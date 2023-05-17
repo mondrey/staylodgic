@@ -121,7 +121,7 @@ function themecore_reservations_metadata() {
 			),
 			array(
 				'name' => esc_html__('Address','themecore'),
-				'id' => 'pagemeta_reservation_guest_name',
+				'id' => 'pagemeta_reservation_guest_address',
 				'type' => 'text',
 				'heading' => 'subhead',
 				'desc' => esc_html__('Address Name','themecore'),

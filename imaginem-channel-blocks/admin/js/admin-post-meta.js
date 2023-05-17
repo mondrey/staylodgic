@@ -100,8 +100,8 @@ jQuery(document).ready(function($) {
 			onChange: function(selectedDates, dateStr, instance) {
 				
 				if (selectedDates.length == 2) {
-					var start_date = selectedDates[0].toISOString().substr(0, 10);
-					var end_date = selectedDates[1].toISOString().substr(0, 10);
+					var start_date = selectedDates[0].toLocaleDateString('en-US').substr(0, 10);
+					var end_date = selectedDates[1].toLocaleDateString('en-US').substr(0, 10);					
 					console.log( start_date,end_date );
 					$.ajax({
 						type: 'POST',

@@ -1,4 +1,30 @@
 <?php
+function cognitive_get_reservation_guest_name($reservation_id) {
+    $guest_name = '';
+    $guest_name = get_post_meta($reservation_id, 'pagemeta_reservation_guest_name', true);
+    return $guest_name;
+}
+function cognitive_generate_reserved_tab( $reservation_data ) {
+    $tab = '';
+	
+	print_r(  $reservation_data );
+    foreach ($reservation_data as $reservation) {
+		$start_date_display = '';
+		$guest_name = '';
+        if ( $reservation['start'] <> 'no' ) {
+			$start_date = new DateTime();
+        	$start_date->setTimestamp($reservation['start']);
+			$start_date_display = $start_date->format('M j, Y');
+			$guest_name = cognitive_get_reservation_guest_name($reservation['id']);
+			$display = 'Reserved for ' . $guest_name . ' - ' . $start_date_display;
+		} else {
+			$guest_name = cognitive_get_reservation_guest_name($reservation['id']);
+			$display = 'Extended for ' . $guest_name;
+		}
+        $tab .= '<div class="reserved-tab-wrap"><div class="reserved-tab reserved-tab-days-3">'.$display.'</div></div>';
+    }
+    return $tab;
+}
 function cognitive_generate_unique_reservation_id( $reservation_post_id ) {
     // Generate a random string or use a timestamp as a unique identifier
     $unique_identifier = uniqid(); // Example: Random string
@@ -79,23 +105,35 @@ function cognitive_get_availability( $roomID ) {
 function cognitive_is_date_reserved( $date, $roomtype ) {
 
 	$currentDate = strtotime( $date );
+	$start = false;
 
-	$args = array(
-		'post_type' => 'reservations', // Replace with your actual custom post type slug
-		'posts_per_page' => -1, // Retrieve all reserved rooms
-	);
+    $args = array(
+        'post_type' => 'reservations',
+        'posts_per_page' => -1,
+        'meta_query' => array(
+            'relation' => 'AND',
+            array(
+                'key' => 'pagemeta_room_name',
+                'value' => $roomtype,
+                'compare' => '='
+            )
+        )
+    );
 	
 	$query = new WP_Query($args);
 
 	$reservation_checkin  = '';
 	$reservation_checkout = '';
 	$reservedRooms        = array();
+	$reserved_data = array();
+	$found = false;
 
 	if ($query->have_posts()) {
 		while ($query->have_posts()) {
 			$query->the_post();
 			
 			$reservedRooms[] = get_the_ID();
+			$reservation_id = get_the_ID();
 			$custom = get_post_custom( get_the_ID() );
 			if (isset($custom['pagemeta_reservation_checkin'][0])) {
 				$dateRangeValue=$custom['pagemeta_reservation_checkin'][0];
@@ -136,12 +174,26 @@ function cognitive_is_date_reserved( $date, $roomtype ) {
 					// Check if the reservation spans the specified number of days
 					$reservationDuration = floor( ( $reservationEndDate - $reservationStartDate ) / ( 60 * 60 * 24 ) ) + 1;
 					if ( $numberOfDays > 0 ) {
-						return true; // Date is part of a reservation for the specified number of days
+						if ( $currentDate == $reservationStartDate ) {
+							$start = $reservationStartDate;
+						} else {
+							$start = 'no';
+						}
+						$reservation_data['id'] = $reservation_id;
+						$reservation_data['start'] = $start;
+						$reserved_data[]=$reservation_data; // Date is part of a reservation for the specified number of days
+						$found = true;
 					}
 				}
 			}
 
 		}
+	}
+
+	if ( $found ) {
+		return $reserved_data;
+	} else {
+		return false;
 	}
 
 	// foreach ( $reservationData as $reservation ) {
@@ -158,7 +210,6 @@ function cognitive_is_date_reserved( $date, $roomtype ) {
     //     }
     // }
 
-    return false; // Date is not reserved
 }
 // Add the Availability menu item to the admin menu
 function cognitive_room_reservation_plugin_add_admin_menu() {
@@ -281,8 +332,15 @@ for ($day = 0; $day < $numDays; $day++) {
 					<td class="calendarCell">
 						<?php
 						$dateString = $date->format('Y-m-d');
-						if (cognitive_is_date_reserved($dateString, $roomId)) {
+						$reservation_data = array();
+						$reservation_data = cognitive_is_date_reserved($dateString, $roomId);
+						if ( $reservation_data ) {
+							print_r($reservation_data);
+							echo '<br/>';
 							echo 'Reserved';
+							echo '<br/>';
+							echo '-----<br/>';
+							echo cognitive_generate_reserved_tab( $reservation_data );
 						}
 						?>
 						Quantity: <?php echo cognitive_get_room_type_quantity($roomId); ?><br>
@@ -368,8 +426,15 @@ function cognitive_ajax_get_availability_calendar() {
 					<td class="calendarCell">
 						<?php
 						$dateString = $date->format('Y-m-d');
-						if (cognitive_is_date_reserved($dateString, $roomId)) {
+						$reservation_data = array();
+						$reservation_data = cognitive_is_date_reserved($dateString, $roomId);
+						if ( $reservation_data ) {
+							print_r($reservation_data);
+							echo '<br/>';
 							echo 'Reserved';
+							echo '<br/>';
+							echo '-----<br/>';
+							echo cognitive_generate_reserved_tab( $reservation_data );
 						}
 						?>
 						Quantity: <?php echo cognitive_get_room_type_quantity($roomId); ?><br>
