@@ -1,0 +1,101 @@
+.entry-content .jp-jplayer a,
+.jp-controls a {
+    text-decoration: none;
+}
+
+.jp-title ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.jp-title {
+    padding-top: 10px;
+}
+
+.jp-gui {
+	position: relative;
+    padding-top: 2px;
+}
+
+.jp-jplayer, .jp-audio {
+    width: 100%;
+    max-width: 100%;
+    line-height: 0;
+}
+
+.jplayer-shortcode h3 {
+    font-size:11px;
+    letter-spacing: 0.5px;
+    margin-bottom: 5px;
+}
+.jp-controls,
+.entry-content ul.jp-controls {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    font-family: "feather";
+}
+
+.jp-controls li {
+    display: inline;
+}
+
+.jp-play,.jp-pause {
+    width: 60px;
+    height: 40px;
+    display: inline-block;
+    text-align: center;
+    line-height: 35px;
+}
+
+.jp-mute,.jp-unmute {
+    position: absolute;
+    right: 75px;
+    top: -1px;
+    width: 20px;
+    height: 38px;
+    display: inline-block;
+    line-height: 40px;
+}
+
+.jp-mute {
+    text-align: left;
+}
+
+.jp-volume-bar {
+    position: absolute;
+    right: 30px;
+    top: 19px;
+    width: 45px;
+    height: 2px;
+    overflow: hidden;
+}
+.jp-volume-bar:hover {
+    cursor: pointer;
+}
+.jp-volume-bar-value {
+    background-color: #fff;
+    height: 2px;
+}
+
+.jp-progress {
+    left: 0;
+    overflow: hidden;
+    position: absolute;
+    top: -4px;
+    width: 100%;
+}
+
+.jp-play-bar {
+    background-color: #fff;
+}
+.jp-progress:hover {
+    cursor: pointer;
+}
+
+.jp-time-holder {
+    position: absolute;
+    right: 120px;
+    top: 14px;
+}

@@ -1,0 +1,103 @@
+#container {
+	display: flex;
+	overflow-x: auto;
+	max-width: 100%;
+  }
+  
+  #rowHeaders {
+	flex-shrink: 0;
+	min-width: 100px;
+  }
+  
+  #calendar {
+	overflow-x: auto;
+	width: 100%;
+	position: relative;
+  }
+  
+  #calendarTable {
+	display: flex;
+	flex-direction: column;
+	border: 1px solid #ccc;
+	border-collapse: collapse;
+	white-space: nowrap;
+	min-width: fit-content;
+  }
+  
+  .calendarRow {
+	display: flex;
+  }
+  
+  .calendarCell {
+	flex-grow: 1;
+	border-right: 1px solid #ccc;
+	padding: 10px;
+	text-align: center;
+	width: 80px; /* Set your desired width here */
+  }
+  
+  .calendarCell:first-child {
+	border-left: none;
+  }
+  
+  .calendarRow .rowHeader {
+	font-weight: bold;
+	background-color: #f5f5f5;
+	position: sticky;
+	left: 0;
+	z-index: 1;
+	width: 200px;
+  }
+  
+  .calendarRow .rowHeader:first-child {
+	border-top: none;
+  }
+  
+  .calendarRow .rowHeader:before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: -1px;
+	height: 100%;
+	width: 1px;
+	background-color: #ccc;
+	z-index: -1;
+  }
+  
+
+
+  #calendarTable {
+	display: table;
+	width: 100%;
+  }
+  
+  .calendarRow {
+	display: table-row;
+  }
+  
+  .calendarCell {
+	display: table-cell;
+	border: 1px solid #ccc;
+	padding: 10px;
+	text-align: center;
+  }
+  
+  .rowHeader {
+	font-weight: bold;
+  }
+  
+  .day {
+	font-weight: bold;
+  }
+  
+  .status {
+	margin-bottom: 5px;
+  }
+  
+  .quantity,
+  .rate {
+	font-size: 12px;
+  }
+  
+  /* Adjust the styles based on your requirements */
+  

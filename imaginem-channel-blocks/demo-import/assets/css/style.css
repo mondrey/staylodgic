@@ -1,0 +1,3 @@
+.js-ocdi-gl-item-container .ocdi__gl-item.js-ocdi-gl-item + div {
+    display: none !important;
+}
