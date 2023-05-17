@@ -58,9 +58,9 @@ jQuery(document).ready(function($) {
 	}
 
 	if ($.fn.flatpickr) {
+
 		$('.datepicker').flatpickr();
-	}
-	if ($.fn.flatpickr) {
+
 		flatpickr(".reservation", {
 			mode: "range",
 			dateFormat: "Y-m-d",
@@ -90,6 +90,35 @@ jQuery(document).ready(function($) {
 										 "<p>Checkout: " + checkout.toLocaleDateString() + "</p>" +
 										 "<p>Room nights: " + roomNights + "</p>";
 				document.getElementById("reservation-details").innerHTML = reservationDetails;
+			}
+		});
+
+		flatpickr(".availabilitycalendar", {
+			mode: "range",
+			dateFormat: "Y-m-d",
+			enableTime: false,
+			onChange: function(selectedDates, dateStr, instance) {
+				
+				if (selectedDates.length == 2) {
+					var start_date = selectedDates[0].toISOString().substr(0, 10);
+					var end_date = selectedDates[1].toISOString().substr(0, 10);
+					console.log( start_date,end_date );
+					$.ajax({
+						type: 'POST',
+						url: ajaxurl,
+						data: {
+							'action': 'cognitive_ajax_get_availability_calendar',
+							'start_date': start_date,
+							'end_date': end_date
+						},
+						success: function(data){
+							$('#calendar').html(data);
+						},
+						error: function(){
+							alert('Error: Unable to retrieve calendar data.');
+						}
+					});
+				}
 			}
 		});
 	}
