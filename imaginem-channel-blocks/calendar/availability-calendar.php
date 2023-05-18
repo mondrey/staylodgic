@@ -101,6 +101,50 @@ function cognitive_get_availability( $roomID ) {
     // Return the availability matrix
     return $availabilityMatrix;
 }
+
+function cognitive_calculate_reserved_rooms($date, $roomtype) {
+    $args = array(
+        'post_type' => 'reservations',
+        'posts_per_page' => -1,
+        'meta_query' => array(
+            'relation' => 'AND',
+            array(
+                'key' => 'pagemeta_room_name',
+                'value' => $roomtype,
+                'compare' => '='
+            )
+        )
+    );
+
+    $query = new WP_Query($args);
+    $reserved_rooms = 0;
+
+    if ($query->have_posts()) {
+        while ($query->have_posts()) {
+            $query->the_post();
+
+            $reservation_id = get_the_ID();
+            $custom = get_post_custom($reservation_id);
+
+            if (isset($custom['pagemeta_checkin_date'][0]) && isset($custom['pagemeta_checkout_date'][0])) {
+                $checkin = strtotime($custom['pagemeta_checkin_date'][0]);
+                $checkout = strtotime($custom['pagemeta_checkout_date'][0]);
+
+                $selected_date = strtotime($date);
+
+                if ($selected_date >= $checkin && $selected_date <= $checkout) {
+                    $reserved_rooms++;
+                }
+            }
+        }
+    }
+
+    wp_reset_postdata();
+
+    return $reserved_rooms;
+}
+
+
 // Function to check if a date falls within a reservation
 function cognitive_is_date_reserved( $date, $roomtype ) {
 
@@ -147,10 +191,17 @@ function cognitive_is_date_reserved( $date, $roomtype ) {
 			
 			$checkin = '';
 			$checkout = '';
-			if (count($dateRangeParts) >= 2) {
-				$checkin = $dateRangeParts[0];
-				$checkout = $dateRangeParts[1];
+			if (isset($custom['pagemeta_checkin_date'][0])) {
+				$checkin=$custom['pagemeta_checkin_date'][0];
 			}
+			if (isset($custom['pagemeta_checkout_date'][0])) {
+				$checkout=$custom['pagemeta_checkout_date'][0];
+			}
+			//echo '----->'.$checkin.'<-----';
+			// if (count($dateRangeParts) >= 2) {
+			// 	$checkin = $dateRangeParts[0];
+			// 	$checkout = $dateRangeParts[1];
+			// }
 
 			// $checkin_start_datetime = explode(" ", $reservation_checkin);
 			// $reservation_checkin_date = $checkin_start_datetime[0];
@@ -211,6 +262,8 @@ function cognitive_is_date_reserved( $date, $roomtype ) {
     // }
 
 }
+
+
 // Add the Availability menu item to the admin menu
 function cognitive_room_reservation_plugin_add_admin_menu() {
 	add_menu_page(
@@ -343,6 +396,10 @@ for ($day = 0; $day < $numDays; $day++) {
 							echo '-----<br/>';
 							echo cognitive_generate_reserved_tab( $reservation_data );
 						}
+						// Calculate the number of reserved rooms for the current date
+                        echo 'number of rooms reserved is';
+						$reserved_rooms = cognitive_calculate_reserved_rooms($dateString,$roomId);
+						echo $reserved_rooms;
 						?>
 						Quantity: <a href="#" class="quantity-link" data-date="<?php echo $dateString; ?>" data-room="<?php echo $roomId; ?>"><?php echo cognitive_get_quantity_array_from_room($roomId, $dateString); ?></a><br>
 						<?php

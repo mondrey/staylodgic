@@ -154,31 +154,56 @@ jQuery(document).ready(function($) {
 			minDate: "today",
 			enableTime: false,
 			onChange: function(selectedDates, dateStr, instance) {
-				const checkin = selectedDates[0];
-				const checkout = selectedDates[1];
-				const roomNights = Math.ceil((checkout - checkin) / (1000 * 60 * 60 * 24));
-		
-				const reservationDetails = document.getElementById("reservation-details");
-				reservationDetails.innerHTML = `
-					<p>Checkin: ${checkin.toLocaleDateString()}</p>
-					<p>Checkout: ${checkout.toLocaleDateString()}</p>
-					<p>Room nights: ${roomNights}</p>
-				`;
+			  const checkin = selectedDates[0];
+			  let checkout; // Declare the checkout variable
+		  
+			  if (selectedDates.length > 1) {
+				checkout = selectedDates[1];
+			  }
+		  
+			  const roomNights = checkout ? Math.ceil((checkout - checkin) / (1000 * 60 * 60 * 24)) : 0;
+		  
+			  const reservationDetails = document.getElementById("reservation-details");
+			  reservationDetails.innerHTML = `
+				<p>Checkin: ${checkin.toLocaleDateString()}</p>
+				${checkout ? `<p>Checkout: ${checkout.toLocaleDateString()}</p>` : ''}
+				<p>Room nights: ${roomNights}</p>
+			  `;
+		  
+			  // Set the values of the hidden input fields
+			  if (checkin && checkout) {
+				const checkinOffset = checkin.getTimezoneOffset() * 60000; // Time zone offset in milliseconds
+				const checkoutOffset = checkout.getTimezoneOffset() * 60000; // Time zone offset in milliseconds
+		  
+				document.getElementById("pagemeta_checkin_date").value = new Date(checkin - checkinOffset).toISOString().split('T')[0];
+				document.getElementById("pagemeta_checkout_date").value = new Date(checkout - checkoutOffset).toISOString().split('T')[0];
+			  }
 			},
 			onReady: function(selectedDates, dateStr, instance) {
-				// calculate room nights and display reservation details for existing reservation
-				var dateRangeInput = instance.input;
-				var dateRangeValue = dateRangeInput.value;
-				var dateRangeParts = dateRangeValue.split(" to ");
-				var checkin = new Date(dateRangeParts[0]);
-				var checkout = new Date(dateRangeParts[1]);
-				var roomNights = (checkout - checkin) / (1000 * 60 * 60 * 24);
-				var reservationDetails = "<p>Check-in: " + checkin.toLocaleDateString() + "</p>" +
-										 "<p>Checkout: " + checkout.toLocaleDateString() + "</p>" +
-										 "<p>Room nights: " + roomNights + "</p>";
-				document.getElementById("reservation-details").innerHTML = reservationDetails;
+			  // calculate room nights and display reservation details for existing reservation
+			  var dateRangeInput = instance.input;
+			  var dateRangeValue = dateRangeInput.value;
+			  var dateRangeParts = dateRangeValue.split(" to ");
+			  var checkin = new Date(dateRangeParts[0]);
+			  var checkout = new Date(dateRangeParts[1]);
+			  var roomNights = (checkout - checkin) / (1000 * 60 * 60 * 24);
+		  
+			  // Set the values of the hidden input fields
+			  if (checkin && checkout) {
+				const checkinOffset = checkin.getTimezoneOffset() * 60000; // Time zone offset in milliseconds
+				const checkoutOffset = checkout.getTimezoneOffset() * 60000; // Time zone offset in milliseconds
+		  
+				document.getElementById("pagemeta_checkin_date").value = new Date(checkin - checkinOffset).toISOString().split('T')[0];
+				document.getElementById("pagemeta_checkout_date").value = new Date(checkout - checkoutOffset).toISOString().split('T')[0];
+			  }
+		  
+			  var reservationDetails = "<p>Check-in: " + checkin.toLocaleDateString() + "</p>" +
+									   "<p>Checkout: " + checkout.toLocaleDateString() + "</p>" +
+									   "<p>Room nights: " + roomNights + "</p>";
+			  document.getElementById("reservation-details").innerHTML = reservationDetails;
 			}
 		});
+		  
 
 		flatpickr(".availabilitycalendar", {
 			mode: "range",

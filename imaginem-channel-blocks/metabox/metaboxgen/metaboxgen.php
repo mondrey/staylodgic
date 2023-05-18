@@ -468,6 +468,10 @@ function themecore_generate_metaboxes($meta_data,$post_id) {
 					$text_value = $meta ? $meta : $field['std'];
 					echo '<input type="text" class="'.$class.' datepicker" data-enable-time="true" name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '" value="' . esc_attr($text_value) . '" size="30" />';
 					break;
+				case 'hidden':
+					$text_value = $meta ? $meta : $field['std'];
+					echo '<input type="hidden" name="', esc_attr($field['id']), '_hidden" id="', esc_attr($field['id']), '_hidden" value="' . esc_attr($text_value) . '" />';
+					break;
 				case 'reservation':
 					$text_value = $meta ? $meta : $field['std'];
 					echo '<input type="text" class="'.$class.' reservation" data-enable-time="true" name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '" value="' . esc_attr($text_value) . '" size="30" />';

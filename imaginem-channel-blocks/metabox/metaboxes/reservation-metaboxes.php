@@ -88,6 +88,24 @@ function themecore_reservations_metadata() {
 				'std' => ''
 			),
 			array(
+				'name' => '',
+				'id' => 'pagemeta_checkin_date',
+				'type' => 'text',
+				'class' => 'textsmall',
+				'heading' => 'subhead',
+				'desc' => '',
+				'std' => ''
+			),
+			array(
+				'name' => '',
+				'id' => 'pagemeta_checkout_date',
+				'type' => 'text',
+				'class' => 'textsmall',
+				'heading' => 'subhead',
+				'desc' => '',
+				'std' => ''
+			),
+			array(
 				'name' => __('Notes','themecore'),
 				'id' => 'pagemeta_reservation_notes',
 				'type' => 'textarea',
