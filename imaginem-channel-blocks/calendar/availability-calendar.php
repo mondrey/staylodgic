@@ -259,6 +259,7 @@ function cognitive_room_reservation_plugin_display_availability() {
 		?>
 	</div>
 	<input type="text" class="availabilitycalendar" id="availabilitycalendar" name="availabilitycalendar" value=""/>
+	<a href="#" id="popup-link" data-bs-toggle="modal" data-bs-target="#admin-popup">Update Quantity</a>
 
 	<div id="container">
 	
@@ -279,18 +280,18 @@ function cognitive_get_availability_calendar() {
 $today = new DateTime();
 $week_ago = (new DateTime())->modify('-7 days');
 $end_date = (new DateTime())->modify('+30 days');
-    
+
 $startDate = $week_ago->format('Y-m-d');
 $endDate = $end_date->format('Y-m-d');
-    
+
 $numDays = (new DateTime($endDate))->diff(new DateTime($startDate))->days + 1;
 	
 // Generate an array of dates for the calendar
 $dates = [];
 for ($day = 0; $day < $numDays; $day++) {
-    $currentDate = new DateTime($startDate);
-    $currentDate->add(new DateInterval("P{$day}D"));
-    $dates[] = $currentDate;
+	$currentDate = new DateTime($startDate);
+	$currentDate->add(new DateInterval("P{$day}D"));
+	$dates[] = $currentDate;
 }
 	
 	$room_list = get_posts('post_type=room&orderby=title&numberposts=-1&order=ASC');
@@ -343,7 +344,7 @@ for ($day = 0; $day < $numDays; $day++) {
 							echo cognitive_generate_reserved_tab( $reservation_data );
 						}
 						?>
-						Quantity: <?php echo cognitive_get_room_type_quantity($roomId); ?><br>
+						Quantity: <a href="#" class="quantity-link" data-date="<?php echo $dateString; ?>" data-room="<?php echo $roomId; ?>"><?php echo cognitive_get_quantity_array_from_room($roomId, $dateString); ?></a><br>
 						<?php
 						$rate = cognitive_get_room_type_base_rate( $roomId );
 						if (!empty($rate) && isset($rate) && $rate > 0) {
@@ -359,12 +360,16 @@ for ($day = 0; $day < $numDays; $day++) {
 	</table>
 	<?php
 	$output = ob_get_clean();
-    echo $output;
+	echo $output;
+
+	cognitive_quanity_modal();
 }
 
+// WordPress AJAX action hook
+add_action('wp_ajax_cognitive_ajax_get_availability_calendar', 'cognitive_ajax_get_availability_calendar');
+add_action('wp_ajax_nopriv_cognitive_ajax_get_availability_calendar', 'cognitive_ajax_get_availability_calendar');
 // PHP function that generates the content
 function cognitive_ajax_get_availability_calendar() {
-
 	// Get the start and end dates from the AJAX request
 	$start_date = $_POST['start_date'];
 	$end_date = $_POST['end_date'];
@@ -437,7 +442,7 @@ function cognitive_ajax_get_availability_calendar() {
 							echo cognitive_generate_reserved_tab( $reservation_data );
 						}
 						?>
-						Quantity: <?php echo cognitive_get_room_type_quantity($roomId); ?><br>
+						Quantity: <?php echo cognitive_get_quantity_array_from_room($postID, $dateString); ?><br>
 						<?php
 						$rate = cognitive_get_room_type_base_rate( $roomId );
 						if (!empty($rate) && isset($rate) && $rate > 0) {
@@ -453,11 +458,147 @@ function cognitive_ajax_get_availability_calendar() {
 	</table>
 	<?php
 	$output = ob_get_clean();
-    echo $output;
-    wp_die();
+	echo $output;
+	wp_die();
 }
 
-// WordPress AJAX action hook
-add_action('wp_ajax_cognitive_ajax_get_availability_calendar', 'cognitive_ajax_get_availability_calendar');
-add_action('wp_ajax_nopriv_cognitive_ajax_get_availability_calendar', 'cognitive_ajax_get_availability_calendar');
+// AJAX handler to save room metadata
+add_action('wp_ajax_cognitive_update_room_availability', 'cognitive_update_room_availability');
+add_action('wp_ajax_nopriv_cognitive_update_room_availability', 'cognitive_update_room_availability');
+function cognitive_update_room_availability() {
+	if (isset($_POST['dateRange'])) {
+		$dateRange = $_POST['dateRange'];
+	} else {
+		// Return an error response if dateRange is not set
+		$response = array(
+			'success' => false,
+			'data' => array(
+				'message' => 'Missing date range parameter.'
+			)
+		);
+		wp_send_json_error($response);
+		return;
+	}
 
+	if (isset($_POST['quantity'])) {
+		$quantity = $_POST['quantity'];
+	} else {
+		// Return an error response if quantity is not set
+		$response = array(
+			'success' => false,
+			'data' => array(
+				'message' => 'Missing quantity parameter.'
+			)
+		);
+		wp_send_json_error($response);
+		return;
+	}
+
+	if (isset($_POST['postID'])) {
+		$postID = $_POST['postID'];
+	} else {
+		// Return an error response if postID is not set
+		$response = array(
+			'success' => false,
+			'data' => array(
+				'message' => 'Missing post ID parameter.'
+			)
+		);
+		wp_send_json_error($response);
+		return;
+	}
+
+	// Split the date range into start and end dates
+	$dateRangeArray = explode(" to ", $dateRange);
+	if (count($dateRangeArray) < 2 && !empty($dateRangeArray[0])) {
+		// Use the single date as both start and end date
+		$startDate = $dateRangeArray[0];
+		$endDate = $startDate;
+	} elseif (count($dateRangeArray) < 2 && empty($dateRangeArray[0])) {
+		// Return an error response if dateRange is invalid
+		$response = array(
+			'success' => false,
+			'data' => array(
+				'message' => 'Invalid date range.'
+			)
+		);
+		wp_send_json_error($response);
+		return;
+	} else {
+		$startDate = $dateRangeArray[0];
+		$endDate = $dateRangeArray[1];
+	}
+
+	// If the end date is empty, set it to the start date
+	if (empty($endDate)) {
+		$endDate = $startDate;
+	}
+
+	// Retrieve the existing quantity_array meta value
+	$quantityArray = get_post_meta($postID, 'quantity_array', true);
+
+	// If the quantity_array is not an array, initialize it as an empty array
+	if (!is_array($quantityArray)) {
+		$quantityArray = array();
+	}
+
+	// Generate an array of dates between the start and end dates
+	$dateRange = cognitive_createDateRangeArray($startDate, $endDate);
+
+	// Update the quantity values for the specified date range
+	foreach ($dateRange as $date) {
+		$quantityArray[$date] = $quantity;
+	}
+
+	// Update the metadata for the 'reservations' post
+	if (!empty($postID) && is_numeric($postID)) {
+		// Update the post meta with the modified quantity array
+		update_post_meta($postID, 'quantity_array', $quantityArray);
+		// Return a success response
+		$response = array(
+			'success' => true,
+			'data' => array(
+				'message' => 'Room availability updated successfully.'
+			)
+		);
+		wp_send_json_success($response);
+	} else {
+		// Return an error response
+		$response = array(
+			'success' => false,
+			'data' => array(
+				'message' => 'Invalid post ID.'
+			)
+		);
+		wp_send_json_error($response);
+	}
+
+	wp_die(); // Optional: Terminate script execution
+}
+
+// Function to create an array of dates between two dates
+function cognitive_createDateRangeArray($startDate, $endDate) {
+	$dateRangeArray = array();
+
+	$currentDate = strtotime($startDate);
+	$endDate = strtotime($endDate);
+
+	while ($currentDate <= $endDate) {
+		$dateRangeArray[] = date('Y-m-d', $currentDate);
+		$currentDate = strtotime('+1 day', $currentDate);
+	}
+
+	return $dateRangeArray;
+}
+
+function cognitive_get_quantity_array_from_room($postID, $dateString) {
+    $quantityArray = get_post_meta($postID, 'quantity_array', true);
+    
+    // Check if the quantity_array exists and the date is available
+    if (!empty($quantityArray) && isset($quantityArray[$dateString])) {
+        return $quantityArray[$dateString];
+    }
+    
+    return false;
+}
+?>

@@ -58,6 +58,93 @@ jQuery(document).ready(function($) {
 	}
 
 	if ($.fn.flatpickr) {
+		// Initialize Flatpickr
+		$('#admin-popup .modaldatepicker').flatpickr(
+			{
+				mode: "range",
+				dateFormat: "Y-m-d",
+				enableTime: false,
+				onClose: function(selectedDates, dateStr, instance) {
+					console.log( selectedDates );
+					if(selectedDates.length == 1){
+						instance.setDate([selectedDates[0],selectedDates[0]], true);
+					}
+				}
+			}
+		);
+	}
+
+	// Handle click event on quantity link
+	$(document).on('click', '.quantity-link', function(e) {
+		e.preventDefault();
+		var date = $(this).data('date');
+		var room = $(this).data('room');
+		
+		// Open the modal with the selected date and room
+		openQuantityModal(date, room);
+	});
+
+	// Function to open the modal with the selected date and room
+	function openQuantityModal(date, room) {
+		// Set the date and room values in the modal inputs
+		$('#admin-popup input[name="modaldatepicker"]').val(date);
+		$('#admin-popup select[name="room"]').val(room);
+		
+		// Open the modal
+		$('#admin-popup').modal('show');
+	}
+
+    // Handle click event on the link that triggers the popup
+    $('#popup-link').click(function(e) {
+        e.preventDefault();
+
+        // Show the popup
+        $('#admin-popup').modal('show');
+
+        // Focus on the input field inside the popup
+        $('#admin-popup input').focus();
+    });
+
+    // Handle click event on the "Save changes" button
+    $('#admin-popup .save-changes').click(function() {
+        var dateRange = $('#admin-popup input[name="modaldatepicker"]').val();
+        var quantity = $('#admin-popup input[name="quantity"]').val();
+        var postID = $('#admin-popup select[name="room"]').val();
+
+		console.log( ajaxurl,dateRange,quantity,postID);
+
+        // Perform AJAX request
+        $.ajax({
+			type: 'POST',
+			url: ajaxurl,
+            data: {
+                action: 'cognitive_update_room_availability',
+                postID: postID,
+                dateRange: dateRange,
+                quantity: quantity
+            },
+            success: function(response) {
+                // Handle the AJAX response here
+                if (response.success) {
+                    // Metadata stored successfully
+                    console.log(response.data.message);
+                } else {
+                    // Error storing metadata
+                    console.error(response.data.message);
+                }
+
+                // Close the modal
+                $('#admin-popup').modal('hide');
+				location.reload();
+            },
+            error: function(xhr, status, error) {
+                // Handle AJAX error here
+                console.error(error);
+            }
+        });
+    });
+
+	if ($.fn.flatpickr) {
 
 		$('.datepicker').flatpickr();
 

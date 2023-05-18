@@ -50,6 +50,7 @@ class Theme_Core {
 
     public function themecore_load_availablity_calendar() {
         require_once (plugin_dir_path( __FILE__ ) . '/calendar/availability-calendar.php');
+        require_once (plugin_dir_path( __FILE__ ) . '/calendar/modals.php');
     }
 
     public function themecore_load_theme_widgets() {
@@ -165,6 +166,11 @@ class Theme_Core {
 				wp_enqueue_script('wp-color-picker');
 				wp_register_script('wp-color-picker-alpha', plugin_dir_url( __FILE__ ) .'admin/js/wp-color-picker-alpha.js', array( 'wp-color-picker' ),null, true );
                 wp_enqueue_script('wp-color-picker-alpha');
+
+                wp_register_script( 'bootstrap', plugin_dir_url( __FILE__ ) .'assets/js/bootstrap/js/bootstrap.bundle.min.js', array( 'jquery' ),null, true );
+                wp_register_style('bootstrap', plugin_dir_url( __FILE__ ) .'assets/js/bootstrap/css/bootstrap.min.css',false, 'screen' );
+                wp_enqueue_style( 'bootstrap');
+				wp_enqueue_script('bootstrap');
 
 				wp_enqueue_media();
 
