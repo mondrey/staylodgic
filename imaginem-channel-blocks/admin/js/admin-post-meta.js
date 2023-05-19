@@ -151,7 +151,6 @@ jQuery(document).ready(function($) {
 		flatpickr(".reservation", {
 			mode: "range",
 			dateFormat: "Y-m-d",
-			minDate: "today",
 			enableTime: false,
 			onChange: function(selectedDates, dateStr, instance) {
 			  const checkin = selectedDates[0];
