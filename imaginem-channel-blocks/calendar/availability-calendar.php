@@ -147,26 +147,40 @@ function update_reservations_array_on_change($room_type, $checkin_date, $checkou
 		}
 	}
 
+	// Remove the reservation post ID from the updated dates
+	$reservations_array_without_id = $reservations_array; // Create a copy of the reservations array
+	foreach ($updated_dates as $date) {
+		if (isset($reservations_array_without_id[$date])) {
+			$reservation_ids = $reservations_array_without_id[$date];
+			if (($key = array_search($reservation_post_id, $reservation_ids)) !== false) {
+				unset($reservations_array_without_id[$date][$key]);
+				// Reset the array keys
+				$reservations_array_without_id[$date] = array_values($reservations_array_without_id[$date]);
+			}
+		}
+	}
+
 	// Add the reservation post ID to the updated dates
 	foreach ($updated_dates as $date) {
-		if (isset($reservations_array[$date])) {
-			if (is_array($reservations_array[$date])) {
-				$reservations_array[$date][] = $reservation_post_id;
+		if (isset($reservations_array_without_id[$date])) {
+			if (is_array($reservations_array_without_id[$date])) {
+				$reservations_array_without_id[$date][] = $reservation_post_id;
 			} else {
-				$reservations_array[$date] = [$reservations_array[$date], $reservation_post_id];
+				$reservations_array_without_id[$date] = [$reservations_array_without_id[$date], $reservation_post_id];
 			}
 		} else {
-			$reservations_array[$date] = [$reservation_post_id];
+			$reservations_array_without_id[$date] = [$reservation_post_id];
 		}
 	}
 
 	// Update the reservations array meta field
-	update_post_meta($room_type, 'reservations_array', json_encode($reservations_array));
+	update_post_meta($room_type, 'reservations_array', json_encode($reservations_array_without_id));
 
 	// Update the previous check-in and check-out dates
 	update_post_meta($room_type, 'previous_checkin_date', $checkin_date);
 	update_post_meta($room_type, 'previous_checkout_date', $checkout_date);
 }
+
 
 function get_dates_between($start_date, $end_date) {
 	$dates = array();
@@ -444,11 +458,23 @@ function cognitive_room_reservation_plugin_display_availability() {
 </div>
 	<?php
 }
+function cognitive_remaining_rooms_for_day($roomId, $dateString) {
 
+	$reserved_room_count = cognitive_count_reservations_for_day($roomId, $dateString);
+	$max_count = cognitive_get_max_quantity_for_room( $roomId, $dateString );
+	$avaiblable_count = $max_count - $reserved_room_count;
+	if ( empty( $avaiblable_count ) || !isset( $avaiblable_count) || $avaiblable_count < 0 ) {
+		$avaiblable_count = 0;
+	}
+	
+	return $avaiblable_count;
+}
 function cognitive_count_reservations_for_day($room_id, $day) {
 	// Retrieve the reservations array for the room type
 	$reservations_array_json = get_post_meta($room_id, 'reservations_array', true);
+	echo '<br/>';
 	print_r($reservations_array_json );
+	echo '<br/>';
 	// If the reservations array is empty or not a JSON string, return 0
 	if (empty($reservations_array_json) || !is_string($reservations_array_json)) {
 		return 0;
@@ -475,7 +501,6 @@ function cognitive_count_reservations_for_day($room_id, $day) {
 
 	return 0;
 }
-
 
 // PHP function that generates the content
 function cognitive_get_availability_calendar() {
@@ -544,6 +569,9 @@ for ($day = 0; $day < $numDays; $day++) {
 						$dateString = $date->format('Y-m-d');
 						$reservation_data = array();
 						$reservation_data = cognitive_is_date_reserved($dateString, $roomId);
+						$remaining_rooms = cognitive_remaining_rooms_for_day($roomId, $dateString);
+						$reserved_room_count = cognitive_count_reservations_for_day($roomId, $dateString);
+						$max_room_count = cognitive_get_max_quantity_for_room($roomId, $dateString);
 						if ( $reservation_data ) {
 							print_r($reservation_data);
 							echo '<br/>';
@@ -552,15 +580,21 @@ for ($day = 0; $day < $numDays; $day++) {
 							echo '-----<br/>';
 							echo cognitive_generate_reserved_tab( $reservation_data );
 							echo '<br/>';
-							echo 'Total reservations:' . cognitive_count_reservations_for_day($roomId, $dateString);
+							echo 'Total reservations:' . $reserved_room_count;
+							echo '<br/>';
+							echo 'Remaining Rooms:' . $remaining_rooms;
 							echo '<br/>';
 						}
 						// Calculate the number of reserved rooms for the current date
-						echo 'number of rooms reserved is';
+						echo '<br/>';
+						echo 'Number of rooms reserved is:';
 						$reserved_rooms = cognitive_calculate_reserved_rooms($dateString,$roomId);
 						echo $reserved_rooms;
+						echo '<br/>';
+						echo 'Max Rooms:' . $max_room_count;
+						echo '<br/>';
 						?>
-						Quantity: <a href="#" class="quantity-link" data-date="<?php echo $dateString; ?>" data-room="<?php echo $roomId; ?>"><?php echo cognitive_get_quantity_array_from_room($roomId, $dateString); ?></a><br>
+						Quantity: <a href="#" class="quantity-link" data-reserved="<?php echo $reserved_rooms; ?>" data-date="<?php echo $dateString; ?>" data-room="<?php echo $roomId; ?>"><?php echo $remaining_rooms; ?></a><br>
 						<?php
 						$rate = cognitive_get_room_type_base_rate( $roomId );
 						if (!empty($rate) && isset($rate) && $rate > 0) {
@@ -664,7 +698,7 @@ function cognitive_ajax_get_availability_calendar() {
 							echo cognitive_generate_reserved_tab( $reservation_data );
 						}
 						?>
-						Quantity: <?php echo cognitive_get_quantity_array_from_room($postID, $dateString); ?><br>
+						Quantity: <?php echo cognitive_get_max_quantity_for_room($postID, $dateString); ?><br>
 						<?php
 						$rate = cognitive_get_room_type_base_rate( $roomId );
 						if (!empty($rate) && isset($rate) && $rate > 0) {
@@ -769,7 +803,9 @@ function cognitive_update_room_availability() {
 
 	// Update the quantity values for the specified date range
 	foreach ($dateRange as $date) {
-		$quantityArray[$date] = $quantity;
+		$reserved_rooms = cognitive_calculate_reserved_rooms($date,$postID);
+		$final_quantity = $quantity + $reserved_rooms;
+		$quantityArray[$date] = $final_quantity;
 	}
 
 	// Update the metadata for the 'reservations' post
@@ -813,7 +849,7 @@ function cognitive_createDateRangeArray($startDate, $endDate) {
 	return $dateRangeArray;
 }
 
-function cognitive_get_quantity_array_from_room($postID, $dateString) {
+function cognitive_get_max_quantity_for_room($postID, $dateString) {
 	$quantityArray = get_post_meta($postID, 'quantity_array', true);
 	
 	// Check if the quantity_array exists and the date is available
