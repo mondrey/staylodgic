@@ -203,50 +203,6 @@ function cognitive_get_reservation_guest_name($reservation_id) {
 	$guest_name = get_post_meta($reservation_id, 'pagemeta_reservation_guest_name', true);
 	return $guest_name;
 }
-function cognitive_generate_reserved_tab( $reservation_data ) {
-	$display = false;
-	$tab = array();
-	if (DEBUG_MODE) {
-		print_r(  $reservation_data );
-	}
-	$row = 0;
-	foreach ($reservation_data as $reservation) {
-		$start_date_display = '';
-		$guest_name = '';
-		$guest_name = cognitive_get_reservation_guest_name($reservation['id']);
-		$reserved_days = cognitive_count_reservation_days( $reservation['id'] );
-		$checkin = cognitive_get_checkin_date( $reservation['id'] );
-		$checkout = cognitive_get_checkout_date( $reservation['id'] );
-		$row++;
-		if ( $reservation['start'] <> 'no' ) {
-			$start_date = new DateTime();
-			$start_date->setTimestamp($reservation['start']);
-			$start_date_display = $start_date->format('M j, Y');
-			$display_info = $guest_name;
-			$width = ( 80 * ( $reserved_days + 1 ) ) - 3;
-			$tab['new'][] = '<div class="reserved-tab-wrap" data-row="'.$row.'" data-reservationid="'.$reservation['id'].'" data-checkin="'.$checkin.'" data-checkout="'.$checkout.'"><div class="reserved-tab reserved-tab-days-'.$reserved_days.'"><div style="width:'.$width.'px;" class="reserved-tab-inner">'.$display_info.'</div></div></div>';
-			$display = true;
-		} else {
-			$tab['existing'][] = '<div class="reserved-tab-wrap reserved-extended" data-row="'.$row.'" data-reservationid="'.$reservation['id'].'" data-checkin="'.$checkin.'" data-checkout="'.$checkout.'"><div class="reserved-tab"></div></div>';
-			$display = true;
-		}
-	}
-
-	
-	$htmltab = '';
-
-	if ($display) {
-
-		foreach ($tab as $key => $subArray) {
-			foreach ($subArray as $element) {
-				$htmltab .= $element;
-			}
-		}
-		
-	}
-	
-	return $htmltab;
-}
 
 function cognitive_get_availability( $roomID ) {
 	// Get the availability matrix field values for the Room post
@@ -629,7 +585,12 @@ for ($day = 0; $day < $numDays; $day++) {
 						<div class="reservation-tab-wrap" data-day="<?php echo $dateString; ?>">
 						<?php
 						if ( $reservation_data ) {
-							echo cognitive_generate_reserved_tab( $reservation_data );
+							$reservation_module = array();
+							//echo cognitive_generate_reserved_tab( $reservation_data, $checkout_list );
+							$reservation_module = cognitive_generate_reserved_tab( $reservation_data, $checkout_list, $dateString );
+							echo $reservation_module['tab'];
+							$checkout_list = $reservation_module['checkout'];
+							//print_r( $checkout_list );
 						}
 						?>
 						</div>
@@ -643,6 +604,159 @@ for ($day = 0; $day < $numDays; $day++) {
 	echo $output;
 
 	cognitive_quanity_modal();
+}
+function cognitive_generate_reserved_tab( $reservation_data, $checkout_list, $current_day ) {
+	$display = false;
+	$tab = array();
+	if (DEBUG_MODE) {
+		print_r(  $reservation_data );
+	}
+	$row = 0;
+	$room = 1;
+	foreach ($reservation_data as $reservation) {
+		$start_date_display = '';
+		$guest_name = '';
+		$reservatoin_id = $reservation['id'];
+		$guest_name = cognitive_get_reservation_guest_name($reservation['id']);
+		$reserved_days = cognitive_count_reservation_days( $reservation['id'] );
+		$checkin = cognitive_get_checkin_date( $reservation['id'] );
+		$checkout = cognitive_get_checkout_date( $reservation['id'] );
+		$row++;
+
+		if ( !array_key_exists($reservatoin_id, $checkout_list) ) {
+
+			$newCheckin = $checkin; // Checkin date of the new value to be added
+			$hasConflict = false; // Flag to track if there is a conflict
+			
+			// Iterate through the existing array
+			foreach ($checkout_list as $value) {
+				$checkoutDate = $value['checkout'];
+			
+				// Compare the new checkin date with existing checkout dates
+				if ($newCheckin < $checkoutDate) {
+					$hasConflict = true;
+					//echo 'Conflict' . $reservatoin_id;
+					break; // Stop iterating if a conflict is found
+				}
+			}
+
+			$givenCheckinDate = $checkin;
+
+			// Filter the array based on the check-in date and existing checkout dates
+			$filteredArray = array_filter($checkout_list, function($value) use ($givenCheckinDate) {
+				return $value['checkout'] > $givenCheckinDate;
+			});
+
+
+			// Extract the room numbers from the filtered array
+			$roomNumbers = array_column($filteredArray, 'room');
+
+			// Check for missing room numbers
+			$missingNumber = false;
+			sort($roomNumbers);
+
+			if (!empty($roomNumbers)) {
+				for ($i = 1; $i <= max($roomNumbers); $i++) {
+					if (!in_array($i, $roomNumbers)) {
+						$missingNumber = $i;
+						break;
+					}
+				}
+			}
+
+			// Output the result
+			if ($missingNumber) {
+				//echo "The missing room number is: $missingNumber";
+				$room = $missingNumber;
+			} else {
+				$givenDate = $checkin;
+				$recordCount = 0;
+
+				foreach ($checkout_list as $value) {
+					$checkoutDate = $value['checkout'];
+				
+					if ($checkoutDate >= $givenDate) {
+						$recordCount++;
+					}
+				}
+				
+				if ($hasConflict) {
+					//echo "Conflict detected: The new checkin date falls within existing checkout dates.";
+					$room = $recordCount + 1;
+				} else {
+					//echo "No conflict: The new checkin date is outside existing checkout dates.";
+					$room = $recordCount - 1;
+				}
+			}
+			// $highestRoom = 1; // Initialize with a lower value
+
+			// foreach ($checkout_list as $value) {
+			// 	$room = $value['room'];
+			
+			// 	if ($room > $highestRoom) {
+			// 		$highestRoom = $room;
+			// 	}
+			// }
+
+
+			if (empty($checkout_list)) {
+				$room = 1;
+			}
+
+			$checkout_list[$reservatoin_id]['room']=$room;
+			$checkout_list[$reservatoin_id]['checkin']=$checkin;
+			$checkout_list[$reservatoin_id]['checkout']=$checkout;
+		}
+
+		if ( array_key_exists($reservatoin_id, $checkout_list) ) {
+			$room = $checkout_list[$reservatoin_id]['room'];
+		}
+
+		// if ( $reservation['start'] <> 'no' ) {
+		// 	$start_date = new DateTime();
+		// 	$start_date->setTimestamp($reservation['start']);
+		// 	$start_date_display = $start_date->format('M j, Y');
+		// 	$display_info = $guest_name;
+		// 	$width = ( 80 * ( $reserved_days + 1 ) ) - 3;
+		// 	$tab['new'][] = '<div class="reserved-tab-wrap" data-room="'.$room.'" data-row="'.$row.'" data-reservationid="'.$reservation['id'].'" data-checkin="'.$checkin.'" data-checkout="'.$checkout.'"><div class="reserved-tab reserved-tab-days-'.$reserved_days.'"><div style="width:'.$width.'px;" class="reserved-tab-inner">'.$display_info.'</div></div></div>';
+		// 	$display = true;
+		// } else {
+		// 	$tab['existing'][] = '<div class="reserved-tab-wrap reserved-extended" data-room="'.$room.'" data-row="'.$row.'" data-reservationid="'.$reservation['id'].'" data-checkin="'.$checkin.'" data-checkout="'.$checkout.'"><div class="reserved-tab"></div></div>';
+		// 	$display = true;
+		// }
+
+		if ( $reservation['start'] <> 'no' ) {
+			$start_date = new DateTime();
+			$start_date->setTimestamp($reservation['start']);
+			$start_date_display = $start_date->format('M j, Y');
+			$display_info = $guest_name;
+			$width = ( 80 * ( $reserved_days ) ) - 3;
+			$tab[$room] = '<div class="reserved-tab-wrap" data-room="'.$room.'" data-row="'.$row.'" data-reservationid="'.$reservation['id'].'" data-checkin="'.$checkin.'" data-checkout="'.$checkout.'"><div class="reserved-tab reserved-tab-days-'.$reserved_days.'"><div style="width:'.$width.'px;" class="reserved-tab-inner">'.$display_info.'</div></div></div>';
+			$display = true;
+		} else {
+			if ( $current_day <> $checkout ) {
+				$tab[$room] = '<div class="reserved-tab-wrap reserved-extended" data-room="'.$room.'" data-row="'.$row.'" data-reservationid="'.$reservation['id'].'" data-checkin="'.$checkin.'" data-checkout="'.$checkout.'"><div class="reserved-tab"></div></div>';
+				$display = true;
+			}
+		}
+
+	}
+	
+	krsort($tab);
+	$tab_array = array();
+	$htmltab = '';
+
+	if ($display) {
+
+		foreach ($tab as $key => $value) {
+			$htmltab .= $value;
+		}
+
+	}
+	$tab_array['tab']=$htmltab;
+	$tab_array['checkout']=$checkout_list;
+
+	return $tab_array;
 }
 
 // WordPress AJAX action hook
