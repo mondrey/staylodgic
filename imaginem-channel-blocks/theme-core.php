@@ -1,6 +1,5 @@
 <?php
 class Theme_Core {
-
     public function __construct() {
         $this->theme_actions();
         $this->include_shortcodes();
