@@ -82,62 +82,88 @@ function remove_reservation_id($room_type, $reservation_post_id) {
 
 // Hook into the save_post action
 add_action('save_post', 'update_reservations_array_on_save', 13, 3);
-function update_reservations_array_on_save($post_id, $post, $update) {
 
-	// Check if this is an autosave or revision
-	if (wp_is_post_autosave($post_id) || wp_is_post_revision($post_id)) {
+/**
+ * Triggered when a post is saved. If the post type is 'reservations' and is not autosaved or revision, it updates the reservation details.
+ */
+function update_reservations_array_on_save($post_id, $post, $update) {
+	if (!is_valid_post($post_id, $post)) {
 		return;
 	}
 
-	// Check if the post is of the "reservations" post type
-	if ($post->post_type === 'reservations') {
-        // Check if the post is being restored from the trash
-        $post_status = get_post_status($post_id);
-		
-        if ( $post_status === 'draft' ) {
-			//print_r(  $post_status ); die();
-            return; // Stop the execution of the function
-        }
-		$room_type = get_post_meta($post_id, 'pagemeta_room_name', true);
-		$checkin_date = get_post_meta($post_id, 'pagemeta_checkin_date', true);
-		$checkout_date = get_post_meta($post_id, 'pagemeta_checkout_date', true);
-		
-		// Call the update_reservations_array_on_change function
-		update_reservations_array_on_change($room_type, $checkin_date, $checkout_date, $post_id);
+	$room_type = get_post_meta($post_id, 'pagemeta_room_name', true);
+	$checkin_date = get_post_meta($post_id, 'pagemeta_checkin_date', true);
+	$checkout_date = get_post_meta($post_id, 'pagemeta_checkout_date', true);
+
+	remove_reservation_from_all_rooms($post_id); // Remove the reservation from all rooms
+
+	// Add reservation to the new room type
+	update_reservations_array_on_change($room_type, $checkin_date, $checkout_date, $post_id);
+}
+
+/**
+ * Remove the reservation from all rooms.
+ */
+function remove_reservation_from_all_rooms($reservation_post_id) {
+	$room_types = get_posts(['post_type' => 'room']);
+	error_log("remove_reservation_from_all_rooms is called with ID: " . $reservation_post_id);
+	foreach ($room_types as $room) {
+		$reservations_array = get_reservations_array($room->ID);
+
+		if (!empty($reservations_array)) {
+			error_log("Before removing ID {$reservation_post_id} from room {$room->ID}: " . print_r($reservations_array, true));
+			
+			$reservations_array = remove_id_from_reservations_array($reservation_post_id, $reservations_array);
+
+			error_log("After removing ID {$reservation_post_id} from room {$room->ID}: " . print_r($reservations_array, true));
+		}
+
+		update_post_meta($room->ID, 'reservations_array', json_encode($reservations_array));
 	}
 }
 
-function update_reservations_array_on_change($room_type, $checkin_date, $checkout_date, $reservation_post_id) {
-	// Retrieve the reservations array for the room type
-	$reservations_array = get_post_meta($room_type, 'reservations_array', true);
-
-	// If the reservations array is empty or not present, create a new array
-	if (empty($reservations_array)) {
-		$reservations_array = [];
-	} else {
-		// Convert $reservations_array to an array if it's a string
-		if (!is_array($reservations_array)) {
-			$reservations_array = json_decode($reservations_array, true);
+/**
+ * Remove the reservation ID from the entire array
+ */
+function remove_id_from_reservations_array($reservation_post_id, $reservations_array) {
+	foreach ($reservations_array as $date => &$reservations) {
+		foreach ($reservations as $key => $id) {
+			if ($id == $reservation_post_id) {
+				unset($reservations[$key]);
+			}
 		}
+		// Reset the array keys
+		$reservations = array_values($reservations);
+	}
 
-		if (!is_array($reservations_array)) {
-			error_log('Failed to convert reservations array to array!');
-			return;
+	return $reservations_array;
+}
+
+
+/**
+ * Add dates to the reservations array for a given reservation post ID.
+ */
+function add_dates_to_reservations_array($dates, $reservation_post_id, $reservations_array) {
+	foreach ($dates as $date) {
+		if (isset($reservations_array[$date])) {
+			if (is_array($reservations_array[$date])) {
+				$reservations_array[$date][] = $reservation_post_id;
+			} else {
+				$reservations_array[$date] = [$reservations_array[$date], $reservation_post_id];
+			}
+		} else {
+			$reservations_array[$date] = [$reservation_post_id];
 		}
 	}
 
-	// Retrieve the previous reservation dates from the meta data fields
-	$previous_checkin_date = get_post_meta($room_type, 'previous_checkin_date', true);
-	$previous_checkout_date = get_post_meta($room_type, 'previous_checkout_date', true);
+	return $reservations_array;
+}
 
-	// Get the previous reservation dates before the modification
-	$previous_dates = get_dates_between($previous_checkin_date, $previous_checkout_date);
-
-	// Get the updated reservation dates after modification
-	$updated_dates = get_dates_between($checkin_date, $checkout_date);
-
-	// Remove the reservation post ID from the previous dates
-	foreach ($previous_dates as $date) {
+/**
+ * Remove dates from the reservations array for a given reservation post ID.
+ */
+function remove_dates_from_reservations_array($dates, $reservation_post_id, $reservations_array) {
+	foreach ($dates as $date) {
 		if (isset($reservations_array[$date])) {
 			$reservation_ids = $reservations_array[$date];
 			if (($key = array_search($reservation_post_id, $reservation_ids)) !== false) {
@@ -148,53 +174,89 @@ function update_reservations_array_on_change($room_type, $checkin_date, $checkou
 		}
 	}
 
-	// Remove the reservation post ID from the updated dates
-	$reservations_array_without_id = $reservations_array; // Create a copy of the reservations array
-	foreach ($updated_dates as $date) {
-		if (isset($reservations_array_without_id[$date])) {
-			$reservation_ids = $reservations_array_without_id[$date];
-			if (($key = array_search($reservation_post_id, $reservation_ids)) !== false) {
-				unset($reservations_array_without_id[$date][$key]);
-				// Reset the array keys
-				$reservations_array_without_id[$date] = array_values($reservations_array_without_id[$date]);
-			}
-		}
-	}
+	return $reservations_array;
+}
 
-	// Remove the reservation ID from the entire array
-	foreach ($reservations_array_without_id as &$reservations) {
-		if (($key = array_search($reservation_post_id, $reservations)) !== false) {
-			unset($reservations[$key]);
-			// Reset the array keys
-			$reservations = array_values($reservations);
-		}
-	}
-	unset($reservations); // Unset the reference variable
+/**
+ * Checks if the post is valid for processing
+ */
+function is_valid_post($post_id, $post) {
+	return !wp_is_post_autosave($post_id) && !wp_is_post_revision($post_id) && $post->post_type === 'reservations' && get_post_status($post_id) !== 'draft';
+}
 
-	// Add the reservation post ID to the updated dates
-	foreach ($updated_dates as $date) {
-		if (isset($reservations_array_without_id[$date])) {
-			if (is_array($reservations_array_without_id[$date])) {
-				$reservations_array_without_id[$date][] = $reservation_post_id;
-			} else {
-				$reservations_array_without_id[$date] = [$reservations_array_without_id[$date], $reservation_post_id];
-			}
-		} else {
-			$reservations_array_without_id[$date] = [$reservation_post_id];
-		}
-	}
+/**
+ * Updates the reservations array when changes are made to a reservation post.
+ */
+function update_reservations_array_on_change($room_type, $checkin_date, $checkout_date, $reservation_post_id) {
+	$reservations_array = get_reservations_array($room_type);
+	$previous_checkin_date = get_post_meta($room_type, 'previous_checkin_date', true);
+	$previous_checkout_date = get_post_meta($room_type, 'previous_checkout_date', true);
 
-	// Update the reservations array meta field
-	update_post_meta($room_type, 'reservations_array', json_encode($reservations_array_without_id));
+	$previous_dates = get_dates_between($previous_checkin_date, $previous_checkout_date);
+	$updated_dates = get_dates_between($checkin_date, $checkout_date);
 
-	// Update the previous check-in and check-out dates
+	$reservations_array = remove_dates_from_reservations_array($previous_dates, $reservation_post_id, $reservations_array);
+	$reservations_array = add_dates_to_reservations_array($updated_dates, $reservation_post_id, $reservations_array);
+
+	update_post_meta($room_type, 'reservations_array', json_encode($reservations_array));
 	update_post_meta($room_type, 'previous_checkin_date', $checkin_date);
 	update_post_meta($room_type, 'previous_checkout_date', $checkout_date);
 }
 
+/**
+ * Retrieves and validates the reservations array for the given room type
+ */
+function get_reservations_array($room_type) {
+	$reservations_array = get_post_meta($room_type, 'reservations_array', true);
 
+	if (empty($reservations_array)) {
+		$reservations_array = [];
+	} else {
+		$reservations_array = is_array($reservations_array) ? $reservations_array : json_decode($reservations_array, true);
+
+		if (!is_array($reservations_array)) {
+			error_log('Failed to convert reservations array to array!');
+			return [];
+		}
+	}
+
+	return $reservations_array;
+}
+
+/**
+ * Removes the post ID from the specified dates
+ */
+function remove_post_id_from_dates($reservations_array, $dates, $post_id) {
+	foreach ($dates as $date) {
+		if (isset($reservations_array[$date])) {
+			$key = array_search($post_id, $reservations_array[$date]);
+			if ($key !== false) {
+				unset($reservations_array[$date][$key]);
+				$reservations_array[$date] = array_values($reservations_array[$date]);
+			}
+		}
+	}
+	return $reservations_array;
+}
+
+/**
+ * Adds the post ID to the specified dates
+ */
+function add_post_id_to_dates($reservations_array, $dates, $post_id) {
+	foreach ($dates as $date) {
+		if (!isset($reservations_array[$date])) {
+			$reservations_array[$date] = [];
+		}
+		$reservations_array[$date][] = $post_id;
+	}
+	return $reservations_array;
+}
+
+/**
+ * Gets all the dates between two given dates
+ */
 function get_dates_between($start_date, $end_date) {
-	$dates = array();
+	$dates = [];
 	$current_date = strtotime($start_date);
 	$end_date = strtotime($end_date);
 
@@ -205,8 +267,6 @@ function get_dates_between($start_date, $end_date) {
 
 	return $dates;
 }
-
-
 
 function cognitive_get_reservation_guest_name($reservation_id) {
 	$guest_name = '';
@@ -410,6 +470,27 @@ function cognitive_get_room_type_quantity( $room_id ) {
 	}
 	return false;
 }
+/**
+ * Retrieves the room rate for a given room ID and date.
+ *
+ * @param int $roomID The ID of the room.
+ * @param string $date The date to retrieve the rate for.
+ *
+ * @return mixed The room rate for the given date, or null if not set.
+ */
+function cognitive_get_room_rate_by_date($roomID, $date) {
+	// Get the room rate array from the post meta data.
+	$roomRateArray = get_post_meta($roomID, 'roomrate_array', true);
+	
+	// If the room rate array is set and the date exists in the array, return the rate.
+	if (is_array($roomRateArray) && isset($roomRateArray[$date])) {
+		return $roomRateArray[$date];
+	}
+
+	$rate = cognitive_get_room_type_base_rate( $roomID );
+	return $rate;
+}
+
 function cognitive_get_room_type_base_rate( $room_id ) {
 	$custom = get_post_custom( $room_id );
 	if (isset($custom['pagemeta_base_rate'][0])) {
@@ -435,8 +516,8 @@ function cognitive_room_reservation_plugin_display_availability() {
 		?>
 	</div>
 	<input type="text" class="availabilitycalendar" id="availabilitycalendar" name="availabilitycalendar" value=""/>
-	<a href="#" id="popup-link" data-bs-toggle="modal" data-bs-target="#admin-popup">Update Quantity</a>
-
+	<a href="#" id="quantity-popup-link" data-bs-toggle="modal" data-bs-target="#quantity-popup">Update Quantity</a>
+	<a href="#" id="rates-popup-link" data-bs-toggle="modal" data-bs-target="#rates-popup">Update Rates</a>
 	<div id="container">
 	
 <div id="calendar">
@@ -508,23 +589,23 @@ function cognitive_count_reservations_for_day($room_id, $day) {
 
 // PHP function that generates the content
 function cognitive_get_availability_calendar() {
-// Define the start and end dates
-$today = new DateTime();
-$week_ago = (new DateTime())->modify('-9 days');
-$end_date = (new DateTime())->modify('+30 days');
+	// Define the start and end dates
+	$today = new DateTime();
+	$week_ago = (new DateTime())->modify('-9 days');
+	$end_date = (new DateTime())->modify('+30 days');
 
-$startDate = $week_ago->format('Y-m-d');
-$endDate = $end_date->format('Y-m-d');
+	$startDate = $week_ago->format('Y-m-d');
+	$endDate = $end_date->format('Y-m-d');
 
-$numDays = (new DateTime($endDate))->diff(new DateTime($startDate))->days + 1;
-	
-// Generate an array of dates for the calendar
-$dates = [];
-for ($day = 0; $day < $numDays; $day++) {
-	$currentDate = new DateTime($startDate);
-	$currentDate->add(new DateInterval("P{$day}D"));
-	$dates[] = $currentDate;
-}
+	$numDays = (new DateTime($endDate))->diff(new DateTime($startDate))->days + 1;
+		
+	// Generate an array of dates for the calendar
+	$dates = [];
+	for ($day = 0; $day < $numDays; $day++) {
+		$currentDate = new DateTime($startDate);
+		$currentDate->add(new DateInterval("P{$day}D"));
+		$dates[] = $currentDate;
+	}
 	
 	$room_list = get_posts(array(
 		'post_type' => 'room',
@@ -572,6 +653,7 @@ for ($day = 0; $day < $numDays; $day++) {
 						$reserved_room_count = cognitive_count_reservations_for_day($roomId, $dateString);
 						$max_room_count = cognitive_get_max_quantity_for_room($roomId, $dateString);
 						$reserved_rooms = cognitive_calculate_reserved_rooms($dateString,$roomId);
+						$room_rate = cognitive_get_room_rate_by_date( $roomId, $dateString );
 						
 						if (DEBUG_MODE) {
 							if ( $reservation_data ) {
@@ -599,9 +681,8 @@ for ($day = 0; $day < $numDays; $day++) {
 						<div class="calendar-info">
 						<a href="#" class="quantity-link" data-reserved="<?php echo $reserved_rooms; ?>" data-date="<?php echo $dateString; ?>" data-room="<?php echo $roomId; ?>"><?php echo $max_room_count . '~~' . $reserved_room_count . '~~' . $remaining_rooms; ?></a>
 						<?php
-						$rate = cognitive_get_room_type_base_rate( $roomId );
-						if (!empty($rate) && isset($rate) && $rate > 0) {
-							echo '<a class="rate-link" href="#">'.$rate.'</a>';
+						if (!empty($room_rate) && isset($room_rate) && $room_rate > 0) {
+							echo '<a class="roomrate-link" href="#">'.$room_rate.'</a>';
 						}
 						?>
 						</div>
@@ -628,6 +709,7 @@ for ($day = 0; $day < $numDays; $day++) {
 	echo $output;
 
 	cognitive_quanity_modal();
+	cognitive_rates_modal();
 }
 function cognitive_generate_reserved_tab( $reservation_data, $checkout_list, $current_day, $calendar_start ) {
 	$display = false;
@@ -900,6 +982,120 @@ function cognitive_ajax_get_availability_calendar() {
 	$output = ob_get_clean();
 	echo $output;
 	wp_die();
+}
+
+// AJAX handler to save room metadata
+add_action('wp_ajax_cognitive_update_room_rate', 'cognitive_update_room_rate');
+add_action('wp_ajax_nopriv_cognitive_update_room_rate', 'cognitive_update_room_rate');
+function cognitive_update_room_rate() {
+	if (isset($_POST['dateRange'])) {
+		$dateRange = $_POST['dateRange'];
+	} else {
+		// Return an error response if dateRange is not set
+		$response = array(
+			'success' => false,
+			'data' => array(
+				'message' => 'Missing date range parameter.'
+			)
+		);
+		wp_send_json_error($response);
+		return;
+	}
+
+	if (isset($_POST['rate'])) {
+		$rate = $_POST['rate'];
+	} else {
+		// Return an error response if quantity is not set
+		$response = array(
+			'success' => false,
+			'data' => array(
+				'message' => 'Missing rate parameter.'
+			)
+		);
+		wp_send_json_error($response);
+		return;
+	}
+
+	if (isset($_POST['postID'])) {
+		$postID = $_POST['postID'];
+	} else {
+		// Return an error response if postID is not set
+		$response = array(
+			'success' => false,
+			'data' => array(
+				'message' => 'Missing post ID parameter.'
+			)
+		);
+		wp_send_json_error($response);
+		return;
+	}
+
+	// Split the date range into start and end dates
+	$dateRangeArray = explode(" to ", $dateRange);
+	if (count($dateRangeArray) < 2 && !empty($dateRangeArray[0])) {
+		// Use the single date as both start and end date
+		$startDate = $dateRangeArray[0];
+		$endDate = $startDate;
+	} elseif (count($dateRangeArray) < 2 && empty($dateRangeArray[0])) {
+		// Return an error response if dateRange is invalid
+		$response = array(
+			'success' => false,
+			'data' => array(
+				'message' => 'Invalid date range.'
+			)
+		);
+		wp_send_json_error($response);
+		return;
+	} else {
+		$startDate = $dateRangeArray[0];
+		$endDate = $dateRangeArray[1];
+	}
+
+	// If the end date is empty, set it to the start date
+	if (empty($endDate)) {
+		$endDate = $startDate;
+	}
+
+	// Retrieve the existing roomrate_array meta value
+	$roomrateArray = get_post_meta($postID, 'roomrate_array', true);
+
+	// If the quantity_array is not an array, initialize it as an empty array
+	if (!is_array($roomrateArray)) {
+		$roomrateArray = array();
+	}
+
+	// Generate an array of dates between the start and end dates
+	$dateRange = cognitive_createDateRangeArray($startDate, $endDate);
+
+	// Update the quantity values for the specified date range
+	foreach ($dateRange as $date) {
+		$roomrateArray[$date] = $rate;
+	}
+
+	// Update the metadata for the 'reservations' post
+	if (!empty($postID) && is_numeric($postID)) {
+		// Update the post meta with the modified quantity array
+		update_post_meta($postID, 'roomrate_array', $roomrateArray);
+		// Return a success response
+		$response = array(
+			'success' => true,
+			'data' => array(
+				'message' => 'Room rates updated successfully.'
+			)
+		);
+		wp_send_json_success($response);
+	} else {
+		// Return an error response
+		$response = array(
+			'success' => false,
+			'data' => array(
+				'message' => 'Invalid post ID.'
+			)
+		);
+		wp_send_json_error($response);
+	}
+
+	wp_die(); // Optional: Terminate script execution
 }
 
 // AJAX handler to save room metadata
