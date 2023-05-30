@@ -1,6 +1,42 @@
 (function ($) {
 	$(document).ready(function () {
 
+		function updateCalendarCells() {
+			// For each td.calendarCell element...
+			$('td.calendarCell').each(function() {
+				// Find the .quantity-link element within this td.
+				var $quantityLink = $(this).find('.quantity-link');
+
+				// If the data-remaining attribute is 0...
+				if ($quantityLink.data('remaining') == 0) {
+					// Add your specific class to the td.
+					$(this).addClass('fully-booked');
+				}
+			});
+		}
+
+		updateCalendarCells();
+
+		// ---- Boostrap Tooltip
+		$('.reserved-tab-with-info').each(function () {
+			var guest = $(this).data('guest');
+			var room = $(this).data('room');
+			var reservationid = $(this).data('reservationid');
+			var checkin = $(this).data('checkin');
+			var checkout = $(this).data('checkout');
+			var tooltipContent = 'Guest: ' + guest + '<br>Room: ' + room + '<br>Reservation ID: ' + reservationid + '<br>Check-in: ' + checkin + '<br>Check-out: ' + checkout;
+	
+			$(this).attr('data-bs-toggle', 'tooltip');
+			$(this).attr('data-bs-html', 'true'); // Allow HTML content in the tooltip
+			$(this).attr('title', tooltipContent);
+	
+		});
+	
+		var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+		var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+			return new bootstrap.Tooltip(tooltipTriggerEl)
+		});
+		// ---- Bootstrap Tooltip end
 
 		if ($.fn.flatpickr) {
 			// Initialize Flatpickr
@@ -243,6 +279,7 @@
 							},
 							success: function(data){
 								$('#calendar').html(data);
+								updateCalendarCells();
 							},
 							error: function(){
 								alert('Error: Unable to retrieve calendar data.');

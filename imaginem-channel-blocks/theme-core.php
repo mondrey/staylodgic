@@ -184,6 +184,7 @@ class Theme_Core {
 				wp_enqueue_style('flatpickr');
 				wp_enqueue_script('flatpickr');
 				wp_enqueue_script('admin-post-meta');
+                
             }
         }
     }

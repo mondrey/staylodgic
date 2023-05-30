@@ -522,13 +522,16 @@ function cognitive_room_reservation_plugin_display_availability() {
 	
 <div id="calendar">
 
-
-
-<?php echo cognitive_get_availability_calendar(); ?>
+	<?php
+	echo cognitive_get_availability_calendar( false, false );
+	?>
 
 </div>
 </div>
 	<?php
+
+	cognitive_quanity_modal();
+	cognitive_rates_modal();
 }
 function cognitive_remaining_rooms_for_day($roomId, $dateString) {
 
@@ -588,25 +591,48 @@ function cognitive_count_reservations_for_day($room_id, $day) {
 }
 
 // PHP function that generates the content
-function cognitive_get_availability_calendar() {
-	// Define the start and end dates
-	$today = new DateTime();
-	$week_ago = (new DateTime())->modify('-9 days');
-	$end_date = (new DateTime())->modify('+30 days');
+function cognitive_get_availability_calendar( $startDate, $endDate ) {
 
-	$startDate = $week_ago->format('Y-m-d');
-	$endDate = $end_date->format('Y-m-d');
+	if ( ! $startDate && ! $endDate ) {
+		// Define the start and end dates
+		$today = new DateTime();
+		$week_ago = (new DateTime())->modify('-9 days');
+		$end_date = (new DateTime())->modify('+30 days');
 
-	$numDays = (new DateTime($endDate))->diff(new DateTime($startDate))->days + 1;
-		
-	// Generate an array of dates for the calendar
-	$dates = [];
-	for ($day = 0; $day < $numDays; $day++) {
-		$currentDate = new DateTime($startDate);
-		$currentDate->add(new DateInterval("P{$day}D"));
-		$dates[] = $currentDate;
-	}
+		$startDate = $week_ago->format('Y-m-d');
+		$endDate = $end_date->format('Y-m-d');
+
+		$numDays = (new DateTime($endDate))->diff(new DateTime($startDate))->days + 1;
+
+		// Generate an array of dates for the calendar
+		$dates = [];
+		for ($day = 0; $day < $numDays; $day++) {
+			$currentDate = new DateTime($startDate);
+			$currentDate->add(new DateInterval("P{$day}D"));
+			$dates[] = $currentDate;
+		}
+
+	} else {
+		$startDate = new DateTime($startDate);
+		$endDate = new DateTime($endDate);
 	
+		// $startDate = new DateTime("2023-05-17");
+		// $endDate = new DateTime("2023-06-22");
+		
+		// Calculate the number of days between the start and end dates
+		$numDays = $endDate->diff($startDate)->days + 1;
+
+		// Generate an array of dates for the calendar
+		$dates = [];
+		for ($day = 0; $day < 30; $day++) {
+			$currentDate = clone $startDate;
+			$currentDate->add(new DateInterval("P{$day}D"));
+			$dates[] = $currentDate;
+		}
+
+		$startDate = $startDate->format('Y-m-d');
+		$endDate = $endDate->format('Y-m-d');
+	}
 	$room_list = get_posts(array(
 		'post_type' => 'room',
 		'orderby' => 'title',
@@ -628,10 +654,17 @@ function cognitive_get_availability_calendar() {
 		<tr class="calendarRow">
 			<td class="calendarCell rowHeader"></td>
 			<?php
+			$number_of_columns = 0;
+			$markNumDays = $numDays + 1;
 			foreach ($dates as $date) :
+				$number_of_columns++;
 				$month = $date->format('F');
+				$column_class = '';
+				if ( $number_of_columns < $markNumDays ) {
+					$column_class = "rangeSelected";
+				}
 			?>
-					<td class="calendarCell monthHeader">
+					<td class="calendarCell monthHeader <?php echo $column_class; ?>">
 						<div class="month"><?php echo $month; ?></div>
 						<div class="day"><?php echo $date->format('D'); ?> <?php echo $date->format('j'); ?></div>
 					</td>
@@ -679,7 +712,7 @@ function cognitive_get_availability_calendar() {
 						?>
 						<div class="calendar-info-wrap">
 						<div class="calendar-info">
-						<a href="#" class="quantity-link" data-reserved="<?php echo $reserved_rooms; ?>" data-date="<?php echo $dateString; ?>" data-room="<?php echo $roomId; ?>"><?php echo $max_room_count . '~~' . $reserved_room_count . '~~' . $remaining_rooms; ?></a>
+						<a href="#" class="quantity-link" data-remaining="<?php echo $remaining_rooms; ?>" data-reserved="<?php echo $reserved_rooms; ?>" data-date="<?php echo $dateString; ?>" data-room="<?php echo $roomId; ?>"><?php echo $remaining_rooms; ?></a>
 						<?php
 						if (!empty($room_rate) && isset($room_rate) && $room_rate > 0) {
 							echo '<a class="roomrate-link" href="#">'.$room_rate.'</a>';
@@ -706,10 +739,7 @@ function cognitive_get_availability_calendar() {
 	</table>
 	<?php
 	$output = ob_get_clean();
-	echo $output;
-
-	cognitive_quanity_modal();
-	cognitive_rates_modal();
+	return $output;
 }
 function cognitive_generate_reserved_tab( $reservation_data, $checkout_list, $current_day, $calendar_start ) {
 	$display = false;
@@ -832,14 +862,14 @@ function cognitive_generate_reserved_tab( $reservation_data, $checkout_list, $cu
 		// 	$tab['existing'][] = '<div class="reserved-tab-wrap reserved-extended" data-room="'.$room.'" data-row="'.$row.'" data-reservationid="'.$reservation['id'].'" data-checkin="'.$checkin.'" data-checkout="'.$checkout.'"><div class="reserved-tab"></div></div>';
 		// 	$display = true;
 		// }
-
+			
 		if ( $reservation['start'] <> 'no' ) {
 			$start_date = new DateTime();
 			$start_date->setTimestamp($reservation['checkin']);
 			$start_date_display = $start_date->format('M j, Y');
 			$display_info = $guest_name . ' -' . $reservation['id'];
 			$width = ( 80 * ( $reserved_days ) ) - 3;
-			$tab[$room] = '<div class="reserved-tab-wrap" data-room="'.$room.'" data-row="'.$row.'" data-reservationid="'.$reservation['id'].'" data-checkin="'.$checkin.'" data-checkout="'.$checkout.'"><div class="reserved-tab reserved-tab-days-'.$reserved_days.'"><div style="width:'.$width.'px;" class="reserved-tab-inner">'.$display_info.'</div></div></div>';
+			$tab[$room] = '<div class="reserved-tab-wrap reserved-tab-with-info" data-guest="'.$guest_name.'" data-room="'.$room.'" data-row="'.$row.'" data-reservationid="'.$reservation['id'].'" data-checkin="'.$checkin.'" data-checkout="'.$checkout.'"><div class="reserved-tab reserved-tab-days-'.$reserved_days.'"><div style="width:'.$width.'px;" class="reserved-tab-inner">'.$display_info.'</div></div></div>';
 			$display = true;
 		} else {
 			if ( $current_day <> $checkout ) {
@@ -852,7 +882,7 @@ function cognitive_generate_reserved_tab( $reservation_data, $checkout_list, $cu
 				$daysBetween = cognitive_countDaysBetweenDates($check_in_date_past, $current_day);
 				$width = ( 80 * ( $reserved_days - $daysBetween ) ) - 3;
 				if ( $check_in_date_past < $calendar_start && $calendar_start == $current_day ) {
-					$tab[$room] = '<div class="reserved-tab-wrap reserved-from-past" data-room="'.$room.'" data-row="'.$row.'" data-reservationid="'.$reservation['id'].'" data-checkin="'.$checkin.'" data-checkout="'.$checkout.'"><div class="reserved-tab reserved-tab-days-'.$reserved_days.'"><div style="width:'.$width.'px;" class="reserved-tab-inner"><i class="fa-solid fa-arrow-right-from-bracket"></i>'.$display_info.'</div></div></div>';
+					$tab[$room] = '<div class="reserved-tab-wrap reserved-tab-with-info reserved-from-past" data-guest="'.$guest_name.'" data-room="'.$room.'" data-row="'.$row.'" data-reservationid="'.$reservation['id'].'" data-checkin="'.$checkin.'" data-checkout="'.$checkout.'"><div class="reserved-tab reserved-tab-days-'.$reserved_days.'"><div style="width:'.$width.'px;" class="reserved-tab-inner"><i class="fa-solid fa-arrow-right-from-bracket"></i>'.$display_info.'</div></div></div>';
 				} else {
 					$tab[$room] = '<div class="reserved-tab-wrap reserved-extended" data-room="'.$room.'" data-row="'.$row.'" data-reservationid="'.$reservation['id'].'" data-checkin="'.$checkin.'" data-checkout="'.$checkout.'"><div class="reserved-tab"></div></div>';
 				}
@@ -889,96 +919,8 @@ function cognitive_ajax_get_availability_calendar() {
 	$end_date = $_POST['end_date'];
 	// Define the start and end dates
 	// Define the start and end dates as DateTime objects
-	$startDate = new DateTime($start_date);
-	$endDate = new DateTime($end_date);
-
-	// $startDate = new DateTime("2023-05-17");
-	// $endDate = new DateTime("2023-06-22");
-	
-	// Calculate the number of days between the start and end dates
-	$numDays = $endDate->diff($startDate)->days + 1;
-	
-	// Generate an array of dates for the calendar
-	$dates = [];
-	for ($day = 0; $day < $numDays; $day++) {
-		$currentDate = clone $startDate;
-		$currentDate->add(new DateInterval("P{$day}D"));
-		$dates[] = $currentDate;
-	}
-	
-	$room_list = get_posts(array(
-		'post_type' => 'room',
-		'orderby' => 'title',
-		'numberposts' => -1,
-		'order' => 'ASC',
-		'post_status' => 'publish' // Retrieve only published posts
-	));
-	if ($room_list) {
-		foreach($room_list as $key => $list) {
-			$rooms[$list->ID] = $list->post_title;
-		}
-	} else {
-		$rooms[0]="Rooms not found.";
-	}
-
 	ob_start();
-	?>
-	<table id="calendarTable">
-		<tr class="calendarRow">
-			<td class="calendarCell rowHeader"></td>
-			<?php
-			$currentMonth = '';
-			foreach ($dates as $date) :
-				$month = $date->format('F');
-				if ($currentMonth !== $month) :
-					$currentMonth = $month;
-			?>
-					<td class="calendarCell monthHeader">
-						<div class="month"><?php echo $currentMonth; ?></div>
-						<div class="day"><?php echo $date->format('j'); ?></div>
-					</td>
-				<?php else : ?>
-					<td class="calendarCell">
-						<div class="day"><?php echo $date->format('j'); ?></div>
-					</td>
-				<?php endif; ?>
-			<?php endforeach; ?>
-		</tr>
-		<?php foreach ($rooms as $roomId => $roomName) : ?>
-			<tr class="calendarRow">
-				<td class="calendarCell rowHeader"><?php echo $roomName; ?></td>
-				<?php foreach ($dates as $date) : ?>
-					<td class="calendarCell">
-						<?php
-						$dateString = $date->format('Y-m-d');
-						$reservation_data = array();
-						$reservation_data = cognitive_is_date_reserved($dateString, $roomId);
-						if ( $reservation_data ) {
-							if (DEBUG_MODE) {
-								print_r($reservation_data);
-								echo '<br/>';
-								echo 'Reserved';
-								echo '<br/>';
-								echo '-----<br/>';
-								echo cognitive_generate_reserved_tab( $reservation_data );
-							}
-						}
-						?>
-						Quantity: <?php echo cognitive_get_max_quantity_for_room($postID, $dateString); ?>
-						<?php
-						$rate = cognitive_get_room_type_base_rate( $roomId );
-						if (!empty($rate) && isset($rate) && $rate > 0) {
-							echo 'Rate: $' . $rate;
-						} else {
-							echo 'Rate not available';
-						}
-						?>
-					</td>
-				<?php endforeach; ?>
-			</tr>
-		<?php endforeach; ?>
-	</table>
-	<?php
+	echo cognitive_get_availability_calendar( $start_date, $end_date );
 	$output = ob_get_clean();
 	echo $output;
 	wp_die();

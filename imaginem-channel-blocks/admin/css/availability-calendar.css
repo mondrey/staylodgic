@@ -151,7 +151,12 @@ font-size: 12px;
 	border-bottom-left-radius: 0;
 }
 
-.collision {
-	/* Add your collision styling here */
-	background-color: red;
-  }
+.calendarCell.monthHeader.rangeSelected {
+	border-top: 2px solid #f00;
+}
+.calendarCell.fully-booked {
+	background: #ff000012;
+}
+body .tooltip .tooltip-inner {
+    text-align: left;
+}
