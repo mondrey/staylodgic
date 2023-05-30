@@ -161,6 +161,16 @@ function update_reservations_array_on_change($room_type, $checkin_date, $checkou
 		}
 	}
 
+	// Remove the reservation ID from the entire array
+	foreach ($reservations_array_without_id as &$reservations) {
+		if (($key = array_search($reservation_post_id, $reservations)) !== false) {
+			unset($reservations[$key]);
+			// Reset the array keys
+			$reservations = array_values($reservations);
+		}
+	}
+	unset($reservations); // Unset the reference variable
+
 	// Add the reservation post ID to the updated dates
 	foreach ($updated_dates as $date) {
 		if (isset($reservations_array_without_id[$date])) {
@@ -338,11 +348,12 @@ function cognitive_is_date_reserved( $date, $roomtype ) {
 					$reservationDuration = floor( ( $reservationEndDate - $reservationStartDate ) / ( 60 * 60 * 24 ) ) + 1;
 					if ( $numberOfDays > 0 ) {
 						if ( $currentDate == $reservationStartDate ) {
-							$start = $reservationStartDate;
+							$start = 'yes';
 						} else {
 							$start = 'no';
 						}
 						$reservation_data['id'] = $reservation_id;
+						$reservation_data['checkin'] = $reservationStartDate;
 						$reservation_data['start'] = $start;
 						$reserved_data[]=$reservation_data; // Date is part of a reservation for the specified number of days
 						$found = true;
@@ -443,18 +454,21 @@ function cognitive_remaining_rooms_for_day($roomId, $dateString) {
 	$reserved_room_count = cognitive_count_reservations_for_day($roomId, $dateString);
 	$max_count = cognitive_get_max_quantity_for_room( $roomId, $dateString );
 	$avaiblable_count = $max_count - $reserved_room_count;
-	if ( empty( $avaiblable_count ) || !isset( $avaiblable_count) || $avaiblable_count < 0 ) {
+	if ( empty( $avaiblable_count ) || !isset( $avaiblable_count) ) {
 		$avaiblable_count = 0;
 	}
 	
 	return $avaiblable_count;
 }
 function cognitive_count_reservations_for_day($room_id, $day) {
+
+	$occupied_count = 0;
 	// Retrieve the reservations array for the room type
 	$reservations_array_json = get_post_meta($room_id, 'reservations_array', true);
 	if ( DEBUG_MODE ) {
 		print_r($reservations_array_json );
 	}
+	//print_r($reservations_array_json );
 	// If the reservations array is empty or not a JSON string, return 0
 	if (empty($reservations_array_json) || !is_string($reservations_array_json)) {
 		return 0;
@@ -473,9 +487,19 @@ function cognitive_count_reservations_for_day($room_id, $day) {
 		
 		// Check if the reservation IDs is an array
 		if (is_array($reservation_ids)) {
-			return count($reservation_ids);
+			
+			// Loop through reservation ID and see if checkout is on the same day.
+			// If so don't count it as an occupied room
+			foreach( $reservation_ids as $reservation_id ) {
+				$checkout = cognitive_get_checkout_date( $reservation_id );
+				if ( $day < $checkout ) {
+					$occupied_count++;
+				}
+			}
+			return $occupied_count;
 		} elseif (!empty($reservation_ids)) {
-			return 1;
+			$max_room_count = cognitive_get_max_quantity_for_room($room_id, $day);
+			return $max_room_count;
 		}
 	}
 
@@ -486,7 +510,7 @@ function cognitive_count_reservations_for_day($room_id, $day) {
 function cognitive_get_availability_calendar() {
 // Define the start and end dates
 $today = new DateTime();
-$week_ago = (new DateTime())->modify('-7 days');
+$week_ago = (new DateTime())->modify('-9 days');
 $end_date = (new DateTime())->modify('+30 days');
 
 $startDate = $week_ago->format('Y-m-d');
@@ -573,7 +597,7 @@ for ($day = 0; $day < $numDays; $day++) {
 						?>
 						<div class="calendar-info-wrap">
 						<div class="calendar-info">
-						<a href="#" class="quantity-link" data-reserved="<?php echo $reserved_rooms; ?>" data-date="<?php echo $dateString; ?>" data-room="<?php echo $roomId; ?>"><?php echo $remaining_rooms; ?></a>
+						<a href="#" class="quantity-link" data-reserved="<?php echo $reserved_rooms; ?>" data-date="<?php echo $dateString; ?>" data-room="<?php echo $roomId; ?>"><?php echo $max_room_count . '~~' . $reserved_room_count . '~~' . $remaining_rooms; ?></a>
 						<?php
 						$rate = cognitive_get_room_type_base_rate( $roomId );
 						if (!empty($rate) && isset($rate) && $rate > 0) {
@@ -587,7 +611,7 @@ for ($day = 0; $day < $numDays; $day++) {
 						if ( $reservation_data ) {
 							$reservation_module = array();
 							//echo cognitive_generate_reserved_tab( $reservation_data, $checkout_list );
-							$reservation_module = cognitive_generate_reserved_tab( $reservation_data, $checkout_list, $dateString );
+							$reservation_module = cognitive_generate_reserved_tab( $reservation_data, $checkout_list, $dateString, $startDate );
 							echo $reservation_module['tab'];
 							$checkout_list = $reservation_module['checkout'];
 							//print_r( $checkout_list );
@@ -605,7 +629,7 @@ for ($day = 0; $day < $numDays; $day++) {
 
 	cognitive_quanity_modal();
 }
-function cognitive_generate_reserved_tab( $reservation_data, $checkout_list, $current_day ) {
+function cognitive_generate_reserved_tab( $reservation_data, $checkout_list, $current_day, $calendar_start ) {
 	$display = false;
 	$tab = array();
 	if (DEBUG_MODE) {
@@ -641,13 +665,14 @@ function cognitive_generate_reserved_tab( $reservation_data, $checkout_list, $cu
 			}
 
 			$givenCheckinDate = $checkin;
-
+			//echo $givenCheckinDate . '-' . $reservatoin_id . ' ';
 			// Filter the array based on the check-in date and existing checkout dates
 			$filteredArray = array_filter($checkout_list, function($value) use ($givenCheckinDate) {
 				return $value['checkout'] > $givenCheckinDate;
 			});
 
-
+			// print_r( $filteredArray );
+			// echo '<br/>';
 			// Extract the room numbers from the filtered array
 			$roomNumbers = array_column($filteredArray, 'room');
 
@@ -666,7 +691,8 @@ function cognitive_generate_reserved_tab( $reservation_data, $checkout_list, $cu
 
 			// Output the result
 			if ($missingNumber) {
-				//echo "The missing room number is: $missingNumber";
+				// echo "The missing room number is: $missingNumber";
+				// echo '<br/>';
 				$room = $missingNumber;
 			} else {
 				$givenDate = $checkin;
@@ -675,7 +701,7 @@ function cognitive_generate_reserved_tab( $reservation_data, $checkout_list, $cu
 				foreach ($checkout_list as $value) {
 					$checkoutDate = $value['checkout'];
 				
-					if ($checkoutDate >= $givenDate) {
+					if ($checkoutDate > $givenDate) {
 						$recordCount++;
 					}
 				}
@@ -727,15 +753,27 @@ function cognitive_generate_reserved_tab( $reservation_data, $checkout_list, $cu
 
 		if ( $reservation['start'] <> 'no' ) {
 			$start_date = new DateTime();
-			$start_date->setTimestamp($reservation['start']);
+			$start_date->setTimestamp($reservation['checkin']);
 			$start_date_display = $start_date->format('M j, Y');
-			$display_info = $guest_name;
+			$display_info = $guest_name . ' -' . $reservation['id'];
 			$width = ( 80 * ( $reserved_days ) ) - 3;
 			$tab[$room] = '<div class="reserved-tab-wrap" data-room="'.$room.'" data-row="'.$row.'" data-reservationid="'.$reservation['id'].'" data-checkin="'.$checkin.'" data-checkout="'.$checkout.'"><div class="reserved-tab reserved-tab-days-'.$reserved_days.'"><div style="width:'.$width.'px;" class="reserved-tab-inner">'.$display_info.'</div></div></div>';
 			$display = true;
 		} else {
 			if ( $current_day <> $checkout ) {
-				$tab[$room] = '<div class="reserved-tab-wrap reserved-extended" data-room="'.$room.'" data-row="'.$row.'" data-reservationid="'.$reservation['id'].'" data-checkin="'.$checkin.'" data-checkout="'.$checkout.'"><div class="reserved-tab"></div></div>';
+				// Get the checkin day for this as it's in the past of start of the availblablity calendar.
+				// So this tab is happening from the past and needs to be labled athough an extention.
+				$check_in_date_past = new DateTime();
+				$check_in_date_past->setTimestamp($reservation['checkin']);
+				$check_in_date_past = $check_in_date_past->format('Y-m-d');
+				$display_info = $guest_name . ' -' . $reservation['id'];
+				$daysBetween = cognitive_countDaysBetweenDates($check_in_date_past, $current_day);
+				$width = ( 80 * ( $reserved_days - $daysBetween ) ) - 3;
+				if ( $check_in_date_past < $calendar_start && $calendar_start == $current_day ) {
+					$tab[$room] = '<div class="reserved-tab-wrap reserved-from-past" data-room="'.$room.'" data-row="'.$row.'" data-reservationid="'.$reservation['id'].'" data-checkin="'.$checkin.'" data-checkout="'.$checkout.'"><div class="reserved-tab reserved-tab-days-'.$reserved_days.'"><div style="width:'.$width.'px;" class="reserved-tab-inner"><i class="fa-solid fa-arrow-right-from-bracket"></i>'.$display_info.'</div></div></div>';
+				} else {
+					$tab[$room] = '<div class="reserved-tab-wrap reserved-extended" data-room="'.$room.'" data-row="'.$row.'" data-reservationid="'.$reservation['id'].'" data-checkin="'.$checkin.'" data-checkout="'.$checkout.'"><div class="reserved-tab"></div></div>';
+				}
 				$display = true;
 			}
 		}
@@ -1006,28 +1044,42 @@ function cognitive_get_max_quantity_for_room($postID, $dateString) {
 	return false;
 }
 function cognitive_get_checkin_date($reservation_post_id) {
-    // Get the check-in and check-out dates for the reservation
-    $checkin_date = get_post_meta($reservation_post_id, 'pagemeta_checkin_date', true);
+	// Get the check-in and check-out dates for the reservation
+	$checkin_date = get_post_meta($reservation_post_id, 'pagemeta_checkin_date', true);
 
-    return $checkin_date;
+	return $checkin_date;
 }
 function cognitive_get_checkout_date($reservation_post_id) {
-    // Get the check-in and check-out dates for the reservation
-    $checkout_date = get_post_meta($reservation_post_id, 'pagemeta_checkout_date', true);
+	// Get the check-in and check-out dates for the reservation
+	$checkout_date = get_post_meta($reservation_post_id, 'pagemeta_checkout_date', true);
 
-    return $checkout_date;
+	return $checkout_date;
 }
 function cognitive_count_reservation_days($reservation_post_id) {
-    // Get the check-in and check-out dates for the reservation
-    $checkin_date = get_post_meta($reservation_post_id, 'pagemeta_checkin_date', true);
-    $checkout_date = get_post_meta($reservation_post_id, 'pagemeta_checkout_date', true);
-  
-    // Calculate the number of days
-    $datetime1 = new DateTime($checkin_date);
-    $datetime2 = new DateTime($checkout_date);
-    $interval = $datetime1->diff($datetime2);
-    $num_days = $interval->days;
+	// Get the check-in and check-out dates for the reservation
+	$checkin_date = get_post_meta($reservation_post_id, 'pagemeta_checkin_date', true);
+	$checkout_date = get_post_meta($reservation_post_id, 'pagemeta_checkout_date', true);
 
-    return $num_days;
+	// Calculate the number of days
+	$datetime1 = new DateTime($checkin_date);
+	$datetime2 = new DateTime($checkout_date);
+	$interval = $datetime1->diff($datetime2);
+	$num_days = $interval->days;
+
+	return $num_days;
+}
+function cognitive_countDaysBetweenDates($startDate, $endDate) {
+	// Create DateTime objects for the start and end dates
+	$startDateTime = new DateTime($startDate);
+	$endDateTime = new DateTime($endDate);
+
+	// Calculate the difference between the two dates
+	$interval = $endDateTime->diff($startDateTime);
+
+	// Extract the number of days from the interval
+	$daysBetween = $interval->days;
+
+	// Return the result
+	return $daysBetween;
 }
 ?>

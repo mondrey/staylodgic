@@ -105,6 +105,10 @@ font-size: 12px;
 	position: relative;
 	height: 25px;
 }
+.reserved-tab-wrap::before {
+	position: absolute;
+
+}
 .reserved-tab {
 	position: absolute;
 }
@@ -142,7 +146,10 @@ font-size: 12px;
 	padding: 3px 3px 3px 7px;
 	border-radius: 4px;
 }
-
+.reserved-from-past .reserved-tab-inner {
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+}
 
 .collision {
 	/* Add your collision styling here */

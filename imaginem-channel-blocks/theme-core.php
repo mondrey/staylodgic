@@ -171,6 +171,10 @@ class Theme_Core {
                 wp_enqueue_style( 'bootstrap');
 				wp_enqueue_script('bootstrap');
 
+                wp_enqueue_style( 'fontawesome-6', plugin_dir_url( __FILE__ ) .'assets/fonts/fontawesome-free-6.4.0-web/css/fontawesome.css',false, 'screen' );
+                wp_enqueue_style( 'fontawesome-6-brands', plugin_dir_url( __FILE__ ) .'assets/fonts/fontawesome-free-6.4.0-web/css/all.css',false, 'screen' );
+                wp_enqueue_style( 'fontawesome-6-solid', plugin_dir_url( __FILE__ ) .'assets/fonts/fontawesome-free-6.4.0-web/css/solid.css',false, 'screen' );
+
 				wp_enqueue_media();
 
 				wp_enqueue_style('themecore-admin-styles');
