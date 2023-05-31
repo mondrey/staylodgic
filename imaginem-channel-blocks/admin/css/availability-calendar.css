@@ -44,28 +44,29 @@ border-left: none;
 
 .calendarRow .rowHeader {
 font-weight: bold;
-background-color: #f5f5f5;
+background-color: #eee;
 position: sticky;
 left: 0;
 z-index: 1;
-width: 200px;
+width: 290px;
+font-size: 12px;
+padding: 20px;
 }
 
 .calendarRow .rowHeader:first-child {
 border-top: none;
 }
 
-.calendarRow .rowHeader:before {
-content: "";
-position: absolute;
-top: 0;
-left: -1px;
-height: 100%;
-width: 1px;
-background-color: #ccc;
-z-index: -1;
+.calendarRow .rowHeader::before {
+	content: "";
+	position: absolute;
+	bottom: -1px;
+	left: -1px;
+	height: 1px;
+	width: 100%;
+	background-color: #dfdfdf;
+	z-index: -1;
 }
-
 
 
 #calendarTable {
@@ -104,6 +105,7 @@ font-size: 12px;
 .reserved-tab-wrap {
 	position: relative;
 	height: 25px;
+	z-index: 0;
 }
 .reserved-tab-wrap::before {
 	position: absolute;
@@ -155,7 +157,7 @@ font-size: 12px;
 	border-top: 2px solid #f00;
 }
 .calendarCell.fully-booked {
-	background: #ff000012;
+	background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQVQYV2NkIALsU1Y2ZiSkDqTI6e7ds3gVwhSBDMOpEFkRToXoirAqxKYIQyEuRSgK8SmCKySkCKyQGEUghQCl2yVCPSoUNwAAAABJRU5ErkJggg==) repeat;
 }
 body .tooltip .tooltip-inner {
     text-align: left;

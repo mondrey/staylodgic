@@ -544,6 +544,20 @@ function cognitive_remaining_rooms_for_day($roomId, $dateString) {
 	
 	return $avaiblable_count;
 }
+function cognitive_is_room_for_day_fullybooked($roomId, $dateString) {
+
+	$reserved_room_count = cognitive_count_reservations_for_day($roomId, $dateString);
+	$max_count = cognitive_get_max_quantity_for_room( $roomId, $dateString );
+	$avaiblable_count = $max_count - $reserved_room_count;
+	if ( empty( $avaiblable_count ) || !isset( $avaiblable_count) ) {
+		$avaiblable_count = 0;
+	}
+	if ( 0 == $avaiblable_count ) {
+		return true;
+	}
+	
+	return false;
+}
 function cognitive_count_reservations_for_day($room_id, $day) {
 
 	$occupied_count = 0;
@@ -677,7 +691,6 @@ function cognitive_get_availability_calendar( $startDate, $endDate ) {
 			<tr class="calendarRow calendar-room-row" data-id="<?php echo $roomId; ?>">
 				<td class="calendarCell rowHeader"><?php echo $roomName; ?></td>
 				<?php foreach ($dates as $date) : ?>
-					<td class="calendarCell">
 						<?php
 						$dateString = $date->format('Y-m-d');
 						$reservation_data = array();
@@ -687,7 +700,11 @@ function cognitive_get_availability_calendar( $startDate, $endDate ) {
 						$max_room_count = cognitive_get_max_quantity_for_room($roomId, $dateString);
 						$reserved_rooms = cognitive_calculate_reserved_rooms($dateString,$roomId);
 						$room_rate = cognitive_get_room_rate_by_date( $roomId, $dateString );
-						
+						$occupancy_status_class = "";
+						if ( cognitive_is_room_for_day_fullybooked($roomId, $dateString) ) {
+							$occupancy_status_class = "fully-booked";
+						}
+						echo '<td class="calendarCell '.$occupancy_status_class.'">';
 						if (DEBUG_MODE) {
 							if ( $reservation_data ) {
 								print_r($reservation_data);
