@@ -214,7 +214,8 @@
 				  if (selectedDates.length > 1) {
 					checkout = selectedDates[1];
 				  }
-			  
+				  let reservationID = $(instance.input).data('postid');
+				  console.log(reservationID);
 				  const roomNights = checkout ? Math.ceil((checkout - checkin) / (1000 * 60 * 60 * 24)) : 0;
 			  
 				  const reservationDetails = document.getElementById("reservation-details");
@@ -232,6 +233,37 @@
 					document.getElementById("pagemeta_checkin_date").value = new Date(checkin - checkinOffset).toISOString().split('T')[0];
 					document.getElementById("pagemeta_checkout_date").value = new Date(checkout - checkoutOffset).toISOString().split('T')[0];
 				  }
+
+				  // Availablity checking to see if range chosen has room available for the dates
+				  const checkinOffset = checkin ? checkin.getTimezoneOffset() * 60000 : 0; 
+				  const checkoutOffset = checkout ? checkout.getTimezoneOffset() * 60000 : 0; 
+
+				  if (checkin && checkout) {
+					var data = {
+						'action': 'cognitive_check_room_availability',
+						'reservationid': reservationID,
+						'checkin': new Date(checkin - checkinOffset).toISOString().split('T')[0],
+						'checkout': new Date(checkout - checkoutOffset).toISOString().split('T')[0]
+					};
+					
+					jQuery.post(ajaxurl, data, function(response) {
+						let selectElement = $('#pagemeta_room_name');
+						selectElement.empty();
+					
+						var available_rooms = JSON.parse(response); // Parse the JSON string into an object
+						console.log( available_rooms );
+						$.each(available_rooms, function(key, value){
+							if(value){
+								let optionElement = `<option value="${key}">${value}</option>`; // changed here
+								selectElement.append(optionElement);
+							}
+						});
+
+						// Trigger update
+    					selectElement.trigger("chosen:updated");
+
+					});
+				}
 				},
 				onReady: function(selectedDates, dateStr, instance) {
 				  // calculate room nights and display reservation details for existing reservation

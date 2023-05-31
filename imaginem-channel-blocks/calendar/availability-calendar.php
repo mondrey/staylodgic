@@ -544,9 +544,9 @@ function cognitive_remaining_rooms_for_day($roomId, $dateString) {
 	
 	return $avaiblable_count;
 }
-function cognitive_is_room_for_day_fullybooked($roomId, $dateString) {
+function cognitive_is_room_for_day_fullybooked($roomId, $dateString, $excluded_reservation_id = null) {
 
-	$reserved_room_count = cognitive_count_reservations_for_day($roomId, $dateString);
+	$reserved_room_count = cognitive_count_reservations_for_day($roomId, $dateString, $excluded_reservation_id);
 	$max_count = cognitive_get_max_quantity_for_room( $roomId, $dateString );
 	$avaiblable_count = $max_count - $reserved_room_count;
 	if ( empty( $avaiblable_count ) || !isset( $avaiblable_count) ) {
@@ -558,7 +558,7 @@ function cognitive_is_room_for_day_fullybooked($roomId, $dateString) {
 	
 	return false;
 }
-function cognitive_count_reservations_for_day($room_id, $day) {
+function cognitive_count_reservations_for_day($room_id, $day, $excluded_reservation_id = null) {
 
 	$occupied_count = 0;
 	// Retrieve the reservations array for the room type
@@ -589,6 +589,10 @@ function cognitive_count_reservations_for_day($room_id, $day) {
 			// Loop through reservation ID and see if checkout is on the same day.
 			// If so don't count it as an occupied room
 			foreach( $reservation_ids as $reservation_id ) {
+
+				// If this reservation should be excluded from the count, skip this loop iteration
+				if ($reservation_id == $excluded_reservation_id) continue;
+
 				$checkout = cognitive_get_checkout_date( $reservation_id );
 				if ( $day < $checkout ) {
 					$occupied_count++;
@@ -1237,4 +1241,55 @@ function cognitive_countDaysBetweenDates($startDate, $endDate) {
 	// Return the result
 	return $daysBetween;
 }
-?>
+
+function cognitive_is_room_fullybooked_for_date_range($roomId, $checkin_date, $checkout_date, $reservationid) {
+	// get the date range
+	$start = new DateTime($checkin_date);
+	$end = new DateTime($checkout_date);
+	$interval = new DateInterval('P1D');
+	$daterange = new DatePeriod($start, $interval, $end);
+
+	foreach ($daterange as $date) {
+		// Check if the room is fully booked for the given date
+		if (cognitive_is_room_for_day_fullybooked($roomId, $date->format("Y-m-d"), $reservationid)) {
+			// If the room is fully booked for any of the dates in the range, return true
+			return true;
+		}
+	}
+
+	// If the room is not fully booked for any of the dates in the range, return false
+	return false;
+}
+
+
+add_action('wp_ajax_cognitive_check_room_availability', 'cognitive_check_room_availability');
+add_action('wp_ajax_nopriv_cognitive_check_room_availability', 'cognitive_check_room_availability');
+
+function cognitive_check_room_availability() {
+	$checkin_date = $_POST['checkin'];
+	$checkout_date = $_POST['checkout'];
+	$reservationid = $_POST['reservationid'];
+	$available_rooms = array();
+
+	// get all rooms
+	$room_list = get_posts(array(
+		'post_type' => 'room',
+		'orderby' => 'title',
+		'numberposts' => -1,
+		'order' => 'ASC',
+		'post_status' => 'publish'
+	));
+
+	foreach($room_list as $room) {
+		$is_fullybooked = cognitive_is_room_fullybooked_for_date_range($room->ID, $checkin_date, $checkout_date, $reservationid);
+		
+		// if not fully booked add to available rooms
+		if (!$is_fullybooked) {
+			$available_rooms[$room->ID] = $room->post_title; // changed here
+		}
+	}
+
+	echo json_encode($available_rooms);
+	wp_die(); // this is required to terminate immediately and return a proper response
+}
+

@@ -474,7 +474,7 @@ function themecore_generate_metaboxes($meta_data,$post_id) {
 					break;
 				case 'reservation':
 					$text_value = $meta ? $meta : $field['std'];
-					echo '<input type="text" class="'.$class.' reservation" data-enable-time="true" name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '" value="' . esc_attr($text_value) . '" size="30" />';
+					echo '<input data-postid="'.get_the_id().'" type="text" class="'.$class.' reservation" data-enable-time="true" name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '" value="' . esc_attr($text_value) . '" size="30" />';
 					echo '<div id="reservation-details"></div>';
 					break;
 				case 'textarea':
