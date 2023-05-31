@@ -667,6 +667,9 @@ function cognitive_get_availability_calendar( $startDate, $endDate ) {
 	}
 
 	ob_start();
+	// Get today's date
+	$today = new DateTime();
+	$today = $today->format('Y-m-d');
 	?>
 	<table id="calendarTable">
 		<tr class="calendarRow">
@@ -681,10 +684,19 @@ function cognitive_get_availability_calendar( $startDate, $endDate ) {
 				if ( $number_of_columns < $markNumDays ) {
 					$column_class = "rangeSelected";
 				}
+				$today_status_class = '';
+				$checkdateString = $date->format('Y-m-d');
+				if ( $checkdateString == $today ) {
+					$today_status_class = "is-today";
+					$month = "Today";
+				}
 			?>
-					<td class="calendarCell monthHeader <?php echo $column_class; ?>">
-						<div class="month"><?php echo $month; ?></div>
-						<div class="day"><?php echo $date->format('D'); ?> <?php echo $date->format('j'); ?></div>
+					<td class="calendarCell monthHeader <?php echo $today_status_class; ?> <?php echo $column_class; ?>">
+						<div class="monthDayinfo-wrap">
+							<div class="month"><?php echo $month; ?></div>
+							<div class="day-letter"><?php echo $date->format('D'); ?></div>
+							<div class="day"><?php echo $date->format('j'); ?></div>
+						</div>
 					</td>
 			<?php endforeach; ?>
 		</tr>
@@ -708,7 +720,11 @@ function cognitive_get_availability_calendar( $startDate, $endDate ) {
 						if ( cognitive_is_room_for_day_fullybooked($roomId, $dateString) ) {
 							$occupancy_status_class = "fully-booked";
 						}
-						echo '<td class="calendarCell '.$occupancy_status_class.'">';
+						$today_status_class = '';
+						if ( $dateString == $today ) {
+							$today_status_class = "is-today";
+						}
+						echo '<td class="calendarCell '.$today_status_class.' '.$occupancy_status_class.'">';
 						if (DEBUG_MODE) {
 							if ( $reservation_data ) {
 								print_r($reservation_data);
@@ -884,13 +900,13 @@ function cognitive_generate_reserved_tab( $reservation_data, $checkout_list, $cu
 		// 	$display = true;
 		// }
 			
+		$display_info = $guest_name . '<span>Booking.com</span>';
 		if ( $reservation['start'] <> 'no' ) {
 			$start_date = new DateTime();
 			$start_date->setTimestamp($reservation['checkin']);
 			$start_date_display = $start_date->format('M j, Y');
-			$display_info = $guest_name . ' -' . $reservation['id'];
 			$width = ( 80 * ( $reserved_days ) ) - 3;
-			$tab[$room] = '<div class="reserved-tab-wrap reserved-tab-with-info" data-guest="'.$guest_name.'" data-room="'.$room.'" data-row="'.$row.'" data-reservationid="'.$reservation['id'].'" data-checkin="'.$checkin.'" data-checkout="'.$checkout.'"><div class="reserved-tab reserved-tab-days-'.$reserved_days.'"><div style="width:'.$width.'px;" class="reserved-tab-inner">'.$display_info.'</div></div></div>';
+			$tab[$room] = '<div class="reserved-tab-wrap reserved-tab-with-info" data-guest="'.$guest_name.'" data-room="'.$room.'" data-row="'.$row.'" data-reservationid="'.$reservation['id'].'" data-checkin="'.$checkin.'" data-checkout="'.$checkout.'"><div class="reserved-tab reserved-tab-days-'.$reserved_days.'"><div style="width:'.$width.'px;" class="reserved-tab-inner"><div class="ota-sign"></div><div class="guest-name">'.$display_info.'</div></div></div></div>';
 			$display = true;
 		} else {
 			if ( $current_day <> $checkout ) {
@@ -899,11 +915,10 @@ function cognitive_generate_reserved_tab( $reservation_data, $checkout_list, $cu
 				$check_in_date_past = new DateTime();
 				$check_in_date_past->setTimestamp($reservation['checkin']);
 				$check_in_date_past = $check_in_date_past->format('Y-m-d');
-				$display_info = $guest_name . ' -' . $reservation['id'];
 				$daysBetween = cognitive_countDaysBetweenDates($check_in_date_past, $current_day);
 				$width = ( 80 * ( $reserved_days - $daysBetween ) ) - 3;
 				if ( $check_in_date_past < $calendar_start && $calendar_start == $current_day ) {
-					$tab[$room] = '<div class="reserved-tab-wrap reserved-tab-with-info reserved-from-past" data-guest="'.$guest_name.'" data-room="'.$room.'" data-row="'.$row.'" data-reservationid="'.$reservation['id'].'" data-checkin="'.$checkin.'" data-checkout="'.$checkout.'"><div class="reserved-tab reserved-tab-days-'.$reserved_days.'"><div style="width:'.$width.'px;" class="reserved-tab-inner"><i class="fa-solid fa-arrow-right-from-bracket"></i>'.$display_info.'</div></div></div>';
+					$tab[$room] = '<div class="reserved-tab-wrap reserved-tab-with-info reserved-from-past" data-guest="'.$guest_name.'" data-room="'.$room.'" data-row="'.$row.'" data-reservationid="'.$reservation['id'].'" data-checkin="'.$checkin.'" data-checkout="'.$checkout.'"><div class="reserved-tab reserved-tab-days-'.$reserved_days.'"><div style="width:'.$width.'px;" class="reserved-tab-inner"><div class="ota-sign"></div><div class="guest-name">'.$display_info.'</div></div></div></div>';
 				} else {
 					$tab[$room] = '<div class="reserved-tab-wrap reserved-extended" data-room="'.$room.'" data-row="'.$row.'" data-reservationid="'.$reservation['id'].'" data-checkin="'.$checkin.'" data-checkout="'.$checkout.'"><div class="reserved-tab"></div></div>';
 				}
