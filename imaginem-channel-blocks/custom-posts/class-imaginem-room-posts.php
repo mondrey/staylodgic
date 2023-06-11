@@ -1,11 +1,10 @@
 <?php
 class Imaginem_Room_Posts {
 
-    function __construct() 
-    {	
-        add_action('init', array( $this, 'init'));
-        add_action('admin_init', array( $this, 'sort_admin_init'));
-        add_filter("manage_edit-room_columns", array( $this, 'room_edit_columns'));
+	function __construct() {
+		add_action('init', array( $this, 'init'));
+		add_action('admin_init', array( $this, 'sort_admin_init'));
+		add_filter("manage_edit-room_columns", array( $this, 'room_edit_columns'));
 		add_action("manage_posts_custom_column",  array( $this, 'room_custom_columns'));
 		add_action('admin_menu', array( $this, 'mtheme_enable_room_sort') );
 		add_action('wp_ajax_room_sort', array( $this, 'mtheme_save_room_order'));
@@ -20,7 +19,7 @@ class Imaginem_Room_Posts {
 	}
 
 	function mtheme_enable_room_sort() {
-	    add_submenu_page('edit.php?post_type=room', 'Sort rooms', 'Sort Rooms', 'edit_posts', basename(__FILE__), array( $this, 'mtheme_sort_room'));
+		add_submenu_page('edit.php?post_type=room', 'Sort rooms', 'Sort Rooms', 'edit_posts', basename(__FILE__), array( $this, 'mtheme_sort_room'));
 	}
 	function mtheme_room_orderby($orderby){
 		global $wpdb;
@@ -59,15 +58,15 @@ class Imaginem_Room_Posts {
 			</li>
 		<?php endwhile; ?>
 		</div><!-- End div#wrap //-->
-	 
+	
 	<?php
 	}
 	function mtheme_save_room_order() {
 		global $wpdb; // WordPress database class
-	 
+	
 		$order = explode(',', $_POST['order']);
 		$counter = 0;
-	 
+	
 		foreach ($order as $sort_id) {
 			$wpdb->update($wpdb->posts, array( 'menu_order' => $counter ), array( 'ID' => $sort_id) );
 			$counter++;
@@ -79,8 +78,8 @@ class Imaginem_Room_Posts {
 	* room Admin columns
 	*/
 	function room_custom_columns($column){
-	    global $post;
-	    $custom = get_post_custom();
+		global $post;
+		$custom = get_post_custom();
 		$image_url=wp_get_attachment_thumb_url( get_post_thumbnail_id( $post->ID ) );
 		
 		$full_image_id = get_post_thumbnail_id(($post->ID), 'fullimage'); 
@@ -94,36 +93,36 @@ class Imaginem_Room_Posts {
 			define('MTHEME', $mtheme_shortname);
 		}
 
-	    switch ($column)
-	    {
-	        case "room_image":
+		switch ($column)
+		{
+			case "room_image":
 				if ( isset($image_url) && $image_url<>"" ) {
-	            echo '<a class="thickbox" href="'.$full_image_url.'"><img src="'.$image_url.'" width="60px" height="60px" alt="featured" /></a>';
+				echo '<a class="thickbox" href="'.$full_image_url.'"><img src="'.$image_url.'" width="60px" height="60px" alt="featured" /></a>';
 				}
-	            break;
-	        case "theme_description":
-	            if ( isset($custom['pagemeta_thumbnail_desc'][0]) ) { echo $custom['pagemeta_thumbnail_desc'][0]; }
-	            break;
-	        case "video":
-	            if ( isset($custom['pagemeta_lightbox_video'][0]) ) { echo $custom['pagemeta_lightbox_video'][0]; }
-	            break;
-	        case 'roomtypes':
-	            echo get_the_term_list($post->ID, 'roomtypes', '', ', ','');
-	            break;
-	    } 
+				break;
+			case "theme_description":
+				if ( isset($custom['pagemeta_thumbnail_desc'][0]) ) { echo $custom['pagemeta_thumbnail_desc'][0]; }
+				break;
+			case "video":
+				if ( isset($custom['pagemeta_lightbox_video'][0]) ) { echo $custom['pagemeta_lightbox_video'][0]; }
+				break;
+			case 'roomtypes':
+				echo get_the_term_list($post->ID, 'roomtypes', '', ', ','');
+				break;
+		} 
 	}
 
 	function room_edit_columns($columns){
-	    $columns = array(
-	        "cb" => "<input type=\"checkbox\" />",
-	        "title" => __('Room Title','mthemelocal'),
-	        "theme_description" => __('Description','mthemelocal'),
+		$columns = array(
+			"cb" => "<input type=\"checkbox\" />",
+			"title" => __('Room Title','mthemelocal'),
+			"theme_description" => __('Description','mthemelocal'),
 			"video" => __('Video','mthemelocal'),
-	        "roomtypes" => __('roomtypes','mthemelocal'),
+			"roomtypes" => __('roomtypes','mthemelocal'),
 			"room_image" => __('Image','mthemelocal')
-	    );
-	 
-	    return $columns;
+		);
+	
+		return $columns;
 	}
 	
 	/**
@@ -141,40 +140,40 @@ class Imaginem_Room_Posts {
 		/*
 		* Register room Post Manager
 		*/
-	    $mtheme_room_slug="rooms";
-	    if (function_exists('superlens_get_option_data')) {
-	    	$mtheme_room_slug = superlens_get_option_data('room_permalink_slug');
+		$mtheme_room_slug="rooms";
+		if (function_exists('superlens_get_option_data')) {
+			$mtheme_room_slug = superlens_get_option_data('room_permalink_slug');
 		}
-	    if ( $mtheme_room_slug=="" || !isSet($mtheme_room_slug) ) {
-	        $mtheme_room_slug="rooms";
-	    }
-	    $mtheme_room_singular_refer = "Rooms";
-	    if (function_exists('superlens_get_option_data')) {
-	    	$mtheme_room_singular_refer = superlens_get_option_data('room_archive_title');
+		if ( $mtheme_room_slug=="" || !isSet($mtheme_room_slug) ) {
+			$mtheme_room_slug="rooms";
+		}
+		$mtheme_room_singular_refer = "Rooms";
+		if (function_exists('superlens_get_option_data')) {
+			$mtheme_room_singular_refer = superlens_get_option_data('room_archive_title');
 		}
 		if ( '' === $mtheme_room_singular_refer || empty($mtheme_room_singular_refer) ) {
 			$mtheme_room_singular_refer = "Rooms";
 		}
-	    $args = array(
-	        'label' => $mtheme_room_singular_refer,
-	        'singular_label' => __('room','mthemelocal'),
-	        'public' => true,
-	        'show_ui' => true,
-	        'capability_type' => 'post',
-	        'hierarchical' => false,
-	        'has_archive' =>true,
+		$args = array(
+			'label' => $mtheme_room_singular_refer,
+			'singular_label' => __('room','mthemelocal'),
+			'public' => true,
+			'show_ui' => true,
+			'capability_type' => 'post',
+			'hierarchical' => false,
+			'has_archive' =>true,
 			'menu_position' => 6,
-	    	'menu_icon' => plugin_dir_url( __FILE__ ) . 'images/portfolio.png',
-	        'rewrite' => array('slug' => $mtheme_room_slug),//Use a slug like "work" or "project" that shouldnt be same with your page name
-	        'supports' => array('title', 'author', 'thumbnail')//Boxes will be shown in the panel
-	       );
-	 
-	    register_post_type( 'room' , $args );
+			'menu_icon' => plugin_dir_url( __FILE__ ) . 'images/portfolio.png',
+			'rewrite' => array('slug' => $mtheme_room_slug),//Use a slug like "work" or "project" that shouldnt be same with your page name
+			'supports' => array('title', 'author', 'thumbnail')//Boxes will be shown in the panel
+		);
+	
+		register_post_type( 'room' , $args );
 		/*
 		* Add Taxonomy for room 'Type'
 		*/
 		register_taxonomy('roomtypes', array("room"), array("hierarchical" => true, "label" => "Room Category", "singular_label" => "roomtypes", "rewrite" => true));
-		 
+		
 		/*
 		* Hooks for the room and Featured viewables
 		*/
@@ -201,7 +200,7 @@ class Imaginem_Room_Posts {
 			}
 		}
 	}
-    
+	
 }
 $mtheme_room_post_type = new Imaginem_Room_Posts();
 
@@ -217,78 +216,78 @@ class mtheme_Roomcategory_add_image {
 	}
 
 	// Add to admin_init function
-	 
+	
 	function mtheme_roomtype_columns($columns) {
-	    $columns['roomtype_image'] = 'Image';
-	    return $columns;
+		$columns['roomtype_image'] = 'Image';
+		return $columns;
 	}
 
 	// Add to admin_init function
-	 
+	
 	function mtheme_manage_workype_columns($value,$columns,$term_id) {
 		$mtheme_roomtype_image_id = get_option('mtheme_roomtype_image_id' . $term_id);
-	    switch ($columns) {
-	        case 'roomtype_image':
-	        		if ($mtheme_roomtype_image_id) {
-	        			$mtheme_roomtype_image_url = wp_get_attachment_image_src( $mtheme_roomtype_image_id, 'thumbnail', false );
-	            		$value = '<img src="'.$mtheme_roomtype_image_url[0].'" width="100px" height="auto" />';
-	            	}
-	            break;
-	 
-	        default:
-	            break;
-	    }
-	    return $value;
+		switch ($columns) {
+			case 'roomtype_image':
+					if ($mtheme_roomtype_image_id) {
+						$mtheme_roomtype_image_url = wp_get_attachment_image_src( $mtheme_roomtype_image_id, 'thumbnail', false );
+						$value = '<img src="'.$mtheme_roomtype_image_url[0].'" width="100px" height="auto" />';
+					}
+				break;
+	
+			default:
+				break;
+		}
+		return $value;
 	}
 
 	function mtheme_admin_head() {
-	    $taxonomies = get_taxonomies();
-	    $taxonomies = array('roomtypes'); // uncomment and specify particular taxonomies you want to add image feature.
-	    if (is_array($taxonomies)) {
-	        foreach ($taxonomies as $z_taxonomy) {
-	            add_action($z_taxonomy . '_add_form_fields', array(&$this,'mtheme_tax_field') );
-	            add_action($z_taxonomy . '_edit_form_fields', array(&$this,'mtheme_tax_field') );
-	        }
-	    }
+		$taxonomies = get_taxonomies();
+		$taxonomies = array('roomtypes'); // uncomment and specify particular taxonomies you want to add image feature.
+		if (is_array($taxonomies)) {
+			foreach ($taxonomies as $z_taxonomy) {
+				add_action($z_taxonomy . '_add_form_fields', array(&$this,'mtheme_tax_field') );
+				add_action($z_taxonomy . '_edit_form_fields', array(&$this,'mtheme_tax_field') );
+			}
+		}
 	}
 
 	// add image field in add form
 	function mtheme_tax_field($taxonomy) {
-	    wp_enqueue_style('thickbox');
-	    wp_enqueue_script('thickbox');
+		wp_enqueue_style('thickbox');
+		wp_enqueue_script('thickbox');
 		wp_enqueue_media();
 
-	    if(empty($taxonomy)) {
-	        echo '<div class="form-field">
-	                <label for="mtheme_roomtype_input">Image</label>
-	                <input size="40" type="text" name="mtheme_roomtype_input" id="mtheme_roomtype_input" value="" />
-	                <input type="text" name="mtheme_roomtype_image_id" id="mtheme_roomtype_image_id" value="" />
-	            </div>';
-	    }
-	    else{
-	    	
-	    	$mtheme_roomtype_input_url='';
-	    	$mtheme_roomtype_image_id='';
+		if(empty($taxonomy)) {
+			echo '<div class="form-field">
+					<label for="mtheme_roomtype_input">Image</label>
+					<input size="40" type="text" name="mtheme_roomtype_input" id="mtheme_roomtype_input" value="" />
+					<input type="text" name="mtheme_roomtype_image_id" id="mtheme_roomtype_image_id" value="" />
+				</div>';
+		}
+		else{
+			
+			$mtheme_roomtype_input_url='';
+			$mtheme_roomtype_image_id='';
 
-	        if ( isSet($taxonomy->term_id) ) {
-	        	//$mtheme_roomtype_input_url = get_option('mtheme_roomtype_input' . $taxonomy->term_id);
-	        	$mtheme_roomtype_image_id = get_option('mtheme_roomtype_image_id' . $taxonomy->term_id);
-	        }
-	        
-	        echo '<tr class="form-field">
+			if ( isSet($taxonomy->term_id) ) {
+				//$mtheme_roomtype_input_url = get_option('mtheme_roomtype_input' . $taxonomy->term_id);
+				$mtheme_roomtype_image_id = get_option('mtheme_roomtype_image_id' . $taxonomy->term_id);
+			}
+			
+			echo '<tr class="form-field">
 			<th scope="row" valign="top"><label for="mtheme_roomtype_input">Image</label></th>
 			<td>
 			<input type="hidden" name="mtheme_roomtype_image_id" id="mtheme_roomtype_image_id" value="' . $mtheme_roomtype_image_id . '" />
 			<a class="button" id="mtheme_upload_work_image">Set category image</a>
 			<div class="inside" id="featured_roomtype_image_wrap">';
-	        if(!empty($mtheme_roomtype_image_id)) {
-	            $mtheme_roomtype_image_url = wp_get_attachment_image_src( $mtheme_roomtype_image_id, 'thumbnail', false );
-	            echo '<img id="featured_roomtype_image" src="'.$mtheme_roomtype_image_url[0].'" style="max-width:200px;border: 1px solid #ccc;padding: 5px;box-shadow: 5px 5px 10px #ccc;margin-top: 10px;" >';
-	            echo '<a style="display:block;" id="remove_roomtype_image" href="#">Remove category Image</a>';
-	        }
-	        echo '</div>';
-	        echo '</td></tr><br/>';
-	    }
+			if(!empty($mtheme_roomtype_image_id)) {
+				$mtheme_roomtype_image_url = wp_get_attachment_image_src( $mtheme_roomtype_image_id, 'thumbnail', false );
+				echo '<img id="featured_roomtype_image" src="'.$mtheme_roomtype_image_url[0].'" style="max-width:200px;border: 1px solid #ccc;padding: 5px;box-shadow: 5px 5px 10px #ccc;margin-top: 10px;" >';
+				echo '<a style="display:block;" id="remove_roomtype_image" href="#">Remove category Image</a>';
+			}
+			echo '</div>';
+			echo '</td></tr><br/>';
+		}
 	?>
 	<script>
 	jQuery(document).ready(function($){
@@ -329,15 +328,14 @@ class mtheme_Roomcategory_add_image {
 				if (active_image.length > 0 ) {
 					$(active_image).attr('src', attachment.attributes.sizes.thumbnail.url);
 				} else {
-	  				var roomtypeImg = jQuery('<img/>');
-	  					roomtypeImg.attr('id','featured_roomtype_image')
+					var roomtypeImg = jQuery('<img/>');
+						roomtypeImg.attr('id','featured_roomtype_image')
 						roomtypeImg.attr('src', attachment.attributes.sizes.thumbnail.url);
 						roomtypeImg.attr('style',"max-width:200px;border: 1px solid #ccc;padding: 5px;box-shadow: 5px 5px 10px #ccc;margin-top: 10px;")
 						roomtypeImg.appendTo('#featured_roomtype_image_wrap');
 
 					jQuery( '<a style="display:block;" id="remove_roomtype_image" href="#">Remove roomtype Image</a>' ).appendTo( "#featured_roomtype_image_wrap" );
 				}
-				
 				jQuery("#mtheme_roomtype_image_id").val(attachment.id);
 			});
 
@@ -356,17 +354,17 @@ class mtheme_Roomcategory_add_image {
 
 	// save our taxonomy image while edit or save term
 	function mtheme_save_tax_pic($term_id) {
-	    if (isset($_POST['mtheme_roomtype_image_id'])) {
-	    	update_option('mtheme_roomtype_image_id' . $term_id, $_POST['mtheme_roomtype_image_id']);
-	    }
+		if (isset($_POST['mtheme_roomtype_image_id'])) {
+			update_option('mtheme_roomtype_image_id' . $term_id, $_POST['mtheme_roomtype_image_id']);
+		}
 	}
 
 	// output taxonomy image url for the given term_id (NULL by default)
 	function mtheme_roomtype_input_url($term_id = NULL) {
-	    if ($term_id) {
-	        $current_term = get_term_by('slug', get_query_var('term'), get_query_var('taxonomy'));
-	        return get_option('mtheme_roomtype_input' . $current_term->term_id);
-	    }
+		if ($term_id) {
+			$current_term = get_term_by('slug', get_query_var('term'), get_query_var('taxonomy'));
+			return get_option('mtheme_roomtype_input' . $current_term->term_id);
+		}
 	}
 
 }

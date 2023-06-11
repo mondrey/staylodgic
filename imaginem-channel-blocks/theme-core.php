@@ -19,6 +19,7 @@ class Theme_Core {
         add_action( 'admin_init', array( $this, 'themecore_add_page_box' ) );
         // add_action( 'admin_init', array( $this, 'themecore_clientitemmetabox_init' ) );
         add_action( 'admin_init', array( $this, 'themecore_reservationsitemmetabox_init' ) );
+        add_action( 'admin_init', array( $this, 'themecore_customersitemmetabox_init' ) );
         // add_action( 'admin_init', array( $this, 'themecore_fullscreenitemmetabox_init' ) );
         // add_action( "admin_init", array( $this, 'themecore_portfolioitemmetabox_init' ) );
         // add_action( 'admin_init', array( $this, 'themecore_proofingitemmetabox_init' ) );
@@ -42,6 +43,7 @@ class Theme_Core {
         // require_once (plugin_dir_path( __FILE__ ) . '/custom-posts/class-imaginem-fullscreen-posts.php');
         // require_once (plugin_dir_path( __FILE__ ) . '/custom-posts/class-imaginem-portfolio-posts.php');
         require_once (plugin_dir_path( __FILE__ ) . '/custom-posts/class-imaginem-reservation-posts.php');
+        require_once (plugin_dir_path( __FILE__ ) . '/custom-posts/class-imaginem-customer-posts.php');
         // require_once (plugin_dir_path( __FILE__ ) . '/custom-posts/class-imaginem-proofing-posts.php');
         //require_once (plugin_dir_path( __FILE__ ) . '/custom-posts/class-imaginem-photostory-posts.php');
         require_once (plugin_dir_path( __FILE__ ) . '/custom-posts/class-imaginem-room-posts.php');
@@ -49,7 +51,9 @@ class Theme_Core {
 
     public function themecore_load_availablity_calendar() {
         require_once (plugin_dir_path( __FILE__ ) . '/calendar/availability-calendar.php');
+        require_once (plugin_dir_path( __FILE__ ) . '/calendar/admin-calendar.php');
         require_once (plugin_dir_path( __FILE__ ) . '/calendar/modals.php');
+        require_once (plugin_dir_path( __FILE__ ) . '/calendar/front-end.php');
     }
 
     public function themecore_load_theme_widgets() {
@@ -77,6 +81,7 @@ class Theme_Core {
         require_once (plugin_dir_path( __FILE__ ) . '/metabox/metaboxes/post-metaboxes.php');
         // require_once (plugin_dir_path( __FILE__ ) . '/metabox/metaboxes/fullscreen-metaboxes.php');
         require_once (plugin_dir_path( __FILE__ ) . '/metabox/metaboxes/reservation-metaboxes.php');
+        require_once (plugin_dir_path( __FILE__ ) . '/metabox/metaboxes/customer-metaboxes.php');
         require_once (plugin_dir_path( __FILE__ ) . '/metabox/metaboxes/woocommerce-metaboxes.php');
         //require_once (plugin_dir_path( __FILE__ ) . '/metabox/metaboxes/photostory-metaboxes.php');
         require_once (plugin_dir_path( __FILE__ ) . '/metabox/metaboxes/room-metaboxes.php');
@@ -191,6 +196,21 @@ class Theme_Core {
 
     public function mtheme_load_front_end_scripts_styles() {
 
+        wp_register_style('flatpickr', plugin_dir_url( __FILE__ ) .'assets/js/flatpickr/flatpickr.min.css', array(), '1.0', 'screen' );
+		wp_register_script('flatpickr', plugin_dir_url( __FILE__ ) .'assets/js/flatpickr/flatpickr.js', array( 'jquery' ),'1.0', true );
+        wp_register_script( 'frontend-calendar', plugins_url( 'assets/js/frontend-calendar.js', __FILE__ ), array( 'jquery' ), '1.0', true );
+        wp_localize_script( 'frontend-calendar', 'frontendAjax',
+            array(
+                'ajaxurl'  => admin_url('admin-ajax.php'),
+                'post_id' => get_the_ID(),
+                'nonce'   => wp_create_nonce( 'themecore-nonce-search' ),
+            )
+        );
+        
+        wp_enqueue_script( 'frontend-calendar', array('jquery'), null, true );
+        wp_enqueue_style('flatpickr');
+        wp_enqueue_script('flatpickr');
+        
 		// Modernizer
 		wp_register_script( 'modernizr', plugin_dir_url( __FILE__ ) .'assets/js/modernizr.custom.47002.js', array( 'jquery' ),null, true );
 		wp_register_script( 'jquery-debouncedresize', plugins_url( '/assets/js/smartresize/jquery.debouncedresize.js', Imaginem_Blocks__FILE__ ), [ 'jquery' ], false, true );
@@ -287,7 +307,11 @@ class Theme_Core {
 		}
 		// Events Metabox
 		public function themecore_reservationsitemmetabox_init(){
-			add_meta_box('reservationsInfo-meta', esc_html__('Events Options','imaginem-blocks-ii'), 'themecore_reservationsitem_metaoptions', 'reservations', 'normal', 'low');
+			add_meta_box('reservationsInfo-meta', esc_html__('Reservation Options','imaginem-blocks-ii'), 'themecore_reservationsitem_metaoptions', 'reservations', 'normal', 'low');
+		}
+		// Events Metabox
+		public function themecore_customersitemmetabox_init(){
+			add_meta_box('customersInfo-meta', esc_html__('Customer Options','imaginem-blocks-ii'), 'themecore_customersitem_metaoptions', 'customers', 'normal', 'low');
 		}
 		// Fullscreen Metabox
 		public function themecore_fullscreenitemmetabox_init(){

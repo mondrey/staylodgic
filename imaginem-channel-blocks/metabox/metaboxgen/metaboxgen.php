@@ -780,6 +780,10 @@ function themecore_checkdata($post_id) {
 				$reservations_box = themecore_reservations_metadata();
 				themecore_savedata($reservations_box,$post_id);
 				break;
+			case 'customers':
+				$customers_box = themecore_customers_metadata();
+				themecore_savedata($customers_box,$post_id);
+				break;
 			case 'post':
 				$mtheme_post_metapack = themecore_post_metadata();
 

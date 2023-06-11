@@ -171,6 +171,10 @@ if ( ! function_exists( 'themecore_setup_elementor_settings_for_theme' ) ) {
             array_push($elementor_cpt_support,"reservations");
             update_option('elementor_cpt_support', $elementor_cpt_support);
         }
+        if (!in_array("customers", $elementor_cpt_support)) {
+            array_push($elementor_cpt_support,"customers");
+            update_option('elementor_cpt_support', $elementor_cpt_support);
+        }
         if (!in_array("portfolio", $elementor_cpt_support)) {
             array_push($elementor_cpt_support,"portfolio");
             update_option('elementor_cpt_support', $elementor_cpt_support);
@@ -201,6 +205,9 @@ function themecore_elementor_categories($types) {
     }
     if ( 'reservationsection' === $types ) {
         $the_list = get_terms('reservationsection');
+    }
+    if ( 'customersection' === $types ) {
+        $the_list = get_terms('customersection');
     }
     if ( 'blog' === $types ) {
         $the_list = get_categories();

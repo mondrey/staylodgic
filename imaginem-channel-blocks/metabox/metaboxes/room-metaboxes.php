@@ -59,7 +59,14 @@ function themecore_room_metadata() {
 				'name' => __('Children:','themecore'),
 				'id' => 'pagemeta_children',
 				'type' => 'text',
-				'desc' => __('Children:  (free child)','themecore'),
+				'desc' => __('Children:','themecore'),
+				'std' => ''
+			),
+			array(
+				'name' => __('Capacity:','themecore'),
+				'id' => 'pagemeta_capacity',
+				'type' => 'text',
+				'desc' => __('Capacity:','themecore'),
 				'std' => ''
 			),
 			array(
@@ -74,6 +81,13 @@ function themecore_room_metadata() {
 				'id' => 'pagemeta_bathrooms',
 				'type' => 'text',
 				'desc' => __('Bathrooms','themecore'),
+				'std' => ''
+			),
+			array(
+				'name' => __('Accomodation Size:','themecore'),
+				'id' => 'pagemeta_size',
+				'type' => 'text',
+				'desc' => __('Size:','themecore'),
 				'std' => ''
 			),
 			array(

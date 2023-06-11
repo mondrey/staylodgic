@@ -1,5 +1,55 @@
 <?php
 define('DEBUG_MODE', false);
+function cognitive_create_customer_from_reservation_post($reservation_post_id) {
+    // Retrieve the reservation post using the ID
+    $reservation_post = get_post($reservation_post_id);
+
+    if (!$reservation_post) {
+        // Handle error if reservation post not found
+        return;
+    }
+
+    // Retrieve the necessary post meta data from the reservation post
+    $full_name = get_post_meta($reservation_post_id, 'pagemeta_full_name', true);
+    $email_address = get_post_meta($reservation_post_id, 'pagemeta_email_address', true);
+    $phone_number = get_post_meta($reservation_post_id, 'pagemeta_phone_number', true);
+    $street_address = get_post_meta($reservation_post_id, 'pagemeta_street_address', true);
+    $city = get_post_meta($reservation_post_id, 'pagemeta_city', true);
+    $state = get_post_meta($reservation_post_id, 'pagemeta_state', true);
+    $zip_code = get_post_meta($reservation_post_id, 'pagemeta_zip_code', true);
+    $country = get_post_meta($reservation_post_id, 'pagemeta_country', true);
+    $booking_number = get_post_meta($reservation_post_id, 'pagemeta_booking_number', true);
+
+    // Create customer post
+    $customer_post_data = array(
+        'post_type'     => 'customers',  // Your custom post type for customers
+        'post_title'    => $full_name,   // Set the customer's full name as post title
+        'post_status'   => 'publish',    // The status you want to give new posts
+        'meta_input'    => array(
+            'pagemeta_full_name' => $full_name,
+            'pagemeta_email_address' => $email_address,
+            'pagemeta_phone_number' => $phone_number,
+            'pagemeta_street_address' => $street_address,
+            'pagemeta_city' => $city,
+            'pagemeta_state' => $state,
+            'pagemeta_zip_code' => $zip_code,
+            'pagemeta_country' => $country,
+            'pagemeta_booking_number' => $booking_number,  // Set the booking number as post meta
+            // add other meta data you need
+        ),
+    );
+
+    // Insert the post
+    $customer_post_id = wp_insert_post($customer_post_data);
+
+    if (!$customer_post_id) {
+        // Handle error while creating customer post
+        return;
+    }
+
+    // Update the reservation post with the customer post ID
+    update_post_meta($reservation_post_id, 'pagemeta_customer_id', $customer_post_id);
+}
 function cognitive_generate_unique_reservation_id( $reservation_post_id ) {
 	// Generate a random string or use a timestamp as a unique identifier
 	$unique_identifier = uniqid(); // Example: Random string
@@ -99,6 +149,13 @@ function update_reservations_array_on_save($post_id, $post, $update) {
 
 	// Add reservation to the new room type
 	update_reservations_array_on_change($room_type, $checkin_date, $checkout_date, $post_id);
+
+    // Check if customer post exists
+    $customer_id = get_post_meta($post_id, 'pagemeta_customer_id', true);
+    if (!$customer_id) {
+        // Create new customer from the filled inputs in reservation
+        cognitive_create_customer_from_reservation_post($post_id);
+    }
 }
 
 /**
@@ -268,11 +325,42 @@ function get_dates_between($start_date, $end_date) {
 	return $dates;
 }
 
-function cognitive_get_reservation_guest_name($reservation_id) {
-	$guest_name = '';
-	$guest_name = get_post_meta($reservation_id, 'pagemeta_reservation_guest_name', true);
-	return $guest_name;
+function cognitive_get_reservation_guest_name($reservation_post_id) {
+    // Get the booking number from the reservation post meta
+    $booking_number = get_post_meta($reservation_post_id, 'pagemeta_booking_number', true);
+
+    if (!$booking_number) {
+        // Handle error if booking number not found
+        return '';
+    }
+
+    // Query the customer post with the matching booking number
+    $customer_query = new WP_Query(array(
+        'post_type' => 'customers',
+        'meta_query' => array(
+            array(
+                'key' => 'pagemeta_booking_number',
+                'value' => $booking_number,
+            ),
+        ),
+    ));
+
+    if ($customer_query->have_posts()) {
+        $customer_post = $customer_query->posts[0];
+
+        // Retrieve the guest's full name from the customer post meta
+        $guest_full_name = get_post_meta($customer_post->ID, 'pagemeta_full_name', true);
+
+        // Restore the original post data
+        wp_reset_postdata();
+
+        return $guest_full_name;
+    }
+
+    // No matching customer found
+    return '';
 }
+
 
 function cognitive_get_availability( $roomID ) {
 	// Get the availability matrix field values for the Room post
@@ -313,7 +401,7 @@ function cognitive_calculate_reserved_rooms($date, $roomtype) {
 
 				$selected_date = strtotime($date);
 
-				if ($selected_date >= $checkin && $selected_date <= $checkout) {
+				if ($selected_date >= $checkin && $selected_date < $checkout) {
 					$reserved_rooms++;
 				}
 			}
@@ -369,7 +457,7 @@ function cognitive_is_date_reserved( $date, $roomtype ) {
 			}
 
 			// Date will be like so $dateRangeValue = "2023-05-21 to 2023-05-24";
-			$dateRangeParts = explode(" to ", $dateRangeValue);
+			//$dateRangeParts = explode(" to ", $dateRangeValue);
 			
 			$checkin = '';
 			$checkout = '';
@@ -544,20 +632,7 @@ function cognitive_remaining_rooms_for_day($roomId, $dateString) {
 	
 	return $avaiblable_count;
 }
-function cognitive_is_room_for_day_fullybooked($roomId, $dateString, $excluded_reservation_id = null) {
 
-	$reserved_room_count = cognitive_count_reservations_for_day($roomId, $dateString, $excluded_reservation_id);
-	$max_count = cognitive_get_max_quantity_for_room( $roomId, $dateString );
-	$avaiblable_count = $max_count - $reserved_room_count;
-	if ( empty( $avaiblable_count ) || !isset( $avaiblable_count) ) {
-		$avaiblable_count = 0;
-	}
-	if ( 0 == $avaiblable_count ) {
-		return true;
-	}
-	
-	return false;
-}
 function cognitive_count_reservations_for_day($room_id, $day, $excluded_reservation_id = null) {
 
 	$occupied_count = 0;
@@ -672,6 +747,41 @@ function cognitive_get_availability_calendar( $startDate, $endDate ) {
 	$today = $today->format('Y-m-d');
 	?>
 	<table id="calendarTable">
+		<tr class="calendarRow">
+			<td class="calendarCell rowHeader">
+				<?php
+				echo cognitive_calculate_range_occupancy( $startDate, $endDate );
+				?>
+				%
+			</td>
+			<?php
+			$number_of_columns = 0;
+			$markNumDays = $numDays + 1;
+			foreach ($dates as $date) :
+				$number_of_columns++;
+				$month = $date->format('F');
+				$column_class = '';
+				if ( $number_of_columns < $markNumDays ) {
+					$column_class = "rangeSelected";
+				}
+				$today_status_class = '';
+				$occupancydate = $date->format('Y-m-d');
+				if ( $occupancydate == $today ) {
+					$today_status_class = "is-today";
+					$month = "Today";
+				}
+			?>
+					<td class="calendarCell monthHeader <?php echo $today_status_class; ?> <?php echo $column_class; ?>">
+						<div class="occupancyStats-wrap">
+							<div class="occupancyStats-adr">
+								ADR: <?php echo cognitive_calculate_adr( $occupancydate ); ?>
+								<br/>
+								<?php echo cognitive_calculate_occupancy( $occupancydate ); ?>%
+							</div>
+						</div>
+					</td>
+			<?php endforeach; ?>
+		</tr>
 		<tr class="calendarRow">
 			<td class="calendarCell rowHeader"></td>
 			<?php
@@ -790,6 +900,7 @@ function cognitive_generate_reserved_tab( $reservation_data, $checkout_list, $cu
 		$start_date_display = '';
 		$guest_name = '';
 		$reservatoin_id = $reservation['id'];
+		$booking_number = cognitive_get_booking_number($reservation['id']);
 		$guest_name = cognitive_get_reservation_guest_name($reservation['id']);
 		$reserved_days = cognitive_count_reservation_days( $reservation['id'] );
 		$checkin = cognitive_get_checkin_date( $reservation['id'] );
@@ -906,7 +1017,7 @@ function cognitive_generate_reserved_tab( $reservation_data, $checkout_list, $cu
 			$start_date->setTimestamp($reservation['checkin']);
 			$start_date_display = $start_date->format('M j, Y');
 			$width = ( 80 * ( $reserved_days ) ) - 3;
-			$tab[$room] = '<div class="reserved-tab-wrap reserved-tab-with-info" data-guest="'.$guest_name.'" data-room="'.$room.'" data-row="'.$row.'" data-reservationid="'.$reservation['id'].'" data-checkin="'.$checkin.'" data-checkout="'.$checkout.'"><div class="reserved-tab reserved-tab-days-'.$reserved_days.'"><div style="width:'.$width.'px;" class="reserved-tab-inner"><div class="ota-sign"></div><div class="guest-name">'.$display_info.'</div></div></div></div>';
+			$tab[$room] = '<div class="reserved-tab-wrap reserved-tab-with-info" data-guest="'.$guest_name.'" data-room="'.$room.'" data-row="'.$row.'" data-bookingnumber="'.$booking_number.'" data-reservationid="'.$reservation['id'].'" data-checkin="'.$checkin.'" data-checkout="'.$checkout.'"><div class="reserved-tab reserved-tab-days-'.$reserved_days.'"><div style="width:'.$width.'px;" class="reserved-tab-inner"><div class="ota-sign"></div><div class="guest-name">'.$display_info.'</div></div></div></div>';
 			$display = true;
 		} else {
 			if ( $current_day <> $checkout ) {
@@ -1257,6 +1368,21 @@ function cognitive_countDaysBetweenDates($startDate, $endDate) {
 	return $daysBetween;
 }
 
+function cognitive_is_room_for_day_fullybooked($roomId, $dateString, $excluded_reservation_id = null) {
+
+	$reserved_room_count = cognitive_count_reservations_for_day($roomId, $dateString, $excluded_reservation_id);
+	$max_count = cognitive_get_max_quantity_for_room( $roomId, $dateString );
+	$avaiblable_count = $max_count - $reserved_room_count;
+	if ( empty( $avaiblable_count ) || !isset( $avaiblable_count) ) {
+		$avaiblable_count = 0;
+	}
+	if ( 0 == $avaiblable_count ) {
+		return true;
+	}
+	
+	return false;
+}
+
 function cognitive_is_room_fullybooked_for_date_range($roomId, $checkin_date, $checkout_date, $reservationid) {
 	// get the date range
 	$start = new DateTime($checkin_date);
@@ -1276,10 +1402,8 @@ function cognitive_is_room_fullybooked_for_date_range($roomId, $checkin_date, $c
 	return false;
 }
 
-
 add_action('wp_ajax_cognitive_check_room_availability', 'cognitive_check_room_availability');
 add_action('wp_ajax_nopriv_cognitive_check_room_availability', 'cognitive_check_room_availability');
-
 function cognitive_check_room_availability() {
 	$checkin_date = $_POST['checkin'];
 	$checkout_date = $_POST['checkout'];
@@ -1307,4 +1431,271 @@ function cognitive_check_room_availability() {
 	echo json_encode($available_rooms);
 	wp_die(); // this is required to terminate immediately and return a proper response
 }
+
+function cognitive_get_available_rooms_for_date_range( $checkin_date, $checkout_date ) {
+	$available_rooms = array();
+
+	// get all rooms
+	$room_list = get_posts(array(
+		'post_type' => 'room',
+		'orderby' => 'title',
+		'numberposts' => -1,
+		'order' => 'ASC',
+		'post_status' => 'publish'
+	));
+
+	foreach($room_list as $room) {
+		$count = cognitive_get_max_room_qty_for_date_range($room->ID, $checkin_date, $checkout_date, $reservationid);
+		
+		// if not fully booked add to available rooms
+		if ( $count !== 0 ) {
+			$available_rooms[$room->ID][$count] = $room->post_title; // changed here
+		}
+	}
+
+	return $available_rooms;
+}
+
+function cognitive_get_max_room_qty_for_date_range($roomId, $checkin_date, $checkout_date, $reservationid) {
+	// get the date range
+	$start = new DateTime($checkin_date);
+	$end = new DateTime($checkout_date);
+	$interval = new DateInterval('P1D');
+	$daterange = new DatePeriod($start, $interval, $end);
+
+	$max_count = PHP_INT_MAX;
+
+	foreach ($daterange as $date) {
+		// Check if the room is fully booked for the given date
+		$count = cognitive_get_max_room_qty_for_day($roomId, $date->format("Y-m-d"), $reservationid);
+
+		if ( $count < $max_count ) {
+			$max_count = $count;
+		}
+	}
+
+	// If no count was ever set, return false or whatever default value you need
+	if ($max_count == PHP_INT_MAX) {
+		return false;
+	}
+	
+	// If the room is not fully booked for any of the dates in the range, return max_count
+	return $max_count;
+}
+
+
+function cognitive_get_max_room_qty_for_day($roomId, $dateString, $excluded_reservation_id = null) {
+
+	$reserved_room_count = cognitive_count_reservations_for_day($roomId, $dateString, $excluded_reservation_id);
+	$max_count = cognitive_get_max_quantity_for_room( $roomId, $dateString );
+	$avaiblable_count = $max_count - $reserved_room_count;
+	if ( empty( $avaiblable_count ) || !isset( $avaiblable_count) ) {
+		$avaiblable_count = 0;
+	}
+	return $avaiblable_count;
+}
+
+function cognitive_splitDateRange($dateRange) {
+	// Split the date range into start and end dates
+	$dateRangeArray = explode(" to ", $dateRange);
+	
+	if (count($dateRangeArray) < 2 && !empty($dateRangeArray[0])) {
+		// Use the single date as both start and end date
+		$startDate = $dateRangeArray[0];
+		$endDate = $startDate;
+	} elseif (count($dateRangeArray) < 2 && empty($dateRangeArray[0])) {
+		// Return null if dateRange is invalid
+		return null;
+	} else {
+		$startDate = $dateRangeArray[0];
+		$endDate = $dateRangeArray[1];
+	}
+
+	// If the end date is empty, set it to the start date
+	if (empty($endDate)) {
+		$endDate = $startDate;
+	}
+
+	// Return start and end date as an array
+	return array('startDate' => $startDate, 'endDate' => $endDate);
+}
+
+function cognitive_get_reservation_ids_for_customer($customer_id) {
+    $args = array(
+        'post_type'  => 'reservations',
+        'meta_query' => array(
+            array(
+                'key'     => 'pagemeta_customer_id',
+                'value'   => $customer_id,
+                'compare' => '=',
+            ),
+        ),
+    );
+    $posts = get_posts($args);
+    $reservation_ids = array();
+    foreach ($posts as $post) {
+        $reservation_ids[] = $post->ID;
+    }
+    return $reservation_ids;
+}
+
+function cognitive_get_room_name_for_reservation($post_id) {
+    // Get room id from post meta
+    $room_id = get_post_meta($post_id, 'pagemeta_room_name', true);
+
+    // If room id exists, get the room's post title
+    if ($room_id) {
+        $room_post = get_post($room_id);
+        if ($room_post) {
+            return $room_post->post_title;
+        }
+    }
+
+    return null;
+}
+
+function cognitive_get_room_ids_for_booking_number($booking_number) {
+    $args = array(
+        'post_type'  => 'reservations',
+        'meta_query' => array(
+            array(
+                'key'   => 'pagemeta_booking_number',
+                'value' => $booking_number,
+            )
+        )
+    );
+
+    $reservations = get_posts($args);
+    $room_names = array();
+    foreach ($reservations as $reservation) {
+        $room_id = get_post_meta($reservation->ID, 'pagemeta_room_name', true);
+        // Use the room ID to get the room's post title
+        $room_post = get_post($room_id);
+        if ($room_post) {
+            $room_names[] = $room_post->ID;
+        }
+    }
+
+    return $room_names;
+}
+
+function cognitive_get_booking_number($reservation_post_id) {
+    // Get the booking number from the reservation post meta
+    $booking_number = get_post_meta($reservation_post_id, 'pagemeta_booking_number', true);
+
+    if (!$booking_number) {
+        // Handle error if booking number not found
+        return '';
+    }
+
+    return $booking_number;
+}
+
+function cognitive_calculate_adr($currentdateString) {
+	$currentDate = new DateTime($currentdateString);
+	$totalRoomRevenue = 0;
+	$numberOfRoomsSold = 0;
+
+	$args = array(
+		'post_type'      => 'reservations',
+		'posts_per_page' => -1,
+		'post_status'    => 'publish',
+	);
+
+	$query = new WP_Query($args);
+
+	if ($query->have_posts()) {
+		while ($query->have_posts()) {
+			$query->the_post();
+
+			$reservationStartDate = get_post_meta(get_the_ID(), 'pagemeta_checkin_date', true);
+			$reservationEndDate = get_post_meta(get_the_ID(), 'pagemeta_checkout_date', true);
+
+			$reservationStartDate = new DateTime($reservationStartDate);
+			$reservationEndDate = new DateTime($reservationEndDate);
+
+			// Check if the current date falls within the reservation period
+			if ($currentDate >= $reservationStartDate && $currentDate < $reservationEndDate) {
+				$roomID = get_post_meta(get_the_ID(), 'pagemeta_room_name', true);
+
+				// Get the room rate for the current date
+				$roomRate = cognitive_get_room_rate_by_date($roomID, $currentDate->format('Y-m-d'));
+
+				$totalRoomRevenue += $roomRate;
+				$numberOfRoomsSold++;
+			}
+		}
+	}
+
+	wp_reset_postdata();
+
+	// Calculate ADR
+	$adr = ($numberOfRoomsSold > 0) ? round( $totalRoomRevenue / $numberOfRoomsSold ) : 0;
+
+	return $adr;
+}
+
+function cognitive_calculate_occupancy($currentdateString) {
+	$totalOccupiedRooms = 0;
+	$totalAvailableRooms = 0;
+
+	$args = array(
+		'post_type'      => 'room',
+		'posts_per_page' => -1,
+		'post_status'    => 'publish',
+	);
+
+	$rooms = get_posts($args);
+
+	foreach($rooms as $room){
+		// Increment the total number of occupied rooms
+		$totalOccupiedRooms += cognitive_calculate_reserved_rooms( $currentdateString, $room->ID );
+		// Increment the total number of available rooms
+		$totalAvailableRooms += cognitive_get_max_quantity_for_room( $room->ID, $currentdateString);
+
+		//echo '<br>'.$currentdateString.'<br>'. $room->ID . '||' . $totalOccupiedRooms. '||' . $totalAvailableRooms . '<br>';
+		//echo '<br>'. $room->ID . '||' . $totalOccupiedRooms. '||' . $totalAvailableRooms . '<br>';
+	}
+
+	wp_reset_postdata();
+
+	// Calculate the occupancy percentage
+	if ($totalAvailableRooms > 0) {
+		$occupancyPercentage = round(($totalOccupiedRooms / $totalAvailableRooms) * 100);
+	} else {
+		$occupancyPercentage = 0;
+	}	
+
+	return $occupancyPercentage;
+}
+
+function cognitive_calculate_range_occupancy($startDateString, $endDateString) {
+    $startDate = new DateTime($startDateString);
+    $endDate = new DateTime($endDateString);
+    $currentDate = clone $startDate;
+    
+    $totalOccupancyPercentage = 0;
+    $daysCount = 0;
+
+    while ($currentDate <= $endDate) {
+        $currentDateString = $currentDate->format('Y-m-d');
+        $occupancyPercentage = cognitive_calculate_occupancy($currentDateString);
+        $totalOccupancyPercentage += $occupancyPercentage;
+        $daysCount++;
+        $currentDate->modify('+1 day');
+    }
+
+    if ($daysCount > 0) {
+        $averageOccupancyPercentage = round($totalOccupancyPercentage / $daysCount);
+    } else {
+        $averageOccupancyPercentage = 0;
+    }
+
+    return $averageOccupancyPercentage;
+}
+
+
+
+
+
 

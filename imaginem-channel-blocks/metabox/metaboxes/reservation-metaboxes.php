@@ -36,6 +36,9 @@ function themecore_reservations_metadata() {
 		$options_room_names[0]="Rooms not found.";
 	}
 
+	// Generate unique booking number
+	$booking_number = uniqid('booking-');
+
 	$reservations_box = array(
 		'id' => 'reservationsmeta-box',
 		'title' => esc_html__('Reservations Metabox','themecore'),
@@ -55,6 +58,15 @@ function themecore_reservations_metadata() {
 				'id' => 'pagemeta_sep_page_options',
 				'type' => 'seperator',
 				),
+			array(
+				'name' => '',
+				'id' => 'pagemeta_booking_number',
+				'type' => 'text',
+				'class' => 'textsmall',
+				'heading' => 'subhead',
+				'desc' => '',
+				'std' => $booking_number
+			),
 			array(
 				'name' => esc_html__('Reservation Status','themecore'),
 				'id' => 'pagemeta_reservation_notice',
@@ -106,6 +118,24 @@ function themecore_reservations_metadata() {
 				'std' => ''
 			),
 			array(
+				'name' => '',
+				'id' => 'pagemeta_reservation_room_cost',
+				'type' => 'text',
+				'class' => 'textsmall',
+				'heading' => 'subhead',
+				'desc' => esc_html__('Room Price','themecore'),
+				'std' => ''
+			),
+			array(
+				'name' => '',
+				'id' => 'pagemeta_reservation_room_paid',
+				'type' => 'text',
+				'class' => 'textsmall',
+				'heading' => 'subhead',
+				'desc' => esc_html__('Paid Price','themecore'),
+				'std' => ''
+			),
+			array(
 				'name' => __('Notes','themecore'),
 				'id' => 'pagemeta_reservation_notes',
 				'type' => 'textarea',
@@ -129,90 +159,84 @@ function themecore_reservations_metadata() {
 				'std' => ''
 			),
 			array(
-				'name' => 'Guest Name',
-				'id' => 'pagemeta_reservation_guest_name',
+				'name' => esc_html__('Customer','themecore'),
+				'id' => 'pagemeta_customer_checkin',
+				'type' => 'customer',
+				'class' => 'textsmall',
+				'heading' => 'subhead',
+				'desc' => '',
+				'std' => ''
+			),
+			array(
+				'name' => esc_html__('Full Name','themecore'),
+				'id' => 'pagemeta_full_name',
 				'type' => 'text',
 				'class' => 'textsmall',
 				'heading' => 'subhead',
-				'desc' => esc_html__('Guest Name','imaginem-blocks-ii'),
+				'desc' => '',
 				'std' => ''
 			),
 			array(
-				'name' => esc_html__('Address','themecore'),
-				'id' => 'pagemeta_reservation_guest_address',
-				'type' => 'text',
-				'heading' => 'subhead',
-				'desc' => esc_html__('Address Name','themecore'),
-				'std' => ''
-			),
-			array(
-				'name' => '',
-				'id' => 'pagemeta_reservation_guest_street',
-				'type' => 'text',
-				'heading' => 'subhead',
-				'desc' => esc_html__('Street','themecore'),
-				'std' => ''
-			),
-			array(
-				'name' => '',
-				'id' => 'pagemeta_reservation_guest_state',
+				'name' => esc_html__('Email Address','themecore'),
+				'id' => 'pagemeta_email_address',
 				'type' => 'text',
 				'class' => 'textsmall',
 				'heading' => 'subhead',
-				'desc' => esc_html__('State','themecore'),
+				'desc' => '',
 				'std' => ''
 			),
 			array(
-				'name' => '',
-				'id' => 'pagemeta_reservation_guest_postal',
+				'name' => esc_html__('Phone Number','themecore'),
+				'id' => 'pagemeta_phone_number',
 				'type' => 'text',
 				'class' => 'textsmall',
 				'heading' => 'subhead',
-				'desc' => esc_html__('Zip/Postal Code','themecore'),
+				'desc' => '',
 				'std' => ''
 			),
 			array(
-				'name' => '',
-				'id' => 'pagemeta_reservation_guest_country',
-				'type' => 'country',
-				'heading' => 'subhead',
-				'desc' => esc_html__('Reservation country','themecore'),
-				'std' => ''
-			),
-			array(
-				'name' => '',
-				'id' => 'pagemeta_reservation_guest_phone',
+				'name' => esc_html__('Street Address','themecore'),
+				'id' => 'pagemeta_street_address',
 				'type' => 'text',
 				'class' => 'textsmall',
 				'heading' => 'subhead',
-				'desc' => esc_html__('Phone','themecore'),
+				'desc' => '',
 				'std' => ''
 			),
 			array(
-				'name' => '',
-				'id' => 'pagemeta_reservation_guest_email',
+				'name' => esc_html__('City','themecore'),
+				'id' => 'pagemeta_city',
 				'type' => 'text',
 				'class' => 'textsmall',
 				'heading' => 'subhead',
-				'desc' => esc_html__('Email','themecore'),
+				'desc' => '',
 				'std' => ''
 			),
 			array(
-				'name' => '',
-				'id' => 'pagemeta_reservation_room_cost',
+				'name' => esc_html__('State','themecore'),
+				'id' => 'pagemeta_state',
 				'type' => 'text',
 				'class' => 'textsmall',
 				'heading' => 'subhead',
-				'desc' => esc_html__('Room Price','themecore'),
+				'desc' => '',
 				'std' => ''
 			),
 			array(
-				'name' => '',
-				'id' => 'pagemeta_reservation_room_cost',
+				'name' => esc_html__('Zip Code','themecore'),
+				'id' => 'pagemeta_zip_code',
 				'type' => 'text',
 				'class' => 'textsmall',
 				'heading' => 'subhead',
-				'desc' => esc_html__('Paid Price','themecore'),
+				'desc' => '',
+				'std' => ''
+			),
+			array(
+				'name' => esc_html__('Country','themecore'),
+				'id' => 'pagemeta_country',
+				'type' => 'text',
+				'class' => 'textsmall',
+				'heading' => 'subhead',
+				'desc' => '',
 				'std' => ''
 			),
 		)

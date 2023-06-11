@@ -22,9 +22,10 @@
 			var guest = $(this).data('guest');
 			var room = $(this).data('room');
 			var reservationid = $(this).data('reservationid');
+			var bookingnumber = $(this).data('bookingnumber');
 			var checkin = $(this).data('checkin');
 			var checkout = $(this).data('checkout');
-			var tooltipContent = 'Guest: ' + guest + '<br>Room: ' + room + '<br>Reservation ID: ' + reservationid + '<br>Check-in: ' + checkin + '<br>Check-out: ' + checkout;
+			var tooltipContent = 'Guest: ' + guest + '<br><br/>Room: ' + room + '<br><br/>Booking Number:<br/>' + bookingnumber + '<br><br/>Check-in: ' + checkin + '<br>Check-out: ' + checkout;
 	
 			$(this).attr('data-bs-toggle', 'tooltip');
 			$(this).attr('data-bs-html', 'true'); // Allow HTML content in the tooltip
@@ -43,6 +44,7 @@
 			$('#quantity-popup .modaldatepicker').flatpickr(
 				{
 					mode: "range",
+					showMonths: 2,
 					dateFormat: "Y-m-d",
 					enableTime: false,
 					onClose: function(selectedDates, dateStr, instance) {
@@ -58,6 +60,7 @@
 			$('#rates-popup .modaldatepicker').flatpickr(
 				{
 					mode: "range",
+					showMonths: 2,
 					dateFormat: "Y-m-d",
 					enableTime: false,
 					onClose: function(selectedDates, dateStr, instance) {
@@ -205,6 +208,7 @@
 	
 			flatpickr(".reservation", {
 				mode: "range",
+				showMonths: 2,
 				dateFormat: "Y-m-d",
 				enableTime: false,
 				onChange: function(selectedDates, dateStr, instance) {
@@ -294,6 +298,7 @@
 			flatpickr(".availabilitycalendar", {
 				mode: "range",
 				dateFormat: "Y-m-d",
+				showMonths: 2,
 				enableTime: false,
 				onChange: function(selectedDates, dateStr, instance) {
 					
