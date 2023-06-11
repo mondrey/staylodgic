@@ -50,9 +50,6 @@ jQuery(document).ready(function($) {
     MetaBoxGoogleFontSelect( this, mainID );
   });
 
-	//Implement color picker
-	jQuery('.colorSwatch').wpColorPicker();
-
 	if ($.fn.chosen) {
 		$('.chosen-select-metabox').chosen();
 	}

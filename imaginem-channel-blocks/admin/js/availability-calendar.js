@@ -17,6 +17,23 @@
 
 		// updateCalendarCells();
 
+		$('#calendarTable .calendarRow').each(function(rowIndex) {
+			var row = $(this);
+			row.find('.reserved-tab-inner').each(function() {
+				var tabWidth = $(this).data('tabwidth');
+				$(this).css('opacity', 0)
+				.velocity({
+					width: tabWidth, 
+					opacity: 1
+				}, 
+				{
+					duration: 100,
+					easing: "swing",
+					delay: ( Math.random() * 170 ) * rowIndex // Random delay between 0 and 100
+				}); 
+			});
+		});
+
 		// ---- Boostrap Tooltip
 		$('.reserved-tab-with-info').each(function () {
 			var guest = $(this).data('guest');
@@ -26,18 +43,22 @@
 			var checkin = $(this).data('checkin');
 			var checkout = $(this).data('checkout');
 			var tooltipContent = 'Guest: ' + guest + '<br><br/>Room: ' + room + '<br><br/>Booking Number:<br/>' + bookingnumber + '<br><br/>Check-in: ' + checkin + '<br>Check-out: ' + checkout;
-	
+
 			$(this).attr('data-bs-toggle', 'tooltip');
 			$(this).attr('data-bs-html', 'true'); // Allow HTML content in the tooltip
 			$(this).attr('title', tooltipContent);
-	
 		});
-	
-		var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+
+		var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
 		var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-			return new bootstrap.Tooltip(tooltipTriggerEl)
+			return new bootstrap.Tooltip(tooltipTriggerEl, {
+				animation: true,
+				delay: { "show": 1000, "hide": 100 }
+			});
 		});
+
 		// ---- Bootstrap Tooltip end
+
 
 		if ($.fn.flatpickr) {
 			// Initialize Flatpickr
@@ -205,11 +226,25 @@
 		if ($.fn.flatpickr) {
 	
 			$('.datepicker').flatpickr();
-	
+
+			function getExistingDates() {
+				let checkinValue = document.getElementById('pagemeta_checkin_date') ? document.getElementById('pagemeta_checkin_date').value : null;
+				let checkoutValue = document.getElementById('pagemeta_checkout_date') ? document.getElementById('pagemeta_checkout_date').value : null;
+			
+				// Only set the default dates if checkinValue and checkoutValue exist
+				let defaultDates = [];
+				if (checkinValue && checkoutValue) {
+					defaultDates = [checkinValue, checkoutValue];
+				}
+				return defaultDates;
+			}
+			
+			let defaultDates = getExistingDates();
 			flatpickr(".reservation", {
 				mode: "range",
 				showMonths: 2,
 				dateFormat: "Y-m-d",
+				defaultDate: defaultDates,
 				enableTime: false,
 				onChange: function(selectedDates, dateStr, instance) {
 				  const checkin = selectedDates[0];
@@ -277,7 +312,7 @@
 				  var checkin = new Date(dateRangeParts[0]);
 				  var checkout = new Date(dateRangeParts[1]);
 				  var roomNights = (checkout - checkin) / (1000 * 60 * 60 * 24);
-			  
+				  
 				  // Set the values of the hidden input fields
 				  if (checkin && checkout) {
 					const checkinOffset = checkin.getTimezoneOffset() * 60000; // Time zone offset in milliseconds

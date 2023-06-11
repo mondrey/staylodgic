@@ -109,8 +109,19 @@ font-size: 12px;
 .reserved-tab {
 	position: absolute;
 	overflow: hidden;
+	border-radius: 20px;
+	box-shadow: 1px 2px 5px transparent;
+	transition: box-shadow 0.3s ease-in-out;
 }
-
+.reserved-from-past .reserved-tab {
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+}
+.reserved-tab:hover {
+	position: absolute;
+	overflow: hidden;
+	box-shadow: 1px 2px 5px #0000004f;
+}
 .quantity-link,
 .rate-link {
 	display: block;
@@ -132,6 +143,8 @@ font-size: 12px;
 	font-size: 11px;
 	padding: 3px 3px 3px 7px;
 	border-radius: 30px;
+	transition: opacity 1s ease-in, width 1s ease-in;
+	opacity: 0;
 }
 .reserved-extended {
 	width: 80px;
@@ -236,4 +249,36 @@ body .tooltip .tooltip-inner {
 }
 .calendarCell.is-today {
 	background: #ff006c1c;
+}
+.occupancyStats-wrap {
+	font-size: 11px;
+	padding: 10px;
+	color: #9b9b9b;
+}
+.occupancy-percentage {
+	font-size: 14px;
+	color: #d9d9d9;
+}
+.calendarCell.monthHeader.occupancy-stats {
+	background: #1a1a1a;
+	box-shadow: inset 11px 1px 31px #ffffff26;
+}
+.occupancy-total {
+	font-size: 14px;
+	font-weight: normal;
+}
+.guest-name,
+a.reservation-edit-link {
+	color: #000;
+}
+a.reservation-edit-link:focus {
+	box-shadow: none;
+}
+.tooltip.fade:not(.show) {
+    opacity: 0;
+}
+
+.tooltip.fade.show {
+    transition: opacity 0.2s linear;
+    opacity: 1;
 }
