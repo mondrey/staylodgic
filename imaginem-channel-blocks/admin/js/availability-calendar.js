@@ -36,30 +36,32 @@
 		}
 		runCalendarAnimation();
 
-		// ---- Boostrap Tooltip
-		$('.reserved-tab-with-info').each(function () {
-			var guest = $(this).data('guest');
-			var room = $(this).data('room');
-			var reservationid = $(this).data('reservationid');
-			var bookingnumber = $(this).data('bookingnumber');
-			var checkin = $(this).data('checkin');
-			var checkout = $(this).data('checkout');
-			var tooltipContent = 'Guest: ' + guest + '<br><br/>Room: ' + room + '<br><br/>Booking Number:<br/>' + bookingnumber + '<br><br/>Check-in: ' + checkin + '<br>Check-out: ' + checkout;
-
-			$(this).attr('data-bs-toggle', 'tooltip');
-			$(this).attr('data-bs-html', 'true'); // Allow HTML content in the tooltip
-			$(this).attr('title', tooltipContent);
-		});
-
-		var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-		var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-			return new bootstrap.Tooltip(tooltipTriggerEl, {
-				animation: true,
-				delay: { "show": 1000, "hide": 100 }
+		function initializeTooltips() {
+			$('.reserved-tab-with-info').each(function () {
+				var guest = $(this).data('guest');
+				var room = $(this).data('room');
+				var reservationid = $(this).data('reservationid');
+				var bookingnumber = $(this).data('bookingnumber');
+				var checkin = $(this).data('checkin');
+				var checkout = $(this).data('checkout');
+				var tooltipContent = 'Guest: ' + guest + '<br><br/>Room: ' + room + '<br><br/>Booking Number:<br/>' + bookingnumber + '<br><br/>Check-in: ' + checkin + '<br>Check-out: ' + checkout;
+		
+				$(this).attr('data-bs-toggle', 'tooltip');
+				$(this).attr('data-bs-html', 'true'); // Allow HTML content in the tooltip
+				$(this).attr('title', tooltipContent);
 			});
-		});
-
-		// ---- Bootstrap Tooltip end
+		
+			var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+			var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+				return new bootstrap.Tooltip(tooltipTriggerEl, {
+					animation: true,
+					delay: { "show": 1000, "hide": 100 }
+				});
+			});
+		}
+		
+		// Initially initialize tooltips
+		initializeTooltips();
 
 
 		if ($.fn.flatpickr) {
@@ -334,28 +336,35 @@
 				}
 			  });  
 			  
+			  // Availablity Calendar
+			  var calendarTable = $('#calendarTable');
 
-			var calendarTable = $('#calendarTable');
-
-			// Extract the start and end date from the data attributes
-			var startDate = calendarTable.data('calstart');
-			var endDate = calendarTable.data('calend');
-			
-			var fp = flatpickr(".availabilitycalendar", {
-				mode: "range",
-				dateFormat: "Y-m-d",
-				showMonths: 2,
-				enableTime: false,
-				defaultDate: [startDate, endDate], // Set the defaultDate to the start and end dates
-				onChange: function(selectedDates, dateStr, instance) {
-					if (selectedDates.length == 2) {
-						updateCalendarData(selectedDates);
-					}
-				}
-			});
-
-			var debouncedCalendarUpdate = _.debounce(updateCalendarData, 1000);  // Wait for 300ms of inactivity
-	
+			  // Extract the start and end date from the data attributes
+			  var startDate = calendarTable.data('calstart');
+			  var endDate = calendarTable.data('calend');
+			  
+			  var debouncedCalendarUpdate = _.debounce(updateCalendarData, 500);  // Wait for 300ms of inactivity
+			  
+			  var fp;
+			  
+			  function initializeFlatpickr(newStartDate, newEndDate) {
+				  fp = flatpickr(".availabilitycalendar", {
+					  mode: "range",
+					  dateFormat: "Y-m-d",
+					  showMonths: 2,
+					  enableTime: false,
+					  defaultDate: [newStartDate, newEndDate], // Set the defaultDate to the start and end dates
+					  onChange: function(selectedDates, dateStr, instance) {
+						  if (selectedDates.length == 2) {
+							  updateCalendarData(selectedDates);
+						  }
+					  }
+				  });
+			  }
+			  
+			  // Call the initialize function with the initial dates
+			  initializeFlatpickr(startDate, endDate);
+			  
 			function updateCalendarData(selectedDates) {
 				var start_date = selectedDates[0].toLocaleDateString('en-US').substr(0, 10);
 				var end_date = selectedDates[1].toLocaleDateString('en-US').substr(0, 10);
@@ -372,61 +381,37 @@
 					success: function(data){
 						$('#calendar').html(data);
 						runCalendarAnimation();
-						//updateCalendarCells();
+						// After updating the content, initialize the tooltips again
+						initializeTooltips();
 					},
 					error: function(){
 						alert('Error: Unable to retrieve calendar data.');
 					}
 				});
 			}
-			// Event handler for the "Previous" button
-			$('#prev-week').click(function() {
-				var prevStartDate = fp.selectedDates[0].fp_incr(-7); // Decrease start date by 15 days
-				var prevEndDate = fp.selectedDates[1].fp_incr(-7); // Decrease end date by 15 days
-				fp.setDate([prevStartDate, prevEndDate]); // Update the date selection in the flatpickr instance
-				debouncedCalendarUpdate(fp.selectedDates); // Call the AJAX function
-			});
 	
-			// Event handler for the "Next" button
-			$('#next-week').click(function() {
-				var nextStartDate = fp.selectedDates[0].fp_incr(7); // Increase start date by 15 days
-				var nextEndDate = fp.selectedDates[1].fp_incr(7); // Increase end date by 15 days
-				fp.setDate([nextStartDate, nextEndDate]); // Update the date selection in the flatpickr instance
-				debouncedCalendarUpdate(fp.selectedDates); // Call the AJAX function
-			});
-
-			// Event handler for the "Previous" button
-			$('#prev-half').click(function() {
-				var prevStartDate = fp.selectedDates[0].fp_incr(-15); // Decrease start date by 15 days
-				var prevEndDate = fp.selectedDates[1].fp_incr(-15); // Decrease end date by 15 days
-				fp.setDate([prevStartDate, prevEndDate]); // Update the date selection in the flatpickr instance
-				debouncedCalendarUpdate(fp.selectedDates); // Call the AJAX function
-			});
-	
-			// Event handler for the "Next" button
-			$('#next-half').click(function() {
-				var nextStartDate = fp.selectedDates[0].fp_incr(15); // Increase start date by 15 days
-				var nextEndDate = fp.selectedDates[1].fp_incr(15); // Increase end date by 15 days
-				fp.setDate([nextStartDate, nextEndDate]); // Update the date selection in the flatpickr instance
-				debouncedCalendarUpdate(fp.selectedDates); // Call the AJAX function
-			});
-	
-			// Event handler for the "Previous" button
-			$('#prev').click(function() {
-				var prevStartDate = fp.selectedDates[0].fp_incr(-30); // Decrease start date by 30 days
-				var prevEndDate = fp.selectedDates[1].fp_incr(-30); // Decrease end date by 30 days
-				fp.setDate([prevStartDate, prevEndDate]); // Update the date selection in the flatpickr instance
-				debouncedCalendarUpdate(fp.selectedDates); // Call the AJAX function
-			});
-	
-			// Event handler for the "Next" button
-			$('#next').click(function() {
-				var nextStartDate = fp.selectedDates[0].fp_incr(30); // Increase start date by 30 days
-				var nextEndDate = fp.selectedDates[1].fp_incr(30); // Increase end date by 30 days
-				fp.setDate([nextStartDate, nextEndDate]); // Update the date selection in the flatpickr instance
-				debouncedCalendarUpdate(fp.selectedDates); // Call the AJAX function
-			});
-			  
+			function shiftDates(buttonId, days) {
+				$(buttonId).click(function() {
+					var newStartDate = fp.selectedDates[0].fp_incr(days);
+					var newEndDate = fp.selectedDates[1].fp_incr(days);
+					
+					// Destroy the current instance
+					fp.destroy();
+			
+					// Initialize a new flatpickr instance with the new dates
+					initializeFlatpickr(newStartDate, newEndDate);
+			
+					debouncedCalendarUpdate(fp.selectedDates);
+				});
+			}
+			
+			// Now call this function with the parameters you want:
+			shiftDates('#prev-week', -7);
+			shiftDates('#next-week', 7);
+			shiftDates('#prev-half', -15);
+			shiftDates('#next-half', 15);
+			shiftDates('#prev', -30);
+			shiftDates('#next', 30);
 			  
 						
 		}
