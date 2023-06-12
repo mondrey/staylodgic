@@ -82,6 +82,7 @@ function themecore_reservations_metadata() {
 			array(
 				'name' => esc_html__('Room','themecore'),
 				'id' => 'pagemeta_room_name',
+				'class' => 'room_choice',
 				'type' => 'select',
 				'target' => 'room_names',
 				'desc' => esc_html__('Room.','themecore'),

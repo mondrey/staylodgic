@@ -282,20 +282,21 @@
 			  
 				  jQuery.post(ajaxurl, data, function(response) {
 					let selectElement = $('#pagemeta_room_name');
+					let selectedValue = selectElement.val(); // Save the currently selected value
+					
 					selectElement.empty();
-			  
-					var available_rooms = JSON.parse(response); // Parse the JSON string into an object
-					console.log(available_rooms);
+				  
+					var available_rooms = JSON.parse(response);
 					$.each(available_rooms, function(key, value) {
-					  if (value) {
-						let optionElement = `<option value="${key}">${value}</option>`; // changed here
-						selectElement.append(optionElement);
-					  }
+						if (value) {
+							let optionElement = `<option value="${key}" ${(key === selectedValue) ? 'selected' : ''}>${value}</option>`;
+							selectElement.append(optionElement);
+						}
 					});
-			  
+				  
 					// Trigger update
 					selectElement.trigger("chosen:updated");
-				  });
+				});
 				}
 			  }
 			  
@@ -331,7 +332,7 @@
 										   "<p>Room nights: " + roomNights + "</p>";
 				  document.getElementById("reservation-details").innerHTML = reservationDetails;
 				}
-			  });			  
+			  });  
 			  
 
 			var calendarTable = $('#calendarTable');

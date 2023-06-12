@@ -513,7 +513,7 @@ function themecore_generate_metaboxes($meta_data,$post_id) {
 						if ($key=='0') {
 							$key = __('All the items','themecore');
 						}
-						echo '<option value="'. esc_attr($key) .'"', $meta == $key ? ' selected="selected"' : '', '>', esc_attr($option) , '</option>';
+						echo '<option value="'. esc_attr($key) .'"', $meta == $key ? ' selected' : '', '>', esc_attr($option) , '</option>';
 					}
 					echo '</select></div>';
 
