@@ -17,22 +17,24 @@
 
 		// updateCalendarCells();
 
-		$('#calendarTable .calendarRow').each(function(rowIndex) {
-			var row = $(this);
-			row.find('.reserved-tab-inner').each(function() {
+		function runCalendarAnimation() {
+			$('#calendarTable .calendarRow').each(function(rowIndex) {
+				var row = $(this);
+				row.find('.reserved-tab-inner').each(function() {
 				var tabWidth = $(this).data('tabwidth');
 				$(this).css('opacity', 0)
-				.velocity({
-					width: tabWidth, 
+					.velocity({
+					width: tabWidth,
 					opacity: 1
-				}, 
-				{
+					}, {
 					duration: 100,
 					easing: "swing",
-					delay: ( Math.random() * 170 ) * rowIndex // Random delay between 0 and 100
-				}); 
+					delay: (Math.random() * 170) * rowIndex // Random delay between 0 and 100
+					});
+				});
 			});
-		});
+		}
+		runCalendarAnimation();
 
 		// ---- Boostrap Tooltip
 		$('.reserved-tab-with-info').each(function () {
@@ -239,72 +241,74 @@
 				return defaultDates;
 			}
 			
-			let defaultDates = getExistingDates();
-			flatpickr(".reservation", {
+			function handleDateChange(selectedDates, instance) {
+				const checkin = selectedDates[0];
+				let checkout;
+			  
+				if (selectedDates.length > 1) {
+				  checkout = selectedDates[1];
+				}
+				let reservationID = $(instance.input).data('postid');
+				console.log(reservationID);
+				const roomNights = checkout ? Math.ceil((checkout - checkin) / (1000 * 60 * 60 * 24)) : 0;
+			  
+				const reservationDetails = document.getElementById("reservation-details");
+				reservationDetails.innerHTML = `
+				  <p>Checkin: ${checkin.toLocaleDateString()}</p>
+				  ${checkout ? `<p>Checkout: ${checkout.toLocaleDateString()}</p>` : ''}
+				  <p>Room nights: ${roomNights}</p>
+				`;
+			  
+				// Set the values of the hidden input fields
+				if (checkin && checkout) {
+				  const checkinOffset = checkin.getTimezoneOffset() * 60000; // Time zone offset in milliseconds
+				  const checkoutOffset = checkout.getTimezoneOffset() * 60000; // Time zone offset in milliseconds
+			  
+				  document.getElementById("pagemeta_checkin_date").value = new Date(checkin - checkinOffset).toISOString().split('T')[0];
+				  document.getElementById("pagemeta_checkout_date").value = new Date(checkout - checkoutOffset).toISOString().split('T')[0];
+				}
+			  
+				// Availability checking to see if the chosen range has rooms available for the dates
+				const checkinOffset = checkin ? checkin.getTimezoneOffset() * 60000 : 0;
+				const checkoutOffset = checkout ? checkout.getTimezoneOffset() * 60000 : 0;
+			  
+				if (checkin && checkout) {
+				  var data = {
+					'action': 'cognitive_check_room_availability',
+					'reservationid': reservationID,
+					'checkin': new Date(checkin - checkinOffset).toISOString().split('T')[0],
+					'checkout': new Date(checkout - checkoutOffset).toISOString().split('T')[0]
+				  };
+			  
+				  jQuery.post(ajaxurl, data, function(response) {
+					let selectElement = $('#pagemeta_room_name');
+					selectElement.empty();
+			  
+					var available_rooms = JSON.parse(response); // Parse the JSON string into an object
+					console.log(available_rooms);
+					$.each(available_rooms, function(key, value) {
+					  if (value) {
+						let optionElement = `<option value="${key}">${value}</option>`; // changed here
+						selectElement.append(optionElement);
+					  }
+					});
+			  
+					// Trigger update
+					selectElement.trigger("chosen:updated");
+				  });
+				}
+			  }
+			  
+			  let defaultDates = getExistingDates();
+			  const flatpickrInstance = flatpickr(".reservation", {
 				mode: "range",
 				showMonths: 2,
 				dateFormat: "Y-m-d",
 				defaultDate: defaultDates,
 				enableTime: false,
-				onChange: function(selectedDates, dateStr, instance) {
-				  const checkin = selectedDates[0];
-				  let checkout; // Declare the checkout variable
-			  
-				  if (selectedDates.length > 1) {
-					checkout = selectedDates[1];
-				  }
-				  let reservationID = $(instance.input).data('postid');
-				  console.log(reservationID);
-				  const roomNights = checkout ? Math.ceil((checkout - checkin) / (1000 * 60 * 60 * 24)) : 0;
-			  
-				  const reservationDetails = document.getElementById("reservation-details");
-				  reservationDetails.innerHTML = `
-					<p>Checkin: ${checkin.toLocaleDateString()}</p>
-					${checkout ? `<p>Checkout: ${checkout.toLocaleDateString()}</p>` : ''}
-					<p>Room nights: ${roomNights}</p>
-				  `;
-			  
-				  // Set the values of the hidden input fields
-				  if (checkin && checkout) {
-					const checkinOffset = checkin.getTimezoneOffset() * 60000; // Time zone offset in milliseconds
-					const checkoutOffset = checkout.getTimezoneOffset() * 60000; // Time zone offset in milliseconds
-			  
-					document.getElementById("pagemeta_checkin_date").value = new Date(checkin - checkinOffset).toISOString().split('T')[0];
-					document.getElementById("pagemeta_checkout_date").value = new Date(checkout - checkoutOffset).toISOString().split('T')[0];
-				  }
-
-				  // Availablity checking to see if range chosen has room available for the dates
-				  const checkinOffset = checkin ? checkin.getTimezoneOffset() * 60000 : 0; 
-				  const checkoutOffset = checkout ? checkout.getTimezoneOffset() * 60000 : 0; 
-
-				  if (checkin && checkout) {
-					var data = {
-						'action': 'cognitive_check_room_availability',
-						'reservationid': reservationID,
-						'checkin': new Date(checkin - checkinOffset).toISOString().split('T')[0],
-						'checkout': new Date(checkout - checkoutOffset).toISOString().split('T')[0]
-					};
-					
-					jQuery.post(ajaxurl, data, function(response) {
-						let selectElement = $('#pagemeta_room_name');
-						selectElement.empty();
-					
-						var available_rooms = JSON.parse(response); // Parse the JSON string into an object
-						console.log( available_rooms );
-						$.each(available_rooms, function(key, value){
-							if(value){
-								let optionElement = `<option value="${key}">${value}</option>`; // changed here
-								selectElement.append(optionElement);
-							}
-						});
-
-						// Trigger update
-    					selectElement.trigger("chosen:updated");
-
-					});
-				}
-				},
+				onChange: handleDateChange,
 				onReady: function(selectedDates, dateStr, instance) {
+				  handleDateChange(selectedDates, instance); // Call the handleDateChange function manually
 				  // calculate room nights and display reservation details for existing reservation
 				  var dateRangeInput = instance.input;
 				  var dateRangeValue = dateRangeInput.value;
@@ -327,39 +331,103 @@
 										   "<p>Room nights: " + roomNights + "</p>";
 				  document.getElementById("reservation-details").innerHTML = reservationDetails;
 				}
-			});
+			  });			  
 			  
-	
-			flatpickr(".availabilitycalendar", {
+
+			var calendarTable = $('#calendarTable');
+
+			// Extract the start and end date from the data attributes
+			var startDate = calendarTable.data('calstart');
+			var endDate = calendarTable.data('calend');
+			
+			var fp = flatpickr(".availabilitycalendar", {
 				mode: "range",
 				dateFormat: "Y-m-d",
 				showMonths: 2,
 				enableTime: false,
+				defaultDate: [startDate, endDate], // Set the defaultDate to the start and end dates
 				onChange: function(selectedDates, dateStr, instance) {
-					
 					if (selectedDates.length == 2) {
-						var start_date = selectedDates[0].toLocaleDateString('en-US').substr(0, 10);
-						var end_date = selectedDates[1].toLocaleDateString('en-US').substr(0, 10);					
-						console.log( start_date,end_date );
-						$.ajax({
-							type: 'POST',
-							url: ajaxurl,
-							data: {
-								'action': 'cognitive_ajax_get_availability_calendar',
-								'start_date': start_date,
-								'end_date': end_date
-							},
-							success: function(data){
-								$('#calendar').html(data);
-								//updateCalendarCells();
-							},
-							error: function(){
-								alert('Error: Unable to retrieve calendar data.');
-							}
-						});
+						updateCalendarData(selectedDates);
 					}
 				}
 			});
+
+			var debouncedCalendarUpdate = _.debounce(updateCalendarData, 1000);  // Wait for 300ms of inactivity
+	
+			function updateCalendarData(selectedDates) {
+				var start_date = selectedDates[0].toLocaleDateString('en-US').substr(0, 10);
+				var end_date = selectedDates[1].toLocaleDateString('en-US').substr(0, 10);
+				console.log( start_date,end_date );
+	
+				$.ajax({
+					type: 'POST',
+					url: ajaxurl,
+					data: {
+						'action': 'cognitive_ajax_get_availability_calendar',
+						'start_date': start_date,
+						'end_date': end_date
+					},
+					success: function(data){
+						$('#calendar').html(data);
+						runCalendarAnimation();
+						//updateCalendarCells();
+					},
+					error: function(){
+						alert('Error: Unable to retrieve calendar data.');
+					}
+				});
+			}
+			// Event handler for the "Previous" button
+			$('#prev-week').click(function() {
+				var prevStartDate = fp.selectedDates[0].fp_incr(-7); // Decrease start date by 15 days
+				var prevEndDate = fp.selectedDates[1].fp_incr(-7); // Decrease end date by 15 days
+				fp.setDate([prevStartDate, prevEndDate]); // Update the date selection in the flatpickr instance
+				debouncedCalendarUpdate(fp.selectedDates); // Call the AJAX function
+			});
+	
+			// Event handler for the "Next" button
+			$('#next-week').click(function() {
+				var nextStartDate = fp.selectedDates[0].fp_incr(7); // Increase start date by 15 days
+				var nextEndDate = fp.selectedDates[1].fp_incr(7); // Increase end date by 15 days
+				fp.setDate([nextStartDate, nextEndDate]); // Update the date selection in the flatpickr instance
+				debouncedCalendarUpdate(fp.selectedDates); // Call the AJAX function
+			});
+
+			// Event handler for the "Previous" button
+			$('#prev-half').click(function() {
+				var prevStartDate = fp.selectedDates[0].fp_incr(-15); // Decrease start date by 15 days
+				var prevEndDate = fp.selectedDates[1].fp_incr(-15); // Decrease end date by 15 days
+				fp.setDate([prevStartDate, prevEndDate]); // Update the date selection in the flatpickr instance
+				debouncedCalendarUpdate(fp.selectedDates); // Call the AJAX function
+			});
+	
+			// Event handler for the "Next" button
+			$('#next-half').click(function() {
+				var nextStartDate = fp.selectedDates[0].fp_incr(15); // Increase start date by 15 days
+				var nextEndDate = fp.selectedDates[1].fp_incr(15); // Increase end date by 15 days
+				fp.setDate([nextStartDate, nextEndDate]); // Update the date selection in the flatpickr instance
+				debouncedCalendarUpdate(fp.selectedDates); // Call the AJAX function
+			});
+	
+			// Event handler for the "Previous" button
+			$('#prev').click(function() {
+				var prevStartDate = fp.selectedDates[0].fp_incr(-30); // Decrease start date by 30 days
+				var prevEndDate = fp.selectedDates[1].fp_incr(-30); // Decrease end date by 30 days
+				fp.setDate([prevStartDate, prevEndDate]); // Update the date selection in the flatpickr instance
+				debouncedCalendarUpdate(fp.selectedDates); // Call the AJAX function
+			});
+	
+			// Event handler for the "Next" button
+			$('#next').click(function() {
+				var nextStartDate = fp.selectedDates[0].fp_incr(30); // Increase start date by 30 days
+				var nextEndDate = fp.selectedDates[1].fp_incr(30); // Increase end date by 30 days
+				fp.setDate([nextStartDate, nextEndDate]); // Update the date selection in the flatpickr instance
+				debouncedCalendarUpdate(fp.selectedDates); // Call the AJAX function
+			});
+			  
+			  
+						
 		}
 
 	});

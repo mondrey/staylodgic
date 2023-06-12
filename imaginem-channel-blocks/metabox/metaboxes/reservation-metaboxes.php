@@ -69,17 +69,14 @@ function themecore_reservations_metadata() {
 			),
 			array(
 				'name' => esc_html__('Reservation Status','themecore'),
-				'id' => 'pagemeta_reservation_notice',
-				'class' => 'reservation_notice',
+				'id' => 'pagemeta_reservation_status',
+				'class' => 'reservation_status',
 				'type' => 'select',
 				'desc' => esc_html__('Reservation Status','themecore'),
 				'options' => array(
-					'active'    => esc_attr__('Active','themecore'),
-					'inactive'  => esc_attr__('Hide from Listings','themecore'),
-					'postponed' => esc_attr__('Display as Postponed','themecore'),
-					'cancelled' => esc_attr__('Display as Cancelled','themecore'),
-					'fullreservation' => esc_attr__('Reservation is Full','themecore'),
-					'pastreservation' => esc_attr__('Past Reservation','themecore')
+					'confirmed'    => esc_attr__('Confirmed','themecore'),
+					'cancelled'  => esc_attr__('Cancelled','themecore'),
+					'pending' => esc_attr__('Pending','themecore')
 					),
 			),
 			array(

@@ -132,6 +132,7 @@ class Theme_Core {
 
 		wp_enqueue_style( 'room-reservation-plugin-availability-styles', plugin_dir_url( __FILE__ ) .'admin/css/availability-calendar.css',false, 'screen' );
 		wp_enqueue_script( 'room-reservation-plugin-availability-scripts', plugin_dir_url( __FILE__ ) .'admin/js/availability-calendar.js', array( 'jquery' ),null, true );
+		wp_enqueue_script( 'Lodash', plugin_dir_url( __FILE__ ) .'admin/js/lodash.js', array( 'jquery' ),null, true );
 
 		if ( function_exists('get_current_screen') ) {
 			$current_admin_screen = get_current_screen();

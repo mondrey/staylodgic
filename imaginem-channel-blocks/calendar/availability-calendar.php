@@ -144,11 +144,14 @@ function update_reservations_array_on_save($post_id, $post, $update) {
 	$room_type = get_post_meta($post_id, 'pagemeta_room_name', true);
 	$checkin_date = get_post_meta($post_id, 'pagemeta_checkin_date', true);
 	$checkout_date = get_post_meta($post_id, 'pagemeta_checkout_date', true);
+	$reservation_status = get_post_meta($post_id, 'pagemeta_reservation_status', true);
 
 	remove_reservation_from_all_rooms($post_id); // Remove the reservation from all rooms
 
-	// Add reservation to the new room type
-	update_reservations_array_on_change($room_type, $checkin_date, $checkout_date, $post_id);
+	if ( coginitive_confirmed_reservation($post_id) ) {
+		// Add reservation to the new room type
+		update_reservations_array_on_change($room_type, $checkin_date, $checkout_date, $post_id);
+	}
 
 	// Check if customer post exists
 	$customer_id = get_post_meta($post_id, 'pagemeta_customer_id', true);
@@ -603,9 +606,17 @@ function cognitive_room_reservation_plugin_display_availability() {
 		// Add any custom HTML content here
 		?>
 	</div>
-	<input type="text" class="availabilitycalendar" id="availabilitycalendar" name="availabilitycalendar" value=""/>
-	<a href="#" id="quantity-popup-link" data-bs-toggle="modal" data-bs-target="#quantity-popup">Update Quantity</a>
-	<a href="#" id="rates-popup-link" data-bs-toggle="modal" data-bs-target="#rates-popup">Update Rates</a>
+	<div class="calendar-controls-wrap">
+		<button id="prev">Previous</button>
+		<button id="prev-half">Prev 15</button>
+		<button id="prev-week">Prev 7</button>
+		<input type="text" class="availabilitycalendar" id="availabilitycalendar" name="availabilitycalendar" value=""/>
+		<button id="next-week">Next 7</button>
+		<button id="next-half">Next 15</button>
+		<button id="next">Next</button>
+		<a href="#" id="quantity-popup-link" data-bs-toggle="modal" data-bs-target="#quantity-popup">Update Quantity</a>
+		<a href="#" id="rates-popup-link" data-bs-toggle="modal" data-bs-target="#rates-popup">Update Rates</a>
+	</div>
 	<div id="container">
 	
 <div id="calendar">
@@ -746,7 +757,7 @@ function cognitive_get_availability_calendar( $startDate, $endDate ) {
 	$today = new DateTime();
 	$today = $today->format('Y-m-d');
 	?>
-	<table id="calendarTable">
+	<table id="calendarTable" data-calstart="<?php echo $startDate; ?>" data-calend="<?php echo $endDate; ?>">
 		<tr class="calendarRow">
 			<td class="calendarCell rowHeader">
 				<div class="occupancyStats-wrap">
@@ -908,6 +919,7 @@ function cognitive_generate_reserved_tab( $reservation_data, $checkout_list, $cu
 		$reserved_days = cognitive_count_reservation_days( $reservation['id'] );
 		$checkin = cognitive_get_checkin_date( $reservation['id'] );
 		$checkout = cognitive_get_checkout_date( $reservation['id'] );
+		$reservation_status = cognitive_get_reservation_status( $reservation['id'] );
 		$row++;
 
 		if ( !array_key_exists($reservatoin_id, $checkout_list) ) {
@@ -1020,7 +1032,7 @@ function cognitive_generate_reserved_tab( $reservation_data, $checkout_list, $cu
 			$start_date->setTimestamp($reservation['checkin']);
 			$start_date_display = $start_date->format('M j, Y');
 			$width = ( 80 * ( $reserved_days ) ) - 3;
-			$tab[$room] = '<a class="reservation-edit-link" href="' . $reservation_edit_link . '"><div class="reserved-tab-wrap reserved-tab-with-info" data-guest="'.$guest_name.'" data-room="'.$room.'" data-row="'.$row.'" data-bookingnumber="'.$booking_number.'" data-reservationid="'.$reservation['id'].'" data-checkin="'.$checkin.'" data-checkout="'.$checkout.'"><div class="reserved-tab reserved-tab-days-'.$reserved_days.'"><div data-tabwidth="'.$width.'" class="reserved-tab-inner"><div class="ota-sign"></div><div class="guest-name">'.$display_info.'</div></div></div></div></a>';
+			$tab[$room] = '<a class="reservation-tab-is-'.$reservation_status.' reservation-tab-id-'.$reservatoin_id.' reservation-edit-link" href="' . $reservation_edit_link . '"><div class="reserved-tab-wrap reserved-tab-with-info reservation-'.$reservation_status.'" data-reservationstatus="'.$reservation_status.'" data-guest="'.$guest_name.'" data-room="'.$room.'" data-row="'.$row.'" data-bookingnumber="'.$booking_number.'" data-reservationid="'.$reservation['id'].'" data-checkin="'.$checkin.'" data-checkout="'.$checkout.'"><div class="reserved-tab reserved-tab-days-'.$reserved_days.'"><div data-tabwidth="'.$width.'" class="reserved-tab-inner"><div class="ota-sign"></div><div class="guest-name">'.$display_info.'</div></div></div></div></a>';
 			$display = true;
 		} else {
 			if ( $current_day <> $checkout ) {
@@ -1032,9 +1044,9 @@ function cognitive_generate_reserved_tab( $reservation_data, $checkout_list, $cu
 				$daysBetween = cognitive_countDaysBetweenDates($check_in_date_past, $current_day);
 				$width = ( 80 * ( $reserved_days - $daysBetween ) ) - 3;
 				if ( $check_in_date_past < $calendar_start && $calendar_start == $current_day ) {
-					$tab[$room] = '<a class="reservation-edit-link" href="' . $reservation_edit_link . '"><div class="reserved-tab-wrap reserved-tab-with-info reserved-from-past" data-guest="'.$guest_name.'" data-room="'.$room.'" data-row="'.$row.'" data-reservationid="'.$reservation['id'].'" data-checkin="'.$checkin.'" data-checkout="'.$checkout.'"><div class="reserved-tab reserved-tab-days-'.$reserved_days.'"><div data-tabwidth="'.$width.'" class="reserved-tab-inner"><div class="ota-sign"></div><div class="guest-name">'.$display_info.'</div></div></div></div></a>';
+					$tab[$room] = '<a class="reservation-tab-is-'.$reservation_status.' reservation-tab-id-'.$reservatoin_id.' reservation-edit-link" href="' . $reservation_edit_link . '"><div class="reserved-tab-wrap reserved-tab-with-info reserved-from-past reservation-'.$reservation_status.'" data-reservationstatus="'.$reservation_status.'" data-guest="'.$guest_name.'" data-room="'.$room.'" data-row="'.$row.'" data-reservationid="'.$reservation['id'].'" data-checkin="'.$checkin.'" data-checkout="'.$checkout.'"><div class="reserved-tab reserved-tab-days-'.$reserved_days.'"><div data-tabwidth="'.$width.'" class="reserved-tab-inner"><div class="ota-sign"></div><div class="guest-name">'.$display_info.'</div></div></div></div></a>';
 				} else {
-					$tab[$room] = '<div class="reserved-tab-wrap reserved-extended" data-room="'.$room.'" data-row="'.$row.'" data-reservationid="'.$reservation['id'].'" data-checkin="'.$checkin.'" data-checkout="'.$checkout.'"><div class="reserved-tab"></div></div>';
+					$tab[$room] = '<div class="reservation-tab-is-'.$reservation_status.' reservation-tab-id-'.$reservatoin_id.' reserved-tab-wrap reserved-extended reservation-'.$reservation_status.'" data-reservationstatus="'.$reservation_status.'" data-room="'.$room.'" data-row="'.$row.'" data-reservationid="'.$reservation['id'].'" data-checkin="'.$checkin.'" data-checkout="'.$checkout.'"><div class="reserved-tab"></div></div>';
 				}
 				$display = true;
 			}
@@ -1342,6 +1354,23 @@ function cognitive_get_checkout_date($reservation_post_id) {
 	$checkout_date = get_post_meta($reservation_post_id, 'pagemeta_checkout_date', true);
 
 	return $checkout_date;
+}
+function cognitive_get_reservation_status($reservation_post_id) {
+	// Get the reservation status for the reservation
+	$reservation_status = get_post_meta($reservation_post_id, 'pagemeta_reservation_status', true);
+
+	return $reservation_status;
+}
+function coginitive_confirmed_reservation($reservation_post_id) {
+	// Get the reservation status for the reservation
+	$reservation_status = get_post_meta($reservation_post_id, 'pagemeta_reservation_status', true);
+
+	if ( 'confirmed' == $reservation_status ) {
+		return true;
+	}
+
+	return false;
+
 }
 function cognitive_count_reservation_days($reservation_post_id) {
 	// Get the check-in and check-out dates for the reservation
