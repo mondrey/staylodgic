@@ -240,12 +240,18 @@ body .tooltip .tooltip-inner {
 	border: 0;
 }
 .reservation-cancelled .reserved-tab-inner {
-	background-image: radial-gradient( circle farthest-corner at 10% 20%, rgba(255, 186, 22, 0.56) 20.8%, rgba(255, 1, 1, 0.57) 74.4% );
+	background-image: radial-gradient( circle farthest-corner at 10% 20%, rgba(255, 1, 132, 0.19) 20.8%, rgba(201, 255, 250, 0.57) 74.4% );
 	border: 0;
 }
 .reservation-pending .reserved-tab-inner {
-	background-image: radial-gradient( circle 344px at 1.4% 0%,  rgba(242,185,252,1) 19.3%, rgba(250,254,190,1) 80.7% );
+	background-image: radial-gradient( circle farthest-corner at 10% 20%, rgba(208, 208, 208, 0.3) 20.8%, rgba(201, 255, 250, 0.57) 74.4% );
 	border: 0;
+}
+.reservation-cancelled .ota-sign {
+	background: #ff0c738a;
+}
+.reservation-pending .ota-sign {
+	background: #0c32ff42;
 }
 .guest-name span {
 	display: block;

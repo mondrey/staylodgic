@@ -153,7 +153,15 @@ function themecore_reservations_metadata() {
 				'type' => 'text',
 				'class' => 'textsmall',
 				'heading' => 'subhead',
-				'desc' => esc_html__('Guests','imaginem-blocks-ii'),
+				'desc' => esc_html__('Guests','themecore'),
+				'std' => ''
+			),
+			array(
+				'name' => esc_html__('Children ( Age )','themecore'),
+				'id' => 'pagemeta_children_repeat',
+				'type' => 'repeat_text',
+				'heading' => 'subhead',
+				'desc' => esc_html__('Child Age','themecore'),
 				'std' => ''
 			),
 			array(

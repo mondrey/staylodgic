@@ -137,6 +137,16 @@ function themecore_get_select_target_options($type) {
 				$list_options[$list->term_id] = $list->name;
 			}
 			break;
+		case 'bedsetup':
+			$list_options = array(
+				'twinbed'=>esc_html__('Twin bed','superlens'),
+				'fullbed'=>esc_html__('Full bed','superlens'),
+				'queenbed'=>esc_html__('Queen bed','superlens'),
+				'kingbed'=>esc_html__('King bed','superlens'),
+				'bunkbed'=>esc_html__('Bunk bed','superlens'),
+				'sofabed'=>esc_html__('Sofa bed','superlens')
+				);
+			break;
 		case 'backgroundslideshow_choices':
 			$list_options = array(
 				'options_slideshow'=>esc_html__('Customizer Set Slideshow Images','superlens'),

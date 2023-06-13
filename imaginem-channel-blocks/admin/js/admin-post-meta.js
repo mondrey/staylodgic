@@ -6,6 +6,70 @@ jQuery(document).ready(function($) {
     	$("#"+check_radio_selector).prop("checked", true);
     });
 
+	$('.movethis-wrap .add-box').click(function(){
+
+		var repeat_id = $('.movethis-wrap').data('repeat');
+        var n = $('.text-box').length + 1;
+        if( 4 < n ) {
+        	$('.add-box-notice').fadeIn();
+        	setTimeout("jQuery('.add-box-notice').fadeOut();", 4000);
+            return false;
+        }
+        var box_html = $('<div id="text-box" class="text-box" id="text-box"><input placeholder="Age" type="text" name="'+repeat_id+'[age][]" value="" id="box_age' + n + '" /><a href="#" class="remove-box">Remove</a></div>');
+        box_html.hide();
+        $('.movethis-wrap .text-box:last').after(box_html);
+        box_html.fadeIn('slow');
+        return false;
+    });
+    $('.movethis-wrap').on('click', '.remove-box', function(){
+        $(this).parent().css( 'background-color', '#FF6C6C' );
+        $(this).parent().fadeOut("slow", function() {
+            $(this).remove();
+            $('.box-number').each(function(index){
+                $(this).text( index + 1 );
+            });
+        });
+        return false;
+    });
+
+// Add button click event
+$('.bedlayout-wrap .add-bedlayout-box').click(function() {
+	var bedlayoutWrap = $(this).closest('.bedlayout-wrap');
+  
+	// Destroy the chosen selects within the specific bedlayout-wrap
+	bedlayoutWrap.find('.bedtype-select').chosen('destroy');
+  
+	// Clone the div section
+	var newSection = bedlayoutWrap.find('.bedlayout-box').first().clone();
+  
+	// Reset the input field value in the cloned section
+	newSection.find('input').val('');
+  
+	// Create new IDs for the cloned select input and the input field
+	var newSelectId = 'bed_type' + bedlayoutWrap.find('.bedlayout-box').length;
+	var newInputId = 'bed_number' + bedlayoutWrap.find('.bedlayout-box').length;
+  
+	// Update the ID of the select input and the input field in the cloned section
+	newSection.find('.bedtype-select').attr('id', newSelectId);
+	newSection.find('input').attr('id', newInputId);
+  
+	// Add a remove button to the cloned section
+	var removeButton = $('<div class="remove-bedlayout">Remove</div>');
+	newSection.append(removeButton);
+  
+	// Append the new div section below the last one
+	bedlayoutWrap.find('.bedlayout-box').last().after(newSection);
+  
+	// Re-initialize the chosen selects within the specific bedlayout-wrap
+	bedlayoutWrap.find('.bedtype-select').chosen();
+  });
+  
+  // Remove button click event
+  $('body').on('click', '.remove-bedlayout', function() {
+	$(this).closest('.bedlayout-box').remove();
+  });
+  
+
   /**
     * Google Fonts
     */

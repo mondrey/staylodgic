@@ -49,24 +49,24 @@ function themecore_room_metadata() {
 				'std' => ''
 			),
 			array(
-				'name' => __('Guests','themecore'),
-				'id' => 'pagemeta_guests',
+				'name' => __('Max Guests','themecore'),
+				'id' => 'pagemeta_max_guests',
 				'type' => 'text',
-				'desc' => __('Guests: (max. guests allowed).','themecore'),
+				'desc' => __('Max guests allowed.','themecore'),
 				'std' => ''
 			),
 			array(
-				'name' => __('Children:','themecore'),
-				'id' => 'pagemeta_children',
+				'name' => __('Max Adults:','themecore'),
+				'id' => 'pagemeta_max_children',
 				'type' => 'text',
-				'desc' => __('Children:','themecore'),
+				'desc' => __('Max adults allowed:','themecore'),
 				'std' => ''
 			),
 			array(
-				'name' => __('Capacity:','themecore'),
-				'id' => 'pagemeta_capacity',
+				'name' => __('Max Children:','themecore'),
+				'id' => 'pagemeta_max_children',
 				'type' => 'text',
-				'desc' => __('Capacity:','themecore'),
+				'desc' => __('Max children allowed:','themecore'),
 				'std' => ''
 			),
 			array(
@@ -105,14 +105,31 @@ function themecore_room_metadata() {
 				'std' => ''
 				),
 			array(
-				'name' => __('Active','themecore'),
-				'id' => 'pagemeta_slideshow_titledesc',
-				'type' => 'select',
-				'std' => 'enable',
-				'desc' => __('Display title and description','themecore'),
-				'options' => array(
-					'enable' => 'Enable',
-					'disable' => 'Disable')
+				'name' => esc_html__('Bed Setup','themecore'),
+				'id' => 'pagemeta_bedsetup_repeat',
+				'target' => 'bedsetup',
+				'type' => 'bedsetup_repeat',
+				'heading' => 'subhead',
+				'desc' => esc_html__('Bed Setup','themecore'),
+				'std' => ''
+			),
+			array(
+				'name' => esc_html__('Alternate Bed Setup #1 ( optional )','themecore'),
+				'id' => 'pagemeta_alt_bedsetup_repeat',
+				'target' => 'bedsetup',
+				'type' => 'bedsetup_repeat',
+				'heading' => 'subhead',
+				'desc' => esc_html__('Optional Setup','themecore'),
+				'std' => ''
+			),
+			array(
+				'name' => esc_html__('Alternate Bed Setup #2 ( optional )','themecore'),
+				'id' => 'pagemeta_alt_bedsetup_second_repeat',
+				'target' => 'bedsetup',
+				'type' => 'bedsetup_repeat',
+				'heading' => 'subhead',
+				'desc' => esc_html__('Optional Setup','themecore'),
+				'std' => ''
 			),
 			array(
 				'name' => __('Switch Menu','themecore'),

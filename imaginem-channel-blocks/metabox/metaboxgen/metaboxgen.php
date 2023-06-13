@@ -386,6 +386,67 @@ function themecore_generate_metaboxes($meta_data,$post_id) {
 					echo '<input type="text" class="'.$class.'" name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '" value="' . esc_attr($text_value) . '" size="30" />';
 					break;
 
+				case 'bedsetup_repeat':
+					$text_value = $meta ? $meta : $field['std'];
+					echo '<div class="bedlayout-wrap" data-repeat="'.$field['id'].'">';
+					echo '<div class="bedlayout">';
+					$repeat_count = 0;
+					$found_data=false;
+					if (isSet($meta) && is_array($meta) ) {
+						foreach ($meta['bedtype'] as $value) {
+							if (isSet($value) && $value<>"") {
+								$found_data = true;
+								$age = '';
+								if ( isSet( $meta['bedtype'][$repeat_count] ) ) {
+									$bedtype = $meta['bedtype'][$repeat_count];
+								}
+								if ( isSet( $meta['bednumber'][$repeat_count] ) ) {
+									$bednumber = $meta['bednumber'][$repeat_count];
+								}
+								$class='';
+								if (isset($field['target'])) {
+									$field['options'] = themecore_get_select_target_options($field['target']);
+								}
+								echo '<div class="bedlayout-box" id="bedlayout-box">';
+								echo '<div class="selectbox-type-selector"><select class="chosen-select-metabox bedtype-select" name="', esc_attr($field['id']).'[bedtype][]" id="bed_type'.$repeat_count.'">';
+								foreach ($field['options'] as $key => $option) {
+									if ($key=='0') {
+										$key = __('All the items','themecore');
+									}
+									echo '<option value="'. esc_attr($key) .'"', $bedtype == $key ? ' selected' : '', '>', esc_attr($option) , '</option>';
+								}
+								echo '</select>';
+								echo ' X <input placeholder="0" type="text" name="'. esc_attr($field['id']).'[bednumber][]" value="'. esc_attr($bednumber) .'" id="bed_number'.$repeat_count.'" /></div>';
+								if ( $repeat_count > 0 ) {
+									echo '<div class="remove-bedlayout">Remove</div>';
+								}
+								echo '</div>';
+							}
+							$repeat_count++;
+						}
+					}
+					if (!$found_data) {
+						if (isset($field['target'])) {
+							$field['options'] = themecore_get_select_target_options($field['target']);
+						}
+						echo '<div class="bedlayout-box" id="bedlayout-box">';
+						echo '<div class="selectbox-type-selector"><select class="chosen-select-metabox" name="', esc_attr($field['id']).'[bedtype][]" id="bed_type0">';
+						foreach ($field['options'] as $key => $option) {
+							if ($key=='0') {
+								$key = __('All the items','themecore');
+							}
+							echo '<option value="'. esc_attr($key) .'"', $meta == $key ? ' selected' : '', '>', esc_attr($option) , '</option>';
+						}
+						echo '</select>';
+						echo ' X <input placeholder="How many" type="text" name="'. esc_attr($field['id']).'[bednumber][]" value="" id="bed_number0" /></div>';
+						echo '</div>';
+					}
+					echo '</div>';
+					echo '<span class="add-bedlayout-box">'.esc_html__('Add layout','themecore').'</span>';
+					echo '<span class="add-bedlayout-box-notice">'.esc_html__('Max Reached!','themecore').'</span>';
+					echo '</div>';
+					break;
+
 				case 'repeat_text':
 					$text_value = $meta ? $meta : $field['std'];
 					echo '<div class="movethis-wrap" data-repeat="'.$field['id'].'">';
@@ -395,20 +456,15 @@ function themecore_generate_metaboxes($meta_data,$post_id) {
 					$repeat_count = 0;
 					$found_data=false;
 					if (isSet($meta) && is_array($meta) ) {
-						foreach ($meta['size'] as $value) {
+						foreach ($meta['age'] as $value) {
 							if (isSet($value) && $value<>"") {
 								$found_data = true;
-								$size = '';
-								$price = '';
-								if ( isSet( $meta['size'][$repeat_count] ) ) {
-									$size = $meta['size'][$repeat_count];
-								}
-								if ( isSet( $meta['price'][$repeat_count] ) ) {
-									$price = $meta['price'][$repeat_count];
+								$age = '';
+								if ( isSet( $meta['age'][$repeat_count] ) ) {
+									$age = $meta['age'][$repeat_count];
 								}
 								echo '<div class="text-box" id="text-box">';
-								echo '<input placeholder="'.esc_attr__('Size','themecore').'" type="text" name="'. esc_attr($field['id']).'[size][]" value="'. esc_attr($size) .'" id="box_size'.$repeat_count.'" />';
-								echo '<input placeholder="'.esc_attr__('Price','themecore').'" type="text" name="'. esc_attr($field['id']).'[price][]" value="'. esc_attr($price) .'" id="box_price'.$repeat_count.'" />';
+								echo '<input placeholder="'.esc_attr__('Age','themecore').'" type="text" name="'. esc_attr($field['id']).'[age][]" value="'. esc_attr($age) .'" id="box_size'.$repeat_count.'" />';
 								if ($repeat_count>0) {
 									echo '<span class="remove-box">'.esc_html__('Remove','themecore').'</span>';
 								}
@@ -419,12 +475,10 @@ function themecore_generate_metaboxes($meta_data,$post_id) {
 					}
 					if (!$found_data) {
 						echo '<div class="text-box" id="text-box">';
-						echo '<input placeholder="'.esc_attr__('Size','themecore').'" type="text" name="'. esc_attr($field['id']).'[size][]" value="" id="box_size0" />';
-						echo '<input placeholder="'.esc_attr__('Price','themecore').'" type="text" name="'. esc_attr($field['id']).'[price][]" value="" id="box_price0" />';
 						echo '</div>';
 					}
 					echo '</div>';
-					echo '<span class="add-box">'.esc_html__('Add more','themecore').'</span>';
+					echo '<span class="add-box">'.esc_html__('Add Child','themecore').'</span>';
 					echo '<span class="add-box-notice">'.esc_html__('Max Reached!','themecore').'</span>';
 					echo '</div>';
 					break;

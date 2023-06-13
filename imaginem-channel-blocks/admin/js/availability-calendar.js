@@ -250,7 +250,7 @@
 				if (selectedDates.length > 1) {
 				  checkout = selectedDates[1];
 				}
-				let reservationID = $(instance.input).data('postid');
+				let reservationID = themecore_admin_vars.post_id;
 				console.log(reservationID);
 				const roomNights = checkout ? Math.ceil((checkout - checkin) / (1000 * 60 * 60 * 24)) : 0;
 			  
@@ -334,7 +334,7 @@
 										   "<p>Room nights: " + roomNights + "</p>";
 				  document.getElementById("reservation-details").innerHTML = reservationDetails;
 				}
-			  });  
+			  });
 			  
 			  // Availablity Calendar
 			  var calendarTable = $('#calendarTable');

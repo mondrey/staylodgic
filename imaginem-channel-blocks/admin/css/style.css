@@ -651,9 +651,6 @@
 
 
 .movethis #text-box {
-    background: #f7f7f7;
-    border-bottom: 1px solid #d2d2d2;
-    border-top: 1px solid #d2d2d2;
     margin-bottom: 5px;
     margin-top: -6px;
     padding-bottom: 6px;
@@ -664,6 +661,7 @@
 .movethis #text-box:hover {
 	cursor:grab;
 }
+.remove-bedlayout,
 .remove-box {
     margin-left: 10px;
     color: #008ec2;
@@ -673,32 +671,12 @@
 	     -o-transition: color 0.1s ease-in-out;
 	        transition: color 0.1s ease-in-out;
 }
+.remove-bedlayout:hover,
 .remove-box:hover {
 	cursor: pointer;
 	color: #000;
 }
-.movethis .text-box:after {
-	position: absolute;
-	right: 1%;
-	top: 9px;
-	color: #8e8e8e;
-    -moz-osx-font-smoothing: grayscale;
-    display: inline-block;
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 400;
-    height: 20px;
-    line-height: 1;
-    text-align: center;
-    text-decoration: inherit;
-    vertical-align: top;
-    width: 20px;
-    font-family: "dashicons";
-    content: "\f333";
-}
-.movethis .text-box:hover:after {
-	color: #000;
-}
+.add-bedlayout-box-notice,
 .add-box-notice {
     background: #fdffb3;
     color: #555;
@@ -718,6 +696,7 @@
 .movethis-wrap input {
 	width: 30%;
 }
+.add-bedlayout-box,
 .movethis-wrap .add-box {
     background: #0073aa;
     color: #fff;
@@ -726,6 +705,7 @@
     padding: 5px 10px;
     text-decoration: none;
 }
+.add-bedlayout-box[disabled],
 .movethis-wrap .add-box[disabled] {
     background: #f7f7f7;
     color: #000;
@@ -734,10 +714,15 @@
     padding: 5px 10px;
     text-decoration: none;
 }
+.add-bedlayout-box:hover,
 .movethis-wrap .add-box:hover {
     background: #008ec2;
     cursor: pointer;
 }
+#bedlayout-box {
+	margin-bottom: 5px;
+}
+.add-bedlayout-box[disabled]:hover,
 .movethis-wrap .add-box[disabled]:hover {
 	background: #f7f7f7;
 }
