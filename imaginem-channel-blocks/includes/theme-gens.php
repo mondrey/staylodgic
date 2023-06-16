@@ -558,4 +558,87 @@ function themecore_get_option_data( $name, $default = false ) {
 	}
 	return $default;
 }
-?>
+
+function cognitive_get_customer_array(){
+	$customer = array(
+		array(
+			'name' => esc_html__('Customer','themecore'),
+			'id' => 'pagemeta_sep_page_options',
+			'type' => 'seperator'
+		),
+		array(
+			'name' => esc_html__('Full Name','themecore'),
+			'id' => 'pagemeta_full_name',
+			'type' => 'text',
+			'class' => 'textsmall',
+			'heading' => 'subhead',
+			'desc' => '',
+			'std' => ''
+		),
+		array(
+			'name' => esc_html__('Email Address','themecore'),
+			'id' => 'pagemeta_email_address',
+			'type' => 'text',
+			'class' => 'textsmall',
+			'heading' => 'subhead',
+			'desc' => '',
+			'std' => ''
+		),
+		array(
+			'name' => esc_html__('Phone Number','themecore'),
+			'id' => 'pagemeta_phone_number',
+			'type' => 'text',
+			'class' => 'textsmall',
+			'heading' => 'subhead',
+			'desc' => '',
+			'std' => ''
+		),
+		array(
+			'name' => esc_html__('Street Address','themecore'),
+			'id' => 'pagemeta_street_address',
+			'type' => 'text',
+			'class' => 'textsmall',
+			'heading' => 'subhead',
+			'desc' => '',
+			'std' => ''
+		),
+		array(
+			'name' => esc_html__('City','themecore'),
+			'id' => 'pagemeta_city',
+			'type' => 'text',
+			'class' => 'textsmall',
+			'heading' => 'subhead',
+			'desc' => '',
+			'std' => ''
+		),
+		array(
+			'name' => esc_html__('State','themecore'),
+			'id' => 'pagemeta_state',
+			'type' => 'text',
+			'class' => 'textsmall',
+			'heading' => 'subhead',
+			'desc' => '',
+			'std' => ''
+		),
+		array(
+			'name' => esc_html__('Zip Code','themecore'),
+			'id' => 'pagemeta_zip_code',
+			'type' => 'text',
+			'class' => 'textsmall',
+			'heading' => 'subhead',
+			'desc' => '',
+			'std' => ''
+		),
+		array(
+			'name' => esc_html__('Country','themecore'),
+			'id' => 'pagemeta_country',
+			'type' => 'text',
+			'class' => 'textsmall',
+			'heading' => 'subhead',
+			'desc' => '',
+			'std' => ''
+		)
+	);
+
+	return $customer;
+}

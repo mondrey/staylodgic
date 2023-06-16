@@ -328,6 +328,91 @@ function get_dates_between($start_date, $end_date) {
 	return $dates;
 }
 
+function cognitive_get_customer_meta_data($customer_array, $customer_post_id) {
+	$output = array();
+
+	// Loop through the customer array
+	foreach ($customer_array as $item) {
+		if ( 'seperator' !== $item['type'] ) {
+			// Get the meta value for the current item's 'id'
+			$meta_value = get_post_meta($customer_post_id, $item['id'], true);
+			// Add an entry to the output array, with 'name' as the key and the meta value as the value
+			$output[$item['name']] = $meta_value;
+		}
+	}
+
+	return $output;
+}
+
+function cognitive_check_customer_exists($reservation_post_id) {
+	// Get the booking number from the reservation post meta
+	$booking_number = get_post_meta($reservation_post_id, 'pagemeta_booking_number', true);
+
+	if (!$booking_number) {
+		// Handle error if booking number not found
+		return false;
+	}
+
+	// Query the customer post with the matching booking number
+	$customer_query = new WP_Query(array(
+		'post_type' => 'customers',
+		'meta_query' => array(
+			array(
+				'key' => 'pagemeta_booking_number',
+				'value' => $booking_number,
+			),
+		),
+	));
+
+	// Check if a customer post exists
+	if ($customer_query->have_posts()) {
+		// Restore the original post data
+		wp_reset_postdata();
+
+		// Return true if a matching customer post is found
+		return true;
+	}
+
+	// No matching customer found, return false
+	return false;
+}
+
+
+function cognitive_get_reservation_customer_id($reservation_post_id) {
+	// Get the booking number from the reservation post meta
+	$booking_number = get_post_meta($reservation_post_id, 'pagemeta_booking_number', true);
+
+	if (!$booking_number) {
+		// Handle error if booking number not found
+		return '';
+	}
+
+	// Query the customer post with the matching booking number
+	$customer_query = new WP_Query(array(
+		'post_type' => 'customers',
+		'meta_query' => array(
+			array(
+				'key' => 'pagemeta_booking_number',
+				'value' => $booking_number,
+			),
+		),
+	));
+
+	if ($customer_query->have_posts()) {
+		$customer_post = $customer_query->posts[0];
+
+		// Restore the original post data
+		wp_reset_postdata();
+
+		// Return the ID of the customer post
+		return $customer_post->ID;
+	}
+
+	// No matching customer found
+	return '';
+}
+
+
 function cognitive_get_reservation_guest_name($reservation_post_id) {
 	// Get the booking number from the reservation post meta
 	$booking_number = get_post_meta($reservation_post_id, 'pagemeta_booking_number', true);
@@ -1552,6 +1637,15 @@ function cognitive_splitDateRange($dateRange) {
 	return array('startDate' => $startDate, 'endDate' => $endDate);
 }
 
+function cognitive_generate_customer_html_list($array) {
+	$html = "<ul>";
+	foreach ($array as $key => $value) {
+		$html .= "<li><strong>{$key}:</strong> {$value}</li>";
+	}
+	$html .= "</ul>";
+	return $html;
+}
+
 function cognitive_get_reservation_ids_for_customer($customer_id) {
 	$args = array(
 		'post_type'  => 'reservations',
@@ -1632,7 +1726,15 @@ function cognitive_calculate_adr($currentdateString) {
 		'post_type'      => 'reservations',
 		'posts_per_page' => -1,
 		'post_status'    => 'publish',
+		'meta_query'     => array(
+			array(
+				'key'     => 'pagemeta_reservation_status',
+				'value'   => 'confirmed',
+				'compare' => '=',
+			),
+		),
 	);
+	
 
 	$query = new WP_Query($args);
 

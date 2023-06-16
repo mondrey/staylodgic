@@ -61,7 +61,7 @@ function themecore_reservations_metadata() {
 			array(
 				'name' => '',
 				'id' => 'pagemeta_booking_number',
-				'type' => 'text',
+				'type' => 'readonly',
 				'class' => 'textsmall',
 				'heading' => 'subhead',
 				'desc' => '',
@@ -100,7 +100,7 @@ function themecore_reservations_metadata() {
 			array(
 				'name' => '',
 				'id' => 'pagemeta_checkin_date',
-				'type' => 'text',
+				'type' => 'offview',
 				'class' => 'textsmall',
 				'heading' => 'subhead',
 				'desc' => '',
@@ -109,7 +109,7 @@ function themecore_reservations_metadata() {
 			array(
 				'name' => '',
 				'id' => 'pagemeta_checkout_date',
-				'type' => 'text',
+				'type' => 'offview',
 				'class' => 'textsmall',
 				'heading' => 'subhead',
 				'desc' => '',
@@ -148,105 +148,68 @@ function themecore_reservations_metadata() {
 				'std' => ''
 				),
 			array(
-				'name' => 'Guests',
-				'id' => 'pagemeta_reservation_room_guests',
-				'type' => 'text',
-				'class' => 'textsmall',
-				'heading' => 'subhead',
-				'desc' => esc_html__('Guests','themecore'),
-				'std' => ''
-			),
-			array(
-				'name' => esc_html__('Children ( Age )','themecore'),
-				'id' => 'pagemeta_children_repeat',
-				'type' => 'repeat_text',
-				'heading' => 'subhead',
-				'desc' => esc_html__('Child Age','themecore'),
-				'std' => ''
-			),
-			array(
-				'name' => esc_html__('Customer','themecore'),
-				'id' => 'pagemeta_customer_checkin',
-				'type' => 'customer',
+				'name' => 'Adults',
+				'id' => 'pagemeta_reservation_room_adults',
+				'type' => 'number',
+				'occupant' => 'adult',
+				'datafrom' => 'roomtype',
+				'maxcap' => 'pagemeta_max_adults',
+				'min' => '1',
+				'max' => '9',
+				'step' => '1',
+				'unit' => 'adults',
 				'class' => 'textsmall',
 				'heading' => 'subhead',
 				'desc' => '',
-				'std' => ''
+				'std' => '0'
 			),
 			array(
-				'name' => esc_html__('Full Name','themecore'),
-				'id' => 'pagemeta_full_name',
-				'type' => 'text',
+				'name' => 'Children',
+				'id' => 'pagemeta_reservation_room_children',
+				'type' => 'number',
+				'occupant' => 'child',
+				'datafrom' => 'roomtype',
+				'min' => '0',
+				'max' => '9',
+				'step' => '1',
+				'unit' => 'children',
+				'maxcap' => 'pagemeta_max_children',
 				'class' => 'textsmall',
 				'heading' => 'subhead',
 				'desc' => '',
-				'std' => ''
-			),
-			array(
-				'name' => esc_html__('Email Address','themecore'),
-				'id' => 'pagemeta_email_address',
-				'type' => 'text',
-				'class' => 'textsmall',
-				'heading' => 'subhead',
-				'desc' => '',
-				'std' => ''
-			),
-			array(
-				'name' => esc_html__('Phone Number','themecore'),
-				'id' => 'pagemeta_phone_number',
-				'type' => 'text',
-				'class' => 'textsmall',
-				'heading' => 'subhead',
-				'desc' => '',
-				'std' => ''
-			),
-			array(
-				'name' => esc_html__('Street Address','themecore'),
-				'id' => 'pagemeta_street_address',
-				'type' => 'text',
-				'class' => 'textsmall',
-				'heading' => 'subhead',
-				'desc' => '',
-				'std' => ''
-			),
-			array(
-				'name' => esc_html__('City','themecore'),
-				'id' => 'pagemeta_city',
-				'type' => 'text',
-				'class' => 'textsmall',
-				'heading' => 'subhead',
-				'desc' => '',
-				'std' => ''
-			),
-			array(
-				'name' => esc_html__('State','themecore'),
-				'id' => 'pagemeta_state',
-				'type' => 'text',
-				'class' => 'textsmall',
-				'heading' => 'subhead',
-				'desc' => '',
-				'std' => ''
-			),
-			array(
-				'name' => esc_html__('Zip Code','themecore'),
-				'id' => 'pagemeta_zip_code',
-				'type' => 'text',
-				'class' => 'textsmall',
-				'heading' => 'subhead',
-				'desc' => '',
-				'std' => ''
-			),
-			array(
-				'name' => esc_html__('Country','themecore'),
-				'id' => 'pagemeta_country',
-				'type' => 'text',
-				'class' => 'textsmall',
-				'heading' => 'subhead',
-				'desc' => '',
-				'std' => ''
+				'std' => '0'
 			),
 		)
 	);
+
+	$customer = cognitive_get_customer_array();
+
+	$reservation_id = get_the_ID();
+
+	$customer_datafetch = array(
+		array(
+			'name' => esc_html__('Customer','themecore'),
+			'id' => 'pagemeta_sep_page_options',
+			'type' => 'seperator',
+			),
+		array(
+			'name' => '',
+			'id' => $reservation_id,
+			'type' => 'get_customer_data',
+			'class' => '',
+			'heading' => '',
+			'desc' => '',
+			'std' => ''
+		)
+	);
+
+	
+
+	if ( ! cognitive_check_customer_exists( $reservation_id ) ) {
+		$reservations_box['fields'] = array_merge($reservations_box['fields'], $customer);
+	} else {
+		$reservations_box['fields'] = array_merge($reservations_box['fields'], $customer_datafetch);
+	}
 	return $reservations_box;
 }
 /*

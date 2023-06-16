@@ -405,18 +405,21 @@
 		  box-shadow: inset 0 1px 2px 0px rgba(0, 0, 0, .2),   
 		                 0 1px 0 0px rgba(250, 250, 250, .5);  
 		 }
-		.ui-slider-horizontal .ui-slider-handle {
-			position: absolute;  
-		    z-index: 2;  
-		    width: 25px;  
-		    height: 25px;  
-		    cursor: pointer;
-		    background: transparent url(../images/handle.png) no-repeat 0 0;
-		    color: #1C94C4;  
-		    outline: none;  
-		    top: -9px;  
-		    margin-left: -12px;
-		 }
+		 .ui-slider-horizontal .ui-slider-handle {
+			position: absolute;
+			z-index: 2;
+			width: 11px;
+			height: 11px;
+			cursor: pointer;
+			background: #fff;
+			color: #1C94C4;
+			outline: none;
+			top: -3px;
+			margin-left: -12px;
+			border-radius: 100%;
+			border: 1px solid #0000004f;
+			box-shadow: 1px 1px 2px #000;
+		}
 		.ui-slider-horizontal .ui-slider-range { 
 			background: #5AB7DE;
 		  box-shadow: inset 0 2px 4px 0px rgba(0, 0, 0, .8),   
@@ -755,4 +758,71 @@
 }
 .chosen-container.chosen-container-single {
     min-width: 250px;
+}
+
+.switch-toggle {
+	width: 53px;
+	height: 24px;
+	box-shadow: inset 3px 1px 13px #00000042;
+	position: relative;
+	border-radius: 30px;
+	cursor: pointer;
+}
+.switch-toggle-slide {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.switch-inner {
+	width: 14px;
+	height: 14px;
+	background-color: #2196F3;
+	transition: left 0.3s, background-color 0.3s;
+	border-radius: 38px;
+	top: 5px;
+	position: relative;
+	box-shadow: 0px 0px 1px #000;
+}
+.switch-toggle.switch-off .switch-inner {
+	position: absolute;
+	background-color: #a4a4a4;
+	left: 5px;
+}
+
+.switch-toggle.switch-on .switch-inner {
+	position: absolute;
+	left: 34px;
+}
+
+.metabox-fields.metaboxtype_offview {
+	display: none;
+}
+
+.number-input {
+	display: flex;
+	align-items: center;
+}
+  
+.number-input input {
+	width: 50px;
+	text-align: center;
+	margin: 0 5px;
+}
+  
+.number-input span {
+	width: 30px;
+	height: 30px;
+	border: none;
+	background-color: #ddd;
+	border-radius: 20px;
+	cursor: pointer;
+	line-height: 2;
+	text-align: center;
+}
+  
+.number-input span:hover {
+	background-color: #ccc;
 }

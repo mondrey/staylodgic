@@ -231,6 +231,177 @@
 	
 			$('.datepicker').flatpickr();
 
+		function initialize_reservation_guest_amount() {
+			
+			$('#pagemeta_room_name').change(function() {
+
+				$('.notify-number-over-max').hide();
+
+				var selectedValue = $(this).val(); // Get the selected room value
+				var occupantsData = $('.occupants-range').attr('data-occupants'); // Get the data-occupants attribute
+				var occupantsObject = JSON.parse(occupantsData); // Parse the JSON string into an object
+			
+				// Check if the selected room ID exists in the occupants object
+				if (occupantsObject.hasOwnProperty(selectedValue)) {
+
+					var $adultInput = $('#pagemeta_reservation_room_adults');
+
+					var adult_number = $('#pagemeta_reservation_room_adults').val();
+
+					// Get the max guests for the selected room
+					var maxGuests = occupantsObject[selectedValue]["max_guests"]; 
+			
+					// Determine whether to use max_adults or max_children for adults
+					var maxValueAdults = occupantsObject[selectedValue]['max_adults'];
+
+					// Determine whether to use max_adults or max_children for children
+					var maxValueChildren = occupantsObject[selectedValue]['max_children'];
+
+					$adultInput.attr("data-guestmax", maxGuests);
+					$adultInput.attr("data-adultmax", maxValueAdults);
+					$adultInput.attr("data-childmax", maxValueChildren);
+					// If max_adults value is 0, use maxGuests value
+					//maxValueAdults = (maxValueAdults == '0') ? maxGuests : maxValueAdults;
+					console.log( maxValueAdults );
+					if ( 'disabled' == maxValueAdults ) {
+						$adultInput.attr('data-min', '1');
+						$adultInput.attr('data-max', maxGuests);
+						$adultInput.attr('data-guestmax', maxGuests);
+						$('.adult-number-max-notice').hide();
+						$('.combined-adult-number-max-notice').show();
+						$('.combined-adult-number-max').show().text(maxGuests);
+
+						if ( adult_number > maxGuests ) {
+							$('.occupant-adult-notify.notify-number-over-max').show();
+						}
+					} else {
+						$adultInput.attr('data-min', '1');
+						$adultInput.attr('data-max', maxValueAdults);
+						$adultInput.attr('data-guestmax', maxGuests);
+						$('.combined-adult-number-max-notice').hide();
+						$('.adult-number-max-notice').show();
+						$('.adult-number-max').show().text(maxValueAdults);
+
+						if ( adult_number > maxValueAdults ) {
+							$('.occupant-adult-notify.notify-number-over-max').show();
+						}
+					}
+			
+					// Update the max attribute and the jQuery UI slider for adults
+					
+					
+
+					//$adultInput.val('1');
+			
+
+
+					var $childInput = $('#pagemeta_reservation_room_children');
+
+					var children_number = $childInput.val();
+
+					$childInput.attr("data-guestmax", maxGuests);
+					$childInput.attr("data-adultmax", maxValueAdults);
+					$childInput.attr("data-childmax", maxValueChildren);
+					// If max_children value is 0, use maxGuests value
+					//maxValueChildren = (maxValueChildren == '0') ? maxGuests : maxValueChildren;
+
+					if ( 'disabled' == maxValueChildren ) {
+						$childInput.attr('data-min', '0');
+						$childInput.attr('data-max', maxGuests);
+						$childInput.attr('data-guestmax', maxGuests);
+						$('.child-number-max-notice').hide();
+						$('.combined-child-number-max-notice').show();
+						$('.combined-child-number-max').show().text(maxGuests);
+
+						if ( children_number > maxGuests ) {
+							$('.occupant-child-notify.notify-number-over-max').show();
+						}
+					} else {
+						$childInput.attr('data-min', '0');
+						$childInput.attr('data-max', maxValueChildren);
+						$childInput.attr('data-guestmax', maxGuests);
+						$('.combined-child-number-max-notice').hide();
+						$('.child-number-max-notice').show();
+						$('.child-number-max').text(maxValueChildren);
+						
+						if ( children_number > maxValueChildren ) {
+							$('.occupant-child-notify.notify-number-over-max').show();
+						}
+					}
+					
+					// Update the max attribute and the jQuery UI slider for children
+
+					//$childInput.val('0');
+			
+					// Update the text in the ranger-max-value span
+					
+				}
+			});
+
+			$('.number-input').each(function() {
+				var input = $(this).find('.number-value');
+			
+				$(this).on('click', '.minus-btn', function() {
+					var guest = input.attr('data-guest');
+					var minValue = parseInt(input.attr('data-min'));
+					var value = parseInt(input.val());
+					if (value > minValue) {
+						input.val(value - 1);
+						calculateSum();
+						if (guest === "child") {
+							$("#guest-age input[data-counter='" + (value - 1) + "']").remove();  // remove the corresponding extra input field
+						}
+					}
+					$('#pagemeta_room_name').trigger('change');
+				});
+			
+				$(this).on('click', '.plus-btn', function() {
+					var guest = input.attr('data-guest');
+					var minValue = parseInt(input.attr('data-min'));
+					var maxValue = parseInt(input.attr('data-max'));
+					var guestmaxValue = parseInt(input.attr('data-guestmax'));
+					var value = parseInt(input.val());
+					if (value < maxValue && calculateSum() + 1 <= guestmaxValue) {
+						$('.child-number-notice').hide();
+						input.val(value + 1);
+						calculateSum();
+						if (guest === "child") {
+							var extraInput = $("<input name='pagemeta_reservation_room_children[age][]' type='text' data-counter='" + value + "' placeholder='Enter age'>");
+							$("#guest-age").append(extraInput);  // append the extra input to the "guest-age" div
+						}
+					}
+					$('#pagemeta_room_name').trigger('change');
+				});
+			
+				// Calculate the initial sum
+				calculateSum();
+			});
+			
+			
+				function calculateSum() {
+					var sum = 0;
+					$('.number-input .number-value').each(function() {
+					sum += parseInt($(this).val());
+					});
+					console.log('Total sum:', sum);
+					return sum;
+				}
+
+				function calculateSum() {
+					var sum = 0;
+					$('.number-input .number-value').each(function() {
+					sum += parseInt($(this).val());
+					});
+					console.log('Total sum:', sum);
+					return sum;
+				}
+			  
+			  
+
+		}
+
+			initialize_reservation_guest_amount();
+			
 			function getExistingDates() {
 				let checkinValue = document.getElementById('pagemeta_checkin_date') ? document.getElementById('pagemeta_checkin_date').value : null;
 				let checkoutValue = document.getElementById('pagemeta_checkout_date') ? document.getElementById('pagemeta_checkout_date').value : null;
@@ -255,19 +426,21 @@
 				const roomNights = checkout ? Math.ceil((checkout - checkin) / (1000 * 60 * 60 * 24)) : 0;
 			  
 				const reservationDetails = document.getElementById("reservation-details");
-				reservationDetails.innerHTML = `
-				  <p>Checkin: ${checkin.toLocaleDateString()}</p>
-				  ${checkout ? `<p>Checkout: ${checkout.toLocaleDateString()}</p>` : ''}
-				  <p>Room nights: ${roomNights}</p>
-				`;
+				if (checkin && checkout) {
+					reservationDetails.innerHTML = `
+					<p>Checkin: ${checkin.toLocaleDateString()}</p>
+					${checkout ? `<p>Checkout: ${checkout.toLocaleDateString()}</p>` : ''}
+					<p>Room nights: ${roomNights}</p>
+					`;
+				}
 			  
 				// Set the values of the hidden input fields
 				if (checkin && checkout) {
-				  const checkinOffset = checkin.getTimezoneOffset() * 60000; // Time zone offset in milliseconds
-				  const checkoutOffset = checkout.getTimezoneOffset() * 60000; // Time zone offset in milliseconds
-			  
-				  document.getElementById("pagemeta_checkin_date").value = new Date(checkin - checkinOffset).toISOString().split('T')[0];
-				  document.getElementById("pagemeta_checkout_date").value = new Date(checkout - checkoutOffset).toISOString().split('T')[0];
+					const checkinOffset = checkin.getTimezoneOffset() * 60000; // Time zone offset in milliseconds
+					const checkoutOffset = checkout.getTimezoneOffset() * 60000; // Time zone offset in milliseconds
+
+					document.getElementById("pagemeta_checkin_date").value = new Date(checkin - checkinOffset).toISOString().split('T')[0];
+					document.getElementById("pagemeta_checkout_date").value = new Date(checkout - checkoutOffset).toISOString().split('T')[0];
 				}
 			  
 				// Availability checking to see if the chosen range has rooms available for the dates
@@ -285,7 +458,10 @@
 				  jQuery.post(ajaxurl, data, function(response) {
 					let selectElement = $('#pagemeta_room_name');
 					let selectedValue = selectElement.val(); // Save the currently selected value
-					
+
+					// store the value to guest number selectors
+					$('.occupants-range').attr('data-room', selectedValue);
+
 					selectElement.empty();
 				  
 					var available_rooms = JSON.parse(response);
@@ -321,7 +497,7 @@
 				  var roomNights = (checkout - checkin) / (1000 * 60 * 60 * 24);
 				  
 				  // Set the values of the hidden input fields
-				  if (checkin && checkout) {
+				  if (checkin && !isNaN(Date.parse(checkin)) && checkout && !isNaN(Date.parse(checkout))) {
 					const checkinOffset = checkin.getTimezoneOffset() * 60000; // Time zone offset in milliseconds
 					const checkoutOffset = checkout.getTimezoneOffset() * 60000; // Time zone offset in milliseconds
 			  

@@ -306,3 +306,27 @@ a.reservation-edit-link:focus {
 .calendar-controls-wrap {
 	margin-bottom: 14px;
 }
+#guest-age {
+	margin-top: 10px;
+}
+.notify-number-over-max {
+	color: #ff0000;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+.adult-number-max-notice,
+.child-number-max-notice {
+	margin-top: 10px;
+	color: #5e5e5e;
+}
+.notify-number-over-max,
+.adult-number-max-notice,
+.child-number-max-notice,
+.combined-adult-number-max-notice,
+.combined-child-number-max-notice {
+	display: none;
+}
+.combined-child-number-max-notice,
+.combined-adult-number-max-notice {
+	margin-top: 10px;
+}

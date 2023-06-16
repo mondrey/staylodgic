@@ -381,9 +381,34 @@ function themecore_generate_metaboxes($meta_data,$post_id) {
 					echo '<input type="text" class="'.$class.'" name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '" value="' . esc_attr($text_value) . '" size="30" />';
 					break;
 
+				case 'disabled':
+					$text_value = $meta ? $meta : $field['std'];
+					echo '<input type="text" class="'.$class.'" name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '" value="' . esc_attr($text_value) . '" size="30" disabled />';
+					echo '<input type="hidden" class="'.$class.'" name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '" value="' . esc_attr($text_value) . '" size="30" />';
+
+					break;
+
+				case 'readonly':
+					$text_value = $meta ? $meta : $field['std'];
+					echo '<input readonly type="text" class="'.$class.'" name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '" value="' . esc_attr($text_value) . '" size="30" />';
+					break;
+					
+				case 'offview':
+					$text_value = $meta ? $meta : $field['std'];
+					echo '<input type="hidden" class="'.$class.'" name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '" value="' . esc_attr($text_value) . '" size="30" />';
+					break;
+
 				case 'text':
 					$text_value = $meta ? $meta : $field['std'];
 					echo '<input type="text" class="'.$class.'" name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '" value="' . esc_attr($text_value) . '" size="30" />';
+					break;
+
+				case 'switch':
+					$text_value = $meta ? $meta : $field['std'];
+					echo '<div class="switch-toggle">';
+					echo '<input type="hidden" class="meta-switch-toggle '.$class.'" name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '" value="' . esc_attr($text_value) . '" size="30" />';
+					echo '<div class="switch-toggle-slide"><div class="switch-inner"></div></div>';
+					echo '</div>';
 					break;
 
 				case 'bedsetup_repeat':
@@ -487,25 +512,25 @@ function themecore_generate_metaboxes($meta_data,$post_id) {
 					echo '<select name="'.esc_attr($field['id']).'" id="'.esc_attr($field['id']).'">';
 					$start = strtotime('12am');
 					for ($i = 0; $i < (24 * 4); $i++) {
-					    
-					    $tod = $start + ($i * 15 * 60);
-					    $display = date('h:i A', $tod);
+						
+						$tod = $start + ($i * 15 * 60);
+						$display = date('h:i A', $tod);
 
-					    if (substr($display, 0, 2) == '00') {
-					        	$display = '12' . substr($display, 2);
-					    }
-					    if ($meta==$display) {
-					    	$timeselected='selected="selected"';
-					    } else {
-					    	$timeselected="";
-					    }
-
-					    $display_user_time = $display;
-					    $event_time_format = themecore_get_option_data('events_time_format');
-					    if ($event_time_format == "24hr") {
-					    	$display_user_time = date('H:i', $tod);
+						if (substr($display, 0, 2) == '00') {
+								$display = '12' . substr($display, 2);
 						}
-					    echo '<option value="' . esc_attr($display) . '" '.$timeselected.'>' . esc_attr($display_user_time) . '</option>';
+						if ($meta==$display) {
+							$timeselected='selected="selected"';
+						} else {
+							$timeselected="";
+						}
+
+						$display_user_time = $display;
+						$event_time_format = themecore_get_option_data('events_time_format');
+						if ($event_time_format == "24hr") {
+							$display_user_time = date('H:i', $tod);
+						}
+						echo '<option value="' . esc_attr($display) . '" '.$timeselected.'>' . esc_attr($display_user_time) . '</option>';
 					} 
 					echo '</select>';
 
@@ -596,6 +621,170 @@ function themecore_generate_metaboxes($meta_data,$post_id) {
 					break;
 
 				// Basic text input
+				case 'occupants':
+					$output = '';
+
+					$max_adults = 'disabled';
+					$max_children = 'disabled';
+					$max_guests = '0';
+
+					$roomOccupantData = array();
+
+					if ( isset($field['datafrom']) ) {
+						if ( 'roomtype' == $field['datafrom'] ) {
+							$room = get_posts('post_type=room&numberposts=-1&order=ASC');
+							if ($room) {
+								foreach($room as $key => $list) {
+									$custom = get_post_custom($list->ID);
+									if ( isSet($custom[ "pagemeta_max_adult_limit_status"][0]) ) { 
+										$adult_limit_status = $custom[ "pagemeta_max_adult_limit_status"][0];
+										if ( '1' == $adult_limit_status ) {
+											$max_adults = $custom[ "pagemeta_max_adults"][0];
+										}
+									}
+									if ( isSet($custom[ "pagemeta_max_children_limit_status"][0]) ) { 
+										$children_limit_status = $custom[ "pagemeta_max_children_limit_status"][0];
+										if ( '1' == $children_limit_status ) {
+											$max_children = $custom[ "pagemeta_max_children"][0];
+										}
+									}
+									if ( isSet($custom[ "pagemeta_max_guests"][0]) ) { 
+										$max_guests = $custom[ "pagemeta_max_guests"][0]; 
+									}
+									$roomOccupantData[$list->ID]['max_adults'] = $max_adults;
+									$roomOccupantData[$list->ID]['max_children'] = $max_children;
+									$roomOccupantData[$list->ID]['max_guests'] = $max_guests;
+								}
+							}
+						}
+					}
+					if ( isset($field['unit']) ) {
+						$jsonOccupants = json_encode($roomOccupantData);
+						echo "<div class='occupant-".$field['occupant']." occupants-range ranger-min-max-wrap' data-room='' data-occupant='".$field['occupant']."' data-occupants='". $jsonOccupants ."'><span class='ranger-min-value'>".esc_attr($field['min'])."</span>";
+						echo '<span class="ranger-max-value">'.esc_attr($field['max']).'</span></div>';
+						echo '<div id="' . esc_attr( $field['id'] ) . '_slider"></div>';
+						echo '<div class="ranger-bar">';
+					}
+					if ( !isSet($meta) || $meta=="" ) { 
+						if ($meta==0) {$meta="0";} else {$meta=$field['std'];}
+					}
+					$meta=floatval($meta);
+					echo '<input id="' . esc_attr( $field['id'] ) . '" class="of-input input-occupant input-occupant-'.$field['occupant'].'" name="' . esc_attr( $field['id'] ) . '" type="text" value="'.esc_attr($meta).'"';
+					
+					if ( isset($field['unit']) ) {
+						if (isset($field['min'])) {
+							echo ' min="' . esc_attr($field['min']);
+						}
+						if (isset($field['max'])) {
+							echo '" max="' . esc_attr($field['max']);
+						}
+						if (isset($field['step'])) {
+							echo '" step="' . esc_attr($field['step']);
+						}
+						echo '" />';
+						if (isset($field['unit'])) {
+							echo '<span>' . esc_attr($field['unit']) . '</span>';
+						}
+						echo '</div>';
+					} else {
+						echo ' />';
+					}
+					
+				break;
+
+				case 'get_customer_data':
+
+					$customer_array = cognitive_get_customer_array();
+					$customer_post_id = cognitive_get_reservation_customer_id( $field['id'] );
+					$customer_post_edit = get_edit_post_link( $customer_post_id );
+					echo '<a href="'.$customer_post_edit.'">Edit</a>';
+					$customer_data = cognitive_get_customer_meta_data( $customer_array, $customer_post_id);
+			
+					echo cognitive_generate_customer_html_list($customer_data);
+
+					break;
+
+				case 'number':
+					$output="";
+
+					$roomOccupantData = array();
+
+					if ( isset($field['datafrom']) ) {
+						if ( 'roomtype' == $field['datafrom'] ) {
+
+
+							$room = get_posts('post_type=room&numberposts=-1&order=ASC');
+							if ($room) {
+								foreach($room as $key => $list) {
+									$max_adults = 'disabled';
+									$max_children = 'disabled';
+									$max_guests = '0';
+									$custom = get_post_custom($list->ID);
+									if ( isSet($custom[ "pagemeta_max_adult_limit_status"][0]) ) { 
+										$adult_limit_status = $custom[ "pagemeta_max_adult_limit_status"][0];
+										if ( '1' == $adult_limit_status ) {
+											$max_adults = $custom[ "pagemeta_max_adults"][0];
+										}
+									}
+									if ( isSet($custom[ "pagemeta_max_children_limit_status"][0]) ) { 
+										$children_limit_status = $custom[ "pagemeta_max_children_limit_status"][0];
+										if ( '1' == $children_limit_status ) {
+											$max_children = $custom[ "pagemeta_max_children"][0];
+										}
+									}
+									if ( isSet($custom[ "pagemeta_max_guests"][0]) ) { 
+										$max_guests = $custom[ "pagemeta_max_guests"][0]; 
+									}
+									$roomOccupantData[$list->ID]['max_adults'] = $max_adults;
+									$roomOccupantData[$list->ID]['max_children'] = $max_children;
+									$roomOccupantData[$list->ID]['max_guests'] = $max_guests;
+								}
+							}
+						}
+					}
+					
+					$jsonOccupants = json_encode($roomOccupantData);
+
+					if ( !isSet($meta) || $meta=="" ) { 
+						if ($meta==0) {$meta="0";} else {$meta=$field['std'];}
+					}
+					echo "<div id='" . esc_attr( $field['id'] ) . "_wrap' class='number-input occupant-".$field['occupant']." occupants-range' data-room='0' data-occupant='".$field['occupant']."' min='" . $field['min'] . "' max='" . $field['min'] . "' data-occupants='". $jsonOccupants ."' >";
+					echo '<span class="minus-btn">-</span>';
+					
+					if ( 'child' == $field['occupant'] ) {
+						if ( isset($meta['number']) ) {
+							$meta_value = $meta['number'];
+						} else {
+							$meta_value = '0';
+						}
+						$name_property = $field['id'] . '[number]';
+					} else {
+						$meta_value = $meta;
+						$name_property = $field['id'];
+					}
+					echo '<input data-guest="'.$field['occupant'].'" data-guestmax="0" data-adultmax="0" data-childmax="0" id="' . esc_attr( $field['id'] ) . '" value="'.esc_attr($meta_value).'" name="' . $name_property . '" type="text" class="number-value" readonly>';
+					echo '<span class="plus-btn">+</span>';
+					echo '</div>';
+					echo '<div class="occupant-'.$field['occupant'].'-notify notify-number-over-max">Exceeds maximum</div>';
+					if ( 'child' == $field['occupant'] ) {
+						echo '<div class="child-number-max-notice">Maximum occupancy: <span class="child-number-max"></span></div>';
+						echo '<div class="combined-child-number-max-notice">Combined occupancy: <span class="combined-child-number-max"></span></div>';
+						echo '<div id="guest-age">';
+						if ( isset( $meta['number'] ) ) {
+							for ($i = 0; $i < $meta['number']; $i++) {
+								$age = isset($meta['age'][$i]) ? $meta['age'][$i] : '';
+								echo "<input name='pagemeta_reservation_room_children[age][]' type='text' data-counter='" . $i . "' value='" . $age . "' placeholder='Enter age'>";
+							}
+						}
+						echo '</div>';
+					} else {
+						echo '<div class="adult-number-max-notice">Maximum occupancy: <span class="adult-number-max"></span></div>';
+						echo '<div class="combined-adult-number-max-notice">Combined occupancy: <span class="combined-adult-number-max"></span></div>';
+					}
+					
+					
+				break;
+
 				case 'range':
 					$output="";
 					if ( isset($field['unit']) ) {

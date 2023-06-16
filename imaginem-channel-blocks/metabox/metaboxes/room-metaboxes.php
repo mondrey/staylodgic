@@ -51,42 +51,80 @@ function themecore_room_metadata() {
 			array(
 				'name' => __('Max Guests','themecore'),
 				'id' => 'pagemeta_max_guests',
-				'type' => 'text',
+				'type' => 'range',
+				'min' => '1',
+				'max' => '9',
+				'step' => '1',
+				'unit' => 'guests',
 				'desc' => __('Max guests allowed.','themecore'),
 				'std' => ''
 			),
 			array(
+				'name' => __('Set Max Adult Limit on/off','themecore'),
+				'id' => 'pagemeta_max_adult_limit_status',
+				'type' => 'switch',
+				'desc' => __('','themecore'),
+				'std' => ''
+			),
+			array(
 				'name' => __('Max Adults:','themecore'),
-				'id' => 'pagemeta_max_children',
-				'type' => 'text',
+				'id' => 'pagemeta_max_adults',
+				'type' => 'range',
+				'min' => '0',
+				'max' => '9',
+				'step' => '1',
+				'unit' => 'adults',
 				'desc' => __('Max adults allowed:','themecore'),
+				'std' => ''
+			),
+			array(
+				'name' => __('Set Max Children Limit on/off','themecore'),
+				'id' => 'pagemeta_max_children_limit_status',
+				'type' => 'switch',
+				'desc' => __('','themecore'),
 				'std' => ''
 			),
 			array(
 				'name' => __('Max Children:','themecore'),
 				'id' => 'pagemeta_max_children',
-				'type' => 'text',
+				'type' => 'range',
+				'min' => '0',
+				'max' => '9',
+				'step' => '1',
+				'unit' => 'children',
 				'desc' => __('Max children allowed:','themecore'),
 				'std' => ''
 			),
 			array(
 				'name' => __('Beds:','themecore'),
 				'id' => 'pagemeta_beds',
-				'type' => 'text',
+				'type' => 'range',
+				'min' => '1',
+				'max' => '9',
+				'step' => '1',
+				'unit' => 'bed(s)',
 				'desc' => __('Beds','themecore'),
 				'std' => ''
 			),
 			array(
 				'name' => __('Bathrooms:','themecore'),
 				'id' => 'pagemeta_bathrooms',
-				'type' => 'text',
+				'type' => 'range',
+				'min' => '1',
+				'max' => '9',
+				'step' => '1',
+				'unit' => 'bathroom(s)',
 				'desc' => __('Bathrooms','themecore'),
 				'std' => ''
 			),
 			array(
 				'name' => __('Accomodation Size:','themecore'),
 				'id' => 'pagemeta_size',
-				'type' => 'text',
+				'type' => 'range',
+				'min' => '1',
+				'max' => '9999',
+				'step' => '1',
+				'unit' => 'sqf',
 				'desc' => __('Size:','themecore'),
 				'std' => ''
 			),

@@ -1,6 +1,36 @@
 jQuery(document).ready(function($) {
 	"use strict";
 
+		// Set initial positions of switches
+	$('.switch-toggle').each(function() {
+		var hiddenInput = $(this).find('.meta-switch-toggle');
+		var currentValue = hiddenInput.val();
+
+		if (!currentValue || currentValue == '0') {
+			$(this).removeClass('switch-on');
+			$(this).addClass('switch-off');
+		} else {
+			$(this).removeClass('switch-off');
+			$(this).addClass('switch-on');
+		}
+	});
+
+	// Attach click event listener to each switch-toggle
+	$('.switch-toggle').on('click', function() {
+		var hiddenInput = $(this).find('.meta-switch-toggle');
+		var currentValue = hiddenInput.val();
+		var newValue = (!currentValue || currentValue == '0') ? '1' : '0';
+
+		hiddenInput.val(newValue);
+		if (newValue == '0') {
+			$(this).removeClass('switch-on');
+			$(this).addClass('switch-off');
+		} else {
+			$(this).removeClass('switch-off');
+			$(this).addClass('switch-on');
+		}
+	});
+
     $(".metabox-image-radio-selector").on('click', function() {
     	var check_radio_selector = $(this).data('holder');
     	$("#"+check_radio_selector).prop("checked", true);
@@ -183,7 +213,7 @@ $('.bedlayout-wrap .add-bedlayout-box').click(function() {
 	                // get input max
 	                var inputMin = parseInt($(this).attr('min'));
 					var inputMax = parseInt($(this).attr('max'));
-
+					
 	                $('#'+inputId+'_slider').slider({
 						range: "min",
 	                    value: inputValue,
@@ -195,27 +225,28 @@ $('.bedlayout-wrap .add-bedlayout-box').click(function() {
 
 	                    }
 	                });
+
+					
 	            });
 	
-				$( ".ranger-bar :text" ).change(function() {
-					var inputField = $(this);
-					var inputId = $(this).attr('id');
-					var inputMin = parseInt($(this).attr('min'));
-					var inputMax = parseInt($(this).attr('max'));
-					var inputValue = parseInt($(this).val());
-					
-					if (inputValue > inputMax ) { 
-						inputValue=inputMax;
-						$(inputField).val(inputValue);
-					}
-					if (inputValue < inputMin ) { 
-						inputValue=inputMin;
-						$(inputField).val(inputValue);
-					}
-				    $('#'+inputId+'_slider').slider( "value", inputValue );
-				});
+	$( ".ranger-bar :text" ).change(function() {
+		var inputField = $(this);
+		var inputId = $(this).attr('id');
+		var inputMin = parseInt($(this).attr('min'));
+		var inputMax = parseInt($(this).attr('max'));
+		var inputValue = parseInt($(this).val());
+		
+		if (inputValue > inputMax ) { 
+			inputValue=inputMax;
+			$(inputField).val(inputValue);
+		}
+		if (inputValue < inputMin ) { 
+			inputValue=inputMin;
+			$(inputField).val(inputValue);
+		}
+		$('#'+inputId+'_slider').slider( "value", inputValue );
+	});
 	
-
 	jQuery(".selectbox-wrap select").each(function(){
 	  jQuery(this).wrap('<div class="selectbox"/>');
 		jQuery(this).after("<span class='selecttext'></span><span class='select-arrow'></span>");
