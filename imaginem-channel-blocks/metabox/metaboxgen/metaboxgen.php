@@ -692,12 +692,18 @@ function themecore_generate_metaboxes($meta_data,$post_id) {
 					
 				break;
 
+				case 'reservation_for_customer':
+			
+					print_r ( cognitive_get_reservation_ids_for_customer_id($field['customer_id']) );
+
+					break;
+
 				case 'get_customer_data':
 
 					$customer_array = cognitive_get_customer_array();
 					$customer_post_id = cognitive_get_reservation_customer_id( $field['id'] );
 					$customer_post_edit = get_edit_post_link( $customer_post_id );
-					echo '<a href="'.$customer_post_edit.'">Edit</a>';
+					echo '<a class="button button-primary button-large" href="'.$customer_post_edit.'">Edit Customer</a>';
 					$customer_data = cognitive_get_customer_meta_data( $customer_array, $customer_post_id);
 			
 					echo cognitive_generate_customer_html_list($customer_data);

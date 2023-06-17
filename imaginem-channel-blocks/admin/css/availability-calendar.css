@@ -330,3 +330,11 @@ a.reservation-edit-link:focus {
 .combined-adult-number-max-notice {
 	margin-top: 10px;
 }
+ul.existing-customer li {
+	margin: 0 0 10px;
+}
+ul.existing-customer {
+	box-sizing: border-box;
+	padding: 50px;
+	background: #f0f0f0;
+}

@@ -33,6 +33,7 @@
 		$('#bookingSearch').on('click', function(e) { // Changed here
 			e.preventDefault();
 			console.log('Here');
+			var bookingNumber = $('#booking-number').val();
 			var reservationDate = $('#reservation-date').val();
 			var numberOfAdults = $('#number-of-guests').val();
 			var numberOfChildren = $('#number-of-children').val();
@@ -42,6 +43,7 @@
 				type: 'POST',
 				data: {
 					action: 'cognitive_frontend_booking_search', // the PHP function to trigger
+					booking_number: bookingNumber,
 					reservation_date: reservationDate,
 					number_of_guests: numberOfAdults,
 					number_of_children: numberOfChildren
@@ -61,6 +63,8 @@
 		$(document).on('click', '#bookingRegister', function(e) {
 			e.preventDefault();
 	
+			let booking_number = $('#reservation-data').data('bookingnumber');
+			console.log( 'booking-number:' + booking_number );
 			let checkin = $('#reservation-data').data('checkin');
 			let checkout = $('#reservation-data').data('checkout');
 			let rooms = [];
@@ -88,6 +92,7 @@
 				type : 'POST',
 				data : {
 					action : 'cognitive_book_rooms',
+					booking_number : booking_number,
 					checkin : checkin,
 					checkout : checkout,
 					rooms : rooms,
@@ -103,11 +108,17 @@
 				},
 				success : function(response) {
 					// handle success
-					$('#bookingResponse').removeClass('error').addClass('success').text('Booking successfully registered.');
+					if(response.success) {
+						// handle success
+						$('#bookingResponse').removeClass('error').addClass('success').text('Booking successfully registered.');
+					} else {
+						// handle error
+						$('#bookingResponse').removeClass('success').addClass('error').text(response.data);
+					}
 				},
-				error: function(error) {
-					// handle error
-					$('#bookingResponse').removeClass('success').addClass('error').text('Failed to register the booking. Please try again.');
+				error: function(jqXHR, textStatus, errorThrown) {
+					// handle network errors, bad URLs, etc.
+					$('#bookingResponse').removeClass('success').addClass('error').text(errorMessage);
 				}
 			});
 		});

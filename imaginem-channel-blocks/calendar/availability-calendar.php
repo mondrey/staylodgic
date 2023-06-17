@@ -137,7 +137,7 @@ add_action('save_post', 'update_reservations_array_on_save', 13, 3);
  * Triggered when a post is saved. If the post type is 'reservations' and is not autosaved or revision, it updates the reservation details.
  */
 function update_reservations_array_on_save($post_id, $post, $update) {
-	if (!is_valid_post($post_id, $post)) {
+	if (!cognitive_reservation_is_valid_post($post_id, $post)) {
 		return;
 	}
 
@@ -240,7 +240,7 @@ function remove_dates_from_reservations_array($dates, $reservation_post_id, $res
 /**
  * Checks if the post is valid for processing
  */
-function is_valid_post($post_id, $post) {
+function cognitive_reservation_is_valid_post($post_id, $post) {
 	return !wp_is_post_autosave($post_id) && !wp_is_post_revision($post_id) && $post->post_type === 'reservations' && get_post_status($post_id) !== 'draft';
 }
 
@@ -375,6 +375,29 @@ function cognitive_check_customer_exists($reservation_post_id) {
 
 	// No matching customer found, return false
 	return false;
+}
+
+function cognitive_get_reservation_ids_for_customer_id($customer_id) {
+	$args = array(
+		'post_type'  => 'reservations',
+		'meta_query' => array(
+			array(
+				'key'   => 'pagemeta_customer_id',
+				'value' => $customer_id,
+			)
+		)
+	);
+
+	$reservations = get_posts($args);
+	$reservation_ids = array();
+	foreach ($reservations as $reservation) {
+		// Fetch the booking number for this reservation
+		$booking_number = get_post_meta($reservation->ID, 'pagemeta_booking_number', true);
+		
+		$reservation_ids[$reservation->ID] = $booking_number;
+	}
+
+	return $reservation_ids;
 }
 
 
@@ -1638,8 +1661,11 @@ function cognitive_splitDateRange($dateRange) {
 }
 
 function cognitive_generate_customer_html_list($array) {
-	$html = "<ul>";
+	$html = "<ul class='existing-customer'>";
 	foreach ($array as $key => $value) {
+		if ( 'Country' == $key ) {
+			$value = cognitive_countryCodeToEmoji($value) . ' ' . themecore_country_list('display',$value);
+		}
 		$html .= "<li><strong>{$key}:</strong> {$value}</li>";
 	}
 	$html .= "</ul>";

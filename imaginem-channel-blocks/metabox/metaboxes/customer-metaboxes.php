@@ -36,6 +36,8 @@ function themecore_customers_metadata() {
 		$options_room_names[0]="Rooms not found.";
 	}
 
+	$customer_id = get_the_ID();
+
 	$customers_box = array(
 		'id' => 'customersmeta-box',
 		'title' => esc_html__('Customers Metabox','themecore'),
@@ -134,12 +136,29 @@ function themecore_customers_metadata() {
 			array(
 				'name' => esc_html__('Country','themecore'),
 				'id' => 'pagemeta_country',
-				'type' => 'text',
+				'type' => 'country',
 				'class' => 'textsmall',
 				'heading' => 'subhead',
 				'desc' => '',
 				'std' => ''
-			)
+			),
+			array(
+				'name' => esc_html__('Page Settings','themecore'),
+				'id' => 'pagemeta_page_section_id',
+				'type' => 'break',
+				'sectiontitle' => esc_html__('Page Settings','themecore'),
+				'std' => ''
+				),
+			array(
+				'name' => '',
+				'id' => 'pagemeta_reservation_list',
+				'type' => 'reservation_for_customer',
+				'class' => 'textsmall',
+				'heading' => 'subhead',
+				'customer_id' => $customer_id,
+				'desc' => '',
+				'std' => ''
+			),
 		)
 	);
 	return $customers_box;

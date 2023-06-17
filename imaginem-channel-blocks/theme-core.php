@@ -132,23 +132,12 @@ class Theme_Core {
 
 		wp_enqueue_style( 'room-reservation-plugin-availability-styles', plugin_dir_url( __FILE__ ) .'admin/css/availability-calendar.css',false, 'screen' );
 		wp_enqueue_script( 'room-reservation-plugin-availability-scripts', plugin_dir_url( __FILE__ ) .'admin/js/availability-calendar.js', array( 'jquery' ),null, true );
-		wp_enqueue_script( 'Lodash', plugin_dir_url( __FILE__ ) .'admin/js/lodash.js', array( 'jquery' ),null, true );
 
 		if ( function_exists('get_current_screen') ) {
 			$current_admin_screen = get_current_screen();
 		}
 		if (isSet($current_admin_screen)) {
-			if ($current_admin_screen->base == "nav-menus") {
-				wp_enqueue_media();
-				wp_enqueue_script('menu-image-admin');
-				wp_enqueue_style('menu-image-css');
-			}
 			if ( $current_admin_screen->base == 'post') {
-				wp_enqueue_style( 'wp-color-picker');
-				wp_enqueue_script('wp-color-picker');
-				wp_register_script('wp-color-picker-alpha', plugin_dir_url( __FILE__ ) .'admin/js/wp-color-picker-alpha.js', array( 'wp-color-picker' ),null, true );
-				wp_enqueue_script('wp-color-picker-alpha');
-
 				wp_enqueue_media();
 
 				wp_enqueue_style('themecore-admin-styles');

@@ -29,7 +29,7 @@ function cognitive_extend_admin_search_join($join) {
 
 	return $join;
 }
-add_filter('posts_join', 'cognitive_extend_admin_search_join');
+//add_filter('posts_join', 'cognitive_extend_admin_search_join');
 
 function cognitive_extend_admin_search_where($where) {
 	global $pagenow, $wpdb;
@@ -44,7 +44,7 @@ function cognitive_extend_admin_search_where($where) {
 
 	return $where;
 }
-add_filter('posts_where', 'cognitive_extend_admin_search_where');
+//add_filter('posts_where', 'cognitive_extend_admin_search_where');
 
 function cognitive_get_edit_links_for_reservations($reservation_array) {
 	$links = '<ul>';
@@ -70,8 +70,12 @@ function cognitive_book_rooms() {
 	}
 
 	// Generate unique booking number
-	$booking_number = uniqid('booking-');
-
+	$booking_number = sanitize_text_field($_POST['booking_number']);
+	$transient_booking_number = get_transient( $booking_number );
+	delete_transient( $booking_number );
+	if ( '1' != $transient_booking_number ) {
+		wp_send_json_error( 'Invalid or timeout. Please try again' );
+	}
 	// Obtain customer details from form submission
 	$full_name = sanitize_text_field($_POST['full_name']);
 	$email_address = sanitize_email($_POST['email_address']);
@@ -106,7 +110,7 @@ function cognitive_book_rooms() {
 	$customer_post_id = wp_insert_post($customer_post_data);
 
 	if(!$customer_post_id) {
-		// Handle error while creating customer post
+		wp_send_json_error('Could not save Customer: ' . $customer_post_id );
 		return;
 	}
 
@@ -128,6 +132,7 @@ function cognitive_book_rooms() {
 				'post_status'   => 'publish',       // The status you want to give new posts
 				'meta_input'    => array(
 					'pagemeta_room_name' => $room_id,
+					'pagemeta_reservation_status' => 'confirmed',
 					'pagemeta_checkin_date' => $checkin,
 					'pagemeta_checkout_date' => $checkout,
 					'pagemeta_booking_number' => $booking_number,  // Set the booking number as post meta
@@ -137,17 +142,18 @@ function cognitive_book_rooms() {
 			);
 
 			// Insert the post
-			$post_id = wp_insert_post($post_data);
+			$reservation_post_id = wp_insert_post($post_data);
 			
-			if($post_id) {
+			if($reservation_post_id) {
 				// Successfully created a reservation post
-				update_reservations_array_on_save($post_id, get_post($post_id), true);
+				update_reservations_array_on_save($reservation_post_id, get_post($post_id), true);
 			} else {
 				// Handle error
 			}
 		}
 	}
-
+	// Send a success response at the end of your function, if all operations are successful
+	wp_send_json_success('Booking successfully registered.');
 	wp_die();
 }
 add_action( 'wp_ajax_cognitive_book_rooms', 'cognitive_book_rooms' );

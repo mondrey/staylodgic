@@ -1,9 +1,9 @@
 <?php
 add_action( 'admin_init', 'cognitive_populate_demo_bookings' );
 function cognitive_populate_demo_bookings() {
-    if (!isset($_GET['populate_data'])) {
-        return;
-    }
+	if (!isset($_GET['populate_data'])) {
+		return;
+	}
 	// Define room details
 	$rooms = [
 		['id' => 33, 'qty' => 2],

@@ -117,11 +117,20 @@ function themecore_reservations_metadata() {
 			),
 			array(
 				'name' => '',
-				'id' => 'pagemeta_reservation_room_cost',
+				'id' => 'pagemeta_reservation_per_night_cost',
 				'type' => 'text',
 				'class' => 'textsmall',
 				'heading' => 'subhead',
-				'desc' => esc_html__('Room Price','themecore'),
+				'desc' => esc_html__('Per night price','themecore'),
+				'std' => ''
+			),
+			array(
+				'name' => '',
+				'id' => 'pagemeta_reservation_total_room_cost',
+				'type' => 'text',
+				'class' => 'textsmall',
+				'heading' => 'subhead',
+				'desc' => esc_html__('Total Room price','themecore'),
 				'std' => ''
 			),
 			array(
@@ -130,7 +139,16 @@ function themecore_reservations_metadata() {
 				'type' => 'text',
 				'class' => 'textsmall',
 				'heading' => 'subhead',
-				'desc' => esc_html__('Paid Price','themecore'),
+				'desc' => esc_html__('Paid Total','themecore'),
+				'std' => ''
+			),
+			array(
+				'name' => '',
+				'id' => 'pagemeta_reservation_room_paid_balance',
+				'type' => 'text',
+				'class' => 'textsmall',
+				'heading' => 'subhead',
+				'desc' => esc_html__('Balance Total','themecore'),
 				'std' => ''
 			),
 			array(
