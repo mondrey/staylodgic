@@ -62,7 +62,7 @@ function cognitive_frontend_booking_search() {
 		$room_type = $_POST['room_type'];
 	}
 
-	$chosenDate = cognitive_splitDateRange($reservation_date);
+	$chosenDate = \AtollMatrix\Common::splitDateRange($reservation_date);
 
 	$checkinDate = '';
 	$checkoutDate = '';
@@ -76,7 +76,9 @@ function cognitive_frontend_booking_search() {
 
 	// Perform your query here, this is just an example
 	$result = "Check-in Date: $checkinDate, Check-out Date: $checkoutDate, Number of Adults: $number_of_guests, Number of Children: $number_of_children";
-	$room_array = cognitive_get_available_rooms_for_date_range($checkinDate, $checkoutDate);
+
+	$room_instance = new \AtollMatrix\Rooms();
+	$room_array = $room_instance->getAvailableRooms_For_DateRange($checkinDate, $checkoutDate);
 	// Always die in functions echoing AJAX content
 	$list = cognitive_list_rooms_and_quantities($room_array);
 	ob_start();

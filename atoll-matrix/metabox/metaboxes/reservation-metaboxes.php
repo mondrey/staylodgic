@@ -222,8 +222,8 @@ function themecore_reservations_metadata() {
 	);
 
 	
-
-	if ( ! cognitive_check_customer_exists( $reservation_id ) ) {
+	$reservation_instance = new \AtollMatrix\Reservations();
+	if ( ! $reservation_instance->haveCustomer( $reservation_id ) ) {
 		$reservations_box['fields'] = array_merge($reservations_box['fields'], $customer);
 	} else {
 		$reservations_box['fields'] = array_merge($reservations_box['fields'], $customer_datafetch);

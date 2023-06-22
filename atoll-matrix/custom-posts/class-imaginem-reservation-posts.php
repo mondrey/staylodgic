@@ -30,15 +30,15 @@ class Imaginem_Reservation_Posts {
 			$full_image_url = $full_image_url[0];
 		}
 
-		switch ($columns)
-		{
+		$reservation_instance = new \AtollMatrix\Reservations( $date = false, $room_id = false, $reservation_id = $post->ID );
+		switch ($columns) {
 			case "reservation_customer":
-				$customer_name = cognitive_get_customer_edit_link_for_reservation($post->ID);
-				echo $customer_name;				
+				$customer_name = $reservation_instance->getCustomerEditLinkForReservation();
+				echo $customer_name;
 				break;
 			case "reservation_room":
-				$room_title = cognitive_get_room_title_for_reservation($post->ID);
-				echo $room_title;				
+				$room_title = $reservation_instance->getRoomTitleForReservation();
+				echo $room_title;
 				break;
 			case "mreservation_section":
 				echo get_the_term_list( get_the_id(), 'reservationsection', '', ', ','' );

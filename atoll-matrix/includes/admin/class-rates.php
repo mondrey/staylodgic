@@ -1,5 +1,5 @@
 <?php
-namespace Cognitive;
+namespace AtollMatrix;
 class Rates {
 
 	public static function getRoomRateByDate( $roomID, $date ) {

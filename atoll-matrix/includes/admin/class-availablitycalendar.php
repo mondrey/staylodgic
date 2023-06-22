@@ -1,5 +1,5 @@
 <?php
-namespace Cognitive;
+namespace AtollMatrix;
 class AvailablityCalendar extends AvailablityCalendarBase {
 
 	public function __construct($startDate = null, $endDate = null) {
@@ -96,12 +96,14 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 			$start_date_display = '';
 			$guest_name = '';
 			$reservatoin_id = $reservation['id'];
-			$booking_number = cognitive_get_booking_number($reservation['id']);
-			$guest_name = cognitive_get_reservation_guest_name($reservation['id']);
-			$reserved_days = cognitive_count_reservation_days( $reservation['id'] );
-			$checkin = cognitive_get_checkin_date( $reservation['id'] );
-			$checkout = cognitive_get_checkout_date( $reservation['id'] );
-			$reservation_status = cognitive_get_reservation_status( $reservation['id'] );
+
+			$reservation_instance = new \AtollMatrix\Reservations( $date = false , $room_id = false, $reservation_id = $reservation['id'] );
+			$booking_number       = $reservation_instance->getBookingNumber();
+			$guest_name           = $reservation_instance->getReservationGuestName();
+			$reserved_days        = $reservation_instance->countReservationDays();
+			$checkin              = $reservation_instance->getCheckinDate();
+			$checkout             = $reservation_instance->getCheckoutDate();
+			$reservation_status   = $reservation_instance->getReservationStatus();
 			$row++;
 	
 			if ( !array_key_exists($reservatoin_id, $checkout_list) ) {
@@ -194,7 +196,7 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 					$check_in_date_past = new \DateTime();
 					$check_in_date_past->setTimestamp($reservation['checkin']);
 					$check_in_date_past = $check_in_date_past->format('Y-m-d');
-					$daysBetween = cognitive_countDaysBetweenDates($check_in_date_past, $current_day);
+					$daysBetween = \AtollMatrix\Common::countDays_BetweenDates( $check_in_date_past, $current_day );
 					$width = ( 80 * ( $reserved_days - $daysBetween ) ) - 3;
 					if ( $check_in_date_past < $calendar_start && $calendar_start == $current_day ) {
 						$tab[$room] = '<a class="reservation-tab-is-'.$reservation_status.' reservation-tab-id-'.$reservatoin_id.' reservation-edit-link" href="' . $reservation_edit_link . '"><div class="reserved-tab-wrap reserved-tab-with-info reserved-from-past reservation-'.$reservation_status.'" data-reservationstatus="'.$reservation_status.'" data-guest="'.$guest_name.'" data-room="'.$room.'" data-row="'.$row.'" data-bookingnumber="'.$booking_number.'" data-reservationid="'.$reservation['id'].'" data-checkin="'.$checkin.'" data-checkout="'.$checkout.'"><div class="reserved-tab reserved-tab-days-'.$reserved_days.'"><div data-tabwidth="'.$width.'" class="reserved-tab-inner"><div class="ota-sign"></div><div class="guest-name">'.$display_info.'</div></div></div></div></a>';
@@ -255,14 +257,18 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 							<?php
 							$dateString = $date->format('Y-m-d');
 							$reservation_data = array();
-							$reservation_data = cognitive_is_date_reserved($dateString, $roomId);
-							$remaining_rooms = cognitive_remaining_rooms_for_day($roomId, $dateString);
-							$reserved_room_count = cognitive_count_reservations_for_day($roomId, $dateString);
-							$max_room_count = cognitive_get_max_quantity_for_room($roomId, $dateString);
-							$reserved_rooms = cognitive_calculate_reserved_rooms($dateString,$roomId);
-							$room_rate = \Cognitive\Rates::getRoomRateByDate( $roomId, $dateString );
+							
+							$reservation_instance = new \AtollMatrix\Reservations( $dateString, $roomId );
+							$reservation_data = $reservation_instance->isDate_Reserved();
+							$reserved_room_count = $reservation_instance->countReservationsForDay();
+							$remaining_rooms = $reservation_instance->remainingRooms_For_Day();
+							$reserved_rooms = $reservation_instance->calculateReservedRooms();
+						
+							$max_room_count = \AtollMatrix\Rooms::getMaxQuantityForRoom($roomId, $dateString);
+
+							$room_rate = \AtollMatrix\Rates::getRoomRateByDate( $roomId, $dateString );
 							$occupancy_status_class = "";
-							if ( cognitive_is_room_for_day_fullybooked($roomId, $dateString) ) {
+							if ( $reservation_instance->isRoom_For_Day_Fullybooked() ) {
 								$occupancy_status_class = "fully-booked";
 							}
 							$today_status_class = '';

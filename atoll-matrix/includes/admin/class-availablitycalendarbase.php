@@ -1,5 +1,5 @@
 <?php
-namespace Cognitive;
+namespace AtollMatrix;
 class AvailablityCalendarBase {
 	protected $today;
 	protected $weekAgo;
@@ -13,10 +13,8 @@ class AvailablityCalendarBase {
 		$this->setStartDate($startDate);
 		$this->setEndDate($endDate);
 		
-		$this->rooms = \Cognitive\Rooms::queryRooms();
-		$this->roomlist = \Cognitive\Rooms::getRoomList();
-
-		$this->confirmedReservations = \Cognitive\Reservations::getConfirmedReservations();
+		$this->rooms = \AtollMatrix\Rooms::queryRooms();
+		$this->roomlist = \AtollMatrix\Rooms::getRoomList();
 		$this->getToday();
 	}
 
@@ -93,10 +91,12 @@ class AvailablityCalendarBase {
 		$currentDate = new \DateTime( $currentdateString );
 		$totalRoomRevenue = 0;
 		$numberOfRoomsSold = 0;
+
+		$confirmed_reservations = \AtollMatrix\Reservations::getConfirmedReservations();
 	
-		if ( $this->confirmedReservations->have_posts() ) {
-			while ( $this->confirmedReservations->have_posts() ) {
-				$this->confirmedReservations->the_post();
+		if ( $confirmed_reservations->have_posts() ) {
+			while ( $confirmed_reservations->have_posts() ) {
+				$confirmed_reservations->the_post();
 	
 				$reservationStartDate = get_post_meta( get_the_ID(), 'pagemeta_checkin_date', true );
 				$reservationEndDate = get_post_meta( get_the_ID(), 'pagemeta_checkout_date', true );
@@ -109,7 +109,7 @@ class AvailablityCalendarBase {
 					$roomID = get_post_meta(get_the_ID(), 'pagemeta_room_name', true);
 	
 					// Get the room rate for the current date
-					$roomRate = \Cognitive\Rates::getRoomRateByDate( $roomID, $currentDate->format('Y-m-d') );
+					$roomRate = \AtollMatrix\Rates::getRoomRateByDate( $roomID, $currentDate->format('Y-m-d') );
 	
 					$totalRoomRevenue += $roomRate;
 					$numberOfRoomsSold++;
@@ -134,9 +134,11 @@ class AvailablityCalendarBase {
 	
 		foreach($this->rooms as $room){
 			// Increment the total number of occupied rooms
-			$totalOccupiedRooms += cognitive_calculate_reserved_rooms( $currentdateString, $room->ID );
+
+			$reservation_instance = new \AtollMatrix\Reservations( $currentdateString, $room->ID );
+			$totalOccupiedRooms += $reservation_instance->calculateReservedRooms();
 			// Increment the total number of available rooms
-			$totalAvailableRooms += cognitive_get_max_quantity_for_room( $room->ID, $currentdateString);
+			$totalAvailableRooms += \AtollMatrix\Rooms::getMaxQuantityForRoom( $room->ID, $currentdateString);
 	
 			//echo '<br>'.$currentdateString.'<br>'. $room->ID . '||' . $totalOccupiedRooms. '||' . $totalAvailableRooms . '<br>';
 			//echo '<br>'. $room->ID . '||' . $totalOccupiedRooms. '||' . $totalAvailableRooms . '<br>';

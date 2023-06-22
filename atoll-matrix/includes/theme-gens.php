@@ -518,14 +518,6 @@ function themecore_country_list($output_type="select",$selected=""){
 	}
 	return $country_list;
 }
-function cognitive_countryCodeToEmoji($code) {
-	$emoji = '';
-	$code = strtoupper($code);
-	for ($i = 0; $i < strlen($code); $i++) {
-		$emoji .= '&#' . (ord($code[$i]) + 127397) . ';';
-	}
-	return $emoji;
-}
 
 function themecore_get_image_id_from_url($image_url) {
 	$attachment = attachment_url_to_postid($image_url);

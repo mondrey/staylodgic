@@ -1,8 +1,8 @@
 <?php
-class Imaginem_Customer_Posts {
+class AtollMatrix_Customer_Posts {
 
 	function __construct() 
-	{	
+	{
 		add_action('init', array( $this, 'init'));
 
 		add_filter("manage_edit-customers_columns", array( $this, 'customers_edit_columns'));
@@ -41,12 +41,12 @@ class Imaginem_Customer_Posts {
 				echo $booking_number;
 				break;
 			case "customer_reservations":
-				$reservation_array = cognitive_get_reservation_ids_for_customer( $post->ID );
-				echo cognitive_get_edit_links_for_reservations( $reservation_array );
+				$reservation_array = \AtollMatrix\Reservations::getReservationIDsForCustomer( $post->ID );
+				echo \AtollMatrix\Reservations::getEditLinksForReservations( $reservation_array );
 				break;
 			case "customer_rooms":
-				$room_ids = cognitive_get_room_ids_for_booking_number( $booking_number );
-				$room_names_string = cognitive_get_room_names_from_ids($room_ids);
+				$room_ids = \AtollMatrix\Reservations::getRoomIDsForBooking_number( $booking_number );
+				$room_names_string = \AtollMatrix\Rooms::getRoomNames_FromIDs($room_ids);
 				echo $room_names_string;
 				break;
 			case "mcustomer_section":
@@ -125,5 +125,5 @@ class Imaginem_Customer_Posts {
 	}
 	
 }
-$mtheme_kbase_post_type = new Imaginem_Customer_Posts();
+$mtheme_kbase_post_type = new AtollMatrix_Customer_Posts();
 ?>

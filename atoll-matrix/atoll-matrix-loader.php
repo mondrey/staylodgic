@@ -31,17 +31,20 @@ class AtollMatrix_Init {
 
 	public function themecore_load_availablity_calendar() {
 		require_once (plugin_dir_path( __FILE__ ) . 'includes/availability-calendar.php');
-		require_once (plugin_dir_path( __FILE__ ) . 'includes/admin-calendar.php');
 		require_once (plugin_dir_path( __FILE__ ) . 'includes/admin-property-data.php');
 		require_once (plugin_dir_path( __FILE__ ) . 'includes/modals.php');
 		require_once (plugin_dir_path( __FILE__ ) . 'includes/front-end.php');
 		require_once (plugin_dir_path( __FILE__ ) . 'includes/payment-helper.php');
 		require_once (plugin_dir_path( __FILE__ ) . 'includes/admin-demo-data.php');
-		require_once (plugin_dir_path( __FILE__ ) . 'includes/admin/AvailablityCalendarBase.php');
-		require_once (plugin_dir_path( __FILE__ ) . 'includes/admin/AvailablityCalendar.php');
-		require_once (plugin_dir_path( __FILE__ ) . 'includes/admin/Rooms.php');
-		require_once (plugin_dir_path( __FILE__ ) . 'includes/admin/Rates.php');
-		require_once (plugin_dir_path( __FILE__ ) . 'includes/admin/Reservations.php');
+
+		require_once (plugin_dir_path( __FILE__ ) . 'includes/admin-calendar-ajax.php');
+		require_once (plugin_dir_path( __FILE__ ) . 'includes/admin/class-availablitycalendarbase.php');
+		require_once (plugin_dir_path( __FILE__ ) . 'includes/admin/class-availablitycalendar.php');
+		require_once (plugin_dir_path( __FILE__ ) . 'includes/admin/class-rooms.php');
+		require_once (plugin_dir_path( __FILE__ ) . 'includes/admin/class-rates.php');
+		require_once (plugin_dir_path( __FILE__ ) . 'includes/admin/class-customers.php');
+		require_once (plugin_dir_path( __FILE__ ) . 'includes/admin/class-reservations.php');
+		require_once (plugin_dir_path( __FILE__ ) . 'includes/admin/class-common.php');
 	}
 
 	public function themecore_load_metaboxes() {

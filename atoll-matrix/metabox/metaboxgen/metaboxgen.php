@@ -694,19 +694,20 @@ function themecore_generate_metaboxes($meta_data,$post_id) {
 
 				case 'reservation_for_customer':
 			
-					$reservation_array = cognitive_get_reservation_ids_for_customer( $field['customer_id'] );
-					echo cognitive_get_edit_links_for_reservations( $reservation_array );
+					$reservation_array = \AtollMatrix\Reservations::getReservationIDsForCustomer( $field['customer_id'] );
+					echo \AtollMatrix\Reservations::getEditLinksForReservations( $reservation_array );
 					break;
 
 				case 'get_customer_data':
 
 					$customer_array = cognitive_get_customer_array();
-					$customer_post_id = cognitive_get_reservation_customer_id( $field['id'] );
+					$reservation_instance = new \AtollMatrix\Reservations();
+					$customer_post_id = $reservation_instance->getReservation_Customer_ID( $field['id'] );
 					$customer_post_edit = get_edit_post_link( $customer_post_id );
 					echo '<a class="button button-primary button-large" href="'.$customer_post_edit.'">Edit Customer</a>';
-					$customer_data = cognitive_get_customer_meta_data( $customer_array, $customer_post_id);
+					$customer_data = $reservation_instance->getCustomer_MetaData( $customer_array, $customer_post_id);
 			
-					echo cognitive_generate_customer_html_list($customer_data);
+					echo \AtollMatrix\Customers::generateCustomerHtmlList($customer_data);
 
 					break;
 
