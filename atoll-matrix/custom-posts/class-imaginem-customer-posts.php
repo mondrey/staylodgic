@@ -31,8 +31,8 @@ class AtollMatrix_Customer_Posts {
 			$full_image_url = $full_image_url[0];
 		}
 
-		if (isset($custom['pagemeta_booking_number'][0])) {
-			$booking_number=$custom['pagemeta_booking_number'][0];
+		if (isset($custom['atollmatrix_booking_number'][0])) {
+			$booking_number=$custom['atollmatrix_booking_number'][0];
 		}
 
 		switch ($columns)
@@ -68,18 +68,18 @@ class AtollMatrix_Customer_Posts {
 		/*
 		* Register Featured Post Manager
 		*/
-		//add_action('init', 'mtheme_featured_register');
-		//add_action('init', 'mtheme_kbase_register');//Always use a shortname like "mtheme_" not to see any 404 errors
+		//add_action('init', 'atollmatrix_featured_register');
+		//add_action('init', 'atollmatrix_kbase_register');//Always use a shortname like "atollmatrix_" not to see any 404 errors
 		/*
 		* Register kbase Post Manager
 		*/
 
-		$mtheme_customers_slug="customers";
-		if (function_exists('superlens_get_option_data')) {
-			$mtheme_customers_slug = superlens_get_option_data('customers_permalink_slug');
+		$atollmatrix_customers_slug="customers";
+		if (function_exists('atollmatrix_get_option_data')) {
+			$atollmatrix_customers_slug = atollmatrix_get_option_data('customers_permalink_slug');
 		}
-		if ( $mtheme_customers_slug=="" || !isSet($mtheme_customers_slug) ) {
-			$mtheme_customers_slug="customers";
+		if ( $atollmatrix_customers_slug=="" || !isSet($atollmatrix_customers_slug) ) {
+			$atollmatrix_customers_slug="customers";
 		}
 		$args = array(
 			'labels' => array(
@@ -99,7 +99,7 @@ class AtollMatrix_Customer_Posts {
 			'has_archive' =>true,
 			'menu_position' => 6,
 			'menu_icon' => plugin_dir_url( __FILE__ ) . 'images/portfolio.png',
-			'rewrite' => array('slug' => $mtheme_customers_slug),//Use a slug like "work" or "project" that shouldnt be same with your page name
+			'rewrite' => array('slug' => $atollmatrix_customers_slug),//Use a slug like "work" or "project" that shouldnt be same with your page name
 			'supports' => array('title', 'author', 'thumbnail')//Boxes will be shown in the panel
 		);
 	
@@ -125,5 +125,5 @@ class AtollMatrix_Customer_Posts {
 	}
 	
 }
-$mtheme_kbase_post_type = new AtollMatrix_Customer_Posts();
+$atollmatrix_kbase_post_type = new AtollMatrix_Customer_Posts();
 ?>

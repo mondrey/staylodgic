@@ -4,7 +4,92 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 
 	public function __construct($startDate = null, $endDate = null) {
 		parent::__construct($startDate, $endDate);
+
+		// WordPress AJAX action hook
+		add_action('wp_ajax_get_Selected_Range_AvailabilityCalendar', array($this, 'get_Selected_Range_AvailabilityCalendar'));
+		add_action('wp_ajax_nopriv_get_Selected_Range_AvailabilityCalendar', array($this, 'get_Selected_Range_AvailabilityCalendar'));
+
+		add_action( 'admin_menu', array($this, 'room_Reservation_Plugin_Add_Admin_Menu' ));
+
 	}
+
+	// Add the Availability menu item to the admin menu
+	public function room_Reservation_Plugin_Add_Admin_Menu() {
+		add_menu_page(
+			'Availability',
+			'Availability',
+			'manage_options',
+			'room-availability',
+			array( $this, 'room_Reservation_Plugin_Display_Availability_Calendar' ),
+			'dashicons-calendar-alt',
+			20
+		);
+	}
+	// Callback function to display the Availability page
+	public function room_Reservation_Plugin_Display_Availability_Calendar() {
+		// Check if user has sufficient permissions
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		// Output the HTML for the Availability page
+		?>
+		<div class="wrap">
+			<h1>Availability</h1>
+			<?php
+			// Add any custom HTML content here
+			?>
+		</div>
+		<div class="calendar-controls-wrap">
+			<button id="prev">Previous</button>
+			<button id="prev-half">Prev 15</button>
+			<button id="prev-week">Prev 7</button>
+			<input type="text" class="availabilitycalendar" id="availabilitycalendar" name="availabilitycalendar" value=""/>
+			<button id="next-week">Next 7</button>
+			<button id="next-half">Next 15</button>
+			<button id="next">Next</button>
+			<a href="#" id="quantity-popup-link" data-bs-toggle="modal" data-bs-target="#quantity-popup">Update Quantity</a>
+			<a href="#" id="rates-popup-link" data-bs-toggle="modal" data-bs-target="#rates-popup">Update Rates</a>
+		</div>
+		<div id="container">
+	<div id="calendar">
+		<?php
+		// Call the getAvailabilityCalendar() method
+		echo $this->getAvailabilityCalendar();
+		?>
+	</div>
+	</div>
+		<?php
+
+		\AtollMatrix\Modals::quanityModal();
+		\AtollMatrix\Modals::ratesModal();
+	}
+
+	public function get_Selected_Range_AvailabilityCalendar() {
+		// Check if the request has necessary data
+		if (!isset($_POST['start_date'], $_POST['end_date'])) {
+			wp_die('Missing parameters');
+		}
+	
+		// Sanitize inputs
+		$start_date = sanitize_text_field($_POST['start_date']);
+		$end_date = sanitize_text_field($_POST['end_date']);
+		error_log('Here:'.$start_date . ' ' . ':'.$end_date );
+	
+		// Validate inputs
+		if (!strtotime($start_date) || !strtotime($end_date)) {
+			wp_die('Invalid dates');
+		}
+	
+		ob_start();
+		echo $this->getAvailabilityCalendar( $start_date, $end_date );
+		$output = ob_get_clean();
+		echo $output;
+	
+		// end execution
+		wp_die();
+	}
+	
 
 	private function displayOccupancy_TableDataBlock() {
 		ob_start();
@@ -57,10 +142,16 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 		return $output;
 	}
 
-	private function displayDate_TableDataBlock( $dates ) {
+	private function displayDate_TableDataBlock( $dates = false, $numDays = false ) {
+		error_log( 'Number of days: ' . $numDays );
 		$today = $this->today;
 		$number_of_columns = 0;
-		$markNumDays = $this->numDays + 1;
+		if ( !$numDays ) {
+			$markNumDays = $this->numDays + 1;
+		} else {
+			$markNumDays = $numDays + 1;
+		}
+		
 		foreach ($dates as $date) :
 			$number_of_columns++;
 			$month = $date->format('F');
@@ -227,14 +318,34 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 	}
 	
 
-	public function getAvailabilityCalendar() {
+	public function getAvailabilityCalendar( $startDate = false, $endDate = false ) {
 
-		$dates = $this->getDates();
+		if ( !$startDate ) {
+			$startDate = $this->startDate;
+			$endDate = $this->endDate;
+		} else {
+			$startDate = new \DateTime($startDate);
+			$endDate = new \DateTime($endDate);
+		}
+
+		$dates = $this->getDates( $startDate, $endDate );
 		$today = $this->today;
+
+		if ($startDate instanceof \DateTime) {
+			$startDateString = $startDate->format('Y-m-d');
+		} else {
+			$startDateString = $startDate;
+		}
 		
+		if ($endDate instanceof \DateTime) {
+			$endDateString = $endDate->format('Y-m-d');
+		} else {
+			$endDateString = $endDate;
+		}
+
 		ob_start();
 		?>
-		<table id="calendarTable" data-calstart="<?php echo $this->startDate; ?>" data-calend="<?php echo $this->endDate; ?>">
+		<table id="calendarTable" data-calstart="<?php echo $startDateString; ?>" data-calend="<?php echo $endDateString; ?>">
 			<tr class="calendarRow">
 				<?php
 				echo $this->displayOccupancy_TableDataBlock();
@@ -244,10 +355,14 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 			<tr class="calendarRow">
 				<td class="calendarCell rowHeader"></td>
 				<?php
-				echo $this->displayDate_TableDataBlock( $dates );
+				$numDays = $this->setNumDays( $startDateString, $endDateString );
+				echo $this->displayDate_TableDataBlock( $dates, $numDays );
 				?>
 			</tr>
-			<?php 
+			<?php
+
+			$this->roomlist = \AtollMatrix\Rooms::getRoomList();
+
 			foreach ( $this->roomlist as $roomId => $roomName ) :
 				$checkout_list = array();
 				?>
@@ -291,7 +406,7 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 							<?php
 							if ( $reservation_data ) {
 								$reservation_module = array();
-								//echo cognitive_generate_reserved_tab( $reservation_data, $checkout_list );
+								//echo atollmatrix_generate_reserved_tab( $reservation_data, $checkout_list );
 								$reservation_module = $this->ReservedTab( $reservation_data, $checkout_list, $dateString, $this->startDate );
 								echo $reservation_module['tab'];
 								$checkout_list = $reservation_module['checkout'];
@@ -308,4 +423,7 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 		$output = ob_get_clean();
 		return $output;
 	}
+
 }
+
+$instance = new \AtollMatrix\AvailablityCalendar();

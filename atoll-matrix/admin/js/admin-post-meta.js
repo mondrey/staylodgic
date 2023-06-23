@@ -64,41 +64,40 @@ jQuery(document).ready(function($) {
 
 // Add button click event
 $('.bedlayout-wrap .add-bedlayout-box').click(function() {
-	var bedlayoutWrap = $(this).closest('.bedlayout-wrap');
-  
-	// Destroy the chosen selects within the specific bedlayout-wrap
-	bedlayoutWrap.find('.bedtype-select').chosen('destroy');
-  
-	// Clone the div section
-	var newSection = bedlayoutWrap.find('.bedlayout-box').first().clone();
-  
-	// Reset the input field value in the cloned section
-	newSection.find('input').val('');
-  
-	// Create new IDs for the cloned select input and the input field
-	var newSelectId = 'bed_type' + bedlayoutWrap.find('.bedlayout-box').length;
-	var newInputId = 'bed_number' + bedlayoutWrap.find('.bedlayout-box').length;
-  
-	// Update the ID of the select input and the input field in the cloned section
-	newSection.find('.bedtype-select').attr('id', newSelectId);
-	newSection.find('input').attr('id', newInputId);
-  
-	// Add a remove button to the cloned section
-	var removeButton = $('<div class="remove-bedlayout">Remove</div>');
-	newSection.append(removeButton);
-  
-	// Append the new div section below the last one
-	bedlayoutWrap.find('.bedlayout-box').last().after(newSection);
-  
-	// Re-initialize the chosen selects within the specific bedlayout-wrap
-	bedlayoutWrap.find('.bedtype-select').chosen();
-  });
-  
-  // Remove button click event
-  $('body').on('click', '.remove-bedlayout', function() {
-	$(this).closest('.bedlayout-box').remove();
-  });
-  
+    var bedlayoutWrap = $(this).closest('.bedlayout-wrap');
+
+    // Destroy select2 instances if they exist
+    bedlayoutWrap.find('.chosen-select-metabox').each(function() {
+        if ($(this).data('select2')) {
+            $(this).select2('destroy');
+        }
+    });
+
+    // Clone the div section
+    var newSection = bedlayoutWrap.find('.bedlayout-box').first().clone(true);
+
+    // Create new IDs for the cloned select input and the input field
+    var newBedlayoutBoxId = 'bedlayout-box' + bedlayoutWrap.find('.bedlayout-box').length;
+    var newInputId = 'bed_number' + bedlayoutWrap.find('.bedlayout-box').length;
+
+    // Update the ID of the select input and the input field in the cloned section
+    newSection.attr('id', newBedlayoutBoxId);
+    newSection.find('input').attr('id', newInputId);
+
+    // Reset the input field value in the cloned section
+    newSection.find('input').val('');
+
+    // Add a remove button to the cloned section
+    var removeButton = $('<div class="remove-bedlayout">Remove</div>');
+    newSection.append(removeButton);
+
+    // Append the new div section below the last one
+    bedlayoutWrap.find('.bedlayout-box').last().after(newSection);
+
+    // Re-initialize select2
+    bedlayoutWrap.find('.chosen-select-metabox').select2();
+});
+
 
   /**
     * Google Fonts
@@ -144,9 +143,7 @@ $('.bedlayout-wrap .add-bedlayout-box').click(function() {
     MetaBoxGoogleFontSelect( this, mainID );
   });
 
-	if ($.fn.chosen) {
-		$('.chosen-select-metabox').chosen();
-	}
+	$('.chosen-select-metabox').select2();
 
 	var sidebarlist;
 	sidebarlist = $('.page_style img.of-radio-img-selected').attr("data-value");
@@ -334,8 +331,8 @@ $('.bedlayout-wrap .add-bedlayout-box').click(function() {
     
     // ******* Multi Upload Function
 	var frame,
-	    images = themecore_admin_vars.post_gallery,
-	    proofingimages = themecore_admin_vars.proofing_gallery,
+	    images = atollmatrix_admin_vars.post_gallery,
+	    proofingimages = atollmatrix_admin_vars.proofing_gallery,
 	    proofingSelection = proofingLoadImages(proofingimages),
 	    selection = loadImages(images);
 
@@ -384,7 +381,7 @@ $('.bedlayout-wrap .add-bedlayout-box').click(function() {
 		    var models = frame.state().get('library');
 			if(models.length == 0){
 			    selection = false;
-				$.post(ajaxurl, { ids: '', action: 'themecore_save_images', post_id: themecore_admin_vars.post_id, nonce: themecore_admin_vars.nonce });
+				$.post(ajaxurl, { ids: '', action: 'themecore_save_images', post_id: atollmatrix_admin_vars.post_id, nonce: atollmatrix_admin_vars.nonce });
 			}
 		});
 		
@@ -411,8 +408,8 @@ $('.bedlayout-wrap .add-bedlayout-box').click(function() {
 							data: { 
 								ids: ids, 
 								action: 'themecore_save_images', 
-								post_id: themecore_admin_vars.post_id, 
-								nonce: themecore_admin_vars.nonce 
+								post_id: atollmatrix_admin_vars.post_id, 
+								nonce: atollmatrix_admin_vars.nonce 
 							},
 							success: function(){
 								selection = loadImages(ids);
@@ -474,7 +471,7 @@ $('.bedlayout-wrap .add-bedlayout-box').click(function() {
 		    var models = frame.state().get('library');
 			if(models.length == 0){
 			    proofingSelection = false;
-				$.post(ajaxurl, { ids: '', action: 'themecore_save_proofing_images', post_id: themecore_admin_vars.post_id, nonce: themecore_admin_vars.nonce });
+				$.post(ajaxurl, { ids: '', action: 'themecore_save_proofing_images', post_id: atollmatrix_admin_vars.post_id, nonce: atollmatrix_admin_vars.nonce });
 			}
 		});
 		
@@ -501,8 +498,8 @@ $('.bedlayout-wrap .add-bedlayout-box').click(function() {
 							data: { 
 								ids: ids, 
 								action: 'themecore_save_proofing_images', 
-								post_id: themecore_admin_vars.post_id, 
-								nonce: themecore_admin_vars.nonce 
+								post_id: atollmatrix_admin_vars.post_id, 
+								nonce: atollmatrix_admin_vars.nonce 
 							},
 							success: function(){
 								proofingSelection = proofingLoadImages(ids);
@@ -668,7 +665,7 @@ $('.bedlayout-wrap .add-bedlayout-box').click(function() {
 		    var models = frame.state().get('library');
 			if(models.length == 0){
 			    selection = false;
-				$.post(ajaxurl, { ids: '', action: 'multo_gallery_save_images', gallerysetid: galleryid, post_id: themecore_admin_vars.post_id, nonce: themecore_admin_vars.nonce });
+				$.post(ajaxurl, { ids: '', action: 'multo_gallery_save_images', gallerysetid: galleryid, post_id: atollmatrix_admin_vars.post_id, nonce: atollmatrix_admin_vars.nonce });
 			}
 		});
 		
@@ -696,8 +693,8 @@ $('.bedlayout-wrap .add-bedlayout-box').click(function() {
 								ids: ids, 
 								gallerysetid: galleryid,
 								action: 'multo_gallery_save_images', 
-								post_id: themecore_admin_vars.post_id, 
-								nonce: themecore_admin_vars.nonce 
+								post_id: atollmatrix_admin_vars.post_id, 
+								nonce: atollmatrix_admin_vars.nonce 
 							},
 							success: function(){
 								selection = multi_loadImages(ids);

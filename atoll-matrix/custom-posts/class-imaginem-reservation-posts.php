@@ -1,5 +1,5 @@
 <?php
-class Imaginem_Reservation_Posts {
+class atollmatrix_Reservation_Posts {
 
 	function __construct() 
 	{	
@@ -59,18 +59,18 @@ class Imaginem_Reservation_Posts {
 		/*
 		* Register Featured Post Manager
 		*/
-		//add_action('init', 'mtheme_featured_register');
-		//add_action('init', 'mtheme_kbase_register');//Always use a shortname like "mtheme_" not to see any 404 errors
+		//add_action('init', 'atollmatrix_featured_register');
+		//add_action('init', 'atollmatrix_kbase_register');//Always use a shortname like "atollmatrix_" not to see any 404 errors
 		/*
 		* Register kbase Post Manager
 		*/
 
-		$mtheme_reservations_slug="reservations";
-		if (function_exists('superlens_get_option_data')) {
-			$mtheme_reservations_slug = superlens_get_option_data('reservations_permalink_slug');
+		$atollmatrix_reservations_slug="reservations";
+		if (function_exists('atollmatrix_get_option_data')) {
+			$atollmatrix_reservations_slug = atollmatrix_get_option_data('reservations_permalink_slug');
 		}
-		if ( $mtheme_reservations_slug=="" || !isSet($mtheme_reservations_slug) ) {
-			$mtheme_reservations_slug="reservations";
+		if ( $atollmatrix_reservations_slug=="" || !isSet($atollmatrix_reservations_slug) ) {
+			$atollmatrix_reservations_slug="reservations";
 		}
 		$args = array(
 			'labels' => array(
@@ -90,7 +90,7 @@ class Imaginem_Reservation_Posts {
 			'has_archive' =>true,
 			'menu_position' => 6,
 			'menu_icon' => plugin_dir_url( __FILE__ ) . 'images/portfolio.png',
-			'rewrite' => array('slug' => $mtheme_reservations_slug),//Use a slug like "work" or "project" that shouldnt be same with your page name
+			'rewrite' => array('slug' => $atollmatrix_reservations_slug),//Use a slug like "work" or "project" that shouldnt be same with your page name
 			'supports' => array('title', 'author', 'thumbnail')//Boxes will be shown in the panel
 		);
 	
@@ -116,5 +116,5 @@ class Imaginem_Reservation_Posts {
 	}
 	
 }
-$mtheme_kbase_post_type = new Imaginem_Reservation_Posts();
+$atollmatrix_kbase_post_type = new atollmatrix_Reservation_Posts();
 ?>

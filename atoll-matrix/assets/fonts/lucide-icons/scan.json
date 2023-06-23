@@ -1,0 +1,14 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "wojtekmaj",
+    "ericfennis"
+  ],
+  "tags": [
+    "qr-code"
+  ],
+  "categories": [
+    "devices",
+    "social"
+  ]
+}

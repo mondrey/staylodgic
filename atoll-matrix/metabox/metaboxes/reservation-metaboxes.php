@@ -1,8 +1,8 @@
 <?php
-function themecore_reservations_metadata() {
-	$mtheme_imagepath =  plugin_dir_url( __FILE__ ) . 'assets/images/';
+function atollmatrix_reservations_metadata() {
+	$atollmatrix_imagepath =  plugin_dir_url( __FILE__ ) . 'assets/images/';
 
-	$mtheme_sidebar_options = themecore_generate_sidebarlist('reservations');
+	$atollmatrix_sidebar_options = atollmatrix_generate_sidebarlist('reservations');
 
 	// Pull all the Featured into an array
 	$bg_slideshow_pages = get_posts('post_type=fullscreen&orderby=title&numberposts=-1&order=ASC');
@@ -41,26 +41,26 @@ function themecore_reservations_metadata() {
 
 	$reservations_box = array(
 		'id' => 'reservationsmeta-box',
-		'title' => esc_html__('Reservations Metabox','themecore'),
+		'title' => esc_html__('Reservations Metabox','atollmatrix'),
 		'page' => 'page',
 		'context' => 'normal',
 		'priority' => 'core',
 		'fields' => array(
 			array(
-				'name' => esc_html__('Reservation Settings','themecore'),
-				'id' => 'pagemeta_reservations_section_id',
+				'name' => esc_html__('Reservation Settings','atollmatrix'),
+				'id' => 'atollmatrix_reservations_section_id',
 				'type' => 'break',
-				'sectiontitle' => esc_html__('Reservations Settings','themecore'),
+				'sectiontitle' => esc_html__('Reservations Settings','atollmatrix'),
 				'std' => ''
 			),
 			array(
-				'name' => esc_html__('Reservation Options','themecore'),
-				'id' => 'pagemeta_sep_page_options',
+				'name' => esc_html__('Reservation Options','atollmatrix'),
+				'id' => 'atollmatrix_sep_page_options',
 				'type' => 'seperator',
 				),
 			array(
 				'name' => '',
-				'id' => 'pagemeta_booking_number',
+				'id' => 'atollmatrix_booking_number',
 				'type' => 'readonly',
 				'class' => 'textsmall',
 				'heading' => 'subhead',
@@ -68,29 +68,29 @@ function themecore_reservations_metadata() {
 				'std' => $booking_number
 			),
 			array(
-				'name' => esc_html__('Reservation Status','themecore'),
-				'id' => 'pagemeta_reservation_status',
+				'name' => esc_html__('Reservation Status','atollmatrix'),
+				'id' => 'atollmatrix_reservation_status',
 				'class' => 'reservation_status',
 				'type' => 'select',
-				'desc' => esc_html__('Reservation Status','themecore'),
+				'desc' => esc_html__('Reservation Status','atollmatrix'),
 				'options' => array(
-					'confirmed'    => esc_attr__('Confirmed','themecore'),
-					'cancelled'  => esc_attr__('Cancelled','themecore'),
-					'pending' => esc_attr__('Pending','themecore')
+					'confirmed'    => esc_attr__('Confirmed','atollmatrix'),
+					'cancelled'  => esc_attr__('Cancelled','atollmatrix'),
+					'pending' => esc_attr__('Pending','atollmatrix')
 					),
 			),
 			array(
-				'name' => esc_html__('Room','themecore'),
-				'id' => 'pagemeta_room_name',
+				'name' => esc_html__('Room','atollmatrix'),
+				'id' => 'atollmatrix_room_id',
 				'class' => 'room_choice',
 				'type' => 'select',
 				'target' => 'room_names',
-				'desc' => esc_html__('Room.','themecore'),
+				'desc' => esc_html__('Room.','atollmatrix'),
 				'options' => ''
 				),
 			array(
-				'name' => esc_html__('Reservation','themecore'),
-				'id' => 'pagemeta_reservation_checkin',
+				'name' => esc_html__('Reservation','atollmatrix'),
+				'id' => 'atollmatrix_reservation_checkin',
 				'type' => 'reservation',
 				'class' => 'textsmall',
 				'heading' => 'subhead',
@@ -99,7 +99,7 @@ function themecore_reservations_metadata() {
 			),
 			array(
 				'name' => '',
-				'id' => 'pagemeta_checkin_date',
+				'id' => 'atollmatrix_checkin_date',
 				'type' => 'offview',
 				'class' => 'textsmall',
 				'heading' => 'subhead',
@@ -108,7 +108,7 @@ function themecore_reservations_metadata() {
 			),
 			array(
 				'name' => '',
-				'id' => 'pagemeta_checkout_date',
+				'id' => 'atollmatrix_checkout_date',
 				'type' => 'offview',
 				'class' => 'textsmall',
 				'heading' => 'subhead',
@@ -117,61 +117,61 @@ function themecore_reservations_metadata() {
 			),
 			array(
 				'name' => '',
-				'id' => 'pagemeta_reservation_per_night_cost',
+				'id' => 'atollmatrix_reservation_per_night_cost',
 				'type' => 'text',
 				'class' => 'textsmall',
 				'heading' => 'subhead',
-				'desc' => esc_html__('Per night price','themecore'),
+				'desc' => esc_html__('Per night price','atollmatrix'),
 				'std' => ''
 			),
 			array(
 				'name' => '',
-				'id' => 'pagemeta_reservation_total_room_cost',
+				'id' => 'atollmatrix_reservation_total_room_cost',
 				'type' => 'text',
 				'class' => 'textsmall',
 				'heading' => 'subhead',
-				'desc' => esc_html__('Total Room price','themecore'),
+				'desc' => esc_html__('Total Room price','atollmatrix'),
 				'std' => ''
 			),
 			array(
 				'name' => '',
-				'id' => 'pagemeta_reservation_room_paid',
+				'id' => 'atollmatrix_reservation_room_paid',
 				'type' => 'text',
 				'class' => 'textsmall',
 				'heading' => 'subhead',
-				'desc' => esc_html__('Paid Total','themecore'),
+				'desc' => esc_html__('Paid Total','atollmatrix'),
 				'std' => ''
 			),
 			array(
 				'name' => '',
-				'id' => 'pagemeta_reservation_room_paid_balance',
+				'id' => 'atollmatrix_reservation_room_paid_balance',
 				'type' => 'text',
 				'class' => 'textsmall',
 				'heading' => 'subhead',
-				'desc' => esc_html__('Balance Total','themecore'),
+				'desc' => esc_html__('Balance Total','atollmatrix'),
 				'std' => ''
 			),
 			array(
-				'name' => __('Notes','themecore'),
-				'id' => 'pagemeta_reservation_notes',
+				'name' => __('Notes','atollmatrix'),
+				'id' => 'atollmatrix_reservation_notes',
 				'type' => 'textarea',
-				'desc' => __('Notes.','themecore'),
+				'desc' => __('Notes.','atollmatrix'),
 				'std' => ''
 			),
 			array(
-				'name' => esc_html__('Page Settings','themecore'),
-				'id' => 'pagemeta_page_section_id',
+				'name' => esc_html__('Page Settings','atollmatrix'),
+				'id' => 'atollmatrix_page_section_id',
 				'type' => 'break',
-				'sectiontitle' => esc_html__('Page Settings','themecore'),
+				'sectiontitle' => esc_html__('Page Settings','atollmatrix'),
 				'std' => ''
 				),
 			array(
 				'name' => 'Adults',
-				'id' => 'pagemeta_reservation_room_adults',
+				'id' => 'atollmatrix_reservation_room_adults',
 				'type' => 'number',
 				'occupant' => 'adult',
 				'datafrom' => 'roomtype',
-				'maxcap' => 'pagemeta_max_adults',
+				'maxcap' => 'atollmatrix_max_adults',
 				'min' => '1',
 				'max' => '9',
 				'step' => '1',
@@ -183,7 +183,7 @@ function themecore_reservations_metadata() {
 			),
 			array(
 				'name' => 'Children',
-				'id' => 'pagemeta_reservation_room_children',
+				'id' => 'atollmatrix_reservation_room_children',
 				'type' => 'number',
 				'occupant' => 'child',
 				'datafrom' => 'roomtype',
@@ -191,7 +191,7 @@ function themecore_reservations_metadata() {
 				'max' => '9',
 				'step' => '1',
 				'unit' => 'children',
-				'maxcap' => 'pagemeta_max_children',
+				'maxcap' => 'atollmatrix_max_children',
 				'class' => 'textsmall',
 				'heading' => 'subhead',
 				'desc' => '',
@@ -200,14 +200,14 @@ function themecore_reservations_metadata() {
 		)
 	);
 
-	$customer = cognitive_get_customer_array();
+	$customer = atollmatrix_get_customer_array();
 
 	$reservation_id = get_the_ID();
 
 	$customer_datafetch = array(
 		array(
-			'name' => esc_html__('Customer','themecore'),
-			'id' => 'pagemeta_sep_page_options',
+			'name' => esc_html__('Customer','atollmatrix'),
+			'id' => 'atollmatrix_sep_page_options',
 			'type' => 'seperator',
 			),
 		array(
@@ -233,8 +233,8 @@ function themecore_reservations_metadata() {
 /*
 * Meta options for Reservations post type
 */
-function themecore_reservationsitem_metaoptions(){
-	$reservations_box = themecore_reservations_metadata();
-	themecore_generate_metaboxes($reservations_box,get_the_id());
+function atollmatrix_reservationsitem_metaoptions(){
+	$reservations_box = atollmatrix_reservations_metadata();
+	atollmatrix_generate_metaboxes($reservations_box,get_the_id());
 }
 ?>

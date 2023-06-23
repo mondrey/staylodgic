@@ -17,8 +17,8 @@ class Rates {
 
 	public static function getRoomTypeBaseRate( $room_id ) {
 		$custom = get_post_custom( $room_id );
-		if (isset($custom['pagemeta_base_rate'][0])) {
-			$base_rate = $custom['pagemeta_base_rate'][0];
+		if (isset($custom['atollmatrix_base_rate'][0])) {
+			$base_rate = $custom['atollmatrix_base_rate'][0];
 	
 			return $base_rate;
 		}

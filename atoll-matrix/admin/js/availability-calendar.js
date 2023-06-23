@@ -111,7 +111,7 @@
 				type: 'POST',
 				url: ajaxurl,
 				data: {
-					action: 'cognitive_update_room_rate',
+					action: 'update_RoomRate',
 					postID: postID,
 					dateRange: dateRange,
 					rate: rate
@@ -201,7 +201,7 @@
 				type: 'POST',
 				url: ajaxurl,
 				data: {
-					action: 'cognitive_update_room_availability',
+					action: 'update_RoomAvailability',
 					postID: postID,
 					dateRange: dateRange,
 					quantity: quantity
@@ -233,7 +233,7 @@
 
 		function initialize_reservation_guest_amount() {
 			
-			$('#pagemeta_room_name').change(function() {
+			$('#atollmatrix_room_id').change(function() {
 
 				$('.notify-number-over-max').hide();
 
@@ -244,9 +244,9 @@
 				// Check if the selected room ID exists in the occupants object
 				if (occupantsObject.hasOwnProperty(selectedValue)) {
 
-					var $adultInput = $('#pagemeta_reservation_room_adults');
+					var $adultInput = $('#atollmatrix_reservation_room_adults');
 
-					var adult_number = $('#pagemeta_reservation_room_adults').val();
+					var adult_number = $('#atollmatrix_reservation_room_adults').val();
 
 					// Get the max guests for the selected room
 					var maxGuests = occupantsObject[selectedValue]["max_guests"]; 
@@ -295,7 +295,7 @@
 			
 
 
-					var $childInput = $('#pagemeta_reservation_room_children');
+					var $childInput = $('#atollmatrix_reservation_room_children');
 
 					var children_number = $childInput.val();
 
@@ -352,7 +352,7 @@
 							$("#guest-age input[data-counter='" + (value - 1) + "']").remove();  // remove the corresponding extra input field
 						}
 					}
-					$('#pagemeta_room_name').trigger('change');
+					$('#atollmatrix_room_id').trigger('change');
 				});
 			
 				$(this).on('click', '.plus-btn', function() {
@@ -366,11 +366,11 @@
 						input.val(value + 1);
 						calculateSum();
 						if (guest === "child") {
-							var extraInput = $("<input name='pagemeta_reservation_room_children[age][]' type='text' data-counter='" + value + "' placeholder='Enter age'>");
+							var extraInput = $("<input name='atollmatrix_reservation_room_children[age][]' type='text' data-counter='" + value + "' placeholder='Enter age'>");
 							$("#guest-age").append(extraInput);  // append the extra input to the "guest-age" div
 						}
 					}
-					$('#pagemeta_room_name').trigger('change');
+					$('#atollmatrix_room_id').trigger('change');
 				});
 			
 				// Calculate the initial sum
@@ -403,8 +403,8 @@
 			initialize_reservation_guest_amount();
 			
 			function getExistingDates() {
-				let checkinValue = document.getElementById('pagemeta_checkin_date') ? document.getElementById('pagemeta_checkin_date').value : null;
-				let checkoutValue = document.getElementById('pagemeta_checkout_date') ? document.getElementById('pagemeta_checkout_date').value : null;
+				let checkinValue = document.getElementById('atollmatrix_checkin_date') ? document.getElementById('atollmatrix_checkin_date').value : null;
+				let checkoutValue = document.getElementById('atollmatrix_checkout_date') ? document.getElementById('atollmatrix_checkout_date').value : null;
 			
 				// Only set the default dates if checkinValue and checkoutValue exist
 				let defaultDates = [];
@@ -421,7 +421,7 @@
 				if (selectedDates.length > 1) {
 				  checkout = selectedDates[1];
 				}
-				let reservationID = themecore_admin_vars.post_id;
+				let reservationID = atollmatrix_admin_vars.post_id;
 				console.log(reservationID);
 				const roomNights = checkout ? Math.ceil((checkout - checkin) / (1000 * 60 * 60 * 24)) : 0;
 			  
@@ -439,8 +439,8 @@
 					const checkinOffset = checkin.getTimezoneOffset() * 60000; // Time zone offset in milliseconds
 					const checkoutOffset = checkout.getTimezoneOffset() * 60000; // Time zone offset in milliseconds
 
-					document.getElementById("pagemeta_checkin_date").value = new Date(checkin - checkinOffset).toISOString().split('T')[0];
-					document.getElementById("pagemeta_checkout_date").value = new Date(checkout - checkoutOffset).toISOString().split('T')[0];
+					document.getElementById("atollmatrix_checkin_date").value = new Date(checkin - checkinOffset).toISOString().split('T')[0];
+					document.getElementById("atollmatrix_checkout_date").value = new Date(checkout - checkoutOffset).toISOString().split('T')[0];
 				}
 			  
 				// Availability checking to see if the chosen range has rooms available for the dates
@@ -449,14 +449,14 @@
 			  
 				if (checkin && checkout) {
 				  var data = {
-					'action': 'cognitive_check_room_availability',
+					'action': 'get_AvailableRooms',
 					'reservationid': reservationID,
 					'checkin': new Date(checkin - checkinOffset).toISOString().split('T')[0],
 					'checkout': new Date(checkout - checkoutOffset).toISOString().split('T')[0]
 				  };
 			  
 				  jQuery.post(ajaxurl, data, function(response) {
-					let selectElement = $('#pagemeta_room_name');
+					let selectElement = $('#atollmatrix_room_id');
 					let selectedValue = selectElement.val(); // Save the currently selected value
 
 					// store the value to guest number selectors
@@ -473,7 +473,7 @@
 					});
 				  
 					// Trigger update
-					selectElement.trigger("chosen:updated");
+					selectElement.select2('open');
 				});
 				}
 			  }
@@ -501,8 +501,8 @@
 					const checkinOffset = checkin.getTimezoneOffset() * 60000; // Time zone offset in milliseconds
 					const checkoutOffset = checkout.getTimezoneOffset() * 60000; // Time zone offset in milliseconds
 			  
-					document.getElementById("pagemeta_checkin_date").value = new Date(checkin - checkinOffset).toISOString().split('T')[0];
-					document.getElementById("pagemeta_checkout_date").value = new Date(checkout - checkoutOffset).toISOString().split('T')[0];
+					document.getElementById("atollmatrix_checkin_date").value = new Date(checkin - checkinOffset).toISOString().split('T')[0];
+					document.getElementById("atollmatrix_checkout_date").value = new Date(checkout - checkoutOffset).toISOString().split('T')[0];
 				  }
 			  
 				  var reservationDetails = "<p>Check-in: " + checkin.toLocaleDateString() + "</p>" +
@@ -550,7 +550,7 @@
 					type: 'POST',
 					url: ajaxurl,
 					data: {
-						'action': 'cognitive_ajax_get_availability_calendar',
+						'action': 'get_Selected_Range_AvailabilityCalendar',
 						'start_date': start_date,
 						'end_date': end_date
 					},

@@ -12,7 +12,7 @@
 				url: frontendAjax.ajaxurl, // the localized URL
 				type: 'POST',
 				data: {
-					action: 'cognitive_process_reservation',
+					action: 'processReservation',
 					total: total,
 					booking_number: booking_number
 				},

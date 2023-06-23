@@ -1,5 +1,5 @@
 <?php
-function mtheme_elementor_icons() {
+function atollmatrix_elementor_icons() {
 $ion_icons = [
 'ion-alert' => 'alert',
 'ion-alert-circled' => 'alert circled',

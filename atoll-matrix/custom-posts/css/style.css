@@ -1,7 +1,7 @@
 .clearfix:after	{ content: "."; visibility: hidden; display: block; height: 0px; clear: both; }
-.mtheme_admin_sort_title { margin-left:10px; position: relative; top:-10px; color:#7d7d7d; text-shadow: -1px 1px #fff;}
-.mtheme_admin_sort_image { border:1px double #444; 		-moz-border-radius: 10px;	-webkit-border-radius: 10px; }
-.mtheme_admin_sort_categories { font-size:10px; margin-left:43px; font-weight:normal; float:right; color:#7d7d7d;}
+.atollmatrix_admin_sort_title { margin-left:10px; position: relative; top:-10px; color:#7d7d7d; text-shadow: -1px 1px #fff;}
+.atollmatrix_admin_sort_image { border:1px double #444; 		-moz-border-radius: 10px;	-webkit-border-radius: 10px; }
+.atollmatrix_admin_sort_categories { font-size:10px; margin-left:43px; font-weight:normal; float:right; color:#7d7d7d;}
 #featured-list { margin-top: 20px; }
  
 	#featured-list li {

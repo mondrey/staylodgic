@@ -1,5 +1,5 @@
 <?php
-function cognitive_get_hotel_Amenities() {
+function atollmatrix_get_hotel_Amenities() {
 	$amenities = array(
 		'1' => '24-hour front desk',
 		'5' => 'Air conditioning',
@@ -72,7 +72,7 @@ function cognitive_get_hotel_Amenities() {
 	return $amenities;
 }
 
-function cognitive_get_hotel_extended_Amenities() {
+function atollmatrix_get_hotel_extended_Amenities() {
 	$amenities = array(
 		'5000' => 'Breakfast in the room',
 		'5001' => 'Public transport tickets',

@@ -83,28 +83,6 @@ class Common {
 	}
 
 	/**
-	 * Updates the reservations array when changes are made to a reservation post.
-	 */
-	public static function updateReservationsArray_On_Change( $room_id, $checkin_date, $checkout_date, $reservation_post_id ) {
-		
-		$reservation_instance = new \AtollMatrix\Reservations();
-		$reservations_array = $reservation_instance->getReservations_Array( $room_id );
-
-		$previous_checkin_date = get_post_meta($room_id, 'previous_checkin_date', true);
-		$previous_checkout_date = get_post_meta($room_id, 'previous_checkout_date', true);
-
-		$previous_dates = self::getDates_Between($previous_checkin_date, $previous_checkout_date);
-		$updated_dates = self::getDates_Between($checkin_date, $checkout_date);
-
-		$reservations_array = self::removeDates_From_ReservationsArray($previous_dates, $reservation_post_id, $reservations_array);
-		$reservations_array = self::addDates_To_ReservationsArray($updated_dates, $reservation_post_id, $reservations_array);
-
-		update_post_meta($room_id, 'reservations_array', json_encode($reservations_array));
-		update_post_meta($room_id, 'previous_checkin_date', $checkin_date);
-		update_post_meta($room_id, 'previous_checkout_date', $checkout_date);
-	}
-
-	/**
 	 * Checks if the post is valid for processing
 	 */
 	public static function isReservation_valid_post( $post_id, $post ) {
@@ -119,82 +97,5 @@ class Common {
 		return $post !== null && !wp_is_post_autosave($post_id) && !wp_is_post_revision($post_id) && $post->post_type === 'customers' && get_post_status($post_id) !== 'draft';
 	}
 
-
-	/**
-	 * Remove dates from the reservations array for a given reservation post ID.
-	 */
-	public static function removeDates_From_ReservationsArray($dates, $reservation_post_id, $reservations_array) {
-		foreach ($dates as $date) {
-			if (isset($reservations_array[$date])) {
-				$reservation_ids = $reservations_array[$date];
-				if (($key = array_search($reservation_post_id, $reservation_ids)) !== false) {
-					unset($reservations_array[$date][$key]);
-					// Reset the array keys
-					$reservations_array[$date] = array_values($reservations_array[$date]);
-				}
-			}
-		}
-
-		return $reservations_array;
-	}
-
-	/**
-	 * Add dates to the reservations array for a given reservation post ID.
-	 */
-	public static function addDates_To_ReservationsArray($dates, $reservation_post_id, $reservations_array) {
-		foreach ($dates as $date) {
-			if (isset($reservations_array[$date])) {
-				if (is_array($reservations_array[$date])) {
-					$reservations_array[$date][] = $reservation_post_id;
-				} else {
-					$reservations_array[$date] = [$reservations_array[$date], $reservation_post_id];
-				}
-			} else {
-				$reservations_array[$date] = [$reservation_post_id];
-			}
-		}
-
-		return $reservations_array;
-	}
-
-	/**
-	 * Remove the reservation ID from the entire array
-	 */
-	public static function removeIDs_From_ReservationsArray( $reservation_post_id, $reservations_array ) {
-		foreach ($reservations_array as $date => &$reservations) {
-			foreach ($reservations as $key => $id) {
-				if ($id == $reservation_post_id) {
-					unset($reservations[$key]);
-				}
-			}
-			// Reset the array keys
-			$reservations = array_values($reservations);
-		}
-
-		return $reservations_array;
-	}
-
-	/**
-	 * Remove the reservation from all rooms.
-	 */
-	public static function removeReservationID_From_All_Rooms( $reservation_post_id ) {
-		$room_types = get_posts(['post_type' => 'room']);
-		//error_log("remove reservation_from_all_rooms is called with ID: " . $reservation_post_id);
-		foreach ($room_types as $room) {
-
-			$reservation_instance = new \AtollMatrix\Reservations();
-			$reservations_array = $reservation_instance->getReservations_Array( $room->ID );
-
-			if (!empty($reservations_array)) {
-				//error_log("Before removing ID {$reservation_post_id} from room {$room->ID}: " . print_r($reservations_array, true));
-				
-				$reservations_array = self::removeIDs_From_ReservationsArray($reservation_post_id, $reservations_array);
-
-				//error_log("After removing ID {$reservation_post_id} from room {$room->ID}: " . print_r($reservations_array, true));
-			}
-
-			update_post_meta($room->ID, 'reservations_array', json_encode($reservations_array));
-		}
-	}
 
 }

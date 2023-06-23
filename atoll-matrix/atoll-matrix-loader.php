@@ -1,43 +1,38 @@
 <?php
 class AtollMatrix_Init {
 	public function __construct() {
-		$this->theme_actions();
-		$this->themecore_load_custom_posts();
-		$this->themecore_load_availablity_calendar();
+		$this->atollmatrix_actions();
+		$this->atollmatrix_load_custom_posts();
+		$this->atollmatrix_load_availablity_calendar();
 	}
 
-	private function theme_actions() {
-		add_action( 'wp_enqueue_scripts', array( $this, 'mtheme_load_front_end_scripts_styles') );
-		add_action( 'admin_enqueue_scripts', array( $this, 'mtheme_load_admin_styles') );
+	private function atollmatrix_actions() {
+		add_action( 'wp_enqueue_scripts', array( $this, 'atollmatrix_load_front_end_scripts_styles') );
+		add_action( 'admin_enqueue_scripts', array( $this, 'atollmatrix_load_admin_styles') );
 
-		add_action( 'admin_init', array( $this, 'themecore_reservationsitemmetabox_init' ) );
-		add_action( 'admin_init', array( $this, 'themecore_customersitemmetabox_init' ) );
-		add_action( 'admin_init', array( $this, 'themecore_roomitemmetabox_init' ) );
+		add_action( 'admin_init', array( $this, 'atollmatrix_reservationsitemmetabox_init' ) );
+		add_action( 'admin_init', array( $this, 'atollmatrix_customersitemmetabox_init' ) );
+		add_action( 'admin_init', array( $this, 'atollmatrix_roomitemmetabox_init' ) );
 
-		add_action( 'init', array( $this, 'themecore_load_textdomain' ) );
-		add_action( 'init', array( $this, 'themecore_load_metaboxes' ) );
+		add_action( 'init', array( $this, 'atollmatrix_load_textdomain' ) );
+		add_action( 'init', array( $this, 'atollmatrix_load_metaboxes' ) );
 	}
 
-	public function themecore_load_textdomain() {
+	public function atollmatrix_load_textdomain() {
 		load_plugin_textdomain( 'imaginem-blocks-ii', false, basename( dirname( __FILE__ ) ) . '/languages' ); 
 	}
 
 
-	public function themecore_load_custom_posts() {
+	public function atollmatrix_load_custom_posts() {
 		require_once (plugin_dir_path( __FILE__ ) . '/custom-posts/class-imaginem-reservation-posts.php');
 		require_once (plugin_dir_path( __FILE__ ) . '/custom-posts/class-imaginem-customer-posts.php');
 		require_once (plugin_dir_path( __FILE__ ) . '/custom-posts/class-imaginem-room-posts.php');
 	}
 
-	public function themecore_load_availablity_calendar() {
-		require_once (plugin_dir_path( __FILE__ ) . 'includes/availability-calendar.php');
+	public function atollmatrix_load_availablity_calendar() {
 		require_once (plugin_dir_path( __FILE__ ) . 'includes/admin-property-data.php');
-		require_once (plugin_dir_path( __FILE__ ) . 'includes/modals.php');
-		require_once (plugin_dir_path( __FILE__ ) . 'includes/front-end.php');
-		require_once (plugin_dir_path( __FILE__ ) . 'includes/payment-helper.php');
 		require_once (plugin_dir_path( __FILE__ ) . 'includes/admin-demo-data.php');
 
-		require_once (plugin_dir_path( __FILE__ ) . 'includes/admin-calendar-ajax.php');
 		require_once (plugin_dir_path( __FILE__ ) . 'includes/admin/class-availablitycalendarbase.php');
 		require_once (plugin_dir_path( __FILE__ ) . 'includes/admin/class-availablitycalendar.php');
 		require_once (plugin_dir_path( __FILE__ ) . 'includes/admin/class-rooms.php');
@@ -45,9 +40,13 @@ class AtollMatrix_Init {
 		require_once (plugin_dir_path( __FILE__ ) . 'includes/admin/class-customers.php');
 		require_once (plugin_dir_path( __FILE__ ) . 'includes/admin/class-reservations.php');
 		require_once (plugin_dir_path( __FILE__ ) . 'includes/admin/class-common.php');
+		require_once (plugin_dir_path( __FILE__ ) . 'includes/admin/class-data.php');
+		require_once (plugin_dir_path( __FILE__ ) . 'includes/admin/class-modals.php');
+		require_once (plugin_dir_path( __FILE__ ) . 'includes/admin/class-payments.php');
+		require_once (plugin_dir_path( __FILE__ ) . 'includes/admin/class-frontend.php');
 	}
 
-	public function themecore_load_metaboxes() {
+	public function atollmatrix_load_metaboxes() {
 		require_once (plugin_dir_path( __FILE__ ) . '/includes/google-fonts.php');
 		require_once (plugin_dir_path( __FILE__ ) . '/includes/theme-gens.php');
 		require_once (plugin_dir_path( __FILE__ ) . '/metabox/metaboxgen/metaboxgen.php');
@@ -56,15 +55,17 @@ class AtollMatrix_Init {
 		require_once (plugin_dir_path( __FILE__ ) . '/metabox/metaboxes/room-metaboxes.php');
 	}
 
-	public function mtheme_load_admin_styles() {
-		wp_register_style('chosen', plugin_dir_url( __FILE__ ) .'assets/js/chosen/chosen.css', array(), false, 'screen' );
-		wp_register_script('chosen', plugin_dir_url( __FILE__ ) .'assets/js/chosen/chosen.jquery.js', array( 'jquery' ),null, true );
+	public function atollmatrix_load_admin_styles() {
+		// wp_register_style('chosen', plugin_dir_url( __FILE__ ) .'assets/js/chosen/chosen.css', array(), false, 'screen' );
+		// wp_register_script('chosen', plugin_dir_url( __FILE__ ) .'assets/js/chosen/chosen.jquery.js', array( 'jquery' ),null, true );
+		wp_register_script('select2', plugin_dir_url( __FILE__ ) .'assets/js/select2/js/select2.full.min.js', array( 'jquery' ),null, true );
+		wp_register_style('select2', plugin_dir_url( __FILE__ ) .'assets/js/select2/css/select2.min.css', array(), false, 'screen' );
 		wp_register_style('flatpickr', plugin_dir_url( __FILE__ ) .'assets/js/flatpickr/flatpickr.min.css', array(), '1.0', 'screen' );
 		wp_register_script('flatpickr', plugin_dir_url( __FILE__ ) .'assets/js/flatpickr/flatpickr.js', array( 'jquery' ),'1.0', true );
 		wp_register_script('admin-post-meta', plugin_dir_url( __FILE__ ) .'admin/js/admin-post-meta.js', array( 'jquery','wp-api','wp-data'),null, true );
 		wp_register_script('menu-image-admin', plugin_dir_url( __FILE__ ) .'admin/js/menu-image-admin.js', array( 'jquery' ),null, true );
 		wp_register_style('menu-image-css', plugin_dir_url( __FILE__ ) .'admin/js/menu-image-admin.css', array(), false, 'screen' );
-		wp_register_style('themecore-admin-styles', plugin_dir_url( __FILE__ ) .'admin/css/style.css',false, 'screen' );
+		wp_register_style('atollmatrix-admin-styles', plugin_dir_url( __FILE__ ) .'admin/css/style.css',false, 'screen' );
 
 		wp_enqueue_style( 'room-reservation-plugin-availability-styles', plugin_dir_url( __FILE__ ) .'admin/css/availability-calendar.css',false, 'screen' );
 		wp_enqueue_script( 'room-reservation-plugin-availability-scripts', plugin_dir_url( __FILE__ ) .'admin/js/availability-calendar.js', array( 'jquery' ),null, true );
@@ -76,20 +77,22 @@ class AtollMatrix_Init {
 			if ( $current_admin_screen->base == 'post') {
 				wp_enqueue_media();
 
-				wp_enqueue_style('themecore-admin-styles');
+				wp_enqueue_style('atollmatrix-admin-styles');
 
-				wp_enqueue_script('chosen');
-				wp_enqueue_style('chosen');
+				wp_enqueue_script('select2');
+				wp_enqueue_style('select2');
 				wp_enqueue_style('flatpickr');
 				wp_enqueue_script('flatpickr');
 				wp_enqueue_script('admin-post-meta');
+
+				wp_enqueue_script( 'jquery-ui-slider' );
 			}
 			wp_localize_script(
 				'jquery',
-				'themecore_admin_vars',
+				'atollmatrix_admin_vars',
 				array(
 					'post_id'          => get_the_ID(),
-					'nonce'            => wp_create_nonce( 'themecore-nonce-metagallery' ),
+					'nonce'            => wp_create_nonce( 'atollmatrix-nonce-metagallery' ),
 				)
 			);
 
@@ -109,7 +112,7 @@ class AtollMatrix_Init {
 
 				wp_enqueue_media();
 
-				wp_enqueue_style('themecore-admin-styles');
+				wp_enqueue_style('atollmatrix-admin-styles');
 
 				wp_enqueue_script('chosen');
 				wp_enqueue_style('chosen');
@@ -121,7 +124,7 @@ class AtollMatrix_Init {
 		}
 	}
 
-	public function mtheme_load_front_end_scripts_styles() {
+	public function atollmatrix_load_front_end_scripts_styles() {
 
 		wp_register_style('flatpickr', plugin_dir_url( __FILE__ ) .'assets/js/flatpickr/flatpickr.min.css', array(), '1.0', 'screen' );
 		wp_register_script('flatpickr', plugin_dir_url( __FILE__ ) .'assets/js/flatpickr/flatpickr.js', array( 'jquery' ),'1.0', true );
@@ -131,7 +134,7 @@ class AtollMatrix_Init {
 			array(
 				'ajaxurl'  => admin_url('admin-ajax.php'),
 				'post_id' => get_the_ID(),
-				'nonce'   => wp_create_nonce( 'themecore-nonce-search' ),
+				'nonce'   => wp_create_nonce( 'atollmatrix-nonce-search' ),
 			)
 		);
 		
@@ -143,17 +146,18 @@ class AtollMatrix_Init {
 	}
 
 		// Events Metabox
-		public function themecore_reservationsitemmetabox_init(){
-			add_meta_box('reservationsInfo-meta', esc_html__('Reservation Options','imaginem-blocks-ii'), 'themecore_reservationsitem_metaoptions', 'reservations', 'normal', 'low');
+		public function atollmatrix_reservationsitemmetabox_init(){
+			add_meta_box('reservationsInfo-meta', esc_html__('Reservation Options','imaginem-blocks-ii'), 'atollmatrix_reservationsitem_metaoptions', 'reservations', 'normal', 'low');
 		}
 		// Events Metabox
-		public function themecore_customersitemmetabox_init(){
-			add_meta_box('customersInfo-meta', esc_html__('Customer Options','imaginem-blocks-ii'), 'themecore_customersitem_metaoptions', 'customers', 'normal', 'low');
+		public function atollmatrix_customersitemmetabox_init(){
+			add_meta_box('customersInfo-meta', esc_html__('Customer Options','imaginem-blocks-ii'), 'atollmatrix_customersitem_metaoptions', 'customers', 'normal', 'low');
 		}
 		// Portfolio Metabox
-		public function themecore_roomitemmetabox_init(){
-			add_meta_box("room-meta", esc_html__("Room Options","imaginem-blocks"), "themecore_roomitem_metaoptions", "room", "normal", "low");
+		public function atollmatrix_roomitemmetabox_init(){
+			add_meta_box("room-meta", esc_html__("Room Options","imaginem-blocks"), "atollmatrix_roomitem_metaoptions", "room", "normal", "low");
 		}
 
 }
+
 new AtollMatrix_Init();

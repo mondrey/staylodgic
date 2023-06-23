@@ -1,32 +1,32 @@
 <?php
-class Imaginem_Room_Posts {
+class atollmatrix_Room_Posts {
 
 	function __construct() {
 		add_action('init', array( $this, 'init'));
 		add_action('admin_init', array( $this, 'sort_admin_init'));
 		add_filter("manage_edit-room_columns", array( $this, 'room_edit_columns'));
 		add_action("manage_posts_custom_column",  array( $this, 'room_custom_columns'));
-		add_action('admin_menu', array( $this, 'mtheme_enable_room_sort') );
-		add_action('wp_ajax_room_sort', array( $this, 'mtheme_save_room_order'));
+		add_action('admin_menu', array( $this, 'atollmatrix_enable_room_sort') );
+		add_action('wp_ajax_room_sort', array( $this, 'atollmatrix_save_room_order'));
 
 		if( is_admin() ) {
 			if ( isSet($_GET["page"]) ) {
 				if ( $_GET["page"] == "class-imaginem-room-posts.php" ) {
-					add_filter( 'posts_orderby', array( $this, 'mtheme_room_orderby'));
+					add_filter( 'posts_orderby', array( $this, 'atollmatrix_room_orderby'));
 				}
 			}
 		}
 	}
 
-	function mtheme_enable_room_sort() {
-		add_submenu_page('edit.php?post_type=room', 'Sort rooms', 'Sort Rooms', 'edit_posts', basename(__FILE__), array( $this, 'mtheme_sort_room'));
+	function atollmatrix_enable_room_sort() {
+		add_submenu_page('edit.php?post_type=room', 'Sort rooms', 'Sort Rooms', 'edit_posts', basename(__FILE__), array( $this, 'atollmatrix_sort_room'));
 	}
-	function mtheme_room_orderby($orderby){
+	function atollmatrix_room_orderby($orderby){
 		global $wpdb;
 		$orderby = "{$wpdb->posts}.menu_order, {$wpdb->posts}.post_date DESC";
 		return($orderby);
 	}
-	function mtheme_sort_room() {
+	function atollmatrix_sort_room() {
 		$room = new WP_Query('post_type=room&posts_per_page=-1&orderby=menu_order&order=ASC');
 	?>
 		<div class="wrap">
@@ -44,12 +44,12 @@ class Imaginem_Room_Posts {
 			$room_cats = get_the_terms( get_the_ID(), 'roomtypes' );
 			
 			?>
-			<?php if ($image_url) { echo '<img class="mtheme_admin_sort_image" src="'.$image_url.'" width="30px" height="30px" alt="" />'; } ?>
-			<span class="mtheme_admin_sort_title"><?php the_title(); ?></span>
+			<?php if ($image_url) { echo '<img class="atollmatrix_admin_sort_image" src="'.$image_url.'" width="30px" height="30px" alt="" />'; } ?>
+			<span class="atollmatrix_admin_sort_title"><?php the_title(); ?></span>
 			<?php
 			if ($room_cats) {
 			?>
-			<span class="mtheme_admin_sort_categories"><?php foreach ($room_cats as $taxonomy) { echo ' | ' . $taxonomy->name; } ?></span>
+			<span class="atollmatrix_admin_sort_categories"><?php foreach ($room_cats as $taxonomy) { echo ' | ' . $taxonomy->name; } ?></span>
 			<?php
 			}
 			?>
@@ -61,7 +61,7 @@ class Imaginem_Room_Posts {
 	
 	<?php
 	}
-	function mtheme_save_room_order() {
+	function atollmatrix_save_room_order() {
 		global $wpdb; // WordPress database class
 	
 		$order = explode(',', $_POST['order']);
@@ -89,8 +89,8 @@ class Imaginem_Room_Posts {
 		}
 
 		if (!defined('MTHEME')) {
-			$mtheme_shortname = "mtheme_p2";
-			define('MTHEME', $mtheme_shortname);
+			$atollmatrix_shortname = "atollmatrix_p2";
+			define('MTHEME', $atollmatrix_shortname);
 		}
 
 		switch ($column)
@@ -101,10 +101,10 @@ class Imaginem_Room_Posts {
 				}
 				break;
 			case "theme_description":
-				if ( isset($custom['pagemeta_thumbnail_desc'][0]) ) { echo $custom['pagemeta_thumbnail_desc'][0]; }
+				if ( isset($custom['atollmatrix_thumbnail_desc'][0]) ) { echo $custom['atollmatrix_thumbnail_desc'][0]; }
 				break;
 			case "video":
-				if ( isset($custom['pagemeta_lightbox_video'][0]) ) { echo $custom['pagemeta_lightbox_video'][0]; }
+				if ( isset($custom['atollmatrix_lightbox_video'][0]) ) { echo $custom['atollmatrix_lightbox_video'][0]; }
 				break;
 			case 'roomtypes':
 				echo get_the_term_list($post->ID, 'roomtypes', '', ', ','');
@@ -135,27 +135,27 @@ class Imaginem_Room_Posts {
 		/*
 		* Register Featured Post Manager
 		*/
-		//add_action('init', 'mtheme_featured_register');
-		//add_action('init', 'room_register');//Always use a shortname like "mtheme_" not to see any 404 errors
+		//add_action('init', 'atollmatrix_featured_register');
+		//add_action('init', 'room_register');//Always use a shortname like "atollmatrix_" not to see any 404 errors
 		/*
 		* Register room Post Manager
 		*/
-		$mtheme_room_slug="rooms";
-		if (function_exists('superlens_get_option_data')) {
-			$mtheme_room_slug = superlens_get_option_data('room_permalink_slug');
+		$atollmatrix_room_slug="rooms";
+		if (function_exists('atollmatrix_get_option_data')) {
+			$atollmatrix_room_slug = atollmatrix_get_option_data('room_permalink_slug');
 		}
-		if ( $mtheme_room_slug=="" || !isSet($mtheme_room_slug) ) {
-			$mtheme_room_slug="rooms";
+		if ( $atollmatrix_room_slug=="" || !isSet($atollmatrix_room_slug) ) {
+			$atollmatrix_room_slug="rooms";
 		}
-		$mtheme_room_singular_refer = "Rooms";
-		if (function_exists('superlens_get_option_data')) {
-			$mtheme_room_singular_refer = superlens_get_option_data('room_archive_title');
+		$atollmatrix_room_singular_refer = "Rooms";
+		if (function_exists('atollmatrix_get_option_data')) {
+			$atollmatrix_room_singular_refer = atollmatrix_get_option_data('room_archive_title');
 		}
-		if ( '' === $mtheme_room_singular_refer || empty($mtheme_room_singular_refer) ) {
-			$mtheme_room_singular_refer = "Rooms";
+		if ( '' === $atollmatrix_room_singular_refer || empty($atollmatrix_room_singular_refer) ) {
+			$atollmatrix_room_singular_refer = "Rooms";
 		}
 		$args = array(
-			'label' => $mtheme_room_singular_refer,
+			'label' => $atollmatrix_room_singular_refer,
 			'singular_label' => __('room','mthemelocal'),
 			'public' => true,
 			'show_ui' => true,
@@ -164,7 +164,7 @@ class Imaginem_Room_Posts {
 			'has_archive' =>true,
 			'menu_position' => 6,
 			'menu_icon' => plugin_dir_url( __FILE__ ) . 'images/portfolio.png',
-			'rewrite' => array('slug' => $mtheme_room_slug),//Use a slug like "work" or "project" that shouldnt be same with your page name
+			'rewrite' => array('slug' => $atollmatrix_room_slug),//Use a slug like "work" or "project" that shouldnt be same with your page name
 			'supports' => array('title', 'author', 'thumbnail')//Boxes will be shown in the panel
 		);
 	
@@ -202,35 +202,35 @@ class Imaginem_Room_Posts {
 	}
 	
 }
-$mtheme_room_post_type = new Imaginem_Room_Posts();
+$atollmatrix_room_post_type = new atollmatrix_Room_Posts();
 
 
-class mtheme_Roomcategory_add_image {
+class atollmatrix_Roomcategory_add_image {
 
 	function __construct() {
-		add_action('admin_head', array(&$this,'mtheme_admin_head') );
-		add_action('edit_term', array(&$this,'mtheme_save_tax_pic') );
-		add_action('create_term', array(&$this,'mtheme_save_tax_pic') );
-		add_filter("manage_edit-roomtypes_columns", array(&$this,'mtheme_roomtype_columns') );
-		add_action("manage_roomtypes_custom_column", array(&$this,'mtheme_manage_workype_columns'),10,3 );
+		add_action('admin_head', array(&$this,'atollmatrix_admin_head') );
+		add_action('edit_term', array(&$this,'atollmatrix_save_tax_pic') );
+		add_action('create_term', array(&$this,'atollmatrix_save_tax_pic') );
+		add_filter("manage_edit-roomtypes_columns", array(&$this,'atollmatrix_roomtype_columns') );
+		add_action("manage_roomtypes_custom_column", array(&$this,'atollmatrix_manage_workype_columns'),10,3 );
 	}
 
 	// Add to admin_init function
 	
-	function mtheme_roomtype_columns($columns) {
+	function atollmatrix_roomtype_columns($columns) {
 		$columns['roomtype_image'] = 'Image';
 		return $columns;
 	}
 
 	// Add to admin_init function
 	
-	function mtheme_manage_workype_columns($value,$columns,$term_id) {
-		$mtheme_roomtype_image_id = get_option('mtheme_roomtype_image_id' . $term_id);
+	function atollmatrix_manage_workype_columns($value,$columns,$term_id) {
+		$atollmatrix_roomtype_image_id = get_option('atollmatrix_roomtype_image_id' . $term_id);
 		switch ($columns) {
 			case 'roomtype_image':
-					if ($mtheme_roomtype_image_id) {
-						$mtheme_roomtype_image_url = wp_get_attachment_image_src( $mtheme_roomtype_image_id, 'thumbnail', false );
-						$value = '<img src="'.$mtheme_roomtype_image_url[0].'" width="100px" height="auto" />';
+					if ($atollmatrix_roomtype_image_id) {
+						$atollmatrix_roomtype_image_url = wp_get_attachment_image_src( $atollmatrix_roomtype_image_id, 'thumbnail', false );
+						$value = '<img src="'.$atollmatrix_roomtype_image_url[0].'" width="100px" height="auto" />';
 					}
 				break;
 	
@@ -240,49 +240,49 @@ class mtheme_Roomcategory_add_image {
 		return $value;
 	}
 
-	function mtheme_admin_head() {
+	function atollmatrix_admin_head() {
 		$taxonomies = get_taxonomies();
 		$taxonomies = array('roomtypes'); // uncomment and specify particular taxonomies you want to add image feature.
 		if (is_array($taxonomies)) {
 			foreach ($taxonomies as $z_taxonomy) {
-				add_action($z_taxonomy . '_add_form_fields', array(&$this,'mtheme_tax_field') );
-				add_action($z_taxonomy . '_edit_form_fields', array(&$this,'mtheme_tax_field') );
+				add_action($z_taxonomy . '_add_form_fields', array(&$this,'atollmatrix_tax_field') );
+				add_action($z_taxonomy . '_edit_form_fields', array(&$this,'atollmatrix_tax_field') );
 			}
 		}
 	}
 
 	// add image field in add form
-	function mtheme_tax_field($taxonomy) {
+	function atollmatrix_tax_field($taxonomy) {
 		wp_enqueue_style('thickbox');
 		wp_enqueue_script('thickbox');
 		wp_enqueue_media();
 
 		if(empty($taxonomy)) {
 			echo '<div class="form-field">
-					<label for="mtheme_roomtype_input">Image</label>
-					<input size="40" type="text" name="mtheme_roomtype_input" id="mtheme_roomtype_input" value="" />
-					<input type="text" name="mtheme_roomtype_image_id" id="mtheme_roomtype_image_id" value="" />
+					<label for="atollmatrix_roomtype_input">Image</label>
+					<input size="40" type="text" name="atollmatrix_roomtype_input" id="atollmatrix_roomtype_input" value="" />
+					<input type="text" name="atollmatrix_roomtype_image_id" id="atollmatrix_roomtype_image_id" value="" />
 				</div>';
 		}
 		else{
 			
-			$mtheme_roomtype_input_url='';
-			$mtheme_roomtype_image_id='';
+			$atollmatrix_roomtype_input_url='';
+			$atollmatrix_roomtype_image_id='';
 
 			if ( isSet($taxonomy->term_id) ) {
-				//$mtheme_roomtype_input_url = get_option('mtheme_roomtype_input' . $taxonomy->term_id);
-				$mtheme_roomtype_image_id = get_option('mtheme_roomtype_image_id' . $taxonomy->term_id);
+				//$atollmatrix_roomtype_input_url = get_option('atollmatrix_roomtype_input' . $taxonomy->term_id);
+				$atollmatrix_roomtype_image_id = get_option('atollmatrix_roomtype_image_id' . $taxonomy->term_id);
 			}
 			
 			echo '<tr class="form-field">
-			<th scope="row" valign="top"><label for="mtheme_roomtype_input">Image</label></th>
+			<th scope="row" valign="top"><label for="atollmatrix_roomtype_input">Image</label></th>
 			<td>
-			<input type="hidden" name="mtheme_roomtype_image_id" id="mtheme_roomtype_image_id" value="' . $mtheme_roomtype_image_id . '" />
-			<a class="button" id="mtheme_upload_work_image">Set category image</a>
+			<input type="hidden" name="atollmatrix_roomtype_image_id" id="atollmatrix_roomtype_image_id" value="' . $atollmatrix_roomtype_image_id . '" />
+			<a class="button" id="atollmatrix_upload_work_image">Set category image</a>
 			<div class="inside" id="featured_roomtype_image_wrap">';
-			if(!empty($mtheme_roomtype_image_id)) {
-				$mtheme_roomtype_image_url = wp_get_attachment_image_src( $mtheme_roomtype_image_id, 'thumbnail', false );
-				echo '<img id="featured_roomtype_image" src="'.$mtheme_roomtype_image_url[0].'" style="max-width:200px;border: 1px solid #ccc;padding: 5px;box-shadow: 5px 5px 10px #ccc;margin-top: 10px;" >';
+			if(!empty($atollmatrix_roomtype_image_id)) {
+				$atollmatrix_roomtype_image_url = wp_get_attachment_image_src( $atollmatrix_roomtype_image_id, 'thumbnail', false );
+				echo '<img id="featured_roomtype_image" src="'.$atollmatrix_roomtype_image_url[0].'" style="max-width:200px;border: 1px solid #ccc;padding: 5px;box-shadow: 5px 5px 10px #ccc;margin-top: 10px;" >';
 				echo '<a style="display:block;" id="remove_roomtype_image" href="#">Remove category Image</a>';
 			}
 			echo '</div>';
@@ -292,9 +292,9 @@ class mtheme_Roomcategory_add_image {
 	<script>
 	jQuery(document).ready(function($){
 		// Get input target field
-		var targetfield="mtheme_roomtype_input";
+		var targetfield="atollmatrix_roomtype_input";
 
-		jQuery("#mtheme_upload_work_image").click( function( event ) {
+		jQuery("#atollmatrix_upload_work_image").click( function( event ) {
 			var jQueryel = jQuery(this);
 			event.preventDefault();
 
@@ -336,7 +336,7 @@ class mtheme_Roomcategory_add_image {
 
 					jQuery( '<a style="display:block;" id="remove_roomtype_image" href="#">Remove roomtype Image</a>' ).appendTo( "#featured_roomtype_image_wrap" );
 				}
-				jQuery("#mtheme_roomtype_image_id").val(attachment.id);
+				jQuery("#atollmatrix_roomtype_image_id").val(attachment.id);
 			});
 
 			custom_file_frame.open();
@@ -344,7 +344,7 @@ class mtheme_Roomcategory_add_image {
 
 		jQuery("#featured_roomtype_image_wrap").on("click", "#remove_roomtype_image", function(){
 			jQuery('#remove_roomtype_image,#featured_roomtype_image').remove();
-			jQuery('#mtheme_roomtype_image_id').val("");
+			jQuery('#atollmatrix_roomtype_image_id').val("");
 			return false;
 		});
 	});
@@ -353,20 +353,20 @@ class mtheme_Roomcategory_add_image {
 	}
 
 	// save our taxonomy image while edit or save term
-	function mtheme_save_tax_pic($term_id) {
-		if (isset($_POST['mtheme_roomtype_image_id'])) {
-			update_option('mtheme_roomtype_image_id' . $term_id, $_POST['mtheme_roomtype_image_id']);
+	function atollmatrix_save_tax_pic($term_id) {
+		if (isset($_POST['atollmatrix_roomtype_image_id'])) {
+			update_option('atollmatrix_roomtype_image_id' . $term_id, $_POST['atollmatrix_roomtype_image_id']);
 		}
 	}
 
 	// output taxonomy image url for the given term_id (NULL by default)
-	function mtheme_roomtype_input_url($term_id = NULL) {
+	function atollmatrix_roomtype_input_url($term_id = NULL) {
 		if ($term_id) {
 			$current_term = get_term_by('slug', get_query_var('term'), get_query_var('taxonomy'));
-			return get_option('mtheme_roomtype_input' . $current_term->term_id);
+			return get_option('atollmatrix_roomtype_input' . $current_term->term_id);
 		}
 	}
 
 }
-$mtheme_Roomcategory_add_image = new mtheme_Roomcategory_add_image();
+$atollmatrix_Roomcategory_add_image = new atollmatrix_Roomcategory_add_image();
 ?>

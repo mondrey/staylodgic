@@ -1,6 +1,6 @@
 <?php
-if ( !function_exists('themecore_google_fonts') ) {
-function themecore_google_fonts() {
+if ( !function_exists('atollmatrix_google_fonts') ) {
+function atollmatrix_google_fonts() {
 $google_api_output='
 {
  "kind": "webfonts#webfontList",

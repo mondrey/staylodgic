@@ -1,5 +1,5 @@
 <?php
-function themecore_generate_sidebarlist( $sidebarlist_type ) {
+function atollmatrix_generate_sidebarlist( $sidebarlist_type ) {
 	$max_sidebars = 50;
 	if ($sidebarlist_type=="events") {
 		$sidebar_options=array();
@@ -7,8 +7,8 @@ function themecore_generate_sidebarlist( $sidebarlist_type ) {
 		$sidebar_options['default_sidebar']='Default Sidebar';
 		for ($sidebar_count=1; $sidebar_count <= $max_sidebars; $sidebar_count++ ) {
 
-			if ( themecore_get_option_data('mthemesidebar-'.$sidebar_count) <> "" ) {
-				$active_sidebar = themecore_get_option_data('mthemesidebar-'.$sidebar_count);
+			if ( atollmatrix_get_option_data('mthemesidebar-'.$sidebar_count) <> "" ) {
+				$active_sidebar = atollmatrix_get_option_data('mthemesidebar-'.$sidebar_count);
 				$sidebar_options['mthemesidebar-'.$sidebar_count] = $active_sidebar;
 			}
 		}
@@ -19,8 +19,8 @@ function themecore_generate_sidebarlist( $sidebarlist_type ) {
 		$sidebar_options['default_sidebar']='Default Sidebar';
 		for ($sidebar_count=1; $sidebar_count <= $max_sidebars; $sidebar_count++ ) {
 
-			if ( themecore_get_option_data('mthemesidebar-'.$sidebar_count) <> "" ) {
-				$active_sidebar = themecore_get_option_data('mthemesidebar-'.$sidebar_count);
+			if ( atollmatrix_get_option_data('mthemesidebar-'.$sidebar_count) <> "" ) {
+				$active_sidebar = atollmatrix_get_option_data('mthemesidebar-'.$sidebar_count);
 				$sidebar_options['mthemesidebar-'.$sidebar_count] = $active_sidebar;
 			}
 		}
@@ -31,8 +31,8 @@ function themecore_generate_sidebarlist( $sidebarlist_type ) {
 		$sidebar_options['default_sidebar']='Default Sidebar';
 		for ($sidebar_count=1; $sidebar_count <= $max_sidebars; $sidebar_count++ ) {
 
-			if ( themecore_get_option_data('mthemesidebar-'.$sidebar_count) <> "" ) {
-				$active_sidebar = themecore_get_option_data('mthemesidebar-'.$sidebar_count);
+			if ( atollmatrix_get_option_data('mthemesidebar-'.$sidebar_count) <> "" ) {
+				$active_sidebar = atollmatrix_get_option_data('mthemesidebar-'.$sidebar_count);
 				$sidebar_options['mthemesidebar-'.$sidebar_count] = $active_sidebar;
 			}
 		}
@@ -47,8 +47,8 @@ function themecore_generate_sidebarlist( $sidebarlist_type ) {
 		}
 		for ($sidebar_count=1; $sidebar_count <= $max_sidebars; $sidebar_count++ ) {
 
-			if ( themecore_get_option_data('mthemesidebar-'.$sidebar_count) <> "" ) {
-				$active_sidebar = themecore_get_option_data('mthemesidebar-'.$sidebar_count);
+			if ( atollmatrix_get_option_data('mthemesidebar-'.$sidebar_count) <> "" ) {
+				$active_sidebar = atollmatrix_get_option_data('mthemesidebar-'.$sidebar_count);
 				$sidebar_options['mthemesidebar-'.$sidebar_count] = $active_sidebar;
 			}
 		}
@@ -59,11 +59,11 @@ function themecore_generate_sidebarlist( $sidebarlist_type ) {
 		return false;
 	}
 }
-function themecore_generate_metaboxes($meta_data,$post_id) {
+function atollmatrix_generate_metaboxes($meta_data,$post_id) {
 	// Use nonce for verification
 	
-	$the_menu_style = themecore_get_option_data('menu_type');
-	echo '<input type="hidden" name="mtheme_meta_box_nonce" value="', wp_create_nonce( 'metabox-nonce' ), '" />';
+	$the_menu_style = atollmatrix_get_option_data('menu_type');
+	echo '<input type="hidden" name="atollmatrix_meta_box_nonce" value="', wp_create_nonce( 'metabox-nonce' ), '" />';
 	
 	echo '<div class="metabox-wrapper theme-menu-style-'.$the_menu_style.' clearfix">';
 	$countcolumns=0;
@@ -71,7 +71,7 @@ function themecore_generate_metaboxes($meta_data,$post_id) {
 		// get current post meta data
 		$meta = get_post_meta($post_id, $field['id'], true);
 
-		if ( themecore_page_is_built_with_elementor( $post_id ) ) {
+		if ( atollmatrix_page_is_built_with_elementor( $post_id ) ) {
 			$elementor_page_settings = get_post_meta( $post_id, '_elementor_page_settings', true );
 			if ( isSet($elementor_page_settings[ $field['id'] ]) ) {
 				$meta = $elementor_page_settings[ $field['id'] ];
@@ -139,7 +139,7 @@ function themecore_generate_metaboxes($meta_data,$post_id) {
 			switch ($field['type']) {
 
 			case 'selected_proofing_images':
-				$filter_image_ids = themecore_get_proofing_attachments ( $post_id );
+				$filter_image_ids = atollmatrix_get_proofing_attachments ( $post_id );
 				$found_selection = false;
 				if ( $filter_image_ids ) {
 
@@ -159,7 +159,7 @@ function themecore_generate_metaboxes($meta_data,$post_id) {
 							if ($proofing_status=="true") {
 								$thumbnail_imagearray = wp_get_attachment_image_src( $attachment_id , 'thumbnail' , false);
 								$thumbnail_imageURI = $thumbnail_imagearray[0];
-								echo '<li class="images"><img src="'.esc_url($thumbnail_imageURI).'" alt="'.esc_attr__('selected','themecore').'" /></li>';
+								echo '<li class="images"><img src="'.esc_url($thumbnail_imageURI).'" alt="'.esc_attr__('selected','atollmatrix').'" /></li>';
 								$found_selection = true;
 							}
 						}
@@ -177,7 +177,7 @@ function themecore_generate_metaboxes($meta_data,$post_id) {
 
 				if (!$found_selection) {
 					echo '<div class="proofing-none-selected">';
-					_e('No selection found.','themecore');
+					_e('No selection found.','atollmatrix');
 					echo '</div>';
 				}
 
@@ -187,12 +187,12 @@ function themecore_generate_metaboxes($meta_data,$post_id) {
 			case 'image_gallery':
 				// SPECIAL CASE:
 				// std controls button text; unique meta key for image uploads
-				$meta = get_post_meta( $post_id, '_mtheme_image_ids', true );
+				$meta = get_post_meta( $post_id, '_atollmatrix_image_ids', true );
 				$thumbs_output = '';
-				$button_text = ($meta) ? esc_html__('Edit Gallery', 'themecore') : $field['std'];
+				$button_text = ($meta) ? esc_html__('Edit Gallery', 'atollmatrix') : $field['std'];
 				$renew_meta = '';
 				if( $meta ) {
-					$field['std'] = esc_html__('Edit Gallery', 'themecore');
+					$field['std'] = esc_html__('Edit Gallery', 'atollmatrix');
 					$thumbs = explode(',', $meta);
 					$thumbs_output = '';
 					$imageidcount = 0;
@@ -216,9 +216,9 @@ function themecore_generate_metaboxes($meta_data,$post_id) {
 
 			    echo 
 			    	'<td>
-			    		<input type="button" class="button" name="' . esc_attr( $field['id'] ) . '" id="mtheme_images_upload" value="' . esc_attr($button_text) .'" />
+			    		<input type="button" class="button" name="' . esc_attr( $field['id'] ) . '" id="atollmatrix_images_upload" value="' . esc_attr($button_text) .'" />
 			    		
-			    		<input type="hidden" name="mtheme_meta[_mtheme_image_ids]" id="_mtheme_image_ids" value="' . esc_attr($renew_meta ? $renew_meta : 'false') . '" />
+			    		<input type="hidden" name="atollmatrix_meta[_atollmatrix_image_ids]" id="_atollmatrix_image_ids" value="' . esc_attr($renew_meta ? $renew_meta : 'false') . '" />
 
 			    		<ul class="mtheme-gallery-thumbs">' . $thumbs_output . '</ul>
 			    	</td>';
@@ -228,12 +228,12 @@ function themecore_generate_metaboxes($meta_data,$post_id) {
 			case 'proofing_gallery':
 				// SPECIAL CASE:
 				// std controls button text; unique meta key for image uploads
-				$meta = get_post_meta( $post_id, '_mtheme_proofing_image_ids', true );
+				$meta = get_post_meta( $post_id, '_atollmatrix_proofing_image_ids', true );
 				$thumbs_output = '';
-				$button_text = ($meta) ? esc_html__('Edit Proofing Gallery', 'themecore') : $field['std'];
+				$button_text = ($meta) ? esc_html__('Edit Proofing Gallery', 'atollmatrix') : $field['std'];
 				$renew_meta = '';
 				if( $meta ) {
-					$field['std'] = esc_html__('Edit Proofing Gallery', 'themecore');
+					$field['std'] = esc_html__('Edit Proofing Gallery', 'atollmatrix');
 					$thumbs = explode(',', $meta);
 					$thumbs_output = '';
 					$imageidcount = 0;
@@ -257,9 +257,9 @@ function themecore_generate_metaboxes($meta_data,$post_id) {
 
 			    echo 
 			    	'<td>
-			    		<input type="button" class="button" name="' . esc_attr( $field['id'] ) . '" id="mtheme_proofing_images_upload" value="' . esc_attr($button_text) .'" />
+			    		<input type="button" class="button" name="' . esc_attr( $field['id'] ) . '" id="atollmatrix_proofing_images_upload" value="' . esc_attr($button_text) .'" />
 			    		
-			    		<input type="hidden" name="mtheme_meta[_mtheme_proofing_image_ids]" id="_mtheme_proofing_image_ids" value="' . esc_attr($renew_meta ? $renew_meta : 'false') . '" />
+			    		<input type="hidden" name="atollmatrix_meta[_atollmatrix_proofing_image_ids]" id="_atollmatrix_proofing_image_ids" value="' . esc_attr($renew_meta ? $renew_meta : 'false') . '" />
 
 			    		<ul class="mtheme-proofing-gallery-thumbs">' . $thumbs_output . '</ul>
 			    	</td>';
@@ -271,9 +271,9 @@ function themecore_generate_metaboxes($meta_data,$post_id) {
 				// std controls button text; unique meta key for image uploads
 				$meta = get_post_meta( $post_id, esc_attr( $field['id'] ) , true );
 				$thumbs_output = '';
-				$button_text = ($meta) ? esc_html__('Edit Gallery', 'themecore') : $field['std'];
+				$button_text = ($meta) ? esc_html__('Edit Gallery', 'atollmatrix') : $field['std'];
 				if( $meta ) {
-					$field['std'] = esc_html__('Edit Gallery', 'themecore');
+					$field['std'] = esc_html__('Edit Gallery', 'atollmatrix');
 					$thumbs = explode(',', $meta);
 					$thumbs_output = '';
 					foreach( $thumbs as $thumb ) {
@@ -309,10 +309,10 @@ function themecore_generate_metaboxes($meta_data,$post_id) {
 							$imageURI = $imagearray[0];
 							$imageID = get_post($attatchmentID);
 							$imageTitle = $image->post_title;
-							echo '<img src="'. esc_url( $imageURI ).'" alt="'.esc_attr__('image','themecore').'" />';
+							echo '<img src="'. esc_url( $imageURI ).'" alt="'.esc_attr__('image','atollmatrix').'" />';
 						}
 					} else {
-						echo esc_html__('No images found.','themecore');
+						echo esc_html__('No images found.','atollmatrix');
 					}
 					break;
 
@@ -335,7 +335,7 @@ function themecore_generate_metaboxes($meta_data,$post_id) {
 
 				case 'upload':
 					if ($meta!="") {
-						$image_url_id = themecore_get_image_id_from_url($meta);
+						$image_url_id = atollmatrix_get_image_id_from_url($meta);
 						$image_thumbnail_data = wp_get_attachment_image_src( $image_url_id , "thumbnail" , true );
 						$image_thumbnail_url = $image_thumbnail_data[0];
 						if ($image_thumbnail_url) {	
@@ -430,13 +430,13 @@ function themecore_generate_metaboxes($meta_data,$post_id) {
 								}
 								$class='';
 								if (isset($field['target'])) {
-									$field['options'] = themecore_get_select_target_options($field['target']);
+									$field['options'] = atollmatrix_get_select_target_options($field['target']);
 								}
 								echo '<div class="bedlayout-box" id="bedlayout-box">';
-								echo '<div class="selectbox-type-selector"><select class="chosen-select-metabox bedtype-select" name="', esc_attr($field['id']).'[bedtype][]" id="bed_type'.$repeat_count.'">';
+								echo '<div class="selectbox-type-selector"><select class="chosen-select-metabox bedtype-select" name="', esc_attr($field['id']).'[bedtype][]" id="bed_type_'.$field['id'].'_' .$repeat_count.'">';
 								foreach ($field['options'] as $key => $option) {
 									if ($key=='0') {
-										$key = __('All the items','themecore');
+										$key = __('All the items','atollmatrix');
 									}
 									echo '<option value="'. esc_attr($key) .'"', $bedtype == $key ? ' selected' : '', '>', esc_attr($option) , '</option>';
 								}
@@ -452,13 +452,13 @@ function themecore_generate_metaboxes($meta_data,$post_id) {
 					}
 					if (!$found_data) {
 						if (isset($field['target'])) {
-							$field['options'] = themecore_get_select_target_options($field['target']);
+							$field['options'] = atollmatrix_get_select_target_options($field['target']);
 						}
 						echo '<div class="bedlayout-box" id="bedlayout-box">';
-						echo '<div class="selectbox-type-selector"><select class="chosen-select-metabox" name="', esc_attr($field['id']).'[bedtype][]" id="bed_type0">';
+						echo '<div class="selectbox-type-selector"><select class="chosen-select-metabox" name="', esc_attr($field['id']).'[bedtype][]" id="bed_type_'.$field['id'].'_0">';
 						foreach ($field['options'] as $key => $option) {
 							if ($key=='0') {
-								$key = __('All the items','themecore');
+								$key = __('All the items','atollmatrix');
 							}
 							echo '<option value="'. esc_attr($key) .'"', $meta == $key ? ' selected' : '', '>', esc_attr($option) , '</option>';
 						}
@@ -467,8 +467,8 @@ function themecore_generate_metaboxes($meta_data,$post_id) {
 						echo '</div>';
 					}
 					echo '</div>';
-					echo '<span class="add-bedlayout-box">'.esc_html__('Add layout','themecore').'</span>';
-					echo '<span class="add-bedlayout-box-notice">'.esc_html__('Max Reached!','themecore').'</span>';
+					echo '<span class="add-bedlayout-box">'.esc_html__('Add layout','atollmatrix').'</span>';
+					echo '<span class="add-bedlayout-box-notice">'.esc_html__('Max Reached!','atollmatrix').'</span>';
 					echo '</div>';
 					break;
 
@@ -489,9 +489,9 @@ function themecore_generate_metaboxes($meta_data,$post_id) {
 									$age = $meta['age'][$repeat_count];
 								}
 								echo '<div class="text-box" id="text-box">';
-								echo '<input placeholder="'.esc_attr__('Age','themecore').'" type="text" name="'. esc_attr($field['id']).'[age][]" value="'. esc_attr($age) .'" id="box_size'.$repeat_count.'" />';
+								echo '<input placeholder="'.esc_attr__('Age','atollmatrix').'" type="text" name="'. esc_attr($field['id']).'[age][]" value="'. esc_attr($age) .'" id="box_size'.$repeat_count.'" />';
 								if ($repeat_count>0) {
-									echo '<span class="remove-box">'.esc_html__('Remove','themecore').'</span>';
+									echo '<span class="remove-box">'.esc_html__('Remove','atollmatrix').'</span>';
 								}
 								echo '</div>';
 							}
@@ -503,8 +503,8 @@ function themecore_generate_metaboxes($meta_data,$post_id) {
 						echo '</div>';
 					}
 					echo '</div>';
-					echo '<span class="add-box">'.esc_html__('Add Child','themecore').'</span>';
-					echo '<span class="add-box-notice">'.esc_html__('Max Reached!','themecore').'</span>';
+					echo '<span class="add-box">'.esc_html__('Add Child','atollmatrix').'</span>';
+					echo '<span class="add-box-notice">'.esc_html__('Max Reached!','atollmatrix').'</span>';
 					echo '</div>';
 					break;
 				case 'timepicker':
@@ -526,7 +526,7 @@ function themecore_generate_metaboxes($meta_data,$post_id) {
 						}
 
 						$display_user_time = $display;
-						$event_time_format = themecore_get_option_data('events_time_format');
+						$event_time_format = atollmatrix_get_option_data('events_time_format');
 						if ($event_time_format == "24hr") {
 							$display_user_time = date('H:i', $tod);
 						}
@@ -538,8 +538,8 @@ function themecore_generate_metaboxes($meta_data,$post_id) {
 
 				case 'country':
 					$text_value = $meta ? $meta : $field['std'];
-					echo '<select name="'.esc_attr($field['id']).'" id="'.esc_attr($field['id']).'">';
-					echo themecore_country_list('select',$meta);
+					echo '<select class="chosen-select-metabox" name="'.esc_attr($field['id']).'" id="'.esc_attr($field['id']).'">';
+					echo atollmatrix_country_list('select',$meta);
 					echo '</select>';
 
 					break;
@@ -563,7 +563,7 @@ function themecore_generate_metaboxes($meta_data,$post_id) {
 				case 'fontselector':
 					$class='';
 					if (isset($field['target'])) {
-						$field['options'] = themecore_get_select_target_options($field['target']);
+						$field['options'] = atollmatrix_get_select_target_options($field['target']);
 					}
 					
 					echo '<div class="selectbox-type-selector"><select class="chosen-select-metabox metabox_google_font_select" name="', $field['id'], '" id="', $field['id'], '">';
@@ -572,7 +572,7 @@ function themecore_generate_metaboxes($meta_data,$post_id) {
 					}
 					echo '</select></div>';
 
-					$googlefont_text = __('abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789','themecore');
+					$googlefont_text = __('abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789','atollmatrix');
 
 					$hide = " hide";
 					if ($key != "none" && $key != "") {
@@ -585,12 +585,12 @@ function themecore_generate_metaboxes($meta_data,$post_id) {
 				case 'select':
 					$class='';
 					if (isset($field['target'])) {
-						$field['options'] = themecore_get_select_target_options($field['target']);
+						$field['options'] = atollmatrix_get_select_target_options($field['target']);
 					}
 					echo '<div class="selectbox-type-selector"><select class="chosen-select-metabox" name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '">';
 					foreach ($field['options'] as $key => $option) {
 						if ($key=='0') {
-							$key = __('All the items','themecore');
+							$key = __('All the items','atollmatrix');
 						}
 						echo '<option value="'. esc_attr($key) .'"', $meta == $key ? ' selected' : '', '>', esc_attr($option) , '</option>';
 					}
@@ -599,19 +599,19 @@ function themecore_generate_metaboxes($meta_data,$post_id) {
 					if ( isSet( $field['target'] ) && isSet( $meta ) ) {
 						if ($field['target']=="client_names") {
 							if ( get_post_type($meta) == 'clients' ) {
-								if( themecore_has_password($meta) ){
+								if( atollmatrix_has_password($meta) ){
 									echo '<div class="metabox-notice metabox-notice-ok">';
-									echo esc_html__('Client selected has password protection.','themecore');
+									echo esc_html__('Client selected has password protection.','atollmatrix');
 									echo '<br/><strong>';
-									echo esc_html__('Gallery password protected.','themecore');
+									echo esc_html__('Gallery password protected.','atollmatrix');
 									echo '</strong></div>';
 								} else {
 									echo '<div class="metabox-notice metabox-notice-no-pass">';
-									echo esc_html__('Client selected does not have password protection.','themecore');
+									echo esc_html__('Client selected does not have password protection.','atollmatrix');
 									echo '<br/>';
-									echo esc_html__('The gallery will be available for everyone.','themecore');
+									echo esc_html__('The gallery will be available for everyone.','atollmatrix');
 									echo '<br/><br/>';
-									echo esc_html__('Add a password to the Client page to protect the gallery.','themecore');
+									echo esc_html__('Add a password to the Client page to protect the gallery.','atollmatrix');
 									echo '</div>';
 								}
 							}
@@ -636,20 +636,20 @@ function themecore_generate_metaboxes($meta_data,$post_id) {
 							if ($room) {
 								foreach($room as $key => $list) {
 									$custom = get_post_custom($list->ID);
-									if ( isSet($custom[ "pagemeta_max_adult_limit_status"][0]) ) { 
-										$adult_limit_status = $custom[ "pagemeta_max_adult_limit_status"][0];
+									if ( isSet($custom[ "atollmatrix_max_adult_limit_status"][0]) ) { 
+										$adult_limit_status = $custom[ "atollmatrix_max_adult_limit_status"][0];
 										if ( '1' == $adult_limit_status ) {
-											$max_adults = $custom[ "pagemeta_max_adults"][0];
+											$max_adults = $custom[ "atollmatrix_max_adults"][0];
 										}
 									}
-									if ( isSet($custom[ "pagemeta_max_children_limit_status"][0]) ) { 
-										$children_limit_status = $custom[ "pagemeta_max_children_limit_status"][0];
+									if ( isSet($custom[ "atollmatrix_max_children_limit_status"][0]) ) { 
+										$children_limit_status = $custom[ "atollmatrix_max_children_limit_status"][0];
 										if ( '1' == $children_limit_status ) {
-											$max_children = $custom[ "pagemeta_max_children"][0];
+											$max_children = $custom[ "atollmatrix_max_children"][0];
 										}
 									}
-									if ( isSet($custom[ "pagemeta_max_guests"][0]) ) { 
-										$max_guests = $custom[ "pagemeta_max_guests"][0]; 
+									if ( isSet($custom[ "atollmatrix_max_guests"][0]) ) { 
+										$max_guests = $custom[ "atollmatrix_max_guests"][0]; 
 									}
 									$roomOccupantData[$list->ID]['max_adults'] = $max_adults;
 									$roomOccupantData[$list->ID]['max_children'] = $max_children;
@@ -700,7 +700,7 @@ function themecore_generate_metaboxes($meta_data,$post_id) {
 
 				case 'get_customer_data':
 
-					$customer_array = cognitive_get_customer_array();
+					$customer_array = atollmatrix_get_customer_array();
 					$reservation_instance = new \AtollMatrix\Reservations();
 					$customer_post_id = $reservation_instance->getReservation_Customer_ID( $field['id'] );
 					$customer_post_edit = get_edit_post_link( $customer_post_id );
@@ -727,20 +727,20 @@ function themecore_generate_metaboxes($meta_data,$post_id) {
 									$max_children = 'disabled';
 									$max_guests = '0';
 									$custom = get_post_custom($list->ID);
-									if ( isSet($custom[ "pagemeta_max_adult_limit_status"][0]) ) { 
-										$adult_limit_status = $custom[ "pagemeta_max_adult_limit_status"][0];
+									if ( isSet($custom[ "atollmatrix_max_adult_limit_status"][0]) ) { 
+										$adult_limit_status = $custom[ "atollmatrix_max_adult_limit_status"][0];
 										if ( '1' == $adult_limit_status ) {
-											$max_adults = $custom[ "pagemeta_max_adults"][0];
+											$max_adults = $custom[ "atollmatrix_max_adults"][0];
 										}
 									}
-									if ( isSet($custom[ "pagemeta_max_children_limit_status"][0]) ) { 
-										$children_limit_status = $custom[ "pagemeta_max_children_limit_status"][0];
+									if ( isSet($custom[ "atollmatrix_max_children_limit_status"][0]) ) { 
+										$children_limit_status = $custom[ "atollmatrix_max_children_limit_status"][0];
 										if ( '1' == $children_limit_status ) {
-											$max_children = $custom[ "pagemeta_max_children"][0];
+											$max_children = $custom[ "atollmatrix_max_children"][0];
 										}
 									}
-									if ( isSet($custom[ "pagemeta_max_guests"][0]) ) { 
-										$max_guests = $custom[ "pagemeta_max_guests"][0]; 
+									if ( isSet($custom[ "atollmatrix_max_guests"][0]) ) { 
+										$max_guests = $custom[ "atollmatrix_max_guests"][0]; 
 									}
 									$roomOccupantData[$list->ID]['max_adults'] = $max_adults;
 									$roomOccupantData[$list->ID]['max_children'] = $max_children;
@@ -780,7 +780,7 @@ function themecore_generate_metaboxes($meta_data,$post_id) {
 						if ( isset( $meta['number'] ) ) {
 							for ($i = 0; $i < $meta['number']; $i++) {
 								$age = isset($meta['age'][$i]) ? $meta['age'][$i] : '';
-								echo "<input name='pagemeta_reservation_room_children[age][]' type='text' data-counter='" . $i . "' value='" . $age . "' placeholder='Enter age'>";
+								echo "<input name='atollmatrix_reservation_room_children[age][]' type='text' data-counter='" . $i . "' value='" . $age . "' placeholder='Enter age'>";
 							}
 						}
 						echo '</div>';
@@ -877,18 +877,18 @@ function themecore_generate_metaboxes($meta_data,$post_id) {
 /**
  * Save image ids
  */
-function themecore_save_proofing_images() {
+function atollmatrix_save_proofing_images() {
 
 	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) 
 		return;
 	
-	if ( !isset($_POST['ids']) || !isset($_POST['nonce']) || !wp_verify_nonce( $_POST['nonce'], 'themecore-nonce-metagallery' ) )
+	if ( !isset($_POST['ids']) || !isset($_POST['nonce']) || !wp_verify_nonce( $_POST['nonce'], 'atollmatrix-nonce-metagallery' ) )
 		return;
 	
 	if ( !current_user_can( 'edit_posts' ) ) return;
  
 	$ids = strip_tags(rtrim($_POST['ids'], ','));
-	update_post_meta($_POST['post_id'], '_mtheme_proofing_image_ids', $ids);
+	update_post_meta($_POST['post_id'], '_atollmatrix_proofing_image_ids', $ids);
 
 	// update thumbs
 	$thumbs = explode(',', $ids);
@@ -899,23 +899,23 @@ function themecore_save_proofing_images() {
 
 	die();
 }
-add_action('wp_ajax_themecore_save_proofing_images', 'themecore_save_proofing_images');
+add_action('wp_ajax_atollmatrix_save_proofing_images', 'atollmatrix_save_proofing_images');
 
 /**
  * Save image ids
  */
-function themecore_save_images() {
+function atollmatrix_save_images() {
 
 	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) 
 		return;
 	
-	if ( !isset($_POST['ids']) || !isset($_POST['nonce']) || !wp_verify_nonce( $_POST['nonce'], 'themecore-nonce-metagallery' ) )
+	if ( !isset($_POST['ids']) || !isset($_POST['nonce']) || !wp_verify_nonce( $_POST['nonce'], 'atollmatrix-nonce-metagallery' ) )
 		return;
 	
 	if ( !current_user_can( 'edit_posts' ) ) return;
  
 	$ids = strip_tags(rtrim($_POST['ids'], ','));
-	update_post_meta($_POST['post_id'], '_mtheme_image_ids', $ids);
+	update_post_meta($_POST['post_id'], '_atollmatrix_image_ids', $ids);
 
 	// update thumbs
 	$thumbs = explode(',', $ids);
@@ -926,7 +926,7 @@ function themecore_save_images() {
 
 	die();
 }
-add_action('wp_ajax_themecore_save_images', 'themecore_save_images');
+add_action('wp_ajax_atollmatrix_save_images', 'atollmatrix_save_images');
 /**
  * Save image ids
  */
@@ -935,7 +935,7 @@ function multo_gallery_save_images() {
 	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) 
 		return;
 	
-	if ( !isset($_POST['ids']) || !isset($_POST['nonce']) || !wp_verify_nonce( $_POST['nonce'], 'themecore-nonce-metagallery' ) )
+	if ( !isset($_POST['ids']) || !isset($_POST['nonce']) || !wp_verify_nonce( $_POST['nonce'], 'atollmatrix-nonce-metagallery' ) )
 		return;
 	
 	if ( !current_user_can( 'edit_posts' ) ) return;
@@ -957,12 +957,12 @@ function multo_gallery_save_images() {
 }
 add_action('wp_ajax_multo_gallery_save_images', 'multo_gallery_save_images');
 // Save data from meta box
-add_action('save_post', 'themecore_checkdata');
-function themecore_checkdata($post_id) {
+add_action('save_post', 'atollmatrix_checkdata');
+function atollmatrix_checkdata($post_id) {
 
 	// verify nonce
-	if ( isset($_POST['mtheme_meta_box_nonce']) ) {
-		if (!wp_verify_nonce($_POST['mtheme_meta_box_nonce'], 'metabox-nonce')) {
+	if ( isset($_POST['atollmatrix_meta_box_nonce']) ) {
+		if (!wp_verify_nonce($_POST['atollmatrix_meta_box_nonce'], 'metabox-nonce')) {
 			return $post_id;
 		}
 	}
@@ -982,67 +982,67 @@ function themecore_checkdata($post_id) {
 		}
 	}
 
-	if ( isset($_POST['mtheme_meta_box_nonce']) ) {
-		$mtheme_post_type_got =  get_post_type($post_id);
+	if ( isset($_POST['atollmatrix_meta_box_nonce']) ) {
+		$atollmatrix_post_type_got =  get_post_type($post_id);
 
-		switch ($mtheme_post_type_got) {
+		switch ($atollmatrix_post_type_got) {
 			case 'page':
-				$mtheme_common_page_box = themecore_page_metadata();
-				themecore_savedata($mtheme_common_page_box,$post_id);
+				$atollmatrix_common_page_box = atollmatrix_page_metadata();
+				atollmatrix_savedata($atollmatrix_common_page_box,$post_id);
 				break;
 			case 'clients':
-				$mtheme_client_box = themecore_client_metadata();
-				themecore_savedata($mtheme_client_box,$post_id);
+				$atollmatrix_client_box = atollmatrix_client_metadata();
+				atollmatrix_savedata($atollmatrix_client_box,$post_id);
 				break;
 			case 'events':
-				$events_box = themecore_events_metadata();
-				themecore_savedata($events_box,$post_id);
+				$events_box = atollmatrix_events_metadata();
+				atollmatrix_savedata($events_box,$post_id);
 				break;
 			case 'portfolio':
-				$portfolio_box = themecore_portfolio_metadata();
-				themecore_savedata($portfolio_box,$post_id);
+				$portfolio_box = atollmatrix_portfolio_metadata();
+				atollmatrix_savedata($portfolio_box,$post_id);
 				break;
-			case 'mtheme_food':
-				$mtheme_food_box = themecore_food_metadata();
-				themecore_savedata($mtheme_food_box,$post_id);
+			case 'atollmatrix_food':
+				$atollmatrix_food_box = atollmatrix_food_metadata();
+				atollmatrix_savedata($atollmatrix_food_box,$post_id);
 				break;
 			case 'fullscreen':
-				$mtheme_fullscreen_box = themecore_fullscreen_metadata();
-				themecore_savedata($mtheme_fullscreen_box,$post_id);
+				$atollmatrix_fullscreen_box = atollmatrix_fullscreen_metadata();
+				atollmatrix_savedata($atollmatrix_fullscreen_box,$post_id);
 				break;
 			case 'photostory':
-				$mtheme_photostory_box = themecore_photostory_metadata();
-				themecore_savedata($mtheme_photostory_box,$post_id);
+				$atollmatrix_photostory_box = atollmatrix_photostory_metadata();
+				atollmatrix_savedata($atollmatrix_photostory_box,$post_id);
 				break;
 			case 'product':
-				$mtheme_woocommerce_box = themecore_woocommerce_metadata();
-				themecore_savedata($mtheme_woocommerce_box,$post_id);
+				$atollmatrix_woocommerce_box = atollmatrix_woocommerce_metadata();
+				atollmatrix_savedata($atollmatrix_woocommerce_box,$post_id);
 				break;
 			case 'proofing':
-				$proofing_box = themecore_proofing_metadata();
-				themecore_savedata($proofing_box,$post_id);
+				$proofing_box = atollmatrix_proofing_metadata();
+				atollmatrix_savedata($proofing_box,$post_id);
 				break;
 			case 'room':
-				$mtheme_room_box = themecore_room_metadata();
-				themecore_savedata($mtheme_room_box,$post_id);
+				$atollmatrix_room_box = atollmatrix_room_metadata();
+				atollmatrix_savedata($atollmatrix_room_box,$post_id);
 				break;
 			case 'reservations':
-				$reservations_box = themecore_reservations_metadata();
-				themecore_savedata($reservations_box,$post_id);
+				$reservations_box = atollmatrix_reservations_metadata();
+				atollmatrix_savedata($reservations_box,$post_id);
 				break;
 			case 'customers':
-				$customers_box = themecore_customers_metadata();
-				themecore_savedata($customers_box,$post_id);
+				$customers_box = atollmatrix_customers_metadata();
+				atollmatrix_savedata($customers_box,$post_id);
 				break;
 			case 'post':
-				$mtheme_post_metapack = themecore_post_metadata();
+				$atollmatrix_post_metapack = atollmatrix_post_metadata();
 
-				themecore_savedata($mtheme_post_metapack['video'],$post_id);
-				themecore_savedata($mtheme_post_metapack['link'],$post_id);
-				themecore_savedata($mtheme_post_metapack['image'],$post_id);
-				themecore_savedata($mtheme_post_metapack['quote'],$post_id);
-				themecore_savedata($mtheme_post_metapack['audio'],$post_id);
-				themecore_savedata($mtheme_post_metapack['main'],$post_id);
+				atollmatrix_savedata($atollmatrix_post_metapack['video'],$post_id);
+				atollmatrix_savedata($atollmatrix_post_metapack['link'],$post_id);
+				atollmatrix_savedata($atollmatrix_post_metapack['image'],$post_id);
+				atollmatrix_savedata($atollmatrix_post_metapack['quote'],$post_id);
+				atollmatrix_savedata($atollmatrix_post_metapack['audio'],$post_id);
+				atollmatrix_savedata($atollmatrix_post_metapack['main'],$post_id);
 				break;
 			
 			default:
@@ -1053,10 +1053,10 @@ function themecore_checkdata($post_id) {
 	
 }
 
-	function themecore_savedata($mtheme_metaboxdata,$post_id) {
+	function atollmatrix_savedata($atollmatrix_metaboxdata,$post_id) {
 
-		if (is_array($mtheme_metaboxdata['fields'])) {
-			foreach ($mtheme_metaboxdata['fields'] as $field) {
+		if (is_array($atollmatrix_metaboxdata['fields'])) {
+			foreach ($atollmatrix_metaboxdata['fields'] as $field) {
 				$old = get_post_meta($post_id, $field['id'], true);
 				$new = '';
 				if ( isset($_POST[$field['id']]) ) {

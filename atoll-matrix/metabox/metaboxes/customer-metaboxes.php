@@ -1,8 +1,8 @@
 <?php
-function themecore_customers_metadata() {
-	$mtheme_imagepath =  plugin_dir_url( __FILE__ ) . 'assets/images/';
+function atollmatrix_customers_metadata() {
+	$atollmatrix_imagepath =  plugin_dir_url( __FILE__ ) . 'assets/images/';
 
-	$mtheme_sidebar_options = themecore_generate_sidebarlist('customers');
+	$atollmatrix_sidebar_options = atollmatrix_generate_sidebarlist('customers');
 
 	// Pull all the Featured into an array
 	$bg_slideshow_pages = get_posts('post_type=fullscreen&orderby=title&numberposts=-1&order=ASC');
@@ -40,21 +40,21 @@ function themecore_customers_metadata() {
 
 	$customers_box = array(
 		'id' => 'customersmeta-box',
-		'title' => esc_html__('Customers Metabox','themecore'),
+		'title' => esc_html__('Customers Metabox','atollmatrix'),
 		'page' => 'page',
 		'context' => 'normal',
 		'priority' => 'core',
 		'fields' => array(
 			array(
-				'name' => esc_html__('Customer Settings','themecore'),
-				'id' => 'pagemeta_customers_section_id',
+				'name' => esc_html__('Customer Settings','atollmatrix'),
+				'id' => 'atollmatrix_customers_section_id',
 				'type' => 'break',
-				'sectiontitle' => esc_html__('Customers Settings','themecore'),
+				'sectiontitle' => esc_html__('Customers Settings','atollmatrix'),
 				'std' => ''
 			),
 			array(
-				'name' => esc_html__('Customer','themecore'),
-				'id' => 'pagemeta_customer_checkin',
+				'name' => esc_html__('Customer','atollmatrix'),
+				'id' => 'atollmatrix_customer_checkin',
 				'type' => 'customer',
 				'class' => 'textsmall',
 				'heading' => 'subhead',
@@ -62,8 +62,8 @@ function themecore_customers_metadata() {
 				'std' => ''
 			),
 			array(
-				'name' => esc_html__('Booking Name','themecore'),
-				'id' => 'pagemeta_booking_number',
+				'name' => esc_html__('Booking Name','atollmatrix'),
+				'id' => 'atollmatrix_booking_number',
 				'type' => 'text',
 				'class' => 'textsmall',
 				'heading' => 'subhead',
@@ -71,8 +71,8 @@ function themecore_customers_metadata() {
 				'std' => ''
 			),
 			array(
-				'name' => esc_html__('Full Name','themecore'),
-				'id' => 'pagemeta_full_name',
+				'name' => esc_html__('Full Name','atollmatrix'),
+				'id' => 'atollmatrix_full_name',
 				'type' => 'text',
 				'class' => 'textsmall',
 				'heading' => 'subhead',
@@ -80,8 +80,8 @@ function themecore_customers_metadata() {
 				'std' => ''
 			),
 			array(
-				'name' => esc_html__('Email Address','themecore'),
-				'id' => 'pagemeta_email_address',
+				'name' => esc_html__('Email Address','atollmatrix'),
+				'id' => 'atollmatrix_email_address',
 				'type' => 'text',
 				'class' => 'textsmall',
 				'heading' => 'subhead',
@@ -89,8 +89,8 @@ function themecore_customers_metadata() {
 				'std' => ''
 			),
 			array(
-				'name' => esc_html__('Phone Number','themecore'),
-				'id' => 'pagemeta_phone_number',
+				'name' => esc_html__('Phone Number','atollmatrix'),
+				'id' => 'atollmatrix_phone_number',
 				'type' => 'text',
 				'class' => 'textsmall',
 				'heading' => 'subhead',
@@ -98,8 +98,8 @@ function themecore_customers_metadata() {
 				'std' => ''
 			),
 			array(
-				'name' => esc_html__('Street Address','themecore'),
-				'id' => 'pagemeta_street_address',
+				'name' => esc_html__('Street Address','atollmatrix'),
+				'id' => 'atollmatrix_street_address',
 				'type' => 'text',
 				'class' => 'textsmall',
 				'heading' => 'subhead',
@@ -107,8 +107,8 @@ function themecore_customers_metadata() {
 				'std' => ''
 			),
 			array(
-				'name' => esc_html__('City','themecore'),
-				'id' => 'pagemeta_city',
+				'name' => esc_html__('City','atollmatrix'),
+				'id' => 'atollmatrix_city',
 				'type' => 'text',
 				'class' => 'textsmall',
 				'heading' => 'subhead',
@@ -116,8 +116,8 @@ function themecore_customers_metadata() {
 				'std' => ''
 			),
 			array(
-				'name' => esc_html__('State','themecore'),
-				'id' => 'pagemeta_state',
+				'name' => esc_html__('State','atollmatrix'),
+				'id' => 'atollmatrix_state',
 				'type' => 'text',
 				'class' => 'textsmall',
 				'heading' => 'subhead',
@@ -125,8 +125,8 @@ function themecore_customers_metadata() {
 				'std' => ''
 			),
 			array(
-				'name' => esc_html__('Zip Code','themecore'),
-				'id' => 'pagemeta_zip_code',
+				'name' => esc_html__('Zip Code','atollmatrix'),
+				'id' => 'atollmatrix_zip_code',
 				'type' => 'text',
 				'class' => 'textsmall',
 				'heading' => 'subhead',
@@ -134,8 +134,8 @@ function themecore_customers_metadata() {
 				'std' => ''
 			),
 			array(
-				'name' => esc_html__('Country','themecore'),
-				'id' => 'pagemeta_country',
+				'name' => esc_html__('Country','atollmatrix'),
+				'id' => 'atollmatrix_country',
 				'type' => 'country',
 				'class' => 'textsmall',
 				'heading' => 'subhead',
@@ -143,15 +143,15 @@ function themecore_customers_metadata() {
 				'std' => ''
 			),
 			array(
-				'name' => esc_html__('Page Settings','themecore'),
-				'id' => 'pagemeta_page_section_id',
+				'name' => esc_html__('Page Settings','atollmatrix'),
+				'id' => 'atollmatrix_page_section_id',
 				'type' => 'break',
-				'sectiontitle' => esc_html__('Page Settings','themecore'),
+				'sectiontitle' => esc_html__('Page Settings','atollmatrix'),
 				'std' => ''
 				),
 			array(
-				'name' => esc_html__('Reservations','themecore'),
-				'id' => 'pagemeta_reservation_list',
+				'name' => esc_html__('Reservations','atollmatrix'),
+				'id' => 'atollmatrix_reservation_list',
 				'type' => 'reservation_for_customer',
 				'class' => 'textsmall',
 				'heading' => 'subhead',
@@ -166,8 +166,8 @@ function themecore_customers_metadata() {
 /*
 * Meta options for Customers post type
 */
-function themecore_customersitem_metaoptions(){
-	$customers_box = themecore_customers_metadata();
-	themecore_generate_metaboxes($customers_box,get_the_id());
+function atollmatrix_customersitem_metaoptions(){
+	$customers_box = atollmatrix_customers_metadata();
+	atollmatrix_generate_metaboxes($customers_box,get_the_id());
 }
 ?>

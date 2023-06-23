@@ -42,7 +42,7 @@
 				url: frontendAjax.ajaxurl, // the localized URL
 				type: 'POST',
 				data: {
-					action: 'cognitive_frontend_booking_search', // the PHP function to trigger
+					action: 'frontend_BookingSearch', // the PHP function to trigger
 					booking_number: bookingNumber,
 					reservation_date: reservationDate,
 					number_of_guests: numberOfAdults,
@@ -91,7 +91,7 @@
 				url: frontendAjax.ajaxurl, // the localized URL
 				type : 'POST',
 				data : {
-					action : 'cognitive_book_rooms',
+					action : 'bookRooms',
 					booking_number : booking_number,
 					checkin : checkin,
 					checkout : checkout,

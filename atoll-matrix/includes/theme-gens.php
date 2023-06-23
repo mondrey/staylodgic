@@ -1,5 +1,5 @@
 <?php
-function themecore_get_particle_json( $type ) {
+function atollmatrix_get_particle_json( $type ) {
 	
 	switch ($type) {
 		case 'move':
@@ -25,7 +25,7 @@ function themecore_get_particle_json( $type ) {
 
 	return $particles;
 }
-function themecore_featured_image_link( $the_image_id ) {
+function atollmatrix_featured_image_link( $the_image_id ) {
 	if ( ! isset( $the_image_id ) ) {
 		$the_image_id = get_the_id();
 	}
@@ -34,9 +34,9 @@ function themecore_featured_image_link( $the_image_id ) {
 	$image_url = $image_url[0];
 	return $image_url;
 }
-function themecore_rev_slider_selectors() {
-	$mtheme_revslides=array();
-	$mtheme_revslides['mtheme-none-selected'] = 'Not Selected';
+function atollmatrix_rev_slider_selectors() {
+	$atollmatrix_revslides=array();
+	$atollmatrix_revslides['mtheme-none-selected'] = 'Not Selected';
 	if(function_exists('rev_slider_shortcode')) {
 
 		$query_sliders = array();
@@ -46,19 +46,19 @@ function themecore_rev_slider_selectors() {
 
 			if(isSet($objSliders)) {
 				foreach($objSliders as $sliders) {
-					$mtheme_revslides[$sliders->alias] = $sliders->alias;
+					$atollmatrix_revslides[$sliders->alias] = $sliders->alias;
 				}
 			}
 		}
 	}
-	return $mtheme_revslides;
+	return $atollmatrix_revslides;
 }
-function themecore_generate_menulist () {
+function atollmatrix_generate_menulist () {
 	$menus = get_terms( 'nav_menu', array( 'hide_empty' => false ) );
 	$menu_select=false;
 	if ( isSet($menus) ) {
 		$menu_select = array();
-		$menu_select['default'] = esc_html__('Default Menu','themecore');
+		$menu_select['default'] = esc_html__('Default Menu','atollmatrix');
 
 		foreach ( $menus as $menu ) {
 			$menu_select[$menu->term_id] = $menu->name;
@@ -66,11 +66,11 @@ function themecore_generate_menulist () {
 	}
 	return $menu_select;
 }
-function themecore_get_elementor_data($post_id,$field_id) {
+function atollmatrix_get_elementor_data($post_id,$field_id) {
 
 	$got_data = false;
 
-	if ( themecore_page_is_built_with_elementor( $post_id ) ) {
+	if ( atollmatrix_page_is_built_with_elementor( $post_id ) ) {
 		$elementor_page_settings = get_post_meta( $post_id, '_elementor_page_settings', true );
 		if ( isSet($elementor_page_settings[ $field_id ]) ) {
 			$got_data = $elementor_page_settings[ $field_id ];
@@ -80,8 +80,8 @@ function themecore_get_elementor_data($post_id,$field_id) {
 	return $got_data;
 
 }
-function themecore_get_pagestyle( $post_id ) {
-  $got_pagestyle = get_post_meta( $post_id, 'pagemeta_pagestyle', true );
+function atollmatrix_get_pagestyle( $post_id ) {
+  $got_pagestyle = get_post_meta( $post_id, 'atollmatrix_pagestyle', true );
 
   switch ($got_pagestyle) {
   	case 'rightsidebar':
@@ -100,7 +100,7 @@ function themecore_get_pagestyle( $post_id ) {
   	default:
   		$pagestyle = 'rightsidebar';
 
-  		if ( themecore_page_is_built_with_elementor( $post_id ) ) {
+  		if ( atollmatrix_page_is_built_with_elementor( $post_id ) ) {
   			$pagestyle = 'edge-to-edge';
   		}
   		
@@ -108,14 +108,14 @@ function themecore_get_pagestyle( $post_id ) {
   }
   return $pagestyle;
 }
-function themecore_has_password($id) {
+function atollmatrix_has_password($id) {
 	$checking_for_password = get_post($id);
 	if(!empty($checking_for_password->post_password)){
 		return true;
 	}
 	return false;
 }
-function themecore_get_select_target_options($type) {
+function atollmatrix_get_select_target_options($type) {
     $list_options = array();
     
     switch($type){
@@ -192,8 +192,8 @@ function themecore_get_select_target_options($type) {
 			if ($featured_pages) {
 				foreach($featured_pages as $key => $list) {
 					$custom = get_post_custom($list->ID);
-					if ( isSet($custom[ "pagemeta_fullscreen_type"][0]) ) { 
-						$slideshow_type=$custom[ "pagemeta_fullscreen_type"][0]; 
+					if ( isSet($custom[ "atollmatrix_fullscreen_type"][0]) ) { 
+						$slideshow_type=$custom[ "atollmatrix_fullscreen_type"][0]; 
 					} else {
 						$slideshow_type="";
 					}
@@ -212,13 +212,13 @@ function themecore_get_select_target_options($type) {
 			if ($featured_pages) {
 				foreach($featured_pages as $key => $list) {
 					$custom = get_post_custom($list->ID);
-					if ( isSet($custom[ "pagemeta_fullscreen_type"][0]) ) { 
-						$slideshow_type=$custom[ "pagemeta_fullscreen_type"][0]; 
+					if ( isSet($custom[ "atollmatrix_fullscreen_type"][0]) ) { 
+						$slideshow_type=$custom[ "atollmatrix_fullscreen_type"][0]; 
 					} else {
 						$slideshow_type="";
 					}
 					if ($slideshow_type == "video") {
-						if ( isSet($custom[ "pagemeta_html5_mp4"][0]) || isSet($custom[ "pagemeta_youtubevideo"][0]) ) {
+						if ( isSet($custom[ "atollmatrix_html5_mp4"][0]) || isSet($custom[ "atollmatrix_youtubevideo"][0]) ) {
 							$list_options[$list->ID] = $list->post_title;
 						}
 					}
@@ -234,8 +234,8 @@ function themecore_get_select_target_options($type) {
 			if ($featured_pages) {
 				foreach($featured_pages as $key => $list) {
 					$custom = get_post_custom($list->ID);
-					if ( isset($custom[ "pagemeta_fullscreen_type"][0]) ) { 
-						$slideshow_type=$custom[ "pagemeta_fullscreen_type"][0]; 
+					if ( isset($custom[ "atollmatrix_fullscreen_type"][0]) ) { 
+						$slideshow_type=$custom[ "atollmatrix_fullscreen_type"][0]; 
 					} else {
 						$slideshow_type="";
 					}
@@ -249,7 +249,7 @@ function themecore_get_select_target_options($type) {
 	
 	return $list_options;
 }
-function themecore_country_list($output_type="select",$selected=""){
+function atollmatrix_country_list($output_type="select",$selected=""){
 	$countries = array
 	(
 		'none' => "Choose Country",
@@ -519,7 +519,7 @@ function themecore_country_list($output_type="select",$selected=""){
 	return $country_list;
 }
 
-function themecore_get_image_id_from_url($image_url) {
+function atollmatrix_get_image_id_from_url($image_url) {
 	$attachment = attachment_url_to_postid($image_url);
 	if ( $attachment ) {
     	return $attachment;
@@ -527,31 +527,31 @@ function themecore_get_image_id_from_url($image_url) {
 		return false;
 	}
 }
-function themecore_get_proofing_attachments( $page_id ) {
+function atollmatrix_get_proofing_attachments( $page_id ) {
 	$filter_image_ids = false;
-	$the_image_ids = get_post_meta( $page_id , '_mtheme_proofing_image_ids');
+	$the_image_ids = get_post_meta( $page_id , '_atollmatrix_proofing_image_ids');
 	if ($the_image_ids) {
 		$filter_image_ids = explode(',', $the_image_ids[0]);
 		return $filter_image_ids;
 	}
 }
-function themecore_get_custom_attachments( $page_id ) {
+function atollmatrix_get_custom_attachments( $page_id ) {
 	$filter_image_ids = false;
-	$the_image_ids = get_post_meta( $page_id , '_mtheme_image_ids');
+	$the_image_ids = get_post_meta( $page_id , '_atollmatrix_image_ids');
 	if ($the_image_ids) {
 		$filter_image_ids = explode(',', $the_image_ids[0]);
 		return $filter_image_ids;
 	}
 }
-function themecore_page_is_built_with_elementor( $post_id ) {
+function atollmatrix_page_is_built_with_elementor( $post_id ) {
   $status = get_post_meta( $post_id, '_elementor_edit_mode', true );
   return $status;
 }
-function themecore_get_max_sidebars() {
+function atollmatrix_get_max_sidebars() {
     $max_sidebars = 50;
     return $max_sidebars;
 }
-function themecore_get_option_data( $name, $default = false ) {
+function atollmatrix_get_option_data( $name, $default = false ) {
 	
 	$opt_value=get_theme_mod( $name );
 	if ( isset( $opt_value ) && $opt_value<>"" ) {
@@ -560,16 +560,16 @@ function themecore_get_option_data( $name, $default = false ) {
 	return $default;
 }
 
-function cognitive_get_customer_array(){
+function atollmatrix_get_customer_array(){
 	$customer = array(
 		array(
-			'name' => esc_html__('Customer','themecore'),
-			'id' => 'pagemeta_sep_page_options',
+			'name' => esc_html__('Customer','atollmatrix'),
+			'id' => 'atollmatrix_sep_page_options',
 			'type' => 'seperator'
 		),
 		array(
-			'name' => esc_html__('Full Name','themecore'),
-			'id' => 'pagemeta_full_name',
+			'name' => esc_html__('Full Name','atollmatrix'),
+			'id' => 'atollmatrix_full_name',
 			'type' => 'text',
 			'class' => 'textsmall',
 			'heading' => 'subhead',
@@ -577,8 +577,8 @@ function cognitive_get_customer_array(){
 			'std' => ''
 		),
 		array(
-			'name' => esc_html__('Email Address','themecore'),
-			'id' => 'pagemeta_email_address',
+			'name' => esc_html__('Email Address','atollmatrix'),
+			'id' => 'atollmatrix_email_address',
 			'type' => 'text',
 			'class' => 'textsmall',
 			'heading' => 'subhead',
@@ -586,8 +586,8 @@ function cognitive_get_customer_array(){
 			'std' => ''
 		),
 		array(
-			'name' => esc_html__('Phone Number','themecore'),
-			'id' => 'pagemeta_phone_number',
+			'name' => esc_html__('Phone Number','atollmatrix'),
+			'id' => 'atollmatrix_phone_number',
 			'type' => 'text',
 			'class' => 'textsmall',
 			'heading' => 'subhead',
@@ -595,8 +595,8 @@ function cognitive_get_customer_array(){
 			'std' => ''
 		),
 		array(
-			'name' => esc_html__('Street Address','themecore'),
-			'id' => 'pagemeta_street_address',
+			'name' => esc_html__('Street Address','atollmatrix'),
+			'id' => 'atollmatrix_street_address',
 			'type' => 'text',
 			'class' => 'textsmall',
 			'heading' => 'subhead',
@@ -604,8 +604,8 @@ function cognitive_get_customer_array(){
 			'std' => ''
 		),
 		array(
-			'name' => esc_html__('City','themecore'),
-			'id' => 'pagemeta_city',
+			'name' => esc_html__('City','atollmatrix'),
+			'id' => 'atollmatrix_city',
 			'type' => 'text',
 			'class' => 'textsmall',
 			'heading' => 'subhead',
@@ -613,8 +613,8 @@ function cognitive_get_customer_array(){
 			'std' => ''
 		),
 		array(
-			'name' => esc_html__('State','themecore'),
-			'id' => 'pagemeta_state',
+			'name' => esc_html__('State','atollmatrix'),
+			'id' => 'atollmatrix_state',
 			'type' => 'text',
 			'class' => 'textsmall',
 			'heading' => 'subhead',
@@ -622,8 +622,8 @@ function cognitive_get_customer_array(){
 			'std' => ''
 		),
 		array(
-			'name' => esc_html__('Zip Code','themecore'),
-			'id' => 'pagemeta_zip_code',
+			'name' => esc_html__('Zip Code','atollmatrix'),
+			'id' => 'atollmatrix_zip_code',
 			'type' => 'text',
 			'class' => 'textsmall',
 			'heading' => 'subhead',
@@ -631,8 +631,8 @@ function cognitive_get_customer_array(){
 			'std' => ''
 		),
 		array(
-			'name' => esc_html__('Country','themecore'),
-			'id' => 'pagemeta_country',
+			'name' => esc_html__('Country','atollmatrix'),
+			'id' => 'atollmatrix_country',
 			'type' => 'country',
 			'class' => 'textsmall',
 			'heading' => 'subhead',

@@ -1,6 +1,6 @@
 <?php
-add_action( 'admin_init', 'cognitive_populate_demo_bookings' );
-function cognitive_populate_demo_bookings() {
+add_action( 'admin_init', 'atollmatrix_populate_demo_bookings' );
+function atollmatrix_populate_demo_bookings() {
 	if (!isset($_GET['populate_data'])) {
 		return;
 	}
@@ -51,15 +51,15 @@ function cognitive_populate_demo_bookings() {
 				'post_title'    => $customer['name'],
 				'post_status'   => 'publish',
 				'meta_input'    => array(
-					'pagemeta_full_name' => $customer['name'],
-					'pagemeta_email_address' => $customer['email'],
-					'pagemeta_phone_number' => $customer['phone'],
-					'pagemeta_street_address' => $customer['address'],
-					'pagemeta_city' => $customer['city'],
-					'pagemeta_state' => $customer['state'],
-					'pagemeta_zip_code' => $customer['zip'],
-					'pagemeta_country' => $customer['country'],
-					'pagemeta_booking_number' => $booking_number,
+					'atollmatrix_full_name' => $customer['name'],
+					'atollmatrix_email_address' => $customer['email'],
+					'atollmatrix_phone_number' => $customer['phone'],
+					'atollmatrix_street_address' => $customer['address'],
+					'atollmatrix_city' => $customer['city'],
+					'atollmatrix_state' => $customer['state'],
+					'atollmatrix_zip_code' => $customer['zip'],
+					'atollmatrix_country' => $customer['country'],
+					'atollmatrix_booking_number' => $booking_number,
 				),
 			);
 			$customer_post_id = wp_insert_post($customer_post_data);
@@ -73,11 +73,11 @@ function cognitive_populate_demo_bookings() {
 				'post_title'    => $booking_number,
 				'post_status'   => 'publish',
 				'meta_input'    => array(
-					'pagemeta_room_name' => $room['id'],
-					'pagemeta_checkin_date' => $date['checkin'],
-					'pagemeta_checkout_date' => $date['checkout'],
-					'pagemeta_booking_number' => $booking_number,
-					'pagemeta_customer_id' => $customer_post_id,
+					'atollmatrix_room_id' => $room['id'],
+					'atollmatrix_checkin_date' => $date['checkin'],
+					'atollmatrix_checkout_date' => $date['checkout'],
+					'atollmatrix_booking_number' => $booking_number,
+					'atollmatrix_customer_id' => $customer_post_id,
 				),
 			);
 			$post_id = wp_insert_post($post_data);

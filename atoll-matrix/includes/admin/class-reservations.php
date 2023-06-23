@@ -12,6 +12,13 @@ class Reservations {
 		$this->reservation_id_excluded = $reservation_id_excluded;
 		$this->date                    = $date;
 		$this->room_id                 = $room_id;
+
+		add_action( 'wp_ajax_bookRooms', array($this, 'bookRooms'));
+		add_action( 'wp_ajax_nopriv_bookRooms', array($this, 'bookRooms'));
+
+		add_action('wp_ajax_get_AvailableRooms', array($this, 'get_AvailableRooms'));
+		add_action('wp_ajax_nopriv_get_AvailableRooms', array($this, 'get_AvailableRooms'));
+		
 	}
 
 	public static function getConfirmedReservations() {
@@ -21,7 +28,7 @@ class Reservations {
 			'post_status'    => 'publish',
 			'meta_query'     => array(
 				array(
-					'key'     => 'pagemeta_reservation_status',
+					'key'     => 'atollmatrix_reservation_status',
 					'value'   => 'confirmed',
 					'compare' => '=',
 				),
@@ -37,7 +44,7 @@ class Reservations {
 			'post_status'    => 'publish',
 			'meta_query' => array(
 				array(
-					'key'   => 'pagemeta_booking_number',
+					'key'   => 'atollmatrix_booking_number',
 					'value' => $booking_number,
 				),
 			),
@@ -50,7 +57,7 @@ class Reservations {
 			'post_type' => 'customers',
 			'meta_query' => array(
 				array(
-					'key' => 'pagemeta_booking_number',
+					'key' => 'atollmatrix_booking_number',
 					'value' => $booking_number,
 				),
 			),
@@ -72,7 +79,7 @@ class Reservations {
 			'meta_query'      => array(
 				'relation'    => 'AND',
 				array(
-					'key'     => 'pagemeta_room_name',
+					'key'     => 'atollmatrix_room_id',
 					'value'   => $room_id,
 					'compare' => '='
 				),
@@ -93,9 +100,9 @@ class Reservations {
 				$reservation_id = get_the_ID();
 				$custom         = get_post_custom($reservation_id);
 	
-				if (isset($custom['pagemeta_checkin_date'][0]) && isset($custom['pagemeta_checkout_date'][0])) {
-					$checkin       = strtotime($custom['pagemeta_checkin_date'][0]);
-					$checkout      = strtotime($custom['pagemeta_checkout_date'][0]);
+				if (isset($custom['atollmatrix_checkin_date'][0]) && isset($custom['atollmatrix_checkout_date'][0])) {
+					$checkin       = strtotime($custom['atollmatrix_checkin_date'][0]);
+					$checkout      = strtotime($custom['atollmatrix_checkout_date'][0]);
 					$selected_date = strtotime($this->date);
 	
 					if ($selected_date >= $checkin && $selected_date < $checkout) {
@@ -125,9 +132,7 @@ class Reservations {
 		
 		// Retrieve the reservations array for the room type
 		$reservations_array_json = get_post_meta($room_id, 'reservations_array', true);
-		if ( DEBUG_MODE ) {
-			print_r($reservations_array_json );
-		}
+
 		//print_r($reservations_array_json );
 		// If the reservations array is empty or not a JSON string, return 0
 		if (empty($reservations_array_json) || !is_string($reservations_array_json)) {
@@ -171,7 +176,7 @@ class Reservations {
 
 	public function getBookingNumber() {
 		// Get the booking number from the reservation post meta
-		$booking_number = get_post_meta($this->reservation_id, 'pagemeta_booking_number', true);
+		$booking_number = get_post_meta($this->reservation_id, 'atollmatrix_booking_number', true);
 	
 		if (!$booking_number) {
 			// Handle error if booking number not found
@@ -196,7 +201,7 @@ class Reservations {
 		if ($customer_query->have_posts()) {
 			$customer_post = $customer_query->posts[0];
 			// Retrieve the guest's full name from the customer post meta
-			$guest_full_name = get_post_meta($customer_post->ID, 'pagemeta_full_name', true);
+			$guest_full_name = get_post_meta($customer_post->ID, 'atollmatrix_full_name', true);
 	
 			// Restore the original post data
 			wp_reset_postdata();
@@ -212,8 +217,8 @@ class Reservations {
 
 		$reservation_post_id = $this->reservation_id;
 		// Get the check-in and check-out dates for the reservation
-		$checkin_date = get_post_meta($reservation_post_id, 'pagemeta_checkin_date', true);
-		$checkout_date = get_post_meta($reservation_post_id, 'pagemeta_checkout_date', true);
+		$checkin_date = get_post_meta($reservation_post_id, 'atollmatrix_checkin_date', true);
+		$checkout_date = get_post_meta($reservation_post_id, 'atollmatrix_checkout_date', true);
 	
 		// Calculate the number of days
 		$datetime1 = new \DateTime($checkin_date);
@@ -230,7 +235,7 @@ class Reservations {
 			$reservation_id = $this->reservation_id;
 		}
 		// Get the check-in and check-out dates for the reservation
-		$checkin_date = get_post_meta($reservation_id, 'pagemeta_checkin_date', true);
+		$checkin_date = get_post_meta($reservation_id, 'atollmatrix_checkin_date', true);
 	
 		return $checkin_date;
 	}
@@ -241,7 +246,7 @@ class Reservations {
 			$reservation_id = $this->reservation_id;
 		}
 		// Get the check-in and check-out dates for the reservation
-		$checkout_date = get_post_meta($reservation_id, 'pagemeta_checkout_date', true);
+		$checkout_date = get_post_meta($reservation_id, 'atollmatrix_checkout_date', true);
 	
 		return $checkout_date;
 	}
@@ -252,7 +257,7 @@ class Reservations {
 			$reservation_id = $this->reservation_id;
 		}
 		// Get the reservation status for the reservation
-		$reservation_status = get_post_meta($reservation_id, 'pagemeta_reservation_status', true);
+		$reservation_status = get_post_meta($reservation_id, 'atollmatrix_reservation_status', true);
 	
 		return $reservation_status;
 	}
@@ -267,7 +272,7 @@ class Reservations {
 				$rooms_query->the_post();
 	
 				// Use the post property of the WP_Query object
-				$room_id = get_post_meta($rooms_query->post->ID, 'pagemeta_room_name', true);
+				$room_id = get_post_meta($rooms_query->post->ID, 'atollmatrix_room_id', true);
 	
 				// Use the room ID to get the room's post title
 				$room_post = get_post($room_id);
@@ -287,7 +292,7 @@ class Reservations {
 			$reservation_id = $this->reservation_id;
 		}
 		// Get the room post ID from the reservation's meta data
-		$room_post_id = get_post_meta($reservation_id, 'pagemeta_room_name', true);
+		$room_post_id = get_post_meta($reservation_id, 'atollmatrix_room_id', true);
 	
 		if ($room_post_id) {
 			// Retrieve the room post using the ID
@@ -308,7 +313,7 @@ class Reservations {
 			'post_type'  => 'reservations',
 			'meta_query' => array(
 				array(
-					'key'     => 'pagemeta_customer_id',
+					'key'     => 'atollmatrix_customer_id',
 					'value'   => $customer_id,
 					'compare' => '=',
 				),
@@ -339,7 +344,7 @@ class Reservations {
 			$reservation_id = $this->reservation_id;
 		}
 		// Get the customer post ID from the reservation's meta data
-		$customer_post_id = get_post_meta($reservation_id, 'pagemeta_customer_id', true);
+		$customer_post_id = get_post_meta($reservation_id, 'atollmatrix_customer_id', true);
 	
 		if ($customer_post_id) {
 			// Retrieve the customer post using the ID
@@ -363,7 +368,7 @@ class Reservations {
 		}
 
 		// Get room id from post meta
-		$room_id = get_post_meta($reservation_id, 'pagemeta_room_name', true);
+		$room_id = get_post_meta($reservation_id, 'atollmatrix_room_id', true);
 	
 		// If room id exists, get the room's post title
 		if ($room_id) {
@@ -436,7 +441,7 @@ class Reservations {
 			$reservation_id = $this->reservation_id;
 		}
 		// Get the reservation status for the reservation
-		$reservation_status = get_post_meta($reservation_id, 'pagemeta_reservation_status', true);
+		$reservation_status = get_post_meta($reservation_id, 'atollmatrix_reservation_status', true);
 	
 		if ( 'confirmed' == $reservation_status ) {
 			return true;
@@ -498,11 +503,11 @@ class Reservations {
 				$reservedRooms[] = get_the_ID();
 				$reservation_id = get_the_ID();
 				$custom = get_post_custom( get_the_ID() );
-				if (isset($custom['pagemeta_reservation_checkin'][0])) {
-					$dateRangeValue=$custom['pagemeta_reservation_checkin'][0];
+				if (isset($custom['atollmatrix_reservation_checkin'][0])) {
+					$dateRangeValue=$custom['atollmatrix_reservation_checkin'][0];
 				}
-				if (isset($custom['pagemeta_room_name'][0])) {
-					$post_room_id=$custom['pagemeta_room_name'][0];
+				if (isset($custom['atollmatrix_room_id'][0])) {
+					$post_room_id=$custom['atollmatrix_room_id'][0];
 				}
 
 				// Date will be like so $dateRangeValue = "2023-05-21 to 2023-05-24";
@@ -510,11 +515,11 @@ class Reservations {
 				
 				$checkin = '';
 				$checkout = '';
-				if (isset($custom['pagemeta_checkin_date'][0])) {
-					$checkin=$custom['pagemeta_checkin_date'][0];
+				if (isset($custom['atollmatrix_checkin_date'][0])) {
+					$checkin=$custom['atollmatrix_checkin_date'][0];
 				}
-				if (isset($custom['pagemeta_checkout_date'][0])) {
-					$checkout=$custom['pagemeta_checkout_date'][0];
+				if (isset($custom['atollmatrix_checkout_date'][0])) {
+					$checkout=$custom['atollmatrix_checkout_date'][0];
 				}
 				//echo '----->'.$checkin.'<-----';
 				// if (count($dateRangeParts) >= 2) {
@@ -575,7 +580,7 @@ class Reservations {
 			$reservation_id = $this->reservation_id;
 		}
 		// Get the booking number from the reservation post meta
-		$booking_number = get_post_meta( $reservation_id, 'pagemeta_booking_number', true );
+		$booking_number = get_post_meta( $reservation_id, 'atollmatrix_booking_number', true );
 	
 		if ( !$booking_number ) {
 			// Handle error if booking number not found
@@ -605,7 +610,7 @@ class Reservations {
 			$reservation_id = $this->reservation_id;
 		}
 		// Get the booking number from the reservation post meta
-		$booking_number = get_post_meta($reservation_id, 'pagemeta_booking_number', true);
+		$booking_number = get_post_meta($reservation_id, 'atollmatrix_booking_number', true);
 	
 		if (!$booking_number) {
 			// Handle error if booking number not found
@@ -669,4 +674,129 @@ class Reservations {
 		return $reservations_array;
 	}
 
+	// Ajax function to book rooms
+	public function bookRooms() {
+	
+		// Check if our nonce is set.
+		if ( ! isset( $_POST['nonce'] ) ) {
+			return;
+		}
+	
+		// Verify that the nonce is valid.
+		if ( ! wp_verify_nonce( $_POST['nonce'], 'atollmatrix-nonce-search' ) ) {
+			return;
+		}
+	
+		// Generate unique booking number
+		$booking_number = sanitize_text_field($_POST['booking_number']);
+		$transient_booking_number = get_transient( $booking_number );
+		delete_transient( $booking_number );
+		if ( '1' != $transient_booking_number ) {
+			wp_send_json_error( 'Invalid or timeout. Please try again' );
+		}
+		// Obtain customer details from form submission
+		$full_name = sanitize_text_field($_POST['full_name']);
+		$email_address = sanitize_email($_POST['email_address']);
+		$phone_number = sanitize_text_field($_POST['phone_number']);
+		$street_address = sanitize_text_field($_POST['street_address']);
+		$city = sanitize_text_field($_POST['city']);
+		$state = sanitize_text_field($_POST['state']);
+		$zip_code = sanitize_text_field($_POST['zip_code']);
+		$country = sanitize_text_field($_POST['country']);
+		// add other fields as necessary
+	
+		// Create customer post
+		$customer_post_data = array(
+			'post_type'     => 'customers',  // Your custom post type for customers
+			'post_title'    => $full_name,   // Set the customer's full name as post title
+			'post_status'   => 'publish',    // The status you want to give new posts
+			'meta_input'    => array(
+				'atollmatrix_full_name' => $full_name,
+				'atollmatrix_email_address' => $email_address,
+				'atollmatrix_phone_number' => $phone_number,
+				'atollmatrix_street_address' => $street_address,
+				'atollmatrix_city' => $city,
+				'atollmatrix_state' => $state,
+				'atollmatrix_zip_code' => $zip_code,
+				'atollmatrix_country' => $country,
+				'atollmatrix_booking_number' => $booking_number,  // Set the booking number as post meta
+				// add other meta data you need
+			),
+		);
+	
+		// Insert the post
+		$customer_post_id = wp_insert_post($customer_post_data);
+	
+		if(!$customer_post_id) {
+			wp_send_json_error('Could not save Customer: ' . $customer_post_id );
+			return;
+		}
+	
+	
+		$checkin = $_POST['checkin'];
+		$checkout = $_POST['checkout'];
+		$rooms = $_POST['rooms'];
+	
+		// Process the booking
+		foreach ($rooms as $room) {
+			$room_id = $room['id'];
+			$quantity = (int)$room['quantity'];
+	
+			for($i = 0; $i < $quantity; $i++) {
+				// Here you can also add other post data like post_title, post_content etc.
+				$post_data = array(
+					'post_type'     => 'reservations',  // Your custom post type
+					'post_title'    => $booking_number,  // Set the booking number as post title
+					'post_status'   => 'publish',       // The status you want to give new posts
+					'meta_input'    => array(
+						'atollmatrix_room_id' => $room_id,
+						'atollmatrix_reservation_status' => 'confirmed',
+						'atollmatrix_checkin_date' => $checkin,
+						'atollmatrix_checkout_date' => $checkout,
+						'atollmatrix_booking_number' => $booking_number,  // Set the booking number as post meta
+						'atollmatrix_customer_id' => $customer_post_id,  // Link to the customer post
+						// add other meta data you need
+					),
+				);
+	
+				// Insert the post
+				$reservation_post_id = wp_insert_post($post_data);
+				
+				if($reservation_post_id) {
+					// Successfully created a reservation post
+					$data_instance = new \AtollMatrix\Data();
+					$data_instance->updateReservationsArray_On_Save($reservation_post_id, get_post($reservation_post_id), true);
+				} else {
+					// Handle error
+				}
+			}
+		}
+		// Send a success response at the end of your function, if all operations are successful
+		wp_send_json_success('Booking successfully registered.');
+		wp_die();
+	}
+
+	public function get_AvailableRooms() {
+		$checkin_date = $_POST['checkin'];
+		$checkout_date = $_POST['checkout'];
+		$reservationid = $_POST['reservationid'];
+		$available_rooms = array();
+	
+		$room_list = \AtollMatrix\Rooms::queryRooms();
+	
+		foreach($room_list as $room) {
+			$is_fullybooked = $this->isRoom_Fullybooked_For_DateRange($room->ID, $checkin_date, $checkout_date, $reservation_id = $reservationid);
+			
+			// if not fully booked add to available rooms
+			if (!$is_fullybooked) {
+				$available_rooms[$room->ID] = $room->post_title; // changed here
+			}
+		}
+	
+		echo json_encode($available_rooms);
+		wp_die(); // this is required to terminate immediately and return a proper response
+	}
+
 }
+
+$instance = new \AtollMatrix\Reservations();

@@ -7,9 +7,9 @@
 .theme-menu-style-compact-minimal-left .condition-without-compact-style {
 	display: none;
 }
-.mtheme_admin_sort_title { margin-left:10px; position: relative; top:-10px; color:#7d7d7d; text-shadow: -1px 1px #fff;}
-.mtheme_admin_sort_image { border:1px double #444; 		-moz-border-radius: 10px;	-webkit-border-radius: 10px; }
-.mtheme_admin_sort_categories { font-size:10px; margin-left:43px; font-weight:normal; float:right; color:#7d7d7d;}
+.atollmatrix_admin_sort_title { margin-left:10px; position: relative; top:-10px; color:#7d7d7d; text-shadow: -1px 1px #fff;}
+.atollmatrix_admin_sort_image { border:1px double #444; 		-moz-border-radius: 10px;	-webkit-border-radius: 10px; }
+.atollmatrix_admin_sort_categories { font-size:10px; margin-left:43px; font-weight:normal; float:right; color:#7d7d7d;}
 #featured-list { margin-top: 20px; }
  
 	#featured-list li {
@@ -66,8 +66,8 @@
  
 #loading-animation { display: none; }
 
-.mtheme_metabox_fieldname { font-family: "Open Sans" , Arial, Tahoma, Verdana, Sans; font-weight:bold; }
-.mtheme_metabox_description { font-style: italic; }
+.atollmatrix_metabox_fieldname { font-family: "Open Sans" , Arial, Tahoma, Verdana, Sans; font-weight:bold; }
+.atollmatrix_metabox_description { font-style: italic; }
 
 .mtheme-multi-thumbs li {
 	display:inline-block;
@@ -315,7 +315,7 @@
 	opacity:1;
 }
 .metabox-wrapper .button-shortcodegen-uploader,
-.metabox-wrapper #mtheme_images_upload {
+.metabox-wrapper #atollmatrix_images_upload {
 	border:1px solid #0073aa;
 	background:#0073aa;
 	width:120px;
@@ -330,7 +330,7 @@
 	border-radius: 4px;
 }
 .metabox-wrapper .button-shortcodegen-uploader:hover,
-.metabox-wrapper #mtheme_images_upload:hover {
+.metabox-wrapper #atollmatrix_images_upload:hover {
 	border:1px solid #000;
 	background:#000;
 	color:#fff;
