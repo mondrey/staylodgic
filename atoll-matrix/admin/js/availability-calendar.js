@@ -417,6 +417,9 @@
 			function handleDateChange(selectedDates, instance) {
 				const checkin = selectedDates[0];
 				let checkout;
+
+				let selectElement = $('#atollmatrix_room_id');
+				selectElement.prop('disabled', true);
 			  
 				if (selectedDates.length > 1) {
 				  checkout = selectedDates[1];
@@ -456,7 +459,6 @@
 				  };
 			  
 				  jQuery.post(ajaxurl, data, function(response) {
-					let selectElement = $('#atollmatrix_room_id');
 					let selectedValue = selectElement.val(); // Save the currently selected value
 
 					// store the value to guest number selectors
@@ -472,8 +474,11 @@
 						}
 					});
 				  
+					// Enable selectElement after the response is processed
+					selectElement.prop('disabled', false);
+
 					// Trigger update
-					selectElement.select2('open');
+					selectElement.trigger('change');
 				});
 				}
 			  }

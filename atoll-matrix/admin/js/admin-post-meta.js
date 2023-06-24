@@ -143,7 +143,9 @@ $('.bedlayout-wrap .add-bedlayout-box').click(function() {
     MetaBoxGoogleFontSelect( this, mainID );
   });
 
-	$('.chosen-select-metabox').select2();
+  if ($.fn.select2 && $('.chosen-select-metabox').length) {
+    $('.chosen-select-metabox').select2();
+  }
 
 	var sidebarlist;
 	sidebarlist = $('.page_style img.of-radio-img-selected').attr("data-value");

@@ -33,6 +33,9 @@ class AtollMatrix_Init {
 		require_once (plugin_dir_path( __FILE__ ) . 'includes/admin-property-data.php');
 		require_once (plugin_dir_path( __FILE__ ) . 'includes/admin-demo-data.php');
 
+		require_once (plugin_dir_path( __FILE__ ) . 'vendors/ics-parser/src/ICal/ICal.php');
+		require_once (plugin_dir_path( __FILE__ ) . 'vendors/ics-parser/src/ICal/Event.php');
+		require_once (plugin_dir_path( __FILE__ ) . 'includes/admin/class-batchprocessor.php');
 		require_once (plugin_dir_path( __FILE__ ) . 'includes/admin/class-availablitycalendarbase.php');
 		require_once (plugin_dir_path( __FILE__ ) . 'includes/admin/class-availablitycalendar.php');
 		require_once (plugin_dir_path( __FILE__ ) . 'includes/admin/class-rooms.php');
@@ -60,6 +63,9 @@ class AtollMatrix_Init {
 		// wp_register_script('chosen', plugin_dir_url( __FILE__ ) .'assets/js/chosen/chosen.jquery.js', array( 'jquery' ),null, true );
 		wp_register_script('select2', plugin_dir_url( __FILE__ ) .'assets/js/select2/js/select2.full.min.js', array( 'jquery' ),null, true );
 		wp_register_style('select2', plugin_dir_url( __FILE__ ) .'assets/js/select2/css/select2.min.css', array(), false, 'screen' );
+
+		wp_register_script('atollmatrix-parser', plugin_dir_url( __FILE__ ) .'admin/js/calendar-parser.js', array( 'jquery' ),null, true );
+		
 		wp_register_style('flatpickr', plugin_dir_url( __FILE__ ) .'assets/js/flatpickr/flatpickr.min.css', array(), '1.0', 'screen' );
 		wp_register_script('flatpickr', plugin_dir_url( __FILE__ ) .'assets/js/flatpickr/flatpickr.js', array( 'jquery' ),'1.0', true );
 		wp_register_script('admin-post-meta', plugin_dir_url( __FILE__ ) .'admin/js/admin-post-meta.js', array( 'jquery','wp-api','wp-data'),null, true );
@@ -87,12 +93,17 @@ class AtollMatrix_Init {
 
 				wp_enqueue_script( 'jquery-ui-slider' );
 			}
+			if ( $current_admin_screen->base == 'atoll-matrix_page_import-ical') {
+
+				wp_enqueue_script('atollmatrix-parser');
+				
+			}
 			wp_localize_script(
 				'jquery',
 				'atollmatrix_admin_vars',
 				array(
-					'post_id'          => get_the_ID(),
-					'nonce'            => wp_create_nonce( 'atollmatrix-nonce-metagallery' ),
+					'post_id' => get_the_ID(),
+					'nonce'   => wp_create_nonce( 'atollmatrix-nonce-metagallery' ),
 				)
 			);
 

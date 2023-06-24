@@ -66,6 +66,7 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 	}
 
 	public function get_Selected_Range_AvailabilityCalendar() {
+
 		// Check if the request has necessary data
 		if (!isset($_POST['start_date'], $_POST['end_date'])) {
 			wp_die('Missing parameters');
@@ -187,7 +188,6 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 			$start_date_display = '';
 			$guest_name = '';
 			$reservatoin_id = $reservation['id'];
-
 			$reservation_instance = new \AtollMatrix\Reservations( $date = false , $room_id = false, $reservation_id = $reservation['id'] );
 			$booking_number       = $reservation_instance->getBookingNumber();
 			$guest_name           = $reservation_instance->getReservationGuestName();
@@ -196,7 +196,7 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 			$checkout             = $reservation_instance->getCheckoutDate();
 			$reservation_status   = $reservation_instance->getReservationStatus();
 			$row++;
-	
+
 			if ( !array_key_exists($reservatoin_id, $checkout_list) ) {
 	
 				$newCheckin = $checkin; // Checkin date of the new value to be added
@@ -208,18 +208,20 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 					// Compare the new checkin date with existing checkout dates
 					if ($newCheckin <= $checkoutDate) {
 						$hasConflict = true;
+						// echo 'has conflict : ' . $newCheckin . ' with ' . $checkoutDate;
 						break; // Stop iterating if a conflict is found
 					}
 				}
 	
 				$givenCheckinDate = $checkin;
-				// Filter the array based on the check-in date and existing checkout dates
+				// Filter the array based on the check-in date and reservations has not checkedout
 				$filteredArray = array_filter($checkout_list, function($value) use ($givenCheckinDate) {
 					return $value['checkout'] > $givenCheckinDate;
 				});
+				
 				// Extract the room numbers from the filtered array
 				$roomNumbers = array_column($filteredArray, 'room');
-	
+				
 				// Check for missing room numbers
 				$missingNumber = false;
 				sort($roomNumbers);
@@ -232,7 +234,7 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 						}
 					}
 				}
-	
+				
 				// Output the result
 				if ($missingNumber) {
 					$room = $missingNumber;
@@ -256,15 +258,18 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 						$room = $recordCount - 1;
 					}
 				}
-	
+				
 	
 				if (empty($checkout_list)) {
 					$room = 1;
 				}
+				if ( $room < 0 ) {
+					$room = 1;
+				}
 	
-				$checkout_list[$reservatoin_id]['room']=$room;
-				$checkout_list[$reservatoin_id]['checkin']=$checkin;
-				$checkout_list[$reservatoin_id]['checkout']=$checkout;
+				$checkout_list[$reservatoin_id]['room']     = $room;
+				$checkout_list[$reservatoin_id]['checkin']  = $checkin;
+				$checkout_list[$reservatoin_id]['checkout'] = $checkout;
 			}
 	
 			if ( array_key_exists($reservatoin_id, $checkout_list) ) {
@@ -348,15 +353,15 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 		<table id="calendarTable" data-calstart="<?php echo $startDateString; ?>" data-calend="<?php echo $endDateString; ?>">
 			<tr class="calendarRow">
 				<?php
-				echo $this->displayOccupancy_TableDataBlock();
-				echo $this->displayAdrOccupancyRange_TableDataBlock( $dates );
+				echo self::displayOccupancy_TableDataBlock();
+				echo self::displayAdrOccupancyRange_TableDataBlock( $dates );
 				?>
 			</tr>
 			<tr class="calendarRow">
 				<td class="calendarCell rowHeader"></td>
 				<?php
 				$numDays = $this->setNumDays( $startDateString, $endDateString );
-				echo $this->displayDate_TableDataBlock( $dates, $numDays );
+				echo self::displayDate_TableDataBlock( $dates, $numDays );
 				?>
 			</tr>
 			<?php
@@ -372,7 +377,7 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 							<?php
 							$dateString = $date->format('Y-m-d');
 							$reservation_data = array();
-							
+
 							$reservation_instance = new \AtollMatrix\Reservations( $dateString, $roomId );
 							$reservation_data = $reservation_instance->isDate_Reserved();
 							$reserved_room_count = $reservation_instance->countReservationsForDay();
@@ -407,7 +412,7 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 							if ( $reservation_data ) {
 								$reservation_module = array();
 								//echo atollmatrix_generate_reserved_tab( $reservation_data, $checkout_list );
-								$reservation_module = $this->ReservedTab( $reservation_data, $checkout_list, $dateString, $this->startDate );
+								$reservation_module = $this->ReservedTab( $reservation_data, $checkout_list, $dateString, $startDateString );
 								echo $reservation_module['tab'];
 								$checkout_list = $reservation_module['checkout'];
 								//print_r( $checkout_list );

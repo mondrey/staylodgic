@@ -13,6 +13,7 @@ class Data {
 	public function create_Customer_From_Reservation_Post($reservation_post_id) {
 		// Retrieve the reservation post using the ID
 		$reservation_post = get_post($reservation_post_id);
+		$customer_post_id = false;
 	
 		if (!$reservation_post) {
 			// Handle error if reservation post not found
