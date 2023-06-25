@@ -1,5 +1,7 @@
 (function ($) {
 	$(document).ready(function () {
+		var fileSignature = [];
+		var originalProcessedEvents = [];
 		var processedEvents = []; // Array to store all processed events
 		var tbody; // Variable to store the reference to the tbody element
 
@@ -13,7 +15,7 @@
 			function processEventsBatch(events) {
 				var batchSize = 5; // Number of events to process in each batch
 				var eventsBatch = events.splice(0, batchSize); // Get the next batch of events
-
+				// console.log( 'The process: ' + originalProcessedEvents );
 				// Make an AJAX request to insert the reservation posts
 				$.ajax({
 					type: 'POST',
@@ -28,9 +30,10 @@
 						if (response.success) {
 							var successCount = response.data.successCount;
 							var skippedCount = response.data.skippedCount;
-							console.log(eventsBatch );
+
 							// Display the successfully inserted reservation posts
 							$.each(eventsBatch, function(index, event) {
+								fileSignature = event.SIGNATURE;
 								if (index < successCount) {
 									var row = $('<tr>');
 									row.append('<td>' + event.SIGNATURE + '</td>');
@@ -49,16 +52,21 @@
 							});
 
 							$('#result').append('<p>' + successCount + ' reservation posts inserted successfully.</p>');
+
+							// Check if there are more events to process
+							if (events.length > 0) {
+								// Process the next batch of events after a short delay (e.g., 1 second)
+								setTimeout(function() {
+									processEventsBatch(events);
+								}, 1000);
+							} else {
+								console.log('processedEvents');
+								console.log(fileSignature);
+								// No more events to process, trigger AJAX call to find future cancelled reservations
+								findFutureCancelledReservations(fileSignature);
+							}
 						} else {
 							$('#result').append('<p>Error inserting reservation posts.</p>');
-						}
-
-						// Check if there are more events to process
-						if (events.length > 0) {
-							// Process the next batch of events after a short delay (e.g., 1 second)
-							setTimeout(function() {
-								processEventsBatch(events);
-							}, 1000);
 						}
 					},
 					error: function(xhr, status, error) {
@@ -75,6 +83,44 @@
 				});
 			}
 
+			// Function to trigger AJAX call for finding future cancelled reservations
+			function findFutureCancelledReservations( signature ) {
+				$.ajax({
+					type: 'POST',
+					url: ajaxurl,
+					data: {
+						action: 'find_future_cancelled_reservations',
+						processedEvents: originalProcessedEvents, // Convert to JSON string
+						signature: signature // Pass the signature in the AJAX request
+					},
+					success: function(response) {
+
+
+						if (response.success) {
+						  var cancelledReservations = response.data.cancelledReservations;
+						  if (cancelledReservations.length > 0) {
+							// Display the list of future cancelled reservations
+							var resultList = $('<ul>');
+							$.each(cancelledReservations, function(index, bookingNumber) {
+							  var listItem = $('<li>').text(bookingNumber);
+							  resultList.append(listItem);
+							});
+							$('#result').append('<p>Future Cancelled Reservations:</p>').append(resultList);
+						  } else {
+							$('#result').append('<p>No future cancelled reservations found.</p>');
+						  }
+						} else {
+						  $('#result').append('<p>Error occurred while retrieving future cancelled reservations.</p>');
+						}
+					},
+					error: function(xhr, status, error) {
+						// Handle error
+						$('#result').append('<p>Error occurred while retrieving future cancelled reservations.</p>');
+					}
+				});
+			}
+
+
 			// Make an AJAX request to process the events
 			$.ajax({
 				type: 'POST',
@@ -86,6 +132,7 @@
 				},
 				success: function(response) {
 					if(response.success) {
+						originalProcessedEvents = JSON.parse(JSON.stringify(response.data.processed)); // Create a deep copy of the original processed events
 						processedEvents = response.data.processed;
 						var transientUsed = response.data.transient_used;
 						

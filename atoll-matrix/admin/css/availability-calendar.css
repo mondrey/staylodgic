@@ -344,6 +344,9 @@ ul.existing-customer {
 	float: right;
 	font-size: 8px;
 }
+#result table {
+	font-size: 8px;
+}
 #sync-form {
 	float: left;
 	width: 50%;

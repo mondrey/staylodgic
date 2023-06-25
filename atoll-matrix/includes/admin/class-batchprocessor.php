@@ -14,9 +14,88 @@ class EventBatchProcessor {
 		add_action('wp_ajax_save_ical_room_meta', array($this, 'save_ical_room_meta'));
 		add_action('wp_ajax_nopriv_save_ical_room_meta', array($this, 'save_ical_room_meta'));
 
+		add_action('wp_ajax_find_future_cancelled_reservations',  array($this, 'find_future_cancelled_reservations'));
+		add_action('wp_ajax_nopriv_find_future_cancelled_reservations',  array($this, 'find_future_cancelled_reservations'));
+
 	}
 
-	function insert_events_batch() {
+	public function find_future_cancelled_reservations() {
+
+
+		// error_log( print_r($_POST, true) );
+		// // Extract UIDs from processedEvents
+		$processedUIDs = array_map(function($event) {
+			return $event['UID'];
+		}, $_POST['processedEvents']);
+
+	// To Test - Remove records from the processedUIDs array as a test to see cancellations are reported
+	// if (!empty($processedUIDs)) {
+	// 	$removedUID = array_pop($processedUIDs);
+	// 	$removedUID = array_pop($processedUIDs);
+	// 	$removedUID = array_pop($processedUIDs);
+	// }
+
+	
+		// // Get the signature from the $_POST data
+		$signature = $_POST['signature'];
+	
+		// Get today's date
+		$today = date('Y-m-d');
+	
+		// Run a query for reservation posts
+		$args = array(
+			'post_type'  => 'reservations',
+			'meta_query' => array(
+				'relation' => 'AND',
+				array(
+					'key'   => 'atollmatrix_ics_signature',
+					'value' => $signature,
+				),
+				array(
+					'key'     => 'atollmatrix_checkin_date',
+					'value'   => $today,
+					'compare' => '>=',  // check-in date is today or in the future
+					'type'    => 'DATE'
+				)
+			)
+		);
+		$query = new \WP_Query($args);
+	
+		$potentiallyCancelled = [];
+	
+		// If the query has posts
+		if ($query->have_posts()) {
+			// For each post in the query
+			while ($query->have_posts()) {
+				// Move the internal pointer
+				$query->the_post();
+	
+				// Get the post meta
+				$booking_number = get_post_meta(get_the_ID(), 'atollmatrix_booking_number', true);
+	
+				// If the booking number doesn't exist in processed UIDs, it's potentially cancelled
+				if (!in_array($booking_number, $processedUIDs)) {
+					$potentiallyCancelled[] = $booking_number;
+				}
+			}
+	
+			// Restore original Post Data
+			wp_reset_postdata();
+		}
+	
+		// Prepare the response data
+		$responseData = array(
+			'success' => true,
+			'cancelledReservations' => $potentiallyCancelled,
+		);
+	
+		// Send the JSON response
+		wp_send_json_success($responseData);
+	}
+	
+	
+
+	public function insert_events_batch() {
 		// Get the processed events data from the request
 		$processedEvents = $_POST['processedEvents'];
 	
@@ -80,7 +159,7 @@ class EventBatchProcessor {
 		$responseData = array(
 			'success' => true,
 			'successCount' => $successCount,
-			'skippedCount' => $skippedCount,
+			'skippedCount' => $skippedCount
 		);
 	
 		// Send the JSON response
@@ -315,6 +394,7 @@ class EventBatchProcessor {
 				'processed' => $processedEvents,
 				'remaining' => count($events),
 				'transient_used' => $transient_used,
+				'processedBookingNumbers' => array_column($processedEvents, 'UID'),
 			),
 		);
 		wp_send_json($response);
