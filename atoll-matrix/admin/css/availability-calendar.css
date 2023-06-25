@@ -338,3 +338,13 @@ ul.existing-customer {
 	padding: 50px;
 	background: #f0f0f0;
 }
+
+#result {
+	width: 50%;
+	float: right;
+	font-size: 8px;
+}
+#sync-form {
+	float: left;
+	width: 50%;
+}

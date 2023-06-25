@@ -4,6 +4,14 @@ class AtollMatrix_Init {
 		$this->atollmatrix_actions();
 		$this->atollmatrix_load_custom_posts();
 		$this->atollmatrix_load_availablity_calendar();
+
+		add_filter( 'upload_mimes',  array($this,'allow_ics_upload') );
+	}
+
+	function allow_ics_upload( $mime_types ) {
+		// Add ICS file extension and mime type to the allowed list
+		$mime_types['ics'] = 'text/calendar';
+		return $mime_types;
 	}
 
 	private function atollmatrix_actions() {
@@ -76,6 +84,10 @@ class AtollMatrix_Init {
 		wp_enqueue_style( 'room-reservation-plugin-availability-styles', plugin_dir_url( __FILE__ ) .'admin/css/availability-calendar.css',false, 'screen' );
 		wp_enqueue_script( 'room-reservation-plugin-availability-scripts', plugin_dir_url( __FILE__ ) .'admin/js/availability-calendar.js', array( 'jquery' ),null, true );
 
+		wp_register_style( 'fontawesome-6', plugin_dir_url( __FILE__ ) .'assets/fonts/fontawesome-free-6.4.0-web/css/fontawesome.css',false, 'screen' );
+		wp_register_style( 'fontawesome-6-brands', plugin_dir_url( __FILE__ ) .'assets/fonts/fontawesome-free-6.4.0-web/css/all.css',false, 'screen' );
+		wp_register_style( 'fontawesome-6-solid', plugin_dir_url( __FILE__ ) .'assets/fonts/fontawesome-free-6.4.0-web/css/solid.css',false, 'screen' );
+
 		if ( function_exists('get_current_screen') ) {
 			$current_admin_screen = get_current_screen();
 		}
@@ -96,6 +108,9 @@ class AtollMatrix_Init {
 			if ( $current_admin_screen->base == 'atoll-matrix_page_import-ical') {
 
 				wp_enqueue_script('atollmatrix-parser');
+				wp_enqueue_style( 'fontawesome-6' );
+				wp_enqueue_style( 'fontawesome-6-brands' );
+				wp_enqueue_style( 'fontawesome-6-solid' );
 				
 			}
 			wp_localize_script(
@@ -117,9 +132,10 @@ class AtollMatrix_Init {
 				wp_enqueue_style( 'bootstrap');
 				wp_enqueue_script('bootstrap');
 
-				wp_enqueue_style( 'fontawesome-6', plugin_dir_url( __FILE__ ) .'assets/fonts/fontawesome-free-6.4.0-web/css/fontawesome.css',false, 'screen' );
-				wp_enqueue_style( 'fontawesome-6-brands', plugin_dir_url( __FILE__ ) .'assets/fonts/fontawesome-free-6.4.0-web/css/all.css',false, 'screen' );
-				wp_enqueue_style( 'fontawesome-6-solid', plugin_dir_url( __FILE__ ) .'assets/fonts/fontawesome-free-6.4.0-web/css/solid.css',false, 'screen' );
+				wp_enqueue_style( 'fontawesome-6' );
+				wp_enqueue_style( 'fontawesome-6-brands' );
+				wp_enqueue_style( 'fontawesome-6-solid' );
+		
 
 				wp_enqueue_media();
 

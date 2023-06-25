@@ -3,8 +3,11 @@
 		var processedEvents = []; // Array to store all processed events
 		var tbody; // Variable to store the reference to the tbody element
 
-		$('#process-events').on('click', function(e) {
+		$('.room_ical_links_wrapper').on('click', '.sync_button', function(e) {
 			e.preventDefault();
+
+			var roomID = $(this).data('room-id');
+			var icsURL = $(this).data('ics-url');
 
 			// Function to process and send events in batches
 			function processEventsBatch(events) {
@@ -17,16 +20,20 @@
 					url: ajaxurl,
 					data: {
 						action: 'insert_events_batch', // This should match the action hook in your functions.php file
+						room_id: roomID,
+						ics_url: icsURL,
 						processedEvents: eventsBatch // Pass the processed events batch to the server
 					},
 					success: function(response) {
 						if (response.success) {
 							var successCount = response.data.successCount;
+							var skippedCount = response.data.skippedCount;
 							console.log(eventsBatch );
 							// Display the successfully inserted reservation posts
 							$.each(eventsBatch, function(index, event) {
 								if (index < successCount) {
 									var row = $('<tr>');
+									row.append('<td>' + event.SIGNATURE + '</td>');
 									row.append('<td>' + event.CREATED + '</td>');
 									row.append('<td>' + event.DTEND + '</td>');
 									row.append('<td>' + event.DTSTART + '</td>');
@@ -35,6 +42,9 @@
 									row.append('<td>' + event.CHECKOUT + '</td>');
 									row.append('<td>' + event.UID + '</td>');
 									tbody.append(row);
+								} else if (index < successCount + skippedCount) {
+									// Display a message for skipped posts
+									$('#result').append('<p>Post with booking number ' + event.UID + ' already exists. Skipped.</p>');
 								}
 							});
 
@@ -70,12 +80,15 @@
 				type: 'POST',
 				url: ajaxurl,
 				data: {
-					action: 'process_event_batch' // This should match the action hook in your functions.php file
+					action: 'process_event_batch', // This should match the action hook in your functions.php file
+					room_id: roomID,
+					ics_url: icsURL
 				},
 				success: function(response) {
 					if(response.success) {
 						processedEvents = response.data.processed;
-
+						var transientUsed = response.data.transient_used;
+						
 						// Create the table
 						var table = $('<table>');
 						var thead = $('<thead>');
@@ -83,6 +96,7 @@
 
 						// Create table headers
 						var headerRow = $('<tr>');
+						headerRow.append('<th>SIGNATURE</th>');
 						headerRow.append('<th>CREATED</th>');
 						headerRow.append('<th>DTEND</th>');
 						headerRow.append('<th>DTSTART</th>');
@@ -99,6 +113,13 @@
 
 						$('#result').append('<p>Processing ' + processedEvents.length + ' events...</p>');
 
+						// Display a message in the #result element
+						if (transientUsed) {
+							$('#result').append('<p>Events were processed using the existing transient.</p>');
+						} else {
+							$('#result').append('<p>Events were processed by parsing the ICS file and storing them in the transient.</p>');
+						}
+
 						// Start processing events in batches
 						processEventsBatch(processedEvents);
 					} else {
@@ -110,6 +131,106 @@
 				}
 			});
 		});
+
+		$('.room_ical_links_wrapper .add_more_ical').click(function(){
+			var group = '<div class="room_ical_link_group">';
+			group += '<input type="url" name="room_ical_links_url[]">';
+			group += '<input type="text" name="room_ical_links_comment[]">';
+			group += '<button type="button" class="remove_ical_group">Remove</button>';
+			group += '</div>';
+		
+			$(this).before(group);
+		});
+
+		$('.room_ical_links_wrapper').on('click', '.unlock_button', function() {
+			var group = $(this).closest('.room_ical_link_group');
+			var inputs = group.find('input');
+		
+			if (inputs.prop('readonly')) {
+				inputs.prop('readonly', false);
+				$(this).html('<i class="fas fa-unlock"></i>');
+			} else {
+				inputs.prop('readonly', true);
+				$(this).html('<i class="fas fa-lock"></i>');
+			}
+		});
+		  
+		
+		// Event delegation is used here to make sure dynamically added buttons also get this event
+		$('.room_ical_links_wrapper').on('click', '.remove_ical_group', function(){
+			$(this).parent('.room_ical_link_group').remove();
+		});
+		
+		$('#save_all_ical_rooms').click(function(e){
+			e.preventDefault();
+			var room_ids = [];
+			var room_links_id = [];
+			var room_links_url = [];
+			var room_links_comment = [];
+		
+			// Get the nonce value from the form
+			var nonce = $('input[name="ical_form_nonce"]').val();
+			
+			$('.room_ical_links_wrapper').each(function(){
+				var room_id = $(this).data('room-id');
+				
+				room_ids.push(room_id);
+			
+				var room_links_group = $(this).find('.room_ical_link_group').map(function(){
+					var id = $(this).find('input[name="room_ical_links_id[]"]').val();
+					var url = $(this).find('input[name="room_ical_links_url[]"]').val();
+					var comment = $(this).find('input[name="room_ical_links_comment[]"]').val();
+					return {
+						id: id,
+						url: url,
+						comment: comment
+					};
+				}).get();
+			
+				// Filter out any URLs that are not valid.
+				room_links_group = room_links_group.filter(function(link) {
+					try {
+						new URL(link.url);
+						return true;
+					} catch (_) {
+						return false;  
+					}
+				});
+			
+				room_links_id.push(room_links_group.map(link => link.id));
+				room_links_url.push(room_links_group.map(link => link.url));
+				room_links_comment.push(room_links_group.map(link => link.comment));
+			});			
+		
+			$.ajax({
+				type: 'POST',
+				url: ajaxurl,
+				data: {
+					action: 'save_ical_room_meta',
+					room_ids: room_ids,
+					room_ical_links_id: room_links_id,
+					room_ical_links_url: room_links_url,
+					room_ical_links_comment: room_links_comment,
+					ical_form_nonce: nonce  // Send the nonce
+				}
+			}).done(function(response){
+				if(response.success) {
+					// The success message from server is in response.data
+					var successMessage = response.data;
+		
+					// Display the success message in your form. Here I'm just alerting it.
+					alert(successMessage);
+				} else {
+					// If for some reason success was false (like if wp_send_json_error() was called), you can handle that here
+					alert("There was an error");
+				}
+			}).fail(function(jqXHR, textStatus, errorThrown){
+				console.log("Request failed: " + textStatus);
+				console.log("Error: " + errorThrown);
+				console.log(jqXHR);
+			});
+		});		
+
 	});
 })(jQuery);
 

@@ -9,6 +9,11 @@ class EventBatchProcessor {
 		add_action('admin_menu', array($this, 'add_admin_menu')); // This now points to the add_admin_menu function
 		add_action('wp_ajax_insert_events_batch', array($this, 'insert_events_batch'));
 		add_action('wp_ajax_nopriv_insert_events_batch', array($this, 'insert_events_batch'));
+
+		// ...
+		add_action('wp_ajax_save_ical_room_meta', array($this, 'save_ical_room_meta'));
+		add_action('wp_ajax_nopriv_save_ical_room_meta', array($this, 'save_ical_room_meta'));
+
 	}
 
 	function insert_events_batch() {
@@ -16,6 +21,7 @@ class EventBatchProcessor {
 		$processedEvents = $_POST['processedEvents'];
 	
 		$successCount = 0; // Counter for successfully inserted posts
+		$skippedCount = 0; // Counter for skipped posts
 	
 		// Loop through the processed events and insert posts
 		foreach ($processedEvents as $event) {
@@ -24,12 +30,11 @@ class EventBatchProcessor {
 			$checkout = $event['DATA']['CHECKOUT'];
 			$name = $event['SUMMARY'];
 			$description = $event['DESCRIPTION'];
-			$ics_filepath = $event['ICSFILEPATH'];
-			$ics_filehash = $event['ICSFILEHASH'];
+			$signature = $event['SIGNATURE'];
 			
-			$room_id = '542';
+			$room_id = $_POST['room_id'];
+			$ics_url = $_POST['ics_url'];
 
-			// Check if a post with the same booking number already exists
 			$existing_post = get_posts(array(
 				'post_type' => 'reservations',
 				'meta_query' => array(
@@ -39,9 +44,10 @@ class EventBatchProcessor {
 					),
 				),
 			));
-
+	
 			// If an existing post is found, skip inserting a new post
 			if ($existing_post) {
+				$skippedCount++;
 				continue;
 			}
 	
@@ -57,8 +63,7 @@ class EventBatchProcessor {
 					'atollmatrix_booking_number' => $booking_number,  // Set the booking number as post meta
 					'atollmatrix_full_name' => $name,  // Customer name
 					'atollmatrix_reservation_notes' => $description,  // Description
-					'atollmatrix_ics_filepath' => $ics_filepath,  // ICS File path
-					'atollmatrix_ics_filehash' => $ics_filehash,  // ICS File hash
+					'atollmatrix_ics_signature' => $signature,  // ICS File hash
 					// add other meta data you need
 				),
 			);
@@ -75,11 +80,12 @@ class EventBatchProcessor {
 		$responseData = array(
 			'success' => true,
 			'successCount' => $successCount,
+			'skippedCount' => $skippedCount,
 		);
 	
 		// Send the JSON response
 		wp_send_json_success($responseData);
-	}	
+	}
 
 	public function add_admin_menu() {
 		add_menu_page(
@@ -107,13 +113,86 @@ class EventBatchProcessor {
 
 	public function display_admin_page() {
 		// The HTML content of your 'Import iCal' page goes here
-		echo "<h1>Import iCal</h1>";
-		echo "<form id='import-ical-form' method='post' enctype='multipart/form-data'>";
-		echo "<input type='file' name='ics_file' accept='.ics'>";
-		echo "<input type='submit' value='Upload'>";
-		echo "</form>";
-		echo "<input type='button' id='process-events' value='Process Events'>";
+		echo "<div class='main-sync-form-wrap'>";
 		echo "<div id='result'></div>";
+		echo "<div id='sync-form'>";
+		echo "<h1>Welcome to Atoll Matrix</h1>";
+	
+		echo "<form id='room_ical_form' method='post'>";
+		echo '<input type="hidden" name="ical_form_nonce" value="' . wp_create_nonce('ical_form_nonce') . '">';
+	
+		$rooms = Rooms::queryRooms();
+		foreach($rooms as $room) {
+			// Get meta
+			$room_ical_links = get_post_meta( $room->ID, 'room_ical_links', true );
+			echo '<div class="room_ical_links_wrapper" data-room-id="' . $room->ID . '">';
+			echo "<h2>" . $room->post_title . "</h2>";
+			if(is_array($room_ical_links) && count($room_ical_links) > 0){
+				foreach ($room_ical_links as $ical_link) {
+					echo '<div class="room_ical_link_group">';
+					echo '<input readonly type="text" name="room_ical_links_id[]" value="' . esc_attr($ical_link['ical_id']) . '">';
+					echo '<input readonly type="url" name="room_ical_links_url[]" value="' . esc_attr($ical_link['ical_url']) . '">';
+					echo '<input readonly type="text" name="room_ical_links_comment[]" value="' . esc_attr($ical_link['ical_comment']) . '">';
+					echo '<button type="button" class="unlock_button"><i class="fas fa-lock"></i></button>'; // Unlock button
+					echo '<button type="button" class="sync_button" data-ics-url="' . esc_attr($ical_link['ical_url']) . '" data-room-id="' . esc_attr($room->ID) . '">Sync</button>'; // Sync button
+					echo '</div>';
+				}
+			} else {
+				echo '<div class="room_ical_link_group">';
+				echo '<input type="url" name="room_ical_links_url[]">';
+				echo '<input type="text" name="room_ical_links_comment[]">';
+				echo '</div>';
+			}
+			echo '<button type="button" class="add_more_ical">Add more</button>';
+			echo '</div>';
+		}
+	
+		echo '<input type="submit" id="save_all_ical_rooms" value="Save">';
+		echo "</form>";
+		echo "</div>";
+		echo "</div>";
+	}
+	
+	public function save_ical_room_meta() {
+		// Perform nonce check and other validations as needed
+		// ...
+		if(!isset($_POST['ical_form_nonce']) || !wp_verify_nonce($_POST['ical_form_nonce'], 'ical_form_nonce')) {
+			wp_send_json_error('Invalid nonce');
+		}
+	
+		$room_ids = $_POST['room_ids'];
+		$room_links_id = $_POST['room_ical_links_id'];
+		$room_links_url = $_POST['room_ical_links_url'];
+		$room_links_comment = $_POST['room_ical_links_comment'];
+		error_log( print_r( $_POST , true ) );
+		for ($i = 0; $i < count($room_ids); $i++) {
+			$room_id = $room_ids[$i];
+			$room_links = array();
+		
+			// Ensure that $room_links_url[$i] is an array before trying to count its elements
+			if (isset($room_links_url[$i]) && is_array($room_links_url[$i])) {
+				for ($j = 0; $j < count($room_links_url[$i]); $j++) {
+					// Check if the URL is valid
+					if (filter_var($room_links_url[$i][$j], FILTER_VALIDATE_URL)) {
+						// Check if a unique ID is already assigned
+						if ( '' == $room_links_id[$i][$j] ) {
+							$room_links_id[$i][$j] = uniqid();
+						}
+						$room_links[] = array(
+							'ical_id' => sanitize_text_field($room_links_id[$i][$j]),
+							'ical_url' => sanitize_url($room_links_url[$i][$j]),
+							'ical_comment' => sanitize_text_field($room_links_comment[$i][$j]),
+						);
+					}
+				}
+			}
+		
+			// Update the meta field in the database.
+			update_post_meta($room_id, 'room_ical_links', $room_links);
+		}		
+	
+		// You can return a success response here
+		wp_send_json_success('Successfully stored');
 	}
 
 	public function process_event_batch() {
@@ -121,14 +200,32 @@ class EventBatchProcessor {
 		// Create a new instance of the parser.
 		$parser = new \ICal\ICal();
 
+		$room_id = $_POST['room_id'];
+		$ics_url = $_POST['ics_url'];
+
+		$file_contents = file_get_contents($ics_url);
+		// Check if the feed is empty or incomplete
+		if ($file_contents === false || empty($file_contents)) {
+			wp_send_json_error('Error: The iCal feed is empty or could not be retrieved.');
+			return;
+		}
+		if (strpos($file_contents, 'BEGIN:VCALENDAR') === false || strpos($file_contents, 'END:VCALENDAR') === false) {
+			wp_send_json_error('Error: The iCal feed is incomplete.');
+			return;
+		}
+
 		// Delete the transient if it exists.
-		delete_transient('unprocessed_events');
 		delete_transient('atollmatrix_unprocessed_reservation_import');
+		$transient_used = false;
+		if (false !== ($events = get_transient('atollmatrix_unprocessed_reservation_import'))) {
+			// The events are stored in the transient
+			$transient_used = true;
+		}
 
 		// Parse the ICS file and store the events in a transient.
-		$file_path = plugin_dir_path(__FILE__) . 'calendar.ics';
+		$file_path = $ics_url;
 		$file_md5Hash = md5($file_path);
-		$parser->initFile($file_path);
+		$parser->initString($file_contents);  // Change this line
 		$events = $parser->events();
 		set_transient('atollmatrix_unprocessed_reservation_import', $events, 12 * HOUR_IN_SECONDS); // store for 12 hours
 
@@ -144,8 +241,6 @@ class EventBatchProcessor {
 
 		if (!$events) {
 			// If not, parse the ICS file and store the events in a transient.
-			$file_path = plugin_dir_path(__FILE__) . 'calendar.ics';
-			$file_md5Hash = md5($file_path);
 			$parser->initFile($file_path);
 			$events = $parser->events();
 			set_transient('atollmatrix_unprocessed_reservation_import', $events, 12 * HOUR_IN_SECONDS); // store for 12 hours
@@ -195,6 +290,7 @@ class EventBatchProcessor {
 			$checkout_date = date('Y-m-d', strtotime($event->dtend));
 			
 			$processedEvent = [
+				'SIGNATURE' => $file_md5Hash,
 				'CREATED' => $event->created,
 				'DTEND' => $event->dtend,
 				'DTSTART' => $event->dtstart,
@@ -203,9 +299,7 @@ class EventBatchProcessor {
 				'CHECKOUT' => $checkout_date,
 				'UID' => $event->uid,
 				'DATA' => $eventData,
-				'DESCRIPTION' => $description,
-				'ICSFILEPATH' => $file_path,
-				'ICSFILEHASH' => $file_md5Hash
+				'DESCRIPTION' => $description
 			];
 			
 
@@ -215,10 +309,15 @@ class EventBatchProcessor {
 		}
 	
 		// Return the processed events and the number of remaining events.
-		wp_send_json_success([
-			'processed' => $processedEvents,
-			'remaining' => count($events),
-		]);
+		$response = array(
+			'success' => true,
+			'data' => array(
+				'processed' => $processedEvents,
+				'remaining' => count($events),
+				'transient_used' => $transient_used,
+			),
+		);
+		wp_send_json($response);
 	}
 }
 
