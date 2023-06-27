@@ -14,7 +14,7 @@ function atollmatrix_reservations_metadata() {
 			if ( isset($custom["fullscreen_type"][0]) ) { 
 				$slideshow_type=$custom["fullscreen_type"][0]; 
 			} else {
-			$slideshow_type="";
+				$slideshow_type = "";
 			}
 			if ($slideshow_type<>"Fullscreen-Video") {
 				$options_bgslideshow[$list->ID] = $list->post_title;
@@ -37,7 +37,7 @@ function atollmatrix_reservations_metadata() {
 	}
 
 	// Generate unique booking number
-	$booking_number = uniqid('booking-');
+	$booking_number = uniqid();
 
 	$reservations_box = array(
 		'id' => 'reservationsmeta-box',
@@ -197,6 +197,26 @@ function atollmatrix_reservations_metadata() {
 				'desc' => '',
 				'std' => '0'
 			),
+			array(
+				'name' => esc_html__('Customer','atollmatrix'),
+				'id' => 'atollmatrix_customer_choice',
+				'class' => 'customer_choice',
+				'type' => 'select',
+				'desc' => esc_html__('Customer choice','atollmatrix'),
+				'options' => array(
+					'new'  => esc_attr__('Create new from this post','atollmatrix'),
+					'existing' => esc_attr__('Choose existing','atollmatrix')
+					),
+			),
+			array(
+				'name' => esc_html__('Choose an existing customer','atollmatrix'),
+				'id' => 'atollmatrix_existing_customer',
+				'class' => 'metabox_existing_customers',
+				'type' => 'select',
+				'target' => 'existing_customers',
+				'desc' => esc_html__('Choose an existing customer.','atollmatrix'),
+				'options' => ''
+			),
 		)
 	);
 
@@ -223,6 +243,14 @@ function atollmatrix_reservations_metadata() {
 
 	
 	$reservation_instance = new \AtollMatrix\Reservations();
+	error_log( '=================' );
+	$the_reservation = $reservation_instance->haveCustomer( $reservation_id );
+	if ( ! $the_reservation ) {
+		error_log('not found ' . $reservation_id );
+	} else {
+		error_log('found ' . $reservation_id );
+	}
+	error_log( print_r( $the_reservation, true ) );
 	if ( ! $reservation_instance->haveCustomer( $reservation_id ) ) {
 		$reservations_box['fields'] = array_merge($reservations_box['fields'], $customer);
 	} else {
@@ -237,4 +265,3 @@ function atollmatrix_reservationsitem_metaoptions(){
 	$reservations_box = atollmatrix_reservations_metadata();
 	atollmatrix_generate_metaboxes($reservations_box,get_the_id());
 }
-?>

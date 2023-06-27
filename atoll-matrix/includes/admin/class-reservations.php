@@ -52,9 +52,11 @@ class Reservations {
 		return new \WP_Query($args);
 	}
 
-	public function getGuestforReservation( $booking_number ) {
+	public function getGuest_id_forReservation($booking_number) {
 		$args = array(
-			'post_type' => 'customers',
+			'post_type' => 'reservations',
+			'posts_per_page' => -1,
+			'post_status' => 'publish',
 			'meta_query' => array(
 				array(
 					'key' => 'atollmatrix_booking_number',
@@ -62,9 +64,47 @@ class Reservations {
 				),
 			),
 		);
-		return new \WP_Query($args);
+		$reservation_query = new \WP_Query($args);
+	
+		if ($reservation_query->have_posts()) {
+			$reservation = $reservation_query->posts[0];
+			$customer_id = get_post_meta($reservation->ID, 'atollmatrix_customer_id', true);
+			return $customer_id;
+		}
+	
+		return false; // Return an empty query if no guest found
 	}
 
+	public function getGuestforReservation($booking_number) {
+		$args = array(
+			'post_type' => 'reservations',
+			'posts_per_page' => -1,
+			'post_status' => 'publish',
+			'meta_query' => array(
+				array(
+					'key' => 'atollmatrix_booking_number',
+					'value' => $booking_number,
+				),
+			),
+		);
+		$reservation_query = new \WP_Query($args);
+	
+		if ($reservation_query->have_posts()) {
+			$reservation = $reservation_query->posts[0];
+			$customer_id = get_post_meta($reservation->ID, 'atollmatrix_customer_id', true);
+	
+			if (!empty($customer_id)) {
+				$customer_args = array(
+					'post_type' => 'customers',
+					'p' => $customer_id,
+					'post_status' => 'publish',
+				);
+				return new \WP_Query($customer_args);
+			}
+		}
+	
+		return new \WP_Query(); // Return an empty query if no guest found
+	}
 
 	public function getReservationsForRoom( $room_id = false ) {
 
@@ -196,8 +236,8 @@ class Reservations {
 		}
 	
 		// Query the customer post with the matching booking number
-		$customer_query = $this->getGuestforReservation( $booking_number );
-
+		$customer_query = $this->getGuestforReservation($booking_number);
+	
 		if ($customer_query->have_posts()) {
 			$customer_post = $customer_query->posts[0];
 			// Retrieve the guest's full name from the customer post meta
@@ -209,9 +249,10 @@ class Reservations {
 			return $guest_full_name;
 		}
 	
-		// No matching customer found
+		// No matching customer found and no name in reservation's metadata
 		return '';
 	}
+	
 
 	public function countReservationDays() {
 
@@ -347,19 +388,27 @@ class Reservations {
 		$customer_post_id = get_post_meta($reservation_id, 'atollmatrix_customer_id', true);
 	
 		if ($customer_post_id) {
-			// Retrieve the customer post using the ID
+			// Check if the customer post exists
 			$customer_post = get_post($customer_post_id);
-	
 			if ($customer_post) {
 				// Get the admin URL and create the link
 				$edit_link = admin_url('post.php?post=' . $customer_post_id . '&action=edit');
 				return '<a href="' . $edit_link . '">' . $customer_post->post_title . '</a>';
 			}
+		} else {
+			// If customer post doesn't exist, retrieve customer name from reservation post
+			$reservation_post = get_post($reservation_id);
+			if ($reservation_post) {
+				$customer_name = get_post_meta($reservation_id, 'atollmatrix_full_name', true);
+				if (!empty($customer_name)) {
+					return $customer_name;
+				}
+			}
 		}
 	
 		// Return null if no customer was found for the reservation
 		return null;
-	}
+	}	
 	
 	public static function getRoomNameForReservation( $reservation_id = false ) {
 
@@ -588,20 +637,9 @@ class Reservations {
 		}
 	
 		// Query the customer post with the matching booking number
-		$customer_query = $this->getGuestforReservation( $booking_number );
-	
-		if ( $customer_query->have_posts() ) {
-			$customer_post = $customer_query->posts[0];
-	
-			// Restore the original post data
-			wp_reset_postdata();
-	
-			// Return the ID of the customer post
-			return $customer_post->ID;
-		}
-	
+		$customer_id = $this->getGuest_id_forReservation( $booking_number );
 		// No matching customer found
-		return '';
+		return $customer_id;
 	}
 
 	public function haveCustomer( $reservation_id ) {
@@ -611,7 +649,7 @@ class Reservations {
 		}
 		// Get the booking number from the reservation post meta
 		$booking_number = get_post_meta($reservation_id, 'atollmatrix_booking_number', true);
-	
+
 		if (!$booking_number) {
 			// Handle error if booking number not found
 			return false;
@@ -619,7 +657,7 @@ class Reservations {
 	
 		// Query the customer post with the matching booking number
 		$customer_query = $this->getGuestforReservation( $booking_number );
-	
+		error_log( print_r( $customer_query, true) );
 		// Check if a customer post exists
 		if ($customer_query->have_posts()) {
 			// Restore the original post data
@@ -719,7 +757,6 @@ class Reservations {
 				'atollmatrix_state' => $state,
 				'atollmatrix_zip_code' => $zip_code,
 				'atollmatrix_country' => $country,
-				'atollmatrix_booking_number' => $booking_number,  // Set the booking number as post meta
 				// add other meta data you need
 			),
 		);

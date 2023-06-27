@@ -22,6 +22,8 @@ class AtollMatrix_Customer_Posts {
 	}
 	function customers_custom_columns($columns) {
 		global $post;
+		
+		$customer_post_id = $post->ID;
 		$custom = get_post_custom();
 		$image_url=wp_get_attachment_thumb_url( get_post_thumbnail_id( $post->ID ) );
 		
@@ -30,24 +32,19 @@ class AtollMatrix_Customer_Posts {
 		if ( isset ($full_image_url[0]) ) {
 			$full_image_url = $full_image_url[0];
 		}
+		
+		$customer_instance = new \AtollMatrix\Customers();
 
-		if (isset($custom['atollmatrix_booking_number'][0])) {
-			$booking_number=$custom['atollmatrix_booking_number'][0];
-		}
-
-		switch ($columns)
-		{
+		switch ($columns) {
 			case "customer_booking":
-				echo $booking_number;
+				echo $customer_instance->generateCustomerBookingNumbers( $customer_post_id );
 				break;
 			case "customer_reservations":
-				$reservation_array = \AtollMatrix\Reservations::getReservationIDsForCustomer( $post->ID );
+				$reservation_array = \AtollMatrix\Reservations::getReservationIDsForCustomer( $customer_post_id );
 				echo \AtollMatrix\Reservations::getEditLinksForReservations( $reservation_array );
 				break;
 			case "customer_rooms":
-				$room_ids = \AtollMatrix\Reservations::getRoomIDsForBooking_number( $booking_number );
-				$room_names_string = \AtollMatrix\Rooms::getRoomNames_FromIDs($room_ids);
-				echo $room_names_string;
+				echo $customer_instance->generateCustomerRooms( $customer_post_id );
 				break;
 			case "mcustomer_section":
 				echo get_the_term_list( get_the_id(), 'customersection', '', ', ','' );

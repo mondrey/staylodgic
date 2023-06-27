@@ -185,6 +185,18 @@ function atollmatrix_get_select_target_options($type) {
 				$list_options[0]="Rooms not found.";
 			}
 			break;
+		case 'existing_customers':
+			// Pull all the Featured into an array
+			$featured_pages = get_posts('post_type=customers&orderby=title&numberposts=-1&order=ASC');
+			$list_options['none'] = "Not Selected";
+			if ($featured_pages) {
+				foreach($featured_pages as $key => $list) {
+					$list_options[$list->ID] = $list->post_title . ' ' . $list->ID;
+				}
+			} else {
+				$list_options[0]="Customers not found.";
+			}
+			break;
 		case 'fullscreen_slideshow_posts':
 			// Pull all the Featured into an array
 			$featured_pages = get_posts('post_type=fullscreen&orderby=title&numberposts=-1&order=ASC');

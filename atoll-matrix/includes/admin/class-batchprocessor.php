@@ -21,6 +21,8 @@ class EventBatchProcessor {
 
 	public function find_future_cancelled_reservations() {
 
+		$processRoomID = $_POST['room_id'];
+		$processICS_ID = $_POST['ics_id'];
 
 		// error_log( print_r($_POST, true) );
 		// // Extract UIDs from processedEvents
@@ -87,7 +89,17 @@ class EventBatchProcessor {
 		$responseData = array(
 			'success' => true,
 			'cancelledReservations' => $potentiallyCancelled,
+			'icsID' => $processICS_ID,
 		);
+
+		$room_ical_data = get_post_meta($processRoomID, 'room_ical_data', true);
+
+		if (isset($room_ical_data[$processICS_ID])) {
+			$room_ical_data[$processICS_ID]['ical_synced'] = true;
+		}
+		
+		//error_log( print_r( $room_ical_data, true ) );
+		update_post_meta( $processRoomID, 'room_ical_data', $room_ical_data );
 	
 		// Send the JSON response
 		wp_send_json_success($responseData);
@@ -98,7 +110,12 @@ class EventBatchProcessor {
 	public function insert_events_batch() {
 		// Get the processed events data from the request
 		$processedEvents = $_POST['processedEvents'];
-	
+		$processRoomID = $_POST['room_id'];
+		$processICS_URL = $_POST['ics_url'];
+		$processICS_ID = $_POST['ics_id'];
+
+		$get_ICS_array = get_post_meta( get_the_ID(), 'room_ical_links', true );
+
 		$successCount = 0; // Counter for successfully inserted posts
 		$skippedCount = 0; // Counter for skipped posts
 	
@@ -143,6 +160,7 @@ class EventBatchProcessor {
 					'atollmatrix_full_name' => $name,  // Customer name
 					'atollmatrix_reservation_notes' => $description,  // Description
 					'atollmatrix_ics_signature' => $signature,  // ICS File hash
+					'atollmatrix_customer_choice' => 'new',  // ICS File hash
 					// add other meta data you need
 				),
 			);
@@ -159,7 +177,8 @@ class EventBatchProcessor {
 		$responseData = array(
 			'success' => true,
 			'successCount' => $successCount,
-			'skippedCount' => $skippedCount
+			'skippedCount' => $skippedCount,
+			'icsID' => $processICS_ID
 		);
 	
 		// Send the JSON response
@@ -203,17 +222,29 @@ class EventBatchProcessor {
 		$rooms = Rooms::queryRooms();
 		foreach($rooms as $room) {
 			// Get meta
-			$room_ical_links = get_post_meta( $room->ID, 'room_ical_links', true );
+			$room_ical_data = get_post_meta( $room->ID, 'room_ical_data', true );
+
 			echo '<div class="room_ical_links_wrapper" data-room-id="' . $room->ID . '">';
 			echo "<h2>" . $room->post_title . "</h2>";
-			if(is_array($room_ical_links) && count($room_ical_links) > 0){
-				foreach ($room_ical_links as $ical_link) {
+			if(is_array($room_ical_data) && count($room_ical_data) > 0){
+				foreach ($room_ical_data as $ical_id => $ical_link) {
+
+					if (isset($room_ical_data[$ical_id])) {
+						$ical_synced = $room_ical_data[$ical_id]['ical_synced'];
+					}
+
 					echo '<div class="room_ical_link_group">';
 					echo '<input readonly type="text" name="room_ical_links_id[]" value="' . esc_attr($ical_link['ical_id']) . '">';
 					echo '<input readonly type="url" name="room_ical_links_url[]" value="' . esc_attr($ical_link['ical_url']) . '">';
 					echo '<input readonly type="text" name="room_ical_links_comment[]" value="' . esc_attr($ical_link['ical_comment']) . '">';
 					echo '<button type="button" class="unlock_button"><i class="fas fa-lock"></i></button>'; // Unlock button
-					echo '<button type="button" class="sync_button" data-ics-url="' . esc_attr($ical_link['ical_url']) . '" data-room-id="' . esc_attr($room->ID) . '">Sync</button>'; // Sync button
+					
+					$button_save_mode = 'Active';
+					if ( !$ical_synced ) {
+						$button_save_mode = 'Sync to Activate';
+					}
+					
+					echo '<button type="button" class="sync_button" data-ics-id="' . esc_attr($ical_id) . '" data-ics-url="' . esc_attr($ical_link['ical_url']) . '" data-room-id="' . esc_attr($room->ID) . '">'.$button_save_mode.'</button>'; // Sync button
 					echo '</div>';
 				}
 			} else {
@@ -243,7 +274,9 @@ class EventBatchProcessor {
 		$room_links_id = $_POST['room_ical_links_id'];
 		$room_links_url = $_POST['room_ical_links_url'];
 		$room_links_comment = $_POST['room_ical_links_comment'];
-		error_log( print_r( $_POST , true ) );
+
+
+		//error_log( print_r( $_POST , true ) );
 		for ($i = 0; $i < count($room_ids); $i++) {
 			$room_id = $room_ids[$i];
 			$room_links = array();
@@ -251,14 +284,28 @@ class EventBatchProcessor {
 			// Ensure that $room_links_url[$i] is an array before trying to count its elements
 			if (isset($room_links_url[$i]) && is_array($room_links_url[$i])) {
 				for ($j = 0; $j < count($room_links_url[$i]); $j++) {
+
+					// Get the old room data
+					$old_room_links = get_post_meta($room_id, 'room_ical_data', true);
+
 					// Check if the URL is valid
 					if (filter_var($room_links_url[$i][$j], FILTER_VALIDATE_URL)) {
 						// Check if a unique ID is already assigned
 						if ( '' == $room_links_id[$i][$j] ) {
 							$room_links_id[$i][$j] = uniqid();
 						}
-						$room_links[] = array(
+
+						$file_md5Hash = md5( sanitize_url($room_links_url[$i][$j]) );
+
+						// Check if the URL is the same as before
+						$ical_synced = false;
+						if (isset($old_room_links[$file_md5Hash]) && $old_room_links[$file_md5Hash]['ical_url'] == $room_links_url[$i][$j]) {
+							$ical_synced = $old_room_links[$file_md5Hash]['ical_synced'];
+						}
+
+						$room_links[$file_md5Hash] = array(
 							'ical_id' => sanitize_text_field($room_links_id[$i][$j]),
+							'ical_synced' => $ical_synced,
 							'ical_url' => sanitize_url($room_links_url[$i][$j]),
 							'ical_comment' => sanitize_text_field($room_links_comment[$i][$j]),
 						);
@@ -267,7 +314,7 @@ class EventBatchProcessor {
 			}
 		
 			// Update the meta field in the database.
-			update_post_meta($room_id, 'room_ical_links', $room_links);
+			update_post_meta($room_id, 'room_ical_data', $room_links);
 		}		
 	
 		// You can return a success response here

@@ -15,6 +15,16 @@ jQuery(document).ready(function($) {
 		}
 	});
 
+	$('#atollmatrix_customer_choice').on('change', function() {
+		var selectedValue = $(this).val();
+		if(selectedValue == 'existing') {
+			$('.metabox_existing_customers').show();
+		} else {
+			$('.metabox_existing_customers').hide();
+		}
+	});
+	$('#atollmatrix_customer_choice').trigger('change');
+
 	// Attach click event listener to each switch-toggle
 	$('.switch-toggle').on('click', function() {
 		var hiddenInput = $(this).find('.meta-switch-toggle');

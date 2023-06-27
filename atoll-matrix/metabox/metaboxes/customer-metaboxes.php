@@ -62,15 +62,6 @@ function atollmatrix_customers_metadata() {
 				'std' => ''
 			),
 			array(
-				'name' => esc_html__('Booking Name','atollmatrix'),
-				'id' => 'atollmatrix_booking_number',
-				'type' => 'text',
-				'class' => 'textsmall',
-				'heading' => 'subhead',
-				'desc' => '',
-				'std' => ''
-			),
-			array(
 				'name' => esc_html__('Full Name','atollmatrix'),
 				'id' => 'atollmatrix_full_name',
 				'type' => 'text',

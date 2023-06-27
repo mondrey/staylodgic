@@ -8,8 +8,11 @@
 		$('.room_ical_links_wrapper').on('click', '.sync_button', function(e) {
 			e.preventDefault();
 
+			$(".sync_button").prop("disabled", true);
+
 			var roomID = $(this).data('room-id');
 			var icsURL = $(this).data('ics-url');
+			var icsID = $(this).data('ics-id');
 
 			// Function to process and send events in batches
 			function processEventsBatch(events) {
@@ -24,12 +27,14 @@
 						action: 'insert_events_batch', // This should match the action hook in your functions.php file
 						room_id: roomID,
 						ics_url: icsURL,
+						ics_id: icsID,
 						processedEvents: eventsBatch // Pass the processed events batch to the server
 					},
 					success: function(response) {
 						if (response.success) {
 							var successCount = response.data.successCount;
 							var skippedCount = response.data.skippedCount;
+							var skippedCount = response.data.icsID;
 
 							// Display the successfully inserted reservation posts
 							$.each(eventsBatch, function(index, event) {
@@ -91,7 +96,9 @@
 					data: {
 						action: 'find_future_cancelled_reservations',
 						processedEvents: originalProcessedEvents, // Convert to JSON string
-						signature: signature // Pass the signature in the AJAX request
+						signature: signature, // Pass the signature in the AJAX request
+						room_id: roomID,
+						ics_id: icsID,
 					},
 					success: function(response) {
 
@@ -109,6 +116,10 @@
 						  } else {
 							$('#result').append('<p>No future cancelled reservations found.</p>');
 						  }
+
+						  $("button.sync_button[data-ics-id='" + response.data.icsID + "']").text('Active');
+						  $(".sync_button").prop("disabled", false);
+
 						} else {
 						  $('#result').append('<p>Error occurred while retrieving future cancelled reservations.</p>');
 						}
@@ -263,10 +274,9 @@
 			}).done(function(response){
 				if(response.success) {
 					// The success message from server is in response.data
-					var successMessage = response.data;
-		
+					// var successMessage = response.data;
 					// Display the success message in your form. Here I'm just alerting it.
-					alert(successMessage);
+					location.reload();
 				} else {
 					// If for some reason success was false (like if wp_send_json_error() was called), you can handle that here
 					alert("There was an error");

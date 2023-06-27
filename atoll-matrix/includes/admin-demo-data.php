@@ -43,7 +43,7 @@ function atollmatrix_populate_demo_bookings() {
 			// Pick customer data
 			$customer = $customer_data[$i];
 			// Generate a unique booking number
-			$booking_number = uniqid('booking-');
+			$booking_number = uniqid();
 
 			// Create customer post
 			$customer_post_data = array(

@@ -30,31 +30,32 @@ class Data {
 		$zip_code = get_post_meta($reservation_post_id, 'atollmatrix_zip_code', true);
 		$country = get_post_meta($reservation_post_id, 'atollmatrix_country', true);
 		$booking_number = get_post_meta($reservation_post_id, 'atollmatrix_booking_number', true);
-	
-		error_log("Customer saving: " . $reservation_post_id . '||'. $full_name);
-	
-		if ( '' !== $full_name ) {
-			// Create customer post
-			$customer_post_data = array(
-				'post_type'     => 'customers',  // Your custom post type for customers
-				'post_title'    => $full_name,   // Set the customer's full name as post title
-				'post_status'   => 'publish',    // The status you want to give new posts
-				'meta_input'    => array(
-					'atollmatrix_full_name' => $full_name,
-					'atollmatrix_email_address' => $email_address,
-					'atollmatrix_phone_number' => $phone_number,
-					'atollmatrix_street_address' => $street_address,
-					'atollmatrix_city' => $city,
-					'atollmatrix_state' => $state,
-					'atollmatrix_zip_code' => $zip_code,
-					'atollmatrix_country' => $country,
-					'atollmatrix_booking_number' => $booking_number,  // Set the booking number as post meta
-					// add other meta data you need
-				),
-			);
-	
-			// Insert the post
-			$customer_post_id = wp_insert_post($customer_post_data);
+		$customer_choice = get_post_meta($reservation_post_id, 'atollmatrix_customer_choice', true);
+
+		if ( 'existing' !== $customer_choice ) {
+			if ( '' !== $full_name ) {
+				error_log("Customer saving: " . $reservation_post_id . '||'. $full_name);
+				// Create customer post
+				$customer_post_data = array(
+					'post_type'     => 'customers',  // Your custom post type for customers
+					'post_title'    => $full_name,   // Set the customer's full name as post title
+					'post_status'   => 'publish',    // The status you want to give new posts
+					'meta_input'    => array(
+						'atollmatrix_full_name' => $full_name,
+						'atollmatrix_email_address' => $email_address,
+						'atollmatrix_phone_number' => $phone_number,
+						'atollmatrix_street_address' => $street_address,
+						'atollmatrix_city' => $city,
+						'atollmatrix_state' => $state,
+						'atollmatrix_zip_code' => $zip_code,
+						'atollmatrix_country' => $country,
+						// add other meta data you need
+					),
+				);
+		
+				// Insert the post
+				$customer_post_id = wp_insert_post($customer_post_data);
+			}
 		}
 	
 		if (!$customer_post_id) {
@@ -146,6 +147,9 @@ class Data {
 		$checkin_date = get_post_meta($post_id, 'atollmatrix_checkin_date', true);
 		$checkout_date = get_post_meta($post_id, 'atollmatrix_checkout_date', true);
 		$reservation_status = get_post_meta($post_id, 'atollmatrix_reservation_status', true);
+		$customer_choice = get_post_meta($post_id, 'atollmatrix_customer_choice', true);
+		$booking_number = get_post_meta($post_id, 'atollmatrix_booking_number', true);
+		$existing_customer = get_post_meta($post_id, 'atollmatrix_existing_customer', true);
 
 		$full_name = get_post_meta($post_id, 'atollmatrix_full_name', true);
 
@@ -158,13 +162,30 @@ class Data {
 		}
 
 		// Check if customer post exists
+		error_log("customer_choice: " . $customer_choice . '||'. $booking_number );
 		$customer_id = get_post_meta($post_id, 'atollmatrix_customer_id', true);
 		error_log("checking customer post: " . $customer_id . '||'. $post_id . '||' . $full_name );
 
+		if ( \AtollMatrix\Common::isCustomer_valid_post( $existing_customer ) ) {
+			if ( 'existing' == $customer_choice ) {
+				
+				error_log("Updating: " . $existing_customer . '||'. $booking_number );
+				update_post_meta($post_id, 'atollmatrix_customer_id', $existing_customer);
+
+			}
+		}
+
+		// Check if the post is being trashed
+		if ($post->post_status === 'trash') {
+			return; // Exit the function if the post is being trashed
+		}
+
 		if ( ! \AtollMatrix\Common::isCustomer_valid_post( $customer_id ) ) {
-			error_log("Customer does not exist: " . $customer_id . '||'. $full_name);
-			// Create new customer from the filled inputs in reservation
-			self::create_Customer_From_Reservation_Post($post_id);
+			if ( 'existing' !== $customer_choice ) {
+				error_log("Customer does not exist: " . $customer_id . '||'. $full_name);
+				// Create new customer from the filled inputs in reservation
+				self::create_Customer_From_Reservation_Post($post_id);
+			}
 		}
 	}
 

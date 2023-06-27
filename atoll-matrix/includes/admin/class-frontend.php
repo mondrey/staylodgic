@@ -12,7 +12,7 @@ class Frontend {
 	
 	public function hotelBooking_SearchForm() {
 		// Generate unique booking number
-		$booking_number = uniqid('booking-');
+		$booking_number = uniqid();
 		set_transient( $booking_number, '1', 20 * MINUTE_IN_SECONDS );
 		ob_start();
 		?>
