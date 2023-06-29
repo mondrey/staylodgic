@@ -177,6 +177,7 @@ class AtollMatrix_Init {
 		wp_enqueue_style('flatpickr');
 		wp_enqueue_script('flatpickr');
 		wp_enqueue_style('flatpickr-extra');
+		wp_enqueue_script('underscore');
 		
 	}
 
