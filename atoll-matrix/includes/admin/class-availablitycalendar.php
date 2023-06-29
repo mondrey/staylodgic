@@ -11,6 +11,35 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 
 		add_action( 'admin_menu', array($this, 'room_Reservation_Plugin_Add_Admin_Menu' ));
 
+		// Register the AJAX action
+		add_action('wp_ajax_fetchOccupancy_Percentage_For_Calendar_Range', array($this, 'fetchOccupancy_Percentage_For_Calendar_Range'));
+		add_action('wp_ajax_nopriv_fetchOccupancy_Percentage_For_Calendar_Range', array($this, 'fetchOccupancy_Percentage_For_Calendar_Range'));
+
+	}
+
+	public function fetchOccupancy_Percentage_For_Calendar_Range() {
+		// Perform necessary security checks or validation here
+
+		// Retrieve start and end dates from the AJAX request
+		$startDate = sanitize_text_field($_POST['start']);
+		$endDate = sanitize_text_field($_POST['end']);
+
+		// error_log( print_r( $startDate, true ));
+		// error_log( print_r( $endDate, true ));
+		$dates = \AtollMatrix\Common::getDates_Between( $startDate, $endDate );
+
+		$occupancy_data = array();
+
+		foreach ($dates as $date) :
+			$occupancydate = $date;
+			$occupancyPercentage = $this->calculateOccupancyForDate( $occupancydate );
+			$occupancy_data[$occupancydate] = $occupancyPercentage;
+		endforeach;
+		// error_log( print_r( $startDate, true ));
+		// error_log( print_r( $endDate, true ));
+		// error_log( print_r( $occupancy_data, true ));
+		// Send occupancy data as JSON response
+		wp_send_json($occupancy_data);
 	}
 
 	// Add the Availability menu item to the admin menu

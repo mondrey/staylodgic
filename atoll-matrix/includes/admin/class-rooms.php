@@ -124,16 +124,16 @@ class Rooms {
 		$rates_for_room_daterange = array();
 	
 		foreach ($daterange as $date) {
-			error_log( 'This is the room ' . $roomId . 'for ' . $date->format("Y-m-d"));
+			error_log( 'This is the room ' . $roomId . ' for ' . $date->format("Y-m-d"));
 			// get individual rates
 			$roomrate_instance = new \AtollMatrix\Rates();
 			$rate = $roomrate_instance->getRoomRateByDate($roomId, $date->format("Y-m-d"));
 			$rates_daterange[$date->format("Y-m-d")] = $rate;
 		}
 		$rates_daterange = array(
-			[$roomId] => $rates_daterange
+			$roomId => $rates_daterange
 		);
-		
+		error_log( print_r( $rates_daterange, true) );
 		// rates for the daterange
 		return $rates_daterange;
 	}
