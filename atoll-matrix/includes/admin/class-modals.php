@@ -24,7 +24,7 @@ class Modals {
 							<label for="room">Room:</label>
 							<select class="form-select" name="room">
 								<?php
-								$featured_pages = get_posts('post_type=room&orderby=title&numberposts=-1&order=ASC');
+								$featured_pages = get_posts('post_type=atmx_room&orderby=title&numberposts=-1&order=ASC');
 								$list_options['none'] = "Not Selected";
 								if ($featured_pages) {
 									foreach($featured_pages as $key => $list) {
@@ -73,7 +73,7 @@ class Modals {
 							<label for="room">Room:</label>
 							<select class="form-select" name="room">
 								<?php
-								$featured_pages = get_posts('post_type=room&orderby=title&numberposts=-1&order=ASC');
+								$featured_pages = get_posts('post_type=atmx_room&orderby=title&numberposts=-1&order=ASC');
 								$list_options['none'] = "Not Selected";
 								if ($featured_pages) {
 									foreach($featured_pages as $key => $list) {

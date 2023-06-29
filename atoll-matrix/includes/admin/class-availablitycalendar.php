@@ -19,7 +19,7 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 			'Availability',
 			'Availability',
 			'manage_options',
-			'room-availability',
+			'atmx-availability',
 			array( $this, 'room_Reservation_Plugin_Display_Availability_Calendar' ),
 			'dashicons-calendar-alt',
 			20

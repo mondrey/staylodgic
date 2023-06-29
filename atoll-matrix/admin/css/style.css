@@ -664,6 +664,7 @@
 .movethis #text-box:hover {
 	cursor:grab;
 }
+.remove-taxlayout,
 .remove-bedlayout,
 .remove-box {
     margin-left: 10px;
@@ -674,11 +675,13 @@
 	     -o-transition: color 0.1s ease-in-out;
 	        transition: color 0.1s ease-in-out;
 }
+.remove-taxlayout:hover,
 .remove-bedlayout:hover,
 .remove-box:hover {
 	cursor: pointer;
 	color: #000;
 }
+.add-taxlayout-box-notice,
 .add-bedlayout-box-notice,
 .add-box-notice {
     background: #fdffb3;
@@ -699,6 +702,7 @@
 .movethis-wrap input {
 	width: 30%;
 }
+.add-taxlayout-box,
 .add-bedlayout-box,
 .movethis-wrap .add-box {
     background: #0073aa;
@@ -708,6 +712,7 @@
     padding: 5px 10px;
     text-decoration: none;
 }
+.add-taxlayout-box[disabled],
 .add-bedlayout-box[disabled],
 .movethis-wrap .add-box[disabled] {
     background: #f7f7f7;
@@ -717,14 +722,17 @@
     padding: 5px 10px;
     text-decoration: none;
 }
+.add-taxlayout-box:hover,
 .add-bedlayout-box:hover,
 .movethis-wrap .add-box:hover {
     background: #008ec2;
     cursor: pointer;
 }
+#taxlayout-box,
 #bedlayout-box {
 	margin-bottom: 5px;
 }
+.add-taxlayout-box[disabled]:hover,
 .add-bedlayout-box[disabled]:hover,
 .movethis-wrap .add-box[disabled]:hover {
 	background: #f7f7f7;

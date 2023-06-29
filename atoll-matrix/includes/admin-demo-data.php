@@ -47,7 +47,7 @@ function atollmatrix_populate_demo_bookings() {
 
 			// Create customer post
 			$customer_post_data = array(
-				'post_type'     => 'customers',
+				'post_type'     => 'atmx_customers',
 				'post_title'    => $customer['name'],
 				'post_status'   => 'publish',
 				'meta_input'    => array(
@@ -69,7 +69,7 @@ function atollmatrix_populate_demo_bookings() {
 
 			// Create reservation post
 			$post_data = array(
-				'post_type'     => 'reservations',
+				'post_type'     => 'atmx_reservations',
 				'post_title'    => $booking_number,
 				'post_status'   => 'publish',
 				'meta_input'    => array(

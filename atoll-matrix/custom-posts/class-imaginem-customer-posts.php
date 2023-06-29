@@ -5,12 +5,12 @@ class AtollMatrix_Customer_Posts {
 	{
 		add_action('init', array( $this, 'init'));
 
-		add_filter("manage_edit-customers_columns", array( $this, 'customers_edit_columns'));
-		add_filter('manage_posts_custom_column' , array( $this, 'customers_custom_columns'));
+		add_filter("manage_edit-atmx_customers_columns", array( $this, 'atmx_customers_edit_columns'));
+		add_filter('manage_posts_custom_column' , array( $this, 'atmx_customers_custom_columns'));
 	}
 
 	// Kbase lister
-	function customers_edit_columns($columns){
+	function atmx_customers_edit_columns($columns){
 		$new_columns = array(
 			"customer_booking" => __('Booking','mthemelocal'),
 			"customer_reservations" => __('Reservations','mthemelocal'),
@@ -20,7 +20,7 @@ class AtollMatrix_Customer_Posts {
 	
 		return array_merge($columns, $new_columns);
 	}
-	function customers_custom_columns($columns) {
+	function atmx_customers_custom_columns($columns) {
 		global $post;
 		
 		$customer_post_id = $post->ID;
@@ -47,7 +47,7 @@ class AtollMatrix_Customer_Posts {
 				echo $customer_instance->generateCustomerRooms( $customer_post_id );
 				break;
 			case "mcustomer_section":
-				echo get_the_term_list( get_the_id(), 'customersection', '', ', ','' );
+				echo get_the_term_list( get_the_id(), 'atmx_customercat', '', ', ','' );
 				break;
 		} 
 	}
@@ -100,11 +100,11 @@ class AtollMatrix_Customer_Posts {
 			'supports' => array('title', 'author', 'thumbnail')//Boxes will be shown in the panel
 		);
 	
-		register_post_type( 'customers' , $args );
+		register_post_type( 'atmx_customers' , $args );
 		/*
 		* Add Taxonomy for kbase 'Type'
 		*/
-		register_taxonomy( 'customersection', array( 'customers' ),
+		register_taxonomy( 'atmx_customercat', array( 'atmx_customers' ),
 			array(
 				'labels' => array(
 					'name' => 'Sections',

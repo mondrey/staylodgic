@@ -21,6 +21,7 @@ class AtollMatrix_Init {
 		add_action( 'admin_init', array( $this, 'atollmatrix_reservationsitemmetabox_init' ) );
 		add_action( 'admin_init', array( $this, 'atollmatrix_customersitemmetabox_init' ) );
 		add_action( 'admin_init', array( $this, 'atollmatrix_roomitemmetabox_init' ) );
+		add_action( 'admin_init', array( $this, 'atollmatrix_paymentitemmetabox_init' ) );
 
 		add_action( 'init', array( $this, 'atollmatrix_load_textdomain' ) );
 		add_action( 'init', array( $this, 'atollmatrix_load_metaboxes' ) );
@@ -35,6 +36,7 @@ class AtollMatrix_Init {
 		require_once (plugin_dir_path( __FILE__ ) . '/custom-posts/class-imaginem-reservation-posts.php');
 		require_once (plugin_dir_path( __FILE__ ) . '/custom-posts/class-imaginem-customer-posts.php');
 		require_once (plugin_dir_path( __FILE__ ) . '/custom-posts/class-imaginem-room-posts.php');
+		require_once (plugin_dir_path( __FILE__ ) . '/custom-posts/class-imaginem-payment-posts.php');
 	}
 
 	public function atollmatrix_load_availablity_calendar() {
@@ -64,6 +66,7 @@ class AtollMatrix_Init {
 		require_once (plugin_dir_path( __FILE__ ) . '/metabox/metaboxes/reservation-metaboxes.php');
 		require_once (plugin_dir_path( __FILE__ ) . '/metabox/metaboxes/customer-metaboxes.php');
 		require_once (plugin_dir_path( __FILE__ ) . '/metabox/metaboxes/room-metaboxes.php');
+		require_once (plugin_dir_path( __FILE__ ) . '/metabox/metaboxes/payment-metaboxes.php');
 	}
 
 	public function atollmatrix_load_admin_styles() {
@@ -122,7 +125,7 @@ class AtollMatrix_Init {
 				)
 			);
 
-			if ( $current_admin_screen->base == 'toplevel_page_room-availability' ) {
+			if ( $current_admin_screen->base == 'toplevel_page_atmx-availability' ) {
 				
 				wp_enqueue_script( 'velocity', plugin_dir_url( __FILE__ ) .'assets/js/velocity.min.js', array( 'jquery' ),null, true );
 				wp_enqueue_script( 'velocity-ui', plugin_dir_url( __FILE__ ) .'assets/js/velocity.ui.js', array( 'jquery' ),null, true );
@@ -172,18 +175,22 @@ class AtollMatrix_Init {
 		
 	}
 
-		// Events Metabox
-		public function atollmatrix_reservationsitemmetabox_init(){
-			add_meta_box('reservationsInfo-meta', esc_html__('Reservation Options','imaginem-blocks-ii'), 'atollmatrix_reservationsitem_metaoptions', 'reservations', 'normal', 'low');
-		}
-		// Events Metabox
-		public function atollmatrix_customersitemmetabox_init(){
-			add_meta_box('customersInfo-meta', esc_html__('Customer Options','imaginem-blocks-ii'), 'atollmatrix_customersitem_metaoptions', 'customers', 'normal', 'low');
-		}
-		// Portfolio Metabox
-		public function atollmatrix_roomitemmetabox_init(){
-			add_meta_box("room-meta", esc_html__("Room Options","imaginem-blocks"), "atollmatrix_roomitem_metaoptions", "room", "normal", "low");
-		}
+	// Reservations Metabox
+	public function atollmatrix_reservationsitemmetabox_init(){
+		add_meta_box('reservationsInfo-meta', esc_html__('Reservation Options','imaginem-blocks-ii'), 'atollmatrix_reservationsitem_metaoptions', 'atmx_reservations', 'normal', 'low');
+	}
+	// Customer Metabox
+	public function atollmatrix_customersitemmetabox_init(){
+		add_meta_box('customersInfo-meta', esc_html__('Customer Options','imaginem-blocks-ii'), 'atollmatrix_customersitem_metaoptions', 'atmx_customers', 'normal', 'low');
+	}
+	// Room Metabox
+	public function atollmatrix_roomitemmetabox_init(){
+		add_meta_box("room-meta", esc_html__("Room Options","imaginem-blocks"), "atollmatrix_roomitem_metaoptions", "atmx_room", "normal", "low");
+	}
+	// Payment Metabox
+	public function atollmatrix_paymentitemmetabox_init(){
+		add_meta_box("payment-meta", esc_html__("Payment Options","imaginem-blocks"), "atollmatrix_paymentitem_metaoptions", "atmx_payments", "normal", "low");
+	}
 
 }
 

@@ -5,12 +5,12 @@ class atollmatrix_Reservation_Posts {
 	{	
 		add_action('init', array( $this, 'init'));
 
-		add_filter("manage_edit-reservations_columns", array( $this, 'reservations_edit_columns'));
-		add_filter('manage_posts_custom_column' , array( $this, 'reservations_custom_columns'));
+		add_filter("manage_edit-atmx_reservations_columns", array( $this, 'atmx_reservations_edit_columns'));
+		add_filter('manage_posts_custom_column' , array( $this, 'atmx_reservations_custom_columns'));
 	}
 
 	// Kbase lister
-	function reservations_edit_columns($columns){
+	function atmx_reservations_edit_columns($columns){
 		$new_columns = array(
 			"mreservation_section" => __('Section','mthemelocal'),
 			"reservation_customer" => __('Customer','mthemelocal'),
@@ -19,7 +19,7 @@ class atollmatrix_Reservation_Posts {
 	
 		return array_merge($columns, $new_columns);
 	}
-	function reservations_custom_columns($columns) {
+	function atmx_reservations_custom_columns($columns) {
 		global $post;
 		$custom = get_post_custom();
 		$image_url=wp_get_attachment_thumb_url( get_post_thumbnail_id( $post->ID ) );
@@ -41,9 +41,9 @@ class atollmatrix_Reservation_Posts {
 				echo $room_title;
 				break;
 			case "mreservation_section":
-				echo get_the_term_list( get_the_id(), 'reservationsection', '', ', ','' );
+				echo get_the_term_list( get_the_id(), 'atmx_rescat', '', ', ','' );
 				break;
-		} 
+		}
 	}
 	/*
 	* kbase Admin columns
@@ -94,11 +94,11 @@ class atollmatrix_Reservation_Posts {
 			'supports' => array('title', 'author', 'thumbnail')//Boxes will be shown in the panel
 		);
 	
-		register_post_type( 'reservations' , $args );
+		register_post_type( 'atmx_reservations' , $args );
 		/*
 		* Add Taxonomy for kbase 'Type'
 		*/
-		register_taxonomy( 'reservationsection', array( 'reservations' ),
+		register_taxonomy( 'atmx_rescat', array( 'atmx_reservations' ),
 			array(
 				'labels' => array(
 					'name' => 'Sections',

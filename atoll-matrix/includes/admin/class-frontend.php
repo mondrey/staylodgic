@@ -86,7 +86,12 @@ class Frontend {
 		$result = "Check-in Date: $checkinDate, Check-out Date: $checkoutDate, Number of Adults: $number_of_guests, Number of Children: $number_of_children";
 	
 		$room_instance = new \AtollMatrix\Rooms();
-		$room_array = $room_instance->getAvailableRooms_For_DateRange($checkinDate, $checkoutDate);
+		// get a combined array of rooms and rates which are available for the dates.
+		$combo_array = $room_instance->getAvailable_Rooms_and_Rates_For_DateRange($checkinDate, $checkoutDate);
+
+		$room_array = $combo_array['rooms'];
+		$rates_array = $combo_array['rates'];
+		error_log( print_r( $rates_array, true ) );
 		// Always die in functions echoing AJAX content
 		$list = self::listRooms_And_Quantities($room_array);
 		ob_start();

@@ -1,6 +1,30 @@
 jQuery(document).ready(function($) {
 	"use strict";
 
+	$('#atollmatrix_payment_booking_id').on('select2:select', function(e) {
+		// Get the selected booking number
+		var bookingNumber = $(this).val();
+	
+		// Make an Ajax request to fetch the room names
+		$.ajax({
+		  url: ajaxurl, // WordPress Ajax URL
+		  type: 'POST',
+		  data: {
+			action: 'get_room_names', // Custom Ajax action
+			booking_number: bookingNumber // Pass the selected booking number as data
+		  },
+		  success: function(response) {
+			// Handle the Ajax response
+			// Display the room names in the desired element
+			$('#payment-reservation-details').html(response);
+		  },
+		  error: function(xhr, status, error) {
+			// Handle any errors that occur during the Ajax request
+			console.log(xhr.responseText);
+		  }
+		});
+	  });
+
 		// Set initial positions of switches
 	$('.switch-toggle').each(function() {
 		var hiddenInput = $(this).find('.meta-switch-toggle');
@@ -107,7 +131,69 @@ $('.bedlayout-wrap .add-bedlayout-box').click(function() {
     // Re-initialize select2
     bedlayoutWrap.find('.chosen-select-metabox').select2();
 });
+// Remove button click event
+$('body').on('click', '.remove-bedlayout', function() {
+	$(this).closest('.bedlayout-box').remove();
+});
 
+
+// Add button click event
+$('.taxlayout-wrap .add-taxlayout-box').click(function() {
+    var taxlayoutWrap = $(this).closest('.taxlayout-wrap');
+
+    // Destroy select2 instances if they exist
+    taxlayoutWrap.find('.chosen-select-metabox').each(function() {
+        if ($(this).data('select2')) {
+            $(this).select2('destroy');
+        }
+    });
+
+    // Clone the div section
+    var newSection = taxlayoutWrap.find('.taxlayout-box').first().clone(true);
+
+    // Reset the input field value in the cloned section
+    newSection.find('input').val('');
+
+    // Append the new div section below the last one
+    taxlayoutWrap.find('.taxlayout-box').last().after(newSection);
+
+    // Generate new IDs for the cloned select input and the input field
+    var clonedSections = taxlayoutWrap.find('.taxlayout-box');
+    var numClonedSections = clonedSections.length;
+
+    clonedSections.each(function(index) {
+        var section = $(this);
+        var taxlabelInput = section.find('input[name^="atollmatrix_bedsetup_repeat[taxlabel]"]');
+        var taxtypeSelect = section.find('select[name^="atollmatrix_bedsetup_repeat[taxtype]"]');
+        var taxnumberInput = section.find('input[name^="atollmatrix_bedsetup_repeat[taxnumber]"]');
+
+        var newTaxlabelId = 'tax_label' + index;
+        var newTaxnumberId = 'tax_number' + index;
+
+        taxlabelInput.attr('id', newTaxlabelId);
+        taxnumberInput.attr('id', newTaxnumberId);
+
+        if (taxtypeSelect.length > 0 && taxtypeSelect.hasClass('chosen-select-metabox')) {
+            var newTaxtypeSelectId = 'tax_type_atollmatrix_bedsetup_repeat_' + index;
+            taxtypeSelect.attr('id', newTaxtypeSelectId);
+        }
+    });
+
+    // Add a remove button to the cloned section
+    var removeButton = $('<div class="remove-taxlayout">Remove</div>');
+    newSection.append(removeButton);
+
+    // Re-initialize select2
+	if (taxtypeSelect.length > 0 && taxtypeSelect.hasClass('chosen-select-metabox')) {
+    	taxlayoutWrap.find('.chosen-select-metabox').select2();
+	}
+});
+
+
+// Remove button click event
+$('body').on('click', '.remove-taxlayout', function() {
+	$(this).closest('.taxlayout-box').remove();
+});
 
   /**
     * Google Fonts
@@ -350,7 +436,7 @@ $('.bedlayout-wrap .add-bedlayout-box').click(function() {
 
 	$('body').addClass('mtheme-admin-core-on');
 
-	$('#mtheme_images_upload').on('click', function(e) {
+	$('#atollmatrix_images_upload').on('click', function(e) {
 		e.preventDefault();
 
 		// Set options for 1st frame render
@@ -393,7 +479,7 @@ $('.bedlayout-wrap .add-bedlayout-box').click(function() {
 		    var models = frame.state().get('library');
 			if(models.length == 0){
 			    selection = false;
-				$.post(ajaxurl, { ids: '', action: 'themecore_save_images', post_id: atollmatrix_admin_vars.post_id, nonce: atollmatrix_admin_vars.nonce });
+				$.post(ajaxurl, { ids: '', action: 'atollmatrix_save_images', post_id: atollmatrix_admin_vars.post_id, nonce: atollmatrix_admin_vars.nonce });
 			}
 		});
 		
@@ -419,13 +505,13 @@ $('.bedlayout-wrap .add-bedlayout-box').click(function() {
 							url: ajaxurl,
 							data: { 
 								ids: ids, 
-								action: 'themecore_save_images', 
+								action: 'atollmatrix_save_images', 
 								post_id: atollmatrix_admin_vars.post_id, 
 								nonce: atollmatrix_admin_vars.nonce 
 							},
 							success: function(){
 								selection = loadImages(ids);
-								$('#_mtheme_image_ids').val( ids );
+								$('#_atollmatrix_image_ids').val( ids );
 								frame.close();
 							},
 							dataType: 'html'
@@ -438,7 +524,7 @@ $('.bedlayout-wrap .add-bedlayout-box').click(function() {
 		}
 	});
 
-	$('#mtheme_proofing_images_upload').on('click', function(e) {
+	$('#atollmatrix_proofing_images_upload').on('click', function(e) {
 		e.preventDefault();
 
 		// Set options for 1st frame render

@@ -16,7 +16,7 @@ class Customers {
 
 	public function get_room_names_by_customer($customer_id) {
 		$args = array(
-			'post_type' => 'reservations',
+			'post_type' => 'atmx_reservations',
 			'post_status' => 'publish',
 			'meta_query' => array(
 				array(
@@ -49,7 +49,7 @@ class Customers {
 	
 	public function get_rooms_by_customer($customer_id) {
 		$args = array(
-			'post_type' => 'reservations',
+			'post_type' => 'atmx_reservations',
 			'post_status' => 'publish',
 			'meta_query' => array(
 				array(
@@ -75,7 +75,7 @@ class Customers {
 
 	public function get_booking_numbers_by_customer($customer_id) {
 		$args = array(
-			'post_type' => 'reservations',
+			'post_type' => 'atmx_reservations',
 			'post_status' => 'publish',
 			'meta_query' => array(
 				array(

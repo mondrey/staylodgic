@@ -103,7 +103,7 @@ class AvailablityCalendarBase {
 		return $averageOccupancyPercentage;
 	}
 
-	function calculateAdrForDate( $currentdateString ) {
+	public function calculateAdrForDate( $currentdateString ) {
 		$currentDate = new \DateTime( $currentdateString );
 		$totalRoomRevenue = 0;
 		$numberOfRoomsSold = 0;

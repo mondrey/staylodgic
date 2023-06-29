@@ -14,7 +14,7 @@ class Rooms {
 
 	public static function queryRooms() {
 		$rooms = get_posts(array(
-			'post_type' => 'room',
+			'post_type' => 'atmx_room',
 			'orderby' => 'title',
 			'numberposts' => -1,
 			'order' => 'ASC',
@@ -67,7 +67,7 @@ class Rooms {
 		return $room_names_list;
 	}
 
-	public function getAvailableRooms_For_DateRange( $checkin_date, $checkout_date ) {
+	public function getAvailable_Rooms_For_DateRange( $checkin_date, $checkout_date ) {
 		$available_rooms = array();
 	
 		// get all rooms
@@ -83,6 +83,59 @@ class Rooms {
 		}
 	
 		return $available_rooms;
+	}
+
+	public function getAvailable_Rooms_and_Rates_For_DateRange( $checkin_date, $checkout_date ) {
+		$combo_array = array();
+		$available_rooms = array();
+		$available_roomrates = array();
+	
+		// get all rooms
+		$room_list = self::queryRooms();
+	
+		foreach($room_list as $room) {
+			$count = self::getMaxRoom_QTY_For_DateRange($room->ID, $checkin_date, $checkout_date, $reservationid = '');
+			
+			// if not fully booked add to available rooms
+			if ( $count !== 0 ) {
+				$available_rooms[$room->ID][$count] = $room->post_title; // changed here
+				
+				$available_roomrates = self::getRoom_RATE_For_DateRange($room->ID, $checkin_date, $checkout_date);
+			}
+		}
+
+		$combo_array = array(
+			'rooms' => $available_rooms,
+			'rates' => $available_roomrates
+		);
+	
+		return $combo_array;
+	}
+
+	public function getRoom_RATE_For_DateRange( $roomId, $checkin_date, $checkout_date ) {
+		
+		// get the date range
+		$start = new \DateTime($checkin_date);
+		$end = new \DateTime($checkout_date);
+		$interval = new \DateInterval('P1D');
+		$daterange = new \DatePeriod($start, $interval, $end);
+
+		$rates_daterange = array();
+		$rates_for_room_daterange = array();
+	
+		foreach ($daterange as $date) {
+			error_log( 'This is the room ' . $roomId . 'for ' . $date->format("Y-m-d"));
+			// get individual rates
+			$roomrate_instance = new \AtollMatrix\Rates();
+			$rate = $roomrate_instance->getRoomRateByDate($roomId, $date->format("Y-m-d"));
+			$rates_daterange[$date->format("Y-m-d")] = $rate;
+		}
+		$rates_daterange = array(
+			[$roomId] => $rates_daterange
+		);
+		
+		// rates for the daterange
+		return $rates_daterange;
 	}
 
 	public function getMaxRoom_QTY_For_DateRange($roomId, $checkin_date, $checkout_date, $reservationid) {
@@ -216,7 +269,7 @@ class Rooms {
 			$quantityArray[$date] = $final_quantity;
 		}
 
-		// Update the metadata for the 'reservations' post
+		// Update the metadata for the 'atmx_reservations' post
 		if (!empty($postID) && is_numeric($postID)) {
 			// Update the post meta with the modified quantity array
 			update_post_meta($postID, 'quantity_array', $quantityArray);
@@ -328,7 +381,7 @@ class Rooms {
 			$roomrateArray[$date] = $rate;
 		}
 
-		// Update the metadata for the 'reservations' post
+		// Update the metadata for the 'atmx_reservations' post
 		if (!empty($postID) && is_numeric($postID)) {
 			// Update the post meta with the modified quantity array
 			update_post_meta($postID, 'roomrate_array', $roomrateArray);

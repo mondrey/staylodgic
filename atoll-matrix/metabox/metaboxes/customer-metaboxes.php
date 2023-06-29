@@ -24,7 +24,7 @@ function atollmatrix_customers_metadata() {
 		$options_bgslideshow[0]="Featured pages not found.";
 	}
 
-	$room_names = get_posts('post_type=room&orderby=title&numberposts=-1&order=ASC');
+	$room_names = get_posts('post_type=atmx_room&orderby=title&numberposts=-1&order=ASC');
 
 	if ($room_names) {
 		$options_room_names['none'] = "Not Selected";

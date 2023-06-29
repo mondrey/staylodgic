@@ -7,8 +7,6 @@ class Payments {
 		add_action('wp_ajax_processReservation',  array($this,'processReservation') );
 		add_action('wp_ajax_nopriv_processReservation',  array($this,'processReservation') );
 
-		add_action('woocommerce_before_calculate_totals',  array($this,'setProduct_Price_Dynamic') , 10, 1);
-
 		// Add the booking number to the checkout page
 		add_action( 'woocommerce_checkout_before_customer_details',  array($this,'addBookingNumber_To_Checkout' ) );
 		add_action( 'woocommerce_before_thankyou',  array($this,'addBookingNumber_To_Checkout' ) );
@@ -24,8 +22,107 @@ class Payments {
 
 		// Display custom column value in WooCommerce Order list table
 		add_action('manage_shop_order_posts_custom_column', array($this, 'display_booking_number_column_value'), 10, 2);
+
+		add_action('wp_ajax_get_room_names', array($this, 'get_room_names_callback'));
+		add_action('wp_ajax_nopriv_get_room_names', array($this, 'get_room_names_callback'));
+
+		add_action('woocommerce_before_calculate_totals', array($this, 'modify_cart_item_prices'));
 	}
 
+
+	public function modify_cart_item_prices($cart) {
+		foreach ($cart->get_cart() as $cart_item) {
+			// Get the WooCommerce session
+			$session = WC()->session;
+
+			// Get the total price from the session
+			$total_price = $session->get('total_price');
+			$cart_item['data']->set_price($total_price);
+		}
+	}
+
+	/**
+	 * Create a unique payment request link for a pre-created product with a booking number in WooCommerce.
+	 *
+	 * @param int $product_id The ID of the pre-created product to be added to the cart.
+	 * @param float $booked_price The price for the booked room.
+	 * @param int $booking_number The booking number associated with the product.
+	 * @return string|bool The unique payment request link if successful, false otherwise.
+	 */
+	public function create_payment_request($product_id, $booked_price, $booking_number) {
+		// Ensure WooCommerce is active
+		if (!class_exists('WooCommerce')) {
+			return false;
+		}
+
+		// Create a unique order key
+		$order_key = uniqid();
+
+		// Generate the payment request link with the order key
+		$payment_request_link = wc_get_checkout_url() . '?key=' . $order_key;
+
+		// Create a new order with the unique order key
+		$order = wc_create_order(['order_key' => $order_key]);
+
+		// Add the product to the order
+		$product = wc_get_product($product_id);
+		$order->add_product($product, 1);
+
+		// Set the booking number as order meta data
+		$order->update_meta_data('booking_number', $booking_number);
+
+		// Save the order
+		$order->save();
+
+		return $payment_request_link;
+	}
+
+	// Ajax callback function to retrieve room names
+	public function get_room_names_callback() {
+		// Check if the booking number is provided in the Ajax request
+		if (isset($_POST['booking_number'])) {
+			$booking_number = $_POST['booking_number'];
+		
+			// Query the reservations to get the room names for the selected booking number
+			$reservation_args = array(
+			'post_type' => 'atmx_reservations',
+			'meta_query' => array(
+				array(
+				'key' => 'atollmatrix_booking_number',
+				'value' => $booking_number,
+				'compare' => '=',
+				),
+			),
+			);
+		
+			$reservations = get_posts($reservation_args);
+		
+			// Create an ordered list
+			$room_list = '<ol>';
+
+			foreach ($reservations as $reservation) {
+				// Get the room name associated with the reservation
+				$room_name = get_the_title(get_post_meta($reservation->ID, 'atollmatrix_room_id', true));
+
+				// Get the reservation edit link
+				$reservation_edit_link = get_edit_post_link($reservation->ID);
+
+				// Create the room name with the reservation edit link as a list item
+				$room_list .= '<li><a href="' . $reservation_edit_link . '">' . $room_name . '</a></li>';
+			}
+
+			// Close the ordered list
+			$room_list .= '</ol>';
+
+			$payment_request = self::create_payment_request( $product_id = '476', $booked_price = '731', $booking_number );
+
+			// Return the room list as a response to the Ajax request
+			echo $room_list . $payment_request;
+		}
+		
+		// Always use wp_die() at the end of Ajax callback functions
+		wp_die();
+	}
 
 	public function add_booking_number_column($columns) {
 		// Add the custom column after the order total column
@@ -40,7 +137,7 @@ class Payments {
 
 			if ($booking_number) {
 				$args = array(
-					'post_type'      => 'reservations',
+					'post_type'      => 'atmx_reservations',
 					'posts_per_page' => -1,
 					'post_status'    => 'publish',
 					'meta_key'       => 'atollmatrix_booking_number',
@@ -93,12 +190,6 @@ class Payments {
 			// Set the checkout started time in the session
 			WC()->session->set('checkout_started', time());
 
-			// Calculate the dynamic price based on the total value
-			$dynamic_price = $total * 2; // Example calculation, adjust it based on your logic
-
-			// Set the dynamic price for the product with ID 476
-			self::setProduct_Price_Dynamic($dynamic_price);
-
 			// Empty the cart before adding the product
 			WC()->cart->empty_cart();
 
@@ -110,6 +201,7 @@ class Payments {
 			// Save the booking number in a session or transient for later use
 			// Example: Save in session
 			WC()->session->set('booking_number', $booking_number);
+			WC()->session->set('total_price', '232');
 
 			// Prepare the response data
 			$response_data = array();
@@ -132,40 +224,13 @@ class Payments {
 		}
 	}
 
-	public function setProduct_Price_Dynamic($cart) {
-		if (is_admin() && !defined('DOING_AJAX')) {
-			return;
-		}
-
-		// Make sure the $cart parameter is an instance of the WC_Cart class
-		if (!($cart instanceof WC_Cart)) {
-			error_log('Invalid $cart object: ' . print_r($cart, true));
-			return;
-		}
-
-		// Loop through each cart item
-		foreach ($cart->get_cart() as $cart_item_key => $cart_item) {
-			$product = $cart_item['data'];
-			$product_id = $product->get_id();
-
-			// Set the dynamic price for the specific product
-			if ($product_id === 476) {
-				// Calculate the dynamic price based on your logic
-				$dynamic_price = 100; // Set the desired dynamic price here
-
-				// Set the dynamic price for the product
-				$product->set_price($dynamic_price);
-			}
-		}
-	}
-
 	public function addBookingNumber_To_Checkout() {
 		// Get the booking number from the session
 		$booking_number = WC()->session->get( 'booking_number' );
 		
 		// Display the booking number
 		if ( ! empty( $booking_number ) ) {
-			echo '<p class="booking-number">Booking Number: ' . esc_html( $booking_number ) . '</p>';
+			echo '<p data-booking-number="' . esc_html( $booking_number ) . '" class="booking-number">Booking Number: ' . esc_html( $booking_number ) . '</p>';
 		}
 	}
 

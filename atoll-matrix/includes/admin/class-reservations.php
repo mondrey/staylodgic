@@ -23,7 +23,7 @@ class Reservations {
 
 	public static function getConfirmedReservations() {
 		$args = array(
-			'post_type'      => 'reservations',
+			'post_type'      => 'atmx_reservations',
 			'posts_per_page' => -1,
 			'post_status'    => 'publish',
 			'meta_query'     => array(
@@ -39,7 +39,7 @@ class Reservations {
 
 	public static function getRoomsforReservation( $booking_number ) {
 		$args = array(
-			'post_type'  => 'reservations',
+			'post_type'  => 'atmx_reservations',
 			'posts_per_page' => -1,
 			'post_status'    => 'publish',
 			'meta_query' => array(
@@ -54,7 +54,7 @@ class Reservations {
 
 	public function getGuest_id_forReservation($booking_number) {
 		$args = array(
-			'post_type' => 'reservations',
+			'post_type' => 'atmx_reservations',
 			'posts_per_page' => -1,
 			'post_status' => 'publish',
 			'meta_query' => array(
@@ -77,7 +77,7 @@ class Reservations {
 
 	public function getGuestforReservation($booking_number) {
 		$args = array(
-			'post_type' => 'reservations',
+			'post_type' => 'atmx_reservations',
 			'posts_per_page' => -1,
 			'post_status' => 'publish',
 			'meta_query' => array(
@@ -95,7 +95,7 @@ class Reservations {
 	
 			if (!empty($customer_id)) {
 				$customer_args = array(
-					'post_type' => 'customers',
+					'post_type' => 'atmx_customers',
 					'p' => $customer_id,
 					'post_status' => 'publish',
 				);
@@ -113,7 +113,7 @@ class Reservations {
 		}
 
 		$args = array(
-			'post_type'       => 'reservations',
+			'post_type'       => 'atmx_reservations',
 			'posts_per_page'  => -1,
 			'post_status'     => 'publish',
 			'meta_query'      => array(
@@ -351,7 +351,7 @@ class Reservations {
 
 	public static function getReservationIDsForCustomer( $customer_id ) {
 		$args = array(
-			'post_type'  => 'reservations',
+			'post_type'  => 'atmx_reservations',
 			'meta_query' => array(
 				array(
 					'key'     => 'atollmatrix_customer_id',
@@ -745,7 +745,7 @@ class Reservations {
 	
 		// Create customer post
 		$customer_post_data = array(
-			'post_type'     => 'customers',  // Your custom post type for customers
+			'post_type'     => 'atmx_customers',  // Your custom post type for customers
 			'post_title'    => $full_name,   // Set the customer's full name as post title
 			'post_status'   => 'publish',    // The status you want to give new posts
 			'meta_input'    => array(
@@ -782,7 +782,7 @@ class Reservations {
 			for($i = 0; $i < $quantity; $i++) {
 				// Here you can also add other post data like post_title, post_content etc.
 				$post_data = array(
-					'post_type'     => 'reservations',  // Your custom post type
+					'post_type'     => 'atmx_reservations',  // Your custom post type
 					'post_title'    => $booking_number,  // Set the booking number as post title
 					'post_status'   => 'publish',       // The status you want to give new posts
 					'meta_input'    => array(

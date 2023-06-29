@@ -173,9 +173,36 @@ function atollmatrix_get_select_target_options($type) {
 				$list_options[0]="Clients not found.";
 			}
 			break;
+		case 'booking_numbers':
+			// Get all reservation posts
+			$reservation_args = array(
+				'post_type' => 'atmx_reservations',
+				'posts_per_page' => -1, // Retrieve all reservations
+			);
+
+			$reservations = get_posts($reservation_args);
+
+			// Create an array to store the booking numbers and customer names
+			$booking_numbers = array();
+			$booking_numbers['none'] = 'Choose a booking';
+			foreach ($reservations as $reservation) {
+				$booking_number = get_post_meta($reservation->ID, 'atollmatrix_booking_number', true);
+				$customer_id = get_post_meta($reservation->ID, 'atollmatrix_customer_id', true);
+
+				// Get the customer name based on the customer ID
+				$customer_name = get_post_meta($customer_id, 'atollmatrix_full_name', true);
+
+				// Add the booking number and customer name to the array
+				$booking_numbers[$booking_number] = $booking_number . ' ' . $customer_name;
+			}
+
+			// Output the booking numbers and customer names
+			$list_options = $booking_numbers;
+
+			break;
 		case 'room_names':
 			// Pull all the Featured into an array
-			$featured_pages = get_posts('post_type=room&orderby=title&numberposts=-1&order=ASC');
+			$featured_pages = get_posts('post_type=atmx_room&orderby=title&numberposts=-1&order=ASC');
 			$list_options['none'] = "Not Selected";
 			if ($featured_pages) {
 				foreach($featured_pages as $key => $list) {
@@ -187,7 +214,7 @@ function atollmatrix_get_select_target_options($type) {
 			break;
 		case 'existing_customers':
 			// Pull all the Featured into an array
-			$featured_pages = get_posts('post_type=customers&orderby=title&numberposts=-1&order=ASC');
+			$featured_pages = get_posts('post_type=atmx_customers&orderby=title&numberposts=-1&order=ASC');
 			$list_options['none'] = "Not Selected";
 			if ($featured_pages) {
 				foreach($featured_pages as $key => $list) {

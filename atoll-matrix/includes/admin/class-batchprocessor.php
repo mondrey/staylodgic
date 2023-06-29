@@ -46,7 +46,7 @@ class EventBatchProcessor {
 	
 		// Run a query for reservation posts
 		$args = array(
-			'post_type'  => 'reservations',
+			'post_type'  => 'atmx_reservations',
 			'meta_query' => array(
 				'relation' => 'AND',
 				array(
@@ -132,7 +132,7 @@ class EventBatchProcessor {
 			$ics_url = $_POST['ics_url'];
 
 			$existing_post = get_posts(array(
-				'post_type' => 'reservations',
+				'post_type' => 'atmx_reservations',
 				'meta_query' => array(
 					array(
 						'key' => 'atollmatrix_booking_number',
@@ -148,7 +148,7 @@ class EventBatchProcessor {
 			}
 	
 			$post_data = array(
-				'post_type'     => 'reservations',  // Your custom post type
+				'post_type'     => 'atmx_reservations',  // Your custom post type
 				'post_title'    => $booking_number,  // Set the booking number as post title
 				'post_status'   => 'publish',       // The status you want to give new posts
 				'meta_input'    => array(

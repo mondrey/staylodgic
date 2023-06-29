@@ -472,6 +472,77 @@ function atollmatrix_generate_metaboxes($meta_data,$post_id) {
 					echo '</div>';
 					break;
 
+					case 'taxsetup_repeat':
+						$text_value = $meta ? $meta : $field['std'];
+						echo '<div class="taxlayout-wrap" data-repeat="'.$field['id'].'">';
+						echo '<div class="taxlayout">';
+						$repeat_count = 0;
+						$taxlabel = '';
+						$taxtype = '';
+						$taxnumber = '';
+						$found_data=false;
+
+						if (isset($meta) && is_array($meta) ) {
+							if (isset($meta['taxnumber'])) {
+								foreach ($meta['taxnumber'] as $value) {
+									if (isSet($value) && $value<>"") {
+										$found_data = true;
+
+										$age = '';
+										if ( isSet( $meta['taxtype'][$repeat_count] ) ) {
+											$taxtype = $meta['taxtype'][$repeat_count];
+										}
+										if ( isSet( $meta['taxnumber'][$repeat_count] ) ) {
+											$taxnumber = $meta['taxnumber'][$repeat_count];
+										}
+										if ( isSet( $meta['taxlabel'][$repeat_count] ) ) {
+											$taxlabel = $meta['taxlabel'][$repeat_count];
+										}
+										$class='';
+										echo '<div class="taxlayout-box" id="taxlayout-box">';
+										echo '<input placeholder="Label" type="text" name="'. esc_attr($field['id']).'[taxlabel][]" value="'. esc_attr($taxlabel) .'" id="tax_label'.$repeat_count.'" />';
+										echo '<div class="selectbox-type-selector">';
+										if ( isset($field['choice']) && '' == $field['choice'] ) {
+											echo '<select class="chosen-select-metabox taxtype-select" name="', esc_attr($field['id']).'[taxtype][]" id="tax_type_'.$field['id'].'_' .$repeat_count.'">';
+											foreach ($field['options'] as $key => $option) {
+												if ($key=='0') {
+													$key = __('All the items','atollmatrix');
+												}
+												echo '<option value="'. esc_attr($key) .'"', $taxtype == $key ? ' selected' : '', '>', esc_attr($option) , '</option>';
+											}
+											echo '</select> X ';
+										}
+										echo '<input placeholder="0" type="text" name="'. esc_attr($field['id']).'[taxnumber][]" value="'. esc_attr($taxnumber) .'" id="tax_number'.$repeat_count.'" /></div>';
+										if ( $repeat_count > 0 ) {
+											echo '<div class="remove-taxlayout">Remove</div>';
+										}
+										echo '</div>';
+									}
+									$repeat_count++;
+								}
+							}
+						}
+						if (!$found_data) {
+							echo '<div class="taxlayout-box" id="taxlayout-box">';
+							echo '<input placeholder="Label" type="text" name="'. esc_attr($field['id']).'[taxlabel][]" value="" id="tax_label0" />';
+							echo '<div class="selectbox-type-selector">';
+							if ( isset($field['choice'] ) && '' == $field['choice'] ) {
+								echo '<select class="chosen-select-metabox" name="', esc_attr($field['id']).'[taxtype][]" id="tax_type_'.$field['id'].'_0">';
+								foreach ($field['options'] as $key => $option) {
+									echo '<option value="'. esc_attr($key) .'"', $meta == $key ? ' selected' : '', '>', esc_attr($option) , '</option>';
+								}
+							
+							echo '</select> X ';
+							}
+							echo '<input placeholder="Value% or Value" type="text" name="'. esc_attr($field['id']).'[taxnumber][]" value="" id="tax_number0" /></div>';
+							echo '</div>';
+						}
+						echo '</div>';
+						echo '<span class="add-taxlayout-box">'.esc_html__('Add layout','atollmatrix').'</span>';
+						echo '<span class="add-taxlayout-box-notice">'.esc_html__('Max Reached!','atollmatrix').'</span>';
+						echo '</div>';
+						break;
+
 				case 'repeat_text':
 					$text_value = $meta ? $meta : $field['std'];
 					echo '<div class="movethis-wrap" data-repeat="'.$field['id'].'">';
@@ -595,6 +666,7 @@ function atollmatrix_generate_metaboxes($meta_data,$post_id) {
 						echo '<option value="'. esc_attr($key) .'"', $meta == $key ? ' selected' : '', '>', esc_attr($option) , '</option>';
 					}
 					echo '</select></div>';
+					
 
 					if ( isSet( $field['target'] ) && isSet( $meta ) ) {
 						if ($field['target']=="client_names") {
@@ -620,6 +692,23 @@ function atollmatrix_generate_metaboxes($meta_data,$post_id) {
 					
 					break;
 
+				case 'payments':
+					$class='';
+					if (isset($field['target'])) {
+						$field['options'] = atollmatrix_get_select_target_options($field['target']);
+					}
+					echo '<div class="selectbox-type-selector"><select class="chosen-select-metabox" name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '">';
+					foreach ($field['options'] as $key => $option) {
+						if ($key=='0') {
+							$key = __('All the items','atollmatrix');
+						}
+						echo '<option value="'. esc_attr($key) .'"', $meta == $key ? ' selected' : '', '>', esc_attr($option) , '</option>';
+					}
+					echo '</select></div>';
+					echo '<div id="payment-reservation-details"></div>';
+					
+				break;
+
 				// Basic text input
 				case 'occupants':
 					$output = '';
@@ -632,7 +721,7 @@ function atollmatrix_generate_metaboxes($meta_data,$post_id) {
 
 					if ( isset($field['datafrom']) ) {
 						if ( 'roomtype' == $field['datafrom'] ) {
-							$room = get_posts('post_type=room&numberposts=-1&order=ASC');
+							$room = get_posts('post_type=atmx_room&numberposts=-1&order=ASC');
 							if ($room) {
 								foreach($room as $key => $list) {
 									$custom = get_post_custom($list->ID);
@@ -720,7 +809,7 @@ function atollmatrix_generate_metaboxes($meta_data,$post_id) {
 						if ( 'roomtype' == $field['datafrom'] ) {
 
 
-							$room = get_posts('post_type=room&numberposts=-1&order=ASC');
+							$room = get_posts('post_type=atmx_room&numberposts=-1&order=ASC');
 							if ($room) {
 								foreach($room as $key => $list) {
 									$max_adults = 'disabled';
@@ -1022,15 +1111,19 @@ function atollmatrix_checkdata($post_id) {
 				$proofing_box = atollmatrix_proofing_metadata();
 				atollmatrix_savedata($proofing_box,$post_id);
 				break;
-			case 'room':
+			case 'atmx_room':
 				$atollmatrix_room_box = atollmatrix_room_metadata();
 				atollmatrix_savedata($atollmatrix_room_box,$post_id);
 				break;
-			case 'reservations':
+			case 'atmx_payments':
+				$atollmatrix_payment_box = atollmatrix_payment_metadata();
+				atollmatrix_savedata($atollmatrix_payment_box,$post_id);
+				break;
+			case 'atmx_reservations':
 				$reservations_box = atollmatrix_reservations_metadata();
 				atollmatrix_savedata($reservations_box,$post_id);
 				break;
-			case 'customers':
+			case 'atmx_customers':
 				$customers_box = atollmatrix_customers_metadata();
 				atollmatrix_savedata($customers_box,$post_id);
 				break;

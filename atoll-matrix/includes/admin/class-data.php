@@ -37,7 +37,7 @@ class Data {
 				error_log("Customer saving: " . $reservation_post_id . '||'. $full_name);
 				// Create customer post
 				$customer_post_data = array(
-					'post_type'     => 'customers',  // Your custom post type for customers
+					'post_type'     => 'atmx_customers',  // Your custom post type for customers
 					'post_title'    => $full_name,   // Set the customer's full name as post title
 					'post_status'   => 'publish',    // The status you want to give new posts
 					'meta_input'    => array(
@@ -69,7 +69,7 @@ class Data {
 
 	function removeReservation_From_Array($post_id) {
 		// Check if the post is of the "reservations" post type
-		if (get_post_type($post_id) === 'reservations') {
+		if (get_post_type($post_id) === 'atmx_reservations') {
 			$room_type = get_post_meta($post_id, 'atollmatrix_room_id', true);
 			$reservation_post_id = $post_id;
 			
@@ -133,7 +133,7 @@ class Data {
 	}
 
 	/**
-	 * Triggered when a post is saved. If the post type is 'reservations' and is not autosaved or revision, it updates the reservation details.
+	 * Triggered when a post is saved. If the post type is 'atmx_reservations' and is not autosaved or revision, it updates the reservation details.
 	 */
 	public function updateReservationsArray_On_Save($post_id, $post, $update) {
 
@@ -270,7 +270,7 @@ class Data {
 	 * Remove the reservation from all rooms.
 	 */
 	public static function removeReservationID_From_All_Rooms( $reservation_post_id ) {
-		$room_types = get_posts(['post_type' => 'room']);
+		$room_types = get_posts(['post_type' => 'atmx_room']);
 		//error_log("remove reservation_from_all_rooms is called with ID: " . $reservation_post_id);
 		foreach ($room_types as $room) {
 

@@ -86,7 +86,7 @@ class Common {
 	 * Checks if the post is valid for processing
 	 */
 	public static function isReservation_valid_post( $post_id, $post ) {
-		return !wp_is_post_autosave($post_id) && !wp_is_post_revision($post_id) && $post->post_type === 'reservations' && get_post_status($post_id) !== 'draft';
+		return !wp_is_post_autosave($post_id) && !wp_is_post_revision($post_id) && $post->post_type === 'atmx_reservations' && get_post_status($post_id) !== 'draft';
 	}
 
 	/**
@@ -94,7 +94,7 @@ class Common {
 	 */
 	public static function isCustomer_valid_post( $post_id ) {
 		$post = get_post($post_id);
-		return $post !== null && !wp_is_post_autosave($post_id) && !wp_is_post_revision($post_id) && $post->post_type === 'customers' && get_post_status($post_id) !== 'draft';
+		return $post !== null && !wp_is_post_autosave($post_id) && !wp_is_post_revision($post_id) && $post->post_type === 'atmx_customers' && get_post_status($post_id) !== 'draft';
 	}
 
 

@@ -19,7 +19,7 @@ class atollmatrix_Room_Posts {
 	}
 
 	function atollmatrix_enable_room_sort() {
-		add_submenu_page('edit.php?post_type=room', 'Sort rooms', 'Sort Rooms', 'edit_posts', basename(__FILE__), array( $this, 'atollmatrix_sort_room'));
+		add_submenu_page('edit.php?post_type=atmx_room', 'Sort rooms', 'Sort Rooms', 'edit_posts', basename(__FILE__), array( $this, 'atollmatrix_sort_room'));
 	}
 	function atollmatrix_room_orderby($orderby){
 		global $wpdb;
@@ -27,7 +27,7 @@ class atollmatrix_Room_Posts {
 		return($orderby);
 	}
 	function atollmatrix_sort_room() {
-		$room = new WP_Query('post_type=room&posts_per_page=-1&orderby=menu_order&order=ASC');
+		$room = new WP_Query('post_type=atmx_room&posts_per_page=-1&orderby=menu_order&order=ASC');
 	?>
 		<div class="wrap">
 		<h2>Sort room<img src="<?php echo home_url(); ?>/wp-admin/images/loading.gif" id="loading-animation" /></h2>
@@ -41,7 +41,7 @@ class atollmatrix_Room_Posts {
 			<?php 
 			$image_url=wp_get_attachment_thumb_url( get_post_thumbnail_id() );
 			$custom = get_post_custom(get_the_ID());
-			$room_cats = get_the_terms( get_the_ID(), 'roomtypes' );
+			$room_cats = get_the_terms( get_the_ID(), 'atmx_roomtype' );
 			
 			?>
 			<?php if ($image_url) { echo '<img class="atollmatrix_admin_sort_image" src="'.$image_url.'" width="30px" height="30px" alt="" />'; } ?>
@@ -106,8 +106,8 @@ class atollmatrix_Room_Posts {
 			case "video":
 				if ( isset($custom['atollmatrix_lightbox_video'][0]) ) { echo $custom['atollmatrix_lightbox_video'][0]; }
 				break;
-			case 'roomtypes':
-				echo get_the_term_list($post->ID, 'roomtypes', '', ', ','');
+			case 'atmx_roomtype':
+				echo get_the_term_list($post->ID, 'atmx_roomtype', '', ', ','');
 				break;
 		} 
 	}
@@ -118,7 +118,7 @@ class atollmatrix_Room_Posts {
 			"title" => __('Room Title','mthemelocal'),
 			"theme_description" => __('Description','mthemelocal'),
 			"video" => __('Video','mthemelocal'),
-			"roomtypes" => __('roomtypes','mthemelocal'),
+			"atollmatrix_roomtypes" => __('atmx_roomtype','mthemelocal'),
 			"room_image" => __('Image','mthemelocal')
 		);
 	
@@ -156,7 +156,7 @@ class atollmatrix_Room_Posts {
 		}
 		$args = array(
 			'label' => $atollmatrix_room_singular_refer,
-			'singular_label' => __('room','mthemelocal'),
+			'singular_label' => __('Room','mthemelocal'),
 			'public' => true,
 			'show_ui' => true,
 			'capability_type' => 'post',
@@ -168,11 +168,11 @@ class atollmatrix_Room_Posts {
 			'supports' => array('title', 'author', 'thumbnail')//Boxes will be shown in the panel
 		);
 	
-		register_post_type( 'room' , $args );
+		register_post_type( 'atmx_room' , $args );
 		/*
 		* Add Taxonomy for room 'Type'
 		*/
-		register_taxonomy('roomtypes', array("room"), array("hierarchical" => true, "label" => "Room Category", "singular_label" => "roomtypes", "rewrite" => true));
+		register_taxonomy('atmx_roomtype', array("atollmatrix_room"), array("hierarchical" => true, "label" => "Room Category", "singular_label" => "atollmatrix_roomtypes", "rewrite" => true));
 		
 		/*
 		* Hooks for the room and Featured viewables
@@ -211,8 +211,8 @@ class atollmatrix_Roomcategory_add_image {
 		add_action('admin_head', array(&$this,'atollmatrix_admin_head') );
 		add_action('edit_term', array(&$this,'atollmatrix_save_tax_pic') );
 		add_action('create_term', array(&$this,'atollmatrix_save_tax_pic') );
-		add_filter("manage_edit-roomtypes_columns", array(&$this,'atollmatrix_roomtype_columns') );
-		add_action("manage_roomtypes_custom_column", array(&$this,'atollmatrix_manage_workype_columns'),10,3 );
+		add_filter("manage_edit-atollmatrix_roomtypes_columns", array(&$this,'atollmatrix_roomtype_columns') );
+		add_action("manage_atollmatrix_roomtypes_custom_column", array(&$this,'atollmatrix_manage_workype_columns'),10,3 );
 	}
 
 	// Add to admin_init function
@@ -242,7 +242,7 @@ class atollmatrix_Roomcategory_add_image {
 
 	function atollmatrix_admin_head() {
 		$taxonomies = get_taxonomies();
-		$taxonomies = array('roomtypes'); // uncomment and specify particular taxonomies you want to add image feature.
+		$taxonomies = array('atmx_roomtype'); // uncomment and specify particular taxonomies you want to add image feature.
 		if (is_array($taxonomies)) {
 			foreach ($taxonomies as $z_taxonomy) {
 				add_action($z_taxonomy . '_add_form_fields', array(&$this,'atollmatrix_tax_field') );
