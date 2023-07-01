@@ -1,15 +1,16 @@
 <?php
 namespace AtollMatrix;
+
 class Frontend {
 
 	public function __construct() {
-		add_shortcode('hotel_booking_search', array($this,'hotelBooking_SearchForm'));
+		add_shortcode( 'hotel_booking_search', array( $this, 'hotelBooking_SearchForm' ) );
 		// AJAX handler to save room metadata
 
-		add_action('wp_ajax_frontend_BookingSearch', array($this,'frontend_BookingSearch'));
-		add_action('wp_ajax_nopriv_frontend_BookingSearch', array($this,'frontend_BookingSearch'));
+		add_action( 'wp_ajax_frontend_BookingSearch', array( $this, 'frontend_BookingSearch' ) );
+		add_action( 'wp_ajax_nopriv_frontend_BookingSearch', array( $this, 'frontend_BookingSearch' ) );
 	}
-	
+
 	public function hotelBooking_SearchForm() {
 		// Generate unique booking number
 		$booking_number = uniqid();
@@ -35,6 +36,17 @@ class Frontend {
 				</div>
 				<div id="bookingSearch" class="div-button">Search</div>
 
+				<div class="available-checkin-summary">
+					<h3>Check-in</h3>
+					<div class="pre-book-check-in"></div>
+					<h3>Last stay night</h3>
+					<div class="pre-book-stay-night"></div>
+					<h3>Check-out</h3>
+					<div class="pre-book-check-out"></div>
+					<h3>Stay Nights</h3>
+					<div class="pre-book-nights"></div>
+				</div>
+
 				<div class="available-list">
 					<div id="available-list-ajax"></div>
 				</div>
@@ -43,13 +55,14 @@ class Frontend {
 		<?php
 		return ob_get_clean();
 	}
-	
-	function frontend_BookingSearch() {
-		$room_type = '';
+
+	public function frontend_BookingSearch() {
+		$room_type          = '';
 		$number_of_children = '';
-		$number_of_guests = '';
-		$reservation_date = '';
-		$booking_number = '';
+		$number_of_guests   = '';
+		$reservation_date   = '';
+		$booking_number     = '';
+	
 		if (isset($_POST['booking_number'])) {
 			$booking_number = $_POST['booking_number'];
 		}
@@ -72,26 +85,51 @@ class Frontend {
 	
 		$chosenDate = \AtollMatrix\Common::splitDateRange($reservation_date);
 	
-		$checkinDate = '';
+		$checkinDate  = '';
 		$checkoutDate = '';
 	
-		if ( isset( $chosenDate['startDate'] ) ) {
+		if (isset($chosenDate['startDate'])) {
 			$checkinDate = $chosenDate['startDate'];
 		}
-		if ( isset( $chosenDate['endDate'] ) ) {
+		if (isset($chosenDate['endDate'])) {
 			$checkoutDate = $chosenDate['endDate'];
 		}
 	
 		// Perform your query here, this is just an example
 		$result = "Check-in Date: $checkinDate, Check-out Date: $checkoutDate, Number of Adults: $number_of_guests, Number of Children: $number_of_children";
-		error_log( print_r( $result, true ) );
+		error_log(print_r($result, true));
 		$room_instance = new \AtollMatrix\Rooms();
-		// get a combined array of rooms and rates which are available for the dates.
+	
+		// Get a combined array of rooms and rates which are available for the dates.
 		$combo_array = $room_instance->getAvailable_Rooms_and_Rates_For_DateRange($checkinDate, $checkoutDate);
+	
+		error_log('Value of $combo_array["rooms"]:');
+		error_log(print_r($combo_array['rooms'], true));
+	
+		if (count($combo_array['rooms']) == 0) {
+			// Perform the greedy search by adjusting the check-in and check-out dates
+			$newCheckinDate = new \DateTime($checkinDate);
+			$newCheckoutDate = new \DateTime($checkoutDate);
+			$newCheckoutDate->add(new \DateInterval('P1D'));
 
-		$room_array = $combo_array['rooms'];
+			$reservation_instance = new \AtollMatrix\Reservations();
+
+			$room_availabity = $reservation_instance->Availability_of_Rooms_For_DateRange( $newCheckinDate->format('Y-m-d'), $newCheckoutDate->format('Y-m-d') );
+			error_log( '---- Room Availability Matrix for Range' );
+			error_log( print_r( $room_availabity, true ));
+		}
+	
+		//set_transient($booking_number, $combo_array, 20 * MINUTE_IN_SECONDS);
+	
+		$room_array  = $combo_array['rooms'];
 		$rates_array = $combo_array['rates'];
-		error_log( print_r( $room_array, true ) );
+		// error_log(print_r($combo_array, true));
+		// error_log("Rooms array");
+		// error_log(print_r($room_array, true));
+		// error_log("Date Range from picker");
+		// error_log(print_r($checkinDate, true));
+		// error_log(print_r($checkoutDate, true));
+	
 		// Always die in functions echoing AJAX content
 		$list = self::listRooms_And_Quantities($room_array);
 		ob_start();
@@ -104,36 +142,35 @@ class Frontend {
 		echo $output;
 		die();
 	}
-	
-	
-	public function listRooms_And_Quantities($room_array) {
+
+	public function listRooms_And_Quantities( $room_array ) {
 		// Initialize empty string to hold HTML
 		$html = '';
-		
+
 		// Iterate through each room
-		foreach ($room_array as $id => $room_info) {
+		foreach ( $room_array as $id => $room_info ) {
 			// Get quantity and room title
-			foreach ($room_info as $quantity => $title) {
+			foreach ( $room_info as $quantity => $title ) {
 				// Append a div for the room with the room ID as a data attribute
 				$html .= '<div data-room-id="' . $id . '">';
 				// Append the room title
 				$html .= '<h2>' . $title . '</h2>';
 				// Append a select element for the quantity
-				$html .= '<select name="room_quantity">';
+				$html .= '<select data-room-id="' . $id . '" name="room_quantity">';
 				// Append an option for each possible quantity
-				for ($i = 0; $i <= $quantity; $i++) {
+				for ( $i = 0; $i <= $quantity; $i++ ) {
 					$html .= '<option value="' . $i . '">' . $i . '</option>';
 				}
 				$html .= '</select>';
 				$html .= '</div>';
 			}
 		}
-		
+
 		// Return the resulting HTML string
 		return $html;
 	}
-	
-	public function paymentHelper_Form( $booking_number ){
+
+	public function paymentHelper_Form( $booking_number ) {
 		$form_html = <<<HTML
 			<form action="" method="post" id="paymentForm">
 				<!-- Other form fields -->
@@ -144,10 +181,10 @@ class Frontend {
 		HTML;
 		return $form_html;
 	}
-	
+
 	public function register_Guest_Form() {
-		$country_options = atollmatrix_country_list("select", "");
-	
+		$country_options = atollmatrix_country_list( "select", "" );
+
 		$form_html = <<<HTML
 		<div class="registration_form">
 			<div class="form-group">
@@ -189,7 +226,7 @@ class Frontend {
 			</div>
 		</div>
 	HTML;
-	
+
 		return $form_html;
 	}
 }

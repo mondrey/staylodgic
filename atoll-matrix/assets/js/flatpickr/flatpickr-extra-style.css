@@ -608,8 +608,8 @@ span.flatpickr-weekday {
 .flatpickr-day.selected.startRange + .endRange:not(:nth-child(7n+1)),
 .flatpickr-day.startRange.startRange + .endRange:not(:nth-child(7n+1)),
 .flatpickr-day.endRange.startRange + .endRange:not(:nth-child(7n+1)) {
-  -webkit-box-shadow: -10px 0 0 #4f99ff;
-          box-shadow: -10px 0 0 #4f99ff;
+  -webkit-box-shadow: -1px 0 0 #4f99ff2e;
+          box-shadow: -1px 0 0 #4f99ff2e;
 }
 .flatpickr-day.selected.startRange.endRange,
 .flatpickr-day.startRange.startRange.endRange,

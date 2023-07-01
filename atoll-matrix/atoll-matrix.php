@@ -9,9 +9,12 @@
  * Text Domain: atollmatrix
  */
 
-if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+if (!defined('ABSPATH')) {
+    exit;
+}
+// Exit if accessed directly
 
-define( 'AtollMatrix_Blocks__FILE__', __FILE__ );
+define('AtollMatrix_Blocks__FILE__', __FILE__);
 
 /**
  * Load Imaginem Blocks
@@ -20,10 +23,11 @@ define( 'AtollMatrix_Blocks__FILE__', __FILE__ );
  *
  * @since 1.0.0
  */
-function AtollMatrix_Load() {
-	// Load localization file
-	load_plugin_textdomain( 'atollmatrix' );
-	require( __DIR__ . '/atoll-matrix-loader.php' );
+function AtollMatrix_Load()
+{
+    // Load localization file
+    load_plugin_textdomain('atollmatrix');
+    require __DIR__ . '/atoll-matrix-loader.php';
 
 }
-add_action( 'plugins_loaded', 'AtollMatrix_Load' );
+add_action('plugins_loaded', 'AtollMatrix_Load');

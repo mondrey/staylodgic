@@ -105,14 +105,13 @@ class EventBatchProcessor {
 		wp_send_json_success($responseData);
 	}
 	
-	
 
 	public function insert_events_batch() {
 		// Get the processed events data from the request
 		$processedEvents = $_POST['processedEvents'];
-		$processRoomID = $_POST['room_id'];
-		$processICS_URL = $_POST['ics_url'];
-		$processICS_ID = $_POST['ics_id'];
+		$processRoomID   = $_POST['room_id'];
+		$processICS_URL  = $_POST['ics_url'];
+		$processICS_ID   = $_POST['ics_id'];
 
 		$get_ICS_array = get_post_meta( get_the_ID(), 'room_ical_links', true );
 
@@ -122,11 +121,11 @@ class EventBatchProcessor {
 		// Loop through the processed events and insert posts
 		foreach ($processedEvents as $event) {
 			$booking_number = $event['UID'];
-			$checkin = $event['DATA']['CHECKIN'];
-			$checkout = $event['DATA']['CHECKOUT'];
-			$name = $event['SUMMARY'];
-			$description = $event['DESCRIPTION'];
-			$signature = $event['SIGNATURE'];
+			$checkin        = $event['DATA']['CHECKIN'];
+			$checkout       = $event['DATA']['CHECKOUT'];
+			$name           = $event['SUMMARY'];
+			$description    = $event['DESCRIPTION'];
+			$signature      = $event['SIGNATURE'];
 			
 			$room_id = $_POST['room_id'];
 			$ics_url = $_POST['ics_url'];
@@ -152,15 +151,15 @@ class EventBatchProcessor {
 				'post_title'    => $booking_number,  // Set the booking number as post title
 				'post_status'   => 'publish',       // The status you want to give new posts
 				'meta_input'    => array(
-					'atollmatrix_room_id' => $room_id,
+					'atollmatrix_room_id'            => $room_id,
 					'atollmatrix_reservation_status' => 'confirmed',
-					'atollmatrix_checkin_date' => $checkin,
-					'atollmatrix_checkout_date' => $checkout,
-					'atollmatrix_booking_number' => $booking_number,  // Set the booking number as post meta
-					'atollmatrix_full_name' => $name,  // Customer name
-					'atollmatrix_reservation_notes' => $description,  // Description
-					'atollmatrix_ics_signature' => $signature,  // ICS File hash
-					'atollmatrix_customer_choice' => 'new',  // ICS File hash
+					'atollmatrix_checkin_date'       => $checkin,
+					'atollmatrix_checkout_date'      => $checkout,
+					'atollmatrix_booking_number'     => $booking_number,   // Set the booking number as post meta
+					'atollmatrix_full_name'          => $name,             // Customer name
+					'atollmatrix_reservation_notes'  => $description,      // Description
+					'atollmatrix_ics_signature'      => $signature,        // ICS File hash
+					'atollmatrix_customer_choice'    => 'new',             // ICS File hash
 					// add other meta data you need
 				),
 			);
@@ -270,9 +269,9 @@ class EventBatchProcessor {
 			wp_send_json_error('Invalid nonce');
 		}
 	
-		$room_ids = $_POST['room_ids'];
-		$room_links_id = $_POST['room_ical_links_id'];
-		$room_links_url = $_POST['room_ical_links_url'];
+		$room_ids           = $_POST['room_ids'];
+		$room_links_id      = $_POST['room_ical_links_id'];
+		$room_links_url     = $_POST['room_ical_links_url'];
 		$room_links_comment = $_POST['room_ical_links_comment'];
 
 
@@ -304,9 +303,9 @@ class EventBatchProcessor {
 						}
 
 						$room_links[$file_md5Hash] = array(
-							'ical_id' => sanitize_text_field($room_links_id[$i][$j]),
-							'ical_synced' => $ical_synced,
-							'ical_url' => sanitize_url($room_links_url[$i][$j]),
+							'ical_id'      => sanitize_text_field($room_links_id[$i][$j]),
+							'ical_synced'  => $ical_synced,
+							'ical_url'     => sanitize_url($room_links_url[$i][$j]),
 							'ical_comment' => sanitize_text_field($room_links_comment[$i][$j]),
 						);
 					}
@@ -349,7 +348,7 @@ class EventBatchProcessor {
 		}
 
 		// Parse the ICS file and store the events in a transient.
-		$file_path = $ics_url;
+		$file_path    = $ics_url;
 		$file_md5Hash = md5($file_path);
 		$parser->initString($file_contents);  // Change this line
 		$events = $parser->events();
@@ -394,7 +393,7 @@ class EventBatchProcessor {
 			$descriptionLines = explode("\n", $description);
 			foreach ($descriptionLines as $line) {
 				$parts = explode(':', $line, 2);
-				$key = isset($parts[0]) ? trim($parts[0]) : '';
+				$key   = isset($parts[0]) ? trim($parts[0]) : '';
 				$value = isset($parts[1]) ? trim($parts[1]) : '';
 				if (array_key_exists($key, $eventData)) {
 					$eventData[$key] = $value;
@@ -416,15 +415,15 @@ class EventBatchProcessor {
 			$checkout_date = date('Y-m-d', strtotime($event->dtend));
 			
 			$processedEvent = [
-				'SIGNATURE' => $file_md5Hash,
-				'CREATED' => $event->created,
-				'DTEND' => $event->dtend,
-				'DTSTART' => $event->dtstart,
-				'SUMMARY' => $event->summary,
-				'CHECKIN' => $checkin_date,
-				'CHECKOUT' => $checkout_date,
-				'UID' => $event->uid,
-				'DATA' => $eventData,
+				'SIGNATURE'   => $file_md5Hash,
+				'CREATED'     => $event->created,
+				'DTEND'       => $event->dtend,
+				'DTSTART'     => $event->dtstart,
+				'SUMMARY'     => $event->summary,
+				'CHECKIN'     => $checkin_date,
+				'CHECKOUT'    => $checkout_date,
+				'UID'         => $event->uid,
+				'DATA'        => $eventData,
 				'DESCRIPTION' => $description
 			];
 			
@@ -438,9 +437,9 @@ class EventBatchProcessor {
 		$response = array(
 			'success' => true,
 			'data' => array(
-				'processed' => $processedEvents,
-				'remaining' => count($events),
-				'transient_used' => $transient_used,
+				'processed'               => $processedEvents,
+				'remaining'               => count($events),
+				'transient_used'          => $transient_used,
 				'processedBookingNumbers' => array_column($processedEvents, 'UID'),
 			),
 		);

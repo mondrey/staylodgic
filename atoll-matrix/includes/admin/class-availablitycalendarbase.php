@@ -41,10 +41,10 @@ class AvailablityCalendarBase {
 		
 		if ( !$startDate ) {
 			$start_Date = new \DateTime($this->startDate);
-			$end_Date = new \DateTime($this->endDate);
+			$end_Date   = new \DateTime($this->endDate);
 		} else {
 			$start_Date = $startDate instanceof \DateTime ? $startDate : new \DateTime($startDate);
-			$end_Date = $endDate instanceof \DateTime ? $endDate : new \DateTime($endDate);
+			$end_Date   = $endDate instanceof \DateTime ? $endDate : new \DateTime($endDate);
 		}
 			
 		$numDays = $start_Date->diff($end_Date)->days + 1;
@@ -59,10 +59,10 @@ class AvailablityCalendarBase {
 
 		if ( !$startDate ) {
 			$start_date = new \DateTime($this->startDate);
-			$end_date = new \DateTime($this->endDate);
+			$end_date   = new \DateTime($this->endDate);
 		} else {
 			$start_date = $startDate;
-			$end_date = $endDate;
+			$end_date   = $endDate;
 		}
 
 		$dates = [];
@@ -87,8 +87,8 @@ class AvailablityCalendarBase {
 		$daysCount = 0;
 	
 		while ( $currentDate <= $endDate ) {
-			$currentDateString = $currentDate->format('Y-m-d');
-			$occupancyPercentage = $this->calculateOccupancyForDate( $currentDateString );
+			$currentDateString         = $currentDate->format('Y-m-d');
+			$occupancyPercentage       = $this->calculateOccupancyForDate( $currentDateString );
 			$totalOccupancyPercentage += $occupancyPercentage;
 			$daysCount++;
 			$currentDate->modify('+1 day');
@@ -115,10 +115,9 @@ class AvailablityCalendarBase {
 				$confirmed_reservations->the_post();
 	
 				$reservationStartDate = get_post_meta( get_the_ID(), 'atollmatrix_checkin_date', true );
-				$reservationEndDate = get_post_meta( get_the_ID(), 'atollmatrix_checkout_date', true );
-	
+				$reservationEndDate   = get_post_meta( get_the_ID(), 'atollmatrix_checkout_date', true );
 				$reservationStartDate = new \DateTime( $reservationStartDate );
-				$reservationEndDate = new \DateTime( $reservationEndDate );
+				$reservationEndDate   = new \DateTime( $reservationEndDate );
 	
 				// Check if the current date falls within the reservation period
 				if ( $currentDate >= $reservationStartDate && $currentDate < $reservationEndDate ) {
@@ -145,18 +144,16 @@ class AvailablityCalendarBase {
 	}
 	
 	public function calculateOccupancyForDate($currentdateString) {
-		$totalOccupiedRooms = 0;
+		$totalOccupiedRooms  = 0;
 		$totalAvailableRooms = 0;
-
-		
-		$this->rooms = \AtollMatrix\Rooms::queryRooms();
+		$this->rooms         = \AtollMatrix\Rooms::queryRooms();
 		
 		foreach($this->rooms as $room){
 			// Increment the total number of occupied rooms
 
 			$reservation_instance = new \AtollMatrix\Reservations( $currentdateString, $room->ID );
 			$totalOccupiedRooms += $reservation_instance->calculateReservedRooms();
-			// Increment the total number of available rooms
+			  // Increment the total number of available rooms
 			$totalAvailableRooms += \AtollMatrix\Rooms::getMaxQuantityForRoom( $room->ID, $currentdateString);
 	
 			//echo '<br>'.$currentdateString.'<br>'. $room->ID . '||' . $totalOccupiedRooms. '||' . $totalAvailableRooms . '<br>';
