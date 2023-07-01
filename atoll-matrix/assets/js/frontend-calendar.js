@@ -202,9 +202,11 @@
 					number_of_children: numberOfChildren
 				},
 				success: function (response) {
-					// handle response
-					console.log(response);
-					$('#available-list-ajax').html(response);
+					var parsedResponse = JSON.parse(response);
+					console.log(parsedResponse); // Output: The parsed JavaScript object or array
+					// You can now work with the parsed data
+					$('#recommended-alternative-dates').html(parsedResponse.alt_recommends);
+					$('#available-list-ajax').html(parsedResponse.roomlist);
 				},
 				error: function (err) {
 					// Handle error here

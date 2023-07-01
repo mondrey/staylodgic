@@ -480,29 +480,30 @@ class Reservations
         return false;
     }
 
-    public function splitArray_By_ContinuousDays($inputArray) {
+    public function splitArray_By_ContinuousDays($inputArray)
+    {
         $outputArray = array();
-        
+
         foreach ($inputArray as $key => $dates) {
-            $tempArray = array();
-            $subset = array();
+            $tempArray    = array();
+            $subset       = array();
             $previousDate = null;
-            
+
             foreach ($dates as $date => $value) {
                 if ($previousDate === null || (strtotime($previousDate . ' + 1 day') == strtotime($date))) {
                     $subset[$date] = $value;
                 } else {
                     $tempArray[] = $subset;
-                    $subset = array($date => $value);
+                    $subset      = array($date => $value);
                 }
-                
+
                 $previousDate = $date;
             }
-            
-            $tempArray[] = $subset;
+
+            $tempArray[]       = $subset;
             $outputArray[$key] = $tempArray;
         }
-        
+
         return $outputArray;
     }
 
@@ -523,16 +524,16 @@ class Reservations
             foreach ($daterange as $date) {
                 $date_string = $date->format("Y-m-d");
                 // Check if the room is fully booked for the given date
-                if ( ! $this->isRoom_For_Day_Fullybooked($room->ID, $date_string, $reservationid = false) ) {
+                if (!$this->isRoom_For_Day_Fullybooked($room->ID, $date_string, $reservationid = false)) {
                     // If the room is fully booked for any of the dates in the range, return true
                     $room_availablity[$room->ID][$date_string] = '1';
                 }
             }
-            
+
         }
 
         // If the room is not fully booked for any of the dates in the range, return false
-        $sub_set_room_availablity = self::splitArray_By_ContinuousDays( $room_availablity );
+        $sub_set_room_availablity = self::splitArray_By_ContinuousDays($room_availablity);
 
         return $sub_set_room_availablity;
     }

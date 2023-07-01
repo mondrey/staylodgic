@@ -1,22 +1,25 @@
 <?php
 namespace AtollMatrix;
 
-class Frontend {
+class Frontend
+{
 
-	public function __construct() {
-		add_shortcode( 'hotel_booking_search', array( $this, 'hotelBooking_SearchForm' ) );
-		// AJAX handler to save room metadata
+    public function __construct()
+    {
+        add_shortcode('hotel_booking_search', array($this, 'hotelBooking_SearchForm'));
+        // AJAX handler to save room metadata
 
-		add_action( 'wp_ajax_frontend_BookingSearch', array( $this, 'frontend_BookingSearch' ) );
-		add_action( 'wp_ajax_nopriv_frontend_BookingSearch', array( $this, 'frontend_BookingSearch' ) );
-	}
+        add_action('wp_ajax_frontend_BookingSearch', array($this, 'frontend_BookingSearch'));
+        add_action('wp_ajax_nopriv_frontend_BookingSearch', array($this, 'frontend_BookingSearch'));
+    }
 
-	public function hotelBooking_SearchForm() {
-		// Generate unique booking number
-		$booking_number = uniqid();
-		set_transient( $booking_number, '1', 20 * MINUTE_IN_SECONDS );
-		ob_start();
-		?>
+    public function hotelBooking_SearchForm()
+    {
+        // Generate unique booking number
+        $booking_number = uniqid();
+        set_transient($booking_number, '1', 20 * MINUTE_IN_SECONDS);
+        ob_start();
+        ?>
 		<div id="hotel-booking-form">
 			<form action="" method="post" id="hotel-booking">
 				<div>
@@ -35,7 +38,7 @@ class Frontend {
 					<input id="number-of-children" name="number_of_children" min="0">
 				</div>
 				<div id="bookingSearch" class="div-button">Search</div>
-
+				<div id="recommended-alternative-dates"></div>
 				<div class="available-checkin-summary">
 					<h3>Check-in</h3>
 					<div class="pre-book-check-in"></div>
@@ -53,125 +56,132 @@ class Frontend {
 			</form>
 		</div>
 		<?php
-		return ob_get_clean();
-	}
+return ob_get_clean();
+    }
 
-	public function frontend_BookingSearch() {
-		$room_type          = '';
-		$number_of_children = '';
-		$number_of_guests   = '';
-		$reservation_date   = '';
-		$booking_number     = '';
-	
-		if (isset($_POST['booking_number'])) {
-			$booking_number = $_POST['booking_number'];
-		}
-	
-		if (isset($_POST['reservation_date'])) {
-			$reservation_date = $_POST['reservation_date'];
-		}
-	
-		if (isset($_POST['number_of_guests'])) {
-			$number_of_guests = $_POST['number_of_guests'];
-		}
-	
-		if (isset($_POST['number_of_children'])) {
-			$number_of_children = $_POST['number_of_children'];
-		}
-	
-		if (isset($_POST['room_type'])) {
-			$room_type = $_POST['room_type'];
-		}
-	
-		$chosenDate = \AtollMatrix\Common::splitDateRange($reservation_date);
-	
-		$checkinDate  = '';
-		$checkoutDate = '';
-	
-		if (isset($chosenDate['startDate'])) {
-			$checkinDate = $chosenDate['startDate'];
-		}
-		if (isset($chosenDate['endDate'])) {
-			$checkoutDate = $chosenDate['endDate'];
-		}
-	
-		// Perform your query here, this is just an example
-		$result = "Check-in Date: $checkinDate, Check-out Date: $checkoutDate, Number of Adults: $number_of_guests, Number of Children: $number_of_children";
-		error_log(print_r($result, true));
-		$room_instance = new \AtollMatrix\Rooms();
-	
-		// Get a combined array of rooms and rates which are available for the dates.
-		$combo_array = $room_instance->getAvailable_Rooms_and_Rates_For_DateRange($checkinDate, $checkoutDate);
-	
-		error_log('Value of $combo_array["rooms"]:');
-		error_log(print_r($combo_array['rooms'], true));
-	
-		if (count($combo_array['rooms']) == 0) {
-			// Perform the greedy search by adjusting the check-in and check-out dates
-			$newCheckinDate = new \DateTime($checkinDate);
-			$newCheckoutDate = new \DateTime($checkoutDate);
-			$newCheckoutDate->add(new \DateInterval('P1D'));
+    public function frontend_BookingSearch()
+    {
+        $room_type          = '';
+        $number_of_children = '';
+        $number_of_guests   = '';
+        $reservation_date   = '';
+        $booking_number     = '';
 
-			$reservation_instance = new \AtollMatrix\Reservations();
+        if (isset($_POST['booking_number'])) {
+            $booking_number = $_POST['booking_number'];
+        }
 
-			$room_availabity = $reservation_instance->Availability_of_Rooms_For_DateRange( $newCheckinDate->format('Y-m-d'), $newCheckoutDate->format('Y-m-d') );
-			error_log( '---- Room Availability Matrix for Range' );
-			error_log( print_r( $room_availabity, true ));
-		}
-	
-		//set_transient($booking_number, $combo_array, 20 * MINUTE_IN_SECONDS);
-	
-		$room_array  = $combo_array['rooms'];
-		$rates_array = $combo_array['rates'];
-		// error_log(print_r($combo_array, true));
-		// error_log("Rooms array");
-		// error_log(print_r($room_array, true));
-		// error_log("Date Range from picker");
-		// error_log(print_r($checkinDate, true));
-		// error_log(print_r($checkoutDate, true));
-	
-		// Always die in functions echoing AJAX content
-		$list = self::listRooms_And_Quantities($room_array);
-		ob_start();
-		echo '<div id="reservation-data" data-bookingnumber="' . $booking_number . '" data-children="' . $number_of_children . '" data-adults="' . $number_of_guests . '" data-checkin="' . $checkinDate . '" data-checkout="' . $checkoutDate . '">';
-		echo $list;
-		echo self::register_Guest_Form();
-		echo '<div id="bookingResponse" class="booking-response"></div>';
-		echo self::paymentHelper_Form($booking_number);
-		$output = ob_get_clean();
-		echo $output;
-		die();
-	}
+        if (isset($_POST['reservation_date'])) {
+            $reservation_date = $_POST['reservation_date'];
+        }
 
-	public function listRooms_And_Quantities( $room_array ) {
-		// Initialize empty string to hold HTML
-		$html = '';
+        if (isset($_POST['number_of_guests'])) {
+            $number_of_guests = $_POST['number_of_guests'];
+        }
 
-		// Iterate through each room
-		foreach ( $room_array as $id => $room_info ) {
-			// Get quantity and room title
-			foreach ( $room_info as $quantity => $title ) {
-				// Append a div for the room with the room ID as a data attribute
-				$html .= '<div data-room-id="' . $id . '">';
-				// Append the room title
-				$html .= '<h2>' . $title . '</h2>';
-				// Append a select element for the quantity
-				$html .= '<select data-room-id="' . $id . '" name="room_quantity">';
-				// Append an option for each possible quantity
-				for ( $i = 0; $i <= $quantity; $i++ ) {
-					$html .= '<option value="' . $i . '">' . $i . '</option>';
-				}
-				$html .= '</select>';
-				$html .= '</div>';
-			}
-		}
+        if (isset($_POST['number_of_children'])) {
+            $number_of_children = $_POST['number_of_children'];
+        }
 
-		// Return the resulting HTML string
-		return $html;
-	}
+        if (isset($_POST['room_type'])) {
+            $room_type = $_POST['room_type'];
+        }
 
-	public function paymentHelper_Form( $booking_number ) {
-		$form_html = <<<HTML
+        $chosenDate = \AtollMatrix\Common::splitDateRange($reservation_date);
+
+        $checkinDate  = '';
+        $checkoutDate = '';
+
+        if (isset($chosenDate['startDate'])) {
+            $checkinDate = $chosenDate['startDate'];
+        }
+        if (isset($chosenDate['endDate'])) {
+            $checkoutDate = $chosenDate['endDate'];
+        }
+
+        // Perform your query here, this is just an example
+        $result = "Check-in Date: $checkinDate, Check-out Date: $checkoutDate, Number of Adults: $number_of_guests, Number of Children: $number_of_children";
+        error_log(print_r($result, true));
+        $room_instance = new \AtollMatrix\Rooms();
+
+        // Get a combined array of rooms and rates which are available for the dates.
+        $combo_array = $room_instance->getAvailable_Rooms_and_Rates_For_DateRange($checkinDate, $checkoutDate);
+
+        error_log('Value of $combo_array["rooms"]:');
+        error_log(print_r($combo_array['rooms'], true));
+
+		$room_availabity = '';
+
+        if (count($combo_array['rooms']) == 0) {
+            // Perform the greedy search by adjusting the check-in and check-out dates
+            $newCheckinDate  = new \DateTime($checkinDate);
+            $newCheckoutDate = new \DateTime($checkoutDate);
+            $newCheckoutDate->add(new \DateInterval('P1D'));
+
+            $reservation_instance = new \AtollMatrix\Reservations();
+
+            $room_availabity = $reservation_instance->Availability_of_Rooms_For_DateRange($newCheckinDate->format('Y-m-d'), $newCheckoutDate->format('Y-m-d'));
+            error_log('---- Alternative Room Availability Matrix for Range');
+            error_log(print_r($room_availabity, true));
+        }
+
+        //set_transient($booking_number, $combo_array, 20 * MINUTE_IN_SECONDS);
+
+        $room_array  = $combo_array['rooms'];
+        $rates_array = $combo_array['rates'];
+        // error_log(print_r($combo_array, true));
+        // error_log("Rooms array");
+        // error_log(print_r($room_array, true));
+        // error_log("Date Range from picker");
+        // error_log(print_r($checkinDate, true));
+        // error_log(print_r($checkoutDate, true));
+
+        // Always die in functions echoing AJAX content
+        $list = self::listRooms_And_Quantities($room_array);
+        ob_start();
+        echo '<div id="reservation-data" data-bookingnumber="' . $booking_number . '" data-children="' . $number_of_children . '" data-adults="' . $number_of_guests . '" data-checkin="' . $checkinDate . '" data-checkout="' . $checkoutDate . '">';
+        echo $list;
+        echo self::register_Guest_Form();
+        echo '<div id="bookingResponse" class="booking-response"></div>';
+        echo self::paymentHelper_Form($booking_number);
+        $output = ob_get_clean();
+        $response['roomlist'] = $output;
+		$response['alt_recommends'] = $room_availabity;
+		echo json_encode($response, JSON_UNESCAPED_SLASHES);
+        die();
+    }
+
+    public function listRooms_And_Quantities($room_array)
+    {
+        // Initialize empty string to hold HTML
+        $html = '';
+
+        // Iterate through each room
+        foreach ($room_array as $id => $room_info) {
+            // Get quantity and room title
+            foreach ($room_info as $quantity => $title) {
+                // Append a div for the room with the room ID as a data attribute
+                $html .= '<div data-room-id="' . $id . '">';
+                // Append the room title
+                $html .= '<h2>' . $title . '</h2>';
+                // Append a select element for the quantity
+                $html .= '<select data-room-id="' . $id . '" name="room_quantity">';
+                // Append an option for each possible quantity
+                for ($i = 0; $i <= $quantity; $i++) {
+                    $html .= '<option value="' . $i . '">' . $i . '</option>';
+                }
+                $html .= '</select>';
+                $html .= '</div>';
+            }
+        }
+
+        // Return the resulting HTML string
+        return $html;
+    }
+
+    public function paymentHelper_Form($booking_number)
+    {
+        $form_html = <<<HTML
 			<form action="" method="post" id="paymentForm">
 				<!-- Other form fields -->
 				<input type="hidden" name="total" id="totalField" value="100">
@@ -179,13 +189,14 @@ class Frontend {
 				<div id="bookingPayment" class="div-button">Pay</div>
 			</form>
 		HTML;
-		return $form_html;
-	}
+        return $form_html;
+    }
 
-	public function register_Guest_Form() {
-		$country_options = atollmatrix_country_list( "select", "" );
+    public function register_Guest_Form()
+    {
+        $country_options = atollmatrix_country_list("select", "");
 
-		$form_html = <<<HTML
+        $form_html = <<<HTML
 		<div class="registration_form">
 			<div class="form-group">
 				<label for="full_name">Full Name</label>
@@ -227,8 +238,8 @@ class Frontend {
 		</div>
 	HTML;
 
-		return $form_html;
-	}
+        return $form_html;
+    }
 }
 
 $instance = new \AtollMatrix\Frontend();
