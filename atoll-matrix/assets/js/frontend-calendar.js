@@ -2,6 +2,49 @@
 	$(document).ready(function () {
 
 
+// Function to update the selected dates and nights
+function updateSelectedDates(checkIn, checkOut) {
+    if (!(checkIn instanceof Date) || !(checkOut instanceof Date)) {
+        // Handle the case when checkIn or checkOut is not a valid Date object
+        console.error('Invalid Date object');
+        return;
+    }
+
+    var checkInDate = checkIn.toDateString();
+    var stayLast = checkOut.toDateString();
+    var checkOutDate = new Date(checkOut.getTime() + 86400000).toDateString();
+
+    $('.pre-book-check-in').text(checkInDate);
+    $('.pre-book-stay-night').text(stayLast);
+    $('.pre-book-check-out').text(checkOutDate);
+
+    var nights = calculateDaysBetweenDates(checkInDate, checkOutDate);
+    $('.pre-book-nights').text(nights);
+}
+
+		// Get the flatpickr input element
+		var flatpickrInput = $("#reservation-date");
+		// Attach click event to each span element
+		$(document).on('click', '.recommended-dates-wrap span', function(e) {
+			// Get the check-in and check-out dates from the data attributes
+			var checkInDateStr = $(this).data("check-in");
+			var stayLastDateStr = $(this).data("check-staylast");
+			var checkOutDateStr = $(this).data("check-out");
+		
+			// Convert the date strings to Date objects
+			var checkInDate = new Date(checkInDateStr);
+			var stayLastDate = new Date(stayLastDateStr);
+			var checkOutDate = new Date(checkOutDateStr);
+		
+			// Update the flatpickr input value with the selected date range
+			flatpickrInput.val(checkInDateStr + " to " + stayLastDateStr);
+		
+			updateSelectedDates(checkInDate, stayLastDate);
+			// Trigger click on the bookingSearch button
+			$("#bookingSearch").trigger("click");
+		});
+		
+
 		function calculateDaysBetweenDates(startDate, endDate) {
 			var start = new Date(startDate);
 			var end = new Date(endDate);
@@ -140,22 +183,10 @@
 				minDate: "today", // Disable navigation to months previous to the current month
 				onChange: function (selectedDates, dateStr, instance) {
 					if (selectedDates.length === 2) {
-						var checkInDate = selectedDates[0].toDateString();
-						var stayLast = selectedDates[1].toDateString();
-						var checkOutDate = new Date(selectedDates[1].getTime() + 86400000).toDateString();
-						updateSelectedDates(checkInDate, stayLast, checkOutDate);
+						updateSelectedDates(selectedDates[0], selectedDates[1]);
 					}
 				}
 			});
-			// Function to update the selected dates and nights
-			function updateSelectedDates(checkInDate, stayLast, checkOutDate) {
-				$('.pre-book-check-in').text(checkInDate);
-				$('.pre-book-stay-night').text(stayLast);
-				$('.pre-book-check-out').text(checkOutDate);
-
-				var nights = calculateDaysBetweenDates(checkInDate, checkOutDate);
-				$('.pre-book-nights').text(nights);
-			}
 		}
 
 		ReservationDatePicker();
@@ -205,8 +236,16 @@
 					var parsedResponse = JSON.parse(response);
 					console.log(parsedResponse); // Output: The parsed JavaScript object or array
 					// You can now work with the parsed data
-					$('#recommended-alternative-dates').html(parsedResponse.alt_recommends);
-					$('#available-list-ajax').html(parsedResponse.roomlist);
+
+					// Check if the array is null or empty
+					if (parsedResponse.alt_recommends === null || parsedResponse.alt_recommends.length === 0) {
+						// The array is empty
+						$('#available-list-ajax').html(parsedResponse.roomlist);
+					} else {
+						// The array is not empty
+						$('.recommended-alt-wrap').show();
+						$('#recommended-alt-dates').html(parsedResponse.alt_recommends);
+					}
 				},
 				error: function (err) {
 					// Handle error here

@@ -38,7 +38,10 @@ class Frontend
 					<input id="number-of-children" name="number_of_children" min="0">
 				</div>
 				<div id="bookingSearch" class="div-button">Search</div>
-				<div id="recommended-alternative-dates"></div>
+				<div class="recommended-alt-wrap">
+                    <div class="recommended-alt-title">Rooms unavailable</br>Please choose among following dates which has availability</div>
+				    <div id="recommended-alt-dates"></div>
+                </div>
 				<div class="available-checkin-summary">
 					<h3>Check-in</h3>
 					<div class="pre-book-check-in"></div>
@@ -110,7 +113,7 @@ return ob_get_clean();
         error_log('Value of $combo_array["rooms"]:');
         error_log(print_r($combo_array['rooms'], true));
 
-		$room_availabity = '';
+		$available_room_dates = array();
 
         if (count($combo_array['rooms']) == 0) {
             // Perform the greedy search by adjusting the check-in and check-out dates
@@ -120,7 +123,75 @@ return ob_get_clean();
 
             $reservation_instance = new \AtollMatrix\Reservations();
 
-            $room_availabity = $reservation_instance->Availability_of_Rooms_For_DateRange($newCheckinDate->format('Y-m-d'), $newCheckoutDate->format('Y-m-d'));
+            $available_room_dates = $reservation_instance->Availability_of_Rooms_For_DateRange($newCheckinDate->format('Y-m-d'), $newCheckoutDate->format('Y-m-d'));
+
+            error_log('---- Alternative Rooms Matrix Early');
+            error_log(print_r($available_room_dates, true));
+            $new_room_availability_array = array();
+
+            // Process each sub-array
+            foreach ($available_room_dates as $roomId => $subArray) {
+                // Initialize the new sub-array for the current room
+                $new_subArray = array();
+            
+                // Get the first and last keys of the inner arrays
+                foreach ($subArray as $innerArray) {
+                    $keys = array_keys($innerArray);
+                    $firstKey = $keys[0];
+                    $lastKey = end($keys);
+            
+                    // Keep only the first and last records and assign unique indexes
+                    $new_subArray[$firstKey] = array(
+                        'check-in' => $firstKey,
+                        'check-out' => $lastKey 
+                    );
+                }
+            
+                // Add the new sub-array to the new room availability array
+                $new_room_availability_array[$roomId] = $new_subArray;
+            }            
+            $room_availabity_array = $new_room_availability_array;
+            
+
+            error_log('---- Alternative Room Availability Matrix Before');
+            error_log(print_r($room_availabity_array, true));
+
+            // Initialize an empty string
+            $output = '';
+
+            foreach ($room_availabity_array as $key => $subset) {
+                // Output the key of the subset
+                error_log ( "Subset Key: $key\n" );
+                
+                // Iterate through each sub array in the subset
+                foreach ($subset as $subArray) {
+                    // Output the sub array
+                    error_log( print_r( $subArray, true ) );
+                    $check_in_alt = $subArray['check-in'];
+                    $staylast = $subArray['check-out'];
+
+                    // Format the dates as "Month Day" (e.g., "July 13th")
+                    $formattedFirstDate = date('F jS', strtotime($check_in_alt));
+                    // Get the date one day after the formattedLastDate
+                    $check_out_alt = date('Y-m-d', strtotime($staylast . ' +1 day'));
+                    $formattedNextDay = date('F jS', strtotime($nextDay));
+                    if (date('F', strtotime($staylast)) !== date('F', strtotime($check_in_alt))) {
+                        $formattedNextDay = date('F jS', strtotime($check_out_alt));
+                    } else {
+                        $formattedNextDay = date('jS', strtotime($check_out_alt));
+                    }
+
+                    $output .= "<span data-check-staylast='{$staylast}' data-check-in='{$check_in_alt}' data-check-out='{$check_out_alt}'>{$formattedFirstDate} - {$formattedNextDay}</span>, ";
+                    
+                    // Perform operations with the sub array...
+                }
+            }
+
+            // Remove the trailing comma and space
+            $output = rtrim($output, ', ');
+
+            // Print the output
+            $room_availabity = '<div class="recommended-dates-wrap">'.$output.'</div>';
             error_log('---- Alternative Room Availability Matrix for Range');
             error_log(print_r($room_availabity, true));
         }

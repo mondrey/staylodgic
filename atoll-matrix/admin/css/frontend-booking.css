@@ -12,3 +12,7 @@
 .booking-response.error {
     background-color: red;
 }
+
+.recommended-alt-wrap {
+    display: none;
+}

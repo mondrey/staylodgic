@@ -167,6 +167,7 @@ class AtollMatrix_Init
     public function atollmatrix_load_front_end_scripts_styles()
     {
 
+        wp_register_style('frontendstyle', plugin_dir_url(__FILE__) . 'admin/css/frontend-booking.css', array(), '1.0', 'screen');
         wp_register_style('flatpickr', plugin_dir_url(__FILE__) . 'assets/js/flatpickr/flatpickr.min.css', array(), '1.0', 'screen');
         wp_register_style('flatpickr-extra', plugin_dir_url(__FILE__) . 'assets/js/flatpickr/flatpickr-extra-style.css', array(), '1.0', 'screen');
         wp_register_script('flatpickr', plugin_dir_url(__FILE__) . 'assets/js/flatpickr/flatpickr.js', array('jquery'), '1.0', true);
@@ -182,6 +183,7 @@ class AtollMatrix_Init
 
         wp_enqueue_script('frontend-calendar', array('jquery'), null, true);
         wp_enqueue_script('payment-helper');
+        wp_enqueue_style('frontendstyle');
         wp_enqueue_style('flatpickr');
         wp_enqueue_script('flatpickr');
         wp_enqueue_style('flatpickr-extra');
