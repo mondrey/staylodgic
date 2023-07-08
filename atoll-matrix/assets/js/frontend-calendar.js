@@ -2,48 +2,48 @@
 	$(document).ready(function () {
 
 
-// Function to update the selected dates and nights
-function updateSelectedDates(checkIn, checkOut) {
-    if (!(checkIn instanceof Date) || !(checkOut instanceof Date)) {
-        // Handle the case when checkIn or checkOut is not a valid Date object
-        console.error('Invalid Date object');
-        return;
-    }
+		// Function to update the selected dates and nights
+		function updateSelectedDates(checkIn, checkOut) {
+			if (!(checkIn instanceof Date) || !(checkOut instanceof Date)) {
+				// Handle the case when checkIn or checkOut is not a valid Date object
+				console.error('Invalid Date object');
+				return;
+			}
 
-    var checkInDate = checkIn.toDateString();
-    var stayLast = checkOut.toDateString();
-    var checkOutDate = new Date(checkOut.getTime() + 86400000).toDateString();
+			var checkInDate = checkIn.toDateString();
+			var stayLast = new Date(checkOut.getTime() - 86400000).toDateString();
+			var checkOutDate = checkOut.toDateString();
 
-    $('.pre-book-check-in').text(checkInDate);
-    $('.pre-book-stay-night').text(stayLast);
-    $('.pre-book-check-out').text(checkOutDate);
+			$('.pre-book-check-in').text(checkInDate);
+			$('.pre-book-stay-night').text(stayLast);
+			$('.pre-book-check-out').text(checkOutDate);
 
-    var nights = calculateDaysBetweenDates(checkInDate, checkOutDate);
-    $('.pre-book-nights').text(nights);
-}
+			var nights = calculateDaysBetweenDates(checkInDate, checkOutDate);
+			$('.pre-book-nights').text(nights);
+		}
 
 		// Get the flatpickr input element
 		var flatpickrInput = $("#reservation-date");
 		// Attach click event to each span element
-		$(document).on('click', '.recommended-dates-wrap span', function(e) {
+		$(document).on('click', '.recommended-dates-wrap span', function (e) {
 			// Get the check-in and check-out dates from the data attributes
 			var checkInDateStr = $(this).data("check-in");
 			var stayLastDateStr = $(this).data("check-staylast");
 			var checkOutDateStr = $(this).data("check-out");
-		
+
 			// Convert the date strings to Date objects
 			var checkInDate = new Date(checkInDateStr);
 			var stayLastDate = new Date(stayLastDateStr);
 			var checkOutDate = new Date(checkOutDateStr);
-		
+			console.log(' the new checkout ' + checkOutDate);
 			// Update the flatpickr input value with the selected date range
-			flatpickrInput.val(checkInDateStr + " to " + stayLastDateStr);
-		
-			updateSelectedDates(checkInDate, stayLastDate);
+			flatpickrInput.val(checkInDateStr + " to " + checkOutDateStr);
+
+			updateSelectedDates(checkInDate, checkOutDate);
 			// Trigger click on the bookingSearch button
 			$("#bookingSearch").trigger("click");
 		});
-		
+
 
 		function calculateDaysBetweenDates(startDate, endDate) {
 			var start = new Date(startDate);
@@ -53,130 +53,13 @@ function updateSelectedDates(checkIn, checkOut) {
 			return days;
 		}
 
-		function processOccupancyData(occupancyData, instance) {
-			// Process the occupancy data here
-			// ...
-			// You can use the occupancyData to disable specific dates or perform other operations
-			// Set the disabled dates
-			var disabledDates = Object.entries(occupancyData)
-				.filter(function ([date, occupancyPercentage]) {
-					return occupancyPercentage === 100;
-				})
-				.map(function ([date, occupancyPercentage]) {
-					return date;
-				});
-
-			instance.set("disable", disabledDates);
-		}
-
 		function ReservationDatePicker() {
-			var occupancyCache = {}; // Object to store cached occupancy data
-			var cacheDuration = 5 * 60 * 1000; // Cache duration in milliseconds (5 minutes)
-
-			function fetchOccupancyData(startDate, endDate, instance) {
-				var data = {
-					action: "fetchOccupancy_Percentage_For_Calendar_Range",
-					start: startDate,
-					end: endDate
-				};
-
-				var cacheKey = startDate + "-" + endDate;
-
-				// Check if the occupancy data is already cached
-				if (occupancyCache.hasOwnProperty(cacheKey)) {
-					var cachedData = occupancyCache[cacheKey];
-
-					// Check if the cache has expired
-					if (Date.now() - cachedData.timestamp <= cacheDuration) {
-						// Cache is still valid, use the cached data
-						processOccupancyData(cachedData.data, instance);
-						return; // Return early, no need for AJAX request
-					} else {
-						// Cache has expired, remove it
-						delete occupancyCache[cacheKey];
-					}
-				}
-
-				$.ajax({
-					url: frontendAjax.ajaxurl,
-					method: "POST",
-					data: data,
-					success: function (response) {
-						console.log("Response data:", response);
-
-						try {
-							var occupancyData = response;
-
-							// Cache the occupancy data with timestamp
-							occupancyCache[cacheKey] = {
-								data: occupancyData,
-								timestamp: Date.now()
-							};
-
-							processOccupancyData(occupancyData, instance);
-						} catch (error) {
-							console.log("JSON parse error:", error);
-						}
-					},
-					error: function (xhr, status, error) {
-						console.log("AJAX error:", error);
-					}
-				});
-			}
-
-			// Rest of the code remains the same
-
-			var debouncedFetchOccupancyData = _.debounce(fetchOccupancyData, 500); // Adjust the delay (in milliseconds) as needed
-
-			function handleReservationCalendarMonthChange(selectedDates, dateStr, instance) {
-				var currentYear = instance.currentYear;
-				var currentMonth = instance.currentMonth;
-
-				// Calculate the current and next months
-				var currentMonthDate = new Date(currentYear, currentMonth, 1);
-				var nextMonthDate = new Date(currentYear, currentMonth + 1, 1);
-
-				var currentMonthName = currentMonthDate.toLocaleString("default", {
-					month: "long"
-				});
-				var nextMonthName = nextMonthDate.toLocaleString("default", {
-					month: "long"
-				});
-
-				console.log("Current month:", currentMonthName);
-				console.log("Next month:", nextMonthName);
-
-				// Calculate the first day of the current month
-				var currentMonthFirstDay = new Date(currentYear, currentMonth, 1);
-				currentMonthFirstDay.setDate(currentMonthFirstDay.getDate() + 1);
-				currentMonthFirstDay = currentMonthFirstDay.toISOString().split("T")[0];
-				console.log("First day of current month:", currentMonthFirstDay);
-
-				// Calculate the last day of the next month
-				var nextMonthLastDay = new Date(currentYear, currentMonth + 2, 0);
-				nextMonthLastDay.setDate(nextMonthLastDay.getDate() + 1);
-				nextMonthLastDay = nextMonthLastDay.toISOString().split("T")[0];
-				console.log("Last day of next month:", nextMonthLastDay);
-
-				debouncedFetchOccupancyData(currentMonthFirstDay, nextMonthLastDay, instance);
-			}
 
 			flatpickr("#reservation-date", {
 				mode: "range",
 				dateFormat: "Y-m-d",
 				showMonths: 2,
 				enableTime: false,
-				onReady: handleReservationCalendarMonthChange,
-				onMonthChange: handleReservationCalendarMonthChange,
-				disable: [
-					function (date) {
-						// Example disable function
-						// Return true to disable specific dates
-						// Modify this function according to your requirements
-						var dayOfWeek = date.getDay();
-						return dayOfWeek === 0 || dayOfWeek === 6; // Disable weekends
-					}
-				],
 				locale: {
 					firstDayOfWeek: 1 // Start week on Monday
 				},
@@ -219,7 +102,7 @@ function updateSelectedDates(checkIn, checkOut) {
 			console.log('Here');
 			var bookingNumber = $('#booking-number').val();
 			var reservationDate = $('#reservation-date').val();
-			var numberOfAdults = $('#number-of-guests').val();
+			var numberOfAdults = $('#number-of-adults').val();
 			var numberOfChildren = $('#number-of-children').val();
 
 			$.ajax({
@@ -229,7 +112,7 @@ function updateSelectedDates(checkIn, checkOut) {
 					action: 'frontend_BookingSearch', // the PHP function to trigger
 					booking_number: bookingNumber,
 					reservation_date: reservationDate,
-					number_of_guests: numberOfAdults,
+					number_of_adults: numberOfAdults,
 					number_of_children: numberOfChildren
 				},
 				success: function (response) {
@@ -238,7 +121,7 @@ function updateSelectedDates(checkIn, checkOut) {
 					// You can now work with the parsed data
 
 					// Check if the array is null or empty
-					if (parsedResponse.alt_recommends === null || parsedResponse.alt_recommends.length === 0) {
+					if (parsedResponse.alt_recommends === false || parsedResponse.alt_recommends.length === 0) {
 						// The array is empty
 						$('#available-list-ajax').html(parsedResponse.roomlist);
 					} else {
@@ -259,6 +142,9 @@ function updateSelectedDates(checkIn, checkOut) {
 
 			let booking_number = $('#reservation-data').data('bookingnumber');
 			console.log('booking-number:' + booking_number);
+			let adults = $('#reservation-data').data('adults');
+			let children = $('#reservation-data').data('children');
+			console.log( adults, children);
 			let checkin = $('#reservation-data').data('checkin');
 			let checkout = $('#reservation-data').data('checkout');
 			let rooms = [];
@@ -286,6 +172,8 @@ function updateSelectedDates(checkIn, checkOut) {
 				type: 'POST',
 				data: {
 					action: 'bookRooms',
+					adults: adults,
+					children: children,
 					booking_number: booking_number,
 					checkin: checkin,
 					checkout: checkout,

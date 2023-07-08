@@ -30,12 +30,12 @@ class Frontend
 					<input type="date" id="reservation-date" name="reservation_date">
 				</div>
 				<div>
-					<label for="number-of-guests">Number of Adults:</label>
-					<input type="number" id="number-of-guests" name="number_of_guests" min="1">
+					<label for="number-of-adults">Number of Adults:</label>
+					<input type="number" id="number-of-adults" name="number_of_adults" min="1">
 				</div>
 				<div class="children-number" data-agelimitofchild="13">
 					<label for="number-of-children">Number of Children:</label>
-					<input id="number-of-children" name="number_of_children" min="0">
+					<input type="number" id="number-of-children" name="number_of_children" min="0">
 				</div>
 				<div id="bookingSearch" class="div-button">Search</div>
 				<div class="recommended-alt-wrap">
@@ -65,8 +65,9 @@ return ob_get_clean();
     public function frontend_BookingSearch()
     {
         $room_type          = '';
-        $number_of_children = '';
-        $number_of_guests   = '';
+        $number_of_children = 0;
+        $number_of_adults   = 0;
+        $number_of_guests   = 0;
         $reservation_date   = '';
         $booking_number     = '';
 
@@ -78,13 +79,15 @@ return ob_get_clean();
             $reservation_date = $_POST['reservation_date'];
         }
 
-        if (isset($_POST['number_of_guests'])) {
-            $number_of_guests = $_POST['number_of_guests'];
+        if (isset($_POST['number_of_adults'])) {
+            $number_of_adults = $_POST['number_of_adults'];
         }
 
         if (isset($_POST['number_of_children'])) {
             $number_of_children = $_POST['number_of_children'];
         }
+
+        $number_of_guests = intval($number_of_adults + $number_of_children);
 
         if (isset($_POST['room_type'])) {
             $room_type = $_POST['room_type'];
@@ -102,8 +105,10 @@ return ob_get_clean();
             $checkoutDate = $chosenDate['endDate'];
         }
 
+        $checkoutDate = date('Y-m-d', strtotime($checkoutDate . ' -1 day'));
+
         // Perform your query here, this is just an example
-        $result = "Check-in Date: $checkinDate, Check-out Date: $checkoutDate, Number of Adults: $number_of_guests, Number of Children: $number_of_children";
+        $result = "Check-in Date: $checkinDate, Check-out Date: $checkoutDate, Number of Adults: $number_of_adults, Number of Children: $number_of_children";
         error_log(print_r($result, true));
         $room_instance = new \AtollMatrix\Rooms();
 
@@ -113,13 +118,15 @@ return ob_get_clean();
         error_log('Value of $combo_array["rooms"]:');
         error_log(print_r($combo_array['rooms'], true));
 
-		$available_room_dates = array();
+        $available_room_dates = array();
+
+        $room_availabity = false;
 
         if (count($combo_array['rooms']) == 0) {
             // Perform the greedy search by adjusting the check-in and check-out dates
             $newCheckinDate  = new \DateTime($checkinDate);
             $newCheckoutDate = new \DateTime($checkoutDate);
-            $newCheckoutDate->add(new \DateInterval('P1D'));
+            //$newCheckoutDate->add(new \DateInterval('P1D'));
 
             $reservation_instance = new \AtollMatrix\Reservations();
 
@@ -133,25 +140,24 @@ return ob_get_clean();
             foreach ($available_room_dates as $roomId => $subArray) {
                 // Initialize the new sub-array for the current room
                 $new_subArray = array();
-            
+
                 // Get the first and last keys of the inner arrays
                 foreach ($subArray as $innerArray) {
-                    $keys = array_keys($innerArray);
+                    $keys     = array_keys($innerArray);
                     $firstKey = $keys[0];
-                    $lastKey = end($keys);
-            
+                    $lastKey  = end($keys);
+
                     // Keep only the first and last records and assign unique indexes
                     $new_subArray[$firstKey] = array(
-                        'check-in' => $firstKey,
-                        'check-out' => $lastKey 
+                        'check-in'  => $firstKey,
+                        'check-out' => $lastKey,
                     );
                 }
-            
+
                 // Add the new sub-array to the new room availability array
                 $new_room_availability_array[$roomId] = $new_subArray;
-            }            
+            }
             $room_availabity_array = $new_room_availability_array;
-            
 
             error_log('---- Alternative Room Availability Matrix Before');
             error_log(print_r($room_availabity_array, true));
@@ -159,39 +165,69 @@ return ob_get_clean();
             // Initialize an empty string
             $output = '';
 
+            $processedDates     = array(); // Array to store processed check-in and checkout dates
+            $new_processedDates = array();
+
             foreach ($room_availabity_array as $key => $subset) {
                 // Output the key of the subset
-                error_log ( "Subset Key: $key\n" );
-                
+                error_log("Subset Key: $key\n");
+
                 // Iterate through each sub array in the subset
                 foreach ($subset as $subArray) {
                     // Output the sub array
-                    error_log( print_r( $subArray, true ) );
+                    error_log(print_r($subArray, true));
                     $check_in_alt = $subArray['check-in'];
-                    $staylast = $subArray['check-out'];
+                    $staylast     = $subArray['check-out'];
 
-                    // Format the dates as "Month Day" (e.g., "July 13th")
-                    $formattedFirstDate = date('F jS', strtotime($check_in_alt));
-                    // Get the date one day after the formattedLastDate
-                    $check_out_alt = date('Y-m-d', strtotime($staylast . ' +1 day'));
-                    $formattedNextDay = date('F jS', strtotime($nextDay));
-                    if (date('F', strtotime($staylast)) !== date('F', strtotime($check_in_alt))) {
-                        $formattedNextDay = date('F jS', strtotime($check_out_alt));
-                    } else {
-                        $formattedNextDay = date('jS', strtotime($check_out_alt));
+                    // Check if the current check-in and checkout dates have already been processed
+                    if (in_array([$check_in_alt, $staylast], $processedDates)) {
+                        //error_log( 'Skipping .... ' . $check_in_alt, $staylast);
+                        continue; // Skip processing identical dates
                     }
 
-                    $output .= "<span data-check-staylast='{$staylast}' data-check-in='{$check_in_alt}' data-check-out='{$check_out_alt}'>{$formattedFirstDate} - {$formattedNextDay}</span>, ";
-                    
+                    // Add the current check-in and checkout dates to the processed dates array
+                    $processedDates[] = [$check_in_alt, $staylast];
+
+                    // Get the date one day after the staylast
+                    $check_out_alt = date('Y-m-d', strtotime($staylast . ' +1 day'));
+
+                    $new_processedDates[$check_in_alt] = array(
+                        'staylast'  => $staylast,
+                        'check-in'  => $check_in_alt,
+                        'check-out' => $check_out_alt,
+                    );
+
                     // Perform operations with the sub array...
                 }
+            }
+
+            error_log('---- Alternative Room Availability Matrix The Final');
+            error_log(print_r($new_processedDates, true));
+            ksort($new_processedDates);
+
+            foreach ($new_processedDates as $key) {
+                $staylast      = $key['staylast'];
+                $check_in_alt  = $key['check-in'];
+                $check_out_alt = $key['check-out'];
+
+                // Format the dates as "Month Day" (e.g., "July 13th")
+                $formattedFirstDate = date('F jS', strtotime($check_in_alt));
+
+                $formattedNextDay = date('F jS', strtotime($check_out_alt));
+                if (date('F', strtotime($staylast)) !== date('F', strtotime($check_in_alt))) {
+                    $formattedNextDay = date('F jS', strtotime($check_out_alt));
+                } else {
+                    $formattedNextDay = date('jS', strtotime($check_out_alt));
+                }
+
+                $output .= "<span data-check-staylast='{$staylast}' data-check-in='{$check_in_alt}' data-check-out='{$check_out_alt}'>{$formattedFirstDate} - {$formattedNextDay}</span>, ";
             }
 
             // Remove the trailing comma and space
             $output = rtrim($output, ', ');
 
             // Print the output
-            $room_availabity = '<div class="recommended-dates-wrap">'.$output.'</div>';
+            $room_availabity = '<div class="recommended-dates-wrap">' . $output . '</div>';
             error_log('---- Alternative Room Availability Matrix for Range');
             error_log(print_r($room_availabity, true));
         }
@@ -210,15 +246,15 @@ return ob_get_clean();
         // Always die in functions echoing AJAX content
         $list = self::listRooms_And_Quantities($room_array);
         ob_start();
-        echo '<div id="reservation-data" data-bookingnumber="' . $booking_number . '" data-children="' . $number_of_children . '" data-adults="' . $number_of_guests . '" data-checkin="' . $checkinDate . '" data-checkout="' . $checkoutDate . '">';
+        echo '<div id="reservation-data" data-bookingnumber="' . $booking_number . '" data-children="' . $number_of_children . '" data-adults="' . $number_of_adults . '" data-guests="' . $number_of_guests . '" data-checkin="' . $checkinDate . '" data-checkout="' . $checkoutDate . '">';
         echo $list;
         echo self::register_Guest_Form();
         echo '<div id="bookingResponse" class="booking-response"></div>';
         echo self::paymentHelper_Form($booking_number);
-        $output = ob_get_clean();
-        $response['roomlist'] = $output;
-		$response['alt_recommends'] = $room_availabity;
-		echo json_encode($response, JSON_UNESCAPED_SLASHES);
+        $output                     = ob_get_clean();
+        $response['roomlist']       = $output;
+        $response['alt_recommends'] = $room_availabity;
+        echo json_encode($response, JSON_UNESCAPED_SLASHES);
         die();
     }
 
@@ -259,7 +295,7 @@ return ob_get_clean();
 				<input type="hidden" name="booking_number" id="booking_number" value="$booking_number">
 				<div id="bookingPayment" class="div-button">Pay</div>
 			</form>
-		HTML;
+HTML;
         return $form_html;
     }
 
@@ -307,7 +343,7 @@ return ob_get_clean();
 				<div id="bookingRegister" class="div-button">Book</div>
 			</div>
 		</div>
-	HTML;
+HTML;
 
         return $form_html;
     }

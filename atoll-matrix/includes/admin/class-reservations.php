@@ -800,6 +800,155 @@ class Reservations
         return $reservations_array;
     }
 
+    public function canAccomodate_everyone_to_all_rooms($rooms, $adults = false, $children = false)
+    {
+
+        $min_adults         = 0;
+        $max_adults_total   = false;
+        $max_children_total = false;
+        $max_guests_total   = 0;
+        $max_children       = false;
+        $max_adults         = false;
+        $max_guests         = 0;
+        $can_occomodate     = array();
+        $will_accomodate    = true;
+        $guests             = intval($adults + $children);
+        $can_occomodate     = array();
+
+        foreach ($rooms as $room) {
+            $room_id  = $room['id'];
+            $room_qty = $room['quantity'];
+
+            $room_data = get_post_custom($room_id);
+            if (isset($room_data["atollmatrix_max_adult_limit_status"][0])) {
+                $adult_limit_status = $room_data["atollmatrix_max_adult_limit_status"][0];
+                if ('1' == $adult_limit_status) {
+                    $max_adults = $room_data["atollmatrix_max_adults"][0];
+                    $max_adults = $max_adults * $room_qty;
+                } else {
+                    $max_adults = false;
+                }
+            }
+            if (isset($room_data["atollmatrix_max_children_limit_status"][0])) {
+                $children_limit_status = $room_data["atollmatrix_max_children_limit_status"][0];
+                if ('1' == $children_limit_status) {
+                    $max_children = $room_data["atollmatrix_max_children"][0];
+                    $max_children = $max_children * $room_qty;
+                } else {
+                    $max_children = false;
+                }
+            }
+            if (isset($room_data["atollmatrix_max_guests"][0])) {
+                $max_guests = $room_data["atollmatrix_max_guests"][0];
+                $max_guests = $max_guests * $room_qty;
+            }
+
+            if ($max_adults) {
+                $max_adults_total = $max_adults_total + $max_adults;
+            }
+            if ($max_children) {
+                $max_children_total = $max_children_total + $max_children;
+            }
+            $max_guests_total = $max_guests_total + $max_guests;
+            $min_adults       = $min_adults + $room_qty;
+
+            $can_occomodate[$room_id]['qty']          = $room_qty;
+            $can_occomodate[$room_id]['max_adults']   = $max_adults;
+            $can_occomodate[$room_id]['max_children'] = $max_children;
+            $can_occomodate[$room_id]['max_guests']   = $max_guests * $room_qty;
+
+        }
+
+        $can_occomodate['allow']              = false;
+        $can_occomodate['error']              = 'Too many guests for choice';
+        $can_occomodate['max_adults_total']   = $max_adults_total;
+        $can_occomodate['max_children_total'] = $max_children_total;
+        $can_occomodate['max_guests_total']   = $max_guests_total;
+        $can_occomodate['adults']             = $adults;
+        $can_occomodate['children']           = $children;
+        $can_occomodate['guests']             = $guests;
+        $can_occomodate['min_adults']         = $min_adults;
+
+        if ($can_occomodate['max_guests_total'] >= $guests) {
+            $can_occomodate['allow'] = true;
+        }
+        if ($can_occomodate['max_children_total']) {
+            if ($can_occomodate['max_children_total'] < $children) {
+                $can_occomodate['allow'] = false;
+                $can_occomodate['error'] = 'Number of children exceed for choice of room';
+            }
+        }
+        // if ($can_occomodate['max_adults_total']) {
+        //     if ($can_occomodate['max_adults_total'] < $adults) {
+        //         $can_occomodate['allow'] = false;
+        //         $can_occomodate['error'] = 'Too many guests to accomodate choice';
+        //     }
+        // }
+        if ($can_occomodate['min_adults'] > $adults) {
+            $can_occomodate['allow'] = false;
+            $can_occomodate['error'] = 'Should have atleast 1 adult in each room';
+        }
+
+        return $can_occomodate;
+
+    }
+
+    public function canAccomodate_everyone_to_room($room_id, $adults = false, $children = false)
+    {
+
+        $max_children    = false;
+        $max_adults      = false;
+        $max_guests      = false;
+        $can_occomodate  = array();
+        $will_accomodate = true;
+
+        $total_guests = intval($adults + $children);
+
+        $room_data = get_post_custom($room_id);
+        if (isset($room_data["atollmatrix_max_adult_limit_status"][0])) {
+            $adult_limit_status = $room_data["atollmatrix_max_adult_limit_status"][0];
+            if ('1' == $adult_limit_status) {
+                $max_adults = $room_data["atollmatrix_max_adults"][0];
+            }
+        }
+        if (isset($room_data["atollmatrix_max_children_limit_status"][0])) {
+            $children_limit_status = $room_data["atollmatrix_max_children_limit_status"][0];
+            if ('1' == $children_limit_status) {
+                $max_children = $room_data["atollmatrix_max_children"][0];
+            }
+        }
+        if (isset($room_data["atollmatrix_max_guests"][0])) {
+            $max_guests = $room_data["atollmatrix_max_guests"][0];
+        }
+
+        if ($max_children) {
+            $can_occomodate[$room_id]['children'] = true;
+            if ($children > $max_children) {
+                $can_occomodate[$room_id]['children'] = false;
+                $will_accomodate                      = false;
+            }
+        }
+        if ($max_adults) {
+            $can_occomodate[$room_id]['adults'] = true;
+            if ($adults > $max_adults) {
+                $can_occomodate[$room_id]['adults'] = false;
+                $will_accomodate                    = false;
+            }
+        }
+        if ($max_guests) {
+            $can_occomodate[$room_id]['guests'] = true;
+            if ($total_guests > $max_guests) {
+                $can_occomodate[$room_id]['guests'] = false;
+                $will_accomodate                    = false;
+            }
+        }
+
+        $can_occomodate[$room_id]['allow'] = $will_accomodate;
+
+        return $can_occomodate;
+
+    }
+
     // Ajax function to book rooms
     public function bookRooms()
     {
@@ -822,6 +971,11 @@ class Reservations
             wp_send_json_error('Invalid or timeout. Please try again');
         }
         // Obtain customer details from form submission
+        $checkin        = $_POST['checkin'];
+        $checkout       = $_POST['checkout'];
+        $rooms          = $_POST['rooms'];
+        $adults         = sanitize_text_field($_POST['adults']);
+        $children       = sanitize_text_field($_POST['children']);
         $full_name      = sanitize_text_field($_POST['full_name']);
         $email_address  = sanitize_email($_POST['email_address']);
         $phone_number   = sanitize_text_field($_POST['phone_number']);
@@ -831,6 +985,16 @@ class Reservations
         $zip_code       = sanitize_text_field($_POST['zip_code']);
         $country        = sanitize_text_field($_POST['country']);
         // add other fields as necessary
+
+        // Check if number of people can be occupied by room
+        $can_accomodate = self::canAccomodate_everyone_to_all_rooms($rooms, $adults, $children);
+        error_log(print_r($can_accomodate, true));
+        if (false == $can_accomodate['allow']) {
+            wp_send_json_error($can_accomodate['error']);
+        }
+        error_log(print_r($can_accomodate, true));
+
+        wp_send_json_error(' Temporary block for debugging ');
 
         // Create customer post
         $customer_post_data = array(
@@ -857,10 +1021,6 @@ class Reservations
             wp_send_json_error('Could not save Customer: ' . $customer_post_id);
             return;
         }
-
-        $checkin  = $_POST['checkin'];
-        $checkout = $_POST['checkout'];
-        $rooms    = $_POST['rooms'];
 
         // Process the booking
         foreach ($rooms as $room) {
