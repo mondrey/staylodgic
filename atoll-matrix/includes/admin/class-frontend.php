@@ -87,7 +87,7 @@ return ob_get_clean();
             $number_of_children = $_POST['number_of_children'];
         }
 
-        $number_of_guests = intval($number_of_adults + $number_of_children);
+        $number_of_guests = intval($number_of_adults) + intval($number_of_children);
 
         if (isset($_POST['room_type'])) {
             $room_type = $_POST['room_type'];
