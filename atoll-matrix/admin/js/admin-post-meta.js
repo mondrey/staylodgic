@@ -1,6 +1,29 @@
 jQuery(document).ready(function($) {
 	"use strict";
 
+	document.addEventListener( 'click', ( event ) => {
+		const target = event.target;
+		if ( ! target.closest( '.atollmatrix-tabs a' ) ) {
+			return;
+		}
+		event.preventDefault();
+		document.querySelectorAll( '.atollmatrix-tabs a' ).forEach( ( tablink ) => {
+			tablink.classList.remove( 'nav-tab-active' );
+		} );
+		target.classList.add( 'nav-tab-active' );
+		targetTab = target.getAttribute( 'data-tab' );
+		document.querySelectorAll( '.atollmatrix-options-form .atollmatrix-tab-item' ).forEach( ( item ) => {
+			if ( item.classList.contains( `atollmatrix-tab-item--${targetTab}` ) ) {
+				item.style.display = 'block';
+			} else {
+				item.style.display = 'none';
+			}
+		} );
+	} );
+	document.addEventListener( 'DOMContentLoaded', function () {
+		document.querySelector( '.atollmatrix-tabs .nav-tab' ).click();
+	}, false );
+
 	$('#atollmatrix_payment_booking_id').on('select2:select', function(e) {
 		// Get the selected booking number
 		var bookingNumber = $(this).val();

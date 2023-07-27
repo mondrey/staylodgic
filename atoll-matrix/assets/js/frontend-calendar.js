@@ -2,6 +2,159 @@
 	$(document).ready(function () {
 
 
+		function roomOccupants() {
+			document.addEventListener('click', function (event) {
+				if (event.target.matches('.occupant-minus-btn')) {
+					const minusBtn = event.target;
+					const inputField = minusBtn.nextElementSibling;
+					const currentValue = parseInt(inputField.value);
+					const minValue = parseInt(inputField.getAttribute('min'));
+
+					if (currentValue > minValue) {
+						inputField.value = currentValue - 1;
+					}
+					event.preventDefault();
+					updateButtonStates(inputField);
+				} else if (event.target.matches('.occupant-plus-btn')) {
+					const plusBtn = event.target;
+					const inputField = plusBtn.previousElementSibling;
+					const currentValue = parseInt(inputField.value);
+					const maxValue = parseInt(inputField.getAttribute('max'));
+
+					const roomParentData = $(event.target).closest('.room-occupied-group');
+					const roomInputData = $(event.target).closest('.room-occupants-wrap');
+					const roomID = roomParentData.data('room-id');
+
+					const occupantType = roomParentData.data('type');
+					const maxAdults = roomParentData.data('adults');
+					const maxChildren = roomParentData.data('children');
+					const maxGuests = roomParentData.data('guests');
+
+					var maxType = maxGuests;
+
+					if ( occupantType == 'children') {
+						maxType = maxChildren;
+					} else {
+						maxType = maxAdults;
+					}
+
+					var adultsUserInput = parseInt(roomInputData.find('[data-occupant="adults-input-' + roomID + '"]').val());
+					var childrenUserInput = parseInt(roomInputData.find('[data-occupant="children-input-' + roomID + '"]').val());
+					if (isNaN(adultsUserInput)) {
+						adultsUserInput = 0;
+					}
+					if (isNaN(childrenUserInput)) {
+						childrenUserInput = 0;
+					}
+
+					const totalUserGuests = parseInt( adultsUserInput + childrenUserInput );
+					console.log( adultsUserInput, childrenUserInput, totalUserGuests, maxGuests );
+
+					
+					if ( maxGuests > totalUserGuests ) {
+							inputField.value = currentValue + 1;
+					}
+					event.preventDefault();
+					updateButtonStates(inputField);
+					
+				}
+
+			});
+
+			function updateButtonStates(inputField) {
+				const minusBtn = inputField.previousElementSibling;
+				const plusBtn = inputField.nextElementSibling;
+				const currentValue = parseInt(inputField.value);
+				const minValue = parseInt(inputField.getAttribute('min'));
+				const maxValue = parseInt(inputField.getAttribute('max'));
+
+				minusBtn.disabled = (currentValue <= minValue);
+				plusBtn.disabled = (currentValue >= maxValue);
+			}
+		}
+
+		roomOccupants();
+
+
+		function roomSelection() {
+			const RoomBookingNumber = $('#booking-number').val();
+			const minusBtns = $('.room-minus-btn');
+			const plusBtns = $('.room-plus-btn');
+			const numberInputs = $('input[type="room-number"]');
+
+			const storedBookingData = sessionStorage.getItem(RoomBookingNumber);
+			const BookingparsedData = JSON.parse(storedBookingData);
+			console.log( BookingparsedData );
+		
+			numberInputs.each(function(index) {
+				const inputField = $(this);
+				const minusBtn = minusBtns.eq(index);
+				const plusBtn = plusBtns.eq(index);
+				const currentValue = parseInt(inputField.val());
+				const minValue = parseInt(inputField.attr('min'));
+				const maxValue = parseInt(inputField.attr('max'));
+				console.log(inputField, minusBtn, plusBtn, currentValue, minValue, maxValue);
+				updateButtonStates(inputField, minusBtn, plusBtn, currentValue, minValue, maxValue);
+			});
+		
+			$(document).on('click', function(event) {
+				if ($(event.target).is('.room-minus-btn')) {
+					const minusBtn = $(event.target);
+					const inputField = minusBtn.next();
+					const currentValue = parseInt(inputField.val());
+					const minValue = parseInt(inputField.attr('min'));
+					if (currentValue > minValue) {
+						inputField.val(currentValue - 1);
+					}
+					event.preventDefault();
+					showOccupants(inputField);
+					updateButtonStates(inputField);
+					return false;
+				} else if ($(event.target).is('.room-plus-btn')) {
+					const plusBtn = $(event.target);
+					const inputField = plusBtn.prev();
+					const currentValue = parseInt(inputField.val());
+					const maxValue = parseInt(inputField.attr('max'));
+					console.log(currentValue);
+					if (currentValue < maxValue) {
+						inputField.val(currentValue + 1);
+					}
+					event.preventDefault();
+					showOccupants(inputField);
+					updateButtonStates(inputField);
+					return false;
+				}
+			});
+		
+			function showOccupants(inputField) {
+				const roomgroupID = inputField.data('roominputid');
+				const roomgroupQTY = inputField.data('roomqty');
+				const roomOccupantData = inputField.closest('.room-occupied-group');
+				console.log( roomOccupantData, roomgroupID, roomgroupQTY);
+				const currentValue = parseInt(inputField.val());
+		
+				for (let index = 0; index < currentValue; index++) {
+					roomOccupantData.find('.room-occupants-wrap-' + roomgroupID + '-' + index).show();
+				}
+		
+				for (let index = currentValue; index < roomgroupQTY; index++) {
+					roomOccupantData.find('.room-occupants-wrap-' + roomgroupID + '-' + index).hide();
+				}
+			}
+		
+			function updateButtonStates(inputField) {
+				const minusBtn = inputField.prev();
+				const plusBtn = inputField.next();
+				const currentValue = parseInt(inputField.val());
+				const minValue = parseInt(inputField.attr('min'));
+				const maxValue = parseInt(inputField.attr('max'));
+		
+				minusBtn.prop('disabled', (currentValue <= minValue));
+				plusBtn.prop('disabled', (currentValue >= maxValue));
+			}
+		}
+		
+
 		// Function to update the selected dates and nights
 		function updateSelectedDates(checkIn, checkOut) {
 			if (!(checkIn instanceof Date) || !(checkOut instanceof Date)) {
@@ -123,12 +276,17 @@
 					// Check if the array is null or empty
 					if (parsedResponse.alt_recommends === false || parsedResponse.alt_recommends.length === 0) {
 						// The array is empty
+						var storeData = []; // Create a new empty array
+						storeData = parsedResponse.booking_data;
+						sessionStorage.setItem(bookingNumber, JSON.stringify(storeData));
 						$('#available-list-ajax').html(parsedResponse.roomlist);
 					} else {
 						// The array is not empty
 						$('.recommended-alt-wrap').show();
 						$('#recommended-alt-dates').html(parsedResponse.alt_recommends);
 					}
+
+					roomSelection();
 				},
 				error: function (err) {
 					// Handle error here
@@ -144,7 +302,7 @@
 			console.log('booking-number:' + booking_number);
 			let adults = $('#reservation-data').data('adults');
 			let children = $('#reservation-data').data('children');
-			console.log( adults, children);
+			console.log(adults, children);
 			let checkin = $('#reservation-data').data('checkin');
 			let checkout = $('#reservation-data').data('checkout');
 			let rooms = [];

@@ -1,4 +1,5 @@
 <?php
+
 namespace AtollMatrix;
 
 class Rooms
@@ -17,20 +18,22 @@ class Rooms
 
     public static function queryRooms()
     {
-        $rooms = get_posts(array(
-            'post_type'   => 'atmx_room',
-            'orderby'     => 'title',
-            'numberposts' => -1,
-            'order'       => 'ASC',
-            'post_status' => 'publish',
-        ));
+        $rooms = get_posts(
+            array(
+                'post_type' => 'atmx_room',
+                'orderby' => 'title',
+                'numberposts' => -1,
+                'order' => 'ASC',
+                'post_status' => 'publish',
+            )
+        );
         return $rooms;
     }
 
     public static function getRoomList()
     {
         $roomlist = [];
-        $rooms    = self::queryRooms(); // Call queryRooms() method here
+        $rooms = self::queryRooms(); // Call queryRooms() method here
         if ($rooms) {
             foreach ($rooms as $key => $list) {
                 $roomlist[$list->ID] = $list->post_title;
@@ -95,9 +98,10 @@ class Rooms
 
     public function getAvailable_Rooms_and_Rates_For_DateRange($checkin_date, $checkout_date)
     {
-        $combo_array         = array();
-        $available_rooms     = array();
+        $combo_array = array();
+        $available_rooms = array();
         $available_roomrates = array();
+        $can_accomodate = array();
 
         // get all rooms
         $room_list = self::queryRooms();
@@ -108,14 +112,18 @@ class Rooms
             // if not fully booked add to available rooms
             if ($count !== 0) {
                 $available_rooms[$room->ID][$count] = $room->post_title; // changed here
-
-                $available_roomrates = self::getRoom_RATE_For_DateRange($room->ID, $checkin_date, $checkout_date);
+                error_log('fetching rates for :' . $room->ID);
+                $available_roomrates[$room->ID] = self::getRoom_RATE_For_DateRange($room->ID, $checkin_date, $checkout_date);
+                // Get room occupany max numbers
+                $can_accomodate[$room->ID] = self::getMax_room_occupants($room->ID);
+                error_log(print_r($available_roomrates, true));
             }
         }
 
         $combo_array = array(
             'rooms' => $available_rooms,
             'rates' => $available_roomrates,
+            'occupants' => $can_accomodate
         );
 
         return $combo_array;
@@ -124,41 +132,81 @@ class Rooms
     public function getRoom_RATE_For_DateRange($roomId, $checkin_date, $checkout_date)
     {
         $start = new \DateTime($checkin_date);
-        $end   = new \DateTime($checkout_date);
+        $end = new \DateTime($checkout_date);
 
         // Add one day to the end date
         $end->add(new \DateInterval('P1D'));
 
-        $interval  = new \DateInterval('P1D');
+        $interval = new \DateInterval('P1D');
         $daterange = new \DatePeriod($start, $interval, $end);
 
-        $rates_daterange   = array();
+        $rates_daterange = array();
         $roomrate_instance = new \AtollMatrix\Rates();
+
+        $total_rate = 0;
 
         foreach ($daterange as $date) {
             //error_log('This is the room ' . $roomId . ' for ' . $date->format("Y-m-d"));
-            $rate                                    = $roomrate_instance->getRoomRateByDate($roomId, $date->format("Y-m-d"));
-            $rates_daterange[$date->format("Y-m-d")] = $rate;
+            $rate = $roomrate_instance->getRoomRateByDate($roomId, $date->format("Y-m-d"));
+            $rates_daterange['date'][$date->format("Y-m-d")] = $rate;
+            $total_rate = $total_rate + $rate;
         }
 
-        $rates_daterange = array(
-            $roomId => $rates_daterange,
-        );
+        $rates_daterange['total'] = $total_rate;
 
         // error_log(print_r($rates_daterange, true));
 
         return $rates_daterange;
     }
 
+    public function getMax_room_occupants($room_id)
+    {
+
+        $max_children   = false;
+        $max_adults     = false;
+        $max_guests     = 0;
+        $can_occomodate = array();
+        $can_occomodate = array();
+
+
+        $room_data = get_post_custom($room_id);
+        if (isset($room_data["atollmatrix_max_adult_limit_status"][0])) {
+            $adult_limit_status = $room_data["atollmatrix_max_adult_limit_status"][0];
+            if ('1' == $adult_limit_status) {
+                $max_adults = $room_data["atollmatrix_max_adults"][0];
+            } else {
+                $max_adults = false;
+            }
+        }
+        if (isset($room_data["atollmatrix_max_children_limit_status"][0])) {
+            $children_limit_status = $room_data["atollmatrix_max_children_limit_status"][0];
+            if ('1' == $children_limit_status) {
+                $max_children = $room_data["atollmatrix_max_children"][0];
+            } else {
+                $max_children = false;
+            }
+        }
+        if (isset($room_data["atollmatrix_max_guests"][0])) {
+            $max_guests = $room_data["atollmatrix_max_guests"][0];
+        }
+
+        $can_occomodate['adults']   = $max_adults;
+        $can_occomodate['children'] = $max_children;
+        $can_occomodate['guests']   = $max_guests;
+
+        return $can_occomodate;
+
+    }
+
     public function getMaxRoom_QTY_For_DateRange($roomId, $checkin_date, $checkout_date, $reservationid)
     {
         // get the date range
         $start = new \DateTime($checkin_date);
-        $end   = new \DateTime($checkout_date);
+        $end = new \DateTime($checkout_date);
         // Add one day to the end date
         $end->add(new \DateInterval('P1D'));
 
-        $interval  = new \DateInterval('P1D');
+        $interval = new \DateInterval('P1D');
         $daterange = new \DatePeriod($start, $interval, $end);
 
         $max_count = PHP_INT_MAX;
@@ -185,9 +233,9 @@ class Rooms
     {
 
         $reservation_instance = new \AtollMatrix\Reservations($dateString, $roomId, $reservation_id = false, $excluded_reservation_id);
-        $reserved_room_count  = $reservation_instance->countReservationsForDay();
+        $reserved_room_count = $reservation_instance->countReservationsForDay();
 
-        $max_count        = \AtollMatrix\Rooms::getMaxQuantityForRoom($roomId, $dateString);
+        $max_count = \AtollMatrix\Rooms::getMaxQuantityForRoom($roomId, $dateString);
         $avaiblable_count = $max_count - $reserved_room_count;
         if (empty($avaiblable_count) || !isset($avaiblable_count)) {
             $avaiblable_count = 0;
@@ -203,7 +251,7 @@ class Rooms
             // Return an error response if dateRange is not set
             $response = array(
                 'success' => false,
-                'data'    => array(
+                'data' => array(
                     'message' => 'Missing date range parameter.',
                 ),
             );
@@ -217,7 +265,7 @@ class Rooms
             // Return an error response if quantity is not set
             $response = array(
                 'success' => false,
-                'data'    => array(
+                'data' => array(
                     'message' => 'Missing quantity parameter.',
                 ),
             );
@@ -231,7 +279,7 @@ class Rooms
             // Return an error response if postID is not set
             $response = array(
                 'success' => false,
-                'data'    => array(
+                'data' => array(
                     'message' => 'Missing post ID parameter.',
                 ),
             );
@@ -244,12 +292,12 @@ class Rooms
         if (count($dateRangeArray) < 2 && !empty($dateRangeArray[0])) {
             // Use the single date as both start and end date
             $startDate = $dateRangeArray[0];
-            $endDate   = $startDate;
+            $endDate = $startDate;
         } elseif (count($dateRangeArray) < 2 && empty($dateRangeArray[0])) {
             // Return an error response if dateRange is invalid
             $response = array(
                 'success' => false,
-                'data'    => array(
+                'data' => array(
                     'message' => 'Invalid date range.',
                 ),
             );
@@ -257,7 +305,7 @@ class Rooms
             return;
         } else {
             $startDate = $dateRangeArray[0];
-            $endDate   = $dateRangeArray[1];
+            $endDate = $dateRangeArray[1];
         }
 
         // If the end date is empty, set it to the start date
@@ -280,9 +328,9 @@ class Rooms
         foreach ($dateRange as $date) {
 
             $reservation_instance = new \AtollMatrix\Reservations($date, $postID);
-            $reserved_rooms       = $reservation_instance->calculateReservedRooms();
+            $reserved_rooms = $reservation_instance->calculateReservedRooms();
 
-            $final_quantity       = $quantity + $reserved_rooms;
+            $final_quantity = $quantity + $reserved_rooms;
             $quantityArray[$date] = $final_quantity;
         }
 
@@ -293,7 +341,7 @@ class Rooms
             // Return a success response
             $response = array(
                 'success' => true,
-                'data'    => array(
+                'data' => array(
                     'message' => 'Room availability updated successfully.',
                 ),
             );
@@ -302,7 +350,7 @@ class Rooms
             // Return an error response
             $response = array(
                 'success' => false,
-                'data'    => array(
+                'data' => array(
                     'message' => 'Invalid post ID.',
                 ),
             );
@@ -320,7 +368,7 @@ class Rooms
             // Return an error response if dateRange is not set
             $response = array(
                 'success' => false,
-                'data'    => array(
+                'data' => array(
                     'message' => 'Missing date range parameter.',
                 ),
             );
@@ -334,7 +382,7 @@ class Rooms
             // Return an error response if quantity is not set
             $response = array(
                 'success' => false,
-                'data'    => array(
+                'data' => array(
                     'message' => 'Missing rate parameter.',
                 ),
             );
@@ -348,7 +396,7 @@ class Rooms
             // Return an error response if postID is not set
             $response = array(
                 'success' => false,
-                'data'    => array(
+                'data' => array(
                     'message' => 'Missing post ID parameter.',
                 ),
             );
@@ -361,12 +409,12 @@ class Rooms
         if (count($dateRangeArray) < 2 && !empty($dateRangeArray[0])) {
             // Use the single date as both start and end date
             $startDate = $dateRangeArray[0];
-            $endDate   = $startDate;
+            $endDate = $startDate;
         } elseif (count($dateRangeArray) < 2 && empty($dateRangeArray[0])) {
             // Return an error response if dateRange is invalid
             $response = array(
                 'success' => false,
-                'data'    => array(
+                'data' => array(
                     'message' => 'Invalid date range.',
                 ),
             );
@@ -374,7 +422,7 @@ class Rooms
             return;
         } else {
             $startDate = $dateRangeArray[0];
-            $endDate   = $dateRangeArray[1];
+            $endDate = $dateRangeArray[1];
         }
 
         // If the end date is empty, set it to the start date
@@ -405,7 +453,7 @@ class Rooms
             // Return a success response
             $response = array(
                 'success' => true,
-                'data'    => array(
+                'data' => array(
                     'message' => 'Room rates updated successfully.',
                 ),
             );
@@ -414,7 +462,7 @@ class Rooms
             // Return an error response
             $response = array(
                 'success' => false,
-                'data'    => array(
+                'data' => array(
                     'message' => 'Invalid post ID.',
                 ),
             );
@@ -423,7 +471,6 @@ class Rooms
 
         wp_die(); // Optional: Terminate script execution
     }
-
 }
 
 $instance = new \AtollMatrix\Rooms();

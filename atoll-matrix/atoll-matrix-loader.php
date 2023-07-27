@@ -29,6 +29,7 @@ class AtollMatrix_Init
 
         add_action('init', array($this, 'atollmatrix_load_textdomain'));
         add_action('init', array($this, 'atollmatrix_load_metaboxes'));
+        add_action('init', array($this, 'atollmatrix_load_themeoptions'));
     }
 
     public function atollmatrix_load_textdomain()
@@ -63,6 +64,10 @@ class AtollMatrix_Init
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-modals.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-payments.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-frontend.php';
+    }
+
+    public function atollmatrix_load_themeoptions() {
+        require_once plugin_dir_path(__FILE__) . '/options/options.php';
     }
 
     public function atollmatrix_load_metaboxes()
@@ -135,6 +140,15 @@ class AtollMatrix_Init
                 )
             );
 
+            if ($current_admin_screen->base == 'atoll-matrix_page_atollmatrix-settings-panel') {
+                wp_enqueue_script('admin_options', plugin_dir_url(__FILE__) . 'admin/js/admin-options.js', array('jquery'), null, true);
+                wp_enqueue_style('admin_options', plugin_dir_url(__FILE__) . 'admin/css/admin-options.css', false, 'screen');
+                // Enqueue jQuery UI Sortable
+                wp_enqueue_script('jquery-ui-sortable');
+
+                // Add CSS styles for the sortable placeholder
+                wp_enqueue_style('jquery-ui-sortable');
+            }
             if ($current_admin_screen->base == 'toplevel_page_atmx-availability') {
 
                 wp_enqueue_script('velocity', plugin_dir_url(__FILE__) . 'assets/js/velocity.min.js', array('jquery'), null, true);
