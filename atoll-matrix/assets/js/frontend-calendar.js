@@ -25,21 +25,21 @@
 					const roomInputData = $(event.target).closest('.room-occupants-wrap');
 					const roomID = roomParentData.data('room-id');
 
-					const occupantType = roomParentData.data('type');
 					const maxAdults = roomParentData.data('adults');
 					const maxChildren = roomParentData.data('children');
 					const maxGuests = roomParentData.data('guests');
-
+					
 					var maxType = maxGuests;
 
+					var adultsUserInput = parseInt(roomInputData.find('[data-occupant="adults-input-' + roomID + '"]').val());
+					var childrenUserInput = parseInt(roomInputData.find('[data-occupant="children-input-' + roomID + '"]').val());
+					var occupantType = $(event.target).closest('.occupant-input-group').find('.room-occupants').data('type');
+					
 					if ( occupantType == 'children') {
 						maxType = maxChildren;
 					} else {
 						maxType = maxAdults;
 					}
-
-					var adultsUserInput = parseInt(roomInputData.find('[data-occupant="adults-input-' + roomID + '"]').val());
-					var childrenUserInput = parseInt(roomInputData.find('[data-occupant="children-input-' + roomID + '"]').val());
 					if (isNaN(adultsUserInput)) {
 						adultsUserInput = 0;
 					}
@@ -52,7 +52,10 @@
 
 					
 					if ( maxGuests > totalUserGuests ) {
+						console.log('maxtype is ', maxChildren);
+						if ( maxGuests > currentValue && maxType > currentValue ) {
 							inputField.value = currentValue + 1;
+						}
 					}
 					event.preventDefault();
 					updateButtonStates(inputField);
@@ -122,6 +125,7 @@
 					event.preventDefault();
 					showOccupants(inputField);
 					updateButtonStates(inputField);
+					console.log('sfdkjhfsdkjhfdskjhfskdjh');
 					return false;
 				}
 			});
@@ -153,7 +157,7 @@
 				plusBtn.prop('disabled', (currentValue >= maxValue));
 			}
 		}
-		
+		roomSelection();
 
 		// Function to update the selected dates and nights
 		function updateSelectedDates(checkIn, checkOut) {
@@ -285,8 +289,6 @@
 						$('.recommended-alt-wrap').show();
 						$('#recommended-alt-dates').html(parsedResponse.alt_recommends);
 					}
-
-					roomSelection();
 				},
 				error: function (err) {
 					// Handle error here

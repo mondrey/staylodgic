@@ -71,7 +71,7 @@ function atollmatrix_room_metadata()
                 'name' => __('Max Adults:', 'atollmatrix'),
                 'id'   => 'atollmatrix_max_adults',
                 'type' => 'range',
-                'min'  => '0',
+                'min'  => '1',
                 'max'  => '9',
                 'step' => '1',
                 'unit' => 'adults',

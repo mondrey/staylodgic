@@ -148,6 +148,12 @@ class AtollMatrixOptionsPanel
             case 'repeatable_tax':
                 return [$this, 'sanitize_tax_field'];
                 break;
+            case 'repeatable_perperson':
+                return [$this, 'sanitize_tax_field'];
+                break;
+            case 'repeatable_mealplan':
+                return [$this, 'sanitize_tax_field'];
+                break;
             default:
             case 'text':
                 return 'sanitize_text_field';
@@ -219,7 +225,7 @@ class AtollMatrixOptionsPanel
             <?php $this->render_tabs();?>
             <form action="options.php" method="post" class="atollmatrix-options-form">
                 <?php
-        settings_fields($this->option_group_name);
+settings_fields($this->option_group_name);
         do_settings_sections($this->option_name);
         submit_button('Save Settings');
         ?>
@@ -262,6 +268,210 @@ $first_tab = false;
         return $option[$option_name];
     }
 
+/**
+ * Renders perperson field.
+ */
+    public function render_repeatable_perperson_field($args)
+    {
+        $option_name = $args['label_for'];
+        $array       = $this->get_option_value($option_name);
+        $description = $this->settings[$option_name]['description'] ?? '';
+
+        $setsOfThree = array();
+        if (isset($array) && is_array($array)) {
+            $setsOfThree = array_chunk($array, 4);
+        }
+        error_log(print_r($setsOfThree, 1));
+
+        ?>
+<div class="repeatable-perperson-template" style="display: none;">
+<div class="repeatable">
+            <select disabled
+            id="<?php echo esc_attr($args['label_for']); ?>_people"
+            name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][]"
+            >
+            <option value="1">1</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            </select>
+            <input disabled
+                type="text"
+                id="<?php echo esc_attr($args['label_for']); ?>_number"
+                name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][]"
+                value="">
+            <select disabled
+            id="<?php echo esc_attr($args['label_for']); ?>_type"
+            name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][]"
+            >
+            <option value="fixed">Fixed</option>
+            <option value="percentage">Percentage</option>
+            </select>
+            <select disabled
+            id="<?php echo esc_attr($args['label_for']); ?>_total"
+            name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][]"
+            >
+            <option value="increase">Increase</option>
+            <option value="descrease">Decrease</option>
+            </select>
+            <span class="remove-set-button"><i class="dashicons dashicons-remove"></i></span>
+            <br/>
+            </div>
+</div>
+<div id="repeatable-perperson-container">
+<?php
+
+        foreach ($setsOfThree as $set) {
+            if (isset($set[1]) && '' != $set[1]) {
+                ?>
+            <div class="repeatable">
+            <select
+            id="<?php echo esc_attr($args['label_for']); ?>_people"
+            name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][]"
+            >
+            <option value="1" <?php selected('1', $set[0], true);?>>1</option>
+            <option value="3" <?php selected('3', $set[0], true);?>>3</option>
+            <option value="4" <?php selected('4', $set[0], true);?>>4</option>
+            <option value="5" <?php selected('5', $set[0], true);?>>5</option>
+            <option value="6" <?php selected('6', $set[0], true);?>>6</option>
+            <option value="7" <?php selected('7', $set[0], true);?>>7</option>
+            <option value="8" <?php selected('8', $set[0], true);?>>8</option>
+            <option value="9" <?php selected('9', $set[0], true);?>>9</option>
+            </select>
+            <input
+                type="text"
+                id="<?php echo esc_attr($args['label_for']); ?>_number"
+                name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][]"
+                value="<?php echo esc_attr($set[1]); ?>">
+            <select
+            id="<?php echo esc_attr($args['label_for']); ?>_type"
+            name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][]"
+            >
+            <option value="fixed" <?php selected('fixed', $set[2], true);?>>Fixed</option>
+            <option value="percentage" <?php selected('percentage', $set[2], true);?>>Percentage</option>
+            </select>
+            <select
+            id="<?php echo esc_attr($args['label_for']); ?>_total"
+            name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][]"
+            >
+            <option value="increase" <?php selected('increase', $set[3], true);?>>Increase</option>
+            <option value="descrease" <?php selected('descrease', $set[3], true);?>>Decrease</option>
+            </select>
+            <span class="remove-set-button"><i class="dashicons dashicons-remove"></i></span>
+            <br/>
+            </div>
+        <?php
+}
+        }
+        ?>
+        </div>
+        <button id="addperperson-repeatable">Add New Section</button>
+            <?php
+if ($description) {
+            ?>
+                <p class="description"><?php echo esc_html($description); ?></p>
+            <?php
+}
+        ?>
+        <?php
+}
+
+/**
+ * Renders Mealplan field.
+ */
+    public function render_repeatable_mealplan_field($args)
+    {
+        $option_name = $args['label_for'];
+        $array       = $this->get_option_value($option_name);
+        $description = $this->settings[$option_name]['description'] ?? '';
+
+        $setsOfThree = array();
+        if (isset($array) && is_array($array)) {
+            $setsOfThree = array_chunk($array, 3);
+        }
+        error_log(print_r($array, 1));
+        error_log(print_r($setsOfThree, 1));
+
+        ?>
+<div class="repeatable-mealplan-template" style="display: none;">
+<div class="repeatable">
+        <select disabled
+        id="<?php echo esc_attr($args['label_for']); ?>_mealtype"
+        name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][]"
+        >
+        <option value="RO">Room Only</option>
+        <option value="BB">Bed and Breakfast</option>
+        <option value="HB">Half Board</option>
+        <option value="FB">Full Board</option>
+        <option value="AN">All-Inclusive</option>
+        </select>
+        <select disabled
+        id="<?php echo esc_attr($args['label_for']); ?>_choice"
+        name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][]"
+        >
+        <option value="included">Included in rate</option>
+        <option value="optional">Optional</option>
+        </select>
+        <input disabled
+            type="text"
+            id="<?php echo esc_attr($args['label_for']); ?>_price"
+            name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][]"
+            value="">
+            <span class="remove-set-button"><i class="dashicons dashicons-remove"></i></span>
+        <br/>
+        </div>
+</div>
+<div id="repeatable-mealplan-container">
+<?php
+
+        foreach ($setsOfThree as $set) {
+            ?>
+        <div class="repeatable">
+        <select
+        id="<?php echo esc_attr($args['label_for']); ?>_people"
+        name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][]"
+        >
+        <option value="RO" <?php selected('RO', $set[0], true);?>>Room Only</option>
+        <option value="BB" <?php selected('BB', $set[0], true);?>>Bed and Breakfast</option>
+        <option value="HB" <?php selected('HB', $set[0], true);?>>Half Board</option>
+        <option value="FB" <?php selected('FB', $set[0], true);?>>Full Board</option>
+        <option value="AN" <?php selected('AN', $set[0], true);?>>All-Inclusive</option>
+        </select>
+        <select
+        id="<?php echo esc_attr($args['label_for']); ?>_choice"
+        name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][]"
+        >
+        <option value="included" <?php selected('included', $set[1], true);?>>Included in rate</option>
+        <option value="optional" <?php selected('optional', $set[1], true);?>>Optional</option>
+        </select>
+        <input
+            type="text"
+            id="<?php echo esc_attr($args['label_for']); ?>_price"
+            name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][]"
+            value="<?php echo esc_attr($set[2]); ?>">
+
+        <span class="remove-set-button"><i class="dashicons dashicons-remove"></i></span>
+        <br/>
+        </div>
+    <?php
+}
+        ?>
+    </div>
+    <button id="addmealplan-repeatable">Add New Section</button>
+        <?php
+if ($description) {
+            ?>
+            <p class="description"><?php echo esc_html($description); ?></p>
+        <?php
+}
+        ?>
+    <?php
+}
+
     /**
      * Renders tax field.
      */
@@ -271,32 +481,35 @@ $first_tab = false;
         $array       = $this->get_option_value($option_name);
         $description = $this->settings[$option_name]['description'] ?? '';
 
-        $setsOfThree = array_chunk($array, 4);
+        $setsOfThree = array();
+        if (isset($array) && is_array($array)) {
+            $setsOfThree = array_chunk($array, 4);
+        }
         error_log(print_r($setsOfThree, 1));
 
         ?>
 <div class="repeatable-template" style="display: none;">
 <div class="repeatable">
 <span class="dashicons dashicons-sort drag-handle"></span>
-            <input
+            <input disabled
                 type="text"
                 id="<?php echo esc_attr($args['label_for']); ?>_label"
                 name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][]"
                 value="">
-            <input
+            <input disabled
                 type="text"
                 id="<?php echo esc_attr($args['label_for']); ?>_number"
                 name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][]"
                 value="">
 
-            <select
+            <select disabled
             id="<?php echo esc_attr($args['label_for']); ?>_type"
             name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][]"
             >
             <option value="fixed">Fixed</option>
             <option value="percentage">Percentage</option>
             </select>
-            <select
+            <select disabled
             id="<?php echo esc_attr($args['label_for']); ?>_duration"
             name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][]"
             >
@@ -305,6 +518,7 @@ $first_tab = false;
             <option value="perday">Per day</option>
             <option value="perpersonperday">Per person per day</option>
             </select>
+            <span class="remove-set-button"><i class="dashicons dashicons-remove"></i></span>
             <br/>
             </div>
 </div>
@@ -312,8 +526,8 @@ $first_tab = false;
 <?php
 
         foreach ($setsOfThree as $set) {
-            if ( isset( $set[0] ) && '' != $set[0] ) {
-            ?>
+            if (isset($set[0]) && '' != $set[0]) {
+                ?>
             <div class="repeatable">
             <span class="dashicons dashicons-sort drag-handle"></span>
             <input
@@ -321,6 +535,7 @@ $first_tab = false;
                 id="<?php echo esc_attr($args['label_for']); ?>_label"
                 name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][]"
                 value="<?php echo esc_attr($set[0]); ?>">
+                
             <input
                 type="text"
                 id="<?php echo esc_attr($args['label_for']); ?>_number"
@@ -343,11 +558,12 @@ $first_tab = false;
             <option value="perday" <?php selected('perday', $set[3], true);?>>Per Day</option>
             <option value="perpersonperday" <?php selected('perpersonperday', $set[3], true);?>>Per person per day</option>
             </select>
+            <span class="remove-set-button"><i class="dashicons dashicons-remove"></i></span>
             <br/>
             </div>
         <?php
-            }
 }
+        }
         ?>
         </div>
         <button id="add-repeatable">Add New Section</button>
@@ -471,21 +687,34 @@ $panel_args = [
     'slug'            => 'atollmatrix-settings-panel',
     'user_capability' => 'manage_options',
     'tabs'            => [
-        'tab-1' => esc_html__('Tab 1', 'text_domain'),
-        'tab-2' => esc_html__('Tab 2', 'text_domain'),
-        'tax' => esc_html__('Tax', 'text_domain'),
+        'tab-1'     => esc_html__('Tab 1', 'text_domain'),
+        'tab-2'     => esc_html__('Tab 2', 'text_domain'),
+        'currency'  => esc_html__('Currency', 'text_domain'),
+        'mealplan'  => esc_html__('Meal Plan', 'text_domain'),
+        'perperson' => esc_html__('Per person price', 'text_domain'),
+        'tax'       => esc_html__('Tax', 'text_domain'),
     ],
 ];
 
+$currencies       = \AtollMatrix\Common::get_atollmatrix_currencies();
+$currency_symbols = \AtollMatrix\Common::get_atollmatrix_currency_symbols();
+$curr_choices     = array();
+
+// Generate the select list
+foreach ($currencies as $currencyCode => $currencyName) {
+    $currency_symbol             = $currency_symbols[$currencyCode];
+    $curr_choices[$currencyCode] = $currencyName . ' ( ' . $currency_symbol . ' )';
+}
+
 $panel_settings = [
     // Tab 1
-    'option_1' => [
+    'option_1'           => [
         'label'       => esc_html__('Checkbox Option', 'text_domain'),
         'type'        => 'checkbox',
         'description' => 'My checkbox field description.',
         'tab'         => 'tab-1',
     ],
-    'option_2' => [
+    'option_2'           => [
         'label'       => esc_html__('Select Option', 'text_domain'),
         'type'        => 'select',
         'description' => 'My select field description.',
@@ -498,23 +727,72 @@ $panel_settings = [
         'tab'         => 'tab-1',
     ],
     // Tab 2
-    'option_3' => [
+    'option_3'           => [
         'label'       => esc_html__('Text Option', 'text_domain'),
         'type'        => 'text',
         'description' => 'My field 1 description.',
         'tab'         => 'tab-2',
     ],
-    'option_4' => [
+    'option_4'           => [
         'label'       => esc_html__('Textarea Option', 'text_domain'),
         'type'        => 'textarea',
         'description' => 'My textarea field description.',
         'tab'         => 'tab-2',
     ],
-    'option_5' => [
-        'label'       => esc_html__('Tax Repeatable Option', 'text_domain'),
+    'taxes'              => [
+        'label'       => esc_html__('Taxes', 'text_domain'),
         'type'        => 'repeatable_tax',
         'description' => 'My textarea field description.',
         'tab'         => 'tax',
+    ],
+    'perpersonpricing'   => [
+        'label'       => esc_html__('Per person price', 'text_domain'),
+        'type'        => 'repeatable_perperson',
+        'description' => 'My textarea field description.',
+        'tab'         => 'perperson',
+    ],
+    'mealplan'           => [
+        'label'       => esc_html__('Meal Plan', 'text_domain'),
+        'type'        => 'repeatable_mealplan',
+        'description' => 'My textarea field description.',
+        'tab'         => 'mealplan',
+    ],
+    'currency'           => [
+        'label'       => esc_html__('Currency', 'text_domain'),
+        'type'        => 'select',
+        'description' => 'My select field description.',
+        'choices'     => $curr_choices,
+        'tab'         => 'currency',
+    ],
+    'currency_position'  => [
+        'label'       => esc_html__('Currency position', 'text_domain'),
+        'type'        => 'select',
+        'description' => 'My select field description.',
+        'choices'     => [
+            'left_space'  => esc_html__('Left with space', 'text_domain'),
+            'right_space' => esc_html__('Right with space', 'text_domain'),
+            'left'        => esc_html__('Left', 'text_domain'),
+            'right'       => esc_html__('Right', 'text_domain'),
+        ],
+        'tab'         => 'currency',
+    ],
+    'thousand_seperator' => [
+        'label'       => esc_html__('Thousand seperator', 'text_domain'),
+        'type'        => 'text',
+        'description' => 'My field 1 description.',
+        'tab'         => 'currency',
+    ],
+    'decimal_seperator'  => [
+        'label'       => esc_html__('Decimal seperator', 'text_domain'),
+        'type'        => 'text',
+        'description' => 'My field 1 description.',
+        'tab'         => 'currency',
+    ],
+    'number_of_decimals' => [
+        'label'       => esc_html__('Number of Decimals', 'text_domain'),
+        'type'        => 'text',
+        'description' => 'My field 1 description.',
+        'tab'         => 'currency',
     ],
 ];
 

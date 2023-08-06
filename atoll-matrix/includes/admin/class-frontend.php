@@ -233,7 +233,7 @@ class Frontend
         $room_instance = new \AtollMatrix\Rooms();
 
         // Get a combined array of rooms and rates which are available for the dates.
-        $combo_array = $room_instance->getAvailable_Rooms_and_Rates_For_DateRange($checkinDate, $checkoutDate);
+        $combo_array = $room_instance->getAvailable_Rooms_Rates_Occupants_For_DateRange($checkinDate, $checkoutDate);
 
         error_log('Value of $combo_array["rooms"]:');
         error_log(print_r($combo_array['rooms'], true));
@@ -316,7 +316,7 @@ class Frontend
                     $html .= '<button class="occupant-plus-btn">+</button>';
                     $html .= '</div>';
     
-                    if ( $can_accomodate[$id]['children'] > 0 ) {
+                    if ( $can_accomodate[$id]['children'] <> 0 ) {
                         $html .= '<label for="occupant-number-input">Children:</label>';
                         $html .= '<div class="occupant-input-group">';
                         $html .= '<button class="occupant-minus-btn">-</button>';
@@ -352,7 +352,7 @@ class Frontend
                 $total_roomrate = $total_roomrate + $roomrate;
             }
             
-            $html .= '<div class="checkin-staydate-total">' . $total_roomrate . '</div>';
+            $html .= '<div class="checkin-staydate-total">' . atollmatrix_price( $total_roomrate ) . '</div>';
             $html .= '</div>';
 
             $html .= '</div>';

@@ -96,7 +96,7 @@ class Rooms
         return $available_rooms;
     }
 
-    public function getAvailable_Rooms_and_Rates_For_DateRange($checkin_date, $checkout_date)
+    public function getAvailable_Rooms_Rates_Occupants_For_DateRange($checkin_date, $checkout_date)
     {
         $combo_array = array();
         $available_rooms = array();
@@ -162,8 +162,8 @@ class Rooms
     public function getMax_room_occupants($room_id)
     {
 
-        $max_children   = false;
-        $max_adults     = false;
+        $max_children   = '999';
+        $max_adults     = '999';
         $max_guests     = 0;
         $can_occomodate = array();
         $can_occomodate = array();
@@ -175,7 +175,7 @@ class Rooms
             if ('1' == $adult_limit_status) {
                 $max_adults = $room_data["atollmatrix_max_adults"][0];
             } else {
-                $max_adults = false;
+                $max_adults = '999';
             }
         }
         if (isset($room_data["atollmatrix_max_children_limit_status"][0])) {
@@ -183,7 +183,7 @@ class Rooms
             if ('1' == $children_limit_status) {
                 $max_children = $room_data["atollmatrix_max_children"][0];
             } else {
-                $max_children = false;
+                $max_children = '999';
             }
         }
         if (isset($room_data["atollmatrix_max_guests"][0])) {

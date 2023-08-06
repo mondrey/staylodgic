@@ -64,6 +64,7 @@ class AtollMatrix_Init
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-modals.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-payments.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-frontend.php';
+        require_once plugin_dir_path(__FILE__) . 'includes/admin/utilities.php';
     }
 
     public function atollmatrix_load_themeoptions() {
