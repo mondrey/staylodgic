@@ -288,6 +288,7 @@ class Frontend
         foreach ($room_array as $id => $room_info) {
             // Get quantity and room title
             
+            $max_guest_number = intval($can_accomodate[$id]['guests'] - 1);
             // Append a div for the room with the room ID as a data attribute
             $html .= '<div class="room-occupied-group" data-adults="'.$can_accomodate[$id]['adults'].'" data-children="'.$can_accomodate[$id]['children'].'" data-guests="'.$can_accomodate[$id]['guests'].'" data-room-id="' . $id . '">';
 
@@ -322,6 +323,9 @@ class Frontend
                         $html .= '<button class="occupant-minus-btn">-</button>';
                         $html .= '<input type="text" data-room="'.$id.'" data-room-number="'.$count.'" class="room-occupants occupant-children" data-occupant="children-input-'.$id.'" data-type="children" min="0" id="children-input-'.$id.'['.$count.'][]" value="0">';
                         $html .= '<button class="occupant-plus-btn">+</button>';
+                        for ($ageinputs=0; $ageinputs < $max_guest_number; $ageinputs++) {
+                            $html .= '<input disabled data-room="'.$id.'" data-room-number="'.$count.'" class="room-occupants occupant-children-age occupant-children-age-'.$id.'" data-type="children-age" id="children-age-input-'.$id.'-'.$ageinputs.'" name="children-age-input-'.$id.'['.$ageinputs.'][]" type="number" placeholder="Enter age">';
+                        }
                         $html .= '</div>';
                     }
 

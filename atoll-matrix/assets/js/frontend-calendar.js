@@ -9,9 +9,18 @@
 					const inputField = minusBtn.nextElementSibling;
 					const currentValue = parseInt(inputField.value);
 					const minValue = parseInt(inputField.getAttribute('min'));
+					const roomParentData = $(event.target).closest('.room-occupied-group');
+					const roomID = roomParentData.data('room-id');
+
+					var occupantType = $(event.target).closest('.occupant-input-group').find('.room-occupants').data('type');
 
 					if (currentValue > minValue) {
 						inputField.value = currentValue - 1;
+
+						var max_child_inputs = currentValue - 1;
+						if ( occupantType == 'children') {
+							activateChildInputField( roomID, max_child_inputs );
+						}
 					}
 					event.preventDefault();
 					updateButtonStates(inputField);
@@ -49,12 +58,16 @@
 
 					const totalUserGuests = parseInt( adultsUserInput + childrenUserInput );
 					console.log( adultsUserInput, childrenUserInput, totalUserGuests, maxGuests );
-
 					
 					if ( maxGuests > totalUserGuests ) {
-						console.log('maxtype is ', maxChildren);
 						if ( maxGuests > currentValue && maxType > currentValue ) {
 							inputField.value = currentValue + 1;
+
+							var max_child_inputs = currentValue + 1;
+							
+							if ( occupantType == 'children') {
+								activateChildInputField( roomID, max_child_inputs );
+							}
 						}
 					}
 					event.preventDefault();
@@ -77,6 +90,16 @@
 		}
 
 		roomOccupants();
+
+		function activateChildInputField( roomID, max_child_inputs ) {
+			$( '.occupant-children-age-' + roomID ).prop("disabled", true).hide();
+			for ( var i = 0; i < max_child_inputs; i++ ) {
+				var child_age_id = '#children-age-input-' + roomID + '-' + i;
+				//add a line with input field with child_age_id from disabled state to active state
+				$( child_age_id ).prop("disabled", false).show();
+				console.log( 'child inputs: ' , child_age_id );
+			}
+		}
 
 
 		function roomSelection() {
@@ -125,7 +148,6 @@
 					event.preventDefault();
 					showOccupants(inputField);
 					updateButtonStates(inputField);
-					console.log('sfdkjhfsdkjhfdskjhfskdjh');
 					return false;
 				}
 			});
