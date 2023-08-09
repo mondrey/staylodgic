@@ -12,6 +12,7 @@
 					const roomParentData = $(event.target).closest('.room-occupied-group');
 					const roomID = roomParentData.data('room-id');
 
+					var occupantRoomNumber = $(event.target).closest('.occupant-input-group').find('.room-occupants').data('roomnumber');
 					var occupantType = $(event.target).closest('.occupant-input-group').find('.room-occupants').data('type');
 
 					if (currentValue > minValue) {
@@ -19,11 +20,12 @@
 
 						var max_child_inputs = currentValue - 1;
 						if ( occupantType == 'children') {
-							activateChildInputField( roomID, max_child_inputs );
+							activateChildInputField( occupantRoomNumber,roomID, max_child_inputs );
 						}
 					}
 					event.preventDefault();
 					updateButtonStates(inputField);
+					occupantsSummary();
 				} else if (event.target.matches('.occupant-plus-btn')) {
 					const plusBtn = event.target;
 					const inputField = plusBtn.previousElementSibling;
@@ -40,8 +42,11 @@
 					
 					var maxType = maxGuests;
 
+					var occupantRoomNumber = $(event.target).closest('.occupant-input-group').find('.room-occupants').data('roomnumber');
+					console.log( 'Room Number:' , occupantRoomNumber );
+
 					var adultsUserInput = parseInt(roomInputData.find('[data-occupant="adults-input-' + roomID + '"]').val());
-					var childrenUserInput = parseInt(roomInputData.find('[data-occupant="children-input-' + roomID + '"]').val());
+					var childrenUserInput = parseInt(roomInputData.find('[data-occupant="children-input-' + roomID + '-' + occupantRoomNumber + '"]').val());
 					var occupantType = $(event.target).closest('.occupant-input-group').find('.room-occupants').data('type');
 					
 					if ( occupantType == 'children') {
@@ -66,12 +71,13 @@
 							var max_child_inputs = currentValue + 1;
 							
 							if ( occupantType == 'children') {
-								activateChildInputField( roomID, max_child_inputs );
+								activateChildInputField( occupantRoomNumber,roomID, max_child_inputs );
 							}
 						}
 					}
 					event.preventDefault();
 					updateButtonStates(inputField);
+					occupantsSummary();
 					
 				}
 
@@ -91,13 +97,14 @@
 
 		roomOccupants();
 
-		function activateChildInputField( roomID, max_child_inputs ) {
-			$( '.occupant-children-age-' + roomID ).prop("disabled", true).hide();
+		function activateChildInputField( occupantRoomNumber,roomID, max_child_inputs ) {
+			console.log( 'child inputfield' , occupantRoomNumber );
+			$( '.occupant-children-age-set-' + roomID + '-' + occupantRoomNumber ).prop("disabled", true).hide();
 			for ( var i = 0; i < max_child_inputs; i++ ) {
-				var child_age_id = '#children-age-input-' + roomID + '-' + i;
+				var child_age_id = '#children-age-input-' + roomID + '-' + occupantRoomNumber + '-' + i;
 				//add a line with input field with child_age_id from disabled state to active state
 				$( child_age_id ).prop("disabled", false).show();
-				console.log( 'child inputs: ' , child_age_id );
+				console.log( 'child inputs:' , child_age_id );
 			}
 		}
 
@@ -131,6 +138,7 @@
 					const minValue = parseInt(inputField.attr('min'));
 					if (currentValue > minValue) {
 						inputField.val(currentValue - 1);
+						roomSummary('minus');
 					}
 					event.preventDefault();
 					showOccupants(inputField);
@@ -144,7 +152,12 @@
 					console.log(currentValue);
 					if (currentValue < maxValue) {
 						inputField.val(currentValue + 1);
+						roomSummary('plus');
+						const roomgroupID = inputField.data('roominputid');
+						const roomOccupantData = inputField.closest('.room-occupied-group');
+						roomOccupantData.find('.room-occupants-wrap-' + roomgroupID + '-' + parseInt(currentValue)).find('.occupant-adults').val('1');
 					}
+
 					event.preventDefault();
 					showOccupants(inputField);
 					updateButtonStates(inputField);
@@ -164,8 +177,11 @@
 				}
 		
 				for (let index = currentValue; index < roomgroupQTY; index++) {
+					roomOccupantData.find('.room-occupants-wrap-' + roomgroupID + '-' + index).find('.occupant-adults').val('0');
+					roomOccupantData.find('.room-occupants-wrap-' + roomgroupID + '-' + index).find('.occupant-children').val('0');
 					roomOccupantData.find('.room-occupants-wrap-' + roomgroupID + '-' + index).hide();
 				}
+				occupantsSummary();
 			}
 		
 			function updateButtonStates(inputField) {
@@ -180,6 +196,37 @@
 			}
 		}
 		roomSelection();
+
+		function roomSummary( action ) {
+			var current_rooms = parseInt( $( '.summary-room-number' ).text() );
+			console.log('current room val', current_rooms );
+			if ( action == 'plus' ) {
+				var new_rooms = parseInt(current_rooms) + 1;
+				$( '.summary-room-number' ).text( new_rooms );
+			}
+			if ( action == 'minus' ) {
+				var new_rooms = parseInt(current_rooms) - 1;
+				$( '.summary-room-number' ).text( new_rooms );
+			}
+		}
+		function occupantsSummary() {
+			var current_adult_number = 0;
+			var current_children_number = 0;
+		
+			$('#reservation-data').find('.occupant-adults').each(function() {
+				var get_adult_number = parseInt($(this).val());
+				current_adult_number += get_adult_number;
+			});
+		
+			$('.summary-adults-number').text(current_adult_number);
+
+			$('#reservation-data').find('.occupant-children').each(function() {
+				var get_child_number = parseInt($(this).val());
+				current_children_number += get_child_number;
+			});
+		
+			$('.summary-children-number').text(current_children_number);
+		}
 
 		// Function to update the selected dates and nights
 		function updateSelectedDates(checkIn, checkOut) {

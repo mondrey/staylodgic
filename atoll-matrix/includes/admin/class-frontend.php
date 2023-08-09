@@ -288,7 +288,8 @@ class Frontend
         foreach ($room_array as $id => $room_info) {
             // Get quantity and room title
             
-            $max_guest_number = intval($can_accomodate[$id]['guests'] - 1);
+            $max_guest_number = intval($can_accomodate[$id]['guests']);
+            $max_child_guest_number = intval($can_accomodate[$id]['guests'] - 1);
             // Append a div for the room with the room ID as a data attribute
             $html .= '<div class="room-occupied-group" data-adults="'.$can_accomodate[$id]['adults'].'" data-children="'.$can_accomodate[$id]['children'].'" data-guests="'.$can_accomodate[$id]['guests'].'" data-room-id="' . $id . '">';
 
@@ -296,7 +297,7 @@ class Frontend
 
                 // Append the room title
                 $html .= '<h2>' . $title . '</h2>';
-                $html .= '<label for="room-number-input">Number:</label>';
+                $html .= '<label for="room-number-input">Rooms:</label>';
                 $html .= '<div class="room-input-group">';
                 $html .= '<button class="room-minus-btn">-</button>';
                 $html .= '<input data-roominputid="'.$id.'" data-roomqty="'.$quantity.'" type="room-number" id="room-input-'.$id.'" min="0" max="'.$quantity.'" value="0">';
@@ -313,7 +314,7 @@ class Frontend
                     $html .= '<label for="occupant-number-input">Adults:</label>';
                     $html .= '<div class="occupant-input-group">';
                     $html .= '<button class="occupant-minus-btn">-</button>';
-                    $html .= '<input type="text" data-room="'.$id.'" data-room-number="'.$count.'" class="room-occupants occupant-adults" data-occupant="adults-input-'.$id.'" data-type="adults" min="1" id="adults-input-'.$id.'['.$count.'][]" value="1">';
+                    $html .= '<input type="text" data-room="'.$id.'" data-room-number="'.$count.'" class="room-occupants occupant-adults" data-occupant="adults-input-'.$id.'" data-type="adults" min="1" id="adults-input-'.$id.'['.$count.'][]" value="0">';
                     $html .= '<button class="occupant-plus-btn">+</button>';
                     $html .= '</div>';
     
@@ -321,10 +322,10 @@ class Frontend
                         $html .= '<label for="occupant-number-input">Children:</label>';
                         $html .= '<div class="occupant-input-group">';
                         $html .= '<button class="occupant-minus-btn">-</button>';
-                        $html .= '<input type="text" data-room="'.$id.'" data-room-number="'.$count.'" class="room-occupants occupant-children" data-occupant="children-input-'.$id.'" data-type="children" min="0" id="children-input-'.$id.'['.$count.'][]" value="0">';
+                        $html .= '<input type="text" data-room="'.$id.'" data-roomnumber="'.$count.'" class="room-occupants occupant-children" data-occupant="children-input-'.$id.'-'.$count.'" data-children-room="'.$count.'" data-type="children" min="0" id="children-input-'.$id.'['.$count.'][]" value="0">';
                         $html .= '<button class="occupant-plus-btn">+</button>';
-                        for ($ageinputs=0; $ageinputs < $max_guest_number; $ageinputs++) {
-                            $html .= '<input disabled data-room="'.$id.'" data-room-number="'.$count.'" class="room-occupants occupant-children-age occupant-children-age-'.$id.'" data-type="children-age" id="children-age-input-'.$id.'-'.$ageinputs.'" name="children-age-input-'.$id.'['.$ageinputs.'][]" type="number" placeholder="Enter age">';
+                        for ($ageinputs=0; $ageinputs < $max_child_guest_number; $ageinputs++) {
+                            $html .= '<input disabled data-room="'.$id.'" data-room-number="'.$count.'" class="room-occupants occupant-child-age-input occupant-children-age occupant-children-age-'.$id.' occupant-children-age-set-'.$id.'-'.$count.' occupant-children-number-'.$id.'-'.$count.'-'.$ageinputs.'" data-childinputid="'.$id.'-'.$count.'" data-type="children-age" id="children-age-input-'.$id.'-'.$count.'-'.$ageinputs.'" name="children-age-input-'.$id.'['.$ageinputs.'][]" type="number" placeholder="Enter age">';
                         }
                         $html .= '</div>';
                     }
@@ -361,6 +362,13 @@ class Frontend
 
             $html .= '</div>';
         }
+
+        $html .= '<div id="booking-summary">';
+        $html .= '<div class="room-summary"><span class="summary-room-number">0</span> Rooms</div>';
+        $html .= '<div class="adults-summary"><span class="summary-adults-number">0</span> Adults</div>';
+        $html .= '<div class="children-summary"><span class="summary-children-number">0</span> Children</div>';
+        $html .= '<div class="booking-process-button">Book</div>';
+        $html .= '</div>';
 
         // Return the resulting HTML string
         return $html;
