@@ -45,7 +45,7 @@
 					var occupantRoomNumber = $(event.target).closest('.occupant-input-group').find('.room-occupants').data('roomnumber');
 					console.log( 'Room Number:' , occupantRoomNumber );
 
-					var adultsUserInput = parseInt(roomInputData.find('[data-occupant="adults-input-' + roomID + '"]').val());
+					var adultsUserInput = parseInt(roomInputData.find('[data-occupant="adults-input-' + roomID + '-' + occupantRoomNumber + '"]').val());
 					var childrenUserInput = parseInt(roomInputData.find('[data-occupant="children-input-' + roomID + '-' + occupantRoomNumber + '"]').val());
 					var occupantType = $(event.target).closest('.occupant-input-group').find('.room-occupants').data('type');
 					
@@ -61,11 +61,12 @@
 						childrenUserInput = 0;
 					}
 
+
 					const totalUserGuests = parseInt( adultsUserInput + childrenUserInput );
-					console.log( adultsUserInput, childrenUserInput, totalUserGuests, maxGuests );
+					console.log( 'Adults:', adultsUserInput, 'Children:', childrenUserInput, 'Total:', totalUserGuests, 'Max:', maxGuests );
 					
 					if ( maxGuests > totalUserGuests ) {
-						if ( maxGuests > currentValue && maxType > currentValue ) {
+						if ( maxGuests > currentValue ) {
 							inputField.value = currentValue + 1;
 
 							var max_child_inputs = currentValue + 1;
@@ -113,7 +114,7 @@
 			const RoomBookingNumber = $('#booking-number').val();
 			const minusBtns = $('.room-minus-btn');
 			const plusBtns = $('.room-plus-btn');
-			const numberInputs = $('input[type="room-number"]');
+			const numberInputs = $('input[data-type="room-number"]');
 
 			const storedBookingData = sessionStorage.getItem(RoomBookingNumber);
 			const BookingparsedData = JSON.parse(storedBookingData);
@@ -395,12 +396,26 @@
 					rooms.push({ id: roomId, quantity: roomQuantity });
 				}
 			});
+
+			$('#hotel-booking').find('input[type="text"]').each(function() {
+				var inputValue = $(this).val();
+				
+				// Check if input value is zero and disable the input
+				if (inputValue === '0') {
+					$(this).prop('disabled', true);
+				}
+			});
+
+			// Serialize form data
+			const booking_data = $('#hotel-booking').serialize();
+			
 			console.log(checkin, checkout, rooms);
 			$.ajax({
 				url: frontendAjax.ajaxurl, // the localized URL
 				type: 'POST',
 				data: {
 					action: 'bookRooms',
+					bookingdata: booking_data,
 					adults: adults,
 					children: children,
 					booking_number: booking_number,
