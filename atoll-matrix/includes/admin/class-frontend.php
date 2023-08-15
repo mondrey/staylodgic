@@ -300,7 +300,7 @@ class Frontend
                 $html .= '<label for="room-number-input">Rooms:</label>';
                 $html .= '<div class="room-input-group">';
                 $html .= '<button class="room-minus-btn">-</button>';
-                $html .= '<input name="room['.$id.'][quantity]" type="text" data-type="room-number" data-roominputid="'.$id.'" data-roomqty="'.$quantity.'" id="room-input-'.$id.'" min="0" max="'.$quantity.'" value="0">';
+                $html .= '<input class="roomchoice" name="room['.$id.'][quantity]" type="text" data-type="room-number" data-roominputid="'.$id.'" data-roomqty="'.$quantity.'" id="room-input-'.$id.'" min="0" max="'.$quantity.'" value="0">';
                 $html .= '<button class="room-plus-btn">+</button>';
                 $html .= '</div>';
 
@@ -314,7 +314,7 @@ class Frontend
                     $html .= '<label for="occupant-number-input">Adults:</label>';
                     $html .= '<div class="occupant-input-group">';
                     $html .= '<button class="occupant-minus-btn">-</button>';
-                    $html .= '<input name="room['.$id.']['.$count.'][occupants][adults][quantity]" type="text" data-room="'.$id.'" data-roomnumber="'.$count.'" class="room-occupants occupant-adults" data-occupant="adults-input-'.$id.'-'.$count.'" data-type="adults" min="1" id="adults-input-'.$id.'['.$count.'][]" value="0">';
+                    $html .= '<input name="room['.$id.'][occupants]['.$count.'][adults][quantity]" type="text" data-room="'.$id.'" data-roomnumber="'.$count.'" class="room-occupants occupant-adults" data-occupant="adults-input-'.$id.'-'.$count.'" data-type="adults" min="1" id="adults-input-'.$id.'['.$count.'][]" value="0">';
                     $html .= '<button class="occupant-plus-btn">+</button>';
                     $html .= '</div>';
     
@@ -322,10 +322,10 @@ class Frontend
                         $html .= '<label for="occupant-number-input">Children:</label>';
                         $html .= '<div class="occupant-input-group">';
                         $html .= '<button class="occupant-minus-btn">-</button>';
-                        $html .= '<input name="room['.$id.']['.$count.'][occupants][children][quantity]" type="text" data-room="'.$id.'" data-roomnumber="'.$count.'" class="room-occupants occupant-children" data-occupant="children-input-'.$id.'-'.$count.'" data-children-room="'.$count.'" data-type="children" min="0" id="children-input-'.$id.'['.$count.'][]" value="0">';
+                        $html .= '<input name="room['.$id.'][occupants]['.$count.'][children][quantity]" type="text" data-room="'.$id.'" data-roomnumber="'.$count.'" class="room-occupants occupant-children" data-occupant="children-input-'.$id.'-'.$count.'" data-children-room="'.$count.'" data-type="children" min="0" id="children-input-'.$id.'['.$count.'][]" value="0">';
                         $html .= '<button class="occupant-plus-btn">+</button>';
                         for ($ageinputs=0; $ageinputs < $max_child_guest_number; $ageinputs++) {
-                            $html .= '<input disabled name="room['.$id.']['.$count.'][occupants][children][age][]" data-room="'.$id.'" data-room-number="'.$count.'" class="room-occupants occupant-child-age-input occupant-children-age occupant-children-age-'.$id.' occupant-children-age-set-'.$id.'-'.$count.' occupant-children-number-'.$id.'-'.$count.'-'.$ageinputs.'" data-childinputid="'.$id.'-'.$count.'" data-type="children-age" id="children-age-input-'.$id.'-'.$count.'-'.$ageinputs.'" name="children-age-input-'.$id.'['.$ageinputs.'][]" type="number" placeholder="Enter age">';
+                            $html .= '<input disabled name="room['.$id.'][occupants]['.$count.'][children][age][]" data-room="'.$id.'" data-room-number="'.$count.'" class="room-occupants occupant-child-age-input occupant-children-age occupant-children-age-'.$id.' occupant-children-age-set-'.$id.'-'.$count.' occupant-children-number-'.$id.'-'.$count.'-'.$ageinputs.'" data-childinputid="'.$id.'-'.$count.'" data-type="children-age" id="children-age-input-'.$id.'-'.$count.'-'.$ageinputs.'" name="children-age-input-'.$id.'['.$ageinputs.'][]" type="number" placeholder="Enter age">';
                         }
                         $html .= '</div>';
                     }
@@ -348,6 +348,12 @@ class Frontend
                 // $html .= '</select>';
 
             }
+
+            $html .= '<div class="roomchoice-mealplan">';
+            $mealplan = atollmatrix_get_option('mealplan');
+            $html .= '------ meal plan';
+            $html .= '<pre>'. print_r( $mealplan, true ) . '</pre>';
+            $html .= '</div>';
 
             $html .= '<div class="checkin-staydate-wrap">';
             

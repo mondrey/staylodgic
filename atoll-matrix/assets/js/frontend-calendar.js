@@ -372,8 +372,8 @@
 
 			let booking_number = $('#reservation-data').data('bookingnumber');
 			console.log('booking-number:' + booking_number);
-			let adults = $('#reservation-data').data('adults');
-			let children = $('#reservation-data').data('children');
+			let adults = $('.summary-adults-number').text();
+			let children = $('.summary-children-number').text();
 			console.log(adults, children);
 			let checkin = $('#reservation-data').data('checkin');
 			let checkout = $('#reservation-data').data('checkout');
@@ -388,9 +388,9 @@
 			let zip_code = $('#zip_code').val();
 			let country = $('#country').val();
 
-			$('#available-list-ajax div').each(function () {
+			$('#available-list-ajax .room-occupied-group').each(function () {
 				let roomId = $(this).data('room-id');
-				let roomQuantity = $(this).find('select[name="room_quantity"]').val();
+				let roomQuantity = $(this).find('.roomchoice').val();
 
 				if (roomId && roomQuantity > 0) {
 					rooms.push({ id: roomId, quantity: roomQuantity });

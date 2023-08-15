@@ -225,10 +225,10 @@ class AtollMatrixOptionsPanel
             <?php $this->render_tabs();?>
             <form action="options.php" method="post" class="atollmatrix-options-form">
                 <?php
-settings_fields($this->option_group_name);
-        do_settings_sections($this->option_name);
-        submit_button('Save Settings');
-        ?>
+                settings_fields($this->option_group_name);
+                do_settings_sections($this->option_name);
+                submit_button('Save Settings');
+                ?>
             </form>
         </div>
         <?php
@@ -277,18 +277,18 @@ $first_tab = false;
         $array       = $this->get_option_value($option_name);
         $description = $this->settings[$option_name]['description'] ?? '';
 
-        $setsOfThree = array();
-        if (isset($array) && is_array($array)) {
-            $setsOfThree = array_chunk($array, 4);
-        }
-        error_log(print_r($setsOfThree, 1));
+        // $setsOfThree = array();
+        // if (isset($array) && is_array($array)) {
+        //     $setsOfThree = array_chunk($array, 4);
+        // }
+        error_log(print_r($array, 1));
 
         ?>
 <div class="repeatable-perperson-template" style="display: none;">
 <div class="repeatable">
             <select disabled
             id="<?php echo esc_attr($args['label_for']); ?>_people"
-            name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][]"
+            name="people"
             >
             <option value="1">1</option>
             <option value="3">3</option>
@@ -302,18 +302,18 @@ $first_tab = false;
             <input disabled
                 type="text"
                 id="<?php echo esc_attr($args['label_for']); ?>_number"
-                name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][]"
+                name="number"
                 value="">
             <select disabled
             id="<?php echo esc_attr($args['label_for']); ?>_type"
-            name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][]"
+            name="type"
             >
             <option value="fixed">Fixed</option>
             <option value="percentage">Percentage</option>
             </select>
             <select disabled
             id="<?php echo esc_attr($args['label_for']); ?>_total"
-            name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][]"
+            name="total"
             >
             <option value="increase">Increase</option>
             <option value="descrease">Decrease</option>
@@ -325,47 +325,51 @@ $first_tab = false;
 <div id="repeatable-perperson-container">
 <?php
 
-        foreach ($setsOfThree as $set) {
-            if (isset($set[1]) && '' != $set[1]) {
+        $count = 0;
+        if ( is_array($array)) {
+            foreach ($array as $key => $value) {
+                $count++;
+                if ( isset( $value['people'] ) ) {
                 ?>
             <div class="repeatable">
             <select
-            id="<?php echo esc_attr($args['label_for']); ?>_people"
-            name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][]"
+            id="<?php echo esc_attr($args['label_for']); ?>_people_<?php echo $count; ?>"
+            name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][<?php echo $key; ?>][people]"
             >
-            <option value="1" <?php selected('1', $set[0], true);?>>1</option>
-            <option value="3" <?php selected('3', $set[0], true);?>>3</option>
-            <option value="4" <?php selected('4', $set[0], true);?>>4</option>
-            <option value="5" <?php selected('5', $set[0], true);?>>5</option>
-            <option value="6" <?php selected('6', $set[0], true);?>>6</option>
-            <option value="7" <?php selected('7', $set[0], true);?>>7</option>
-            <option value="8" <?php selected('8', $set[0], true);?>>8</option>
-            <option value="9" <?php selected('9', $set[0], true);?>>9</option>
+            <option value="1" <?php selected('1', $value['people'], true);?>>1</option>
+            <option value="3" <?php selected('3', $value['people'], true);?>>3</option>
+            <option value="4" <?php selected('4', $value['people'], true);?>>4</option>
+            <option value="5" <?php selected('5', $value['people'], true);?>>5</option>
+            <option value="6" <?php selected('6', $value['people'], true);?>>6</option>
+            <option value="7" <?php selected('7', $value['people'], true);?>>7</option>
+            <option value="8" <?php selected('8', $value['people'], true);?>>8</option>
+            <option value="9" <?php selected('9', $value['people'], true);?>>9</option>
             </select>
             <input
                 type="text"
-                id="<?php echo esc_attr($args['label_for']); ?>_number"
-                name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][]"
-                value="<?php echo esc_attr($set[1]); ?>">
+                id="<?php echo esc_attr($args['label_for']); ?>_number_<?php echo $count; ?>"
+                name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][<?php echo $key; ?>][number]"
+                value="<?php echo esc_attr($value['number']); ?>">
             <select
-            id="<?php echo esc_attr($args['label_for']); ?>_type"
-            name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][]"
+            id="<?php echo esc_attr($args['label_for']); ?>_type_<?php echo $count; ?>"
+            name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][<?php echo $key; ?>][type]"
             >
-            <option value="fixed" <?php selected('fixed', $set[2], true);?>>Fixed</option>
-            <option value="percentage" <?php selected('percentage', $set[2], true);?>>Percentage</option>
+            <option value="fixed" <?php selected('fixed', $value['type'], true);?>>Fixed</option>
+            <option value="percentage" <?php selected('percentage', $value['type'], true);?>>Percentage</option>
             </select>
             <select
-            id="<?php echo esc_attr($args['label_for']); ?>_total"
-            name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][]"
+            id="<?php echo esc_attr($args['label_for']); ?>_total_<?php echo $count; ?>"
+            name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][<?php echo $key; ?>][total]"
             >
-            <option value="increase" <?php selected('increase', $set[3], true);?>>Increase</option>
-            <option value="descrease" <?php selected('descrease', $set[3], true);?>>Decrease</option>
+            <option value="increase" <?php selected('increase', $value['total'], true);?>>Increase</option>
+            <option value="descrease" <?php selected('descrease', $value['total'], true);?>>Decrease</option>
             </select>
             <span class="remove-set-button"><i class="dashicons dashicons-remove"></i></span>
             <br/>
             </div>
         <?php
 }
+            }
         }
         ?>
         </div>
@@ -389,19 +393,19 @@ if ($description) {
         $array       = $this->get_option_value($option_name);
         $description = $this->settings[$option_name]['description'] ?? '';
 
-        $setsOfThree = array();
-        if (isset($array) && is_array($array)) {
-            $setsOfThree = array_chunk($array, 3);
-        }
+        // $setsOfThree = array();
+        // if (isset($array) && is_array($array)) {
+        //     $setsOfThree = array_chunk($array, 3);
+        // }
+        error_log('----- mealplan array -----');
         error_log(print_r($array, 1));
-        error_log(print_r($setsOfThree, 1));
 
         ?>
 <div class="repeatable-mealplan-template" style="display: none;">
 <div class="repeatable">
         <select disabled
         id="<?php echo esc_attr($args['label_for']); ?>_mealtype"
-        name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][]"
+        name="mealtype"
         >
         <option value="RO">Room Only</option>
         <option value="BB">Bed and Breakfast</option>
@@ -411,7 +415,7 @@ if ($description) {
         </select>
         <select disabled
         id="<?php echo esc_attr($args['label_for']); ?>_choice"
-        name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][]"
+        name="choice"
         >
         <option value="included">Included in rate</option>
         <option value="optional">Optional</option>
@@ -419,7 +423,7 @@ if ($description) {
         <input disabled
             type="text"
             id="<?php echo esc_attr($args['label_for']); ?>_price"
-            name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][]"
+            name="price"
             value="">
             <span class="remove-set-button"><i class="dashicons dashicons-remove"></i></span>
         <br/>
@@ -427,38 +431,43 @@ if ($description) {
 </div>
 <div id="repeatable-mealplan-container">
 <?php
+        $count = 0;
+        if ( is_array($array)) {
+            foreach ($array as $key => $value) {
+                $count++;
+                if ( isset( $value['mealtype'] ) ) {
+                ?>
+            <div class="repeatable">
+                <select
+                id="<?php echo esc_attr($args['label_for']); ?>_mealtype_<?php echo $count; ?>"
+                name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][<?php echo $key; ?>][mealtype]"
+                >
+                <option value="RO" <?php selected('RO', $value['mealtype'], true);?>>Room Only</option>
+                <option value="BB" <?php selected('BB', $value['mealtype'], true);?>>Bed and Breakfast</option>
+                <option value="HB" <?php selected('HB', $value['mealtype'], true);?>>Half Board</option>
+                <option value="FB" <?php selected('FB', $value['mealtype'], true);?>>Full Board</option>
+                <option value="AN" <?php selected('AN', $value['mealtype'], true);?>>All-Inclusive</option>
+                </select>
+            <select
+            id="<?php echo esc_attr($args['label_for']); ?>_choice_<?php echo $count; ?>"
+            name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][<?php echo $key; ?>][choice]"
+            >
+            <option value="included" <?php selected('included', $value['choice'], true);?>>Included in rate</option>
+            <option value="optional" <?php selected('optional', $value['choice'], true);?>>Optional</option>
+            </select>
+            <input
+                type="text"
+                id="<?php echo esc_attr($args['label_for']); ?>_price_<?php echo $count; ?>"
+                name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][<?php echo $key; ?>][price]"
+                value="<?php echo esc_attr($value['price']); ?>">
 
-        foreach ($setsOfThree as $set) {
-            ?>
-        <div class="repeatable">
-        <select
-        id="<?php echo esc_attr($args['label_for']); ?>_people"
-        name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][]"
-        >
-        <option value="RO" <?php selected('RO', $set[0], true);?>>Room Only</option>
-        <option value="BB" <?php selected('BB', $set[0], true);?>>Bed and Breakfast</option>
-        <option value="HB" <?php selected('HB', $set[0], true);?>>Half Board</option>
-        <option value="FB" <?php selected('FB', $set[0], true);?>>Full Board</option>
-        <option value="AN" <?php selected('AN', $set[0], true);?>>All-Inclusive</option>
-        </select>
-        <select
-        id="<?php echo esc_attr($args['label_for']); ?>_choice"
-        name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][]"
-        >
-        <option value="included" <?php selected('included', $set[1], true);?>>Included in rate</option>
-        <option value="optional" <?php selected('optional', $set[1], true);?>>Optional</option>
-        </select>
-        <input
-            type="text"
-            id="<?php echo esc_attr($args['label_for']); ?>_price"
-            name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][]"
-            value="<?php echo esc_attr($set[2]); ?>">
-
-        <span class="remove-set-button"><i class="dashicons dashicons-remove"></i></span>
-        <br/>
-        </div>
-    <?php
-}
+            <span class="remove-set-button"><i class="dashicons dashicons-remove"></i></span>
+            <br/>
+            </div>
+        <?php
+                }
+        }
+    }
         ?>
     </div>
     <button id="addmealplan-repeatable">Add New Section</button>
@@ -481,39 +490,39 @@ if ($description) {
         $array       = $this->get_option_value($option_name);
         $description = $this->settings[$option_name]['description'] ?? '';
 
-        $setsOfThree = array();
-        if (isset($array) && is_array($array)) {
-            $setsOfThree = array_chunk($array, 4);
-        }
-        error_log(print_r($setsOfThree, 1));
+        // $setsOfThree = array();
+        // if (isset($array) && is_array($array)) {
+        //     $setsOfThree = array_chunk($array, 4);
+        // }
+        error_log(print_r($array, 1));
 
         ?>
-<div class="repeatable-template" style="display: none;">
+<div class="repeatable-tax-template" style="display: none;">
 <div class="repeatable">
 <span class="dashicons dashicons-sort drag-handle"></span>
             <input disabled
                 type="text"
                 id="<?php echo esc_attr($args['label_for']); ?>_label"
-                name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][]"
+                name="label"
                 value="">
             <input disabled
                 type="text"
                 id="<?php echo esc_attr($args['label_for']); ?>_number"
-                name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][]"
+                name="number"
                 value="">
 
             <select disabled
             id="<?php echo esc_attr($args['label_for']); ?>_type"
-            name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][]"
+            name="type"
             >
             <option value="fixed">Fixed</option>
             <option value="percentage">Percentage</option>
             </select>
             <select disabled
             id="<?php echo esc_attr($args['label_for']); ?>_duration"
-            name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][]"
+            name="duration"
             >
-            <option value="inrate">Include in rate</option>
+            <option value="inrate">Add to rate</option>
             <option value="perperson">Per person</option>
             <option value="perday">Per day</option>
             <option value="perpersonperday">Per person per day</option>
@@ -522,51 +531,55 @@ if ($description) {
             <br/>
             </div>
 </div>
-<div id="repeatable-container">
+<div id="repeatable-tax-container">
 <?php
 
-        foreach ($setsOfThree as $set) {
-            if (isset($set[0]) && '' != $set[0]) {
+    $count = 0;
+    if ( is_array($array)) {
+        foreach ($array as $key => $value) {
+            $count++;
+            if ( isset( $value['label'] ) ) {
                 ?>
             <div class="repeatable">
             <span class="dashicons dashicons-sort drag-handle"></span>
             <input
                 type="text"
-                id="<?php echo esc_attr($args['label_for']); ?>_label"
-                name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][]"
-                value="<?php echo esc_attr($set[0]); ?>">
-                
+                id="<?php echo esc_attr($args['label_for']); ?>_label_<?php echo $count; ?>"
+                name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][<?php echo $key; ?>][label]"
+                value="<?php echo esc_attr($value['label']); ?>">
+
             <input
                 type="text"
-                id="<?php echo esc_attr($args['label_for']); ?>_number"
-                name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][]"
-                value="<?php echo esc_attr($set[1]); ?>">
+                id="<?php echo esc_attr($args['label_for']); ?>_number_<?php echo $count; ?>"
+                name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][<?php echo $key; ?>][number]"
+                value="<?php echo esc_attr($value['number']); ?>">
 
             <select
-            id="<?php echo esc_attr($args['label_for']); ?>_type"
-            name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][]"
+            id="<?php echo esc_attr($args['label_for']); ?>_type_<?php echo $count; ?>"
+            name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][<?php echo $key; ?>][type]"
             >
-            <option value="fixed" <?php selected('fixed', $set[2], true);?>>Fixed</option>
-            <option value="percentage" <?php selected('percentage', $set[2], true);?>>Percentage</option>
+            <option value="fixed" <?php selected('fixed', $value['type'], true);?>>Fixed</option>
+            <option value="percentage" <?php selected('percentage', $value['type'], true);?>>Percentage</option>
             </select>
             <select
-            id="<?php echo esc_attr($args['label_for']); ?>_duration"
-            name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][]"
+            id="<?php echo esc_attr($args['label_for']); ?>_duration_<?php echo $count; ?>"
+            name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][<?php echo $key; ?>][duration]"
             >
-            <option value="inrate" <?php selected('inrate', $set[3], true);?>>Include in rate</option>
-            <option value="perperson" <?php selected('perperson', $set[3], true);?>>Per person</option>
-            <option value="perday" <?php selected('perday', $set[3], true);?>>Per Day</option>
-            <option value="perpersonperday" <?php selected('perpersonperday', $set[3], true);?>>Per person per day</option>
+            <option value="inrate" <?php selected('inrate', $value['duration'], true);?>>Add to rate</option>
+            <option value="perperson" <?php selected('perperson', $value['duration'], true);?>>Per person</option>
+            <option value="perday" <?php selected('perday', $value['duration'], true);?>>Per Day</option>
+            <option value="perpersonperday" <?php selected('perpersonperday', $value['duration'], true);?>>Per person per day</option>
             </select>
             <span class="remove-set-button"><i class="dashicons dashicons-remove"></i></span>
             <br/>
             </div>
         <?php
 }
+    }
         }
         ?>
         </div>
-        <button id="add-repeatable">Add New Section</button>
+        <button id="addtax-repeatable">Add New Section</button>
             <?php
 if ($description) {
             ?>
@@ -663,19 +676,22 @@ if ($description) {
                 id="<?php echo esc_attr($args['label_for']); ?>"
                 name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>]"
             >
-                <?php foreach ($choices as $choice_v => $label) {?>
-                    <option value="<?php echo esc_attr($choice_v); ?>" <?php selected($choice_v, $value, true);?>><?php echo esc_html($label); ?></option>
+            <?php
+            foreach ($choices as $choice_v => $label) {?>
+                <option value="<?php echo esc_attr($choice_v); ?>" <?php selected($choice_v, $value, true);?>><?php echo esc_html($label); ?></option>
                 <?php
-}
+            }
         ?>
             </select>
-            <?php if ($description) {?>
+            <?php
+            if ($description) {
+            ?>
                 <p class="description"><?php echo esc_html($description); ?></p>
             <?php
-}
-        ?>
+            }
+            ?>
         <?php
-}
+    }
 
 }
 

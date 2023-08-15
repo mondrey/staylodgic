@@ -832,13 +832,18 @@ class Reservations
             $room_qty = $room['quantity'];
 
             $room_data = get_post_custom($room_id);
+
+            if (isset($room_data["atollmatrix_max_guests"][0])) {
+                $max_guest_for_room = $room_data["atollmatrix_max_guests"][0];
+                $max_guests = $max_guest_for_room * $room_qty;
+            }
             if (isset($room_data["atollmatrix_max_adult_limit_status"][0])) {
                 $adult_limit_status = $room_data["atollmatrix_max_adult_limit_status"][0];
                 if ('1' == $adult_limit_status) {
                     $max_adults = $room_data["atollmatrix_max_adults"][0];
                     $max_adults = $max_adults * $room_qty;
                 } else {
-                    $max_adults = false;
+                    $max_adults = $max_guest_for_room;
                 }
             }
             if (isset($room_data["atollmatrix_max_children_limit_status"][0])) {
@@ -847,12 +852,8 @@ class Reservations
                     $max_children = $room_data["atollmatrix_max_children"][0];
                     $max_children = $max_children * $room_qty;
                 } else {
-                    $max_children = false;
+                    $max_children = $max_guest_for_room - 1;
                 }
-            }
-            if (isset($room_data["atollmatrix_max_guests"][0])) {
-                $max_guests = $room_data["atollmatrix_max_guests"][0];
-                $max_guests = $max_guests * $room_qty;
             }
 
             if ($max_adults) {
@@ -867,7 +868,7 @@ class Reservations
             $can_occomodate[$room_id]['qty']          = $room_qty;
             $can_occomodate[$room_id]['max_adults']   = $max_adults;
             $can_occomodate[$room_id]['max_children'] = $max_children;
-            $can_occomodate[$room_id]['max_guests']   = $max_guests * $room_qty;
+            $can_occomodate[$room_id]['max_guests']   = $max_guests;
 
         }
 
@@ -883,6 +884,7 @@ class Reservations
 
         if ($can_occomodate['max_guests_total'] >= $guests) {
             $can_occomodate['allow'] = true;
+            $can_occomodate['error'] = '';
         }
         if ($can_occomodate['max_children_total']) {
             if ($can_occomodate['max_children_total'] < $children) {
@@ -974,7 +976,7 @@ class Reservations
 
         error_log('------- booking posted deserialized data -------');
         error_log(print_r($formData, true));
-        
+
         // Check if our nonce is set.
         if (!isset($_POST['nonce'])) {
             return;
@@ -1015,6 +1017,8 @@ class Reservations
             wp_send_json_error($can_accomodate['error']);
         }
         error_log(print_r($can_accomodate, true));
+        error_log("Rooms:");
+        error_log(print_r($rooms, true));
 
         wp_send_json_error(' Temporary block for debugging ');
 
