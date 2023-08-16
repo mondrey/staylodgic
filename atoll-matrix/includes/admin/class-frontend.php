@@ -350,9 +350,7 @@ class Frontend
             }
 
             $html .= '<div class="roomchoice-mealplan">';
-            $mealplan = atollmatrix_get_option('mealplan');
-            $html .= '------ meal plan';
-            $html .= '<pre>'. print_r( $mealplan, true ) . '</pre>';
+            $html .= self::generateMealPlanRadio($id);
             $html .= '</div>';
 
             $html .= '<div class="checkin-staydate-wrap">';
@@ -439,6 +437,54 @@ HTML;
 HTML;
 
         return $form_html;
+    }
+
+    public function generateMealPlanRadio($room_id) {
+
+        $mealPlans = atollmatrix_get_option('mealplan');
+        
+        if (is_array($mealPlans) && count($mealPlans) > 0) {
+            $includedMealPlans = array();
+            $optionalMealPlans = array();
+            
+            foreach ($mealPlans as $id => $plan) {
+                if ($plan['choice'] === 'included') {
+                    $includedMealPlans[$id] = $plan;
+                } elseif ($plan['choice'] === 'optional') {
+                    $optionalMealPlans[$id] = $plan;
+                }
+            }
+        
+            $html = '';
+            if (is_array($includedMealPlans) && count($includedMealPlans) > 0) {
+                foreach ($includedMealPlans as $id => $plan) {
+                    $html .= self::getMealPlanText($plan['mealtype']) . __(' included.','atollmatrix') . '<br>';
+                    $html .= '<input hidden type="text" name="room['.$room_id.'][meal_plan][included]" value="'.$plan['mealtype'].'">';
+                }
+            }
+            if (is_array($optionalMealPlans) && count($optionalMealPlans) > 0) {
+                $html .= '<input type="radio" name="room['.$room_id.'][meal_plan][optional]" value="none" checked>' . __('Not selected','atollmatrix') . '<br>';
+                foreach ($optionalMealPlans as $id => $plan) {
+                    $html .= '<input type="radio" name="room['.$room_id.'][meal_plan][optional]" value="' . $plan['mealtype'] . '">' . self::getMealPlanText($plan['mealtype']) . ' ' . atollmatrix_price( $plan['price'] ) . ' +<br>';
+                }
+            }
+        }
+        return $html;
+    }
+    
+    public function getMealPlanText($mealtype) {
+        switch ($mealtype) {
+            case 'BB':
+                return __('Breakfast','atollmatrix');
+            case 'HB':
+                return __('Halfboard','atollmatrix');
+            case 'FB':
+                return __('Fullboard','atollmatrix');
+            case 'AN':
+                return __('All inclusive','atollmatrix');
+            default:
+                return '';
+        }
     }
 }
 

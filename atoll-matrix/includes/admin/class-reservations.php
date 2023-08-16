@@ -835,7 +835,7 @@ class Reservations
 
             if (isset($room_data["atollmatrix_max_guests"][0])) {
                 $max_guest_for_room = $room_data["atollmatrix_max_guests"][0];
-                $max_guests = $max_guest_for_room * $room_qty;
+                $max_guests         = $max_guest_for_room * $room_qty;
             }
             if (isset($room_data["atollmatrix_max_adult_limit_status"][0])) {
                 $adult_limit_status = $room_data["atollmatrix_max_adult_limit_status"][0];
