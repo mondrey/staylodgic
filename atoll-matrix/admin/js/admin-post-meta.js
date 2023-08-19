@@ -119,16 +119,40 @@ jQuery(document).ready(function($) {
         return false;
     });
 
+
+$(document).on('click', '#add-bed-setup-button', function () {
+
+
+	// Generate a unique identifier based on the current date and time
+	const uniqueID = new Date().getTime() + Math.floor(Math.random() * 1000);
+
+	// Create a container for the new bed setup using jQuery
+	const container = $('<div></div>').addClass('bed-setup-dynamic-container');
+    // Set the data attribute on the container
+    container.attr('data-unique-id', uniqueID);
+
+	// Set the HTML code for the new bed setup
+	container.html($('#bed_setup_container').html());
+
+	// Get the container where new bed setups should be added using jQuery
+	const bedSetupsContainer = $('#bed-inputs-container');
+
+	// Append the new bed setup to the container
+	bedSetupsContainer.append(container);
+	container.find('.add-bedlayout-box').click();
+	// bedSetupsContainer.find('.newbed-layout select,.newbed-layout input').prop('disabled', false);
+});
+
 // Add button click event
-$('.bedlayout-wrap .add-bedlayout-box').click(function() {
+$(document).on('click', '.bedlayout-wrap .add-bedlayout-box', function () {
     var bedlayoutWrap = $(this).closest('.bedlayout-wrap');
 
-    // Destroy select2 instances if they exist
-    bedlayoutWrap.find('.chosen-select-metabox').each(function() {
-        if ($(this).data('select2')) {
-            $(this).select2('destroy');
-        }
-    });
+    // // Destroy select2 instances if they exist
+    // bedlayoutWrap.find('.chosen-select-metabox').each(function() {
+    //     if ($(this).data('select2')) {
+    //         $(this).select2('destroy');
+    //     }
+    // });
 
     // Clone the div section
     var newSection = bedlayoutWrap.find('.bedlayout-box').first().clone(true);
@@ -141,18 +165,29 @@ $('.bedlayout-wrap .add-bedlayout-box').click(function() {
     newSection.attr('id', newBedlayoutBoxId);
     newSection.find('input').attr('id', newInputId);
 
+    var uniqueID = bedlayoutWrap.parent('.bed-setup-dynamic-container').data('unique-id');
+	console.log( uniqueID );
+
     // Reset the input field value in the cloned section
     newSection.find('input').val('');
+	newSection.find('select,input').prop('disabled', false);
+
+    // Update the name attribute for select input (bedtype) with the generated uniqueID
+    newSection.find('select').attr('name', 'atollmatrix_alt_bedsetup[' + uniqueID + '][bedtype][]');
+
+    // Update the name attribute for input (bednumber) with the generated uniqueID
+    newSection.find('input').attr('name', 'atollmatrix_alt_bedsetup[' + uniqueID + '][bednumber][]');
+
 
     // Add a remove button to the cloned section
     var removeButton = $('<div class="remove-bedlayout">Remove</div>');
-    newSection.append(removeButton);
+    newSection.append(removeButton).addClass('newbed-layout');
 
     // Append the new div section below the last one
     bedlayoutWrap.find('.bedlayout-box').last().after(newSection);
 
     // Re-initialize select2
-    bedlayoutWrap.find('.chosen-select-metabox').select2();
+    // bedlayoutWrap.find('.chosen-select-metabox').select2();
 });
 // Remove button click event
 $('body').on('click', '.remove-bedlayout', function() {

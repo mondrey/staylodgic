@@ -834,3 +834,13 @@
 .number-input span:hover {
 	background-color: #ccc;
 }
+
+.bed-setup-container-template {
+	display: none;
+}
+/* .bedlayout-box {
+	display: none;
+}
+.bedlayout-box.newbed-layout {
+	display: block;
+} */

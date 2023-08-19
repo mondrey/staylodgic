@@ -64,7 +64,7 @@ jQuery(document).ready(function ($) {
 		var new_count = getNextUniqueId();
 		var new_id = generateUniqueId();
 		var idMappings = {
-			'name':'atollmatrix_settings[taxes][' + new_id + ']',
+			'name': 'atollmatrix_settings[taxes][' + new_id + ']',
 			'taxes_label': 'option_' + new_count + '_label',
 			'taxes_number': 'option_' + new_count + '_number',
 			'taxes_type': 'option_' + new_count + '_type',
@@ -79,7 +79,7 @@ jQuery(document).ready(function ($) {
 		var new_count = getNextUniqueId();
 		var new_id = generateUniqueId();
 		var idMappings = {
-			'name':'atollmatrix_settings[perpersonpricing][' + new_id + ']',
+			'name': 'atollmatrix_settings[perpersonpricing][' + new_id + ']',
 			'perpersonpricing_people': 'perpersonpricing_' + new_count + '_people',
 			'perpersonpricing_number': 'perpersonpricing_' + new_count + '_number',
 			'perpersonpricing_type': 'perpersonpricing_' + new_count + '_type',
@@ -94,7 +94,7 @@ jQuery(document).ready(function ($) {
 		var new_count = getNextUniqueId();
 		var new_id = generateUniqueId();
 		var idMappings = {
-			'name':'atollmatrix_settings[mealplan][' + new_id + ']',
+			'name': 'atollmatrix_settings[mealplan][' + new_id + ']',
 			'mealplan_mealtype': 'mealplan_' + new_count + '_mealtype',
 			'mealplan_choice': 'mealplan_' + new_count + '_choice',
 			'mealplan_price': 'mealplan_' + new_count + '_price',

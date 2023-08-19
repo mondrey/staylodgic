@@ -420,6 +420,99 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                     echo '</div>';
                     break;
 
+                case 'bedsetup_set':
+                    $text_value = $meta ? $meta : $field['std'];
+                    // Set the HTML code for the new bed setup
+                    $bed_container = '
+                        <div id="bed_setup_container" class="bed-setup-container-template">
+                        <div class="metabox_label"><label for="atollmatrix_alt_bedsetup_${uniqueID}"></label></div>
+                        <div id="atollmatrix_alt_bedsetup_${uniqueID}-section-title" class="sectiontitle clearfix">Alternate Bed Setup #${uniqueID} ( optional )</div>
+                        <div class="bedlayout-wrap" data-repeat="atollmatrix_alt_bedsetup_${uniqueID}">
+                        <div class="bedlayout">
+                            <div class="bedlayout-box" id="bedlayout-box">
+                                <select disabled class="bedtype-select" name="atollmatrix_alt_bedsetup[${uniqueID}][bedtype][]" id="bed_type_atollmatrix_alt_bedsetup_${uniqueID}_0">
+                                <option value="twinbed">Twin bed</option>
+                                <option value="fullbed">Full bed</option>
+                                <option value="queenbed">Queen bed</option>
+                                <option value="kingbed">King bed</option>
+                                <option value="bunkbed">Bunk bed</option>
+                                <option value="sofabed">Sofa bed</option>
+                                </select> X
+                                <input disabled placeholder="0" type="text" name="atollmatrix_alt_bedsetup[${uniqueID}][bednumber][]" value="" id="bed_number${uniqueID}_0">
+                            </div>
+                        </div>
+                        <span class="add-bedlayout-box">Add layout</span>
+                        <span class="add-bedlayout-box-notice">Max Reached!</span>
+                        </div>
+                        <div class="metabox-description">Optional Setup</div>
+                        </div>
+                    ';
+
+                    error_log( '===== bed layout');
+                    error_log( $field['id']);
+                    error_log( print_r($meta, true));
+
+                    $data = array();
+                    $data = $meta;
+
+                    if (isset($field['target'])) {
+                        $field['options'] = atollmatrix_get_select_target_options($field['target']);
+                    }
+
+                    if (isset($data) && is_array($data)) {
+                        $repeat_count = 0;
+                        foreach ($data as $uniqueID => $values) {
+                            echo '<div class="bed-setup-dynamic-container" data-unique-id="'.$uniqueID.'">';
+                            echo '<h3>Bed Layout</h3>';
+                            echo '<div class="bedlayout-wrap" data-repeat="atollmatrix_alt_bedsetup_${uniqueID}">';
+                            echo '<div class="bedlayout">';
+                            if (isset($values['bedtype']) && isset($values['bednumber'])) {
+                                foreach ($values['bedtype'] as $index => $bedtype) {
+                                    $bednumber = $values['bednumber'][$index];
+                    
+                                    if (!empty($bedtype)) {
+                                        $found_data = true;
+                                        $age = '';
+                                        $class = '';
+                                        $field_id = 'field_id'; // Replace with your actual field ID
+                    
+                                        // Assuming $field['options'] contains your options
+                                        echo '<div class="bedlayout-box" id="bedlayout-box">';
+                                        echo '<div class="selectbox-type-selector"><select class="bedtype-select" name="atollmatrix_alt_bedsetup['.$uniqueID.'][bedtype][]" id="bed_type_' . $field_id . '_' . $repeat_count . '">';
+                    
+                                        foreach ($field['options'] as $key => $option) {
+                                            if ($key == '0') {
+                                                $key = __('All the items', 'atollmatrix');
+                                            }
+                                            echo '<option value="' . esc_attr($key) . '"', $bedtype == $key ? ' selected' : '', '>', esc_attr($option), '</option>';
+                                        }
+                    
+                                        echo '</select>';
+                                        echo ' X <input placeholder="0" type="text" name="atollmatrix_alt_bedsetup['.$uniqueID.'][bednumber][]" value="' . esc_attr($bednumber) . '" id="bed_number' . $repeat_count . '" />';
+                                        
+                                        echo '<div class="remove-bedlayout">Remove</div>';
+                                        echo '</div>';
+                    
+                                        echo '</div>';
+                                    }
+                    
+                                    $repeat_count++;
+                                }
+                            }
+                            echo '</div>';
+                            echo '</div>';
+                            echo '</div>';
+                        }
+                    }
+                    
+
+                    echo $bed_container;
+                    // add an input button
+                    echo '<div id="bed-inputs-container"></div>';
+                    echo '<span id="add-bed-setup-button" class="add-bedlayout-box">Add Bed Setup</span>';
+
+                    break;
+
                 case 'bedsetup_repeat':
                     $text_value = $meta ? $meta : $field['std'];
                     echo '<div class="bedlayout-wrap" data-repeat="' . $field['id'] . '">';
