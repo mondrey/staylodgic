@@ -477,7 +477,7 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                                         $field_id = 'field_id'; // Replace with your actual field ID
                     
                                         // Assuming $field['options'] contains your options
-                                        echo '<div class="bedlayout-box" id="bedlayout-box">';
+                                        echo '<div class="bedlayout-box" id="bedlayout-box-'.$uniqueID.'">';
                                         echo '<div class="selectbox-type-selector"><select class="bedtype-select" name="atollmatrix_alt_bedsetup['.$uniqueID.'][bedtype][]" id="bed_type_' . $field_id . '_' . $repeat_count . '">';
                     
                                         foreach ($field['options'] as $key => $option) {

@@ -282,8 +282,32 @@ class Frontend
         error_log(print_r($combo_array, true));
         // Initialize empty string to hold HTML
         $html = '';
-        $count = 0;
 
+        $html .= self::listRooms( $room_array, $rates_array, $can_accomodate );
+        $html .= self::bookingSummary();
+
+        // Return the resulting HTML string
+        return $html;
+    }
+
+    public function bookingSummary() {
+        
+        $html = '<div id="booking-summary">';
+        $html .= '<div class="room-summary"><span class="summary-room-number">0</span> Rooms</div>';
+        $html .= '<div class="adults-summary"><span class="summary-adults-number">0</span> Adults</div>';
+        $html .= '<div class="children-summary"><span class="summary-children-number">0</span> Children</div>';
+        $html .= '<div class="form-group">';
+        $html .= '<div id="bookingRegister" class="div-button">Book</div>';
+        $html .= '</div>';
+        $html .= '</div>';
+        
+        return $html;
+    }
+
+    public function listRooms( $room_array, $rates_array, $can_accomodate ) {
+
+        $html = '';
+        $count = 0;
         // Iterate through each room
         foreach ($room_array as $id => $room_info) {
             // Get quantity and room title
@@ -317,7 +341,7 @@ class Frontend
                     $html .= '<input name="room['.$id.'][occupants]['.$count.'][adults][quantity]" type="text" data-room="'.$id.'" data-roomnumber="'.$count.'" class="room-occupants occupant-adults" data-occupant="adults-input-'.$id.'-'.$count.'" data-type="adults" min="1" id="adults-input-'.$id.'['.$count.'][]" value="0">';
                     $html .= '<button class="occupant-plus-btn">+</button>';
                     $html .= '</div>';
-    
+
                     if ( $can_accomodate[$id]['children'] <> 0 ) {
                         $html .= '<label for="occupant-number-input">Children:</label>';
                         $html .= '<div class="occupant-input-group">';
@@ -331,7 +355,7 @@ class Frontend
                     }
 
                     $html .= '<hr/>';
-    
+
                     $html .= '</div>';
                     $html .= '</div>';
                     $html .= '</div>';
@@ -348,6 +372,10 @@ class Frontend
                 // $html .= '</select>';
 
             }
+
+            $html .= '<div class="roomchoice-bedlayout">';
+            $html .= self::bedLayout($id);
+            $html .= '</div>';
 
             $html .= '<div class="roomchoice-mealplan">';
             $html .= self::generateMealPlanRadio($id);
@@ -367,18 +395,42 @@ class Frontend
             $html .= '</div>';
         }
 
-        $html .= '<div id="booking-summary">';
-        $html .= '<div class="room-summary"><span class="summary-room-number">0</span> Rooms</div>';
-        $html .= '<div class="adults-summary"><span class="summary-adults-number">0</span> Adults</div>';
-        $html .= '<div class="children-summary"><span class="summary-children-number">0</span> Children</div>';
-        $html .= '<div class="form-group">';
-        $html .= '<div id="bookingRegister" class="div-button">Book</div>';
-        $html .= '</div>';
-        $html .= '</div>';
-
-        // Return the resulting HTML string
         return $html;
     }
+
+    public function bedLayout($room_id) {
+
+        $html = '';
+    
+        $room_data = get_post_custom($room_id);
+    
+        if (isset($room_data["atollmatrix_alt_bedsetup"][0])) {
+            $bedsetup = $room_data["atollmatrix_alt_bedsetup"][0];
+            $bedsetup_array = unserialize($bedsetup);
+    
+            $firstRoomId = array_key_first($bedsetup_array);
+    
+            foreach ($bedsetup_array as $roomId => $roomData) {
+                // Get the bed layout for this room
+                $bedLayout = implode(' ', $roomData['bedtype']);
+    
+                $html .= "<label>";
+                $html .= "<input type='radio' name='room[$room_id][bedlayout]' value='$bedLayout'";
+    
+                // Check the first radio input by default
+                if ($roomId === $firstRoomId) {
+                    $html .= " checked";
+                }
+    
+                $html .= ">";
+                $html .= " $roomId - $bedLayout";
+                $html .= "</label><br>";
+            }
+        }
+    
+        return $html;
+    }
+    
 
     public function paymentHelper_Form($booking_number)
     {
