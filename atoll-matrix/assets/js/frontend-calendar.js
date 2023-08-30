@@ -336,7 +336,7 @@
 				url: frontendAjax.ajaxurl, // the localized URL
 				type: 'POST',
 				data: {
-					action: 'frontend_BookingSearch', // the PHP function to trigger
+					action: 'booking_BookingSearch', // the PHP function to trigger
 					booking_number: bookingNumber,
 					reservation_date: reservationDate,
 					number_of_adults: numberOfAdults,

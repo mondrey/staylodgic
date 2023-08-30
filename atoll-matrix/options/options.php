@@ -13,6 +13,11 @@ class AtollMatrixOptionsPanel
     protected $title = '';
 
     /**
+     * Options panel title.
+     */
+    protected $parent_page = '';
+
+    /**
      * Options panel slug.
      */
     protected $slug = '';

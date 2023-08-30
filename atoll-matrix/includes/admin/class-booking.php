@@ -2,16 +2,24 @@
 
 namespace AtollMatrix;
 
-class Frontend
+class Booking
 {
 
-    public function __construct()
+    protected $checkinDate;
+    protected $checkoutDate;
+    protected $staynights;
+
+    public function __construct( $checkinDate = null, $checkoutDate = null, $staynights = null )
     {
+        $this->checkinDate = $checkinDate;
+        $this->checkoutDate = $checkoutDate;
+        $this->staynights = $staynights;
+
         add_shortcode('hotel_booking_search', array($this, 'hotelBooking_SearchForm'));
         // AJAX handler to save room metadata
 
-        add_action('wp_ajax_frontend_BookingSearch', array($this, 'frontend_BookingSearch'));
-        add_action('wp_ajax_nopriv_frontend_BookingSearch', array($this, 'frontend_BookingSearch'));
+        add_action('wp_ajax_booking_BookingSearch', array($this, 'booking_BookingSearch'));
+        add_action('wp_ajax_nopriv_booking_BookingSearch', array($this, 'booking_BookingSearch'));
     }
 
     public function saveBooking_Transient( $booking_number, $data ) {
@@ -182,7 +190,7 @@ class Frontend
         return $room_availabity;
     }
 
-    public function frontend_BookingSearch()
+    public function booking_BookingSearch()
     {
         $room_type = '';
         $number_of_children = 0;
@@ -209,6 +217,10 @@ class Frontend
 
         $number_of_guests = intval($number_of_adults) + intval($number_of_children);
 
+        $to_accomodate['adults'] = $number_of_adults;
+        $to_accomodate['children'] = $number_of_children;
+        $to_accomodate['guests'] = $number_of_guests;
+
         if (isset($_POST['room_type'])) {
             $room_type = $_POST['room_type'];
         }
@@ -220,12 +232,21 @@ class Frontend
 
         if (isset($chosenDate['startDate'])) {
             $checkinDate = $chosenDate['startDate'];
+            $checkinDate_obj = new \DateTime($chosenDate['startDate']);
         }
         if (isset($chosenDate['endDate'])) {
             $checkoutDate = $chosenDate['endDate'];
+            $checkoutDate_obj = new \DateTime($chosenDate['endDate']);
         }
 
         $checkoutDate = date('Y-m-d', strtotime($checkoutDate . ' -1 day'));
+
+        // Calculate the number of nights
+        $staynights = $checkinDate_obj->diff($checkoutDate_obj)->days;
+
+        $this->checkinDate = $checkinDate;
+        $this->checkoutDate = $checkoutDate;
+        $this->staynights = $staynights;
 
         // Perform your query here, this is just an example
         $result = "Check-in Date: $checkinDate, Check-out Date: $checkoutDate, Number of Adults: $number_of_adults, Number of Children: $number_of_children";
@@ -256,7 +277,7 @@ class Frontend
         // error_log(print_r($checkoutDate, true));
 
         // Always die in functions echoing AJAX content
-        $list = self::listRooms_And_Quantities($combo_array);
+        $list = self::listRooms_And_Quantities($combo_array,$to_accomodate);
         ob_start();
         echo '<div id="reservation-data" data-bookingnumber="' . $booking_number . '" data-children="' . $number_of_children . '" data-adults="' . $number_of_adults . '" data-guests="' . $number_of_guests . '" data-checkin="' . $checkinDate . '" data-checkout="' . $checkoutDate . '">';
         echo $list;
@@ -271,7 +292,7 @@ class Frontend
         die();
     }
 
-    public function listRooms_And_Quantities($combo_array)
+    public function listRooms_And_Quantities($combo_array, $to_accomodate = null)
     {
 
         self::saveBooking_Transient( $booking_number, $combo_array );
@@ -283,7 +304,7 @@ class Frontend
         // Initialize empty string to hold HTML
         $html = '';
 
-        $html .= self::listRooms( $room_array, $rates_array, $can_accomodate );
+        $html .= self::listRooms( $room_array, $rates_array, $can_accomodate, $to_accomodate );
         $html .= self::bookingSummary();
 
         // Return the resulting HTML string
@@ -304,13 +325,30 @@ class Frontend
         return $html;
     }
 
-    public function listRooms( $room_array, $rates_array, $can_accomodate ) {
+    public function listRooms( $room_array, $rates_array, $can_accomodate, $to_accomodate = null ) {
 
         $html = '';
         $count = 0;
         // Iterate through each room
         foreach ($room_array as $id => $room_info) {
             // Get quantity and room title
+            error_log('====== to accomodate ');
+            error_log(print_r($to_accomodate, true));
+            error_log(print_r($can_accomodate, true));
+
+            if ( $can_accomodate[$id]['guests'] < $to_accomodate['guests'] ) {
+                error_log('Cannot accomodate number of guests');
+                continue;
+            }
+
+            if ( $can_accomodate[$id]['adults'] < $to_accomodate['adults'] ) {
+                error_log('Cannot accomodate number of adults');
+                continue;
+            }
+            if ( $can_accomodate[$id]['children'] < $to_accomodate['children'] ) {
+                error_log('Cannot accomodate number of children');
+                continue;
+            }
             
             $max_guest_number = intval($can_accomodate[$id]['guests']);
             $max_child_guest_number = intval($can_accomodate[$id]['guests'] - 1);
@@ -383,17 +421,35 @@ class Frontend
 
             $html .= '<div class="checkin-staydate-wrap">';
             
-            $total_roomrate = 0;
-            foreach ($rates_array[$id]['date'] as $staydate => $roomrate) {
-                $html .= '<div class="checkin-staydate"><span class="number-of-rooms"></span>' . $staydate . ' - ' . $roomrate . '</div>';
-                $total_roomrate = $total_roomrate + $roomrate;
-            }
+            $html .= self::displayBookingTotal( $rates_array[$id]['date'] );
             
-            $html .= '<div class="checkin-staydate-total">' . atollmatrix_price( $total_roomrate ) . '</div>';
             $html .= '</div>';
 
             $html .= '</div>';
         }
+
+        return $html;
+    }
+
+    public function displayBookingPerDay( $rates_array_date ) {
+        $total_roomrate = 0;
+        $html = '';
+        foreach ($rates_array_date as $staydate => $roomrate) {
+            if ( $per_day ) {
+                $html .= '<div class="checkin-staydate"><span class="number-of-rooms"></span>' . $staydate . ' - ' . atollmatrix_price($roomrate) . '</div>';
+            }
+            $total_roomrate = $total_roomrate + $roomrate;
+        }
+
+        return $html;
+    }
+    public function displayBookingTotal( $rates_array_date ) {
+        $total_roomrate = 0;
+        $html = '';
+        foreach ($rates_array_date as $staydate => $roomrate) {
+            $total_roomrate = $total_roomrate + $roomrate;
+        }
+        $html .= '<div class="checkin-staydate-total">' . atollmatrix_price( $total_roomrate ) . '</div>';
 
         return $html;
     }
@@ -517,7 +573,7 @@ HTML;
             if (is_array($optionalMealPlans) && count($optionalMealPlans) > 0) {
                 $html .= '<input type="radio" name="room['.$room_id.'][meal_plan][optional]" value="none" checked>' . __('Not selected','atollmatrix') . '<br>';
                 foreach ($optionalMealPlans as $id => $plan) {
-                    $html .= '<input type="radio" name="room['.$room_id.'][meal_plan][optional]" value="' . $plan['mealtype'] . '">' . self::getMealPlanText($plan['mealtype']) . ' ' . atollmatrix_price( $plan['price'] ) . ' +<br>';
+                    $html .= '<input type="radio" name="room['.$room_id.'][meal_plan][optional]" value="' . $plan['mealtype'] . '">' . self::getMealPlanText($plan['mealtype']) . ' ' . atollmatrix_price( $plan['price'] * $this->staynights ) . ' +<br>';
                 }
             }
         }
@@ -540,4 +596,4 @@ HTML;
     }
 }
 
-$instance = new \AtollMatrix\Frontend();
+$instance = new \AtollMatrix\Booking();

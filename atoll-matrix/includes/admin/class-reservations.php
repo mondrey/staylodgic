@@ -812,7 +812,7 @@ class Reservations
         return $reservations_array;
     }
 
-    public function canAccomodate_everyone_to_all_rooms($rooms, $adults = false, $children = false)
+    public function canAccomodate_to_rooms($rooms, $adults = false, $children = false)
     {
 
         $min_adults         = 0;
@@ -1011,7 +1011,7 @@ class Reservations
         // add other fields as necessary
 
         // Check if number of people can be occupied by room
-        $can_accomodate = self::canAccomodate_everyone_to_all_rooms($rooms, $adults, $children);
+        $can_accomodate = self::canAccomodate_to_rooms($rooms, $adults, $children);
         error_log(print_r($can_accomodate, true));
         if (false == $can_accomodate['allow']) {
             wp_send_json_error($can_accomodate['error']);
