@@ -321,7 +321,7 @@ $first_tab = false;
             name="total"
             >
             <option value="increase">Increase</option>
-            <option value="descrease">Decrease</option>
+            <option value="decrease">Decrease</option>
             </select>
             <span class="remove-set-button"><i class="dashicons dashicons-remove"></i></span>
             <br/>
@@ -367,7 +367,7 @@ $first_tab = false;
             name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][<?php echo $key; ?>][total]"
             >
             <option value="increase" <?php selected('increase', $value['total'], true);?>>Increase</option>
-            <option value="descrease" <?php selected('descrease', $value['total'], true);?>>Decrease</option>
+            <option value="decrease" <?php selected('decrease', $value['total'], true);?>>Decrease</option>
             </select>
             <span class="remove-set-button"><i class="dashicons dashicons-remove"></i></span>
             <br/>
@@ -773,7 +773,7 @@ $panel_settings = [
         'tab'         => 'perperson',
     ],
     'childfreestay'   => [
-        'label'       => esc_html__('Children under can stay for free', 'text_domain'),
+        'label'       => esc_html__('Children under the age can stay for free', 'text_domain'),
         'type'        => 'select',
         'description' => 'My select field description.',
         'choices'     => [

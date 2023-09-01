@@ -311,7 +311,7 @@
 			var maxAge = $(this).parent().data('agelimitofchild');
 
 			for (var j = 0; j < numberOfChildren; j++) {
-				var select = $('<select class="children-age-selector" name="children_age_' + (j + 1) + '"></select>');
+				var select = $('<select id="children_age_' + (j + 1) + '" class="children-age-selector" name="children_age[]"></select>');
 
 				for (var i = 0; i <= maxAge; i++) {
 					select.append('<option value="' + i + '">' + i + '</option>');
@@ -332,6 +332,13 @@
 			var numberOfAdults = $('#number-of-adults').val();
 			var numberOfChildren = $('#number-of-children').val();
 
+			var childrenAge = [];
+
+			// Loop through all select elements with the class 'children-age-selector'
+			$('.children-age-selector').each(function() {
+				childrenAge.push($(this).val());
+			});
+
 			$.ajax({
 				url: frontendAjax.ajaxurl, // the localized URL
 				type: 'POST',
@@ -340,7 +347,8 @@
 					booking_number: bookingNumber,
 					reservation_date: reservationDate,
 					number_of_adults: numberOfAdults,
-					number_of_children: numberOfChildren
+					number_of_children: numberOfChildren,
+					children_age: childrenAge
 				},
 				success: function (response) {
 					var parsedResponse = JSON.parse(response);

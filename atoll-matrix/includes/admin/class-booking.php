@@ -8,18 +8,26 @@ class Booking
     protected $checkinDate;
     protected $checkoutDate;
     protected $staynights;
-    protected $toAccomodate;
+    protected $adultGuests;
+    protected $childrenGuests;
+    protected $totalGuests;
+    protected $totalChargeableGuests;
     protected $roomArray;
     protected $ratesArray;
     protected $canAccomodate;
     protected $bookingNumber;
+    protected $children_age;
 
     public function __construct(
         $bookingNumber = null,
         $checkinDate = null,
         $checkoutDate = null,
         $staynights = null,
-        $toAccomodate = null,
+        $adultGuests = null,
+        $childrenGuests = null,
+        $children_age = null,
+        $totalGuests = null,
+        $totalChargeableGuests = null,
         $roomArray = null,
         $ratesArray = null,
         $canAccomodate = null
@@ -27,7 +35,11 @@ class Booking
         $this->checkinDate = $checkinDate;
         $this->checkoutDate = $checkoutDate;
         $this->staynights = $staynights;
-        $this->toAccomodate = $toAccomodate;
+        $this->adultGuests = $adultGuests;
+        $this->childrenGuests = $childrenGuests;
+        $this->totalGuests = $totalGuests;
+        $this->totalChargeableGuests = $totalChargeableGuests;
+        $this->children_age = $children_age;
         $this->roomArray = $roomArray;
         $this->ratesArray = $ratesArray;
         $this->canAccomodate = $canAccomodate;
@@ -210,6 +222,7 @@ class Booking
         $number_of_children = 0;
         $number_of_adults = 0;
         $number_of_guests = 0;
+        $children_age = array();
         $reservation_date = '';
 
         if (isset($_POST['reservation_date'])) {
@@ -224,11 +237,35 @@ class Booking
             $number_of_children = $_POST['number_of_children'];
         }
 
+        $freeStayAgeUnder = atollmatrix_get_option('childfreestay');
+
+        error_log('---- Free Stay');
+        error_log(print_r($freeStayAgeUnder, true));
+
+        $freeStayChildCount = 0;
+
+        if (isset($_POST['children_age'])) {
+            // Loop through all the select elements with the class 'children-age-selector'
+            foreach ($_POST['children_age'] as $selected_age) {
+                // Sanitize and store the selected values in an array
+                $children_age[] = sanitize_text_field($selected_age);
+                if ( $selected_age < $freeStayAgeUnder ) {
+                    $freeStayChildCount = $freeStayChildCount + 1;
+                }
+            }
+        }
+
+        $this->children_age = $children_age;
+
+        error_log('---- Children Age');
+        error_log(print_r($this->children_age, true));
+
         $number_of_guests = intval($number_of_adults) + intval($number_of_children);
 
-        $this->toAccomodate['adults'] = $number_of_adults;
-        $this->toAccomodate['children'] = $number_of_children;
-        $this->toAccomodate['guests'] = $number_of_guests;
+        $this->adultGuests = $number_of_adults;
+        $this->childrenGuests = $number_of_children;
+        $this->totalGuests = $number_of_guests;
+        $this->totalChargeableGuests = $number_of_guests - $freeStayChildCount;
 
         if (isset($_POST['room_type'])) {
             $room_type = $_POST['room_type'];
@@ -295,7 +332,7 @@ class Booking
         self::saveBooking_Transient( $combo_array );
 
         ob_start();
-        echo '<div id="reservation-data" data-bookingnumber="' . $this->bookingNumber . '" data-children="' . $number_of_children . '" data-adults="' . $number_of_adults . '" data-guests="' . $number_of_guests . '" data-checkin="' . $checkinDate . '" data-checkout="' . $checkoutDate . '">';
+        echo '<div id="reservation-data" data-bookingnumber="' . $this->bookingNumber . '" data-children="' . $this->childrenGuests . '" data-adults="' . $this->adultGuests . '" data-guests="' . $this->totalGuests . '" data-checkin="' . $this->checkinDate . '" data-checkout="' . $this->checkoutDate . '">';
         echo $list;
         echo self::register_Guest_Form();
         echo '<div id="bookingResponse" class="booking-response"></div>';
@@ -339,16 +376,16 @@ class Booking
     public function can_ThisRoom_Accomodate( $room_id ) {
 
         $status = true;
-        if ( $this->canAccomodate[$room_id]['guests'] < $this->toAccomodate['guests'] ) {
+        if ( $this->canAccomodate[$room_id]['guests'] < $this->totalGuests ) {
             error_log('Cannot accomodate number of guests');
             $status = false;
         }
 
-        if ( $this->canAccomodate[$room_id]['adults'] < $this->toAccomodate['adults'] ) {
+        if ( $this->canAccomodate[$room_id]['adults'] < $this->adultGuests ) {
             error_log('Cannot accomodate number of adults');
             $status = false;
         }
-        if ( $this->canAccomodate[$room_id]['children'] < $this->toAccomodate['children'] ) {
+        if ( $this->canAccomodate[$room_id]['children'] < $this->childrenGuests ) {
             error_log('Cannot accomodate number of children');
             $status = false;
         }
@@ -363,8 +400,7 @@ class Booking
         // Iterate through each room
         foreach ($this->roomArray as $id => $room_info) {
             // Get quantity and room title
-            error_log('====== to accomodate ');
-            error_log(print_r($this->toAccomodate, true));
+            error_log('====== can accomodate ');
             error_log(print_r($this->canAccomodate, true));
 
             $can_ThisRoom_Accomodate = self::can_ThisRoom_Accomodate( $id );
@@ -382,46 +418,8 @@ class Booking
                 // Append the room title
                 $html .= '<h2>' . $title . '</h2>';
                 $html .= '<label for="room-number-input">Rooms:</label>';
-                $html .= '<div class="room-input-group">';
-                $html .= '<button class="room-minus-btn">-</button>';
-                $html .= '<input class="roomchoice" name="room['.$id.'][quantity]" type="text" data-type="room-number" data-roominputid="'.$id.'" data-roomqty="'.$quantity.'" id="room-input-'.$id.'" min="0" max="'.$quantity.'" value="0">';
-                $html .= '<button class="room-plus-btn">+</button>';
+                $html .= '<input class="roomchoice" name="room['.$id.'][quantity]" type="hidden" data-type="room-number" data-roominputid="'.$id.'" data-roomqty="'.$quantity.'" id="room-input-'.$id.'" min="0" max="'.$quantity.'" value="1">';
                 $html .= '</div>';
-
-                $count = 0;
-
-                for ($i=0; $i < $quantity; $i++) {
-
-                    $html .= '<div data-roomgroup="'.$id.'" data-roomqty="'.$quantity.'" class="room-occupants-wrap room-occupants-wrap-'.$id.'-'.$count.'">';
-                    $html .= '<div class="room-occupants-inner">';
-                    $html .= '<div class="room-occupants">';
-                    $html .= '<label for="occupant-number-input">Adults:</label>';
-                    $html .= '<div class="occupant-input-group">';
-                    $html .= '<button class="occupant-minus-btn">-</button>';
-                    $html .= '<input name="room['.$id.'][occupants]['.$count.'][adults][quantity]" type="text" data-room="'.$id.'" data-roomnumber="'.$count.'" class="room-occupants occupant-adults" data-occupant="adults-input-'.$id.'-'.$count.'" data-type="adults" min="1" id="adults-input-'.$id.'['.$count.'][]" value="0">';
-                    $html .= '<button class="occupant-plus-btn">+</button>';
-                    $html .= '</div>';
-
-                    if ( $this->canAccomodate[$id]['children'] <> 0 ) {
-                        $html .= '<label for="occupant-number-input">Children:</label>';
-                        $html .= '<div class="occupant-input-group">';
-                        $html .= '<button class="occupant-minus-btn">-</button>';
-                        $html .= '<input name="room['.$id.'][occupants]['.$count.'][children][quantity]" type="text" data-room="'.$id.'" data-roomnumber="'.$count.'" class="room-occupants occupant-children" data-occupant="children-input-'.$id.'-'.$count.'" data-children-room="'.$count.'" data-type="children" min="0" id="children-input-'.$id.'['.$count.'][]" value="0">';
-                        $html .= '<button class="occupant-plus-btn">+</button>';
-                        for ($ageinputs=0; $ageinputs < $max_child_guest_number; $ageinputs++) {
-                            $html .= '<input disabled name="room['.$id.'][occupants]['.$count.'][children][age][]" data-room="'.$id.'" data-room-number="'.$count.'" class="room-occupants occupant-child-age-input occupant-children-age occupant-children-age-'.$id.' occupant-children-age-set-'.$id.'-'.$count.' occupant-children-number-'.$id.'-'.$count.'-'.$ageinputs.'" data-childinputid="'.$id.'-'.$count.'" data-type="children-age" id="children-age-input-'.$id.'-'.$count.'-'.$ageinputs.'" name="children-age-input-'.$id.'['.$ageinputs.'][]" type="number" placeholder="Enter age">';
-                        }
-                        $html .= '</div>';
-                    }
-
-                    $html .= '<hr/>';
-
-                    $html .= '</div>';
-                    $html .= '</div>';
-                    $html .= '</div>';
-
-                    $count++;
-                }
 
                 // // Append a select element for the quantity
                 // $html .= '<select data-room-id="' . $id . '" name="room_quantity">';
@@ -468,12 +466,42 @@ class Booking
     public function displayBookingTotal( $room_id ) {
         $total_roomrate = 0;
         $html = '';
+        
+        $perPersonPricing = atollmatrix_get_option('perpersonpricing');
+        error_log('---- Person Pricing');
+        error_log(print_r($perPersonPricing, true));
+        
         foreach ($this->ratesArray[$room_id]['date'] as $staydate => $roomrate) {
+
+            $roomrate = self::applyPricePerPerson($roomrate, $perPersonPricing);
+
             $total_roomrate = $total_roomrate + $roomrate;
         }
         $html .= '<div class="checkin-staydate-total">' . atollmatrix_price( $total_roomrate ) . '</div>';
 
         return $html;
+    }
+
+    private function applyPricePerPerson($roomrate, $perPersonPricing) {
+        foreach ($perPersonPricing as $pricing) {
+            if ($this->totalChargeableGuests == $pricing['people']) {
+                if ($pricing['type'] === 'percentage' && $pricing['total'] === 'decrease') {
+                    // Decrease the rate by the given percentage
+                    $roomrate -= ($roomrate * $pricing['number'] / 100);
+                } elseif ($pricing['type'] === 'fixed' && $pricing['total'] === 'increase') {
+                    // Increase the rate by the fixed amount
+                    $roomrate += $pricing['number'];
+                } elseif ($pricing['type'] === 'percentage' && $pricing['total'] === 'increase') {
+                    // Increase the rate by the given percentage
+                    $roomrate += ($roomrate * $pricing['number'] / 100);
+                } elseif ($pricing['type'] === 'fixed' && $pricing['total'] === 'decrease') {
+                    // Decrease the rate by the fixed amount
+                    $roomrate -= $pricing['number'];
+                }
+            }
+        }
+        
+        return $roomrate;
     }
 
     public function bedLayout($room_id) {
