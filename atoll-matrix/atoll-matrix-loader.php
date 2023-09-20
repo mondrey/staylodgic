@@ -196,6 +196,10 @@ class AtollMatrix_Init
             )
         );
 
+        wp_register_style('fontawesome-6', plugin_dir_url(__FILE__) . 'assets/fonts/fontawesome-free-6.4.0-web/css/fontawesome.css', false, 'screen');
+        wp_register_style('fontawesome-6-brands', plugin_dir_url(__FILE__) . 'assets/fonts/fontawesome-free-6.4.0-web/css/all.css', false, 'screen');
+        wp_register_style('fontawesome-6-solid', plugin_dir_url(__FILE__) . 'assets/fonts/fontawesome-free-6.4.0-web/css/solid.css', false, 'screen');
+
         wp_enqueue_script('frontend-calendar', array('jquery'), null, true);
         wp_enqueue_script('payment-helper');
         wp_enqueue_style('frontendstyle');
@@ -203,6 +207,10 @@ class AtollMatrix_Init
         wp_enqueue_script('flatpickr');
         wp_enqueue_style('flatpickr-extra');
         wp_enqueue_script('underscore');
+        wp_enqueue_style('fontawesome-6');
+        wp_enqueue_style('fontawesome-6-brands');
+        wp_enqueue_style('fontawesome-6-solid');
+
 
     }
 

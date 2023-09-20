@@ -16,12 +16,14 @@ function atollmatrix_price($price)
     // Format the price using number_format
     $price = number_format($price, $number_of_decimals, $decimal_seperator, $thousand_seperator);
 
+    $formatted_price = '<span class="formatted-price" date-price="'.esc_attr($price).'" date-currency="'.esc_attr($currency).'">';
     // Adjust the position of the currency symbol
     if ($currency_position === 'left') {
-        $formatted_price = $currency . ' ' . $price;
+        $formatted_price .= '<span class="currency">'. $currency . '</span>' . ' ' . '<span class="price">'.$price. '</span>';
     } else {
-        $formatted_price = $price . ' ' . $currency;
+        $formatted_price .= '<span class="price">'.$price. '</span>' . ' ' . '<span class="currency">'. $currency . '</span>';
     }
+    $formatted_price .= '</span>';
 
     return $formatted_price;
 }

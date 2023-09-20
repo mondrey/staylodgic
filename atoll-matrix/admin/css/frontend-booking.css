@@ -30,3 +30,77 @@
 	position: fixed;
 	height: 120px;
 }
+.guest-adult-svg {
+	width: 22px;
+	height: 32px;
+	background-image: url( '../../assets/svgs/person-adult.svg' );
+	display: inline-block;
+	background-repeat: no-repeat;
+}
+.guest-child-svg {
+	width: 22px;
+	height: 22px;
+	background-image: url( '../../assets/svgs/person-child.svg' );
+	display: inline-block;
+	background-repeat: no-repeat;
+}
+.guest-bed-kingbed {
+	width: 36px;
+	height: 37px;
+	background-image: url( '../../assets/svgs/bed-king.svg' );
+	display: inline-block;
+	background-repeat: no-repeat;
+	position: relative;
+	top: 11px;
+    left: 6px;
+}
+.guest-bed-twinbed {
+	width: 36px;
+	height: 37px;
+	background-image: url( '../../assets/svgs/bed-single.svg' );
+	display: inline-block;
+	background-repeat: no-repeat;
+	position: relative;
+	top: 11px;
+}
+.type-twinbed-twinbed-two.guest-bed-twinbed {
+	left: -10px;
+}
+
+.included-mealplan {
+	width: 36px;
+	height: 37px;
+	background-image: url( '../../assets/svgs/mealplan.svg' );
+	display: inline-block;
+	background-repeat: no-repeat;
+	position: relative;
+	top: 11px;
+}
+
+.room-details-heading {
+	text-align: left; /* Center the heading */
+}
+
+.room-details-row {
+	display: flex;
+	flex-direction: row; /* Display columns horizontally */
+	justify-content: space-between; /* Space columns evenly */
+	align-items: flex-start; /* align top items vertically */
+}
+
+.room-details-column {
+	flex: 1; /* Equal width for each column */
+	text-align: left;
+	margin: 0 10px; /* Add spacing between columns */
+}
+
+.room-mealplans {
+	padding-top: 20px;
+}
+
+.room-occupied-group {
+	border: 4px solid #000;
+	margin-bottom: 10px;
+	padding: 40px;
+}
+
