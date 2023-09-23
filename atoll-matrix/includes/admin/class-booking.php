@@ -50,6 +50,32 @@ class Booking
 
         add_action('wp_ajax_booking_BookingSearch', array($this, 'booking_BookingSearch'));
         add_action('wp_ajax_nopriv_booking_BookingSearch', array($this, 'booking_BookingSearch'));
+
+        add_action('wp_ajax_process_RoomData', array($this, 'process_RoomData')); // For logged-in users
+        add_action('wp_ajax_nopriv_process_RoomData', array($this, 'process_RoomData')); // For non-logged-in users
+    }
+
+    public function process_RoomData() {
+        // Get the data sent via AJAX
+        $room_id = sanitize_text_field($_POST['room_id']);
+        $room_price = sanitize_text_field($_POST['room_price']);
+        $bed_layout = sanitize_text_field($_POST['bed_layout']);
+        $meal_plan = sanitize_text_field($_POST['meal_plan']);
+        $meal_plan_price = sanitize_text_field($_POST['meal_plan_price']);
+
+        $roomName = \AtollMatrix\Rooms::getRoomName_FromID( $room_id );
+    
+        // Perform any processing you need with the data
+        // For example, you can save it to the database or perform calculations
+    
+        // Return a response (you can modify this as needed)
+        $response = array(
+            'success' => true,
+            'message' => 'Data: '.$roomName.',received successfully.'
+        );
+    
+        // Send the JSON response
+        wp_send_json($response);
     }
 
     public function saveBooking_Transient( $data ) {
@@ -354,18 +380,21 @@ class Booking
         $html = '';
 
         $html .= self::listRooms();
-        // $html .= self::bookingSummary();
+        $html .= self::bookingSummary();
 
         // Return the resulting HTML string
         return $html;
     }
 
     public function bookingSummary() {
-        
         $html = '<div id="booking-summary">';
-        $html .= '<div class="room-summary"><span class="summary-room-number">0</span> Rooms</div>';
-        $html .= '<div class="adults-summary"><span class="summary-adults-number">0</span> Adults</div>';
-        $html .= '<div class="children-summary"><span class="summary-children-number">0</span> Children</div>';
+        $html .= '<div class="room-summary"><span class="summary-room-name">-</span></div>';
+        if ( $this->adultGuests > 0 ) {
+            $html .= '<div class="adults-summary"><span class="summary-adults-number">'.$this->adultGuests.'</span> Adults</div>';
+        }
+        if ( $this->childrenGuests > 0 ) {
+            $html .= '<div class="children-summary"><span class="summary-children-number">'.$this->childrenGuests.'</span> Children</div>';
+        }
         $html .= '<div class="form-group">';
         $html .= '<div id="bookingRegister" class="div-button">Book</div>';
         $html .= '</div>';
@@ -499,7 +528,7 @@ class Booking
 
             $total_roomrate = $total_roomrate + $roomrate;
         }
-        $html .= '<div class="room-price-total">' . atollmatrix_price( $total_roomrate ) . '</div>';
+        $html .= '<div class="room-price-total" data-roomprice="'.esc_attr($total_roomrate).'">' . atollmatrix_price( $total_roomrate ) . '</div>';
 
         return $html;
     }
@@ -670,11 +699,12 @@ HTML;
                 $html .= '<i class="fa-solid fa-plate-wheat"></i><br/>';
                 $html .= '<h3 class="room-mealplans-heading">Mealplans</h3>';
                 $html .= '<div class="room-mealplan-input">';
-                $html .= '<input type="radio" name="room['.$room_id.'][meal_plan][optional]" value="none" checked>' . __('Not selected','atollmatrix') . '<br>';
+                $html .= '<input type="radio" data-mealprice="none" name="room['.$room_id.'][meal_plan][optional]" value="none" checked>' . __('Not selected','atollmatrix') . '<br>';
                 $html .= '</div>';
                 foreach ($optionalMealPlans as $id => $plan) {
                     $html .= '<div class="room-mealplan-input">';
-                    $html .= '<input type="radio" name="room['.$room_id.'][meal_plan][optional]" value="' . $plan['mealtype'] . '">' . self::getMealPlanText($plan['mealtype']) . ' ' . '<span class="room-mealplan-price">' . atollmatrix_price( $plan['price'] * $this->staynights ) . ' +</span>';
+                    $mealprice = $plan['price'] * $this->staynights;
+                    $html .= '<input type="radio" data-mealprice="'.$mealprice.'" name="room['.$room_id.'][meal_plan][optional]" value="' . $plan['mealtype'] . '">' . self::getMealPlanText($plan['mealtype']) . ' ' . '<span class="room-mealplan-price">' . atollmatrix_price( $mealprice ) . ' +</span>';
                     $html .= '</div>';
                 }
                 $html .= '</div>';

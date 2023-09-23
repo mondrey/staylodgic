@@ -56,6 +56,16 @@ class Rooms
         return false;
     }
 
+    public static function getRoomName_FromID($room_id)
+    {
+        $room_post = get_post($room_id);
+        if ($room_post) {
+            $room_name = $room_post->post_title;
+        }
+
+        return $room_name;
+    }
+
     public static function getRoomNames_FromIDs($room_ids)
     {
         $room_names = array();
