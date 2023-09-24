@@ -4,6 +4,7 @@
 		$(document).on('click', '.room-occupied-group', function () {
 			
 			// Get data attributes from the clicked element
+			var bookingnumber = $('#reservation-data').data('bookingnumber');
 			var roomId = $(this).data('room-id');
 			var roompPrice = $(this).find('.room-price-total').data('roomprice');
 			var bedLayout = $("input[name='room[" + roomId + "][bedlayout]']:checked").val();
@@ -14,6 +15,7 @@
 			// Create an object to send via AJAX
 			var dataToSend = {
 				action: 'process_RoomData', // Create a WordPress AJAX action
+				bookingnumber: bookingnumber,
 				room_id: roomId,
 				room_price: roompPrice,
 				bed_layout: bedLayout,

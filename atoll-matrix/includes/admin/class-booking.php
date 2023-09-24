@@ -17,6 +17,7 @@ class Booking
     protected $canAccomodate;
     protected $bookingNumber;
     protected $children_age;
+    protected $bookingSearchResults;
 
     public function __construct(
         $bookingNumber = null,
@@ -30,20 +31,22 @@ class Booking
         $totalChargeableGuests = null,
         $roomArray = null,
         $ratesArray = null,
-        $canAccomodate = null
+        $canAccomodate = null,
+        $bookingSearchResults = null
     ) {
-        $this->checkinDate = $checkinDate;
-        $this->checkoutDate = $checkoutDate;
-        $this->staynights = $staynights;
-        $this->adultGuests = $adultGuests;
-        $this->childrenGuests = $childrenGuests;
-        $this->totalGuests = $totalGuests;
+        $this->checkinDate           = $checkinDate;
+        $this->checkoutDate          = $checkoutDate;
+        $this->staynights            = $staynights;
+        $this->adultGuests           = $adultGuests;
+        $this->childrenGuests        = $childrenGuests;
+        $this->totalGuests           = $totalGuests;
         $this->totalChargeableGuests = $totalChargeableGuests;
-        $this->children_age = $children_age;
-        $this->roomArray = $roomArray;
-        $this->ratesArray = $ratesArray;
-        $this->canAccomodate = $canAccomodate;
-        $this->bookingNumber = uniqid();
+        $this->children_age          = $children_age;
+        $this->roomArray             = $roomArray;
+        $this->ratesArray            = $ratesArray;
+        $this->canAccomodate         = $canAccomodate;
+        $this->bookingSearchResults  = $bookingSearchResults;
+        $this->bookingNumber         = uniqid();
 
         add_shortcode('hotel_booking_search', array($this, 'hotelBooking_SearchForm'));
         // AJAX handler to save room metadata
@@ -55,37 +58,55 @@ class Booking
         add_action('wp_ajax_nopriv_process_RoomData', array($this, 'process_RoomData')); // For non-logged-in users
     }
 
-    public function process_RoomData() {
+    public function process_RoomData()
+    {
         // Get the data sent via AJAX
-        $room_id = sanitize_text_field($_POST['room_id']);
-        $room_price = sanitize_text_field($_POST['room_price']);
-        $bed_layout = sanitize_text_field($_POST['bed_layout']);
-        $meal_plan = sanitize_text_field($_POST['meal_plan']);
+        $bookingnumber   = sanitize_text_field($_POST['bookingnumber']);
+        $room_id         = sanitize_text_field($_POST['room_id']);
+        $room_price      = sanitize_text_field($_POST['room_price']);
+        $bed_layout      = sanitize_text_field($_POST['bed_layout']);
+        $meal_plan       = sanitize_text_field($_POST['meal_plan']);
         $meal_plan_price = sanitize_text_field($_POST['meal_plan_price']);
 
-        $roomName = \AtollMatrix\Rooms::getRoomName_FromID( $room_id );
-    
+        $roomName = \AtollMatrix\Rooms::getRoomName_FromID($room_id);
+
+        $booking_results = self::getBookingTransient( $bookingnumber );
+
+        error_log( '====== From Transient ======' );
+        error_log( print_r( $booking_results , true ));
+        error_log( '====== Specific Room ======' );
+        error_log( print_r( $booking_results[$room_id] , true ));
         // Perform any processing you need with the data
         // For example, you can save it to the database or perform calculations
-    
+
         // Return a response (you can modify this as needed)
         $response = array(
             'success' => true,
-            'message' => 'Data: '.$roomName.',received successfully.'
+            'message' => 'Data: ' . $roomName . ',received successfully.',
         );
-    
+
         // Send the JSON response
         wp_send_json($response);
     }
 
-    public function saveBooking_Transient( $data ) {
+    public function saveBooking_Transient($data)
+    {
         set_transient($this->bookingNumber, $data, 20 * MINUTE_IN_SECONDS);
     }
+    public function getBookingTransient($bookingNumber = null)
+    {
+        if ($bookingNumber === null) {
+            // Use $this->bookingNumber if $bookingNumber is not supplied
+            $bookingNumber = $this->bookingNumber;
+        }
+        
+        return get_transient($bookingNumber);
+    }  
 
     public function hotelBooking_SearchForm()
     {
         // Generate unique booking number
-        self::saveBooking_Transient( '1' );
+        self::saveBooking_Transient('1');
         ob_start();
         ?>
         <div id="hotel-booking-form">
@@ -125,14 +146,14 @@ class Booking
             </form>
         </div>
         <?php
-        return ob_get_clean();
+return ob_get_clean();
     }
 
     public function alternative_BookingDates($checkinDate, $checkoutDate)
     {
 
         // Perform the greedy search by adjusting the check-in and check-out dates
-        $newCheckinDate = new \DateTime($checkinDate);
+        $newCheckinDate  = new \DateTime($checkinDate);
         $newCheckoutDate = new \DateTime($checkoutDate);
         //$newCheckoutDate->add(new \DateInterval('P1D'));
 
@@ -140,8 +161,8 @@ class Booking
 
         $availableRoomDates = $reservation_instance->Availability_of_Rooms_For_DateRange($newCheckinDate->format('Y-m-d'), $newCheckoutDate->format('Y-m-d'));
 
-        error_log('---- Alternative Rooms Matrix Early');
-        error_log(print_r($availableRoomDates, true));
+        // error_log('---- Alternative Rooms Matrix Early');
+        // error_log(print_r($availableRoomDates, true));
         $new_room_availability_array = array();
 
         // Process each sub-array
@@ -151,13 +172,13 @@ class Booking
 
             // Get the first and last keys of the inner arrays
             foreach ($subArray as $innerArray) {
-                $keys = array_keys($innerArray);
+                $keys     = array_keys($innerArray);
                 $firstKey = $keys[0];
-                $lastKey = end($keys);
+                $lastKey  = end($keys);
 
                 // Keep only the first and last records and assign unique indexes
                 $newSubArray[$firstKey] = array(
-                    'check-in' => $firstKey,
+                    'check-in'  => $firstKey,
                     'check-out' => $lastKey,
                 );
             }
@@ -167,25 +188,25 @@ class Booking
         }
         $roomAvailabityArray = $new_room_availability_array;
 
-        error_log('---- Alternative Room Availability Matrix Before');
-        error_log(print_r($roomAvailabityArray, true));
+        // error_log('---- Alternative Room Availability Matrix Before');
+        // error_log(print_r($roomAvailabityArray, true));
 
         // Initialize an empty string
         $output = '';
 
-        $processedDates = array(); // Array to store processed check-in and checkout dates
+        $processedDates    = array(); // Array to store processed check-in and checkout dates
         $newProcessedDates = array();
 
         foreach ($roomAvailabityArray as $key => $subset) {
             // Output the key of the subset
-            error_log("Subset Key: $key\n");
+            // error_log("Subset Key: $key\n");
 
             // Iterate through each sub array in the subset
             foreach ($subset as $subArray) {
                 // Output the sub array
-                error_log(print_r($subArray, true));
+                // error_log(print_r($subArray, true));
                 $checkInAlt = $subArray['check-in'];
-                $staylast = $subArray['check-out'];
+                $staylast   = $subArray['check-out'];
 
                 // Check if the current check-in and checkout dates have already been processed
                 if (in_array([$checkInAlt, $staylast], $processedDates)) {
@@ -200,8 +221,8 @@ class Booking
                 $checkOutAlt = date('Y-m-d', strtotime($staylast . ' +1 day'));
 
                 $newProcessedDates[$checkInAlt] = array(
-                    'staylast' => $staylast,
-                    'check-in' => $checkInAlt,
+                    'staylast'  => $staylast,
+                    'check-in'  => $checkInAlt,
                     'check-out' => $checkOutAlt,
                 );
 
@@ -209,13 +230,13 @@ class Booking
             }
         }
 
-        error_log('---- Alternative Room Availability Matrix The Final');
-        error_log(print_r($newProcessedDates, true));
+        // error_log('---- Alternative Room Availability Matrix The Final');
+        // error_log(print_r($newProcessedDates, true));
         ksort($newProcessedDates);
 
         foreach ($newProcessedDates as $key) {
-            $staylast = $key['staylast'];
-            $checkInAlt = $key['check-in'];
+            $staylast    = $key['staylast'];
+            $checkInAlt  = $key['check-in'];
             $checkOutAlt = $key['check-out'];
 
             // Format the dates as "Month Day" (e.g., "July 13th")
@@ -236,20 +257,20 @@ class Booking
 
         // Print the output
         $roomAvailabity = '<div class="recommended-dates-wrap">' . $output . '</div>';
-        error_log('---- Alternative Room Availability Matrix for Range');
-        error_log(print_r($roomAvailabity, true));
+        // error_log('---- Alternative Room Availability Matrix for Range');
+        // error_log(print_r($roomAvailabity, true));
 
         return $roomAvailabity;
     }
 
     public function booking_BookingSearch()
     {
-        $room_type = '';
+        $room_type          = '';
         $number_of_children = 0;
-        $number_of_adults = 0;
-        $number_of_guests = 0;
-        $children_age = array();
-        $reservation_date = '';
+        $number_of_adults   = 0;
+        $number_of_guests   = 0;
+        $children_age       = array();
+        $reservation_date   = '';
 
         if (isset($_POST['reservation_date'])) {
             $reservation_date = $_POST['reservation_date'];
@@ -265,8 +286,8 @@ class Booking
 
         $freeStayAgeUnder = atollmatrix_get_option('childfreestay');
 
-        error_log('---- Free Stay');
-        error_log(print_r($freeStayAgeUnder, true));
+        // error_log('---- Free Stay');
+        // error_log(print_r($freeStayAgeUnder, true));
 
         $freeStayChildCount = 0;
 
@@ -275,7 +296,7 @@ class Booking
             foreach ($_POST['children_age'] as $selected_age) {
                 // Sanitize and store the selected values in an array
                 $children_age[] = sanitize_text_field($selected_age);
-                if ( $selected_age < $freeStayAgeUnder ) {
+                if ($selected_age < $freeStayAgeUnder) {
                     $freeStayChildCount = $freeStayChildCount + 1;
                 }
             }
@@ -283,14 +304,14 @@ class Booking
 
         $this->children_age = $children_age;
 
-        error_log('---- Children Age');
-        error_log(print_r($this->children_age, true));
+        // error_log('---- Children Age');
+        // error_log(print_r($this->children_age, true));
 
         $number_of_guests = intval($number_of_adults) + intval($number_of_children);
 
-        $this->adultGuests = $number_of_adults;
-        $this->childrenGuests = $number_of_children;
-        $this->totalGuests = $number_of_guests;
+        $this->adultGuests           = $number_of_adults;
+        $this->childrenGuests        = $number_of_children;
+        $this->totalGuests           = $number_of_guests;
         $this->totalChargeableGuests = $number_of_guests - $freeStayChildCount;
 
         if (isset($_POST['room_type'])) {
@@ -299,15 +320,15 @@ class Booking
 
         $chosenDate = \AtollMatrix\Common::splitDateRange($reservation_date);
 
-        $checkinDate = '';
+        $checkinDate  = '';
         $checkoutDate = '';
 
         if (isset($chosenDate['startDate'])) {
-            $checkinDate = $chosenDate['startDate'];
+            $checkinDate     = $chosenDate['startDate'];
             $checkinDate_obj = new \DateTime($chosenDate['startDate']);
         }
         if (isset($chosenDate['endDate'])) {
-            $checkoutDate = $chosenDate['endDate'];
+            $checkoutDate     = $chosenDate['endDate'];
             $checkoutDate_obj = new \DateTime($chosenDate['endDate']);
         }
 
@@ -316,24 +337,35 @@ class Booking
         // Calculate the number of nights
         $staynights = $checkinDate_obj->diff($checkoutDate_obj)->days;
 
-        $this->checkinDate = $checkinDate;
+        $this->checkinDate  = $checkinDate;
         $this->checkoutDate = $checkoutDate;
-        $this->staynights = $staynights;
+        $this->staynights   = $staynights;
+
+        $this->bookingSearchResults                     = array();
+        $this->bookingSearchResults['bookingnumber']    = $this->bookingNumber;
+        $this->bookingSearchResults['checkin']          = $this->checkinDate;
+        $this->bookingSearchResults['checkout']         = $this->checkoutDate;
+        $this->bookingSearchResults['staynights']       = $this->staynights;
+        $this->bookingSearchResults['adults']           = $this->adultGuests;
+        $this->bookingSearchResults['children']         = $this->childrenGuests;
+        $this->bookingSearchResults['children_age']     = $this->children_age;
+        $this->bookingSearchResults['totalguest']       = $this->totalGuests;
+        $this->bookingSearchResults['chargeableguests'] = $this->totalChargeableGuests;
 
         // Perform your query here, this is just an example
         $result = "Check-in Date: $checkinDate, Check-out Date: $checkoutDate, Number of Adults: $number_of_adults, Number of Children: $number_of_children";
-        error_log(print_r($result, true));
+        // error_log(print_r($result, true));
         $room_instance = new \AtollMatrix\Rooms();
 
         // Get a combined array of rooms and rates which are available for the dates.
         $combo_array = $room_instance->getAvailable_Rooms_Rates_Occupants_For_DateRange($this->checkinDate, $this->checkoutDate);
 
-        $this->roomArray = $combo_array['rooms'];
-        $this->ratesArray = $combo_array['rates'];
+        $this->roomArray     = $combo_array['rooms'];
+        $this->ratesArray    = $combo_array['rates'];
         $this->canAccomodate = $combo_array['occupants'];
 
-        error_log('Value of $combo_array["rooms"]:');
-        error_log(print_r($combo_array['rooms'], true));
+        // error_log('Value of $combo_array["rooms"]:');
+        // error_log(print_r($combo_array['rooms'], true));
 
         $availableRoomDates = array();
 
@@ -355,8 +387,6 @@ class Booking
         // Always die in functions echoing AJAX content
         $list = self::list_Rooms_And_Quantities();
 
-        self::saveBooking_Transient( $combo_array );
-
         ob_start();
         echo '<div id="reservation-data" data-bookingnumber="' . $this->bookingNumber . '" data-children="' . $this->childrenGuests . '" data-adults="' . $this->adultGuests . '" data-guests="' . $this->totalGuests . '" data-checkin="' . $this->checkinDate . '" data-checkout="' . $this->checkoutDate . '">';
         echo $list;
@@ -364,9 +394,9 @@ class Booking
         echo '<div id="bookingResponse" class="booking-response"></div>';
         echo self::paymentHelper_Form($this->bookingNumber);
         echo '</div>';
-        $output = ob_get_clean();
-        $response['booking_data'] = $combo_array;
-        $response['roomlist'] = $output;
+        $output                     = ob_get_clean();
+        $response['booking_data']   = $combo_array;
+        $response['roomlist']       = $output;
         $response['alt_recommends'] = $roomAvailabity;
         echo json_encode($response, JSON_UNESCAPED_SLASHES);
         die();
@@ -386,81 +416,87 @@ class Booking
         return $html;
     }
 
-    public function bookingSummary() {
+    public function bookingSummary()
+    {
         $html = '<div id="booking-summary">';
         $html .= '<div class="room-summary"><span class="summary-room-name">-</span></div>';
-        if ( $this->adultGuests > 0 ) {
-            $html .= '<div class="adults-summary"><span class="summary-adults-number">'.$this->adultGuests.'</span> Adults</div>';
+        if ($this->adultGuests > 0) {
+            $html .= '<div class="adults-summary"><span class="summary-adults-number">' . $this->adultGuests . '</span> Adults</div>';
         }
-        if ( $this->childrenGuests > 0 ) {
-            $html .= '<div class="children-summary"><span class="summary-children-number">'.$this->childrenGuests.'</span> Children</div>';
+        if ($this->childrenGuests > 0) {
+            $html .= '<div class="children-summary"><span class="summary-children-number">' . $this->childrenGuests . '</span> Children</div>';
         }
         $html .= '<div class="form-group">';
         $html .= '<div id="bookingRegister" class="div-button">Book</div>';
         $html .= '</div>';
         $html .= '</div>';
-        
+
         return $html;
     }
 
-    public function can_ThisRoom_Accomodate( $room_id ) {
+    public function can_ThisRoom_Accomodate($room_id)
+    {
 
         $status = true;
-        if ( $this->canAccomodate[$room_id]['guests'] < $this->totalGuests ) {
-            error_log('Cannot accomodate number of guests');
+        if ($this->canAccomodate[$room_id]['guests'] < $this->totalGuests) {
+            // error_log('Cannot accomodate number of guests');
             $status = false;
         }
 
-        if ( $this->canAccomodate[$room_id]['adults'] < $this->adultGuests ) {
-            error_log('Cannot accomodate number of adults');
+        if ($this->canAccomodate[$room_id]['adults'] < $this->adultGuests) {
+            // error_log('Cannot accomodate number of adults');
             $status = false;
         }
-        if ( $this->canAccomodate[$room_id]['children'] < $this->childrenGuests ) {
-            error_log('Cannot accomodate number of children');
+        if ($this->canAccomodate[$room_id]['children'] < $this->childrenGuests) {
+            // error_log('Cannot accomodate number of children');
             $status = false;
         }
-        
+
         return $status;
     }
 
-    public function listRooms() {
+    public function listRooms()
+    {
 
-        $html = '';
+        $html  = '';
         $count = 0;
         // Iterate through each room
         foreach ($this->roomArray as $id => $room_info) {
             // Get quantity and room title
-            error_log('====== can accomodate ');
-            error_log(print_r($this->canAccomodate, true));
+            // error_log('====== can accomodate ');
+            // error_log(print_r($this->canAccomodate, true));
 
-            $can_ThisRoom_Accomodate = self::can_ThisRoom_Accomodate( $id );
-            if ( ! $can_ThisRoom_Accomodate ) {
+            $can_ThisRoom_Accomodate = self::can_ThisRoom_Accomodate($id);
+            if (!$can_ThisRoom_Accomodate) {
                 continue;
             }
-            
-            $max_guest_number = intval($this->canAccomodate[$id]['guests']);
+
+            $max_guest_number       = intval($this->canAccomodate[$id]['guests']);
             $max_child_guest_number = intval($this->canAccomodate[$id]['guests'] - 1);
             // Append a div for the room with the room ID as a data attribute
-            $html .= '<div class="room-occupied-group" data-adults="'.$this->canAccomodate[$id]['adults'].'" data-children="'.$this->canAccomodate[$id]['children'].'" data-guests="'.$this->canAccomodate[$id]['guests'].'" data-room-id="' . $id . '">';
+            $html .= '<div class="room-occupied-group" data-adults="' . $this->canAccomodate[$id]['adults'] . '" data-children="' . $this->canAccomodate[$id]['children'] . '" data-guests="' . $this->canAccomodate[$id]['guests'] . '" data-room-id="' . $id . '">';
 
             $html .= '<div class="room-details">';
-            
+
             foreach ($room_info as $quantity => $title) {
 
                 $html .= '<div class="room-details-heading">';
                 // Append the room title
+
+                $this->bookingSearchResults[$id]['roomtitle'] = $title;
+
                 $html .= '<h2>' . $title . '</h2>';
                 $html .= '</div>';
                 $html .= '<div class="room-details-row">';
                 $html .= '<div class="room-details-column">';
-                if ( $this->adultGuests > 0 ) {
-                    for ($displayAdultCount=0; $displayAdultCount < $this->adultGuests; $displayAdultCount++) { 
-                        $html .=  '<span class="guest-adult-svg"></span>';
+                if ($this->adultGuests > 0) {
+                    for ($displayAdultCount = 0; $displayAdultCount < $this->adultGuests; $displayAdultCount++) {
+                        $html .= '<span class="guest-adult-svg"></span>';
                     }
                 }
-                if ( $this->childrenGuests > 0 ) {
-                    for ($displayChildrenCount=0; $displayChildrenCount < $this->childrenGuests; $displayChildrenCount++) { 
-                        $html .=  '<span class="guest-child-svg"></span>';
+                if ($this->childrenGuests > 0) {
+                    for ($displayChildrenCount = 0; $displayChildrenCount < $this->childrenGuests; $displayChildrenCount++) {
+                        $html .= '<span class="guest-child-svg"></span>';
                     }
                 }
 
@@ -472,18 +508,21 @@ class Booking
                 // }
                 // $html .= '</select>';
                 $html .= '<div class="checkin-staydate-wrap">';
-            
-                $html .= self::displayBookingTotal($id);
-                
+
+                $total_roomrate                                   = self::displayBookingTotal($id);
+                $this->bookingSearchResults[$id]['totalroomrate'] = $total_roomrate;
+
+                $html .= '<div class="room-price-total" data-roomprice="' . esc_attr($total_roomrate) . '">' . atollmatrix_price($total_roomrate) . '</div>';
+
                 $html .= '</div>';
                 $html .= '</div>';
 
             }
-            
+
             $html .= '<div class="room-details-column">';
             $html .= '<div class="roomchoice-bedlayout">';
             $html .= '<label for="room-number-input">Bed Layout</label><br/>';
-            $html .= '<input class="roomchoice" name="room['.$id.'][quantity]" type="hidden" data-type="room-number" data-roominputid="'.$id.'" data-roomqty="'.$quantity.'" id="room-input-'.$id.'" min="0" max="'.$quantity.'" value="1">';
+            $html .= '<input class="roomchoice" name="room[' . $id . '][quantity]" type="hidden" data-type="room-number" data-roominputid="' . $id . '" data-roomqty="' . $quantity . '" id="room-input-' . $id . '" min="0" max="' . $quantity . '" value="1">';
             $html .= self::generate_BedInformation($id);
             $html .= '</div>';
             $html .= '</div>';
@@ -497,16 +536,20 @@ class Booking
             $html .= '</div>';
 
             $html .= '</div>';
+
+            // error_log( print_r( $this->bookingSearchResults , true ));
+            self::saveBooking_Transient( $this->bookingSearchResults );
         }
 
         return $html;
     }
 
-    public function displayBookingPerDay( $ratesArray_date ) {
+    public function displayBookingPerDay($ratesArray_date)
+    {
         $total_roomrate = 0;
-        $html = '';
+        $html           = '';
         foreach ($ratesArray_date as $staydate => $roomrate) {
-            if ( $per_day ) {
+            if ($per_day) {
                 $html .= '<div class="checkin-staydate"><span class="number-of-rooms"></span>' . $staydate . ' - ' . atollmatrix_price($roomrate) . '</div>';
             }
             $total_roomrate = $total_roomrate + $roomrate;
@@ -514,26 +557,27 @@ class Booking
 
         return $html;
     }
-    public function displayBookingTotal( $room_id ) {
+    public function displayBookingTotal($room_id)
+    {
         $total_roomrate = 0;
-        $html = '';
-        
+        $html           = '';
+
         $perPersonPricing = atollmatrix_get_option('perpersonpricing');
-        error_log('---- Person Pricing');
-        error_log(print_r($perPersonPricing, true));
-        
+        // error_log('---- Person Pricing');
+        // error_log(print_r($perPersonPricing, true));
+
         foreach ($this->ratesArray[$room_id]['date'] as $staydate => $roomrate) {
 
             $roomrate = self::applyPricePerPerson($roomrate, $perPersonPricing);
 
             $total_roomrate = $total_roomrate + $roomrate;
         }
-        $html .= '<div class="room-price-total" data-roomprice="'.esc_attr($total_roomrate).'">' . atollmatrix_price( $total_roomrate ) . '</div>';
 
-        return $html;
+        return $total_roomrate;
     }
 
-    private function applyPricePerPerson($roomrate, $perPersonPricing) {
+    private function applyPricePerPerson($roomrate, $perPersonPricing)
+    {
         foreach ($perPersonPricing as $pricing) {
             if ($this->totalChargeableGuests == $pricing['people']) {
                 if ($pricing['type'] === 'percentage' && $pricing['total'] === 'decrease') {
@@ -551,22 +595,23 @@ class Booking
                 }
             }
         }
-        
+
         return $roomrate;
     }
 
-    public function get_BedLayout( $bedLayout ) {
+    public function get_BedLayout($bedLayout)
+    {
         switch ($bedLayout) {
             case 'kingbed':
-                $html = '<div class="guest-bed-'.$bedLayout.'"></div>';
+                $html = '<div class="guest-bed-' . $bedLayout . '"></div>';
                 break;
             case 'twinbed twinbed':
-                $html = '<div class="type-twinbed-twinbed-one guest-bed-'.$bedLayout.'"></div><div class="type-twinbed-twinbed-two guest-bed-'.$bedLayout.'"></div>';
+                $html = '<div class="type-twinbed-twinbed-one guest-bed-' . $bedLayout . '"></div><div class="type-twinbed-twinbed-two guest-bed-' . $bedLayout . '"></div>';
                 break;
             case 'kingbed twinbed':
                 $html = '<div class="type-kingbed-twinbed-one guest-bed-kingbed"></div><div class="type-kingbed-twinbed-two guest-bed-twinbed"></div>';
                 break;
-            
+
             default:
                 $html = $bedLayout;
                 break;
@@ -575,39 +620,41 @@ class Booking
         return $html;
     }
 
-    public function generate_BedInformation($room_id) {
+    public function generate_BedInformation($room_id)
+    {
 
         $html = '';
-    
+
         $room_data = get_post_custom($room_id);
-    
+
         if (isset($room_data["atollmatrix_alt_bedsetup"][0])) {
-            $bedsetup = $room_data["atollmatrix_alt_bedsetup"][0];
+            $bedsetup       = $room_data["atollmatrix_alt_bedsetup"][0];
             $bedsetup_array = unserialize($bedsetup);
-    
+
             $firstRoomId = array_key_first($bedsetup_array);
-    
+
             foreach ($bedsetup_array as $roomId => $roomData) {
                 // Get the bed layout for this room
                 $bedLayout = implode(' ', $roomData['bedtype']);
-    
+
+                $this->bookingSearchResults[$room_id]['bedlayout'][sanitize_title($bedLayout)] = true;
+
                 $html .= "<label>";
                 $html .= "<input type='radio' name='room[$room_id][bedlayout]' value='$bedLayout'";
-    
+
                 // Check the first radio input by default
                 if ($roomId === $firstRoomId) {
                     $html .= " checked";
                 }
-    
+
                 $html .= ">";
-                $html .= self::get_BedLayout( $bedLayout );
+                $html .= self::get_BedLayout($bedLayout);
                 $html .= "</label><br>";
             }
         }
-    
+
         return $html;
     }
-    
 
     public function paymentHelper_Form()
     {
@@ -668,14 +715,15 @@ HTML;
         return $form_html;
     }
 
-    public function generate_MealPlanRadio($room_id) {
+    public function generate_MealPlanRadio($room_id)
+    {
 
         $mealPlans = atollmatrix_get_option('mealplan');
-        
+
         if (is_array($mealPlans) && count($mealPlans) > 0) {
             $includedMealPlans = array();
             $optionalMealPlans = array();
-            
+
             foreach ($mealPlans as $id => $plan) {
                 if ($plan['choice'] === 'included') {
                     $includedMealPlans[$id] = $plan;
@@ -683,14 +731,16 @@ HTML;
                     $optionalMealPlans[$id] = $plan;
                 }
             }
-        
+
             $html = '';
             if (is_array($includedMealPlans) && count($includedMealPlans) > 0) {
                 $html .= '<div class="room-included-meals">';
                 foreach ($includedMealPlans as $id => $plan) {
                     $html .= '<i class="fa-solid fa-square-check"></i>';
-                    $html .= self::getMealPlanText($plan['mealtype']) . __(' included.','atollmatrix');
-                    $html .= '<input hidden type="text" name="room['.$room_id.'][meal_plan][included]" value="'.$plan['mealtype'].'">';
+                    $html .= self::getMealPlanText($plan['mealtype']) . __(' included.', 'atollmatrix');
+                    $html .= '<input hidden type="text" name="room[' . $room_id . '][meal_plan][included]" value="' . $plan['mealtype'] . '">';
+
+                    $this->bookingSearchResults[$room_id]['meal_plan'][$plan['mealtype']] = 'included';
                 }
                 $html .= '</div>';
             }
@@ -699,12 +749,15 @@ HTML;
                 $html .= '<i class="fa-solid fa-plate-wheat"></i><br/>';
                 $html .= '<h3 class="room-mealplans-heading">Mealplans</h3>';
                 $html .= '<div class="room-mealplan-input">';
-                $html .= '<input type="radio" data-mealprice="none" name="room['.$room_id.'][meal_plan][optional]" value="none" checked>' . __('Not selected','atollmatrix') . '<br>';
+                $html .= '<input type="radio" data-mealprice="none" name="room[' . $room_id . '][meal_plan][optional]" value="none" checked>' . __('Not selected', 'atollmatrix') . '<br>';
                 $html .= '</div>';
                 foreach ($optionalMealPlans as $id => $plan) {
                     $html .= '<div class="room-mealplan-input">';
                     $mealprice = $plan['price'] * $this->staynights;
-                    $html .= '<input type="radio" data-mealprice="'.$mealprice.'" name="room['.$room_id.'][meal_plan][optional]" value="' . $plan['mealtype'] . '">' . self::getMealPlanText($plan['mealtype']) . ' ' . '<span class="room-mealplan-price">' . atollmatrix_price( $mealprice ) . ' +</span>';
+                    $html .= '<input type="radio" data-mealprice="' . $mealprice . '" name="room[' . $room_id . '][meal_plan][optional]" value="' . $plan['mealtype'] . '">' . self::getMealPlanText($plan['mealtype']) . ' ' . '<span class="room-mealplan-price">' . atollmatrix_price($mealprice) . ' +</span>';
+
+                    $this->bookingSearchResults[$room_id]['meal_plan'][$plan['mealtype']] = $mealprice;
+
                     $html .= '</div>';
                 }
                 $html .= '</div>';
@@ -712,17 +765,18 @@ HTML;
         }
         return $html;
     }
-    
-    public function getMealPlanText($mealtype) {
+
+    public function getMealPlanText($mealtype)
+    {
         switch ($mealtype) {
             case 'BB':
-                return __('Breakfast','atollmatrix');
+                return __('Breakfast', 'atollmatrix');
             case 'HB':
-                return __('Halfboard','atollmatrix');
+                return __('Halfboard', 'atollmatrix');
             case 'FB':
-                return __('Fullboard','atollmatrix');
+                return __('Fullboard', 'atollmatrix');
             case 'AN':
-                return __('All inclusive','atollmatrix');
+                return __('All inclusive', 'atollmatrix');
             default:
                 return '';
         }
