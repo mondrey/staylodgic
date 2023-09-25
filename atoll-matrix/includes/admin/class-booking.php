@@ -72,6 +72,9 @@ class Booking
 
         $booking_results = self::getBookingTransient( $bookingnumber );
 
+        $booking_results[$room_id]['choice']['bedlayout'] = $bed_layout;
+        $booking_results[$room_id]['choice']['mealplan'] = $meal_plan;
+
         error_log( '====== From Transient ======' );
         error_log( print_r( $booking_results , true ));
         error_log( '====== Specific Room ======' );
@@ -85,8 +88,63 @@ class Booking
             'message' => 'Data: ' . $roomName . ',received successfully.',
         );
 
+        $html = self::bookingSummary(
+            $room_id,
+            $booking_results[$room_id]['roomtitle'],
+            $booking_results['checkin'],
+            $booking_results['checkout'],
+            $booking_results['staynights'],
+            $booking_results['adults'],
+            $booking_results['children'],
+            $booking_results[$room_id]['choice']['bedlayout'],
+            $booking_results[$room_id]['choice']['mealplan'],
+            $booking_results[$room_id]['meal_plan'][$booking_results[$room_id]['choice']['mealplan']],
+            $booking_results[$room_id]['totalroomrate']
+        );
+
         // Send the JSON response
-        wp_send_json($response);
+        wp_send_json($html);
+    }
+
+    public function bookingSummary(
+        $room_id = null,
+        $room_name = null,
+        $checkin = null,
+        $checkout = null,
+        $staynights = null,
+        $adults = null,
+        $children = null,
+        $bedtype = null,
+        $mealtype = null,
+        $mealprice = null,
+        $totalroomrate = null
+    )
+    {
+        $html = '<div id="booking-summary-wrap">';
+        $html .= '<div class="room-summary"><span class="summary-room-name">'.$room_name.'</span></div>';
+        $html .= '<div class="meal-summary"><span class="summary-mealtype-name">'.self::getMealPlanText($mealtype).'</span></div>';
+        if ($adults > 0) {
+            for ($displayAdultCount = 0; $displayAdultCount < $adults; $displayAdultCount++) {
+                $html .= '<span class="guest-adult-svg"></span>';
+            }
+        }
+        if ($children > 0) {
+            for ($displayChildrenCount = 0; $displayChildrenCount < $children; $displayChildrenCount++) {
+                $html .= '<span class="guest-child-svg"></span>';
+            }
+        }
+        $html .= '<span class="bed-summary">'.self::get_BedLayout($bedtype).'</span>';
+        $html .= '<span class="checkin-summary">'.$checkin.'</span>';
+        $html .= '<span class="checkout-summary">'.$checkout.'</span>';
+        $html .= '<span class="staynight-summary">'.$staynights.'</span>';
+        $html .= '<span class="price-summary">'.atollmatrix_price( $totalroomrate + $mealprice ).'</span>';
+        $html .= '<span class="tax-summary">Excluding tax</span>';
+        $html .= '<div class="form-group">';
+        $html .= '<div id="bookingRegister" class="div-button">Book</div>';
+        $html .= '</div>';
+        $html .= '</div>';
+
+        return $html;
     }
 
     public function saveBooking_Transient($data)
@@ -284,6 +342,11 @@ return ob_get_clean();
             $number_of_children = $_POST['number_of_children'];
         }
 
+        // // *********** To be removed
+        // $reservation_date = '2023-09-27 to 2023-09-30';
+        // $number_of_adults = 1;
+        // // ***********
+
         $freeStayAgeUnder = atollmatrix_get_option('childfreestay');
 
         // error_log('---- Free Stay');
@@ -410,27 +473,11 @@ return ob_get_clean();
         $html = '';
 
         $html .= self::listRooms();
-        $html .= self::bookingSummary();
+        $html .= '<div id="booking-summary">';
+        //$html .= self::bookingSummary();
+        $html .= '</div>';
 
         // Return the resulting HTML string
-        return $html;
-    }
-
-    public function bookingSummary()
-    {
-        $html = '<div id="booking-summary">';
-        $html .= '<div class="room-summary"><span class="summary-room-name">-</span></div>';
-        if ($this->adultGuests > 0) {
-            $html .= '<div class="adults-summary"><span class="summary-adults-number">' . $this->adultGuests . '</span> Adults</div>';
-        }
-        if ($this->childrenGuests > 0) {
-            $html .= '<div class="children-summary"><span class="summary-children-number">' . $this->childrenGuests . '</span> Children</div>';
-        }
-        $html .= '<div class="form-group">';
-        $html .= '<div id="bookingRegister" class="div-button">Book</div>';
-        $html .= '</div>';
-        $html .= '</div>';
-
         return $html;
     }
 
@@ -552,6 +599,9 @@ return ob_get_clean();
             if ($per_day) {
                 $html .= '<div class="checkin-staydate"><span class="number-of-rooms"></span>' . $staydate . ' - ' . atollmatrix_price($roomrate) . '</div>';
             }
+
+            $roomrate = self::applyPricePerPerson($roomrate);
+
             $total_roomrate = $total_roomrate + $roomrate;
         }
 
@@ -562,13 +612,14 @@ return ob_get_clean();
         $total_roomrate = 0;
         $html           = '';
 
-        $perPersonPricing = atollmatrix_get_option('perpersonpricing');
         // error_log('---- Person Pricing');
         // error_log(print_r($perPersonPricing, true));
 
         foreach ($this->ratesArray[$room_id]['date'] as $staydate => $roomrate) {
 
-            $roomrate = self::applyPricePerPerson($roomrate, $perPersonPricing);
+            $roomrate = self::applyPricePerPerson($roomrate);
+
+            $this->bookingSearchResults[$room_id]['staydate'][$staydate] = $roomrate;
 
             $total_roomrate = $total_roomrate + $roomrate;
         }
@@ -576,8 +627,11 @@ return ob_get_clean();
         return $total_roomrate;
     }
 
-    private function applyPricePerPerson($roomrate, $perPersonPricing)
+    private function applyPricePerPerson($roomrate)
     {
+
+        $perPersonPricing = atollmatrix_get_option('perpersonpricing');
+
         foreach ($perPersonPricing as $pricing) {
             if ($this->totalChargeableGuests == $pricing['people']) {
                 if ($pricing['type'] === 'percentage' && $pricing['total'] === 'decrease') {

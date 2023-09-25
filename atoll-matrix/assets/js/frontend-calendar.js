@@ -2,6 +2,9 @@
 	$(document).ready(function () {
 
 		$(document).on('click', '.room-occupied-group', function () {
+
+			$('.room-occupied-group').removeClass('room-selected');
+			$(this).addClass('room-selected');
 			
 			// Get data attributes from the clicked element
 			var bookingnumber = $('#reservation-data').data('bookingnumber');
@@ -30,6 +33,7 @@
 				data: dataToSend,
 				success: function(response) {
 					// Handle the response from the server
+					$('#booking-summary').html(response);
 					console.log(response);
 					// You can update the page content or perform other actions here
 				}
