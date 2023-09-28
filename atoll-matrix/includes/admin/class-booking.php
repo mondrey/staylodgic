@@ -121,8 +121,10 @@ class Booking
     )
     {
         $html = '<div id="booking-summary-wrap">';
-        $html .= '<div class="room-summary"><span class="summary-room-name">'.$room_name.'</span></div>';
-        $html .= '<div class="meal-summary"><span class="summary-mealtype-name">'.self::getMealPlanText($mealtype).'</span></div>';
+        if ( '' !== $room_name ) {
+            $html .= '<div class="room-summary"><span class="summary-room-name">'.$room_name.'</span></div>';
+        }
+        $html .= '<div class="main-summary-wrap">';
         if ($adults > 0) {
             for ($displayAdultCount = 0; $displayAdultCount < $adults; $displayAdultCount++) {
                 $html .= '<span class="guest-adult-svg"></span>';
@@ -133,15 +135,51 @@ class Booking
                 $html .= '<span class="guest-child-svg"></span>';
             }
         }
-        $html .= '<span class="bed-summary">'.self::get_BedLayout($bedtype).'</span>';
-        $html .= '<span class="checkin-summary">'.$checkin.'</span>';
-        $html .= '<span class="checkout-summary">'.$checkout.'</span>';
-        $html .= '<span class="staynight-summary">'.$staynights.'</span>';
-        $html .= '<span class="price-summary">'.atollmatrix_price( $totalroomrate + $mealprice ).'</span>';
-        $html .= '<span class="tax-summary">Excluding tax</span>';
-        $html .= '<div class="form-group">';
-        $html .= '<div id="bookingRegister" class="div-button">Book</div>';
+        if ( '' !== $bedtype ) {
+            $html .= '<div class="bed-summary">'.self::get_BedLayout($bedtype).'</div>';
+        }
         $html .= '</div>';
+        if ( '' !== $room_id ) {
+            $html .= '<div class="meal-summary-wrap">';
+            if ( '' !== self::generate_MealPlanIncluded($room_id) ) {
+                $html .= '<div class="meal-summary"><span class="summary-mealtype-inlcuded">'.self::generate_MealPlanIncluded($room_id).'</span></div>';
+            }
+            if ( 'none' !== $mealtype ) {
+                $html .= '<div class="summary-icon mealplan-summary-icon"><i class="fa-solid fa-utensils"></i></div>';
+                $html .= '<div class="summary-heading mealplan-summary-heading">Mealplan:</div>';
+                $html .= '<div class="meal-summary"><span class="summary-mealtype-name">'.self::getMealPlanText($mealtype).'</span></div>';
+            }
+            $html .= '</div>';
+
+        }
+
+        $html .= '<div class="stay-summary-wrap">';
+
+        $html .= '<div class="summary-icon checkin-summary-icon"><i class="fa-regular fa-calendar-check"></i></div>';
+        $html .= '<div class="summary-heading checkin-summary-heading">Check-in:</div>';
+        $html .= '<div class="checkin-summary">'.$checkin.'</div>';
+        $html .= '<div class="summary-heading checkout-summary-heading">Check-out:</div>';
+        $html .= '<div class="checkout-summary">'.$checkout.'</div>';
+
+        $html .= '<div class="summary-icon stay-summary-icon"><i class="fa-solid fa-moon"></i></div>';
+        $html .= '<div class="summary-heading staynight-summary-heading">Nights:</div>';
+        $html .= '<div class="staynight-summary">'.$staynights.'</div>';
+        $html .= '</div>';
+
+        if ( '' !== $totalroomrate) {
+            $html .= '<div class="price-summary-wrap">';
+            $html .= '<div class="summary-heading total-summary-heading">Total:</div>';
+            $html .= '<div class="price-summary">'.atollmatrix_price( $totalroomrate + $mealprice ).'</div>';
+            $html .= '<div class="tax-summary">Excluding tax</div>';
+            $html .= '</div>';
+        }
+
+        if ( '' !== $room_id ) {
+            $html .= '<div class="form-group">';
+            $html .= '<div id="bookingRegister" class="book-button">Book this room</div>';
+            $html .= '</div>';
+        }
+
         $html .= '</div>';
 
         return $html;
@@ -186,16 +224,6 @@ class Booking
                     <div class="recommended-alt-title">Rooms unavailable</br>Please choose among following dates which has
                         availability</div>
                     <div id="recommended-alt-dates"></div>
-                </div>
-                <div class="available-checkin-summary">
-                    <h3>Check-in</h3>
-                    <div class="pre-book-check-in"></div>
-                    <h3>Last stay night</h3>
-                    <div class="pre-book-stay-night"></div>
-                    <h3>Check-out</h3>
-                    <div class="pre-book-check-out"></div>
-                    <h3>Stay Nights</h3>
-                    <div class="pre-book-nights"></div>
                 </div>
 
                 <div class="available-list">
@@ -474,7 +502,19 @@ return ob_get_clean();
 
         $html .= self::listRooms();
         $html .= '<div id="booking-summary">';
-        //$html .= self::bookingSummary();
+        $html .= self::bookingSummary(
+            $room_id = '',
+            $booking_results[$room_id]['roomtitle'] = '',
+            $this->checkinDate,
+            $this->checkoutDate,
+            $this->staynights,
+            $this->adultGuests,
+            $this->childrenGuests,
+            $bedlayout = '',
+            $mealplan = '',
+            $choice = '',
+            $total = ''
+        );
         $html .= '</div>';
 
         // Return the resulting HTML string
@@ -575,6 +615,7 @@ return ob_get_clean();
             $html .= '</div>';
             $html .= '<div class="room-details-column">';
             $html .= '<div class="roomchoice-mealplan">';
+            $html .= self::generate_MealPlanIncluded($id);
             $html .= self::generate_MealPlanRadio($id);
             $html .= '</div>';
             $html .= '</div>';
@@ -769,7 +810,7 @@ HTML;
         return $form_html;
     }
 
-    public function generate_MealPlanRadio($room_id)
+    public function generate_MealPlanIncluded($room_id)
     {
 
         $mealPlans = atollmatrix_get_option('mealplan');
@@ -798,6 +839,28 @@ HTML;
                 }
                 $html .= '</div>';
             }
+        }
+        return $html;
+    }
+
+    public function generate_MealPlanRadio($room_id)
+    {
+
+        $mealPlans = atollmatrix_get_option('mealplan');
+
+        if (is_array($mealPlans) && count($mealPlans) > 0) {
+            $includedMealPlans = array();
+            $optionalMealPlans = array();
+
+            foreach ($mealPlans as $id => $plan) {
+                if ($plan['choice'] === 'included') {
+                    $includedMealPlans[$id] = $plan;
+                } elseif ($plan['choice'] === 'optional') {
+                    $optionalMealPlans[$id] = $plan;
+                }
+            }
+
+            $html = '';
             if (is_array($optionalMealPlans) && count($optionalMealPlans) > 0) {
                 $html .= '<div class="room-mealplans">';
                 $html .= '<i class="fa-solid fa-plate-wheat"></i><br/>';

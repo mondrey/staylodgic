@@ -23,13 +23,6 @@
 .occupant-children-age {
     display: none;
 }
-#booking-summary {
-	bottom: 0;
-	left: 0;
-	width: 100%;
-	position: fixed;
-	height: 120px;
-}
 .guest-adult-svg {
 	width: 22px;
 	height: 32px;
@@ -108,3 +101,99 @@
 	border-color: #ffcc00;
 }
 
+#booking-summary {
+	top: 30px;
+	right: 30px;
+	width: 250px;
+	position: fixed;
+	height: calc( 100% - 90px );
+	box-sizing: border-box;
+}
+#booking-summary-wrap {
+	box-sizing: border-box;
+	padding: 30px;
+	background: #eee;
+}
+.admin-bar #booking-summary {
+	top: 60px;
+}
+.summary-room-name {
+	display: block;
+	font-size: 20px;
+	letter-spacing: -0.5px;
+	line-height: 1;
+	font-weight: 700;
+	margin-bottom: 22px;
+}
+.bed-summary {
+	display: inline-block;
+}
+.main-summary-wrap {
+	margin-bottom: 14px;
+}
+.summary-mealtype-inlcuded {
+	margin-bottom: 14px;
+	font-size: 14px;
+	display: block;
+}
+.summary-heading {
+	font-weight: 600;
+	font-size: 15px;
+	letter-spacing: -0.5px;
+	margin-top: 14px;
+}
+.stay-summary-wrap {
+	font-size: 14px;
+}
+.summary-heading.total-summary-heading {
+	font-size: 18px;
+	font-weight: 800;
+}
+.price-summary-wrap {
+	font-size: 14px;
+	font-weight: 600;
+	margin-bottom: 14px;
+}
+.tax-summary {
+	font-size: 11px;
+	letter-spacing: 1px;
+	font-weight: 400;
+}
+.room-included-meals i {
+	color: #60bf00;
+	padding-right: 5px;
+}
+.bed-summary .guest-bed-kingbed {
+	top: 8px;
+}
+.price-summary {
+	margin-top: 7px;
+	font-size: 16px;
+}
+.bed-summary .type-kingbed-twinbed-two {
+	top: 8px;
+	left: 3px;
+}
+.bed-summary .guest-bed-twinbed.twinbed {
+	top: 9px;
+}
+.summary-mealtype-name {
+	font-size: 14px;
+}
+.book-button {
+	padding: 10px;
+	box-sizing: border-box;
+	background: #0064ff;
+	color: #fff;
+	border-radius: 8px;
+	font-size: 14px;
+	font-weight: 600;
+	padding: 10px 22px;
+	display: block;
+}
+.summary-icon i {
+	font-size: 20px;
+	top: 13px;
+	position: relative;
+	color: #0b0b0b;
+}
