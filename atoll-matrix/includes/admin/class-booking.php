@@ -88,19 +88,23 @@ class Booking
             'message' => 'Data: ' . $roomName . ',received successfully.',
         );
 
-        $html = self::bookingSummary(
-            $room_id,
-            $booking_results[$room_id]['roomtitle'],
-            $booking_results['checkin'],
-            $booking_results['checkout'],
-            $booking_results['staynights'],
-            $booking_results['adults'],
-            $booking_results['children'],
-            $booking_results[$room_id]['choice']['bedlayout'],
-            $booking_results[$room_id]['choice']['mealplan'],
-            $booking_results[$room_id]['meal_plan'][$booking_results[$room_id]['choice']['mealplan']],
-            $booking_results[$room_id]['totalroomrate']
-        );
+        if ( is_array( $booking_results ) ) {
+            $html = self::bookingSummary(
+                $room_id,
+                $booking_results[$room_id]['roomtitle'],
+                $booking_results['checkin'],
+                $booking_results['checkout'],
+                $booking_results['staynights'],
+                $booking_results['adults'],
+                $booking_results['children'],
+                $booking_results[$room_id]['choice']['bedlayout'],
+                $booking_results[$room_id]['choice']['mealplan'],
+                $booking_results[$room_id]['meal_plan'][$booking_results[$room_id]['choice']['mealplan']],
+                $booking_results[$room_id]['totalroomrate']
+            );
+        } else {
+            $html = '<div id="booking-summary-wrap" class="booking-summary-warning"><i class="fa-solid fa-circle-exclamation"></i>Session timed out. Please reload the page.</div>';
+        }
 
         // Send the JSON response
         wp_send_json($html);
