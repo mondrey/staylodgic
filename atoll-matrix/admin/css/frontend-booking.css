@@ -1,3 +1,59 @@
+@font-face {
+	font-family: 'jost';
+	font-display: auto;
+	src: url(../../assets/fonts/jost/Jost-Light/Jost-300-Light.woff2) format("woff2"), url(../../assets/fonts/jost/Jost-Light/Jost-300-Light.woff) format("woff");
+	font-weight: 300;
+	font-style: normal
+}
+
+@font-face {
+	font-family: 'jost';
+	font-display: auto;
+	src: url(../../assets/fonts/jost/Jost-Book/Jost-400-Book.woff2) format("woff2"), url(../../assets/fonts/jost/Jost-Book/Jost-400-Book.woff) format("woff");
+	font-weight: 400;
+	font-style: normal
+}
+
+@font-face {
+	font-family: 'jost';
+	font-display: auto;
+	src: url(../../assets/fonts/jost/Jost-Medium/Jost-500-Medium.woff2) format("woff2"), url(../../assets/fonts/jost/Jost-Medium/Jost-500-Medium.woff) format("woff");
+	font-weight: 500;
+	font-style: normal
+}
+
+@font-face {
+	font-family: 'jost';
+	font-display: auto;
+	src: url(../../assets/fonts/jost/Jost-Semi/Jost-600-Semi.woff2) format("woff2"), url(../../assets/fonts/jost/Jost-Semi/Jost-600-Semi.woff) format("woff");
+	font-weight: 600;
+	font-style: normal
+}
+
+@font-face {
+	font-family: 'jost';
+	font-display: auto;
+	src: url(../../assets/fonts/jost/Jost-Bold/Jost-700-Bold.woff2) format("woff2"), url(../../assets/fonts/jost/Jost-Bold/Jost-700-Bold.woff) format("woff");
+	font-weight: 700;
+	font-style: normal
+}
+.atollmatrix-content,
+.atollmatrix-content h1,
+.atollmatrix-content h2,
+.atollmatrix-content h3,
+.atollmatrix-content h4,
+.atollmatrix-content h5 {
+	font: 300 14px/1.5 "jost", Helvetica, Arial, sans-serif;
+}
+.room-details-stats {
+	font-size: 13px;
+	font-weight: 500;
+	letter-spacing: 0.3px;
+}
+.room-details-facilities {
+	letter-spacing: 0.2px;
+	font-weight: 300;
+}
 .booking-response {
     padding: 15px;
     margin-top: 20px;
@@ -44,8 +100,6 @@
 	display: inline-block;
 	background-repeat: no-repeat;
 	position: relative;
-	top: 11px;
-    left: 6px;
 }
 .guest-bed-twinbed {
 	width: 36px;
@@ -54,7 +108,6 @@
 	display: inline-block;
 	background-repeat: no-repeat;
 	position: relative;
-	top: 11px;
 }
 .type-twinbed-twinbed-two.guest-bed-twinbed {
 	left: -10px;
@@ -82,13 +135,12 @@
 }
 
 .room-details-column {
-	flex: 1; /* Equal width for each column */
+	flex: 1;
 	text-align: left;
-	margin: 0 10px; /* Add spacing between columns */
+	margin: 0;
 }
-
-.room-mealplans {
-	padding-top: 20px;
+.room-details-row .room-details-column:first-child {
+	padding-right: 40px;
 }
 
 .room-occupied-group {
@@ -208,4 +260,125 @@
 	background: #ff0000;
 	color: #fff;
 	font-size: 14px;
+}
+.room-details-heading h2 {
+	font-size: 21px;
+	font-weight: 500;
+	margin: 0 0 14px;
+}
+.room-details-image img {
+	width: 260px;
+	box-sizing: border-box;
+	border-radius: 20px;
+}
+.room-details .facility {
+	white-space: nowrap;
+}
+.room-summary-facilities {
+	font-size: 13px;
+}
+.room-summary-facilities i {
+	padding-right: 5px;
+	color: #161717;
+}
+.room-summary-icon {
+	width: 32px;
+	display: inline-block;
+	text-align: center;
+}
+.room-details-stats {
+	padding-top: 8px;
+	color: #484848;
+}
+.room-details-facilities {
+	border-top: 1px solid #00000012;
+	margin-top: 12px;
+	padding-top: 8px;
+}
+.room-details-column .room-price-total {
+	font-size: 20px;
+	letter-spacing: -0.8px;
+	font-weight: 500;
+	background: #caa100;
+	color: #fff;
+	display: inline-block;
+	padding: 0 10px;
+	border-radius: 5px;
+	margin: 13px 0;
+}
+.room-summary-heading {
+	font-size: 15px;
+	font-weight: 500;
+}
+.roomchoice-seperator {
+	margin-bottom: 16px;
+	margin-top: 16px;
+}
+.mealplans-wrap {
+	padding-bottom: 10px;
+}
+.room-mealplan-input-wrap {
+	line-height: 1.8;
+	font-size: 13px;
+	letter-spacing: 0.6px;
+	font-weight: 300;
+}
+
+
+.room-details label {
+display: flex;
+cursor: pointer;
+font-weight: 500;
+position: relative;
+overflow: hidden;
+margin-bottom: 0.375em;
+}
+.room-details label input {
+position: absolute;
+left: -9999px;
+}
+.room-details label input:checked + span.checkbox-label {
+background-color: #e1fbff;
+}
+.room-details label input:checked + span.checkbox-label:before {
+box-shadow: inset 0 0 0 0.4375em #000;
+}
+.room-details label span.checkbox-label {
+	display: flex;
+	align-items: center;
+	padding: 5px 15px 5px 5px;
+	border-radius: 50px;
+	transition: 0.25s ease;
+}
+.room-details label span.checkbox-bed-label {
+	padding: 5px;
+}
+.room-details label span.checkbox-label:hover {
+background-color: #e1fbff;
+}
+.room-details label span.checkbox-label:before {
+display: flex;
+flex-shrink: 0;
+content: "";
+background-color: #fff;
+width: 1.5em;
+height: 1.5em;
+border-radius: 50%;
+margin-right: 0.375em;
+transition: 0.25s ease;
+box-shadow: inset 0 0 0 0.125em #00005c;
+}
+.room-details label span.checkbox-bed-label:before {
+	margin-right: 0;
+}
+.room-details-row .guest-bed-wrap {
+	position: absolute;
+	top: 0;
+	left: 33px;
+  }
+.room-details-row .guest-bed-wrap.guest-bed-twinbed-twinbed-wrap {
+	left: 27px;
+}
+.mealplan-text {
+	padding-left: 5px;
 }

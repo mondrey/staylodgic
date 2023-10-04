@@ -72,13 +72,6 @@ class Booking
 
         $booking_results = self::getBookingTransient( $bookingnumber );
 
-        $booking_results[$room_id]['choice']['bedlayout'] = $bed_layout;
-        $booking_results[$room_id]['choice']['mealplan'] = $meal_plan;
-
-        error_log( '====== From Transient ======' );
-        error_log( print_r( $booking_results , true ));
-        error_log( '====== Specific Room ======' );
-        error_log( print_r( $booking_results[$room_id] , true ));
         // Perform any processing you need with the data
         // For example, you can save it to the database or perform calculations
 
@@ -88,7 +81,22 @@ class Booking
             'message' => 'Data: ' . $roomName . ',received successfully.',
         );
 
+        $mealplan_choice = '';
+
         if ( is_array( $booking_results ) ) {
+
+            error_log( '====== From Transient ======' );
+            error_log( print_r( $booking_results , true ));
+            error_log( '====== Specific Room ======' );
+            error_log( print_r( $booking_results[$room_id] , true ));
+
+            $booking_results[$room_id]['choice']['bedlayout'] = $bed_layout;
+            $booking_results[$room_id]['choice']['mealplan'] = $meal_plan;
+
+            if ( 'none' !== $meal_plan ) {
+                $mealplan_choice = $booking_results[$room_id]['meal_plan'][$booking_results[$room_id]['choice']['mealplan']];
+            }
+
             $html = self::bookingSummary(
                 $room_id,
                 $booking_results[$room_id]['roomtitle'],
@@ -99,7 +107,7 @@ class Booking
                 $booking_results['children'],
                 $booking_results[$room_id]['choice']['bedlayout'],
                 $booking_results[$room_id]['choice']['mealplan'],
-                $booking_results[$room_id]['meal_plan'][$booking_results[$room_id]['choice']['mealplan']],
+                $mealplan_choice,
                 $booking_results[$room_id]['totalroomrate']
             );
         } else {
@@ -128,6 +136,7 @@ class Booking
         if ( '' !== $room_name ) {
             $html .= '<div class="room-summary"><span class="summary-room-name">'.$room_name.'</span></div>';
         }
+
         $html .= '<div class="main-summary-wrap">';
         if ($adults > 0) {
             for ($displayAdultCount = 0; $displayAdultCount < $adults; $displayAdultCount++) {
@@ -143,6 +152,7 @@ class Booking
             $html .= '<div class="bed-summary">'.self::get_BedLayout($bedtype).'</div>';
         }
         $html .= '</div>';
+
         if ( '' !== $room_id ) {
             $html .= '<div class="meal-summary-wrap">';
             if ( '' !== self::generate_MealPlanIncluded($room_id) ) {
@@ -154,7 +164,6 @@ class Booking
                 $html .= '<div class="meal-summary"><span class="summary-mealtype-name">'.self::getMealPlanText($mealtype).'</span></div>';
             }
             $html .= '</div>';
-
         }
 
         $html .= '<div class="stay-summary-wrap">';
@@ -173,7 +182,7 @@ class Booking
         if ( '' !== $totalroomrate) {
             $html .= '<div class="price-summary-wrap">';
             $html .= '<div class="summary-heading total-summary-heading">Total:</div>';
-            $html .= '<div class="price-summary">'.atollmatrix_price( $totalroomrate + $mealprice ).'</div>';
+            $html .= '<div class="price-summary">'.atollmatrix_price( intval( $totalroomrate ) + intval( $mealprice ) ).'</div>';
             $html .= '<div class="tax-summary">Excluding tax</div>';
             $html .= '</div>';
         }
@@ -209,6 +218,7 @@ class Booking
         self::saveBooking_Transient('1');
         ob_start();
         ?>
+        <div class="atollmatrix-content">
         <div id="hotel-booking-form">
             <form action="" method="post" id="hotel-booking">
                 <div>
@@ -234,6 +244,7 @@ class Booking
                     <div id="available-list-ajax"></div>
                 </div>
             </form>
+        </div>
         </div>
         <?php
 return ob_get_clean();
@@ -566,11 +577,44 @@ return ob_get_clean();
             $max_child_guest_number = intval($this->canAccomodate[$id]['guests'] - 1);
             // Append a div for the room with the room ID as a data attribute
             $html .= '<div class="room-occupied-group" data-adults="' . $this->canAccomodate[$id]['adults'] . '" data-children="' . $this->canAccomodate[$id]['children'] . '" data-guests="' . $this->canAccomodate[$id]['guests'] . '" data-room-id="' . $id . '">';
-
             $html .= '<div class="room-details">';
 
             foreach ($room_info as $quantity => $title) {
 
+                $html .= '<div class="room-details-row">';
+                $html .= '<div class="room-details-column">';
+
+                $html .= '<div class="room-details-image">';
+                $image_id = get_post_thumbnail_id( $id );
+                $image_url = wp_get_attachment_image_url( $image_id, 'atollmatrix-large-square' ); // Get the URL of the custom-sized image
+                $html .= '<img class="room-summary-image" src="' . esc_url( $image_url ) . '" alt="Room featured image">';
+                $html .= '</div>';
+
+                $html .= '<div class="room-details-stats">';
+                $room_data = get_post_custom($id);
+                if (isset($room_data["atollmatrix_roomview"][0])) {
+                    $roomview = $room_data["atollmatrix_roomview"][0];
+                    $roomview_array = atollmatrix_get_room_views();
+                    if ( array_key_exists($roomview, $roomview_array)) {
+                        $html .= '<div class="room-summary-roomview"><span class="room-summary-icon"><i class="fa-regular fa-eye"></i></span>'.$roomview_array[$roomview].'</div>';
+                    }
+                }
+
+                if (isset($room_data["atollmatrix_room_size"][0])) {
+                    $roomsize = $room_data["atollmatrix_room_size"][0];
+                    $html .= '<div class="room-summaru-roomsize"><span class="room-summary-icon"><i class="fa-solid fa-vector-square"></i></span>'.$roomsize.' ft²</div>';
+                }
+                $html .= '</div>';
+
+                $html .= '<div class="room-details-facilities">';
+                if (isset($room_data["atollmatrix_room_facilities"][0])) {
+                    $room_facilities = $room_data["atollmatrix_room_facilities"][0];
+                    $html .= atollmatrix_string_to_html_spans( $room_facilities, $class='room-summary-facilities');
+                }
+                $html .= '</div>';
+
+                $html .= '</div>';
+                $html .= '<div class="room-details-column">';
                 $html .= '<div class="room-details-heading">';
                 // Append the room title
 
@@ -578,8 +622,6 @@ return ob_get_clean();
 
                 $html .= '<h2>' . $title . '</h2>';
                 $html .= '</div>';
-                $html .= '<div class="room-details-row">';
-                $html .= '<div class="room-details-column">';
                 if ($this->adultGuests > 0) {
                     for ($displayAdultCount = 0; $displayAdultCount < $this->adultGuests; $displayAdultCount++) {
                         $html .= '<span class="guest-adult-svg"></span>';
@@ -604,29 +646,24 @@ return ob_get_clean();
                 $this->bookingSearchResults[$id]['totalroomrate'] = $total_roomrate;
 
                 $html .= '<div class="room-price-total" data-roomprice="' . esc_attr($total_roomrate) . '">' . atollmatrix_price($total_roomrate) . '</div>';
+                $html .= self::generate_MealPlanIncluded($id);
+                
+                $html .= '<div class="roomchoice-seperator roomchoice-bedlayout">';
+                $html .= '<div class="bedlayout-wrap"><label class="room-summary-heading room-bedlayout-heading" for="room-number-input">Bed Layout</label></div>';
+                $html .= '<input class="roomchoice" name="room[' . $id . '][quantity]" type="hidden" data-type="room-number" data-roominputid="' . $id . '" data-roomqty="' . $quantity . '" id="room-input-' . $id . '" min="0" max="' . $quantity . '" value="1">';
+                $html .= self::generate_BedInformation($id);
+                $html .= '</div>';
+            
+                $html .= '<div class="roomchoice-seperator roomchoice-mealplan">';
+                $html .= self::generate_MealPlanRadio($id);
+                $html .= '</div>';
 
+                $html .= '</div>';
                 $html .= '</div>';
                 $html .= '</div>';
 
             }
-
-            $html .= '<div class="room-details-column">';
-            $html .= '<div class="roomchoice-bedlayout">';
-            $html .= '<label for="room-number-input">Bed Layout</label><br/>';
-            $html .= '<input class="roomchoice" name="room[' . $id . '][quantity]" type="hidden" data-type="room-number" data-roominputid="' . $id . '" data-roomqty="' . $quantity . '" id="room-input-' . $id . '" min="0" max="' . $quantity . '" value="1">';
-            $html .= self::generate_BedInformation($id);
             $html .= '</div>';
-            $html .= '</div>';
-            $html .= '<div class="room-details-column">';
-            $html .= '<div class="roomchoice-mealplan">';
-            $html .= self::generate_MealPlanIncluded($id);
-            $html .= self::generate_MealPlanRadio($id);
-            $html .= '</div>';
-            $html .= '</div>';
-
-            $html .= '</div>';
-            $html .= '</div>';
-
             $html .= '</div>';
 
             // error_log( print_r( $this->bookingSearchResults , true ));
@@ -700,21 +737,20 @@ return ob_get_clean();
 
     public function get_BedLayout($bedLayout)
     {
+        $html = '<div class="guest-bed-wrap guest-bed-' . sanitize_title($bedLayout) . '-wrap">';
         switch ($bedLayout) {
             case 'kingbed':
-                $html = '<div class="guest-bed-' . $bedLayout . '"></div>';
+                $html .= '<div class="guest-bed guest-bed-' . sanitize_title($bedLayout) . '"></div>';
                 break;
             case 'twinbed twinbed':
-                $html = '<div class="type-twinbed-twinbed-one guest-bed-' . $bedLayout . '"></div><div class="type-twinbed-twinbed-two guest-bed-' . $bedLayout . '"></div>';
+                $html .= '<div class="guest-bed type-twinbed-twinbed-one guest-bed-' . $bedLayout . '"></div><div class="guest-bed type-twinbed-twinbed-two guest-bed-' . $bedLayout . '"></div>';
                 break;
             case 'kingbed twinbed':
-                $html = '<div class="type-kingbed-twinbed-one guest-bed-kingbed"></div><div class="type-kingbed-twinbed-two guest-bed-twinbed"></div>';
-                break;
-
-            default:
-                $html = $bedLayout;
+                $html .= '<div class="guest-bed type-kingbed-twinbed-one guest-bed-kingbed"></div><div class="guest-bed type-kingbed-twinbed-two guest-bed-twinbed"></div>';
                 break;
         }
+
+        $html .= '</div>';
 
         return $html;
     }
@@ -738,17 +774,19 @@ return ob_get_clean();
 
                 $this->bookingSearchResults[$room_id]['bedlayout'][sanitize_title($bedLayout)] = true;
 
-                $html .= "<label>";
-                $html .= "<input type='radio' name='room[$room_id][bedlayout]' value='$bedLayout'";
+                $html .= "<label for='room-$room_id-bedlayout-$bedLayout'>";
+                $html .= "<input type='radio' id='room-$room_id-bedlayout-$bedLayout' name='room[$room_id][bedlayout]' value='$bedLayout'";
 
                 // Check the first radio input by default
                 if ($roomId === $firstRoomId) {
                     $html .= " checked";
                 }
 
-                $html .= ">";
+                $html .= '>';
+                $html .= '<span class="checkbox-label checkbox-bed-label">';
                 $html .= self::get_BedLayout($bedLayout);
-                $html .= "</label><br>";
+                $html .= '</span>';
+                $html .= '</label>';
             }
         }
 
@@ -837,8 +875,9 @@ HTML;
                 foreach ($includedMealPlans as $id => $plan) {
                     $html .= '<i class="fa-solid fa-square-check"></i>';
                     $html .= self::getMealPlanText($plan['mealtype']) . __(' included.', 'atollmatrix');
+                    $html .= '<label>';
                     $html .= '<input hidden type="text" name="room[' . $room_id . '][meal_plan][included]" value="' . $plan['mealtype'] . '">';
-
+                    $html .= '</label>';
                     $this->bookingSearchResults[$room_id]['meal_plan'][$plan['mealtype']] = 'included';
                 }
                 $html .= '</div>';
@@ -867,20 +906,24 @@ HTML;
             $html = '';
             if (is_array($optionalMealPlans) && count($optionalMealPlans) > 0) {
                 $html .= '<div class="room-mealplans">';
-                $html .= '<i class="fa-solid fa-plate-wheat"></i><br/>';
-                $html .= '<h3 class="room-mealplans-heading">Mealplans</h3>';
+                $html .= '<div class="mealplans-wrap"><label class="room-summary-heading room-mealplans-heading">Mealplans</label></div>';
+                $html .= '<div class="room-mealplan-input-wrap">';
                 $html .= '<div class="room-mealplan-input">';
-                $html .= '<input type="radio" data-mealprice="none" name="room[' . $room_id . '][meal_plan][optional]" value="none" checked>' . __('Not selected', 'atollmatrix') . '<br>';
+                $html .= '<label for="room-' . $room_id . '-meal_plan-optional-none">';
+                $html .= '<input type="radio" data-mealprice="none" id="room-' . $room_id . '-meal_plan-optional-none" name="room[' . $room_id . '][meal_plan][optional]" value="none" checked><span class="checkbox-label">' . __('Not selected', 'atollmatrix') . '</span>';
+                $html .= '</label>';
                 $html .= '</div>';
                 foreach ($optionalMealPlans as $id => $plan) {
                     $html .= '<div class="room-mealplan-input">';
                     $mealprice = $plan['price'] * $this->staynights;
-                    $html .= '<input type="radio" data-mealprice="' . $mealprice . '" name="room[' . $room_id . '][meal_plan][optional]" value="' . $plan['mealtype'] . '">' . self::getMealPlanText($plan['mealtype']) . ' ' . '<span class="room-mealplan-price">' . atollmatrix_price($mealprice) . ' +</span>';
-
+                    $html .= '<label for="room-' . $room_id . '-meal_plan-optional-' . $plan['mealtype'] . '">';
+                    $html .= '<input type="radio" data-mealprice="' . $mealprice . '" id="room-' . $room_id . '-meal_plan-optional-' . $plan['mealtype'] . '" name="room[' . $room_id . '][meal_plan][optional]" value="' . $plan['mealtype'] . '"><span class="room-mealplan-price checkbox-label">' . atollmatrix_price($mealprice) . '<span class="mealplan-text">' . self::getMealPlanText($plan['mealtype']) . '</span></span>';
+                    $html .= '</label>';
                     $this->bookingSearchResults[$room_id]['meal_plan'][$plan['mealtype']] = $mealprice;
 
                     $html .= '</div>';
                 }
+                $html .= '</div>';
                 $html .= '</div>';
             }
         }

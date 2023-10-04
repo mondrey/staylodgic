@@ -1,44 +1,52 @@
 (function ($) {
 	$(document).ready(function () {
 
-		$(document).on('click', '.room-occupied-group', function () {
-
+		function processRoomData(roomOccupiedGroup) {
 			$('.room-occupied-group').removeClass('room-selected');
-			$(this).addClass('room-selected');
+			roomOccupiedGroup.addClass('room-selected');
 			
-			// Get data attributes from the clicked element
 			var bookingnumber = $('#reservation-data').data('bookingnumber');
-			var roomId = $(this).data('room-id');
-			var roompPrice = $(this).find('.room-price-total').data('roomprice');
+			var roomId = roomOccupiedGroup.data('room-id');
+			var roomPriceTotal = roomOccupiedGroup.find('.room-price-total').data('roomprice');
 			var bedLayout = $("input[name='room[" + roomId + "][bedlayout]']:checked").val();
-			var mealPlan = $("input[name='room[" + roomId + "][meal_plan][optional]']:checked").val();
-			var mealPlanPrice = $("input[name='room[" + roomId + "][meal_plan][optional]']:checked").data('mealprice');
+			var mealPlanInput = $("input[name='room[" + roomId + "][meal_plan][optional]']:checked");
+			var mealPlan = mealPlanInput.val();
+			var mealPlanPrice = mealPlanInput.data('mealprice');
 			console.log(mealPlanPrice);
-	
-			// Create an object to send via AJAX
+		
 			var dataToSend = {
-				action: 'process_RoomData', // Create a WordPress AJAX action
+				action: 'process_RoomData',
 				bookingnumber: bookingnumber,
 				room_id: roomId,
-				room_price: roompPrice,
+				room_price: roomPriceTotal,
 				bed_layout: bedLayout,
 				meal_plan: mealPlan,
 				meal_plan_price: mealPlanPrice
 			};
-	
-			// Send the AJAX request
+		
 			$.ajax({
 				type: 'POST',
-				url: frontendAjax.ajaxurl, // the localized URL
+				url: frontendAjax.ajaxurl,
 				data: dataToSend,
 				success: function(response) {
-					// Handle the response from the server
 					$('#booking-summary').html(response);
 					console.log(response);
 					// You can update the page content or perform other actions here
 				}
 			});
+		}
+		
+		// $(document).on('click', '.room-occupied-group:not(input[type="radio"])', function () {
+		// 	var roomOccupiedGroup = $(this);
+		// 	processRoomData(roomOccupiedGroup);
+		// });
+		
+		$(document).on('change', '#reservation-data input[type="radio"]', function () {
+			var roomOccupiedGroup = $(this).closest('.room-occupied-group');
+			processRoomData(roomOccupiedGroup);
 		});
+
+		
 
 		// Function to update the selected dates and nights
 		function updateSelectedDates(checkIn, checkOut) {

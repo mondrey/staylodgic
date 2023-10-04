@@ -1,4 +1,26 @@
 <?php
+function atollmatrix_string_to_html_spans($input_string, $class) {
+    // Split the input string by commas
+    $pieces = explode(',', $input_string);
+    
+    // Initialize an empty HTML string
+    $html_output = '';
+    
+    // Iterate through the pieces and wrap each in a <span> tag
+    foreach ($pieces as $piece) {
+        // Remove leading and trailing whitespaces from each piece
+        $piece = trim($piece);
+        
+        // Add the piece wrapped in a <span> tag to the HTML output
+        $html_output .= '<span class="'.$class.'"><span class="facility"><i class="fa-solid fa-check"></i>' . $piece . '</span></span> ';
+    }
+    
+    // Remove the trailing comma and space
+    $html_output = rtrim($html_output, ', ');
+    
+    return $html_output;
+}
+
 function atollmatrix_featured_image_link($the_image_id)
 {
     if (!isset($the_image_id)) {

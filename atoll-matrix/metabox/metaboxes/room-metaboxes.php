@@ -120,7 +120,7 @@ function atollmatrix_room_metadata()
             ),
             array(
                 'name' => __('Accomodation Size:', 'atollmatrix'),
-                'id'   => 'atollmatrix_size',
+                'id'   => 'atollmatrix_room_size',
                 'type' => 'range',
                 'min'  => '1',
                 'max'  => '9999',
@@ -130,10 +130,24 @@ function atollmatrix_room_metadata()
                 'std'  => '',
             ),
             array(
-                'name' => __('Description for gallery thumbnail ( Gallery )', 'atollmatrix'),
-                'id'   => 'atollmatrix_thumbnail_desc',
+                'name'    => __('Room view', 'atollmatrix'),
+                'id'      => 'atollmatrix_roomview',
+                'type'    => 'select',
+                'desc'    => __('Choose room view', 'atollmatrix'),
+                'options' => atollmatrix_get_room_views(),
+            ),
+            array(
+                'name' => __('Room facilities ( comma seperated )', 'atollmatrix'),
+                'id'   => 'atollmatrix_room_facilities',
                 'type' => 'textarea',
-                'desc' => __('This description is displayed below each thumbnail.', 'atollmatrix'),
+                'desc' => __('Room facilities', 'atollmatrix'),
+                'std'  => '',
+            ),
+            array(
+                'name' => __('Description', 'atollmatrix'),
+                'id'   => 'atollmatrix_room_desc',
+                'type' => 'textarea',
+                'desc' => __('Description', 'atollmatrix'),
                 'std'  => '',
             ),
             array(

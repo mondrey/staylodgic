@@ -1,4 +1,42 @@
 <?php
+function atollmatrix_get_room_views()
+{
+    $roomViews = array(
+        'CityView'      => 'City View',
+        'SeaView'       => 'Sea View',
+        'MountainView'  => 'Mountain View',
+        'GardenView'    => 'Garden View',
+        'PoolView'      => 'Pool View',
+        'RiverView'     => 'River View',
+        'LakeView'      => 'Lake View',
+        'ForestView'    => 'Forest View',
+        'CourtyardView' => 'Courtyard View',
+        'Beachfront'    => 'Beachfront',
+        'ParkView'      => 'Park View',
+        'CountrysideView' => 'Countryside View',
+        'SunsetView'    => 'Sunset View',
+        'SkylineView'   => 'Skyline View',
+        'HarborView'    => 'Harbor View',
+        'HistoricView'  => 'Historic View',
+        'PanoramicView' => 'Panoramic View',
+        'VineyardView'  => 'Vineyard View',
+        'PoolsideView'  => 'Poolside View',
+        'WildlifeView'  => 'Wildlife View',
+        'SkiSlopesView' => 'Ski Slopes View',
+        'ThemeParkView' => 'Theme Park View',
+        'SportsStadiumView' => 'Sports Stadium View',
+        'WaterfrontView' => 'Waterfront View',
+        'ForestCabinView' => 'Forest Cabin View',
+        'ArtisticView'  => 'Artistic View',
+        'RooftopView'   => 'Rooftop View',
+        'BalconyView'   => 'Balcony View',
+        'DesertView'    => 'Desert View',
+        'LagoonView'    => 'Lagoon View',
+        'SideSeaView'   => 'Side Sea-view',
+    );
+    return $roomViews;
+}
+
 function atollmatrix_get_room_Facitilies()
 {
     $roomFacilities = array(

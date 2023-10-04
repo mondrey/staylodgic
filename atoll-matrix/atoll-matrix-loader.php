@@ -30,6 +30,13 @@ class AtollMatrix_Init
         add_action('init', array($this, 'atollmatrix_load_textdomain'));
         add_action('init', array($this, 'atollmatrix_load_metaboxes'));
         add_action('init', array($this, 'atollmatrix_load_themeoptions'));
+
+        add_action( 'after_setup_theme', array($this, 'atollmatrix_custom_image_size'));
+    }
+
+    public function atollmatrix_custom_image_size()
+    {
+        add_image_size( 'atollmatrix-large-square', 770, 770, true ); // Square.
     }
 
     public function atollmatrix_load_textdomain()
