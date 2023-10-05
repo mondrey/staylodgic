@@ -29,7 +29,14 @@
 				url: frontendAjax.ajaxurl,
 				data: dataToSend,
 				success: function(response) {
-					$('#booking-summary').html(response);
+					var price_element = roomOccupiedGroup.find('.room-price-total');
+					
+					price_element.find('.formatted-price').velocity('fadeOut', {
+						duration: 350,
+						complete: function() {
+							price_element.html(response);
+						}
+					});		
 					console.log(response);
 					// You can update the page content or perform other actions here
 				}
@@ -41,7 +48,7 @@
 		// 	processRoomData(roomOccupiedGroup);
 		// });
 		
-		$(document).on('change', '#reservation-data input[type="radio"]', function () {
+		$(document).on('change', '#reservation-data input[type="radio"].mealtype-input', function () {
 			var roomOccupiedGroup = $(this).closest('.room-occupied-group');
 			processRoomData(roomOccupiedGroup);
 		});

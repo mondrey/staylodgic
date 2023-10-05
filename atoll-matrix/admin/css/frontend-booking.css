@@ -194,9 +194,6 @@
 	letter-spacing: -0.5px;
 	margin-top: 14px;
 }
-.stay-summary-wrap {
-	font-size: 14px;
-}
 .summary-heading.total-summary-heading {
 	font-size: 18px;
 	font-weight: 800;
@@ -262,9 +259,11 @@
 	font-size: 14px;
 }
 .room-details-heading h2 {
-	font-size: 21px;
+	font-size: 30px;
 	font-weight: 500;
-	margin: 0 0 14px;
+	margin: 18px 0 14px;
+	letter-spacing: -0.7px;
+	line-height: 1;
 }
 .room-details-image img {
 	width: 260px;
@@ -293,7 +292,7 @@
 .room-details-facilities {
 	border-top: 1px solid #00000012;
 	margin-top: 12px;
-	padding-top: 8px;
+	padding-top: 12px;
 }
 .room-details-column .room-price-total {
 	font-size: 20px;
@@ -307,11 +306,11 @@
 	margin: 13px 0;
 }
 .room-summary-heading {
-	font-size: 15px;
-	font-weight: 500;
+	font-size: 17px;
+	font-weight: 600;
+	margin-bottom: 12px;
 }
 .roomchoice-seperator {
-	margin-bottom: 16px;
 	margin-top: 16px;
 }
 .mealplans-wrap {
@@ -381,4 +380,28 @@ box-shadow: inset 0 0 0 0.125em #00005c;
 }
 .mealplan-text {
 	padding-left: 5px;
+}
+.roomchoice-selection {
+	border-top: 1px solid #e6e6e6;
+	margin-top: 12px;
+	margin-bottom: 12px;
+}
+.roomchoice-seperator.roomchoice-bedlayout {
+	margin-bottom: 16px;
+	border-bottom: 1px solid #e6e6e6;
+	padding-bottom: 16px;
+}
+.stay-summary-wrap {
+	font-size: 10px;
+	border-top: 1px solid #f0f0f0;
+	margin-top: 30px;
+	padding-top: 12px;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	line-height: 1.9;
+}
+.room-included-meals {
+	font-weight: 400;
+	letter-spacing: 0.4px;
+	font-size: 13px;
 }

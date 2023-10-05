@@ -1,4 +1,10 @@
 <?php
+function atollmatrix_readableDate( $originalDate ) {
+    $formattedDate = date("F jS, Y", strtotime($originalDate));
+
+    return $formattedDate;
+}
+
 function atollmatrix_get_option($option, $default = '')
 {
     $got_value = get_option('atollmatrix_settings')[$option] ?? $default;

@@ -203,6 +203,9 @@ class AtollMatrix_Init
             )
         );
 
+        wp_enqueue_script('velocity', plugin_dir_url(__FILE__) . 'assets/js/velocity.min.js', array('jquery'), null, true);
+        wp_enqueue_script('velocity-ui', plugin_dir_url(__FILE__) . 'assets/js/velocity.ui.js', array('jquery'), null, true);
+
         wp_register_style('fontawesome-6', plugin_dir_url(__FILE__) . 'assets/fonts/fontawesome-free-6.4.0-web/css/fontawesome.css', false, 'screen');
         wp_register_style('fontawesome-6-brands', plugin_dir_url(__FILE__) . 'assets/fonts/fontawesome-free-6.4.0-web/css/all.css', false, 'screen');
         wp_register_style('fontawesome-6-solid', plugin_dir_url(__FILE__) . 'assets/fonts/fontawesome-free-6.4.0-web/css/solid.css', false, 'screen');

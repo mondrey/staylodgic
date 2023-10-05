@@ -3,7 +3,6 @@ namespace AtollMatrix;
 
 class Common
 {
-
     public static function countryCodeToEmoji($code)
     {
         $emoji = '';
