@@ -824,7 +824,7 @@ class Reservations
         $max_guests         = 0;
         $can_occomodate     = array();
         $will_accomodate    = true;
-        $guests             = intval($adults + $children);
+        $guests             = intval($adults) + intval($children);
         $can_occomodate     = array();
 
         foreach ($rooms as $room) {
@@ -989,25 +989,25 @@ class Reservations
 
         // Generate unique booking number
         $booking_number           = sanitize_text_field($_POST['booking_number']);
-        $transient_booking_number = get_transient($booking_number);
+        $transient_booking_data = get_transient($booking_number);
         delete_transient($booking_number);
-        if (!isset($transient_booking_number)) {
+        if (!isset($transient_booking_data)) {
             wp_send_json_error('Invalid or timeout. Please try again');
         }
         // Obtain customer details from form submission
-        $checkin        = $_POST['checkin'];
-        $checkout       = $_POST['checkout'];
-        $rooms          = $_POST['rooms'];
-        $adults         = sanitize_text_field($_POST['adults']);
-        $children       = sanitize_text_field($_POST['children']);
-        $full_name      = sanitize_text_field($_POST['full_name']);
-        $email_address  = sanitize_email($_POST['email_address']);
-        $phone_number   = sanitize_text_field($_POST['phone_number']);
-        $street_address = sanitize_text_field($_POST['street_address']);
-        $city           = sanitize_text_field($_POST['city']);
-        $state          = sanitize_text_field($_POST['state']);
-        $zip_code       = sanitize_text_field($_POST['zip_code']);
-        $country        = sanitize_text_field($_POST['country']);
+        $bookingdata = sanitize_text_field( $_POST['bookingdata'] );
+        $booking_number = sanitize_text_field( $_POST['booking_number'] );
+        $full_name = sanitize_text_field( $_POST['full_name'] );
+        $passport = sanitize_text_field( $_POST['passport'] );
+        $email_address = sanitize_email( $_POST['email_address'] );
+        $phone_number = sanitize_text_field( $_POST['phone_number'] );
+        $street_address = sanitize_text_field( $_POST['street_address'] );
+        $city = sanitize_text_field( $_POST['city'] );
+        $state = sanitize_text_field( $_POST['state'] );
+        $zip_code = sanitize_text_field( $_POST['zip_code'] );
+        $country = sanitize_text_field( $_POST['country'] );
+        $guest_comment = sanitize_text_field( $_POST['guest_comment'] );
+        $guest_content = sanitize_text_field( $_POST['guest_content'] );
         // add other fields as necessary
 
         // Check if number of people can be occupied by room

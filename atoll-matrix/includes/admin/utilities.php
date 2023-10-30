@@ -11,7 +11,7 @@ function atollmatrix_get_option($option, $default = '')
 
     return $got_value;
 }
-function atollmatrix_price($price)
+function atollmatrix_price($originalPrice)
 {
     $currency           = atollmatrix_get_option('currency');
     $currency_position  = atollmatrix_get_option('currency_position');
@@ -20,7 +20,11 @@ function atollmatrix_price($price)
     $number_of_decimals = atollmatrix_get_option('number_of_decimals');
 
     // Format the price using number_format
-    $price = number_format($price, $number_of_decimals, $decimal_seperator, $thousand_seperator);
+    $price = number_format($originalPrice, $number_of_decimals, $decimal_seperator, $thousand_seperator);
+
+    if ( '' == $price ) {
+        $price = $originalPrice;
+    }
 
     $formatted_price = '<span class="formatted-price" date-price="'.esc_attr($price).'" date-currency="'.esc_attr($currency).'">';
     // Adjust the position of the currency symbol

@@ -1,7 +1,7 @@
 (function ($) {
 	$(document).ready(function () {
 
-		function processRoomData(roomOccupiedGroup) {
+		function processRoomPrice(roomOccupiedGroup) {
 			$('.room-occupied-group').removeClass('room-selected');
 			roomOccupiedGroup.addClass('room-selected');
 			
@@ -15,7 +15,7 @@
 			console.log(mealPlanPrice);
 		
 			var dataToSend = {
-				action: 'process_RoomData',
+				action: 'process_RoomPrice',
 				bookingnumber: bookingnumber,
 				room_id: roomId,
 				room_price: roomPriceTotal,
@@ -42,18 +42,79 @@
 				}
 			});
 		}
+
+		// Get new price for room input changes
+		$(document).on('change', '#reservation-data input[type="radio"].mealtype-input', function () {
+			var roomOccupiedGroup = $(this).closest('.room-occupied-group');
+			processRoomPrice(roomOccupiedGroup);
+		});
+
+		// Back to Room Selection
+		$(document).on('click', '.booking-backto-roomschoice', function () {
+			$('.registration_form_outer').velocity('fadeOut', {
+				duration: 350,
+				complete: function() {
+					$('#reservation-data').velocity('fadeIn');
+				}
+			});
+		});
+
+		// Process Room Data
+		function processRoomData(roomOccupiedGroup) {
+			$('.room-occupied-group').removeClass('room-selected');
+			roomOccupiedGroup.addClass('room-selected');
+			
+			var bookingnumber = $('#reservation-data').data('bookingnumber');
+			var roomId = roomOccupiedGroup.data('room-id');
+			var roomPriceTotal = roomOccupiedGroup.find('.room-price-total').data('roomprice');
+			var bedLayout = $("input[name='room[" + roomId + "][bedlayout]']:checked").val();
+			var mealPlanInput = $("input[name='room[" + roomId + "][meal_plan][optional]']:checked");
+			var mealPlan = mealPlanInput.val();
+			var mealPlanPrice = mealPlanInput.data('mealprice');
+			console.log(mealPlanPrice);
+		
+			var dataToSend = {
+				action: 'process_SelectedRoom',
+				bookingnumber: bookingnumber,
+				room_id: roomId,
+				room_price: roomPriceTotal,
+				bed_layout: bedLayout,
+				meal_plan: mealPlan,
+				meal_plan_price: mealPlanPrice
+			};
+		
+			$.ajax({
+				type: 'POST',
+				url: frontendAjax.ajaxurl,
+				data: dataToSend,
+				success: function(response) {
+					// Handle the response from the server
+					$('#booking-summary').html(response);
+
+					$('#reservation-data').velocity('fadeOut', {
+						duration: 350,
+						complete: function() {
+							$('.registration_form_outer').velocity('fadeIn')
+						}
+					});
+					console.log(response);
+					// You can update the page content or perform other actions here
+				}
+			});
+		}
+
+		// Process room choice and registration
+		$(document).on('click', '#reservation-data .book-button', function () {
+
+			var roomOccupiedGroup = $(this).closest('.room-occupied-group');
+			processRoomData(roomOccupiedGroup);
+
+		});
 		
 		// $(document).on('click', '.room-occupied-group:not(input[type="radio"])', function () {
 		// 	var roomOccupiedGroup = $(this);
 		// 	processRoomData(roomOccupiedGroup);
 		// });
-		
-		$(document).on('change', '#reservation-data input[type="radio"].mealtype-input', function () {
-			var roomOccupiedGroup = $(this).closest('.room-occupied-group');
-			processRoomData(roomOccupiedGroup);
-		});
-
-		
 
 		// Function to update the selected dates and nights
 		function updateSelectedDates(checkIn, checkOut) {
@@ -201,47 +262,26 @@
 			});
 		});
 
-		$(document).on('click', '#bookingRegister', function (e) {
+		$(document).on('click', '#booking-register', function (e) {
 			e.preventDefault();
 
 			let booking_number = $('#reservation-data').data('bookingnumber');
 			console.log('booking-number:' + booking_number);
-			let adults = $('.summary-adults-number').text();
-			let children = $('.summary-children-number').text();
-			console.log(adults, children);
-			let checkin = $('#reservation-data').data('checkin');
-			let checkout = $('#reservation-data').data('checkout');
-			let rooms = [];
 
-			let full_name = $('#full_name').val();
-			let email_address = $('#email_address').val();
-			let phone_number = $('#phone_number').val();
-			let street_address = $('#street_address').val();
-			let city = $('#city').val();
-			let state = $('#state').val();
-			let zip_code = $('#zip_code').val();
-			let country = $('#country').val();
-
-			$('#available-list-ajax .room-occupied-group').each(function () {
-				let roomId = $(this).data('room-id');
-				let roomQuantity = $(this).find('.roomchoice').val();
-
-				if (roomId && roomQuantity > 0) {
-					rooms.push({ id: roomId, quantity: roomQuantity });
-				}
-			});
-
-			$('#hotel-booking').find('input[type="text"]').each(function() {
-				var inputValue = $(this).val();
-				
-				// Check if input value is zero and disable the input
-				if (inputValue === '0') {
-					$(this).prop('disabled', true);
-				}
-			});
+			let full_name = $('.registration_form_inputs #full_name').val();
+			let passport = $('.registration_form_inputs #passport').val();
+			let email_address = $('.registration_form_inputs #email_address').val();
+			let phone_number = $('.registration_form_inputs #phone_number').val();
+			let street_address = $('.registration_form_inputs #street_address').val();
+			let city = $('.registration_form_inputs #city').val();
+			let state = $('.registration_form_inputs #state').val();
+			let zip_code = $('.registration_form_inputs #zip_code').val();
+			let country = $('.registration_form_inputs #country').val();
+			let guest_comment = $('.registration_form_inputs #guest_comment').val();
+			let guest_content = $('.registration_form_inputs #guest_content').val();
 
 			// Serialize form data
-			const booking_data = $('#hotel-booking').serialize();
+			const registration_data = $('#guest-registration').serialize();
 			
 			console.log(checkin, checkout, rooms);
 			$.ajax({
@@ -249,14 +289,10 @@
 				type: 'POST',
 				data: {
 					action: 'bookRooms',
-					bookingdata: booking_data,
-					adults: adults,
-					children: children,
+					bookingdata: registration_data,
 					booking_number: booking_number,
-					checkin: checkin,
-					checkout: checkout,
-					rooms: rooms,
 					full_name: full_name,
+					passport: passport,
 					email_address: email_address,
 					phone_number: phone_number,
 					street_address: street_address,
@@ -264,6 +300,8 @@
 					state: state,
 					zip_code: zip_code,
 					country: country,
+					guest_comment: guest_comment,
+					guest_content: guest_content,
 					nonce: frontendAjax.nonce // Our defined nonce
 				},
 				success: function (response) {

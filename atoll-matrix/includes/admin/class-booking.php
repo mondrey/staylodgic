@@ -54,19 +54,23 @@ class Booking
         add_action('wp_ajax_booking_BookingSearch', array($this, 'booking_BookingSearch'));
         add_action('wp_ajax_nopriv_booking_BookingSearch', array($this, 'booking_BookingSearch'));
 
-        add_action('wp_ajax_process_RoomData', array($this, 'process_RoomData')); // For logged-in users
-        add_action('wp_ajax_nopriv_process_RoomData', array($this, 'process_RoomData')); // For non-logged-in users
+        add_action('wp_ajax_process_RoomPrice', array($this, 'process_RoomPrice')); // For logged-in users
+        add_action('wp_ajax_nopriv_process_RoomPrice', array($this, 'process_RoomPrice')); // For non-logged-in users
+
+        add_action('wp_ajax_process_SelectedRoom', array($this, 'process_SelectedRoom')); // For logged-in users
+        add_action('wp_ajax_nopriv_process_SelectedRoom', array($this, 'process_SelectedRoom')); // For non-logged-in users
     }
 
-    public function process_RoomData()
+    public function process_RoomData(
+        $bookingnumber = null,
+        $room_id = null,
+        $room_price = null,
+        $bed_layout = null,
+        $meal_plan = null,
+        $meal_plan_price = null
+    )
     {
         // Get the data sent via AJAX
-        $bookingnumber   = sanitize_text_field($_POST['bookingnumber']);
-        $room_id         = sanitize_text_field($_POST['room_id']);
-        $room_price      = sanitize_text_field($_POST['room_price']);
-        $bed_layout      = sanitize_text_field($_POST['bed_layout']);
-        $meal_plan       = sanitize_text_field($_POST['meal_plan']);
-        $meal_plan_price = sanitize_text_field($_POST['meal_plan_price']);
 
         $roomName = \AtollMatrix\Rooms::getRoomName_FromID($room_id);
 
@@ -81,24 +85,55 @@ class Booking
             'message' => 'Data: ' . $roomName . ',received successfully.',
         );
 
-        $mealplan_choice = '';
-
         if ( is_array( $booking_results ) ) {
 
             error_log( '====== From Transient ======' );
             error_log( print_r( $booking_results , true ));
-            error_log( '====== Specific Room ======' );
-            error_log( print_r( $booking_results[$room_id] , true ));
+
 
             $booking_results[$room_id]['choice']['bedlayout'] = $bed_layout;
             $booking_results[$room_id]['choice']['mealplan'] = $meal_plan;
 
             if ( 'none' !== $meal_plan ) {
-                $mealplan_choice = $booking_results[$room_id]['meal_plan'][$booking_results[$room_id]['choice']['mealplan']];
+                $booking_results[$room_id]['selected_mealplan_price'] = $booking_results[$room_id]['meal_plan'][$booking_results[$room_id]['choice']['mealplan']];
             }
 
-            $html = self::getBoookingPrice(
-                $room_id,
+            $booking_results['room_id'] = $room_id;
+
+            error_log( '====== Specific Room ======' );
+            error_log( print_r( $booking_results[$room_id] , true ));
+
+        } else {
+            $booking_results = false;
+        }
+
+        // Send the JSON response
+        return $booking_results;
+    }
+
+    public function process_SelectedRoom()
+    {
+
+        $bookingnumber   = sanitize_text_field($_POST['bookingnumber']);
+        $room_id         = sanitize_text_field($_POST['room_id']);
+        $room_price      = sanitize_text_field($_POST['room_price']);
+        $bed_layout      = sanitize_text_field($_POST['bed_layout']);
+        $meal_plan       = sanitize_text_field($_POST['meal_plan']);
+        $meal_plan_price = sanitize_text_field($_POST['meal_plan_price']);
+
+        $booking_results = self::process_RoomData(
+            $bookingnumber,
+            $room_id,
+            $room_price,
+            $bed_layout,
+            $meal_plan,
+            $meal_plan_price
+        );
+        
+        if ( is_array( $booking_results ) ) {
+
+            $html = self::bookingSummary(
+                $booking_results['room_id'],
                 $booking_results[$room_id]['roomtitle'],
                 $booking_results['checkin'],
                 $booking_results['checkout'],
@@ -107,9 +142,10 @@ class Booking
                 $booking_results['children'],
                 $booking_results[$room_id]['choice']['bedlayout'],
                 $booking_results[$room_id]['choice']['mealplan'],
-                $mealplan_choice,
+                $booking_results[$room_id]['selected_mealplan_price'],
                 $booking_results[$room_id]['totalroomrate']
             );
+
         } else {
             $html = '<div id="booking-summary-wrap" class="booking-summary-warning"><i class="fa-solid fa-circle-exclamation"></i>Session timed out. Please reload the page.</div>';
         }
@@ -118,7 +154,50 @@ class Booking
         wp_send_json($html);
     }
 
-    public function getBoookingPrice(
+    public function process_RoomPrice()
+    {
+        
+        $bookingnumber   = sanitize_text_field($_POST['bookingnumber']);
+        $room_id         = sanitize_text_field($_POST['room_id']);
+        $room_price      = sanitize_text_field($_POST['room_price']);
+        $bed_layout      = sanitize_text_field($_POST['bed_layout']);
+        $meal_plan       = sanitize_text_field($_POST['meal_plan']);
+        $meal_plan_price = sanitize_text_field($_POST['meal_plan_price']);
+
+        $booking_results = self::process_RoomData(
+            $bookingnumber,
+            $room_id,
+            $room_price,
+            $bed_layout,
+            $meal_plan,
+            $meal_plan_price
+        );
+
+        if ( is_array( $booking_results ) ) {
+
+            $html = self::getSelectedPlanPrice(
+                $booking_results['room_id'],
+                $booking_results[$room_id]['roomtitle'],
+                $booking_results['checkin'],
+                $booking_results['checkout'],
+                $booking_results['staynights'],
+                $booking_results['adults'],
+                $booking_results['children'],
+                $booking_results[$room_id]['choice']['bedlayout'],
+                $booking_results[$room_id]['choice']['mealplan'],
+                $booking_results[$room_id]['selected_mealplan_price'],
+                $booking_results[$room_id]['totalroomrate']
+            );
+
+        } else {
+            $html = '<div id="booking-summary-wrap" class="booking-summary-warning"><i class="fa-solid fa-circle-exclamation"></i>Session timed out. Please reload the page.</div>';
+        }
+
+        // Send the JSON response
+        wp_send_json($html);
+    }
+
+    public function getSelectedPlanPrice(
         $room_id = null,
         $room_name = null,
         $checkin = null,
@@ -151,6 +230,10 @@ class Booking
         $totalroomrate = null
     )
     {
+
+        $totalguests = intval( $adults ) + intval( $children );
+        $totalprice = array();
+
         $html = '<div id="booking-summary-wrap">';
         if ( '' !== $room_name ) {
             $html .= '<div class="room-summary"><span class="summary-room-name">'.$room_name.'</span></div>';
@@ -168,7 +251,7 @@ class Booking
             }
         }
         if ( '' !== $bedtype ) {
-            $html .= '<div class="bed-summary">'.self::get_BedLayout($bedtype).'</div>';
+            $html .= '<div class="bed-summary">'. self::get_AllBedLayouts($bedtype).'</div>';
         }
         $html .= '</div>';
 
@@ -199,16 +282,24 @@ class Booking
         $html .= '</div>';
 
         if ( '' !== $totalroomrate) {
+            $subtotalprice = intval( $totalroomrate ) + intval( $mealprice );
             $html .= '<div class="price-summary-wrap">';
+            $html .= '<div class="summary-heading total-summary-heading">Subtotal:</div>';
+            $html .= '<div class="price-summary">'.atollmatrix_price( $subtotalprice ).'</div>';
             $html .= '<div class="summary-heading total-summary-heading">Total:</div>';
-            $html .= '<div class="price-summary">'.atollmatrix_price( intval( $totalroomrate ) + intval( $mealprice ) ).'</div>';
-            $html .= '<div class="tax-summary">Excluding tax</div>';
+
+            $totalprice = self::applyPriceTax( $subtotalprice, $staynights, $totalguests );
+            foreach ($totalprice['details'] as $totalID => $totalvalue) {
+                $html .= '<div class="tax-summary tax-summary-details">'. $totalvalue .'</div>';
+            }
+            
+            $html .= '<div class="tax-summary tax-summary-total">'. atollmatrix_price( $totalprice['total'] ) .'</div>';
             $html .= '</div>';
         }
 
         if ( '' !== $room_id ) {
             $html .= '<div class="form-group">';
-            $html .= '<div id="bookingRegister" class="book-button">Book this room</div>';
+            $html .= '<div id="booking-register" class="book-button">Book this room</div>';
             $html .= '</div>';
         }
 
@@ -514,10 +605,10 @@ return ob_get_clean();
         ob_start();
         echo '<div id="reservation-data" data-bookingnumber="' . $this->bookingNumber . '" data-children="' . $this->childrenGuests . '" data-adults="' . $this->adultGuests . '" data-guests="' . $this->totalGuests . '" data-checkin="' . $this->checkinDate . '" data-checkout="' . $this->checkoutDate . '">';
         echo $list;
-        echo self::register_Guest_Form();
         echo '<div id="bookingResponse" class="booking-response"></div>';
         echo self::paymentHelper_Form($this->bookingNumber);
         echo '</div>';
+        echo self::register_Guest_Form();
         $output                     = ob_get_clean();
         $response['booking_data']   = $combo_array;
         $response['roomlist']       = $output;
@@ -534,21 +625,6 @@ return ob_get_clean();
         $html = '';
 
         $html .= self::listRooms();
-        $html .= '<div id="booking-summary">';
-        $html .= self::bookingSummary(
-            $room_id = '',
-            $booking_results[$room_id]['roomtitle'] = '',
-            $this->checkinDate,
-            $this->checkoutDate,
-            $this->staynights,
-            $this->adultGuests,
-            $this->childrenGuests,
-            $bedlayout = '',
-            $mealplan = '',
-            $choice = '',
-            $total = ''
-        );
-        $html .= '</div>';
 
         // Return the resulting HTML string
         return $html;
@@ -692,7 +768,7 @@ return ob_get_clean();
                 $html .= '</div>';
 
                 $html .= '<div class="room-button-wrap">';
-                $html .= '<div id="booking-register" class="book-button">Book this room</div>';
+                $html .= '<div data-room-button-id="' . $id . '" id="booking-register" class="book-button">'. __('Choose this room','atollmatrix') . '</div>';
                 $html .= '</div>';
 
                 $html .= '</div>';
@@ -781,24 +857,61 @@ return ob_get_clean();
         return $roomrate;
     }
 
-    public function get_BedLayout($bedLayout)
+    private function applyPriceTax($roomrate, $nights, $guests)
     {
-        $html = '<div class="guest-bed-wrap guest-bed-' . sanitize_title($bedLayout) . '-wrap">';
-        switch ($bedLayout) {
-            case 'kingbed':
-                $html .= '<div class="guest-bed guest-bed-' . sanitize_title($bedLayout) . '"></div>';
-                break;
-            case 'twinbed twinbed':
-                $html .= '<div class="guest-bed type-twinbed-twinbed-one guest-bed-' . $bedLayout . '"></div><div class="guest-bed type-twinbed-twinbed-two guest-bed-' . $bedLayout . '"></div>';
-                break;
-            case 'kingbed twinbed':
-                $html .= '<div class="guest-bed type-kingbed-twinbed-one guest-bed-kingbed"></div><div class="guest-bed type-kingbed-twinbed-two guest-bed-twinbed"></div>';
-                break;
+
+        $price = array();
+        $count = 0;
+        $taxPricing = atollmatrix_get_option('taxes');
+
+        foreach ($taxPricing as $tax) {
+            $percentage = '';
+            if ( $tax['type'] === 'percentage' ) {
+                $percentage = $tax['number'] . '%';
+                if ( $tax['duration'] === 'inrate') {
+                    // Decrease the rate by the given percentage
+                    $total = $roomrate * ( $tax['number'] / 100 );
+                    $roomrate += $total;
+                } elseif ( $tax['duration'] === 'perperson') {
+                    // Increase the rate by the fixed amount
+                    $total = $guests * ($roomrate * $tax['number'] / 100);
+                    $roomrate += $total;
+                } elseif ( $tax['duration'] === 'perday') {
+                    // Increase the rate by the given percentage
+                    $total = $nights * ($roomrate * $tax['number'] / 100);
+                    $roomrate += $total;
+                } elseif ( $tax['duration'] === 'perpersonperday') {
+                    // Increase the rate by the given percentage
+                    $total = $nights * ( $guests * ($roomrate * $tax['number'] / 100) );
+                    $roomrate += $total;
+                }                
+            }
+            if ( $tax['type'] === 'fixed' ) {
+                if ( $tax['duration'] === 'inrate') {
+                    // Decrease the rate by the given percentage
+                    $total = $tax['number'];
+                    $roomrate += $total;
+                } elseif ( $tax['duration'] === 'perperson') {
+                    // Increase the rate by the fixed amount
+                    $total = $guests * $tax['number'];
+                    $roomrate += $total;
+                } elseif ( $tax['duration'] === 'perday') {
+                    // Increase the rate by the given percentage
+                    $total = $nights * $tax['number'];
+                    $roomrate += $total;
+                } elseif ( $tax['duration'] === 'perpersonperday') {
+                    // Increase the rate by the given percentage
+                    $total = $nights * ( $guests * $tax['number'] );
+                    $roomrate += $total;
+                }
+            }
+            $price['details'][$count] = '<span class="tax-value">' . atollmatrix_price($total) . '</span> - <span class="tax-label" data-number="'.$tax['number'].'" data-type="'.$tax['type'].'" data-duration="'.$tax['duration'].'">' . $percentage . ' ' . $tax['label'] . '</span>';
+            $count++;
         }
 
-        $html .= '</div>';
-
-        return $html;
+        $price['total'] = $roomrate;
+ 
+        return $price;
     }
 
     public function generate_BedInformation($room_id)
@@ -816,7 +929,22 @@ return ob_get_clean();
 
             foreach ($bedsetup_array as $roomId => $roomData) {
                 // Get the bed layout for this room
-                $bedLayout = implode(' ', $roomData['bedtype']);
+                
+                $bedLayout = '';
+                $bedCount = 0;
+                foreach ($roomData['bedtype'] as $bedFieldID => $bedName) {
+                    $bedQty = $roomData['bednumber'][$bedFieldID];
+                    if ( $bedCount > 0 ) {
+                        $bedLayout .= ' ';
+                    }
+                    for ($i=0; $i < $bedQty; $i++) { 
+                        if ( $i > 0 ) {
+                            $bedLayout .= ' ';
+                        }
+                        $bedLayout .= $bedName;
+                    }
+                    $bedCount++;
+                }
 
                 $this->bookingSearchResults[$room_id]['bedlayout'][sanitize_title($bedLayout)] = true;
 
@@ -830,10 +958,44 @@ return ob_get_clean();
 
                 $html .= '>';
                 $html .= '<span class="checkbox-label checkbox-bed-label">';
-                $html .= self::get_BedLayout($bedLayout);
+                $html .= '<div class="guest-bed-wrap guest-bed-' . sanitize_title($bedLayout) . '-wrap">';
+                foreach ($roomData['bedtype'] as $bedFieldID => $bedName) {
+
+                    $bedQty = $roomData['bednumber'][$bedFieldID];
+                    for ($i=0; $i < $bedQty; $i++) { 
+                        $html .= self::get_BedLayout( $bedName, $bedFieldID . '-' . $i );
+                    }
+                }
+                $html .= '</div>';
                 $html .= '</span>';
                 $html .= '</label>';
             }
+        }
+
+        return $html;
+    }
+
+    public function get_AllBedLayouts( $bedNames )
+    {
+        $html = '';
+        $bedNames_array = explode( ' ', $bedNames );
+        foreach ($bedNames_array as $key => $bedName) {
+            $html .= self::get_BedLayout( $bedName, $key );
+        }
+
+        return $html;
+    }
+
+    public function get_BedLayout( $bedName, $bedFieldID = null )
+    {
+        
+        switch ($bedName) {
+            case 'kingbed':
+                $html = '<div class="guest-bed guest-bed-' . sanitize_title($bedName) . '"></div>';
+                break;
+            case 'twinbed':
+                $html = '<div class="guest-bed type-twinbed-twinbed-'.$bedFieldID.' guest-bed-' . $bedName . '"></div>';
+                break;
         }
 
         return $html;
@@ -856,42 +1018,83 @@ HTML;
     {
         $country_options = atollmatrix_country_list("select", "");
 
+        $html = '<div class="registration-column registration-column-two" id="booking-summary">';
+        $html .= self::bookingSummary(
+            $room_id = '',
+            $booking_results[$room_id]['roomtitle'] = '',
+            $this->checkinDate,
+            $this->checkoutDate,
+            $this->staynights,
+            $this->adultGuests,
+            $this->childrenGuests,
+            $bedlayout = '',
+            $mealplan = '',
+            $choice = '',
+            $total = ''
+        );
+        $html .= '</div>';
+
         $form_html = <<<HTML
-		<div class="registration_form">
-			<div class="form-group">
-				<label for="full_name">Full Name</label>
-				<input type="text" class="form-control" id="full_name" name="full_name" >
-			</div>
-			<div class="form-group">
-				<label for="email_address">Email Address</label>
-				<input type="email" class="form-control" id="email_address" name="email_address" >
-			</div>
-			<div class="form-group">
-				<label for="phone_number">Phone Number</label>
-				<input type="tel" class="form-control" id="phone_number" name="phone_number" >
-			</div>
-			<div class="form-group">
-				<label for="street_address">Street Address</label>
-				<input type="text" class="form-control" id="street_address" name="street_address" >
-			</div>
-			<div class="form-group">
-				<label for="city">City</label>
-				<input type="text" class="form-control" id="city" name="city" >
-			</div>
-			<div class="form-group">
-				<label for="state">State/Province</label>
-				<input type="text" class="form-control" id="state" name="state">
-			</div>
-			<div class="form-group">
-				<label for="zip_code">Zip Code</label>
-				<input type="text" class="form-control" id="zip_code" name="zip_code">
-			</div>
-			<div class="form-group">
-				<label for="country">Country</label>
-				<select class="form-control" id="country" name="country" >
-				$country_options
-				</select>
-			</div>
+		<div class="registration_form_outer">
+            <div class="booking-backto-roomschoice">Back to Room Choice</div>
+            <div class="registration_form_wrap">
+                <div class="registration_form">
+                <form action="" method="post" id="guest-registration">
+
+                    <div class="registration-column registration-column-one registration_form_inputs">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="full_name" name="full_name" >
+                        <label for="full_name" class="control-label">Full Name</label><i class="bar"></i>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="passport" name="passport" >
+                        <label for="passport" class="control-label">Passport No:</label><i class="bar"></i>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" class="form-control" id="email_address" name="email_address" >
+                        <label for="email_address" class="control-label">Email Address</label><i class="bar"></i>
+                    </div>
+                    <div class="form-group">
+                        <input type="tel" class="form-control" id="phone_number" name="phone_number" >
+                        <label for="phone_number" class="control-label">Phone Number</label><i class="bar"></i>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="street_address" name="street_address" >
+                        <label for="street_address" class="control-label">Street Address</label><i class="bar"></i>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="city" name="city" >
+                        <label for="city" class="control-label">City</label><i class="bar"></i>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="state" name="state">
+                        <label for="state" class="control-label">State/Province</label><i class="bar"></i>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="zip_code" name="zip_code">
+                        <label for="zip_code" class="control-label">Zip Code</label><i class="bar"></i>
+                    </div>
+                    <div class="form-group">
+                        <select class="form-control" id="country" name="country" >
+                        $country_options
+                        </select>
+                        <label for="country" class="control-label">Country</label><i class="bar"></i>
+                    </div>
+                    <div class="form-group">
+                    <textarea class="form-control" id="guest_comment" name="guest_comment"></textarea>
+                    <label for="textarea" class="control-label">Textarea</label><i class="bar"></i>
+                    </div>
+                    <div class="checkbox">
+                    <label>
+                        <input type="checkbox" id="guest_content" name="guest_consent" /><i class="helper"></i>I'm the label from a checkbox
+                    </label>
+                    </div>
+                </form>
+                </div>
+
+                $html
+                </div>
+            </div>
 		</div>
 HTML;
 
