@@ -90,15 +90,20 @@ class Booking
             error_log( '====== From Transient ======' );
             error_log( print_r( $booking_results , true ));
 
-
-            $booking_results[$room_id]['choice']['bedlayout'] = $bed_layout;
-            $booking_results[$room_id]['choice']['mealplan'] = $meal_plan;
+            $booking_results['choice']['room_id'] = $room_id;
+            $booking_results['choice']['bedlayout'] = $bed_layout;
+            $booking_results['choice']['mealplan'] = $meal_plan;
 
             if ( 'none' !== $meal_plan ) {
-                $booking_results[$room_id]['selected_mealplan_price'] = $booking_results[$room_id]['meal_plan'][$booking_results[$room_id]['choice']['mealplan']];
+                $booking_results['choice']['mealplan_price'] = $booking_results[$room_id]['meal_plan'][$booking_results['choice']['mealplan']];
             }
 
-            $booking_results['room_id'] = $room_id;
+            $booking_results['choice']['room_id'] = $room_id;
+
+            self::setBooking_Transient( $booking_results, $bookingnumber);
+
+            error_log( '====== Saved Transient ======' );
+            error_log( print_r( $booking_results , true ));
 
             error_log( '====== Specific Room ======' );
             error_log( print_r( $booking_results[$room_id] , true ));
@@ -114,7 +119,7 @@ class Booking
     public function process_SelectedRoom()
     {
 
-        $bookingnumber   = sanitize_text_field($_POST['bookingnumber']);
+        $bookingnumber   = sanitize_text_field($_POST['booking_number']);
         $room_id         = sanitize_text_field($_POST['room_id']);
         $room_price      = sanitize_text_field($_POST['room_price']);
         $bed_layout      = sanitize_text_field($_POST['bed_layout']);
@@ -133,16 +138,16 @@ class Booking
         if ( is_array( $booking_results ) ) {
 
             $html = self::bookingSummary(
-                $booking_results['room_id'],
+                $booking_results['choice']['room_id'],
                 $booking_results[$room_id]['roomtitle'],
                 $booking_results['checkin'],
                 $booking_results['checkout'],
                 $booking_results['staynights'],
                 $booking_results['adults'],
                 $booking_results['children'],
-                $booking_results[$room_id]['choice']['bedlayout'],
-                $booking_results[$room_id]['choice']['mealplan'],
-                $booking_results[$room_id]['selected_mealplan_price'],
+                $booking_results['choice']['bedlayout'],
+                $booking_results['choice']['mealplan'],
+                $booking_results['choice']['mealplan_price'],
                 $booking_results[$room_id]['totalroomrate']
             );
 
@@ -157,7 +162,7 @@ class Booking
     public function process_RoomPrice()
     {
         
-        $bookingnumber   = sanitize_text_field($_POST['bookingnumber']);
+        $bookingnumber   = sanitize_text_field($_POST['booking_number']);
         $room_id         = sanitize_text_field($_POST['room_id']);
         $room_price      = sanitize_text_field($_POST['room_price']);
         $bed_layout      = sanitize_text_field($_POST['bed_layout']);
@@ -176,16 +181,16 @@ class Booking
         if ( is_array( $booking_results ) ) {
 
             $html = self::getSelectedPlanPrice(
-                $booking_results['room_id'],
+                $booking_results['choice']['room_id'],
                 $booking_results[$room_id]['roomtitle'],
                 $booking_results['checkin'],
                 $booking_results['checkout'],
                 $booking_results['staynights'],
                 $booking_results['adults'],
                 $booking_results['children'],
-                $booking_results[$room_id]['choice']['bedlayout'],
-                $booking_results[$room_id]['choice']['mealplan'],
-                $booking_results[$room_id]['selected_mealplan_price'],
+                $booking_results['choice']['bedlayout'],
+                $booking_results['choice']['mealplan'],
+                $booking_results['choice']['mealplan_price'],
                 $booking_results[$room_id]['totalroomrate']
             );
 
@@ -308,9 +313,9 @@ class Booking
         return $html;
     }
 
-    public function saveBooking_Transient($data)
+    public function setBooking_Transient($data, $bookingNumber)
     {
-        set_transient($this->bookingNumber, $data, 20 * MINUTE_IN_SECONDS);
+        set_transient($bookingNumber, $data, 20 * MINUTE_IN_SECONDS);
     }
     public function getBookingTransient($bookingNumber = null)
     {
@@ -325,7 +330,7 @@ class Booking
     public function hotelBooking_SearchForm()
     {
         // Generate unique booking number
-        self::saveBooking_Transient('1');
+        self::setBooking_Transient('1', $this->bookingNumber);
         ob_start();
         ?>
         <div class="atollmatrix-content">
@@ -606,9 +611,9 @@ return ob_get_clean();
         echo '<div id="reservation-data" data-bookingnumber="' . $this->bookingNumber . '" data-children="' . $this->childrenGuests . '" data-adults="' . $this->adultGuests . '" data-guests="' . $this->totalGuests . '" data-checkin="' . $this->checkinDate . '" data-checkout="' . $this->checkoutDate . '">';
         echo $list;
         echo '<div id="bookingResponse" class="booking-response"></div>';
-        echo self::paymentHelper_Form($this->bookingNumber);
         echo '</div>';
         echo self::register_Guest_Form();
+        echo self::paymentHelper_Form($this->bookingNumber);
         $output                     = ob_get_clean();
         $response['booking_data']   = $combo_array;
         $response['roomlist']       = $output;
@@ -789,7 +794,7 @@ return ob_get_clean();
             $html .= '</div>';
 
             // error_log( print_r( $this->bookingSearchResults , true ));
-            self::saveBooking_Transient( $this->bookingSearchResults );
+            self::setBooking_Transient( $this->bookingSearchResults, $this->bookingNumber );
         }
 
         return $html;

@@ -12,11 +12,11 @@
 			var mealPlanInput = $("input[name='room[" + roomId + "][meal_plan][optional]']:checked");
 			var mealPlan = mealPlanInput.val();
 			var mealPlanPrice = mealPlanInput.data('mealprice');
-			console.log(mealPlanPrice);
+			console.log('Got:' + bookingnumber);
 		
 			var dataToSend = {
 				action: 'process_RoomPrice',
-				bookingnumber: bookingnumber,
+				booking_number: bookingnumber,
 				room_id: roomId,
 				room_price: roomPriceTotal,
 				bed_layout: bedLayout,
@@ -32,7 +32,7 @@
 					var price_element = roomOccupiedGroup.find('.room-price-total');
 					
 					price_element.find('.formatted-price').velocity('fadeOut', {
-						duration: 350,
+						duration: 150,
 						complete: function() {
 							price_element.html(response);
 						}
