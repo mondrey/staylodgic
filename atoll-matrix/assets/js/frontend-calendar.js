@@ -265,43 +265,43 @@
 		$(document).on('click', '#booking-register', function (e) {
 			e.preventDefault();
 
-			let booking_number = $('#reservation-data').data('bookingnumber');
-			console.log('booking-number:' + booking_number);
+			let data_booking_number = $('#reservation-data').data('bookingnumber');
+			console.log('booking-number:' + data_booking_number);
 
-			let full_name = $('.registration_form_inputs #full_name').val();
-			let passport = $('.registration_form_inputs #passport').val();
-			let email_address = $('.registration_form_inputs #email_address').val();
-			let phone_number = $('.registration_form_inputs #phone_number').val();
-			let street_address = $('.registration_form_inputs #street_address').val();
-			let city = $('.registration_form_inputs #city').val();
-			let state = $('.registration_form_inputs #state').val();
-			let zip_code = $('.registration_form_inputs #zip_code').val();
-			let country = $('.registration_form_inputs #country').val();
-			let guest_comment = $('.registration_form_inputs #guest_comment').val();
-			let guest_content = $('.registration_form_inputs #guest_content').val();
+			let data_full_name = $('.registration_form_inputs #full_name').val();
+			let data_passport = $('.registration_form_inputs #passport').val();
+			let data_email_address = $('.registration_form_inputs #email_address').val();
+			let data_phone_number = $('.registration_form_inputs #phone_number').val();
+			let data_street_address = $('.registration_form_inputs #street_address').val();
+			let data_city = $('.registration_form_inputs #city').val();
+			let data_state = $('.registration_form_inputs #state').val();
+			let data_zip_code = $('.registration_form_inputs #zip_code').val();
+			let data_country = $('.registration_form_inputs #country').val();
+			let data_guest_comment = $('.registration_form_inputs #guest_comment').val();
+			let data_guest_consent = $('.registration_form_inputs #guest_consent').val();
 
 			// Serialize form data
 			const registration_data = $('#guest-registration').serialize();
 			
-			console.log(checkin, checkout, rooms);
+			//console.log(checkin, checkout, rooms);
 			$.ajax({
 				url: frontendAjax.ajaxurl, // the localized URL
 				type: 'POST',
 				data: {
 					action: 'bookRooms',
 					bookingdata: registration_data,
-					booking_number: booking_number,
-					full_name: full_name,
-					passport: passport,
-					email_address: email_address,
-					phone_number: phone_number,
-					street_address: street_address,
-					city: city,
-					state: state,
-					zip_code: zip_code,
-					country: country,
-					guest_comment: guest_comment,
-					guest_content: guest_content,
+					booking_number: data_booking_number,
+					full_name: data_full_name,
+					passport: data_passport,
+					email_address: data_email_address,
+					phone_number: data_phone_number,
+					street_address: data_street_address,
+					city: data_city,
+					state: data_state,
+					zip_code: data_zip_code,
+					country: data_country,
+					guest_comment: data_guest_comment,
+					guest_consent: data_guest_consent,
 					nonce: frontendAjax.nonce // Our defined nonce
 				},
 				success: function (response) {
