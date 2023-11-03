@@ -64,6 +64,7 @@
 			$('.room-occupied-group').removeClass('room-selected');
 			roomOccupiedGroup.addClass('room-selected');
 			
+			var atollmatrix_roomlistingbox_nonce = $('input[name="atollmatrix_roomlistingbox_nonce"]').val();
 			var bookingnumber = $('#reservation-data').data('bookingnumber');
 			var roomId = roomOccupiedGroup.data('room-id');
 			var roomPriceTotal = roomOccupiedGroup.find('.room-price-total').data('roomprice');
@@ -80,7 +81,8 @@
 				room_price: roomPriceTotal,
 				bed_layout: bedLayout,
 				meal_plan: mealPlan,
-				meal_plan_price: mealPlanPrice
+				meal_plan_price: mealPlanPrice,
+				atollmatrix_roomlistingbox_nonce: atollmatrix_roomlistingbox_nonce
 			};
 		
 			$.ajax({
@@ -104,7 +106,7 @@
 		}
 
 		// Process room choice and registration
-		$(document).on('click', '#reservation-data .book-button', function () {
+		$(document).on('click', '#reservation-data .choose-room-button', function () {
 
 			var roomOccupiedGroup = $(this).closest('.room-occupied-group');
 			processRoomData(roomOccupiedGroup);
@@ -218,6 +220,7 @@
 			var reservationDate = $('#reservation-date').val();
 			var numberOfAdults = $('#number-of-adults').val();
 			var numberOfChildren = $('#number-of-children').val();
+			var atollmatrix_searchbox_nonce = $('input[name="atollmatrix_searchbox_nonce"]').val();
 
 			var childrenAge = [];
 
@@ -235,7 +238,8 @@
 					reservation_date: reservationDate,
 					number_of_adults: numberOfAdults,
 					number_of_children: numberOfChildren,
-					children_age: childrenAge
+					children_age: childrenAge,
+					atollmatrix_searchbox_nonce: atollmatrix_searchbox_nonce
 				},
 				success: function (response) {
 					var parsedResponse = JSON.parse(response);
@@ -265,6 +269,7 @@
 		$(document).on('click', '#booking-register', function (e) {
 			e.preventDefault();
 
+			var atollmatrix_roomlistingbox_nonce = $('input[name="atollmatrix_roomlistingbox_nonce"]').val();
 			let data_booking_number = $('#reservation-data').data('bookingnumber');
 			console.log('booking-number:' + data_booking_number);
 
@@ -302,7 +307,7 @@
 					country: data_country,
 					guest_comment: data_guest_comment,
 					guest_consent: data_guest_consent,
-					nonce: frontendAjax.nonce // Our defined nonce
+					atollmatrix_roomlistingbox_nonce: atollmatrix_roomlistingbox_nonce
 				},
 				success: function (response) {
 					// handle success

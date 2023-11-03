@@ -1,5 +1,6 @@
 <?php
-function atollmatrix_readableDate( $originalDate ) {
+function atollmatrix_readable_date($originalDate)
+{
     $formattedDate = date("F jS, Y", strtotime($originalDate));
 
     return $formattedDate;
@@ -7,7 +8,7 @@ function atollmatrix_readableDate( $originalDate ) {
 
 function atollmatrix_get_option($option, $default = '')
 {
-    $got_value = get_option('atollmatrix_settings')[$option] ?? $default;
+    $got_value = get_option('atollmatrix_settings')[ $option ] ?? $default;
 
     return $got_value;
 }
@@ -22,16 +23,16 @@ function atollmatrix_price($originalPrice)
     // Format the price using number_format
     $price = number_format($originalPrice, $number_of_decimals, $decimal_seperator, $thousand_seperator);
 
-    if ( '' == $price ) {
+    if ('' == $price) {
         $price = $originalPrice;
     }
 
-    $formatted_price = '<span class="formatted-price" date-price="'.esc_attr($price).'" date-currency="'.esc_attr($currency).'">';
+    $formatted_price = '<span class="formatted-price" date-price="' . esc_attr($price) . '" date-currency="' . esc_attr($currency) . '">';
     // Adjust the position of the currency symbol
     if ($currency_position === 'left') {
-        $formatted_price .= '<span class="currency">'. $currency . '</span>' . ' ' . '<span class="price">'.$price. '</span>';
+        $formatted_price .= '<span class="currency">' . $currency . '</span>' . ' ' . '<span class="price">' . $price . '</span>';
     } else {
-        $formatted_price .= '<span class="price">'.$price. '</span>' . ' ' . '<span class="currency">'. $currency . '</span>';
+        $formatted_price .= '<span class="price">' . $price . '</span>' . ' ' . '<span class="currency">' . $currency . '</span>';
     }
     $formatted_price .= '</span>';
 
@@ -53,4 +54,103 @@ function atollmatrix_reverse_percentage($total, $percentages)
         $initial_value = $initial_value / (1 + ($percentage / 100));
     }
     return $initial_value;
+}
+
+function atollmatrix_apply_tax($roomrate, $nights, $guests, $output)
+{
+
+    $price      = array();
+    $count      = 0;
+    $taxPricing = atollmatrix_get_option('taxes');
+
+    foreach ($taxPricing as $tax) {
+        $percentage = '';
+        if ($tax[ 'type' ] === 'percentage') {
+            $percentage = $tax[ 'number' ] . '%';
+            if ($tax[ 'duration' ] === 'inrate') {
+                // Decrease the rate by the given percentage
+                $total = $roomrate * ($tax[ 'number' ] / 100);
+                $roomrate += $total;
+            } elseif ($tax[ 'duration' ] === 'perperson') {
+                // Increase the rate by the fixed amount
+                $total = $guests * ($roomrate * $tax[ 'number' ] / 100);
+                $roomrate += $total;
+            } elseif ($tax[ 'duration' ] === 'perday') {
+                // Increase the rate by the given percentage
+                $total = $nights * ($roomrate * $tax[ 'number' ] / 100);
+                $roomrate += $total;
+            } elseif ($tax[ 'duration' ] === 'perpersonperday') {
+                // Increase the rate by the given percentage
+                $total = $nights * ($guests * ($roomrate * $tax[ 'number' ] / 100));
+                $roomrate += $total;
+            }
+        }
+        if ($tax[ 'type' ] === 'fixed') {
+            if ($tax[ 'duration' ] === 'inrate') {
+                // Decrease the rate by the given percentage
+                $total = $tax[ 'number' ];
+                $roomrate += $total;
+            } elseif ($tax[ 'duration' ] === 'perperson') {
+                // Increase the rate by the fixed amount
+                $total = $guests * $tax[ 'number' ];
+                $roomrate += $total;
+            } elseif ($tax[ 'duration' ] === 'perday') {
+                // Increase the rate by the given percentage
+                $total = $nights * $tax[ 'number' ];
+                $roomrate += $total;
+            } elseif ($tax[ 'duration' ] === 'perpersonperday') {
+                // Increase the rate by the given percentage
+                $total = $nights * ($guests * $tax[ 'number' ]);
+                $roomrate += $total;
+            }
+        }
+        if ('html' == $output) {
+            $price[ 'details' ][ $count ] = '<span class="tax-value">' . atollmatrix_price($total) . '</span> - <span class="tax-label" data-number="' . $tax[ 'number' ] . '" data-type="' . $tax[ 'type' ] . '" data-duration="' . $tax[ 'duration' ] . '">' . ltrim($percentage . ' ' . $tax[ 'label' ]) . '</span>';
+        } else {
+            $price[ 'details' ][ $count ][ 'label' ] = ltrim($percentage . ' ' . $tax[ 'label' ]);
+            $price[ 'details' ][ $count ][ 'total' ] = $total;
+        }
+        $count++;
+    }
+
+    $price[ 'total' ] = $roomrate;
+
+    return $price;
+}
+
+function atollmatrix_get_mealplan_labels($mealtype)
+{
+    switch ($mealtype) {
+        case 'BB':
+            return __('Breakfast', 'atollmatrix');
+        case 'HB':
+            return __('Halfboard', 'atollmatrix');
+        case 'FB':
+            return __('Fullboard', 'atollmatrix');
+        case 'AN':
+            return __('All inclusive', 'atollmatrix');
+        default:
+            return '';
+    }
+}
+
+function atollmatrix_delete_booking_transient($bookingNumber)
+{
+    delete_transient($bookingNumber);
+}
+function atollmatrix_set_booking_transient($data, $bookingNumber)
+{
+    error_log('----- Saving Transisent -----');
+    error_log($bookingNumber);
+    error_log(print_r($data, true));
+    set_transient($bookingNumber, $data, 20 * MINUTE_IN_SECONDS);
+}
+function atollmatrix_get_booking_transient($bookingNumber = null)
+{
+    if ($bookingNumber === null) {
+        // Use $this->bookingNumber if $bookingNumber is not supplied
+        $bookingNumber = $this->bookingNumber;
+    }
+
+    return get_transient($bookingNumber);
 }
