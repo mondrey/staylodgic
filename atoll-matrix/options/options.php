@@ -729,10 +729,10 @@ foreach ($currencies as $currencyCode => $currencyName) {
 
 $panel_settings = [
     // Tab 1
-    'option_1'           => [
-        'label'       => esc_html__('Checkbox Option', 'text_domain'),
+    'enable_taxes'           => [
+        'label'       => esc_html__('Enable Taxes', 'text_domain'),
         'type'        => 'checkbox',
-        'description' => 'My checkbox field description.',
+        'description' => 'Add taxes to the total',
         'tab'         => 'tab-1',
     ],
     'option_2'           => [

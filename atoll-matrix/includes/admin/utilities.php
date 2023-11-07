@@ -56,64 +56,79 @@ function atollmatrix_reverse_percentage($total, $percentages)
     return $initial_value;
 }
 
+function atollmatrix_has_tax() {
+
+    $taxFlag = atollmatrix_get_option('enable_taxes');
+    return $taxFlag;
+    
+}
+
 function atollmatrix_apply_tax($roomrate, $nights, $guests, $output)
 {
 
     $price      = array();
     $count      = 0;
     $taxPricing = atollmatrix_get_option('taxes');
+    $subtotal = $roomrate;
 
-    foreach ($taxPricing as $tax) {
-        $percentage = '';
-        if ($tax[ 'type' ] === 'percentage') {
-            $percentage = $tax[ 'number' ] . '%';
-            if ($tax[ 'duration' ] === 'inrate') {
-                // Decrease the rate by the given percentage
-                $total = $roomrate * ($tax[ 'number' ] / 100);
-                $roomrate += $total;
-            } elseif ($tax[ 'duration' ] === 'perperson') {
-                // Increase the rate by the fixed amount
-                $total = $guests * ($roomrate * $tax[ 'number' ] / 100);
-                $roomrate += $total;
-            } elseif ($tax[ 'duration' ] === 'perday') {
-                // Increase the rate by the given percentage
-                $total = $nights * ($roomrate * $tax[ 'number' ] / 100);
-                $roomrate += $total;
-            } elseif ($tax[ 'duration' ] === 'perpersonperday') {
-                // Increase the rate by the given percentage
-                $total = $nights * ($guests * ($roomrate * $tax[ 'number' ] / 100));
-                $roomrate += $total;
+    if ( atollmatrix_has_tax() ) {
+        foreach ($taxPricing as $tax) {
+            $percentage = '';
+            if ($tax[ 'type' ] === 'percentage') {
+                $percentage = $tax[ 'number' ] . '%';
+                if ($tax[ 'duration' ] === 'inrate') {
+                    // Decrease the rate by the given percentage
+                    $total = $roomrate * ($tax[ 'number' ] / 100);
+                    $roomrate += $total;
+                } elseif ($tax[ 'duration' ] === 'perperson') {
+                    // Increase the rate by the fixed amount
+                    $total = $guests * ($roomrate * $tax[ 'number' ] / 100);
+                    $roomrate += $total;
+                } elseif ($tax[ 'duration' ] === 'perday') {
+                    // Increase the rate by the given percentage
+                    $total = $nights * ($roomrate * $tax[ 'number' ] / 100);
+                    $roomrate += $total;
+                } elseif ($tax[ 'duration' ] === 'perpersonperday') {
+                    // Increase the rate by the given percentage
+                    $total = $nights * ($guests * ($roomrate * $tax[ 'number' ] / 100));
+                    $roomrate += $total;
+                }
             }
-        }
-        if ($tax[ 'type' ] === 'fixed') {
-            if ($tax[ 'duration' ] === 'inrate') {
-                // Decrease the rate by the given percentage
-                $total = $tax[ 'number' ];
-                $roomrate += $total;
-            } elseif ($tax[ 'duration' ] === 'perperson') {
-                // Increase the rate by the fixed amount
-                $total = $guests * $tax[ 'number' ];
-                $roomrate += $total;
-            } elseif ($tax[ 'duration' ] === 'perday') {
-                // Increase the rate by the given percentage
-                $total = $nights * $tax[ 'number' ];
-                $roomrate += $total;
-            } elseif ($tax[ 'duration' ] === 'perpersonperday') {
-                // Increase the rate by the given percentage
-                $total = $nights * ($guests * $tax[ 'number' ]);
-                $roomrate += $total;
+            if ($tax[ 'type' ] === 'fixed') {
+                if ($tax[ 'duration' ] === 'inrate') {
+                    // Decrease the rate by the given percentage
+                    $total = $tax[ 'number' ];
+                    $roomrate += $total;
+                } elseif ($tax[ 'duration' ] === 'perperson') {
+                    // Increase the rate by the fixed amount
+                    $total = $guests * $tax[ 'number' ];
+                    $roomrate += $total;
+                } elseif ($tax[ 'duration' ] === 'perday') {
+                    // Increase the rate by the given percentage
+                    $total = $nights * $tax[ 'number' ];
+                    $roomrate += $total;
+                } elseif ($tax[ 'duration' ] === 'perpersonperday') {
+                    // Increase the rate by the given percentage
+                    $total = $nights * ($guests * $tax[ 'number' ]);
+                    $roomrate += $total;
+                }
             }
+            if ('html' == $output) {
+                $price[ 'details' ][ $count ] = '<span class="tax-value">' . atollmatrix_price($total) . '</span> - <span class="tax-label" data-number="' . $tax[ 'number' ] . '" data-type="' . $tax[ 'type' ] . '" data-duration="' . $tax[ 'duration' ] . '">' . ltrim($percentage . ' ' . $tax[ 'label' ]) . '</span>';
+            } else {
+                $price[ 'details' ][ $count ][ 'label' ] = ltrim($percentage . ' ' . $tax[ 'label' ]);
+                $price[ 'details' ][ $count ][ 'total' ] = $total;
+            }
+            $count++;
         }
-        if ('html' == $output) {
-            $price[ 'details' ][ $count ] = '<span class="tax-value">' . atollmatrix_price($total) . '</span> - <span class="tax-label" data-number="' . $tax[ 'number' ] . '" data-type="' . $tax[ 'type' ] . '" data-duration="' . $tax[ 'duration' ] . '">' . ltrim($percentage . ' ' . $tax[ 'label' ]) . '</span>';
-        } else {
-            $price[ 'details' ][ $count ][ 'label' ] = ltrim($percentage . ' ' . $tax[ 'label' ]);
-            $price[ 'details' ][ $count ][ 'total' ] = $total;
-        }
-        $count++;
     }
 
+    $price[ 'subtotal' ] = $subtotal;
     $price[ 'total' ] = $roomrate;
+
+    if ( 'single-value' == $output ) {
+        $price = $roomrate;
+    }
 
     return $price;
 }

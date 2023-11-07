@@ -92,6 +92,19 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
 
         }
 
+        if (isset($field['group'])) {
+            if ($field['group'] == "group") {
+                $titleclass = "is-a-group";
+            }
+
+        }
+        if (isset($field['group'])) {
+            if ($field['group'] == "group-end") {
+                $titleclass = "is-the-group-end";
+            }
+
+        }
+
         if (isset($field['class'])) {
             $class = $field['class'];
         }
@@ -402,6 +415,29 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                     echo '<input readonly type="text" class="' . $class . '" name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '" value="' . esc_attr($text_value) . '" size="30" />';
                     break;
 
+                case 'taxgenerate':
+
+                    $the_post_id = get_the_ID(); // Replace this with the actual post ID
+                    $taxStatus = get_post_meta($the_post_id, 'atollmatrix_tax', true);
+                    $taxHTML = get_post_meta($the_post_id, 'atollmatrix_tax_html_data', true);
+                    $taxData = get_post_meta($the_post_id, 'atollmatrix_tax_data', true);
+                
+                    echo '<div id="input-tax-summary">';
+                    echo '<div class="input-tax-summary-wrap">';
+                    if ( 'enabled' == $taxStatus ) {
+                        echo '<div class="input-tax-summary-wrap-inner">';
+                        echo $taxHTML;
+                        echo '</div>';
+                    }
+                    if ( 'excluded' == $taxStatus ) {
+                        echo '<div class="input-tax-summary-wrap-inner">';
+                        echo 'Tax Exluded';
+                        echo '</div>';
+                    }
+                    echo '</div>';
+                    echo '</div>';
+                    break;
+
                 case 'offview':
                     $text_value = $meta ? $meta : $field['std'];
                     echo '<input type="hidden" class="' . $class . '" name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '" value="' . esc_attr($text_value) . '" size="30" />';
@@ -410,6 +446,18 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                 case 'text':
                     $text_value = $meta ? $meta : $field['std'];
                     echo '<input type="text" class="' . $class . '" name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '" value="' . esc_attr($text_value) . '" size="30" />';
+                    break;
+
+                case 'currency':
+                    $text_value = $meta ? $meta : $field['std'];
+                    if ( isset( $field['datatype'] ) ) {
+                        $priceof =  'data-priceof="'.$field['datatype'].'"';
+                    }
+                    $readonly = '';
+                    if ( isset( $field['inputis'] ) ) {
+                        $readonly =  ' readonly';
+                    }
+                    echo '<input type="number" '. $priceof . $readonly . ' data-currencyformat="2" class="' . $class . ' currency-input" min="0" step="0.01" name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '" value="' . esc_attr($text_value) . '" size="30" />';
                     break;
 
                 case 'switch':
@@ -900,7 +948,7 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
 
                     break;
 
-                case 'number':
+                case 'guests':
                     $output = "";
 
                     $roomOccupantData = array();
@@ -1055,6 +1103,26 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
         }
         if (isset($field['desc'])) {
             echo '<div class="metabox-description' . esc_attr($notice_class) . '">', esc_html($field['desc']), '</div>';
+        }
+
+        if ( isset( $field['datatype'] ) && 'roomsubtotal' == $field['datatype'] ) {
+            echo '<br/><span id="reservation-tax-generate" class="button button-primary button-small">Generate Tax</span>&nbsp;';
+            echo '<span id="reservation-tax-exclude" class="button button-secondary button-small">Exclude Tax</span><br/><br/>';
+        }
+        if ( isset( $field['datatype'] ) && 'payment' == $field['datatype'] ) {
+            $reservationTotal = 0;
+            $reservationPaid = 0;
+            if (isset($reservationData["atollmatrix_reservation_total_room_cost"][0])) {
+                $reservationTotal = $reservationData["atollmatrix_reservation_total_room_cost"][0];
+            }
+            if (isset($reservationData["atollmatrix_reservation_room_paid"][0])) {
+                $reservationPaid = $reservationData["atollmatrix_reservation_room_paid"][0];
+            }
+
+            echo '<p class="reservation-payment-balance">' . __( 'Balance' , 'atollmatrix' ) . '</p>';
+            $reservationBalance = intval( $reservationTotal ) - intval(  $reservationPaid );
+            echo atollmatrix_price( $reservationBalance );
+            echo '<br/>';
         }
 
         echo '</div>';

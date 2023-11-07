@@ -130,7 +130,7 @@
 	font-size: 14px;
 	letter-spacing: 0;
 	padding: 0 0 10px 0;
-	font-weight: 400;
+	font-weight: 700;
 }
 .metaboxtype_seperator .sectiontitle {
 	color: #c4902b;
@@ -495,7 +495,13 @@
 }
 
 .metabox-fields {
-	padding: 0 40px 30px;
+	padding: 0 40px 10px;
+}
+.metabox-fields.is-a-group {
+    padding: 0 40px 0;
+}
+.metabox-fields.is-the-group-end {
+    padding: 0 40px 30px;
 }
 .metabox-fields.is-part-of-a-set {
 	padding-bottom: 0;

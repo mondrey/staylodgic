@@ -1,6 +1,51 @@
 jQuery(document).ready(function($) {
 	"use strict";
 
+	function currencyKeyIn() {
+
+		var totalStayNights = $('.reservation-post-numberof-nights').data('numberofnights');
+
+		$('[data-priceof="roompernight"]').on('input', function(e) {
+			var perNightRate = $(this).val();
+			var totalRate = totalStayNights * perNightRate;
+			$('[data-priceof="roomsubtotal"]').val( totalRate.toFixed(2) );
+			$('[data-priceof="roomtotal"]').val('');
+			$('.input-tax-summary-wrap-inner').remove();
+		});
+		$('[data-priceof="roomsubtotal"]').on('input', function(e) {
+			var totalRate = $(this).val();
+			var perNightRate = totalRate / totalStayNights;
+			$('[data-priceof="roompernight"]').val( perNightRate.toFixed(2) );
+			$('[data-priceof="roomtotal"]').val('');
+			$('.input-tax-summary-wrap-inner').remove();
+
+		});
+
+		$( '.reservation' ).on( 'input', function() {
+			totalStayNights = $('.reservation-post-numberof-nights').data('numberofnights');
+			var perNightRate = $('[data-priceof="roompernight"]').val();
+			var totalRate = totalStayNights * perNightRate;
+			$('[data-priceof="roomsubtotal"]').val( totalRate.toFixed(2) );
+			$('[data-priceof="roomtotal"]').val('');
+			$('.input-tax-summary-wrap-inner').remove();
+		});
+	}
+	currencyKeyIn();
+
+	function currencyFormatSetter() {
+		$(".currency-input").each(function() {
+			// Parse the input as a floating-point number
+			let value = parseFloat($(this).val());
+		
+			// Get the currency format from the data attribute
+			const decimalPlaces = parseInt($(this).data("currencyformat"));
+		
+			// Format the input with the specified number of decimal places
+			$(this).val(value.toFixed(decimalPlaces));
+		  });		
+	}
+	currencyFormatSetter();
+
 	document.addEventListener( 'click', ( event ) => {
 		const target = event.target;
 		if ( ! target.closest( '.atollmatrix-tabs a' ) ) {
@@ -23,6 +68,74 @@ jQuery(document).ready(function($) {
 	document.addEventListener( 'DOMContentLoaded', function () {
 		document.querySelector( '.atollmatrix-tabs .nav-tab' ).click();
 	}, false );
+
+
+	$('#reservation-tax-generate').on('click', function(e) {
+		// Get the selected booking number
+		var subtotal_for_tax = $('[data-priceof="roomsubtotal"]').val();
+		var totalStayNights = $('.reservation-post-numberof-nights').data('numberofnights');
+		var adults = $('#atollmatrix_reservation_room_adults').val();
+		var children = $('#atollmatrix_reservation_room_children').val();
+
+		var totalGuests = parseInt( adults ) + parseInt( children );
+
+		var postID = $('input[name="post_ID"]').val();
+	
+		// Make an Ajax request to fetch the room names
+		$.ajax({
+		  url: ajaxurl, // WordPress Ajax URL
+		  type: 'POST',
+		  data: {
+			action: 'generateTax', // Custom Ajax action
+			post_id: postID,
+			nonce: atollmatrix_admin_vars.nonce,
+			subtotal: subtotal_for_tax,
+			staynights: totalStayNights,
+			total_guests: totalGuests
+		  },
+		  success: function(response) {
+			console.log( response );
+			// Handle the Ajax response
+			// Display the room names in the desired element
+			$('#input-tax-summary').html(response.html);
+			$('#atollmatrix_reservation_total_room_cost').val( response.total.toFixed(2) );
+		  },
+		  error: function(xhr, status, error) {
+			// Handle any errors that occur during the Ajax request
+			console.log(xhr.responseText);
+		  }
+		});
+	});
+
+	$('#reservation-tax-exclude').on('click', function(e) {
+		// Get the selected booking number
+		var subtotal_for_tax= $('[data-priceof="roomsubtotal"]').val();
+		var postID = $('input[name="post_ID"]').val();
+	
+		// Make an Ajax request to fetch the room names
+		$.ajax({
+		  url: ajaxurl, // WordPress Ajax URL
+		  type: 'POST',
+		  data: {
+			action: 'excludeTax', // Custom Ajax action
+			post_id: postID,
+			subtotal: subtotal_for_tax,
+			nonce: atollmatrix_admin_vars.nonce
+		  },
+		  success: function(response) {
+			console.log( response );
+			// Handle the Ajax response
+			// Display the room names in the desired element
+			$('#atollmatrix_reservation_total_room_cost').val(subtotal_for_tax);
+			$('.input-tax-summary-wrap-inner').remove();
+			$('#input-tax-summary').html('<div class="input-tax-summary-wrap-inner">' + response + '</div>');
+		  },
+		  error: function(xhr, status, error) {
+			// Handle any errors that occur during the Ajax request
+			console.log(xhr.responseText);
+		  }
+		});
+	});
 
 	$('#atollmatrix_payment_booking_id').on('select2:select', function(e) {
 		// Get the selected booking number

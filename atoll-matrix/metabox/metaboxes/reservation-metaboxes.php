@@ -9,32 +9,32 @@ function atollmatrix_reservations_metadata()
     $bg_slideshow_pages = get_posts('post_type=fullscreen&orderby=title&numberposts=-1&order=ASC');
 
     if ($bg_slideshow_pages) {
-        $options_bgslideshow['none'] = "Not Selected";
+        $options_bgslideshow[ 'none' ] = "Not Selected";
         foreach ($bg_slideshow_pages as $key => $list) {
             $custom = get_post_custom($list->ID);
-            if (isset($custom["fullscreen_type"][0])) {
-                $slideshow_type = $custom["fullscreen_type"][0];
+            if (isset($custom[ "fullscreen_type" ][ 0 ])) {
+                $slideshow_type = $custom[ "fullscreen_type" ][ 0 ];
             } else {
                 $slideshow_type = "";
             }
             if ($slideshow_type != "Fullscreen-Video") {
-                $options_bgslideshow[$list->ID] = $list->post_title;
+                $options_bgslideshow[ $list->ID ] = $list->post_title;
             }
         }
     } else {
-        $options_bgslideshow[0] = "Featured pages not found.";
+        $options_bgslideshow[ 0 ] = "Featured pages not found.";
     }
 
     $room_names = get_posts('post_type=atmx_room&orderby=title&numberposts=-1&order=ASC');
 
     if ($room_names) {
-        $options_room_names['none'] = "Not Selected";
+        $options_room_names[ 'none' ] = "Not Selected";
         foreach ($room_names as $key => $list) {
-            $custom                        = get_post_custom($list->ID);
-            $options_room_names[$list->ID] = $list->post_title;
+            $custom                          = get_post_custom($list->ID);
+            $options_room_names[ $list->ID ] = $list->post_title;
         }
     } else {
-        $options_room_names[0] = "Rooms not found.";
+        $options_room_names[ 0 ] = "Rooms not found.";
     }
 
     // Generate unique booking number
@@ -117,40 +117,57 @@ function atollmatrix_reservations_metadata()
                 'std'     => '',
             ),
             array(
-                'name'    => '',
-                'id'      => 'atollmatrix_reservation_per_night_cost',
-                'type'    => 'text',
-                'class'   => 'textsmall',
-                'heading' => 'subhead',
-                'desc'    => esc_html__('Per night price', 'atollmatrix'),
-                'std'     => '',
+                'name'     => 'Room Rate',
+                'id'       => 'atollmatrix_reservation_rate_per_night',
+                'type'     => 'currency',
+                'class'    => 'textsmall',
+                'group'    => 'group',
+                'datatype' => 'roompernight',
+                'desc'     => esc_html__('Per night price', 'atollmatrix'),
+                'std'      => '',
+            ),
+            array(
+                'name'     => '',
+                'id'       => 'atollmatrix_reservation_subtotal_room_cost',
+                'type'     => 'currency',
+                'class'    => 'textsmall',
+                'heading'  => 'subhead',
+                'group'    => 'group',
+                'datatype' => 'roomsubtotal',
+                'desc'     => esc_html__('Subtotal', 'atollmatrix'),
+                'std'      => '',
             ),
             array(
                 'name'    => '',
-                'id'      => 'atollmatrix_reservation_total_room_cost',
-                'type'    => 'text',
+                'id'      => 'atollmatrix_reservation_tax',
+                'type'    => 'taxgenerate',
                 'class'   => 'textsmall',
                 'heading' => 'subhead',
-                'desc'    => esc_html__('Total Room price', 'atollmatrix'),
+                'desc'    => '',
                 'std'     => '',
             ),
             array(
-                'name'    => '',
-                'id'      => 'atollmatrix_reservation_room_paid',
-                'type'    => 'text',
-                'class'   => 'textsmall',
-                'heading' => 'subhead',
-                'desc'    => esc_html__('Paid Total', 'atollmatrix'),
-                'std'     => '',
+                'name'     => '',
+                'id'       => 'atollmatrix_reservation_total_room_cost',
+                'type'     => 'currency',
+                'inputis'  => 'readonly',
+                'class'    => 'textsmall',
+                'heading'  => 'subhead',
+                'group'    => 'group',
+                'datatype' => 'roomtotal',
+                'desc'     => esc_html__('Total', 'atollmatrix'),
+                'std'      => '',
             ),
             array(
-                'name'    => '',
-                'id'      => 'atollmatrix_reservation_room_paid_balance',
-                'type'    => 'text',
-                'class'   => 'textsmall',
-                'heading' => 'subhead',
-                'desc'    => esc_html__('Balance Total', 'atollmatrix'),
-                'std'     => '',
+                'name'     => 'Payments',
+                'id'       => 'atollmatrix_reservation_room_paid',
+                'type'     => 'currency',
+                'class'    => 'textsmall',
+                'heading'  => 'subhead',
+                'group'    => 'group',
+                'datatype' => 'payment',
+                'desc'     => '',
+                'std'      => '',
             ),
             array(
                 'name' => __('Notes', 'atollmatrix'),
@@ -169,7 +186,7 @@ function atollmatrix_reservations_metadata()
             array(
                 'name'     => 'Adults',
                 'id'       => 'atollmatrix_reservation_room_adults',
-                'type'     => 'number',
+                'type'     => 'guests',
                 'occupant' => 'adult',
                 'datafrom' => 'roomtype',
                 'maxcap'   => 'atollmatrix_max_adults',
@@ -185,7 +202,7 @@ function atollmatrix_reservations_metadata()
             array(
                 'name'     => 'Children',
                 'id'       => 'atollmatrix_reservation_room_children',
-                'type'     => 'number',
+                'type'     => 'guests',
                 'occupant' => 'child',
                 'datafrom' => 'roomtype',
                 'min'      => '0',
@@ -252,9 +269,9 @@ function atollmatrix_reservations_metadata()
     }
     error_log(print_r($the_reservation, true));
     if (!$reservation_instance->haveCustomer($reservation_id)) {
-        $reservations_box['fields'] = array_merge($reservations_box['fields'], $customer);
+        $reservations_box[ 'fields' ] = array_merge($reservations_box[ 'fields' ], $customer);
     } else {
-        $reservations_box['fields'] = array_merge($reservations_box['fields'], $customer_datafetch);
+        $reservations_box[ 'fields' ] = array_merge($reservations_box[ 'fields' ], $customer_datafetch);
     }
     return $reservations_box;
 }

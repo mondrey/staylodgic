@@ -431,9 +431,9 @@
 				const reservationDetails = document.getElementById("reservation-details");
 				if (checkin && checkout) {
 					reservationDetails.innerHTML = `
-					<p>Checkin: ${checkin.toLocaleDateString()}</p>
-					${checkout ? `<p>Checkout: ${checkout.toLocaleDateString()}</p>` : ''}
-					<p>Room nights: ${roomNights}</p>
+					<p class="reservation-post-checkin-date">Checkin: ${checkin.toLocaleDateString()}</p>
+					${checkout ? `<p class="reservation-post-checkout-date">Checkout: ${checkout.toLocaleDateString()}</p>` : ''}
+					<p data-numberofnights="${roomNights}" class="reservation-post-numberof-nights">Room nights: ${roomNights}</p>
 					`;
 				}
 			  
@@ -510,9 +510,9 @@
 					document.getElementById("atollmatrix_checkout_date").value = new Date(checkout - checkoutOffset).toISOString().split('T')[0];
 				  }
 			  
-				  var reservationDetails = "<p>Check-in: " + checkin.toLocaleDateString() + "</p>" +
-										   "<p>Checkout: " + checkout.toLocaleDateString() + "</p>" +
-										   "<p>Room nights: " + roomNights + "</p>";
+				  var reservationDetails = '<p class="reservation-post-checkin-date">Check-in: ' + checkin.toLocaleDateString() + '</p>' +
+										   '<p class="reservation-post-checkout-date">Checkout: ' + checkout.toLocaleDateString() + '</p>' +
+										   '<p data-numberofnights="'+roomNights+'" class="reservation-post-numberof-nights">Room nights: ' + roomNights + "</p>";
 				  document.getElementById("reservation-details").innerHTML = reservationDetails;
 				}
 			  });
