@@ -1,6 +1,21 @@
 jQuery(document).ready(function($) {
 	"use strict";
 
+	function PaymentsAdjuster() {
+		// Attach a click event handler to the "remove" links
+		$('.remove-payment').on('click', function (e) {
+			e.preventDefault();
+			var $removeLink = $(this);
+			var timestamp = $removeLink.data('timestamp');
+			var index = $removeLink.data('index');
+			var $liElement = $removeLink.closest('li');
+
+			// Remove the <li> element
+			$liElement.remove();
+		});
+	}
+	PaymentsAdjuster();
+
 	function currencyKeyIn() {
 
 		var totalStayNights = $('.reservation-post-numberof-nights').data('numberofnights');

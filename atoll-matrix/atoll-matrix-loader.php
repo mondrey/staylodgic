@@ -228,6 +228,7 @@ class AtollMatrix_Init
     public function atollmatrix_reservationsitemmetabox_init()
     {
         add_meta_box('reservationsInfo-meta', esc_html__('Reservation Options', 'imaginem-blocks-ii'), 'atollmatrix_reservationsitem_metaoptions', 'atmx_reservations', 'normal', 'low');
+        add_meta_box('reservationsInfo-changelog', esc_html__('Reservation Changelog', 'imaginem-blocks-ii'), 'atollmatrix_reservationsitem_changelog', 'atmx_reservations', 'normal', 'low');
     }
     // Customer Metabox
     public function atollmatrix_customersitemmetabox_init()
@@ -238,6 +239,7 @@ class AtollMatrix_Init
     public function atollmatrix_roomitemmetabox_init()
     {
         add_meta_box("room-meta", esc_html__("Room Options", "imaginem-blocks"), "atollmatrix_roomitem_metaoptions", "atmx_room", "normal", "low");
+        add_meta_box("room-changelog", esc_html__("Room Changelog", "imaginem-blocks"), "atollmatrix_roomitem_changelog", "atmx_room", "normal", "low");
     }
     // Payment Metabox
     public function atollmatrix_paymentitemmetabox_init()

@@ -177,6 +177,26 @@ function atollmatrix_room_metadata()
     );
     return $atollmatrix_room_box;
 }
+function atollmatrix_room_changelog()
+{
+
+    $atollmatrix_room_changelog = array(
+        'id'       => 'roommeta-box-changelog',
+        'title'    => 'Room Changelog',
+        'page'     => 'page',
+        'context'  => 'normal',
+        'priority' => 'high',
+        'fields'   => array(
+            array(
+                'name'    => esc_html__('', 'atollmatrix'),
+                'id'           => 'atollmatrix_changelog',
+                'type'         => 'changelog',
+                'std'          => '',
+            ),
+        ),
+    );
+    return $atollmatrix_room_changelog;
+}
 /*
  * Meta options for Room post type
  */
@@ -184,4 +204,9 @@ function atollmatrix_roomitem_metaoptions()
 {
     $atollmatrix_room_box = atollmatrix_room_metadata();
     atollmatrix_generate_metaboxes($atollmatrix_room_box, get_the_id());
+}
+function atollmatrix_roomitem_changelog()
+{
+    $atollmatrix_room_changelog = atollmatrix_room_changelog();
+    atollmatrix_generate_metaboxes($atollmatrix_room_changelog, get_the_id());
 }

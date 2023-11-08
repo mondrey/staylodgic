@@ -161,7 +161,7 @@ function atollmatrix_reservations_metadata()
             array(
                 'name'     => 'Payments',
                 'id'       => 'atollmatrix_reservation_room_paid',
-                'type'     => 'currency',
+                'type'     => 'currencyarray',
                 'class'    => 'textsmall',
                 'heading'  => 'subhead',
                 'group'    => 'group',
@@ -260,20 +260,32 @@ function atollmatrix_reservations_metadata()
     );
 
     $reservation_instance = new \AtollMatrix\Reservations();
-    error_log('=================');
-    $the_reservation = $reservation_instance->haveCustomer($reservation_id);
-    if (!$the_reservation) {
-        error_log('not found ' . $reservation_id);
-    } else {
-        error_log('found ' . $reservation_id);
-    }
-    error_log(print_r($the_reservation, true));
     if (!$reservation_instance->haveCustomer($reservation_id)) {
         $reservations_box[ 'fields' ] = array_merge($reservations_box[ 'fields' ], $customer);
     } else {
         $reservations_box[ 'fields' ] = array_merge($reservations_box[ 'fields' ], $customer_datafetch);
     }
     return $reservations_box;
+}
+function atollmatrix_reservations_changelog()
+{
+
+    $atollmatrix_rerservation_changelog = array(
+        'id'       => 'reservation-box-changelog',
+        'title'    => 'Reservation Changelog',
+        'page'     => 'page',
+        'context'  => 'normal',
+        'priority' => 'high',
+        'fields'   => array(
+            array(
+                'name'    => esc_html__('', 'atollmatrix'),
+                'id'           => 'atollmatrix_changelog',
+                'type'         => 'changelog',
+                'std'          => '',
+            ),
+        ),
+    );
+    return $atollmatrix_rerservation_changelog;
 }
 /*
  * Meta options for Reservations post type
@@ -283,3 +295,9 @@ function atollmatrix_reservationsitem_metaoptions()
     $reservations_box = atollmatrix_reservations_metadata();
     atollmatrix_generate_metaboxes($reservations_box, get_the_id());
 }
+function atollmatrix_reservationsitem_changelog()
+{
+    $atollmatrix_rerservations_changelog = atollmatrix_reservations_changelog();
+    atollmatrix_generate_metaboxes($atollmatrix_rerservations_changelog, get_the_id());
+}
+

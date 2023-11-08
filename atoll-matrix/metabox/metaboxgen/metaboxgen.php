@@ -460,6 +460,46 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                     echo '<input type="number" '. $priceof . $readonly . ' data-currencyformat="2" class="' . $class . ' currency-input" min="0" step="0.01" name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '" value="' . esc_attr($text_value) . '" size="30" />';
                     break;
 
+                case 'currencyarray':
+                    $dateTime = date("Y-m-d H:i:s");
+                    $text_value = $meta ? $meta : $field['std'];
+                    if (isset($field['datatype'])) {
+                        $priceof = 'data-priceof="' . $field['datatype'] . '"';
+                    }
+                    $readonly = '';
+                    if (isset($field['inputis'])) {
+                        $readonly = ' readonly';
+                    }
+                    echo '<input type="number" ' . $priceof . $readonly . ' data-currencyformat="2" class="' . $class . ' currency-input" min="0" step="0.01" name="atollmatrix_reservation_room_paid[' . $dateTime . ']" id="', esc_attr($field['id']), '" value="" size="30" />';
+                    echo "<ul>";
+                
+                    $payments = get_post_meta(get_the_id(), 'atollmatrix_reservation_room_paid', true);
+                    $total_cost = get_post_meta(get_the_id(), 'atollmatrix_reservation_total_room_cost', true);
+                    $total_payments = 0;
+                    if (is_array($payments) && !empty($payments)) {
+                        echo "<ul>";
+                        foreach ($payments as $timestamp => $value) {
+                            if ( isset( $value ) && '' !== $value) {
+                                $payment_id = 'payment-' . sanitize_title($timestamp);
+                                echo '<li class="' . $payment_id . '">';
+                                echo '<div class="payment-date-lister">';
+                                echo atollmatrix_price( $value );
+                                echo ' [<span class="remove-payment" data-timestamp="$timestamp" data-index="$index">remove</span>] ' .$timestamp;
+                                echo '<input type="hidden" name="atollmatrix_reservation_room_paid[' . $timestamp . ']" value="' . $value . '" size="30" />';
+                                echo '</div>';                                    
+                                echo "</li>";
+
+                                $total_payments = $total_payments + $value;
+                            }
+                        }
+                        echo "</ul>";
+                        echo '<p class="reservation-payment-balance">' . __( 'Balance' , 'atollmatrix' ) . '</p>';
+                        $balance = intval( $total_cost ) - intval( $total_payments );
+                        echo atollmatrix_price( $balance );
+                    }
+                
+                        break;
+                    
                 case 'switch':
                     $text_value = $meta ? $meta : $field['std'];
                     echo '<div class="switch-toggle">';
@@ -496,9 +536,9 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                         </div>
                     ';
 
-                    error_log( '===== bed layout');
-                    error_log( $field['id']);
-                    error_log( print_r($meta, true));
+                    // error_log( '===== bed layout');
+                    // error_log( $field['id']);
+                    // error_log( print_r($meta, true));
 
                     $data = array();
                     $data = $meta;
@@ -840,6 +880,37 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
 
                     break;
 
+                    case 'changelog':
+                        $post_id = get_the_id();
+                    
+                        // Retrieve the change log for the post
+                        $change_log = get_post_meta($post_id, 'atollmatrix_change_log', true);
+
+                        // echo '<pre>';
+                        // print_r($change_log);
+                        // echo '</pre>';
+                        // Check if the change log exists and is an array
+                        $reversed_change_log = array_reverse($change_log);
+                        echo '<div class="settings-change-log">';
+                        if (is_array($reversed_change_log) && !empty($reversed_change_log)) {
+                            echo '<ol>';
+                            foreach ($reversed_change_log as $change) {
+                                echo '<li>';
+                                echo '<strong>'. $change['field_id'].'</strong> changed by '.$change['user'].' on ' . $change['timestamp'] . '<br>';
+                                // Format old and new values using the format_value function
+                                echo '<strong>Old Value:</strong> ' . atollmatrix_format_value($change['old_value']) . '<hr/>';
+                                echo '<strong>New Value:</strong> ' . atollmatrix_format_value($change['new_value']) . '<hr/>';
+                                echo '</li>';
+                            }
+                            echo '</ol>';
+                        } else {
+                            echo 'No change log available for this post.';
+                        }
+                        echo '</div>';
+                        break;
+                    
+                    
+
                 case 'payments':
                     $class = '';
                     if (isset($field['target'])) {
@@ -1016,7 +1087,7 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                         if (isset($meta['number'])) {
                             for ($i = 0; $i < $meta['number']; $i++) {
                                 $age = isset($meta['age'][$i]) ? $meta['age'][$i] : '';
-                                echo "<input name='atollmatrix_reservation_room_children[age][]' type='text' data-counter='" . $i . "' value='" . $age . "' placeholder='Enter age'>";
+                                echo "<input name='atollmatrix_reservation_room_children[age][]' type='number' data-counter='" . $i . "' value='" . $age . "' placeholder='Enter age'>";
                             }
                         }
                         echo '</div>';
@@ -1109,22 +1180,6 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
             echo '<br/><span id="reservation-tax-generate" class="button button-primary button-small">Generate Tax</span>&nbsp;';
             echo '<span id="reservation-tax-exclude" class="button button-secondary button-small">Exclude Tax</span><br/><br/>';
         }
-        if ( isset( $field['datatype'] ) && 'payment' == $field['datatype'] ) {
-            $reservationTotal = 0;
-            $reservationPaid = 0;
-            if (isset($reservationData["atollmatrix_reservation_total_room_cost"][0])) {
-                $reservationTotal = $reservationData["atollmatrix_reservation_total_room_cost"][0];
-            }
-            if (isset($reservationData["atollmatrix_reservation_room_paid"][0])) {
-                $reservationPaid = $reservationData["atollmatrix_reservation_room_paid"][0];
-            }
-
-            echo '<p class="reservation-payment-balance">' . __( 'Balance' , 'atollmatrix' ) . '</p>';
-            $reservationBalance = intval( $reservationTotal ) - intval(  $reservationPaid );
-            echo atollmatrix_price( $reservationBalance );
-            echo '<br/>';
-        }
-
         echo '</div>';
     }
 
@@ -1336,27 +1391,75 @@ function atollmatrix_checkdata($post_id)
 
 function atollmatrix_savedata($atollmatrix_metaboxdata, $post_id)
 {
-
+    
+    // delete_post_meta($post_id, 'atollmatrix_change_log');
     if (is_array($atollmatrix_metaboxdata['fields'])) {
         foreach ($atollmatrix_metaboxdata['fields'] as $field) {
-            $old = get_post_meta($post_id, $field['id'], true);
-            $new = '';
-            if (isset($_POST[$field['id']])) {
-                $new = $_POST[$field['id']];
-            }
+            $field_id = $field['id'];
+            $old = get_post_meta($post_id, $field_id, true);
+            $new = isset($_POST[$field_id]) ? $_POST[$field_id] : '';
 
-            if (isset($new)) {
-                if ($new && $new != $old) {
-                    delete_post_meta($post_id, $field['id']);
-                    update_post_meta($post_id, $field['id'], $new);
-                } elseif ($new == "0") {
-                    delete_post_meta($post_id, $field['id']);
-                    update_post_meta($post_id, $field['id'], $new);
-                } elseif ('' == $new && $old) {
-                    delete_post_meta($post_id, $field['id'], $old);
+            if ( 'atollmatrix_reservation_room_paid' == $field_id ) {
+                // Get the first element of the array
+                $firstElement = reset($new);
+                // Check if the first element is empty
+                if (empty($firstElement)) {
+                    // Remove the first element
+                    array_shift($new);
+
+                    foreach ($new as $record) {
+                        if (!in_array($record, $old)) {
+                            // Record is missing from $old, add it to the missingRecords array
+                            $missingRecords[] = $record;
+                        }
+                    }
+                    
+                    if (empty($missingRecords)) {
+                        // echo "No records missing in the new array.";
+                    } else {
+                        $new = '';
+                        $old = '';
+                    }
+
+
                 }
             }
+            if ($new !== $old) {
+                // Create or retrieve the log array
+                $change_log = get_post_meta($post_id, 'atollmatrix_change_log', true);
+                if (!is_array($change_log)) {
+                    $change_log = array();
+                }
+                // Create a log entry with timestamp, field ID, old value, and new value
+                
+                if ( '' == $field['name'] ) {
+                    $storage_name = $field['desc'];
+                } else {
+                    $storage_name = $field['name'];
+                }
 
+                $current_user = wp_get_current_user();
+                $username = $current_user->user_login;
+
+                $log_entry = array(
+                    'timestamp' => current_time('mysql'),
+                    'user' => $username,
+                    'field_id' => $storage_name,
+                    'old_value' => $old,
+                    'new_value' => $new,
+                );
+
+                // Add the log entry to the change log
+                $change_log[] = $log_entry;
+
+                // Update the post meta field with the new value
+                delete_post_meta($post_id, $field_id);
+                update_post_meta($post_id, $field_id, $new);
+
+                // Update the change log in the post meta
+                update_post_meta($post_id, 'atollmatrix_change_log', $change_log);
+            }
         }
     }
 }
+

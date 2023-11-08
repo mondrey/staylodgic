@@ -70,6 +70,25 @@ class Booking
 		add_action('wp_ajax_nopriv_excludeTax', array($this, 'excludeTax'));
 	}
 
+	function paymentAdjuster() {
+		// Handle the removal request here and update the data array
+		// Make sure to sanitize and validate the input data
+		// Return the updated data as a JSON response
+		// Example:
+		
+		$data = array(
+			"2023-11-08 15:30:45" => "Value 1",
+			"2023-11-09 10:20:15" => "Value 2",
+			"2023-11-10 12:45:30" => "Value 3"
+		);
+	
+		$keyToRemove = sanitize_text_field($_POST['remove']);
+		unset($data[$keyToRemove]);
+	
+		wp_send_json($data);
+		wp_die();
+	}
+
 	public function excludeTax() {
 		$response = array();
 

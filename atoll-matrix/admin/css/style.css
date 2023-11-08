@@ -847,3 +847,7 @@
 #bedlayout-box {
 	display: none;
 }
+.remove-payment {
+	color: #0064ff;
+	cursor: pointer;
+}

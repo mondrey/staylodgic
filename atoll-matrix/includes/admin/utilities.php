@@ -1,4 +1,23 @@
 <?php
+// Function to recursively format arrays as strings
+function atollmatrix_format_value($value) {
+    $formatted_elements = '';
+    if (is_array($value)) {
+        $formatted_start = '<ul>';
+        foreach ($value as $key => $item) {
+            $formatted_elements .= '<li><strong>' . $key . ':</strong> ' . atollmatrix_format_value($item) . '</li>';
+        }
+        $formatted_end = '</ul>';
+        if ( '' == $formatted_elements ) {
+            return false;
+        } else {
+            return $formatted_start.$formatted_elements.$formatted_end;
+        }
+        
+    } else {
+        return $value;
+    }
+}
 function atollmatrix_readable_date($originalDate)
 {
     $formattedDate = date("F jS, Y", strtotime($originalDate));
