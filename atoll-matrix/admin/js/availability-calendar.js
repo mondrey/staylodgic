@@ -343,9 +343,8 @@
 			
 				$(this).on('click', '.minus-btn', function() {
 					var guest = input.attr('data-guest');
-					var minValue = parseInt(input.attr('data-min'));
 					var value = parseInt(input.val());
-					if (value > minValue) {
+					if (value > 0) {
 						input.val(value - 1);
 						calculateSum();
 						if (guest === "child") {
@@ -357,18 +356,13 @@
 			
 				$(this).on('click', '.plus-btn', function() {
 					var guest = input.attr('data-guest');
-					var minValue = parseInt(input.attr('data-min'));
-					var maxValue = parseInt(input.attr('data-max'));
-					var guestmaxValue = parseInt(input.attr('data-guestmax'));
 					var value = parseInt(input.val());
-					if (value < maxValue && calculateSum() + 1 <= guestmaxValue) {
-						$('.child-number-notice').hide();
-						input.val(value + 1);
-						calculateSum();
-						if (guest === "child") {
-							var extraInput = $("<input name='atollmatrix_reservation_room_children[age][]' type='text' data-counter='" + value + "' placeholder='Enter age'>");
-							$("#guest-age").append(extraInput);  // append the extra input to the "guest-age" div
-						}
+					$('.child-number-notice').hide();
+					input.val(value + 1);
+					calculateSum();
+					if (guest === "child") {
+						var extraInput = $("<input name='atollmatrix_reservation_room_children[age][]' type='text' data-counter='" + value + "' placeholder='Enter age'>");
+						$("#guest-age").append(extraInput);  // append the extra input to the "guest-age" div
 					}
 					$('#atollmatrix_room_id').trigger('change');
 				});
@@ -386,17 +380,6 @@
 					console.log('Total sum:', sum);
 					return sum;
 				}
-
-				function calculateSum() {
-					var sum = 0;
-					$('.number-input .number-value').each(function() {
-					sum += parseInt($(this).val());
-					});
-					console.log('Total sum:', sum);
-					return sum;
-				}
-			  
-			  
 
 		}
 

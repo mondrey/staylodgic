@@ -890,23 +890,29 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                         // print_r($change_log);
                         // echo '</pre>';
                         // Check if the change log exists and is an array
-                        $reversed_change_log = array_reverse($change_log);
-                        echo '<div class="settings-change-log">';
-                        if (is_array($reversed_change_log) && !empty($reversed_change_log)) {
-                            echo '<ol>';
-                            foreach ($reversed_change_log as $change) {
-                                echo '<li>';
-                                echo '<strong>'. $change['field_id'].'</strong> changed by '.$change['user'].' on ' . $change['timestamp'] . '<br>';
-                                // Format old and new values using the format_value function
-                                echo '<strong>Old Value:</strong> ' . atollmatrix_format_value($change['old_value']) . '<hr/>';
-                                echo '<strong>New Value:</strong> ' . atollmatrix_format_value($change['new_value']) . '<hr/>';
-                                echo '</li>';
+                        if (is_array($change_log) && !empty($change_log)) {
+
+                            $reversed_change_log = array_reverse($change_log);
+                        
+                            echo '<div class="settings-change-log">';
+                            if (is_array($reversed_change_log) && !empty($reversed_change_log)) {
+                                echo '<ol>';
+                                foreach ($reversed_change_log as $change) {
+                                    echo '<li>';
+                                    echo '<strong>'. $change['field_id'].'</strong> changed by '.$change['user'].' on ' . $change['timestamp'] . '<br>';
+                                    // Format old and new values using the format_value function
+                                    echo '<strong>Old Value:</strong> ' . atollmatrix_format_value($change['old_value']) . '<hr/>';
+                                    echo '<strong>New Value:</strong> ' . atollmatrix_format_value($change['new_value']) . '<hr/>';
+                                    echo '</li>';
+                                }
+                                echo '</ol>';
+                            } else {
+                                echo 'No change log available for this post.';
                             }
-                            echo '</ol>';
+                            echo '</div>';
                         } else {
                             echo 'No change log available for this post.';
                         }
-                        echo '</div>';
                         break;
                     
                     
