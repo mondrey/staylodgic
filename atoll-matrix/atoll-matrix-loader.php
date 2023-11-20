@@ -25,7 +25,6 @@ class AtollMatrix_Init
         add_action('admin_init', array($this, 'atollmatrix_reservationsitemmetabox_init'));
         add_action('admin_init', array($this, 'atollmatrix_customersitemmetabox_init'));
         add_action('admin_init', array($this, 'atollmatrix_roomitemmetabox_init'));
-        add_action('admin_init', array($this, 'atollmatrix_paymentitemmetabox_init'));
 
         add_action('init', array($this, 'atollmatrix_load_textdomain'));
         add_action('init', array($this, 'atollmatrix_load_metaboxes'));
@@ -49,7 +48,6 @@ class AtollMatrix_Init
         require_once plugin_dir_path(__FILE__) . '/custom-posts/class-imaginem-reservation-posts.php';
         require_once plugin_dir_path(__FILE__) . '/custom-posts/class-imaginem-customer-posts.php';
         require_once plugin_dir_path(__FILE__) . '/custom-posts/class-imaginem-room-posts.php';
-        require_once plugin_dir_path(__FILE__) . '/custom-posts/class-imaginem-payment-posts.php';
     }
 
     public function atollmatrix_load_availablity_calendar()
@@ -86,7 +84,6 @@ class AtollMatrix_Init
         require_once plugin_dir_path(__FILE__) . '/metabox/metaboxes/reservation-metaboxes.php';
         require_once plugin_dir_path(__FILE__) . '/metabox/metaboxes/customer-metaboxes.php';
         require_once plugin_dir_path(__FILE__) . '/metabox/metaboxes/room-metaboxes.php';
-        require_once plugin_dir_path(__FILE__) . '/metabox/metaboxes/payment-metaboxes.php';
     }
 
     public function atollmatrix_load_admin_styles()
@@ -241,12 +238,6 @@ class AtollMatrix_Init
         add_meta_box("room-meta", esc_html__("Room Options", "imaginem-blocks"), "atollmatrix_roomitem_metaoptions", "atmx_room", "normal", "low");
         add_meta_box("room-changelog", esc_html__("Room Changelog", "imaginem-blocks"), "atollmatrix_roomitem_changelog", "atmx_room", "normal", "low");
     }
-    // Payment Metabox
-    public function atollmatrix_paymentitemmetabox_init()
-    {
-        add_meta_box("payment-meta", esc_html__("Payment Options", "imaginem-blocks"), "atollmatrix_paymentitem_metaoptions", "atmx_payments", "normal", "low");
-    }
-
 }
 
 new AtollMatrix_Init();

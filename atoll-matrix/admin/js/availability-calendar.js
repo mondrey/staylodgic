@@ -344,7 +344,11 @@
 				$(this).on('click', '.minus-btn', function() {
 					var guest = input.attr('data-guest');
 					var value = parseInt(input.val());
-					if (value > 0) {
+					var minValue = 1;
+					if (guest === "child") {
+						minValue = 0;
+					}
+					if (value > minValue) {
 						input.val(value - 1);
 						calculateSum();
 						if (guest === "child") {
