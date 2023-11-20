@@ -60,6 +60,8 @@ class Booking
 		add_action('wp_ajax_process_SelectedRoom', array($this, 'process_SelectedRoom')); // For logged-in users
 		add_action('wp_ajax_nopriv_process_SelectedRoom', array($this, 'process_SelectedRoom')); // For non-logged-in users
 
+		add_action('wp_ajax_generate_BedMetabox', array($this, 'generate_BedMetabox_callback'), 10, 3); // For logged-in users
+
 		add_action('wp_ajax_bookRooms', array($this, 'bookRooms'));
 		add_action('wp_ajax_nopriv_bookRooms', array($this, 'bookRooms'));
 
@@ -927,6 +929,92 @@ class Booking
 		return $roomrate;
 	}
 
+	public function generate_BedMetabox_callback()
+	{
+        if (isset($_POST['roomID'])) {
+            $room_id = $_POST['roomID'];
+        }
+        if (isset($_POST['fieldID'])) {
+            $meta_field = $_POST['fieldID'];
+        }
+        if (isset($_POST['metaValue'])) {
+            $meta_value = $_POST['metaValue'];
+        }
+
+		if ( '' !== $room_id) {
+			$html = self::generate_BedMetabox($room_id, $meta_field, $meta_value );
+		} else {
+			$html = '<span class="bedlayout-room-notfound-error">Room not found!</span>';
+		}
+
+		wp_send_json($html);
+	}
+
+	public function generate_BedMetabox($room_id, $meta_field, $meta_value )
+	{
+
+		$html = '';
+
+		$room_data = get_post_custom($room_id);
+
+		$bedinputcount = 0;
+
+		error_log( $room_id );
+		error_log( $meta_field );
+		error_log( $meta_value );
+
+		if (isset($room_data[ "atollmatrix_alt_bedsetup" ][ 0 ])) {
+			$bedsetup       = $room_data[ "atollmatrix_alt_bedsetup" ][ 0 ];
+			$bedsetup_array = unserialize($bedsetup);
+
+			foreach ($bedsetup_array as $roomId => $roomData) {
+				// Get the bed layout for this room
+
+				$bedLayout = '';
+				$bedCount  = 0;
+				foreach ($roomData[ 'bedtype' ] as $bedFieldID => $bedName) {
+					$bedQty = $roomData[ 'bednumber' ][ $bedFieldID ];
+					if ($bedCount > 0) {
+						$bedLayout .= ' ';
+					}
+					for ($i = 0; $i < $bedQty; $i++) {
+						if ($i > 0) {
+							$bedLayout .= ' ';
+						}
+						$bedLayout .= $bedName;
+					}
+					$bedCount++;
+				}
+
+				$bedinputcount++;
+				
+				$html .= "<label for='".esc_attr($meta_field)."-".$bedinputcount."'>";
+				$html .= "<input type='radio' id='".esc_attr($meta_field)."-".$bedinputcount."' name='".esc_attr($meta_field)."' value='$bedLayout'";
+
+				// Check the first radio input by default
+				if ($meta_value === $bedLayout) {
+					$html .= " checked";
+				}
+
+				$html .= '>';
+				$html .= '<span class="checkbox-label checkbox-bed-label">';
+				$html .= '<div class="guest-bed-wrap guest-bed-' . sanitize_title($bedLayout) . '-wrap">';
+				foreach ($roomData[ 'bedtype' ] as $bedFieldID => $bedName) {
+
+					$bedQty = $roomData[ 'bednumber' ][ $bedFieldID ];
+					for ($i = 0; $i < $bedQty; $i++) {
+						$html .= get_BedLayout($bedName, $bedFieldID . '-' . $i);
+					}
+				}
+				$html .= '</div>';
+				$html .= '</span>';
+				$html .= '</label>';
+			}
+		}
+
+		return $html;
+	}
+
 	public function generate_BedInformation($room_id)
 	{
 
@@ -976,7 +1064,7 @@ class Booking
 
 					$bedQty = $roomData[ 'bednumber' ][ $bedFieldID ];
 					for ($i = 0; $i < $bedQty; $i++) {
-						$html .= self::get_BedLayout($bedName, $bedFieldID . '-' . $i);
+						$html .= get_BedLayout($bedName, $bedFieldID . '-' . $i);
 					}
 				}
 				$html .= '</div>';
@@ -993,22 +1081,7 @@ class Booking
 		$html           = '';
 		$bedNames_array = explode(' ', $bedNames);
 		foreach ($bedNames_array as $key => $bedName) {
-			$html .= self::get_BedLayout($bedName, $key);
-		}
-
-		return $html;
-	}
-
-	public function get_BedLayout($bedName, $bedFieldID = null)
-	{
-
-		switch ($bedName) {
-			case 'kingbed':
-				$html = '<div class="guest-bed guest-bed-' . sanitize_title($bedName) . '"></div>';
-				break;
-			case 'twinbed':
-				$html = '<div class="guest-bed type-twinbed-twinbed-' . $bedFieldID . ' guest-bed-' . $bedName . '"></div>';
-				break;
+			$html .= get_BedLayout($bedName, $key);
 		}
 
 		return $html;
@@ -1548,6 +1621,8 @@ HTML;
 				'atollmatrix_reservation_status' => 'confirmed',
 				'atollmatrix_checkin_date'       => $checkin,
 				'atollmatrix_checkout_date'      => $checkout,
+				'atollmatrix_reservation_room_bedlayout' => $reservationData['bedlayout'],
+				'atollmatrix_reservation_room_mealplan' => $reservationData['mealplan'],
 				'atollmatrix_reservation_room_adults' => $reservationData['adults'],
 				'atollmatrix_reservation_room_children' => $children_array,
 				'atollmatrix_reservation_rate_per_night' => $reservationData['ratepernight'],

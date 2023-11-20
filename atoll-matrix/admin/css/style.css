@@ -259,15 +259,8 @@
 	color:#444;
 }
 .metabox-wrapper input[type=radio] {
-	margin-bottom:10px;
-	width:100%;
-	line-height:16px;
-	color:#333;
-	padding: 9px; 
-	outline: 0;  
-	font-size:12px;  
-	width: 20px;
-	margin-left:20px;
+	position: relative;
+	top: 15px;
 }
 
 .metabox-wrapper textarea {
@@ -850,4 +843,37 @@
 .remove-payment {
 	color: #0064ff;
 	cursor: pointer;
+}
+.bedlayout-room-notfound-error {
+	padding: 5px 10px;
+	color:#fff;
+	background: #ff0000;
+}
+
+.metaboxtype_bedlayout label {
+	display: flex;
+	cursor: pointer;
+	font-weight: 500;
+	position: relative;
+	overflow: hidden;
+	margin-bottom: 0.375em;
+}
+.guest-bed-kingbed {
+	width: 36px;
+	height: 37px;
+	background-image: url( '../../assets/svgs/bed-king.svg' );
+	display: inline-block;
+	background-repeat: no-repeat;
+	position: relative;
+}
+.guest-bed-twinbed {
+	width: 36px;
+	height: 37px;
+	background-image: url( '../../assets/svgs/bed-single.svg' );
+	display: inline-block;
+	background-repeat: no-repeat;
+	position: relative;
+}
+.type-twinbed-twinbed-two.guest-bed-twinbed {
+	left: -10px;
 }

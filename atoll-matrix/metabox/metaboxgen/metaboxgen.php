@@ -847,7 +847,7 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                     if (isset($field['target'])) {
                         $field['options'] = atollmatrix_get_select_target_options($field['target']);
                     }
-                    echo '<div class="selectbox-type-selector"><select class="chosen-select-metabox" name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '">';
+                    echo '<div class="selectbox-type-selector"><select class="chosen-select-metabox choice-', esc_attr($field['id']), '" name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '">';
                     foreach ($field['options'] as $key => $option) {
                         if ($key == '0') {
                             $key = __('All the items', 'atollmatrix');
@@ -855,28 +855,6 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                         echo '<option value="' . esc_attr($key) . '"', $meta == $key ? ' selected' : '', '>', esc_attr($option), '</option>';
                     }
                     echo '</select></div>';
-
-                    if (isset($field['target']) && isset($meta)) {
-                        if ($field['target'] == "client_names") {
-                            if (get_post_type($meta) == 'clients') {
-                                if (atollmatrix_has_password($meta)) {
-                                    echo '<div class="metabox-notice metabox-notice-ok">';
-                                    echo esc_html__('Client selected has password protection.', 'atollmatrix');
-                                    echo '<br/><strong>';
-                                    echo esc_html__('Gallery password protected.', 'atollmatrix');
-                                    echo '</strong></div>';
-                                } else {
-                                    echo '<div class="metabox-notice metabox-notice-no-pass">';
-                                    echo esc_html__('Client selected does not have password protection.', 'atollmatrix');
-                                    echo '<br/>';
-                                    echo esc_html__('The gallery will be available for everyone.', 'atollmatrix');
-                                    echo '<br/><br/>';
-                                    echo esc_html__('Add a password to the Client page to protect the gallery.', 'atollmatrix');
-                                    echo '</div>';
-                                }
-                            }
-                        }
-                    }
 
                     break;
 
@@ -914,8 +892,86 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                             echo 'No change log available for this post.';
                         }
                         break;
+
+                case 'mealplan_included':
+
+                    $mealPlans = atollmatrix_get_option('mealplan');
+            
+                    if (is_array($mealPlans) && count($mealPlans) > 0) {
+                        $includedMealPlans = array();
+                        $optionalMealPlans = array();
+            
+                        foreach ($mealPlans as $id => $plan) {
+                            if ($plan[ 'choice' ] === 'included') {
+                                $includedMealPlans[ $id ] = $plan;
+                            } elseif ($plan[ 'choice' ] === 'optional') {
+                                $optionalMealPlans[ $id ] = $plan;
+                            }
+                        }
+
+                        $html = '';
+                        $html_input = '';
+
+                        echo '<div class="room-included-meals">';
+                        if (is_array($includedMealPlans) && count($includedMealPlans) > 0) {
+                            foreach ($includedMealPlans as $id => $plan) {
+                                if ( isset( $plan[ 'mealtype' ] ) ) {
+                                    $html_input .= atollmatrix_get_mealplan_labels($plan[ 'mealtype' ]) . __(' included.', 'atollmatrix') . '\r\n';
+                                }
+                            }
+                        }
+                        $textarea_value = $meta ? $meta : $html_input;
+                        echo '<textarea name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '" cols="60" rows="4" >' . esc_textarea($textarea_value) . '</textarea>';
+                            
+                        echo '</div>';
+
+                        echo $html;
+                    }
                     
+                    break;
+
+                case 'bedlayout' :
+
+                    $the_post_id = get_the_ID(); // Replace this with the actual post ID
+                    $room_id = get_post_meta($the_post_id, 'atollmatrix_room_id', true);
+
+                    $booking_instance = new \AtollMatrix\Booking();
+                    $bedlayoutInputs     = $booking_instance->generate_BedMetabox($room_id, $field['id'], $meta);
+
+                    echo '<div id="metabox-bedlayout" data-field="'.esc_attr($field['id']).'" data-metavalue="'.esc_attr($meta).'">';
+                    echo $bedlayoutInputs;
+                    echo '</div>';
                     
+                    break;
+                    
+                case 'mealplan':
+                
+                    $mealPlans = atollmatrix_get_option('mealplan');
+            
+                    if (is_array($mealPlans) && count($mealPlans) > 0) {
+                        $includedMealPlans = array();
+                        $optionalMealPlans = array();
+            
+                        foreach ($mealPlans as $id => $plan) {
+                            if ($plan[ 'choice' ] === 'included') {
+                                $includedMealPlans[ $id ] = $plan;
+                            } elseif ($plan[ 'choice' ] === 'optional') {
+                                $optionalMealPlans[ $id ] = $plan;
+                            }
+                        }
+            
+                        $html = '';
+                        echo '<div class="selectbox-type-selector"><select class="chosen-select-metabox" name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '">';
+                        echo '<option value="none"', $meta == 'none' ? ' selected' : '', '>None</option>';
+                        foreach ($optionalMealPlans as $key => $option) {
+                            echo '<option value="' . esc_attr($option[ 'mealtype' ]) . '"', $meta == $option[ 'mealtype' ] ? ' selected' : '', '>' . atollmatrix_get_mealplan_labels($option[ 'mealtype' ]) . '</option>';
+                        }
+                        echo '</select></div>';
+
+                        echo $html;
+                    }
+                    
+                    break;
 
                 case 'payments':
                     $class = '';

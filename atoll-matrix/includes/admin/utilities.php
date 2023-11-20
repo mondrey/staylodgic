@@ -1,4 +1,18 @@
 <?php
+function get_BedLayout($bedName, $bedFieldID = null)
+{
+
+    switch ($bedName) {
+        case 'kingbed':
+            $html = '<div class="guest-bed guest-bed-' . sanitize_title($bedName) . '"></div>';
+            break;
+        case 'twinbed':
+            $html = '<div class="guest-bed type-twinbed-twinbed-' . $bedFieldID . ' guest-bed-' . $bedName . '"></div>';
+            break;
+    }
+
+    return $html;
+}
 // Function to recursively format arrays as strings
 function atollmatrix_format_value($value) {
     $formatted_elements = '';

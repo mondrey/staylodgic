@@ -235,12 +235,44 @@
 			
 			$('#atollmatrix_room_id').change(function() {
 
+
 				$('.notify-number-over-max').hide();
 
 				var selectedValue = $(this).val(); // Get the selected room value
 				var occupantsData = $('.occupants-range').attr('data-occupants'); // Get the data-occupants attribute
 				var occupantsObject = JSON.parse(occupantsData); // Parse the JSON string into an object
+
+
+				var bedLayoutField = $('#metabox-bedlayout').attr('data-field');
+				var bedMetaValue = $('#metabox-bedlayout').attr('data-metavalue');
+				// Change Bedlayout for chosen room
+				
+				$.ajax({
+					type: 'POST',
+					url: ajaxurl,
+					data: {
+						action: 'generate_BedMetabox',
+						roomID: selectedValue,
+						fieldID: bedLayoutField,
+						metaValue: bedMetaValue
+					},
+					success: function(response) {
+						// Handle the AJAX response here
+						if (response.success) {
+							// Metadata stored successfully
+							console.log(response.data.message);
+						} else {
+							// Error storing metadata
+							$('#metabox-bedlayout').html(response);
+						}
+					},
+					error: function(xhr, status, error) {
+						// Handle AJAX error here
+						console.error(error);
+					}
+				});
 			
+				// Adjust Guest max count for occupants
 				// Check if the selected room ID exists in the occupants object
 				if (occupantsObject.hasOwnProperty(selectedValue)) {
 
@@ -355,7 +387,7 @@
 							$("#guest-age input[data-counter='" + (value - 1) + "']").remove();  // remove the corresponding extra input field
 						}
 					}
-					$('#atollmatrix_room_id').trigger('change');
+					// $('#atollmatrix_room_id').trigger('change');
 				});
 			
 				$(this).on('click', '.plus-btn', function() {
@@ -368,7 +400,7 @@
 						var extraInput = $("<input name='atollmatrix_reservation_room_children[age][]' type='text' data-counter='" + value + "' placeholder='Enter age'>");
 						$("#guest-age").append(extraInput);  // append the extra input to the "guest-age" div
 					}
-					$('#atollmatrix_room_id').trigger('change');
+					// $('#atollmatrix_room_id').trigger('change');
 				});
 			
 				// Calculate the initial sum
