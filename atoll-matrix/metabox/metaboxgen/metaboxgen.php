@@ -417,7 +417,7 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
 
                 case 'taxgenerate':
 
-                    $the_post_id = get_the_ID(); // Replace this with the actual post ID
+                    $the_post_id = get_the_ID();
                     $taxStatus = get_post_meta($the_post_id, 'atollmatrix_tax', true);
                     $taxHTML = get_post_meta($the_post_id, 'atollmatrix_tax_html_data', true);
                     $taxData = get_post_meta($the_post_id, 'atollmatrix_tax_data', true);
@@ -427,6 +427,8 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                     if ( 'enabled' == $taxStatus ) {
                         echo '<div class="input-tax-summary-wrap-inner">';
                         echo $taxHTML;
+                        error_log( '------ tax out -------' );
+                        error_log( print_r( $taxHTML, true) );
                         echo '</div>';
                     }
                     if ( 'excluded' == $taxStatus ) {
@@ -916,7 +918,7 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                         if (is_array($includedMealPlans) && count($includedMealPlans) > 0) {
                             foreach ($includedMealPlans as $id => $plan) {
                                 if ( isset( $plan[ 'mealtype' ] ) ) {
-                                    $html_input .= atollmatrix_get_mealplan_labels($plan[ 'mealtype' ]) . __(' included.', 'atollmatrix') . '\r\n';
+                                    $html_input .= atollmatrix_get_mealplan_labels($plan[ 'mealtype' ]) . __(' included. ', 'atollmatrix');
                                 }
                             }
                         }

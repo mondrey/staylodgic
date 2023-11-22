@@ -92,8 +92,12 @@ jQuery(document).ready(function($) {
 		var adults = $('#atollmatrix_reservation_room_adults').val();
 		var children = $('#atollmatrix_reservation_room_children').val();
 
-		var totalGuests = parseInt( adults ) + parseInt( children );
+		if ( '' == children ) {
+			children = 0;
+		}
 
+		var totalGuests = parseInt( adults ) + parseInt( children );
+		console.log('Total guests ' + totalGuests);
 		var postID = $('input[name="post_ID"]').val();
 	
 		// Make an Ajax request to fetch the room names

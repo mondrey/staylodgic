@@ -116,11 +116,8 @@ class Booking
 			$tax = atollmatrix_apply_tax($subtotal, $staynights, $totalGuests, $output = 'html');
 	
 			if ($tax) {
-				$html = '<div class="input-tax-summary-wrap-inner">';
-				foreach ($tax['details'] as $totalID => $totalvalue) {
-					$html .= '<div class="tax-summary tax-summary-details">' . $totalvalue . '</div>';
-				}
-				$html .= '</div>';
+
+				$html = atollmatrix_generate_tax_summary( $tax['details'] );
 
 				$response['html'] = $html;
 				$response['total'] = $tax['total'];
@@ -1611,6 +1608,13 @@ HTML;
 			$children_array['age'][] = $value;
 		}
 
+		$tax_status = 'excluded';
+		$tax_html = false;
+		if ( atollmatrix_has_tax() ) {
+			$tax_status = 'enabled';
+			$tax_html = atollmatrix_generate_tax_summary( $reservationData['tax_html']['details'] );
+		}
+
 		// Here you can also add other post data like post_title, post_content etc.
 		$post_data = array(
 			'post_type' => 'atmx_reservations', // Your custom post type
@@ -1621,6 +1625,9 @@ HTML;
 				'atollmatrix_reservation_status' => 'confirmed',
 				'atollmatrix_checkin_date'       => $checkin,
 				'atollmatrix_checkout_date'      => $checkout,
+				'atollmatrix_tax' => $tax_status,
+				'atollmatrix_tax_html_data' => $tax_html,
+				'atollmatrix_tax_data' => $reservationData['tax'],
 				'atollmatrix_reservation_room_bedlayout' => $reservationData['bedlayout'],
 				'atollmatrix_reservation_room_mealplan' => $reservationData['mealplan'],
 				'atollmatrix_reservation_room_adults' => $reservationData['adults'],

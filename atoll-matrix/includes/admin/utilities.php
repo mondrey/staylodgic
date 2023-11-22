@@ -96,6 +96,16 @@ function atollmatrix_has_tax() {
     
 }
 
+function atollmatrix_generate_tax_summary( $tax ) {
+    $html = '<div class="input-tax-summary-wrap-inner">';
+    foreach ($tax as $totalID => $totalvalue) {
+        $html .= '<div class="tax-summary tax-summary-details">' . $totalvalue . '</div>';
+    }
+    $html .= '</div>';
+
+    return $html;
+}
+
 function atollmatrix_apply_tax($roomrate, $nights, $guests, $output)
 {
 
