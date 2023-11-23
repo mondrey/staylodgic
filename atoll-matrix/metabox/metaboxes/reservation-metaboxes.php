@@ -74,11 +74,15 @@ function atollmatrix_reservations_metadata()
                 'class'   => 'reservation_status',
                 'type'    => 'select',
                 'desc'    => esc_html__('Reservation Status', 'atollmatrix'),
-                'options' => array(
-                    'confirmed' => esc_attr__('Confirmed', 'atollmatrix'),
-                    'cancelled' => esc_attr__('Cancelled', 'atollmatrix'),
-                    'pending'   => esc_attr__('Pending', 'atollmatrix'),
-                ),
+                'options' => get_booking_statuses(),
+            ),
+            array(
+                'name'    => esc_html__('Reservation Sub Status', 'atollmatrix'),
+                'id'      => 'atollmatrix_reservation_substatus',
+                'class'   => 'reservation_status',
+                'type'    => 'select',
+                'desc'    => esc_html__('Reservation Sub Status', 'atollmatrix'),
+                'options' => get_booking_substatuses(),
             ),
             array(
                 'name'    => esc_html__('Room', 'atollmatrix'),

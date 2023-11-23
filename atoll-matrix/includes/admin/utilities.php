@@ -1,4 +1,39 @@
 <?php
+function get_booking_substatuses()
+{
+    $bookingSubStatuses = array(
+        'completed'      => esc_attr__('Completed', 'atollmatrix'),
+        'checkedin'      => esc_attr__('Checked-In', 'atollmatrix'),
+        'checkedout'     => esc_attr__('Checked-Out', 'atollmatrix'),
+        'noshow'         => esc_attr__('No Show', 'atollmatrix'),
+        'onhold'         => esc_attr__('On Hold', 'atollmatrix'),
+        'pendingpayment' => esc_attr__('Pending Payment', 'atollmatrix'),
+        'refunded'       => esc_attr__('Refunded', 'atollmatrix'),
+        'inprogress'     => esc_attr__('In Progress', 'atollmatrix'),
+        'expired'        => esc_attr__('Expired', 'atollmatrix'),
+    );
+
+    return $bookingSubStatuses;
+}
+function get_booking_statuses()
+{
+    $bookingStatuses = array(
+        'confirmed' => esc_attr__('Confirmed', 'atollmatrix'),
+        'cancelled' => esc_attr__('Cancelled', 'atollmatrix'),
+        'pending'   => esc_attr__('Pending', 'atollmatrix'),
+    );
+
+    return $bookingStatuses;
+}
+function get_new_booking_statuses()
+{
+    $bookingStatuses = array(
+        'confirmed' => esc_attr__('Confirmed', 'atollmatrix'),
+        'pending'   => esc_attr__('Pending', 'atollmatrix'),
+    );
+
+    return $bookingStatuses;
+}
 function get_BedLayout($bedName, $bedFieldID = null)
 {
 
@@ -14,7 +49,8 @@ function get_BedLayout($bedName, $bedFieldID = null)
     return $html;
 }
 // Function to recursively format arrays as strings
-function atollmatrix_format_value($value) {
+function atollmatrix_format_value($value)
+{
     $formatted_elements = '';
     if (is_array($value)) {
         $formatted_start = '<ul>';
@@ -22,12 +58,12 @@ function atollmatrix_format_value($value) {
             $formatted_elements .= '<li><strong>' . $key . ':</strong> ' . atollmatrix_format_value($item) . '</li>';
         }
         $formatted_end = '</ul>';
-        if ( '' == $formatted_elements ) {
+        if ('' == $formatted_elements) {
             return false;
         } else {
-            return $formatted_start.$formatted_elements.$formatted_end;
+            return $formatted_start . $formatted_elements . $formatted_end;
         }
-        
+
     } else {
         return $value;
     }
@@ -89,14 +125,16 @@ function atollmatrix_reverse_percentage($total, $percentages)
     return $initial_value;
 }
 
-function atollmatrix_has_tax() {
+function atollmatrix_has_tax()
+{
 
     $taxFlag = atollmatrix_get_option('enable_taxes');
     return $taxFlag;
-    
+
 }
 
-function atollmatrix_generate_tax_summary( $tax ) {
+function atollmatrix_generate_tax_summary($tax)
+{
     $html = '<div class="input-tax-summary-wrap-inner">';
     foreach ($tax as $totalID => $totalvalue) {
         $html .= '<div class="tax-summary tax-summary-details">' . $totalvalue . '</div>';
@@ -112,9 +150,9 @@ function atollmatrix_apply_tax($roomrate, $nights, $guests, $output)
     $price      = array();
     $count      = 0;
     $taxPricing = atollmatrix_get_option('taxes');
-    $subtotal = $roomrate;
+    $subtotal   = $roomrate;
 
-    if ( atollmatrix_has_tax() ) {
+    if (atollmatrix_has_tax()) {
         foreach ($taxPricing as $tax) {
             $percentage = '';
             if ($tax[ 'type' ] === 'percentage') {
@@ -167,9 +205,9 @@ function atollmatrix_apply_tax($roomrate, $nights, $guests, $output)
     }
 
     $price[ 'subtotal' ] = $subtotal;
-    $price[ 'total' ] = $roomrate;
+    $price[ 'total' ]    = $roomrate;
 
-    if ( 'single-value' == $output ) {
+    if ('single-value' == $output) {
         $price = $roomrate;
     }
 

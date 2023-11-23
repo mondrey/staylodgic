@@ -323,6 +323,17 @@ class Reservations
 
 		return $reservation_status;
 	}
+	public function getReservationSubStatus($reservation_id = false)
+	{
+
+		if (!$reservation_id) {
+			$reservation_id = $this->reservation_id;
+		}
+		// Get the reservation sub status for the reservation
+		$reservation_substatus = get_post_meta($reservation_id, 'atollmatrix_reservation_substatus', true);
+
+		return $reservation_substatus;
+	}
 
 	public static function getRoomIDsForBooking_number($booking_number)
 	{

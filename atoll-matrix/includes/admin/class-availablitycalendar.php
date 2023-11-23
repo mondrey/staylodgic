@@ -189,7 +189,7 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 
 		foreach ( $dates as $date ) :
 			$number_of_columns++;
-			$month        = $date->format( 'F' );
+			$month        = $date->format( 'M' );
 			$column_class = '';
 			if ( $number_of_columns < $markNumDays ) {
 				$column_class = "rangeSelected";
@@ -235,6 +235,7 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 			$checkin              = $reservation_instance->getCheckinDate();
 			$checkout             = $reservation_instance->getCheckoutDate();
 			$reservation_status   = $reservation_instance->getReservationStatus();
+			$reservation_substatus   = $reservation_instance->getReservationSubStatus();
 			$row++;
 
 			if ( ! array_key_exists( $reservatoin_id, $checkout_list ) ) {
@@ -323,7 +324,7 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 				$start_date->setTimestamp( $reservation['checkin'] );
 				$start_date_display = $start_date->format( 'M j, Y' );
 				$width              = ( 80 * ( $reserved_days ) ) - 3;
-				$tab[ $room ]       = '<a class="reservation-tab-is-' . $reservation_status . ' reservation-tab-id-' . $reservatoin_id . ' reservation-edit-link" href="' . $reservation_edit_link . '"><div class="reserved-tab-wrap reserved-tab-with-info reservation-' . $reservation_status . '" data-reservationstatus="' . $reservation_status . '" data-guest="' . $guest_name . '" data-room="' . $room . '" data-row="' . $row . '" data-bookingnumber="' . $booking_number . '" data-reservationid="' . $reservation['id'] . '" data-checkin="' . $checkin . '" data-checkout="' . $checkout . '"><div class="reserved-tab reserved-tab-days-' . $reserved_days . '"><div data-tabwidth="' . $width . '" class="reserved-tab-inner"><div class="ota-sign"></div><div class="guest-name">' . $display_info . '</div></div></div></div></a>';
+				$tab[ $room ]       = '<a class="reservation-tab-is-' . $reservation_status . ' ' . $reservation_substatus . ' reservation-tab-id-' . $reservatoin_id . ' reservation-edit-link" href="' . $reservation_edit_link . '"><div class="reserved-tab-wrap reserved-tab-with-info reservation-' . $reservation_status . ' reservation-substatus-' . $reservation_substatus . '" data-reservationstatus="' . $reservation_status . '" data-guest="' . $guest_name . '" data-room="' . $room . '" data-row="' . $row . '" data-bookingnumber="' . $booking_number . '" data-reservationid="' . $reservation['id'] . '" data-checkin="' . $checkin . '" data-checkout="' . $checkout . '"><div class="reserved-tab reserved-tab-days-' . $reserved_days . '"><div data-tabwidth="' . $width . '" class="reserved-tab-inner"><div class="ota-sign"></div><div class="guest-name">' . $display_info . '</div></div></div></div></a>';
 				$display            = true;
 			} else {
 				if ( $current_day <> $checkout ) {
@@ -335,9 +336,9 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 					$daysBetween        = \AtollMatrix\Common::countDays_BetweenDates( $check_in_date_past, $current_day );
 					$width              = ( 80 * ( $reserved_days - $daysBetween ) ) - 3;
 					if ( $check_in_date_past < $calendar_start && $calendar_start == $current_day ) {
-						$tab[ $room ] = '<a class="reservation-tab-is-' . $reservation_status . ' reservation-tab-id-' . $reservatoin_id . ' reservation-edit-link" href="' . $reservation_edit_link . '"><div class="reserved-tab-wrap reserved-tab-with-info reserved-from-past reservation-' . $reservation_status . '" data-reservationstatus="' . $reservation_status . '" data-guest="' . $guest_name . '" data-room="' . $room . '" data-row="' . $row . '" data-bookingnumber="' . $booking_number . '" data-reservationid="' . $reservation['id'] . '" data-checkin="' . $checkin . '" data-checkout="' . $checkout . '"><div class="reserved-tab reserved-tab-days-' . $reserved_days . '"><div data-tabwidth="' . $width . '" class="reserved-tab-inner"><div class="ota-sign"></div><div class="guest-name">' . $display_info . '</div></div></div></div></a>';
+						$tab[ $room ] = '<a class="reservation-tab-is-' . $reservation_status . ' ' . $reservation_substatus . ' reservation-tab-id-' . $reservatoin_id . ' reservation-edit-link" href="' . $reservation_edit_link . '"><div class="reserved-tab-wrap reserved-tab-with-info reserved-from-past reservation-' . $reservation_status . '" data-reservationstatus="' . $reservation_status . '" data-guest="' . $guest_name . '" data-room="' . $room . '" data-row="' . $row . '" data-bookingnumber="' . $booking_number . '" data-reservationid="' . $reservation['id'] . '" data-checkin="' . $checkin . '" data-checkout="' . $checkout . '"><div class="reserved-tab reserved-tab-days-' . $reserved_days . '"><div data-tabwidth="' . $width . '" class="reserved-tab-inner"><div class="ota-sign"></div><div class="guest-name">' . $display_info . '</div></div></div></div></a>';
 					} else {
-						$tab[ $room ] = '<div class="reservation-tab-is-' . $reservation_status . ' reservation-tab-id-' . $reservatoin_id . ' reserved-tab-wrap reserved-extended reservation-' . $reservation_status . '" data-reservationstatus="' . $reservation_status . '" data-room="' . $room . '" data-row="' . $row . '" data-reservationid="' . $reservation['id'] . '" data-checkin="' . $checkin . '" data-checkout="' . $checkout . '"><div class="reserved-tab"></div></div>';
+						$tab[ $room ] = '<div class="reservation-tab-is-' . $reservation_status . ' ' . $reservation_substatus . ' reservation-tab-id-' . $reservatoin_id . ' reserved-tab-wrap reserved-extended reservation-' . $reservation_status . ' reservation-substatus-' . $reservation_substatus . '" data-reservationstatus="' . $reservation_status . '" data-room="' . $room . '" data-row="' . $row . '" data-reservationid="' . $reservation['id'] . '" data-checkin="' . $checkin . '" data-checkout="' . $checkout . '"><div class="reserved-tab"></div></div>';
 					}
 					$display = true;
 				}

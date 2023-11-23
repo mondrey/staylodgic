@@ -153,7 +153,11 @@
 			var checkOutDate = new Date(checkOutDateStr);
 			console.log(' the new checkout ' + checkOutDate);
 			// Update the flatpickr input value with the selected date range
-			flatpickrInput.val(checkInDateStr + " to " + checkOutDateStr);
+			// Update the flatpickr input value with the selected date range
+			flatpickrInstance.input.value = checkInDateStr + " to " + checkOutDateStr;
+
+			// Set the selected dates using setDate method
+			flatpickrInstance.setDate([checkInDate, checkOutDate]);
 
 			updateSelectedDates(checkInDate, checkOutDate);
 			// Trigger click on the bookingSearch button
@@ -170,8 +174,7 @@
 		}
 
 		function ReservationDatePicker() {
-
-			flatpickr("#reservation-date", {
+			var flatpickrInstance = flatpickr("#reservation-date", {
 				mode: "range",
 				dateFormat: "Y-m-d",
 				showMonths: 2,
@@ -186,9 +189,12 @@
 					}
 				}
 			});
+		
+			return flatpickrInstance;
 		}
-
-		ReservationDatePicker();
+		
+		// Initialize flatpickr and get the instance
+		var flatpickrInstance = ReservationDatePicker();
 
 
 
