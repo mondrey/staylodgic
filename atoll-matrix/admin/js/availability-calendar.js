@@ -59,7 +59,6 @@
 				});
 			});
 		}
-		
 		// Initially initialize tooltips
 		initializeTooltips();
 
@@ -374,56 +373,6 @@
 					
 				}
 			});
-
-			$('.number-input').each(function() {
-				var input = $(this).find('.number-value');
-			
-				$(this).on('click', '.minus-btn', function() {
-					var guest = input.attr('data-guest');
-					var value = parseInt(input.val());
-					var minValue = 1;
-					if (guest === "child") {
-						minValue = 0;
-					}
-					if (value > minValue) {
-						input.val(value - 1);
-						calculateSum();
-						if (guest === "child") {
-							$("#guest-age input[data-counter='" + (value - 1) + "']").remove();  // remove the corresponding extra input field
-						}
-					}
-					// $('#atollmatrix_room_id').trigger('change');
-				});
-			
-				$(this).on('click', '.plus-btn', function() {
-					var guest = input.attr('data-guest');
-					var value = parseInt(input.val());
-					if ( isNaN(value)) {
-						value = 0;
-					}
-					$('.child-number-notice').hide();
-					input.val(value + 1);
-					calculateSum();
-					if (guest === "child") {
-						var extraInput = $("<input name='atollmatrix_reservation_room_children[age][]' type='text' data-counter='" + value + "' placeholder='Age'>");
-						$("#guest-age").append(extraInput);  // append the extra input to the "guest-age" div
-					}
-					// $('#atollmatrix_room_id').trigger('change');
-				});
-			
-				// Calculate the initial sum
-				calculateSum();
-			});
-			
-			
-				function calculateSum() {
-					var sum = 0;
-					$('.number-input .number-value').each(function() {
-					sum += parseInt($(this).val());
-					});
-					console.log('Total sum:', sum);
-					return sum;
-				}
 
 		}
 

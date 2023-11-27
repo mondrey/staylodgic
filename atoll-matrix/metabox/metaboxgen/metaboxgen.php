@@ -1129,6 +1129,7 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                     echo "<div id='" . esc_attr($field['id']) . "_wrap' class='number-input occupant-" . $field['occupant'] . " occupants-range' data-room='0' data-occupant='" . $field['occupant'] . "' min='" . $field['min'] . "' max='" . $field['min'] . "' data-occupants='" . $jsonOccupants . "' >";
                     echo '<span class="minus-btn">-</span>';
 
+                    $child_age_input = '';
                     if ('child' == $field['occupant']) {
                         if (isset($meta['number'])) {
                             $meta_value = $meta['number'];
@@ -1136,11 +1137,13 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                             $meta_value = '0';
                         }
                         $name_property = $field['id'] . '[number]';
+
+                        $child_age_input = 'data-childageinput="atollmatrix_reservation_room_children[age][]"';
                     } else {
                         $meta_value    = $meta;
                         $name_property = $field['id'];
                     }
-                    echo '<input data-guest="' . $field['occupant'] . '" data-guestmax="0" data-adultmax="0" data-childmax="0" id="' . esc_attr($field['id']) . '" value="' . esc_attr($meta_value) . '" name="' . $name_property . '" type="text" class="number-value" readonly>';
+                    echo '<input data-guest="' . $field['occupant'] . '" '.$child_age_input.' data-guestmax="0" data-adultmax="0" data-childmax="0" id="' . esc_attr($field['id']) . '" value="' . esc_attr($meta_value) . '" name="' . $name_property . '" type="text" class="number-value" readonly>';
                     echo '<span class="plus-btn">+</span>';
                     echo '</div>';
                     echo '<div class="occupant-' . $field['occupant'] . '-notify notify-number-over-max">Exceeds maximum</div>';
@@ -1151,7 +1154,7 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                         if (isset($meta['number'])) {
                             for ($i = 0; $i < $meta['number']; $i++) {
                                 $age = isset($meta['age'][$i]) ? $meta['age'][$i] : '';
-                                echo "<input name='atollmatrix_reservation_room_children[age][]' type='number' data-counter='" . $i . "' value='" . $age . "' placeholder='Enter age'>";
+                                echo "<input name='".$child_age_input."' type='number' data-counter='" . $i . "' value='" . $age . "' placeholder='Enter age'>";
                             }
                         }
                         echo '</div>';

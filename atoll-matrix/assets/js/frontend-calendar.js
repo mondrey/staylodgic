@@ -4,7 +4,7 @@
 		function processRoomPrice(roomOccupiedGroup) {
 			$('.room-occupied-group').removeClass('room-selected');
 			roomOccupiedGroup.addClass('room-selected');
-			
+
 			var bookingnumber = $('#reservation-data').data('bookingnumber');
 			var roomId = roomOccupiedGroup.data('room-id');
 			var roomPriceTotal = roomOccupiedGroup.find('.room-price-total').data('roomprice');
@@ -13,7 +13,7 @@
 			var mealPlan = mealPlanInput.val();
 			var mealPlanPrice = mealPlanInput.data('mealprice');
 			console.log('Got:' + bookingnumber);
-		
+
 			var dataToSend = {
 				action: 'process_RoomPrice',
 				booking_number: bookingnumber,
@@ -23,20 +23,20 @@
 				meal_plan: mealPlan,
 				meal_plan_price: mealPlanPrice
 			};
-		
+
 			$.ajax({
 				type: 'POST',
 				url: frontendAjax.ajaxurl,
 				data: dataToSend,
-				success: function(response) {
+				success: function (response) {
 					var price_element = roomOccupiedGroup.find('.room-price-total');
-					
+
 					price_element.find('.formatted-price').velocity('fadeOut', {
 						duration: 150,
-						complete: function() {
+						complete: function () {
 							price_element.html(response);
 						}
-					});		
+					});
 					console.log(response);
 					// You can update the page content or perform other actions here
 				}
@@ -53,7 +53,7 @@
 		$(document).on('click', '.booking-backto-roomschoice', function () {
 			$('.registration_form_outer').velocity('fadeOut', {
 				duration: 350,
-				complete: function() {
+				complete: function () {
 					$('#reservation-data').velocity('fadeIn');
 				}
 			});
@@ -63,7 +63,7 @@
 		function processRoomData(roomOccupiedGroup) {
 			$('.room-occupied-group').removeClass('room-selected');
 			roomOccupiedGroup.addClass('room-selected');
-			
+
 			var atollmatrix_roomlistingbox_nonce = $('input[name="atollmatrix_roomlistingbox_nonce"]').val();
 			var bookingnumber = $('#reservation-data').data('bookingnumber');
 			var roomId = roomOccupiedGroup.data('room-id');
@@ -73,7 +73,7 @@
 			var mealPlan = mealPlanInput.val();
 			var mealPlanPrice = mealPlanInput.data('mealprice');
 			console.log(mealPlanPrice);
-		
+
 			var dataToSend = {
 				action: 'process_SelectedRoom',
 				bookingnumber: bookingnumber,
@@ -84,18 +84,18 @@
 				meal_plan_price: mealPlanPrice,
 				atollmatrix_roomlistingbox_nonce: atollmatrix_roomlistingbox_nonce
 			};
-		
+
 			$.ajax({
 				type: 'POST',
 				url: frontendAjax.ajaxurl,
 				data: dataToSend,
-				success: function(response) {
+				success: function (response) {
 					// Handle the response from the server
 					$('#booking-summary').html(response);
 
 					$('#reservation-data').velocity('fadeOut', {
 						duration: 350,
-						complete: function() {
+						complete: function () {
 							$('.registration_form_outer').velocity('fadeIn')
 						}
 					});
@@ -112,7 +112,7 @@
 			processRoomData(roomOccupiedGroup);
 
 		});
-		
+
 		// $(document).on('click', '.room-occupied-group:not(input[type="radio"])', function () {
 		// 	var roomOccupiedGroup = $(this);
 		// 	processRoomData(roomOccupiedGroup);
@@ -189,34 +189,34 @@
 					}
 				}
 			});
-		
+
 			return flatpickrInstance;
 		}
-		
+
 		// Initialize flatpickr and get the instance
 		var flatpickrInstance = ReservationDatePicker();
 
 
 
-		$("#number-of-children").change(function () {
-			// Remove old selectors if exists
-			$(".children-selector-wrap").remove();
+		// $("#number-of-children").change(function () {
+		// 	// Remove old selectors if exists
+		// 	$(".children-selector-wrap").remove();
 
-			var numberOfChildren = $(this).val();
-			var maxAge = $(this).parent().data('agelimitofchild');
+		// 	var numberOfChildren = $(this).val();
+		// 	var maxAge = $(this).parent().data('agelimitofchild');
 
-			for (var j = 0; j < numberOfChildren; j++) {
-				var select = $('<select id="children_age_' + (j + 1) + '" class="children-age-selector" name="children_age[]"></select>');
+		// 	for (var j = 0; j < numberOfChildren; j++) {
+		// 		var select = $('<select id="children_age_' + (j + 1) + '" class="children-age-selector" name="children_age[]"></select>');
 
-				for (var i = 0; i <= maxAge; i++) {
-					select.append('<option value="' + i + '">' + i + '</option>');
-				}
+		// 		for (var i = 0; i <= maxAge; i++) {
+		// 			select.append('<option value="' + i + '">' + i + '</option>');
+		// 		}
 
-				var wrapper = $('<div class="children-selector-wrap"></div>');
-				wrapper.append(select);
-				$(this).parent().append(wrapper);
-			}
-		});
+		// 		var wrapper = $('<div class="children-selector-wrap"></div>');
+		// 		wrapper.append(select);
+		// 		$(this).parent().append(wrapper);
+		// 	}
+		// });
 
 		// Frontend codes
 		$('#bookingSearch').on('click', function (e) { // Changed here
@@ -231,7 +231,7 @@
 			var childrenAge = [];
 
 			// Loop through all select elements with the class 'children-age-selector'
-			$('.children-age-selector').each(function() {
+			$('.children-age-selector').each(function () {
 				childrenAge.push($(this).val());
 			});
 
@@ -293,7 +293,7 @@
 
 			// Serialize form data
 			const registration_data = $('#guest-registration').serialize();
-			
+
 			//console.log(checkin, checkout, rooms);
 			$.ajax({
 				url: frontendAjax.ajaxurl, // the localized URL

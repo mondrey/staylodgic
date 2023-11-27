@@ -37,6 +37,7 @@
 	font-weight: 700;
 	font-style: normal
 }
+
 .atollmatrix-content,
 .atollmatrix-content h1,
 .atollmatrix-content h2,
@@ -45,70 +46,79 @@
 .atollmatrix-content h5 {
 	font: 300 14px/1.5 "jost", Helvetica, Arial, sans-serif;
 }
+
 .room-details-stats {
 	font-size: 13px;
 	font-weight: 500;
 	letter-spacing: 0.3px;
 }
+
 .room-details-facilities {
 	letter-spacing: 0.2px;
 	font-weight: 300;
 }
+
 .booking-response {
-    padding: 15px;
-    margin-top: 20px;
-    border-radius: 5px;
-    color: white;
+	padding: 15px;
+	margin-top: 20px;
+	border-radius: 5px;
+	color: white;
 }
 
 .booking-response.success {
-    background-color: green;
+	background-color: green;
 }
 
 .booking-response.error {
-    background-color: red;
+	background-color: red;
 }
 
 .recommended-alt-wrap {
-    display: none;
+	display: none;
 }
 
 .room-occupants-wrap {
-    display: none;
+	display: none;
 }
+
 .occupant-children-age {
-    display: none;
+	display: none;
 }
+
 .guest-adult-svg {
 	width: 22px;
 	height: 32px;
-	background-image: url( '../../assets/svgs/person-adult.svg' );
+	background-image: url('../../assets/svgs/person-adult.svg');
 	display: inline-block;
 	background-repeat: no-repeat;
 }
+
 .guest-child-svg {
 	width: 22px;
 	height: 22px;
-	background-image: url( '../../assets/svgs/person-child.svg' );
+	background-image: url('../../assets/svgs/person-child.svg');
 	display: inline-block;
 	background-repeat: no-repeat;
 }
+
 .guest-bed-kingbed {
 	width: 36px;
 	height: 37px;
-	background-image: url( '../../assets/svgs/bed-king.svg' );
+	background-image: url('../../assets/svgs/bed-king.svg');
 	display: inline-block;
 	background-repeat: no-repeat;
 	position: relative;
 }
+
 .guest-bed-twinbed {
 	width: 36px;
 	height: 37px;
-	background-image: url( '../../assets/svgs/bed-single.svg' );
+	background-image: url('../../assets/svgs/bed-single.svg');
 	display: inline-block;
 	background-repeat: no-repeat;
 	position: relative;
 }
+
 .type-twinbed-twinbed-two.guest-bed-twinbed {
 	left: -10px;
 }
@@ -116,7 +126,7 @@
 .included-mealplan {
 	width: 36px;
 	height: 37px;
-	background-image: url( '../../assets/svgs/mealplan.svg' );
+	background-image: url('../../assets/svgs/mealplan.svg');
 	display: inline-block;
 	background-repeat: no-repeat;
 	position: relative;
@@ -124,14 +134,18 @@
 }
 
 .room-details-heading {
-	text-align: left; /* Center the heading */
+	text-align: left;
+	/* Center the heading */
 }
 
 .room-details-row {
 	display: flex;
-	flex-direction: row; /* Display columns horizontally */
-	justify-content: space-between; /* Space columns evenly */
-	align-items: flex-start; /* align top items vertically */
+	flex-direction: row;
+	/* Display columns horizontally */
+	justify-content: space-between;
+	/* Space columns evenly */
+	align-items: flex-start;
+	/* align top items vertically */
 }
 
 .room-details-column {
@@ -139,6 +153,7 @@
 	text-align: left;
 	margin: 0;
 }
+
 .room-details-row .room-details-column:first-child {
 	padding-right: 40px;
 }
@@ -147,14 +162,15 @@
 	border: 1px solid #ececec;
 	margin-bottom: 10px;
 	padding: 40px;
-  transition: box-shadow 0.4s;
+	transition: box-shadow 0.4s;
 }
+
 .room-occupied-group:hover {
-  box-shadow: 0 6px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 5px -1px rgba(0, 0, 0, 0.2);
+	box-shadow: 0 6px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 5px -1px rgba(0, 0, 0, 0.2);
 }
 
 .room-occupied-group.room-selected {
-  box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12), 0 3px 5px -1px rgba(0, 0, 0, 0.2);
+	box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12), 0 3px 5px -1px rgba(0, 0, 0, 0.2);
 }
 
 #booking-summary-wrap {
@@ -162,9 +178,11 @@
 	padding: 30px;
 	background: #eee;
 }
+
 .admin-bar #booking-summary {
 	top: 60px;
 }
+
 .summary-room-name {
 	display: block;
 	font-size: 20px;
@@ -173,62 +191,77 @@
 	font-weight: 700;
 	margin-bottom: 22px;
 }
+
 .bed-summary {
 	display: inline-block;
 }
+
 .main-summary-wrap {
 	margin-bottom: 14px;
 }
+
 .summary-mealtype-inlcuded {
 	margin-bottom: 14px;
 	font-size: 14px;
 	display: block;
 }
+
 .summary-heading {
 	font-weight: 600;
 	font-size: 15px;
 	letter-spacing: -0.5px;
 	margin-top: 14px;
 }
+
 .summary-heading.total-summary-heading {
 	font-size: 18px;
 	font-weight: 800;
 }
+
 .price-summary-wrap {
 	font-size: 14px;
 	font-weight: 600;
 	margin-bottom: 14px;
 }
+
 .tax-summary {
 	font-size: 11px;
 	letter-spacing: 1px;
 	font-weight: 400;
 }
+
 .room-included-meals i {
 	color: #60bf00;
 	padding-right: 5px;
 }
+
 .bed-summary .guest-bed-kingbed {
 	top: 8px;
 }
+
 .price-summary {
 	margin-top: 7px;
 	font-size: 16px;
 }
+
 .tax-summary-total {
 	font-size: 18px;
-	font-weight: 800;  
+	font-weight: 800;
 }
+
 .bed-summary .type-kingbed-twinbed-two {
 	top: 8px;
 	left: 3px;
 }
+
 .bed-summary .guest-bed-twinbed.twinbed {
 	top: 9px;
 }
+
 .summary-mealtype-name {
 	font-size: 14px;
 }
+
 .book-button {
 	padding: 10px;
 	box-sizing: border-box;
@@ -240,12 +273,14 @@
 	padding: 10px 22px;
 	display: block;
 }
+
 .summary-icon i {
 	font-size: 20px;
 	top: 13px;
 	position: relative;
 	color: #0b0b0b;
 }
+
 .fa-solid.fa-circle-exclamation {
 	padding-right: 8px;
 	color: #fff;
@@ -253,11 +288,13 @@
 	font-size: 42px;
 	margin-bottom: 17px;
 }
+
 #booking-summary-wrap.booking-summary-warning {
 	background: #ff0000;
 	color: #fff;
 	font-size: 14px;
 }
+
 .room-details-heading h2 {
 	font-size: 30px;
 	font-weight: 500;
@@ -265,35 +302,43 @@
 	letter-spacing: -0.7px;
 	line-height: 1;
 }
+
 .room-details-image img {
 	width: 260px;
 	box-sizing: border-box;
 	border-radius: 20px;
 }
+
 .room-details .facility {
 	white-space: nowrap;
 }
+
 .room-summary-facilities {
 	font-size: 13px;
 }
+
 .room-summary-facilities i {
 	padding-right: 5px;
 	color: #6730ff;
 }
+
 .room-summary-icon {
 	width: 32px;
 	display: inline-block;
 	text-align: center;
 }
+
 .room-details-stats {
 	padding-top: 8px;
 	color: #484848;
 }
+
 .room-details-facilities {
 	border-top: 1px solid #00000012;
 	margin-top: 12px;
 	padding-top: 12px;
 }
+
 .room-details-column .room-price-total {
 	font-size: 20px;
 	letter-spacing: -0.8px;
@@ -305,17 +350,21 @@
 	border-radius: 5px;
 	margin: 13px 0;
 }
+
 .room-summary-heading {
 	font-size: 17px;
 	font-weight: 600;
 	margin-bottom: 12px;
 }
+
 .roomchoice-seperator {
 	margin-top: 16px;
 }
+
 .mealplans-wrap {
 	padding-bottom: 10px;
 }
+
 .room-mealplan-input-wrap {
 	line-height: 1.8;
 	font-size: 13px;
@@ -325,23 +374,27 @@
 
 
 .room-details label {
-display: flex;
-cursor: pointer;
-font-weight: 500;
-position: relative;
-overflow: hidden;
-margin-bottom: 0.375em;
+	display: flex;
+	cursor: pointer;
+	font-weight: 500;
+	position: relative;
+	overflow: hidden;
+	margin-bottom: 0.375em;
 }
+
 .room-details label input {
-position: absolute;
-left: -9999px;
+	position: absolute;
+	left: -9999px;
 }
-.room-details label input:checked + span.checkbox-label {
-background-color: #e1fbff;
+
+.room-details label input:checked+span.checkbox-label {
+	background-color: #e1fbff;
 }
-.room-details label input:checked + span.checkbox-label:before {
-box-shadow: inset 0 0 0 0.4375em #000;
+
+.room-details label input:checked+span.checkbox-label:before {
+	box-shadow: inset 0 0 0 0.4375em #000;
 }
+
 .room-details label span.checkbox-label {
 	display: flex;
 	align-items: center;
@@ -349,48 +402,58 @@ box-shadow: inset 0 0 0 0.4375em #000;
 	border-radius: 50px;
 	transition: 0.25s ease;
 }
+
 .room-details label span.checkbox-bed-label {
 	padding: 5px;
 }
+
 .room-details label span.checkbox-label:hover {
-background-color: #e1fbff;
+	background-color: #e1fbff;
 }
+
 .room-details label span.checkbox-label:before {
-display: flex;
-flex-shrink: 0;
-content: "";
-background-color: #fff;
-width: 1.5em;
-height: 1.5em;
-border-radius: 50%;
-margin-right: 0.375em;
-transition: 0.25s ease;
-box-shadow: inset 0 0 0 0.125em #00005c;
+	display: flex;
+	flex-shrink: 0;
+	content: "";
+	background-color: #fff;
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 50%;
+	margin-right: 0.375em;
+	transition: 0.25s ease;
+	box-shadow: inset 0 0 0 0.125em #00005c;
 }
+
 .room-details label span.checkbox-bed-label:before {
 	margin-right: 0;
 }
+
 .room-details-row .guest-bed-wrap {
 	position: absolute;
 	top: 0;
 	left: 33px;
-  }
+}
+
 .room-details-row .guest-bed-wrap.guest-bed-twinbed-twinbed-wrap {
 	left: 27px;
 }
+
 .mealplan-text {
 	padding-left: 5px;
 }
+
 .roomchoice-selection {
 	border-top: 1px solid #e6e6e6;
 	margin-top: 12px;
 	margin-bottom: 12px;
 }
+
 .roomchoice-seperator.roomchoice-bedlayout {
 	margin-bottom: 16px;
 	border-bottom: 1px solid #e6e6e6;
 	padding-bottom: 16px;
 }
+
 .stay-summary-wrap {
 	font-size: 10px;
 	border-top: 1px solid #f0f0f0;
@@ -400,6 +463,7 @@ box-shadow: inset 0 0 0 0.125em #00005c;
 	letter-spacing: 1px;
 	line-height: 1.9;
 }
+
 .room-included-meals {
 	font-weight: 400;
 	letter-spacing: 0.4px;
@@ -411,14 +475,19 @@ box-shadow: inset 0 0 0 0.125em #00005c;
 	background-color: #fff;
 	border: 1px solid #ddd;
 	border-radius: 5px;
-  display: flex;
-  flex-direction: row; /* Display form elements side by side */
-  justify-content: space-between; /* Create two columns */
+	display: flex;
+	flex-direction: row;
+	/* Display form elements side by side */
+	justify-content: space-between;
+	/* Create two columns */
 }
+
 /* Style for .registration-column elements */
 .registration-column {
-  width: 50%; /* Adjust this percentage to control column width */
+	width: 50%;
+	/* Adjust this percentage to control column width */
 }
+
 .registration_form .form-group {
 	margin-bottom: 15px;
 }
@@ -431,143 +500,157 @@ box-shadow: inset 0 0 0 0.125em #00005c;
 .registration_form textarea::before,
 .registration_form *::after,
 .registration_form *::before {
-  box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 .registration_form {
-  position: relative;
+	position: relative;
 }
+
 .registration_form::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12), 0 5px 5px -3px rgba(0, 0, 0, 0.2);
-  -webkit-transform: scale(0.98);
-          transform: scale(0.98);
-  -webkit-transition: -webkit-transform 0.28s ease-in-out;
-  transition: -webkit-transform 0.28s ease-in-out;
-  transition: transform 0.28s ease-in-out;
-  transition: transform 0.28s ease-in-out, -webkit-transform 0.28s ease-in-out;
-  z-index: -1;
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12), 0 5px 5px -3px rgba(0, 0, 0, 0.2);
+	-webkit-transform: scale(0.98);
+	transform: scale(0.98);
+	-webkit-transition: -webkit-transform 0.28s ease-in-out;
+	transition: -webkit-transform 0.28s ease-in-out;
+	transition: transform 0.28s ease-in-out;
+	transition: transform 0.28s ease-in-out, -webkit-transform 0.28s ease-in-out;
+	z-index: -1;
 }
+
 .registration_form:hover::before {
-  -webkit-transform: scale(1);
-          transform: scale(1);
+	-webkit-transform: scale(1);
+	transform: scale(1);
 }
 
 .registration_form .button-container {
-  text-align: center;
+	text-align: center;
 }
 
 .registration_form fieldset {
-  margin: 0 0 3rem;
-  padding: 0;
-  border: none;
+	margin: 0 0 3rem;
+	padding: 0;
+	border: none;
 }
 
 .registration_form .form-radio,
 .registration_form .form-group {
-  position: relative;
-  margin-top: 2.25rem;
-  margin-bottom: 2.25rem;
+	position: relative;
+	margin-top: 2.25rem;
+	margin-bottom: 2.25rem;
 }
 
-.registration_form .form-inline > .form-group,
-.registration_form .form-inline > .btn {
-  display: inline-block;
-  margin-bottom: 0;
+.registration_form .form-inline>.form-group,
+.registration_form .form-inline>.btn {
+	display: inline-block;
+	margin-bottom: 0;
 }
 
 .registration_form .form-help {
-  margin-top: 0.125rem;
-  margin-left: 0.125rem;
-  color: #b3b3b3;
-  font-size: 0.8rem;
+	margin-top: 0.125rem;
+	margin-left: 0.125rem;
+	color: #b3b3b3;
+	font-size: 0.8rem;
 }
+
 .registration_form .checkbox .form-help,
 .registration_form .form-radio .form-help,
 .registration_form .form-group .form-help {
-  position: absolute;
-  width: 100%;
+	position: absolute;
+	width: 100%;
 }
+
 .registration_form .checkbox .form-help {
-  position: relative;
-  margin-bottom: 1rem;
+	position: relative;
+	margin-bottom: 1rem;
 }
+
 .registration_form .form-radio .form-help {
-  padding-top: 0.25rem;
-  margin-top: -1rem;
+	padding-top: 0.25rem;
+	margin-top: -1rem;
 }
 
 .registration_form .form-group input {
-  height: 1.9rem;
+	height: 1.9rem;
 }
+
 .registration_form .form-group textarea {
-  resize: none;
+	resize: none;
 }
+
 .registration_form .form-group select {
-  width: 100%;
-  font-size: 1rem;
-  height: 1.6rem;
-  padding: 0.125rem 0.125rem 0.0625rem;
-  background: none;
-  border: none;
-  line-height: 1.6;
-  box-shadow: none;
+	width: 100%;
+	font-size: 1rem;
+	height: 1.6rem;
+	padding: 0.125rem 0.125rem 0.0625rem;
+	background: none;
+	border: none;
+	line-height: 1.6;
+	box-shadow: none;
 }
+
 .registration_form .form-group .control-label {
-  position: absolute;
-  top: -13px;
-  pointer-events: none;
-  padding-left: 0.125rem;
-  z-index: 1;
-  color: #b3b3b3;
-  font-size: 1rem;
-  font-weight: normal;
-  -webkit-transition: all 0.28s ease;
-  transition: all 0.28s ease;
+	position: absolute;
+	top: -13px;
+	pointer-events: none;
+	padding-left: 0.125rem;
+	z-index: 1;
+	color: #b3b3b3;
+	font-size: 1rem;
+	font-weight: normal;
+	-webkit-transition: all 0.28s ease;
+	transition: all 0.28s ease;
 }
+
 .registration_form .form-group .bar {
-  position: relative;
-  border-bottom: 0.0625rem solid #999;
-  display: block;
+	position: relative;
+	border-bottom: 0.0625rem solid #999;
+	display: block;
 }
+
 .registration_form .form-group .bar::before {
-  content: '';
-  height: 0.125rem;
-  width: 0;
-  left: 50%;
-  bottom: -0.0625rem;
-  position: absolute;
-  background: #0064ff;
-  -webkit-transition: left 0.28s ease, width 0.28s ease;
-  transition: left 0.28s ease, width 0.28s ease;
-  z-index: 2;
+	content: '';
+	height: 0.125rem;
+	width: 0;
+	left: 50%;
+	bottom: -0.0625rem;
+	position: absolute;
+	background: #0064ff;
+	-webkit-transition: left 0.28s ease, width 0.28s ease;
+	transition: left 0.28s ease, width 0.28s ease;
+	z-index: 2;
 }
+
 .registration_form .form-group input,
 .registration_form .form-group textarea {
-  display: block;
-  background: none;
-  padding: 0.125rem 0.125rem 0.0625rem;
-  font-size: 1rem;
-  border-width: 0;
-  border-color: transparent;
-  line-height: 1.9;
-  width: 100%;
-  color: transparent;
-  -webkit-transition: all 0.28s ease;
-  transition: all 0.28s ease;
-  box-shadow: none;
+	display: block;
+	background: none;
+	padding: 0.125rem 0.125rem 0.0625rem;
+	font-size: 1rem;
+	border-width: 0;
+	border-color: transparent;
+	line-height: 1.9;
+	width: 100%;
+	color: transparent;
+	-webkit-transition: all 0.28s ease;
+	transition: all 0.28s ease;
+	box-shadow: none;
 }
+
 .registration_form .form-group input[type="file"] {
-  line-height: 1;
+	line-height: 1;
 }
-.registration_form .form-group input[type="file"] ~ .bar {
-  display: none;
+
+.registration_form .form-group input[type="file"]~.bar {
+	display: none;
 }
+
 .registration_form .form-group select,
 .registration_form .form-group input:focus,
 .registration_form .form-group input:valid,
@@ -577,253 +660,370 @@ box-shadow: inset 0 0 0 0.125em #00005c;
 .registration_form .form-group textarea:valid,
 .registration_form .form-group textarea.form-file,
 .registration_form .form-group textarea.has-value {
-  color: #333;
+	color: #333;
 }
-.registration_form .form-group select ~ .control-label,
-.registration_form .form-group input:focus ~ .control-label,
-.registration_form .form-group input.form-file ~ .control-label,
-.registration_form .form-group input.has-value ~ .control-label,
-.registration_form .form-group textarea:focus ~ .control-label,
-.registration_form .form-group textarea:valid ~ .control-label,
-.registration_form .form-group textarea.form-file ~ .control-label,
-.registration_form .form-group textarea.has-value ~ .control-label {
-  font-size: 0.8rem;
-  color: gray;
-  top: -1rem;
-  left: 0;
+
+.registration_form .form-group select~.control-label,
+.registration_form .form-group input:focus~.control-label,
+.registration_form .form-group input.form-file~.control-label,
+.registration_form .form-group input.has-value~.control-label,
+.registration_form .form-group textarea:focus~.control-label,
+.registration_form .form-group textarea:valid~.control-label,
+.registration_form .form-group textarea.form-file~.control-label,
+.registration_form .form-group textarea.has-value~.control-label {
+	font-size: 0.8rem;
+	color: gray;
+	top: -1rem;
+	left: 0;
 }
+
 .registration_form .form-group select:focus,
 .registration_form .form-group input:focus,
 .registration_form .form-group textarea:focus {
-  outline: none;
+	outline: none;
 }
-.registration_form .form-group select:focus ~ .control-label,
-.registration_form .form-group input:focus ~ .control-label,
-.registration_form .form-group textarea:focus ~ .control-label {
-  color: #0064ff;
+
+.registration_form .form-group select:focus~.control-label,
+.registration_form .form-group input:focus~.control-label,
+.registration_form .form-group textarea:focus~.control-label {
+	color: #0064ff;
 }
-.registration_form .form-group select:focus ~ .bar::before,
-.registration_form .form-group input:focus ~ .bar::before,
-.registration_form .form-group textarea:focus ~ .bar::before {
-  width: 100%;
-  left: 0;
+
+.registration_form .form-group select:focus~.bar::before,
+.registration_form .form-group input:focus~.bar::before,
+.registration_form .form-group textarea:focus~.bar::before {
+	width: 100%;
+	left: 0;
 }
 
 .registration_form .checkbox label,
 .registration_form .form-radio label {
-  position: relative;
-  cursor: pointer;
-  padding-left: 2rem;
-  text-align: left;
-  color: #333;
-  display: block;
+	position: relative;
+	cursor: pointer;
+	padding-left: 2rem;
+	text-align: left;
+	color: #333;
+	display: block;
 }
+
 .registration_form .checkbox input,
 .registration_form .form-radio input {
-  width: auto;
-  opacity: 0.00000001;
-  position: absolute;
-  left: 0;
+	width: auto;
+	opacity: 0.00000001;
+	position: absolute;
+	left: 0;
 }
 
 .registration_form .radio {
-  margin-bottom: 1rem;
+	margin-bottom: 1rem;
 }
+
 .registration_form .radio .helper {
-  position: absolute;
-  top: -0.25rem;
-  left: -0.25rem;
-  cursor: pointer;
-  display: block;
-  font-size: 1rem;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
-  color: #999;
+	position: absolute;
+	top: -0.25rem;
+	left: -0.25rem;
+	cursor: pointer;
+	display: block;
+	font-size: 1rem;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	color: #999;
 }
+
 .registration_form .radio .helper::before,
 .registration_form .radio .helper::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  margin: 0.25rem;
-  width: 1rem;
-  height: 1rem;
-  -webkit-transition: -webkit-transform 0.28s ease;
-  transition: -webkit-transform 0.28s ease;
-  transition: transform 0.28s ease;
-  transition: transform 0.28s ease, -webkit-transform 0.28s ease;
-  border-radius: 50%;
-  border: 0.125rem solid currentColor;
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 0;
+	margin: 0.25rem;
+	width: 1rem;
+	height: 1rem;
+	-webkit-transition: -webkit-transform 0.28s ease;
+	transition: -webkit-transform 0.28s ease;
+	transition: transform 0.28s ease;
+	transition: transform 0.28s ease, -webkit-transform 0.28s ease;
+	border-radius: 50%;
+	border: 0.125rem solid currentColor;
 }
+
 .registration_form .radio .helper::after {
-  -webkit-transform: scale(0);
-          transform: scale(0);
-  background-color: #0064ff;
-  border-color: #0064ff;
+	-webkit-transform: scale(0);
+	transform: scale(0);
+	background-color: #0064ff;
+	border-color: #0064ff;
 }
+
 .registration_form .radio label:hover .helper {
-  color: #0064ff;
+	color: #0064ff;
 }
-.registration_form .radio input:checked ~ .helper::after {
-  -webkit-transform: scale(0.5);
-          transform: scale(0.5);
+
+.registration_form .radio input:checked~.helper::after {
+	-webkit-transform: scale(0.5);
+	transform: scale(0.5);
 }
-.registration_form .radio input:checked ~ .helper::before {
-  color: #0064ff;
+
+.registration_form .radio input:checked~.helper::before {
+	color: #0064ff;
 }
 
 .registration_form .checkbox {
-  margin-top: 3rem;
-  margin-bottom: 1rem;
-}
-.registration_form .checkbox .helper {
-  color: #999;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 1rem;
-  height: 1rem;
-  z-index: 0;
-  border: 0.125rem solid currentColor;
-  border-radius: 0.0625rem;
-  -webkit-transition: border-color 0.28s ease;
-  transition: border-color 0.28s ease;
-}
-.registration_form .checkbox .helper::before,
-.registration_form .checkbox .helper::after {
-  position: absolute;
-  height: 0;
-  width: 0.2rem;
-  background-color: #0064ff;
-  display: block;
-  -webkit-transform-origin: left top;
-          transform-origin: left top;
-  border-radius: 0.25rem;
-  content: '';
-  -webkit-transition: opacity 0.28s ease, height 0s linear 0.28s;
-  transition: opacity 0.28s ease, height 0s linear 0.28s;
-  opacity: 0;
-}
-.registration_form .checkbox .helper::before {
-  top: 0.65rem;
-  left: 0.38rem;
-  -webkit-transform: rotate(-135deg);
-          transform: rotate(-135deg);
-  box-shadow: 0 0 0 0.0625rem #fff;
-}
-.registration_form .checkbox .helper::after {
-  top: 0.3rem;
-  left: 0;
-  -webkit-transform: rotate(-45deg);
-          transform: rotate(-45deg);
-}
-.registration_form .checkbox label:hover .helper {
-  color: #0064ff;
-}
-.registration_form .checkbox input:checked ~ .helper {
-  color: #0064ff;
-}
-.registration_form .checkbox input:checked ~ .helper::after,
-.registration_form .checkbox input:checked ~ .helper::before {
-  opacity: 1;
-  -webkit-transition: height 0.28s ease;
-  transition: height 0.28s ease;
-}
-.registration_form .checkbox input:checked ~ .helper::after {
-  height: 0.5rem;
-}
-.registration_form .checkbox input:checked ~ .helper::before {
-  height: 1.2rem;
-  -webkit-transition-delay: 0.28s;
-          transition-delay: 0.28s;
+	margin-top: 3rem;
+	margin-bottom: 1rem;
 }
 
-.registration_form .radio + .radio,
-.registration_form .checkbox + .checkbox {
-  margin-top: 1rem;
+.registration_form .checkbox .helper {
+	color: #999;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 1rem;
+	height: 1rem;
+	z-index: 0;
+	border: 0.125rem solid currentColor;
+	border-radius: 0.0625rem;
+	-webkit-transition: border-color 0.28s ease;
+	transition: border-color 0.28s ease;
+}
+
+.registration_form .checkbox .helper::before,
+.registration_form .checkbox .helper::after {
+	position: absolute;
+	height: 0;
+	width: 0.2rem;
+	background-color: #0064ff;
+	display: block;
+	-webkit-transform-origin: left top;
+	transform-origin: left top;
+	border-radius: 0.25rem;
+	content: '';
+	-webkit-transition: opacity 0.28s ease, height 0s linear 0.28s;
+	transition: opacity 0.28s ease, height 0s linear 0.28s;
+	opacity: 0;
+}
+
+.registration_form .checkbox .helper::before {
+	top: 0.65rem;
+	left: 0.38rem;
+	-webkit-transform: rotate(-135deg);
+	transform: rotate(-135deg);
+	box-shadow: 0 0 0 0.0625rem #fff;
+}
+
+.registration_form .checkbox .helper::after {
+	top: 0.3rem;
+	left: 0;
+	-webkit-transform: rotate(-45deg);
+	transform: rotate(-45deg);
+}
+
+.registration_form .checkbox label:hover .helper {
+	color: #0064ff;
+}
+
+.registration_form .checkbox input:checked~.helper {
+	color: #0064ff;
+}
+
+.registration_form .checkbox input:checked~.helper::after,
+.registration_form .checkbox input:checked~.helper::before {
+	opacity: 1;
+	-webkit-transition: height 0.28s ease;
+	transition: height 0.28s ease;
+}
+
+.registration_form .checkbox input:checked~.helper::after {
+	height: 0.5rem;
+}
+
+.registration_form .checkbox input:checked~.helper::before {
+	height: 1.2rem;
+	-webkit-transition-delay: 0.28s;
+	transition-delay: 0.28s;
+}
+
+.registration_form .radio+.radio,
+.registration_form .checkbox+.checkbox {
+	margin-top: 1rem;
 }
 
 .registration_form .has-error .legend.legend,
 .registration_form .has-error.form-group .control-label.control-label {
-  color: #d9534f;
+	color: #d9534f;
 }
+
 .registration_form .has-error.form-group .form-help,
-.registration_form .has-error.form-group .helper, .has-error.checkbox .form-help,
-.registration_form .has-error.checkbox .helper, .has-error.radio .form-help,
-.registration_form .has-error.radio .helper, .has-error.form-radio .form-help,
+.registration_form .has-error.form-group .helper,
+.has-error.checkbox .form-help,
+.registration_form .has-error.checkbox .helper,
+.has-error.radio .form-help,
+.registration_form .has-error.radio .helper,
+.has-error.form-radio .form-help,
 .registration_form .has-error.form-radio .helper {
-  color: #d9534f;
+	color: #d9534f;
 }
+
 .registration_form .has-error .bar::before {
-  background: #d9534f;
-  left: 0;
-  width: 100%;
+	background: #d9534f;
+	left: 0;
+	width: 100%;
 }
 
 .registration_form .button {
-  position: relative;
-  background: currentColor;
-  border: 1px solid currentColor;
-  font-size: 1.1rem;
-  color: #4f93ce;
-  margin: 3rem 0;
-  padding: 0.75rem 3rem;
-  cursor: pointer;
-  -webkit-transition: background-color 0.28s ease, color 0.28s ease, box-shadow 0.28s ease;
-  transition: background-color 0.28s ease, color 0.28s ease, box-shadow 0.28s ease;
-  overflow: hidden;
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+	position: relative;
+	background: currentColor;
+	border: 1px solid currentColor;
+	font-size: 1.1rem;
+	color: #4f93ce;
+	margin: 3rem 0;
+	padding: 0.75rem 3rem;
+	cursor: pointer;
+	-webkit-transition: background-color 0.28s ease, color 0.28s ease, box-shadow 0.28s ease;
+	transition: background-color 0.28s ease, color 0.28s ease, box-shadow 0.28s ease;
+	overflow: hidden;
+	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
 }
+
 .registration_form .button span {
-  color: #fff;
-  position: relative;
-  z-index: 1;
+	color: #fff;
+	position: relative;
+	z-index: 1;
 }
+
 .registration_form .button::before {
-  content: '';
-  position: absolute;
-  background: #071017;
-  border: 50vh solid #1d4567;
-  width: 30vh;
-  height: 30vh;
-  border-radius: 50%;
-  display: block;
-  top: 50%;
-  left: 50%;
-  z-index: 0;
-  opacity: 1;
-  -webkit-transform: translate(-50%, -50%) scale(0);
-          transform: translate(-50%, -50%) scale(0);
+	content: '';
+	position: absolute;
+	background: #071017;
+	border: 50vh solid #1d4567;
+	width: 30vh;
+	height: 30vh;
+	border-radius: 50%;
+	display: block;
+	top: 50%;
+	left: 50%;
+	z-index: 0;
+	opacity: 1;
+	-webkit-transform: translate(-50%, -50%) scale(0);
+	transform: translate(-50%, -50%) scale(0);
 }
+
 .registration_form .button:hover {
-  color: #0064ff;
-  box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12), 0 3px 5px -1px rgba(0, 0, 0, 0.2);
+	color: #0064ff;
+	box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12), 0 3px 5px -1px rgba(0, 0, 0, 0.2);
 }
+
 .registration_form .button:active::before,
 .registration_form .button:focus::before {
-  -webkit-transition: opacity 0.28s ease 0.364s, -webkit-transform 1.12s ease;
-  transition: opacity 0.28s ease 0.364s, -webkit-transform 1.12s ease;
-  transition: transform 1.12s ease, opacity 0.28s ease 0.364s;
-  transition: transform 1.12s ease, opacity 0.28s ease 0.364s, -webkit-transform 1.12s ease;
-  -webkit-transform: translate(-50%, -50%) scale(1);
-          transform: translate(-50%, -50%) scale(1);
-  opacity: 0;
+	-webkit-transition: opacity 0.28s ease 0.364s, -webkit-transform 1.12s ease;
+	transition: opacity 0.28s ease 0.364s, -webkit-transform 1.12s ease;
+	transition: transform 1.12s ease, opacity 0.28s ease 0.364s;
+	transition: transform 1.12s ease, opacity 0.28s ease 0.364s, -webkit-transform 1.12s ease;
+	-webkit-transform: translate(-50%, -50%) scale(1);
+	transform: translate(-50%, -50%) scale(1);
+	opacity: 0;
 }
+
 .registration_form .button:focus {
-  outline: none;
+	outline: none;
 }
 
 .registration-column.registration-column-two {
-  width: 40%;
+	width: 40%;
 }
+
 .registration-column.registration-column-one {
-  width: 60%;
-  padding: 10px 40px;
-  box-sizing: border-box;
+	width: 60%;
+	padding: 10px 40px;
+	box-sizing: border-box;
 }
+
 .registration_form_outer {
-  display: none;
+	display: none;
+}
+
+
+.number-input input {
+	width: 50px;
+	text-align: center;
+	margin: 0 5px;
+}
+
+.number-input span {
+	display: inline-block;
+	width: 30px;
+	height: 30px;
+	border: none;
+	background-color: #000;
+	color: #fff;
+	border-radius: 20px;
+	cursor: pointer;
+	line-height: 2;
+	text-align: center;
+	transition: 0.3s background-color;
+}
+
+.number-input span:hover {
+	background-color: #555;
+}
+.number-input span:active {
+	background-color: #ccc;
+}
+.occupants-range input {
+	border: 2px solid #000;
+	transition: 0.3s border-color;
+	border-radius: 4px;
+	line-height: 26px;
+}
+.occupants-range:active input {
+	border-color: #888;
+}
+
+
+.front-booking-search {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #fff;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.front-booking-calendar-wrap {
+    flex: 1; /* Occupy 50% of the available space */
+    display: flex;
+    align-items: center;
+}
+
+.front-booking-calendar-icon {
+    margin-right: 10px;
+    color: #3498db; /* Change the color as needed */
+}
+
+.front-booking-guests-wrap {
+    flex: 1; /* Occupy the remaining 50% of the available space */
+    display: flex;
+    justify-content: space-between; /* Distribute space evenly between child elements */
+	align-items: flex-end; /* Center align items vertically */
+}
+
+.front-booking-guest-adult-wrap,
+.front-booking-guest-child-wrap,
+.front-booking-booking-search {
+    width: 33%; /* Occupy 33% of the available space */
+}
+
+.front-booking-guest-adult-icon,
+.front-booking-guest-child-icon {
+    margin-right: 5px;
+}
+
+.front-booking-adult-adult-value,
+.front-booking-adult-child-value {
+    font-weight: bold;
+    font-size: 16px;
+    color: #333; /* Change the color as needed */
 }
