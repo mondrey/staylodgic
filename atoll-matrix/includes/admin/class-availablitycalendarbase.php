@@ -57,7 +57,7 @@ class AvailablityCalendarBase
         $numDays = $start_Date->diff($end_Date)->days + 1;
 
         if (!$startDate) {
-            error_log('Start: ' . $startDate . ' End: ' . $endDate . ' Number: ' . $numDays);
+            // error_log('Start: ' . $startDate . ' End: ' . $endDate . ' Number: ' . $numDays);
         }
         return $numDays;
     }

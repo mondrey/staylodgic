@@ -1625,6 +1625,8 @@ HTML;
             $new_bookingsubstatus = 'onhold';
         }
 
+        $reservation_booking_uid = \AtollMatrix\Common::generateUuid();
+
         // Here you can also add other post data like post_title, post_content etc.
         $post_data = array(
             'post_type' => 'atmx_reservations', // Your custom post type
@@ -1647,6 +1649,7 @@ HTML;
                 'atollmatrix_reservation_subtotal_room_cost' => $reservationData[ 'subtotal' ],
                 'atollmatrix_reservation_total_room_cost'    => $reservationData[ 'total' ],
                 'atollmatrix_booking_number'                 => $booking_number,
+                'atollmatrix_booking_uid'                 => $reservation_booking_uid,
                 'atollmatrix_customer_id'                    => $customer_post_id,
                 'atollmatrix_booking_data'                   => $reservationData,
             ),

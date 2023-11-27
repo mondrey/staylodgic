@@ -49,8 +49,8 @@ class AtollMatrixOptionsPanel
     {
         $this->args              = $args;
         $this->settings          = $settings;
-        $this->parent_page       = $this->args[ 'parent_page' ] ?? esc_html__('atoll-matrix', 'text_domain');
-        $this->title             = $this->args[ 'title' ] ?? esc_html__('Settings', 'text_domain');
+        $this->parent_page       = $this->args[ 'parent_page' ] ?? esc_html__('atoll-matrix', 'atollmatrix');
+        $this->title             = $this->args[ 'title' ] ?? esc_html__('Settings', 'atollmatrix');
         $this->slug              = $this->args[ 'slug' ] ?? sanitize_key($this->title);
         $this->option_name       = $this->args[ 'option_name' ] ?? sanitize_key($this->title);
         $this->option_group_name = $this->option_name . '_group';
@@ -217,7 +217,7 @@ class AtollMatrixOptionsPanel
             add_settings_error(
                 $this->option_name . '_mesages',
                 $this->option_name . '_message',
-                esc_html__('Settings Saved', 'text_domain'),
+                esc_html__('Settings Saved', 'atollmatrix'),
                 'updated'
             );
         }
@@ -295,14 +295,14 @@ $first_tab = false;
             id="<?php echo esc_attr($args[ 'label_for' ]); ?>_people"
             name="people"
             >
-            <option value="1">1</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
+            <option value="1"><?php _e('1','atollmatrix'); ?></option>
+            <option value="3"><?php _e('3','atollmatrix'); ?></option>
+            <option value="4"><?php _e('4','atollmatrix'); ?></option>
+            <option value="5"><?php _e('5','atollmatrix'); ?></option>
+            <option value="6"><?php _e('6','atollmatrix'); ?></option>
+            <option value="7"><?php _e('7','atollmatrix'); ?></option>
+            <option value="8"><?php _e('8','atollmatrix'); ?></option>
+            <option value="9"><?php _e('9','atollmatrix'); ?></option>
             </select>
             <input disabled
                 type="text"
@@ -313,15 +313,15 @@ $first_tab = false;
             id="<?php echo esc_attr($args[ 'label_for' ]); ?>_type"
             name="type"
             >
-            <option value="fixed">Fixed</option>
-            <option value="percentage">Percentage</option>
+            <option value="fixed"><?php _e('Fixed','atollmatrix'); ?></option>
+            <option value="percentage"><?php _e('Percentage','atollmatrix'); ?></option>
             </select>
             <select disabled
             id="<?php echo esc_attr($args[ 'label_for' ]); ?>_total"
             name="total"
             >
-            <option value="increase">Increase</option>
-            <option value="decrease">Decrease</option>
+            <option value="increase"><?php _e('Increase','atollmatrix'); ?></option>
+            <option value="decrease"><?php _e('Decrease','atollmatrix'); ?></option>
             </select>
             <span class="remove-set-button"><i class="dashicons dashicons-remove"></i></span>
             <br/>
@@ -341,14 +341,14 @@ $first_tab = false;
             id="<?php echo esc_attr($args[ 'label_for' ]); ?>_people_<?php echo $count; ?>"
             name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args[ 'label_for' ]); ?>][<?php echo $key; ?>][people]"
             >
-            <option value="1" <?php selected('1', $value[ 'people' ], true);?>>1</option>
-            <option value="3" <?php selected('3', $value[ 'people' ], true);?>>3</option>
-            <option value="4" <?php selected('4', $value[ 'people' ], true);?>>4</option>
-            <option value="5" <?php selected('5', $value[ 'people' ], true);?>>5</option>
-            <option value="6" <?php selected('6', $value[ 'people' ], true);?>>6</option>
-            <option value="7" <?php selected('7', $value[ 'people' ], true);?>>7</option>
-            <option value="8" <?php selected('8', $value[ 'people' ], true);?>>8</option>
-            <option value="9" <?php selected('9', $value[ 'people' ], true);?>>9</option>
+            <option value="1" <?php selected('1', $value[ 'people' ], true);?>><?php _e('1','atollmatrix'); ?></option>
+            <option value="3" <?php selected('3', $value[ 'people' ], true);?>><?php _e('3','atollmatrix'); ?></option>
+            <option value="4" <?php selected('4', $value[ 'people' ], true);?>><?php _e('4','atollmatrix'); ?></option>
+            <option value="5" <?php selected('5', $value[ 'people' ], true);?>><?php _e('5','atollmatrix'); ?></option>
+            <option value="6" <?php selected('6', $value[ 'people' ], true);?>><?php _e('6','atollmatrix'); ?></option>
+            <option value="7" <?php selected('7', $value[ 'people' ], true);?>><?php _e('7','atollmatrix'); ?></option>
+            <option value="8" <?php selected('8', $value[ 'people' ], true);?>><?php _e('8','atollmatrix'); ?></option>
+            <option value="9" <?php selected('9', $value[ 'people' ], true);?>><?php _e('9','atollmatrix'); ?></option>
             </select>
             <input
                 type="text"
@@ -359,15 +359,15 @@ $first_tab = false;
             id="<?php echo esc_attr($args[ 'label_for' ]); ?>_type_<?php echo $count; ?>"
             name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args[ 'label_for' ]); ?>][<?php echo $key; ?>][type]"
             >
-            <option value="fixed" <?php selected('fixed', $value[ 'type' ], true);?>>Fixed</option>
-            <option value="percentage" <?php selected('percentage', $value[ 'type' ], true);?>>Percentage</option>
+            <option value="fixed" <?php selected('fixed', $value[ 'type' ], true);?>><?php _e('Fixed','atollmatrix'); ?></option>
+            <option value="percentage" <?php selected('percentage', $value[ 'type' ], true);?>><?php _e('Percentage','atollmatrix'); ?></option>
             </select>
             <select
             id="<?php echo esc_attr($args[ 'label_for' ]); ?>_total_<?php echo $count; ?>"
             name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args[ 'label_for' ]); ?>][<?php echo $key; ?>][total]"
             >
-            <option value="increase" <?php selected('increase', $value[ 'total' ], true);?>>Increase</option>
-            <option value="decrease" <?php selected('decrease', $value[ 'total' ], true);?>>Decrease</option>
+            <option value="increase" <?php selected('increase', $value[ 'total' ], true);?>><?php _e('Increase','atollmatrix'); ?></option>
+            <option value="decrease" <?php selected('decrease', $value[ 'total' ], true);?>><?php _e('Decrease','atollmatrix'); ?></option>
             </select>
             <span class="remove-set-button"><i class="dashicons dashicons-remove"></i></span>
             <br/>
@@ -378,7 +378,7 @@ $first_tab = false;
         }
         ?>
         </div>
-        <button id="addperperson-repeatable">Add New Section</button>
+        <button id="addperperson-repeatable"><?php _e('Add New Section','atollmatrix'); ?></button>
             <?php
 if ($description) {
             ?>
@@ -412,18 +412,18 @@ if ($description) {
         id="<?php echo esc_attr($args[ 'label_for' ]); ?>_mealtype"
         name="mealtype"
         >
-        <option value="RO">Room Only</option>
-        <option value="BB">Bed and Breakfast</option>
-        <option value="HB">Half Board</option>
-        <option value="FB">Full Board</option>
-        <option value="AN">All-Inclusive</option>
+        <option value="RO"><?php _e('Room Only','atollmatrix'); ?></option>
+        <option value="BB"><?php _e('Bed and Breakfast','atollmatrix'); ?></option>
+        <option value="HB"><?php _e('Half Board','atollmatrix'); ?></option>
+        <option value="FB"><?php _e('Full Board','atollmatrix'); ?></option>
+        <option value="AN"><?php _e('All-Inclusive','atollmatrix'); ?></option>
         </select>
         <select disabled
         id="<?php echo esc_attr($args[ 'label_for' ]); ?>_choice"
         name="choice"
         >
-        <option value="included">Included in rate</option>
-        <option value="optional">Optional</option>
+        <option value="included"><?php _e('Included in rate','atollmatrix'); ?></option>
+        <option value="optional"><?php _e('Optional','atollmatrix'); ?></option>
         </select>
         <input disabled
             type="text"
@@ -447,18 +447,18 @@ $count = 0;
                 id="<?php echo esc_attr($args[ 'label_for' ]); ?>_mealtype_<?php echo $count; ?>"
                 name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args[ 'label_for' ]); ?>][<?php echo $key; ?>][mealtype]"
                 >
-                <option value="RO" <?php selected('RO', $value[ 'mealtype' ], true);?>>Room Only</option>
-                <option value="BB" <?php selected('BB', $value[ 'mealtype' ], true);?>>Bed and Breakfast</option>
-                <option value="HB" <?php selected('HB', $value[ 'mealtype' ], true);?>>Half Board</option>
-                <option value="FB" <?php selected('FB', $value[ 'mealtype' ], true);?>>Full Board</option>
-                <option value="AN" <?php selected('AN', $value[ 'mealtype' ], true);?>>All-Inclusive</option>
+                <option value="RO" <?php selected('RO', $value[ 'mealtype' ], true);?>><?php _e('Room Only','atollmatrix'); ?></option>
+                <option value="BB" <?php selected('BB', $value[ 'mealtype' ], true);?>><?php _e('Bed and Breakfast','atollmatrix'); ?></option>
+                <option value="HB" <?php selected('HB', $value[ 'mealtype' ], true);?>><?php _e('Half Board','atollmatrix'); ?></option>
+                <option value="FB" <?php selected('FB', $value[ 'mealtype' ], true);?>><?php _e('Full Board','atollmatrix'); ?></option>
+                <option value="AN" <?php selected('AN', $value[ 'mealtype' ], true);?>><?php _e('All-Inclusive','atollmatrix'); ?></option>
                 </select>
             <select
             id="<?php echo esc_attr($args[ 'label_for' ]); ?>_choice_<?php echo $count; ?>"
             name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args[ 'label_for' ]); ?>][<?php echo $key; ?>][choice]"
             >
-            <option value="included" <?php selected('included', $value[ 'choice' ], true);?>>Included in rate</option>
-            <option value="optional" <?php selected('optional', $value[ 'choice' ], true);?>>Optional</option>
+            <option value="included" <?php selected('included', $value[ 'choice' ], true);?>><?php _e('Included in rate','atollmatrix'); ?></option>
+            <option value="optional" <?php selected('optional', $value[ 'choice' ], true);?>><?php _e('Optional','atollmatrix'); ?></option>
             </select>
             <input
                 type="text"
@@ -475,7 +475,7 @@ $count = 0;
         }
         ?>
     </div>
-    <button id="addmealplan-repeatable">Add New Section</button>
+    <button id="addmealplan-repeatable"><?php _e('Add New Section','atollmatrix'); ?></button>
         <?php
 if ($description) {
             ?>
@@ -527,10 +527,10 @@ if ($description) {
             id="<?php echo esc_attr($args[ 'label_for' ]); ?>_duration"
             name="duration"
             >
-            <option value="inrate">Add to rate</option>
-            <option value="perperson">Per person</option>
-            <option value="perday">Per day</option>
-            <option value="perpersonperday">Per person per day</option>
+            <option value="inrate"><?php _e('Add to rate','atollmatrix'); ?></option>
+            <option value="perperson"><?php _e('Per person','atollmatrix'); ?></option>
+            <option value="perday"><?php _e('Per day','atollmatrix'); ?></option>
+            <option value="perpersonperday"><?php _e('Per person per day','atollmatrix'); ?></option>
             </select>
             <span class="remove-set-button"><i class="dashicons dashicons-remove"></i></span>
             <br/>
@@ -563,17 +563,17 @@ if ($description) {
             id="<?php echo esc_attr($args[ 'label_for' ]); ?>_type_<?php echo $count; ?>"
             name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args[ 'label_for' ]); ?>][<?php echo $key; ?>][type]"
             >
-            <option value="fixed" <?php selected('fixed', $value[ 'type' ], true);?>>Fixed</option>
-            <option value="percentage" <?php selected('percentage', $value[ 'type' ], true);?>>Percentage</option>
+            <option value="fixed" <?php selected('fixed', $value[ 'type' ], true);?>><?php _e('Fixed','atollmatrix'); ?></option>
+            <option value="percentage" <?php selected('percentage', $value[ 'type' ], true);?>><?php _e('Percentage','atollmatrix'); ?></option>
             </select>
             <select
             id="<?php echo esc_attr($args[ 'label_for' ]); ?>_duration_<?php echo $count; ?>"
             name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args[ 'label_for' ]); ?>][<?php echo $key; ?>][duration]"
             >
-            <option value="inrate" <?php selected('inrate', $value[ 'duration' ], true);?>>Add to rate</option>
-            <option value="perperson" <?php selected('perperson', $value[ 'duration' ], true);?>>Per person</option>
-            <option value="perday" <?php selected('perday', $value[ 'duration' ], true);?>>Per Day</option>
-            <option value="perpersonperday" <?php selected('perpersonperday', $value[ 'duration' ], true);?>>Per person per day</option>
+            <option value="inrate" <?php selected('inrate', $value[ 'duration' ], true);?>><?php _e('Add to rate','atollmatrix'); ?></option>
+            <option value="perperson" <?php selected('perperson', $value[ 'duration' ], true);?>><?php _e('Per person','atollmatrix'); ?></option>
+            <option value="perday" <?php selected('perday', $value[ 'duration' ], true);?>><?php _e('Per Day','atollmatrix'); ?></option>
+            <option value="perpersonperday" <?php selected('perpersonperday', $value[ 'duration' ], true);?>><?php _e('Per person per day','atollmatrix'); ?></option>
             </select>
             <span class="remove-set-button"><i class="dashicons dashicons-remove"></i></span>
             <br/>
@@ -584,7 +584,7 @@ if ($description) {
         }
         ?>
         </div>
-        <button id="addtax-repeatable">Add New Section</button>
+        <button id="addtax-repeatable"><?php _e('Add New Section','atollmatrix'); ?></button>
             <?php
 if ($description) {
             ?>
@@ -708,12 +708,12 @@ $panel_args = [
     'slug'            => 'atollmatrix-settings-panel',
     'user_capability' => 'manage_options',
     'tabs'            => [
-        'tab-1'     => esc_html__('Tab 1', 'text_domain'),
-        'tab-2'     => esc_html__('Tab 2', 'text_domain'),
-        'currency'  => esc_html__('Currency', 'text_domain'),
-        'mealplan'  => esc_html__('Meal Plan', 'text_domain'),
-        'perperson' => esc_html__('Per person price', 'text_domain'),
-        'tax'       => esc_html__('Tax', 'text_domain'),
+        'general'     => esc_html__('General', 'atollmatrix'),
+        'tab-2'     => esc_html__('Tab 2', 'atollmatrix'),
+        'currency'  => esc_html__('Currency', 'atollmatrix'),
+        'mealplan'  => esc_html__('Meal Plan', 'atollmatrix'),
+        'perperson' => esc_html__('Per person price', 'atollmatrix'),
+        'tax'       => esc_html__('Tax', 'atollmatrix'),
      ],
  ];
 
@@ -730,127 +730,127 @@ foreach ($currencies as $currencyCode => $currencyName) {
 $panel_settings = [
     // Tab 1
     'enable_taxes'         => [
-        'label'       => esc_html__('Enable Taxes', 'text_domain'),
+        'label'       => esc_html__('Enable Taxes', 'atollmatrix'),
         'type'        => 'checkbox',
         'description' => 'Add taxes to the total',
-        'tab'         => 'tab-1',
+        'tab'         => 'general',
      ],
     'new_bookingstatus'    => [
-        'label'       => esc_html__('Choose status for new bookings', 'text_domain'),
+        'label'       => esc_html__('Choose status for new bookings', 'atollmatrix'),
         'type'        => 'select',
         'description' => 'Choose status for new bookings.',
         'choices'     => get_new_booking_statuses(),
-        'tab'         => 'tab-1',
+        'tab'         => 'general',
      ],
     'new_bookingsubstatus' => [
-        'label'       => esc_html__('Choose sub status for new bookings', 'text_domain'),
+        'label'       => esc_html__('Choose sub status for new bookings', 'atollmatrix'),
         'type'        => 'select',
         'description' => 'Choose sub status for new bookings.',
         'choices'     => get_booking_substatuses(),
-        'tab'         => 'tab-1',
+        'tab'         => 'general',
      ],
     'option_2'             => [
-        'label'       => esc_html__('Select Option', 'text_domain'),
+        'label'       => esc_html__('Select Option', 'atollmatrix'),
         'type'        => 'select',
         'description' => 'My select field description.',
         'choices'     => [
-            ''         => esc_html__('Select', 'text_domain'),
-            'choice_1' => esc_html__('Choice 1', 'text_domain'),
-            'choice_2' => esc_html__('Choice 2', 'text_domain'),
-            'choice_3' => esc_html__('Choice 3', 'text_domain'),
+            ''         => esc_html__('Select', 'atollmatrix'),
+            'choice_1' => esc_html__('Choice 1', 'atollmatrix'),
+            'choice_2' => esc_html__('Choice 2', 'atollmatrix'),
+            'choice_3' => esc_html__('Choice 3', 'atollmatrix'),
          ],
-        'tab'         => 'tab-1',
+        'tab'         => 'general',
      ],
     // Tab 2
     'option_3'             => [
-        'label'       => esc_html__('Text Option', 'text_domain'),
+        'label'       => esc_html__('Text Option', 'atollmatrix'),
         'type'        => 'text',
         'description' => 'My field 1 description.',
         'tab'         => 'tab-2',
      ],
     'option_4'             => [
-        'label'       => esc_html__('Textarea Option', 'text_domain'),
+        'label'       => esc_html__('Textarea Option', 'atollmatrix'),
         'type'        => 'textarea',
         'description' => 'My textarea field description.',
         'tab'         => 'tab-2',
      ],
     'taxes'                => [
-        'label'       => esc_html__('Taxes', 'text_domain'),
+        'label'       => esc_html__('Taxes', 'atollmatrix'),
         'type'        => 'repeatable_tax',
         'description' => 'My textarea field description.',
         'tab'         => 'tax',
      ],
     'perpersonpricing'     => [
-        'label'       => esc_html__('Per person price', 'text_domain'),
+        'label'       => esc_html__('Per person price', 'atollmatrix'),
         'type'        => 'repeatable_perperson',
         'description' => 'My textarea field description.',
         'tab'         => 'perperson',
      ],
     'childfreestay'        => [
-        'label'       => esc_html__('Children under the age can stay for free', 'text_domain'),
+        'label'       => esc_html__('Children under the age can stay for free', 'atollmatrix'),
         'type'        => 'select',
         'description' => 'My select field description.',
         'choices'     => [
-            '0'  => esc_html__('0', 'text_domain'),
-            '1'  => esc_html__('1', 'text_domain'),
-            '2'  => esc_html__('2', 'text_domain'),
-            '3'  => esc_html__('3', 'text_domain'),
-            '4'  => esc_html__('4', 'text_domain'),
-            '5'  => esc_html__('5', 'text_domain'),
-            '6'  => esc_html__('6', 'text_domain'),
-            '7'  => esc_html__('7', 'text_domain'),
-            '8'  => esc_html__('8', 'text_domain'),
-            '9'  => esc_html__('9', 'text_domain'),
-            '10' => esc_html__('10', 'text_domain'),
-            '11' => esc_html__('11', 'text_domain'),
-            '12' => esc_html__('12', 'text_domain'),
-            '13' => esc_html__('13', 'text_domain'),
-            '14' => esc_html__('14', 'text_domain'),
-            '15' => esc_html__('15', 'text_domain'),
-            '16' => esc_html__('16', 'text_domain'),
-            '17' => esc_html__('17', 'text_domain'),
+            '0'  => esc_html__('0', 'atollmatrix'),
+            '1'  => esc_html__('1', 'atollmatrix'),
+            '2'  => esc_html__('2', 'atollmatrix'),
+            '3'  => esc_html__('3', 'atollmatrix'),
+            '4'  => esc_html__('4', 'atollmatrix'),
+            '5'  => esc_html__('5', 'atollmatrix'),
+            '6'  => esc_html__('6', 'atollmatrix'),
+            '7'  => esc_html__('7', 'atollmatrix'),
+            '8'  => esc_html__('8', 'atollmatrix'),
+            '9'  => esc_html__('9', 'atollmatrix'),
+            '10' => esc_html__('10', 'atollmatrix'),
+            '11' => esc_html__('11', 'atollmatrix'),
+            '12' => esc_html__('12', 'atollmatrix'),
+            '13' => esc_html__('13', 'atollmatrix'),
+            '14' => esc_html__('14', 'atollmatrix'),
+            '15' => esc_html__('15', 'atollmatrix'),
+            '16' => esc_html__('16', 'atollmatrix'),
+            '17' => esc_html__('17', 'atollmatrix'),
          ],
         'tab'         => 'perperson',
      ],
     'mealplan'             => [
-        'label'       => esc_html__('Meal Plan', 'text_domain'),
+        'label'       => esc_html__('Meal Plan', 'atollmatrix'),
         'type'        => 'repeatable_mealplan',
         'description' => 'My textarea field description.',
         'tab'         => 'mealplan',
      ],
     'currency'             => [
-        'label'       => esc_html__('Currency', 'text_domain'),
+        'label'       => esc_html__('Currency', 'atollmatrix'),
         'type'        => 'select',
         'description' => 'My select field description.',
         'choices'     => $curr_choices,
         'tab'         => 'currency',
      ],
     'currency_position'    => [
-        'label'       => esc_html__('Currency position', 'text_domain'),
+        'label'       => esc_html__('Currency position', 'atollmatrix'),
         'type'        => 'select',
         'description' => 'My select field description.',
         'choices'     => [
-            'left_space'  => esc_html__('Left with space', 'text_domain'),
-            'right_space' => esc_html__('Right with space', 'text_domain'),
-            'left'        => esc_html__('Left', 'text_domain'),
-            'right'       => esc_html__('Right', 'text_domain'),
+            'left_space'  => esc_html__('Left with space', 'atollmatrix'),
+            'right_space' => esc_html__('Right with space', 'atollmatrix'),
+            'left'        => esc_html__('Left', 'atollmatrix'),
+            'right'       => esc_html__('Right', 'atollmatrix'),
          ],
         'tab'         => 'currency',
      ],
     'thousand_seperator'   => [
-        'label'       => esc_html__('Thousand seperator', 'text_domain'),
+        'label'       => esc_html__('Thousand seperator', 'atollmatrix'),
         'type'        => 'text',
         'description' => 'My field 1 description.',
         'tab'         => 'currency',
      ],
     'decimal_seperator'    => [
-        'label'       => esc_html__('Decimal seperator', 'text_domain'),
+        'label'       => esc_html__('Decimal seperator', 'atollmatrix'),
         'type'        => 'text',
         'description' => 'My field 1 description.',
         'tab'         => 'currency',
      ],
     'number_of_decimals'   => [
-        'label'       => esc_html__('Number of Decimals', 'text_domain'),
+        'label'       => esc_html__('Number of Decimals', 'atollmatrix'),
         'type'        => 'text',
         'description' => 'My field 1 description.',
         'tab'         => 'currency',

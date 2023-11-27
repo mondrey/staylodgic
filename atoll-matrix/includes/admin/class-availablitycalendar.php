@@ -105,7 +105,7 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 		// Sanitize inputs
 		$start_date = sanitize_text_field( $_POST['start_date'] );
 		$end_date   = sanitize_text_field( $_POST['end_date'] );
-		error_log( 'Here:' . $start_date . ' ' . ':' . $end_date );
+		// error_log( 'Here:' . $start_date . ' ' . ':' . $end_date );
 
 		// Validate inputs
 		if ( ! strtotime( $start_date ) || ! strtotime( $end_date ) ) {
@@ -129,11 +129,12 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 			<div class="occupancyStats-wrap">
 				<div class="occupancyStats-inner">
 					<div class="occupancy-total">
-						Occupancy
+						<?php _e('Occupancy','atollmatrix'); ?>
 						<span class="occupancy-total-stats">
 							<?php
-							echo $this->calculateOccupancyTotalForRange( $this->startDate, $this->endDate );
-							?><span>%</span>
+							echo esc_html( $this->calculateOccupancyTotalForRange( $this->startDate, $this->endDate ) );
+							?>
+							<span>%</span>
 						</span>
 					</div>
 				</div>
@@ -159,14 +160,15 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 			$occupancydate = $date->format( 'Y-m-d' );
 			ob_start();
 			?>
-			<td class="calendarCell monthHeader occupancy-stats <?php echo $this->todayCSSTag( $occupancydate ); ?>">
+			<td class="calendarCell monthHeader occupancy-stats <?php echo esc_attr( $this->todayCSSTag( $occupancydate ) ); ?>">
 				<div class="occupancyStats-wrap">
 					<div class="occupancyStats-inner">
-						<div class="occupancy-adr">ADR:
-							<?php echo $this->calculateAdrForDate( $occupancydate ); ?>
+						<div class="occupancy-adr">
+							<?php _e('ADR:','atollmatrix'); ?>
+							<?php echo esc_html( $this->calculateAdrForDate( $occupancydate ) ); ?>
 						</div>
 						<div class="occupancy-percentage">
-							<?php echo $this->calculateOccupancyForDate( $occupancydate ); ?><span>%</span>
+							<?php echo esc_html( $this->calculateOccupancyForDate( $occupancydate ) ); ?><span>%</span>
 						</div>
 					</div>
 				</div>
@@ -178,7 +180,7 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 	}
 
 	private function displayDate_TableDataBlock( $dates = false, $numDays = false ) {
-		error_log( 'Number of days: ' . $numDays );
+		// error_log( 'Number of days: ' . $numDays );
 		$today             = $this->today;
 		$number_of_columns = 0;
 		if ( ! $numDays ) {
@@ -200,16 +202,16 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 			}
 			ob_start();
 			?>
-			<td class="calendarCell monthHeader <?php echo $this->todayCSSTag( $occupancydate ); ?> <?php echo $column_class; ?>">
+			<td class="calendarCell monthHeader <?php echo esc_attr( $this->todayCSSTag( $occupancydate ) ); ?> <?php echo esc_attr( $column_class ); ?>">
 				<div class="monthDayinfo-wrap">
 					<div class="month">
-						<?php echo $month; ?>
+						<?php echo esc_html( $month ); ?>
 					</div>
 					<div class="day-letter">
-						<?php echo $date->format( 'D' ); ?>
+						<?php echo esc_html( $date->format( 'D' ) ); ?>
 					</div>
 					<div class="day">
-						<?php echo $date->format( 'j' ); ?>
+						<?php echo esc_html( $date->format( 'j' ) ); ?>
 					</div>
 				</div>
 			</td>
@@ -318,13 +320,14 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 			}
 
 			$reservation_edit_link = get_edit_post_link( $reservation['id'] );
-			$display_info          = $guest_name . '<span>Booking.com</span>';
+			$display_info = $guest_name;
+			$display_ota = 'Booking.com';
 			if ( $reservation['start'] <> 'no' ) {
 				$start_date = new \DateTime();
 				$start_date->setTimestamp( $reservation['checkin'] );
 				$start_date_display = $start_date->format( 'M j, Y' );
 				$width              = ( 80 * ( $reserved_days ) ) - 3;
-				$tab[ $room ]       = '<a class="reservation-tab-is-' . $reservation_status . ' ' . $reservation_substatus . ' reservation-tab-id-' . $reservatoin_id . ' reservation-edit-link" href="' . $reservation_edit_link . '"><div class="reserved-tab-wrap reserved-tab-with-info reservation-' . $reservation_status . ' reservation-substatus-' . $reservation_substatus . '" data-reservationstatus="' . $reservation_status . '" data-guest="' . $guest_name . '" data-room="' . $room . '" data-row="' . $row . '" data-bookingnumber="' . $booking_number . '" data-reservationid="' . $reservation['id'] . '" data-checkin="' . $checkin . '" data-checkout="' . $checkout . '"><div class="reserved-tab reserved-tab-days-' . $reserved_days . '"><div data-tabwidth="' . $width . '" class="reserved-tab-inner"><div class="ota-sign"></div><div class="guest-name">' . $display_info . '</div></div></div></div></a>';
+				$tab[ $room ]       = '<a class="reservation-tab-is-' . esc_attr( $reservation_status ) . ' ' . esc_attr( $reservation_substatus ) . ' reservation-tab-id-' . esc_attr( $reservatoin_id ) . ' reservation-edit-link" href="' . esc_attr( $reservation_edit_link ) . '"><div class="reserved-tab-wrap reserved-tab-with-info reservation-' . esc_attr( $reservation_status ) . ' reservation-substatus-' . esc_attr( $reservation_substatus ) . '" data-reservationstatus="' . esc_attr( $reservation_status ) . '" data-guest="' . esc_attr( $guest_name ) . '" data-room="' . esc_attr( $room ) . '" data-row="' . esc_attr( $row ) . '" data-bookingnumber="' . esc_attr( $booking_number ) . '" data-reservationid="' . $reservation['id'] . '" data-checkin="' . esc_attr( $checkin ) . '" data-checkout="' . esc_attr( $checkout ) . '"><div class="reserved-tab reserved-tab-days-' . esc_attr( $reserved_days ) . '"><div data-tabwidth="' . esc_attr( $width ) . '" class="reserved-tab-inner"><div class="ota-sign"></div><div class="guest-name">' . esc_html( $display_info ) . '<span>'. esc_html( $display_ota ) .'</span></div></div></div></div></a>';
 				$display            = true;
 			} else {
 				if ( $current_day <> $checkout ) {
@@ -336,9 +339,9 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 					$daysBetween        = \AtollMatrix\Common::countDays_BetweenDates( $check_in_date_past, $current_day );
 					$width              = ( 80 * ( $reserved_days - $daysBetween ) ) - 3;
 					if ( $check_in_date_past < $calendar_start && $calendar_start == $current_day ) {
-						$tab[ $room ] = '<a class="reservation-tab-is-' . $reservation_status . ' ' . $reservation_substatus . ' reservation-tab-id-' . $reservatoin_id . ' reservation-edit-link" href="' . $reservation_edit_link . '"><div class="reserved-tab-wrap reserved-tab-with-info reserved-from-past reservation-' . $reservation_status . '" data-reservationstatus="' . $reservation_status . '" data-guest="' . $guest_name . '" data-room="' . $room . '" data-row="' . $row . '" data-bookingnumber="' . $booking_number . '" data-reservationid="' . $reservation['id'] . '" data-checkin="' . $checkin . '" data-checkout="' . $checkout . '"><div class="reserved-tab reserved-tab-days-' . $reserved_days . '"><div data-tabwidth="' . $width . '" class="reserved-tab-inner"><div class="ota-sign"></div><div class="guest-name">' . $display_info . '</div></div></div></div></a>';
+						$tab[ $room ] = '<a class="reservation-tab-is-' . esc_attr( $reservation_status ) . ' ' . esc_attr( $reservation_substatus ) . ' reservation-tab-id-' . esc_attr( $reservatoin_id ) . ' reservation-edit-link" href="' . esc_attr( $reservation_edit_link ) . '"><div class="reserved-tab-wrap reserved-tab-with-info reserved-from-past reservation-' . esc_attr( $reservation_status ) . '" data-reservationstatus="' . esc_attr( $reservation_status ) . '" data-guest="' . esc_attr( $guest_name ) . '" data-room="' . esc_attr( $room ) . '" data-row="' . esc_attr( $row ) . '" data-bookingnumber="' . esc_attr( $booking_number ) . '" data-reservationid="' . esc_attr( $reservation['id'] ) . '" data-checkin="' . esc_attr( $checkin ) . '" data-checkout="' . esc_attr( $checkout ) . '"><div class="reserved-tab reserved-tab-days-' . esc_attr( $reserved_days ) . '"><div data-tabwidth="' . esc_attr( $width ) . '" class="reserved-tab-inner"><div class="ota-sign"></div><div class="guest-name">' . esc_html( $display_info ) . '<span>'. esc_html( $display_ota ) .'</span></div></div></div></div></a>';
 					} else {
-						$tab[ $room ] = '<div class="reservation-tab-is-' . $reservation_status . ' ' . $reservation_substatus . ' reservation-tab-id-' . $reservatoin_id . ' reserved-tab-wrap reserved-extended reservation-' . $reservation_status . ' reservation-substatus-' . $reservation_substatus . '" data-reservationstatus="' . $reservation_status . '" data-room="' . $room . '" data-row="' . $row . '" data-reservationid="' . $reservation['id'] . '" data-checkin="' . $checkin . '" data-checkout="' . $checkout . '"><div class="reserved-tab"></div></div>';
+						$tab[ $room ] = '<div class="reservation-tab-is-' . esc_attr( $reservation_status ) . ' ' . esc_attr( $reservation_substatus ) . ' reservation-tab-id-' . esc_attr( $reservatoin_id ) . ' reserved-tab-wrap reserved-extended reservation-' . esc_attr( $reservation_status ) . ' reservation-substatus-' . esc_attr( $reservation_substatus ) . '" data-reservationstatus="' . esc_attr( $reservation_status ) . '" data-room="' . esc_attr( $room ) . '" data-row="' . esc_attr( $row ) . '" data-reservationid="' . esc_attr( $reservation['id'] ) . '" data-checkin="' . esc_attr( $checkin ) . '" data-checkout="' . esc_attr( $checkout ) . '"><div class="reserved-tab"></div></div>';
 					}
 					$display = true;
 				}
@@ -391,7 +394,7 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 
 		ob_start();
 		?>
-		<table id="calendarTable" data-calstart="<?php echo $startDateString; ?>" data-calend="<?php echo $endDateString; ?>">
+		<table id="calendarTable" data-calstart="<?php echo esc_attr( $startDateString ); ?>" data-calend="<?php echo esc_attr( $endDateString ); ?>">
 			<tr class="calendarRow">
 				<?php
 				echo self::displayOccupancy_TableDataBlock();
@@ -412,9 +415,9 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 			foreach ( $this->roomlist as $roomId => $roomName ) :
 				$checkout_list = array();
 				?>
-				<tr class="calendarRow calendar-room-row" data-id="<?php echo $roomId; ?>">
+				<tr class="calendarRow calendar-room-row" data-id="<?php echo esc_attr( $roomId ); ?>">
 					<td class="calendarCell rowHeader">
-						<?php echo $roomName; ?>
+						<?php echo esc_html( $roomName ); ?>
 					</td>
 					<?php foreach ( $dates as $date ) : ?>
 						<?php
@@ -438,21 +441,21 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 						if ( $dateString == $today ) {
 							$today_status_class = "is-today";
 						}
-						echo '<td class="calendarCell ' . $today_status_class . ' ' . $occupancy_status_class . '">';
+						echo '<td class="calendarCell ' . esc_attr( $today_status_class ) . ' ' . esc_attr( $occupancy_status_class ) . '">';
 						?>
 						<div class="calendar-info-wrap">
 							<div class="calendar-info">
-								<a href="#" class="quantity-link" data-remaining="<?php echo $remaining_rooms; ?>"
-									data-reserved="<?php echo $reserved_rooms; ?>" data-date="<?php echo $dateString; ?>"
-									data-room="<?php echo $roomId; ?>"><?php echo $remaining_rooms; ?></a>
+								<a href="#" class="quantity-link" data-remaining="<?php echo esc_attr( $remaining_rooms ); ?>"
+									data-reserved="<?php echo esc_attr( $reserved_rooms ); ?>" data-date="<?php echo esc_attr( $dateString ); ?>"
+									data-room="<?php echo esc_attr( $roomId ); ?>"><?php echo esc_html( $remaining_rooms ); ?></a>
 								<?php
 								if ( ! empty( $room_rate ) && isset( $room_rate ) && $room_rate > 0 ) {
-									echo '<a class="roomrate-link" href="#">' . $room_rate . '</a>';
+									echo '<a class="roomrate-link" href="#">' . esc_html( $room_rate ) . '</a>';
 								}
 								?>
 							</div>
 						</div>
-						<div class="reservation-tab-wrap" data-day="<?php echo $dateString; ?>">
+						<div class="reservation-tab-wrap" data-day="<?php echo esc_attr( $dateString ); ?>">
 							<?php
 							if ( $reservation_data ) {
 								$reservation_module = array();

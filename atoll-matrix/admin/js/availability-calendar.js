@@ -228,6 +228,11 @@
 		});
 	
 		if ($.fn.flatpickr) {
+
+			var room_related_input_fields = $('#reservation-details,.metabox-fields.room_choice,.metabox-fields.reservation_status,.metabox-fields.metaboxtype_bedlayout,.metabox-fields.metaboxtype_mealplan_included,.metabox-fields.reservation_meals,.metabox-fields.metaboxtype_currency,.metabox-fields.metaboxtype_taxgenerate,.metabox-fields.metaboxtype_currencyarray');
+			if ( '' == $('.reservation').val() ) {
+				room_related_input_fields.hide();
+			}
 	
 			$('.datepicker').flatpickr();
 
@@ -393,11 +398,14 @@
 				$(this).on('click', '.plus-btn', function() {
 					var guest = input.attr('data-guest');
 					var value = parseInt(input.val());
+					if ( isNaN(value)) {
+						value = 0;
+					}
 					$('.child-number-notice').hide();
 					input.val(value + 1);
 					calculateSum();
 					if (guest === "child") {
-						var extraInput = $("<input name='atollmatrix_reservation_room_children[age][]' type='text' data-counter='" + value + "' placeholder='Enter age'>");
+						var extraInput = $("<input name='atollmatrix_reservation_room_children[age][]' type='text' data-counter='" + value + "' placeholder='Age'>");
 						$("#guest-age").append(extraInput);  // append the extra input to the "guest-age" div
 					}
 					// $('#atollmatrix_room_id').trigger('change');
@@ -498,6 +506,9 @@
 
 					// Trigger update
 					selectElement.trigger('change');
+
+					room_related_input_fields.show();
+				  
 				});
 				}
 			  }
@@ -527,6 +538,7 @@
 			  
 					document.getElementById("atollmatrix_checkin_date").value = new Date(checkin - checkinOffset).toISOString().split('T')[0];
 					document.getElementById("atollmatrix_checkout_date").value = new Date(checkout - checkoutOffset).toISOString().split('T')[0];
+
 				  }
 			  
 				  var reservationDetails = '<p class="reservation-post-checkin-date">Check-in: ' + checkin.toLocaleDateString() + '</p>' +

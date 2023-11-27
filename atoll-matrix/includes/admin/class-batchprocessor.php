@@ -127,6 +127,7 @@ class EventBatchProcessor
 		// Loop through the processed events and insert posts
 		foreach ($processedEvents as $event) {
 			$booking_number = $event['UID'];
+			$booking_uid = $event['UID'];
 			$checkin = $event['DATA']['CHECKIN'];
 			$checkout = $event['DATA']['CHECKOUT'];
 			$name = $event['SUMMARY'];
@@ -167,6 +168,7 @@ class EventBatchProcessor
 					'atollmatrix_checkin_date' => $checkin,
 					'atollmatrix_checkout_date' => $checkout,
 					'atollmatrix_booking_number' => $booking_number,
+					'atollmatrix_booking_uid' => $booking_uid,
 					// Set the booking number as post meta
 					'atollmatrix_full_name' => $name,
 					// Customer name

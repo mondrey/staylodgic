@@ -97,10 +97,6 @@
 	font-weight: normal;
 }
 
-.metabox_label {
-	margin: 10px 0 0 0;
-}
-
 .is_subtitle label {
 	color: #7B7B7B;
 	font-size: 16px;
@@ -115,6 +111,7 @@
 	max-width: 580px;
 	width: 100%;
 	margin-top: 5px;
+	font-style: italic;
 	-webkit-transition: color 0.5s ease-in-out;
 	   -moz-transition: color 0.5s ease-in-out;
 	     -o-transition: color 0.5s ease-in-out;
@@ -823,15 +820,27 @@
 	width: 30px;
 	height: 30px;
 	border: none;
-	background-color: #ddd;
+	background-color: #000;
+	color: #fff;
 	border-radius: 20px;
 	cursor: pointer;
 	line-height: 2;
 	text-align: center;
+	transition: 0.3s background-color;
 }
   
 .number-input span:hover {
+	background-color: #555;
+}
+.number-input span:active {
 	background-color: #ccc;
+}
+.occupants-range input {
+	border: 2px solid #000;
+	transition: 0.3s border-color;
+}
+.occupants-range:active input {
+	border-color: #888;
 }
 
 .bed-setup-container-template {
@@ -876,4 +885,43 @@
 }
 .type-twinbed-twinbed-two.guest-bed-twinbed {
 	left: -10px;
+}
+
+.metaboxtype_get_customer_data,
+.reservation_guest {
+    background: #ebf6f76b;
+    border-bottom: 1px solid #0b0b0b14;
+}
+.reservation_payments,
+.reservation_meals,
+.reservation_date,
+.reservation_status {
+    background: #eeebf76b;
+    border-bottom: 1px solid #0b0b0b14;
+}
+.metabox_label {
+    margin: 0;
+    padding-top: 17px;
+	display: none;
+}
+.metabox-fields.reservation_total {
+	padding-bottom: 20px;
+}
+.metabox-fields .reservation_number_box {
+	border: 0;
+	padding: 0;
+	font-size: 16px;
+	background: none;
+	letter-spacing: 2px;
+	color: #ff0000;
+}
+.metabox-fields.is-a-group,
+.metabox-fields.is_subtitle,
+.metabox-fields {
+	padding-top: 15px;
+}
+
+#guest-age input {
+	width: 50px;
+	margin-bottom: 1px;
 }

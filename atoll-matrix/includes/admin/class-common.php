@@ -3,6 +3,22 @@ namespace AtollMatrix;
 
 class Common
 {
+	public static function generateUuid() {
+		// Generate a version 4 UUID
+		return sprintf('%04x%04x-%04x-4%03x-%04x-%04x%04x%04x',
+			// 32 bits for "time_low"
+			mt_rand(0, 0xffff), mt_rand(0, 0xffff),
+			// 16 bits for "time_mid"
+			mt_rand(0, 0xffff),
+			// 12 bits before the 0100 of (version) 4 for "time_hi_and_version"
+			mt_rand(0, 0x0fff) | 0x4000,
+			// 16 bits, 8 bits for "clk_seq_hi_res", 8 bits for "clk_seq_low"
+			mt_rand(0, 0xffff),
+			// 48 bits for "node"
+			mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
+		);
+	}
+	
 	public static function countryCodeToEmoji($code)
 	{
 		$emoji = '';

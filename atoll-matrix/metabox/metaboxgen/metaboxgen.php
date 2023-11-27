@@ -1236,7 +1236,7 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
         if (isset($field['type']) && $field['type'] == "notice") {
             $notice_class = " big-notice";
         }
-        if (isset($field['desc'])) {
+        if ( isset($field['desc']) && '' !== $field['desc'] ) {
             echo '<div class="metabox-description' . esc_attr($notice_class) . '">', esc_html($field['desc']), '</div>';
         }
 
