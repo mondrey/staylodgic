@@ -392,22 +392,24 @@ class Booking
 		<div class="atollmatrix-content">
 		<div id="hotel-booking-form">
 			<form action="" method="post" id="hotel-booking">
-                <div class="front-booking-search">
+            <div class="front-booking-search">
+    <div class="front-booking-calendar-wrap">
+        <div class="front-booking-calendar-icon"><i class="fa-solid fa-calendar-days"></i></div>
+        <div class="front-booking-calendar-date">Jan 21th to Feb 1st 2023</div>
+    </div>
+    <div class="front-booking-guests-wrap">
+        <div class="front-booking-guests-container"> <!-- New container -->
+            <div class="front-booking-guest-adult-wrap">
+                <div class="front-booking-guest-adult-icon"><span class="guest-adult-svg"></span><span class="front-booking-adult-adult-value">2</span></div>
+            </div>
+            <div class="front-booking-guest-child-wrap">
+                <div class="front-booking-guest-child-icon"><span class="guest-child-svg"></span><span class="front-booking-adult-child-value">1</span></div>
+            </div>
+        </div>
+        <div class="front-booking-booking-search">Search</div>
+    </div>
+</div>
 
-                    <div class="front-booking-calendar-wrap">
-                            <div class="front-booking-calendar-icon"><i class="fa-solid fa-calendar-days"></i></div>
-                            <div class="front-booking-calendar-date">Jan 21th to Feb 1st 2023</div>
-                    </div>
-                    <div class="front-booking-guests-wrap">
-                        <div class="front-booking-guest-adult-wrap">
-                            <div class="front-booking-guest-adult-icon"><span class="guest-adult-svg"></span><span class="front-booking-adult-adult-value">2</span></div>
-                        </div>
-                        <div class="front-booking-guest-child-wrap">
-                            <div class="front-booking-guest-child-icon"><span class="guest-child-svg"></span><span class="front-booking-adult-child-value">1</span></div>
-                        </div>
-                        <div class="front-booking-booking-search">Search</div>
-                    </div>
-                </div>
 
 				<div>
 					<input type="hidden" name="atollmatrix_searchbox_nonce" value="<?php echo esc_attr($searchbox_nonce); ?>" />

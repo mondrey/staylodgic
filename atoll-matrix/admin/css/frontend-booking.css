@@ -979,8 +979,6 @@
 .occupants-range:active input {
 	border-color: #888;
 }
-
-
 .front-booking-search {
     display: flex;
     align-items: center;
@@ -1007,13 +1005,20 @@
     flex: 1; /* Occupy the remaining 50% of the available space */
     display: flex;
     justify-content: space-between; /* Distribute space evenly between child elements */
+    align-items: flex-end; /* Center align items vertically */
+}
+
+.front-booking-guests-container {
+    display: flex; /* Create a new container for the adult and child wraps */
+    width: 66%; /* Occupy 66% of the available space within .front-booking-guests-wrap */
+    justify-content: space-between; /* Distribute space evenly between child elements */
 	align-items: flex-end; /* Center align items vertically */
 }
 
 .front-booking-guest-adult-wrap,
 .front-booking-guest-child-wrap,
 .front-booking-booking-search {
-    width: 33%; /* Occupy 33% of the available space */
+    flex-grow: 1; /* Equal flex-grow for each child to evenly distribute space */
 }
 
 .front-booking-guest-adult-icon,
@@ -1027,3 +1032,4 @@
     font-size: 16px;
     color: #333; /* Change the color as needed */
 }
+
