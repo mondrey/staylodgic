@@ -967,69 +967,243 @@
 .number-input span:hover {
 	background-color: #555;
 }
+
 .number-input span:active {
 	background-color: #ccc;
 }
+
 .occupants-range input {
 	border: 2px solid #000;
 	transition: 0.3s border-color;
 	border-radius: 4px;
 	line-height: 26px;
 }
+
 .occupants-range:active input {
 	border-color: #888;
 }
+
 .front-booking-search {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background-color: #fff;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	background-color: #fff;
+	padding: 10px;
+	border: 1px solid #ccccccba;
+	border-radius: 5px;
+	box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.2);
 }
 
 .front-booking-calendar-wrap {
-    flex: 1; /* Occupy 50% of the available space */
-    display: flex;
-    align-items: center;
+	flex: 1;
+	/* Occupy 50% of the available space */
+	display: flex;
+	align-items: center;
+	height: 42px;
 }
 
 .front-booking-calendar-icon {
-    margin-right: 10px;
-    color: #3498db; /* Change the color as needed */
+	margin-right: 10px;
+	color: #000;
+	margin-left: 20px;
 }
 
+.front-booking-calendar-date {
+	font-size: 14px;
+	letter-spacing: 0.4px;
+	font-weight: 400;
+}
+
+#atollmatrix_reservation_room_adults_wrap {
+	margin-bottom: 10px;
+}
+
+#bookingSearch {
+	background: #000;
+	color: #fff;
+	padding: 10px 20px;
+	border: none;
+	cursor: pointer;
+	width: 120px;
+	text-align: center;
+	border-radius: 5px;
+	font-size: 15px;
+	font-weight: 500;
+	transition: 0.4s background-color;
+}
+
+#bookingSearch:hover {
+	/* Styles for when the button is hovered */
+	background-color: #0064ff;
+	/* Example hover background color */
+}
+
+#bookingSearch:active {
+	/* Styles for when the button is clicked/active */
+	background-color: #0064ff;
+	/* Example active background color */
+}
+
+
 .front-booking-guests-wrap {
-    flex: 1; /* Occupy the remaining 50% of the available space */
-    display: flex;
-    justify-content: space-between; /* Distribute space evenly between child elements */
-    align-items: flex-end; /* Center align items vertically */
+	flex: 1;
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-end;
+	padding-left: 50px;
+	border-left: 1px dotted #0000004f;
 }
 
 .front-booking-guests-container {
-    display: flex; /* Create a new container for the adult and child wraps */
-    width: 66%; /* Occupy 66% of the available space within .front-booking-guests-wrap */
-    justify-content: space-between; /* Distribute space evenly between child elements */
-	align-items: flex-end; /* Center align items vertically */
+	display: flex;
+	/* Create a new container for the adult and child wraps */
+	width: 66%;
+	/* Occupy 66% of the available space within .front-booking-guests-wrap */
+	justify-content: space-between;
+	/* Distribute space evenly between child elements */
+	align-items: flex-end;
+	/* Center align items vertically */
 }
 
 .front-booking-guest-adult-wrap,
 .front-booking-guest-child-wrap,
 .front-booking-booking-search {
-    flex-grow: 1; /* Equal flex-grow for each child to evenly distribute space */
+	flex-grow: 1;
+	/* Equal flex-grow for each child to evenly distribute space */
 }
 
 .front-booking-guest-adult-icon,
 .front-booking-guest-child-icon {
-    margin-right: 5px;
+	margin-right: 5px;
 }
 
 .front-booking-adult-adult-value,
 .front-booking-adult-child-value {
-    font-weight: bold;
-    font-size: 16px;
-    color: #333; /* Change the color as needed */
+	font-weight: bold;
+	font-size: 16px;
+	color: #333;
+	/* Change the color as needed */
 }
 
+#atollmatrix_reservation_room_children_wrap,
+#atollmatrix_reservation_room_adults_wrap {
+	user-select: none;
+}
+
+.atollmatrix_reservation_room_guests_wrap {
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+	width: 100%;
+	position: absolute;
+	width: 270px;
+	left: 30%;
+	top: 67px;
+	border: 1px solid #00000012;
+	padding: 30px 30px 24px;
+	border-radius: 6px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	background-color: #fff;
+}
+
+.atollmatrix_reservation_room_guests_wrap.hidden {
+	display: none;
+}
+
+#atollmatrix_reservation_room_children_wrap {
+	margin-bottom: 14px;
+}
+
+.front-booking-calendar-icon i {
+	font-size: 22px;
+}
+
+.front-booking-guests-container {
+	cursor: pointer;
+}
+
+.number-input {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	/* Equal width columns */
+	grid-gap: 10px;
+	/* Spacing between columns */
+	align-items: center;
+}
+
+.column-one {
+	grid-column: 1 / span 1;
+	/* Span 1 column */
+	grid-row: 1;
+}
+
+.column-two {
+	grid-column: 2 / span 1;
+	/* Span 1 column */
+	grid-row: 1;
+	display: flex;
+	gap: 5px;
+	align-items: center;
+}
+
+.column-two label {
+	margin-bottom: 5px;
+}
+
+#hotel-booking-form {
+	position: relative;
+}
+
+.atollmatrix_reservation_room_guests_wrap #guest-age input {
+	border: 2px solid #000;
+	transition: 0.3s border-color;
+	border-radius: 4px;
+	line-height: 26px;
+	width: 121px;
+	margin: 4px 3px;
+	text-align: center;
+}
+
+.front-booking-calendar-wrap {
+	cursor: pointer;
+}
+
+#reservation-date {
+	position: absolute;
+	top: 42px;
+	left: 14px;
+	opacity: 0;
+}
+
+.available-list {
+	margin-top: 12px;
+}
+
+.recommended-alt-wrap {
+	padding: 30px;
+	box-sizing: border-box;
+	background: #eee;
+}
+
+.recommended-alt-title {
+	font-size: 20px;
+	margin-bottom: 2px;
+}
+
+.recommended-alt-description {
+	font-size: 14px;
+	margin-bottom: 7px;
+}
+
+.recommended-dates-wrap {
+	color: #0028ff;
+	font-weight: 400;
+	text-decoration: underline;
+	cursor: pointer;
+	opacity: 1;
+	transform: 0.3s opacity;
+}
+
+.recommended-dates-wrap:hover {
+	opacity: 0.8;
+}

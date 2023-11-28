@@ -388,6 +388,10 @@ class Booking
         atollmatrix_set_booking_transient('1', $this->bookingNumber);
         ob_start();
         $searchbox_nonce = wp_create_nonce('atollmatrix-searchbox-nonce');
+        $availabilityDateArray = array();
+
+        $availability_instance = new \AtollMatrix\AvailablityCalendar();
+        $fullybooked_dates = $availability_instance->fetchOccupancy_Percentage_For_Calendar_Range( false, false, true );
         ?>
 		<div class="atollmatrix-content">
 		<div id="hotel-booking-form">
@@ -395,7 +399,7 @@ class Booking
             <div class="front-booking-search">
     <div class="front-booking-calendar-wrap">
         <div class="front-booking-calendar-icon"><i class="fa-solid fa-calendar-days"></i></div>
-        <div class="front-booking-calendar-date">Jan 21th to Feb 1st 2023</div>
+        <div class="front-booking-calendar-date">Choose stay dates</div>
     </div>
     <div class="front-booking-guests-wrap">
         <div class="front-booking-guests-container"> <!-- New container -->
@@ -403,40 +407,44 @@ class Booking
                 <div class="front-booking-guest-adult-icon"><span class="guest-adult-svg"></span><span class="front-booking-adult-adult-value">2</span></div>
             </div>
             <div class="front-booking-guest-child-wrap">
-                <div class="front-booking-guest-child-icon"><span class="guest-child-svg"></span><span class="front-booking-adult-child-value">1</span></div>
+                <div class="front-booking-guest-child-icon"><span class="guest-child-svg"></span><span class="front-booking-adult-child-value">0</span></div>
             </div>
         </div>
-        <div class="front-booking-booking-search">Search</div>
+        <div id="bookingSearch" class="div-button">Search</div>
     </div>
 </div>
 
 
-				<div>
+				<div class="atollmatrix_reservation_datepicker">
 					<input type="hidden" name="atollmatrix_searchbox_nonce" value="<?php echo esc_attr($searchbox_nonce); ?>" />
-					<label for="reservation-date">Book Date:</label>
-					<input type="date" id="reservation-date" name="reservation_date">
+					<input data-booked="<?php echo htmlspecialchars(json_encode($fullybooked_dates), ENT_QUOTES, 'UTF-8'); ?>" type="date" id="reservation-date" name="reservation_date">
 				</div>
-                <div id="atollmatrix_reservation_room_adults_wrap" class="number-input occupant-adult occupants-range">
-                    <label for="number-of-adults">Adults</label>
-                    <span class="minus-btn">-</span>
-                    <input data-guest="adult" data-guestmax="0" data-adultmax="0" data-childmax="0" id="number-of-adults" value="0" name="number_of_adults" type="text" class="number-value" readonly="">
-                    <span class="plus-btn">+</span>
-                </div>
-                <div id="atollmatrix_reservation_room_children_wrap" class="number-input occupant-child occupants-range">
-                    <label for="number-of-adults">Children</label>
-                    <span class="minus-btn">-</span>
-                    <input data-childageinput="children_age[]" data-guest="child" data-guestmax="0" data-adultmax="0" data-childmax="0" id="number-of-children" value="0" name="number_of_children" type="text" class="number-value" readonly="">
-                    <span class="plus-btn">+</span>
+                <div class="atollmatrix_reservation_room_guests_wrap">
+                    <div id="atollmatrix_reservation_room_adults_wrap" class="number-input occupant-adult occupants-range">
+                        <div class="column-one">
+                            <label for="number-of-adults">Adults</label>
+                        </div>
+                        <div class="column-two">
+                            <span class="minus-btn">-</span>
+                            <input data-guest="adult" data-guestmax="0" data-adultmax="0" data-childmax="0" id="number-of-adults" value="2" name="number_of_adults" type="text" class="number-value" readonly="">
+                            <span class="plus-btn">+</span>
+                        </div>
+                    </div>
+                    <div id="atollmatrix_reservation_room_children_wrap" class="number-input occupant-child occupants-range">
+                        <div class="column-one">
+                            <label for="number-of-adults">Children</label>
+                        </div>
+                        <div class="column-two">
+                            <span class="minus-btn">-</span>
+                            <input data-childageinput="children_age[]" data-guest="child" data-guestmax="0" data-adultmax="0" data-childmax="0" id="number-of-children" value="0" name="number_of_children" type="text" class="number-value" readonly="">
+                            <span class="plus-btn">+</span>
+                        </div>
+                        
+                    </div>
                     <div id="guest-age"></div>
                 </div>
-				<!-- <div class="children-number" data-agelimitofchild="13">
-					<label for="number-of-children">Number of Children:</label>
-					<input type="number" id="number-of-children" name="number_of_children" min="0">
-				</div> -->
-				<div id="bookingSearch" class="div-button">Search</div>
 				<div class="recommended-alt-wrap">
-					<div class="recommended-alt-title">Rooms unavailable</br>Please choose among following dates which has
-						availability</div>
+					<div class="recommended-alt-title">Rooms unavailable</div><div class="recommended-alt-description">Following range from your selection is avaiable.</div>
 					<div id="recommended-alt-dates"></div>
 				</div>
 			</form>
@@ -642,7 +650,7 @@ return ob_get_clean();
         }
         if (isset($chosenDate[ 'endDate' ])) {
             $checkoutDate     = $chosenDate[ 'endDate' ];
-            $checkoutDate     = date('Y-m-d', strtotime($checkoutDate . ' +1 day'));
+            //$checkoutDate     = date('Y-m-d', strtotime($checkoutDate . ' +1 day'));
             $checkoutDate_obj = new \DateTime($checkoutDate);
         }
 
@@ -681,11 +689,11 @@ return ob_get_clean();
 
         $availableRoomDates = array();
 
-        $roomAvailabity = false;
+        $roomAvailability = false;
 
         if (count($combo_array[ 'rooms' ]) == 0) {
 
-            $roomAvailabity = self::alternative_BookingDates($checkinDate, $checkoutDate);
+            $roomAvailability = self::alternative_BookingDates($checkinDate, $checkoutDate);
         }
 
         //set_transient($bookingNumber, $combo_array, 20 * MINUTE_IN_SECONDS);
@@ -712,7 +720,7 @@ return ob_get_clean();
         $output                       = ob_get_clean();
         $response[ 'booking_data' ]   = $combo_array;
         $response[ 'roomlist' ]       = $output;
-        $response[ 'alt_recommends' ] = $roomAvailabity;
+        $response[ 'alt_recommends' ] = $roomAvailability;
         echo json_encode($response, JSON_UNESCAPED_SLASHES);
         die();
     }

@@ -118,6 +118,12 @@
 		// 	processRoomData(roomOccupiedGroup);
 		// });
 
+		// Function to format the date as "MMM Dth" (e.g., "Jan 21st")
+		function formatDate(date) {
+			const options = { month: 'short', day: 'numeric' };
+			return new Intl.DateTimeFormat('en-US', options).format(date);
+		}
+
 		// Function to update the selected dates and nights
 		function updateSelectedDates(checkIn, checkOut) {
 			if (!(checkIn instanceof Date) || !(checkOut instanceof Date)) {
@@ -126,15 +132,19 @@
 				return;
 			}
 
-			var checkInDate = checkIn.toDateString();
-			var stayLast = new Date(checkOut.getTime() - 86400000).toDateString();
-			var checkOutDate = checkOut.toDateString();
+			var formattedCheckIn = formatDate(checkIn);
+			var formattedStayLast = formatDate(new Date(checkOut.getTime() - 86400000));
+			var formattedCheckOut = formatDate(checkOut);
 
-			$('.pre-book-check-in').text(checkInDate);
-			$('.pre-book-stay-night').text(stayLast);
-			$('.pre-book-check-out').text(checkOutDate);
+			// Update the selected dates in the specified format
+			var formattedDateRange = formattedCheckIn + ' to ' + formattedCheckOut;
+			$('.front-booking-calendar-date').text(formattedDateRange);
 
-			var nights = calculateDaysBetweenDates(checkInDate, checkOutDate);
+			$('.pre-book-check-in').text(formattedCheckIn);
+			$('.pre-book-stay-night').text(formattedStayLast);
+			$('.pre-book-check-out').text(formattedCheckOut);
+
+			var nights = calculateDaysBetweenDates(checkIn, checkOut);
 			$('.pre-book-nights').text(nights);
 		}
 
@@ -173,8 +183,88 @@
 			return days;
 		}
 
+		function setupGuestsContainer() {
+			var guestsContainer = $('.front-booking-guests-container');
+			var guestsWrap = $('.atollmatrix_reservation_room_guests_wrap');
+		
+			// Hide guestsWrap initially
+			guestsWrap.addClass('hidden');
+		
+			// Function to fade in the guestsWrap
+			function fadeInGuestsWrap() {
+				guestsWrap.velocity('slideDown', {
+					duration: 200,
+					complete: function () {
+						// After sliding down, fade in the element
+						guestsWrap.velocity('fadeTo', { duration: 200, opacity: 1 });
+					}
+				});
+			}
+		
+			// Function to fade out the guestsWrap
+			function fadeOutGuestsWrap() {
+				guestsWrap.velocity('slideUp', {
+					duration: 200,
+					complete: function () {
+						// After sliding down, fade in the element
+						guestsWrap.velocity('fadeTo', { duration: 200, opacity: 1 });
+					}
+				});
+			}
+		
+			// Toggle guestsWrap visibility when clicking .front-booking-guests-container
+			guestsContainer.on('click', function (event) {
+				// Toggle visibility by adding/removing the 'hidden' class
+				guestsWrap.hasClass('hidden') ? fadeInGuestsWrap() : fadeOutGuestsWrap();
+				event.stopPropagation(); // Prevent the click event from reaching the document click handler
+			});
+		
+			// Hide guestsWrap when clicking outside of it
+			$(document).on('click', function (event) {
+				if (!$(event.target).closest('.atollmatrix_reservation_room_guests_wrap').length) {
+					// If the click was outside the guestsWrap, fade it out
+					fadeOutGuestsWrap();
+				}
+			});
+		
+			// Prevent hiding when clicking inside the container
+			guestsWrap.on('click', function (event) {
+				event.stopPropagation(); // Prevent the click event from reaching the document click handler
+			});
+		}
+		
+		
+		
+		// Call the function to set up the guests container behavior
+		setupGuestsContainer();
+		
+
 		function ReservationDatePicker() {
-			var flatpickrInstance = flatpickr("#reservation-date", {
+			
+			var flatpickrInstance;
+
+			// Function to get fully booked dates from the data attribute
+			function getFullyBookedDates() {
+				var bookedData = document.getElementById("reservation-date").getAttribute("data-booked");
+				return JSON.parse(bookedData);
+			}
+
+			// Function to disable dates based on the fully booked dates
+			function disableFullyBookedDates(date) {
+				var fullyBookedDates = getFullyBookedDates();
+				var dateString = date.toISOString().split('T')[0]; // Convert date to YYYY-MM-DD format
+
+				if (Array.isArray(fullyBookedDates)) {
+					return fullyBookedDates.includes(dateString);
+				} else if (typeof fullyBookedDates === 'object') {
+					// Check if the date is in the object keys
+					return fullyBookedDates.hasOwnProperty(dateString);
+				}
+
+				return false;
+			}
+
+			flatpickrInstance = flatpickr("#reservation-date", {
 				mode: "range",
 				dateFormat: "Y-m-d",
 				showMonths: 2,
@@ -187,11 +277,24 @@
 					if (selectedDates.length === 2) {
 						updateSelectedDates(selectedDates[0], selectedDates[1]);
 					}
-				}
+				},
+				disable: [
+					// Use the disableFullyBookedDates function to disable specific dates
+					function (date) {
+						return disableFullyBookedDates(date);
+					}
+				]
+			});
+
+			// Add click event listener to trigger flatpickr when .front-booking-calendar-wrap is clicked
+			var calendarWrap = document.querySelector('.front-booking-calendar-wrap');
+			calendarWrap.addEventListener('click', function () {
+				flatpickrInstance.open();
 			});
 
 			return flatpickrInstance;
 		}
+
 
 		// Initialize flatpickr and get the instance
 		var flatpickrInstance = ReservationDatePicker();
@@ -221,7 +324,7 @@
 		// Frontend codes
 		$('#bookingSearch').on('click', function (e) { // Changed here
 			e.preventDefault();
-			console.log('Here');
+
 			var bookingNumber = $('#booking-number').val();
 			var reservationDate = $('#reservation-date').val();
 			var numberOfAdults = $('#number-of-adults').val();

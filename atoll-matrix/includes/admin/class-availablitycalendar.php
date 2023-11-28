@@ -18,30 +18,60 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 
 	}
 
-	public function fetchOccupancy_Percentage_For_Calendar_Range() {
+	public function fetchOccupancy_Percentage_For_Calendar_Range( $startDate = false, $endDate = false, $onlyFullOccupancy = false ) {
 		// Perform necessary security checks or validation here
-
-		// Retrieve start and end dates from the AJAX request
-		$startDate = sanitize_text_field( $_POST['start'] );
-		$endDate   = sanitize_text_field( $_POST['end'] );
-
-		// error_log( print_r( $startDate, true ));
-		// error_log( print_r( $endDate, true ));
-		$dates = \AtollMatrix\Common::getDates_Between( $startDate, $endDate );
-
-		$occupancy_data = array();
-
-		foreach ( $dates as $date ) :
-			$occupancydate                    = $date;
-			$occupancyPercentage              = $this->calculateOccupancyForDate( $occupancydate );
-			$occupancy_data[ $occupancydate ] = $occupancyPercentage;
-		endforeach;
-		// error_log( print_r( $startDate, true ));
-		// error_log( print_r( $endDate, true ));
-		// error_log( print_r( $occupancy_data, true ));
-		// Send occupancy data as JSON response
-		wp_send_json( $occupancy_data );
-	}
+	
+		// Check if AJAX POST values are set
+		$isAjaxRequest = isset( $_POST['start'] ) && isset( $_POST['end'] );
+	
+		// Calculate current date
+		$currentDate = current_time('Y-m-d');
+	
+		// Calculate end date as 90 days from the current date
+		$endDate = date('Y-m-d', strtotime($currentDate . ' +90 days'));
+	
+		if ( ! $startDate ) {
+			// Use the current date as the start date
+			$startDate = $currentDate;
+		}
+	
+		// Retrieve start and end dates from the AJAX request if not provided
+		if ( $isAjaxRequest ) {
+			$startDate = sanitize_text_field( $_POST['start'] );
+			$endDate   = sanitize_text_field( $_POST['end'] );
+		}
+	
+		if ( isset( $startDate ) && isset( $endDate ) ) {
+			$dates = \AtollMatrix\Common::getDates_Between( $startDate, $endDate );
+	
+			$occupancy_data = array();
+	
+			foreach ( $dates as $date ) :
+				$occupancydate                    = $date;
+				$occupancyPercentage              = $this->calculateOccupancyForDate( $occupancydate );
+	
+				// Check if only full occupancy dates should be included
+				if ( $onlyFullOccupancy && $occupancyPercentage < 100 ) {
+					continue; // Skip this date if not full occupancy
+				}
+	
+				$occupancy_data[ $occupancydate ] = $occupancyPercentage;
+			endforeach;
+	
+			// Send occupancy data as JSON response if it's an AJAX request
+			if ( $isAjaxRequest ) {
+				wp_send_json( $occupancy_data );
+			} else {
+				return $occupancy_data; // Return the array if it's not an AJAX request
+			}
+		} else {
+			if ( $isAjaxRequest ) {
+				wp_send_json_error('Invalid date range!');
+			} else {
+				return array(); // Return an empty array if it's not an AJAX request and the date range is invalid
+			}
+		}
+	}			
 
 	// Add the Availability menu item to the admin menu
 	public function room_Reservation_Plugin_Add_Admin_Menu() {

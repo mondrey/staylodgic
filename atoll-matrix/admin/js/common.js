@@ -25,7 +25,10 @@
 					this.input.val(value - 1);
 					this.calculateSum();
 					if (guest === "child") {
+						$('.front-booking-adult-child-value').text( value - 1 );
 						$("#guest-age input[data-counter='" + (value - 1) + "']").remove();
+					} else {
+						$('.front-booking-adult-adult-value').text( value - 1 );
 					}
 				}
 			}
@@ -41,10 +44,12 @@
 				this.calculateSum();
 				if (guest === "child") {
 					var child_age_input = this.input.attr('data-childageinput');
+					$('.front-booking-adult-child-value').text( value + 1 );
 					var extraInput = $("<input name='"+child_age_input+"' type='text' data-counter='" + value + "' placeholder='Age'>");
 					$("#guest-age").append(extraInput);
+				} else {
+					$('.front-booking-adult-adult-value').text( value + 1 );
 				}
-				console.log(child_age_input);
 			}
 		
 			calculateSum() {
