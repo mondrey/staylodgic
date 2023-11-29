@@ -1,5 +1,34 @@
 <?php
-function get_booking_substatuses()
+function atollmatrix_formatDate($dateString, $formatChoice = 'monthshort_first')
+{
+	$formattedDate = '';
+	$dateTime = new DateTime($dateString);
+
+	switch ($formatChoice) {
+		case 'default':
+			$formattedDate = $dateTime->format('Y-m-d');
+			break;
+		case 'short':
+			$formattedDate = $dateTime->format('M d, Y');
+			break;
+		case 'long':
+			$formattedDate = $dateTime->format('F d, Y');
+			break;
+		case 'monthshort_first':
+			$formattedDate = $dateTime->format('M jS, Y');
+			break;
+		case 'monthshort_after':
+			$formattedDate = $dateTime->format('jS M, Y');
+			break;
+		// Add more format choices as needed
+		default:
+			$formattedDate = $dateTime->format('Y-m-d');
+			break;
+	}
+
+	return $formattedDate;
+}
+function atollmatrix_get_booking_substatuses()
 {
     $bookingSubStatuses = array(
         'completed'      => esc_attr__('Completed', 'atollmatrix'),
@@ -15,7 +44,7 @@ function get_booking_substatuses()
 
     return $bookingSubStatuses;
 }
-function get_booking_statuses()
+function atollmatrix_get_booking_statuses()
 {
     $bookingStatuses = array(
         'confirmed' => esc_attr__('Confirmed', 'atollmatrix'),
@@ -25,7 +54,7 @@ function get_booking_statuses()
 
     return $bookingStatuses;
 }
-function get_new_booking_statuses()
+function atollmatrix_get_new_booking_statuses()
 {
     $bookingStatuses = array(
         'confirmed' => esc_attr__('Confirmed', 'atollmatrix'),
@@ -34,7 +63,7 @@ function get_new_booking_statuses()
 
     return $bookingStatuses;
 }
-function get_BedLayout($bedName, $bedFieldID = null)
+function atollmatrix_get_BedLayout($bedName, $bedFieldID = null)
 {
 
     switch ($bedName) {

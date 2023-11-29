@@ -137,6 +137,14 @@ class AtollMatrix_Init
                 wp_enqueue_style('fontawesome-6-solid');
 
             }
+            if ($current_admin_screen && $current_admin_screen->base == 'edit' && $current_admin_screen->post_type == 'atmx_reservations') {
+
+                wp_enqueue_script('atollmatrix-parser');
+                wp_enqueue_style('fontawesome-6');
+                wp_enqueue_style('fontawesome-6-brands');
+                wp_enqueue_style('fontawesome-6-solid');
+
+            }
             wp_localize_script(
                 'jquery',
                 'atollmatrix_admin_vars',
@@ -154,6 +162,9 @@ class AtollMatrix_Init
 
                 // Add CSS styles for the sortable placeholder
                 wp_enqueue_style('jquery-ui-sortable');
+
+                wp_enqueue_script('select2', plugin_dir_url(__FILE__) . 'assets/js/select2/js/select2.full.min.js', array('jquery'), null, true);
+                wp_enqueue_style('select2', plugin_dir_url(__FILE__) . 'assets/js/select2/css/select2.min.css', array(), false, 'screen');
             }
             if ($current_admin_screen->base == 'toplevel_page_atmx-availability') {
 

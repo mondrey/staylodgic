@@ -271,6 +271,47 @@ class Reservations
         return '';
     }
 
+    public function isGuestCurrentlyStaying()
+    {
+        $reservation_post_id = $this->reservation_id;
+        $today_date          = date('Y-m-d'); // Get today's date
+
+        // Get the check-in and check-out dates for the reservation
+        $checkin_date  = get_post_meta($reservation_post_id, 'atollmatrix_checkin_date', true);
+        $checkout_date = get_post_meta($reservation_post_id, 'atollmatrix_checkout_date', true);
+
+        // Check if today's date is within the reservation period
+        if ($today_date >= $checkin_date && $today_date <= $checkout_date) {
+            return true; // Guest is currently staying
+        } else {
+            return false; // Guest is not currently staying
+        }
+    }
+
+    public function isGuestCheckingInToday()
+    {
+        $reservation_post_id = $this->reservation_id;
+        $today_date          = date('Y-m-d'); // Get today's date
+
+        // Get the check-in date for the reservation
+        $checkin_date = get_post_meta($reservation_post_id, 'atollmatrix_checkin_date', true);
+        
+        // Check if today's date is the check-in date
+        return $today_date === $checkin_date;
+    }
+
+    public function isGuestCheckingOutToday()
+    {
+        $reservation_post_id = $this->reservation_id;
+        $today_date          = date('Y-m-d'); // Get today's date
+
+        // Get the check-out date for the reservation
+        $checkout_date = get_post_meta($reservation_post_id, 'atollmatrix_checkout_date', true);
+
+        // Check if today's date is the check-out date
+        return $today_date === $checkout_date;
+    }
+
     public function countReservationDays()
     {
 

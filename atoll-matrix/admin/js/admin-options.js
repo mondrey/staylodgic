@@ -1,6 +1,14 @@
 jQuery(document).ready(function ($) {
 	"use strict";
 
+	$('.atollmatrix-options-form select').each(function () {
+		// Fetch the data-width attribute value
+		var widthAttribute = $(this).data('width');
+		$(this).select2({
+			width: widthAttribute || '300px' // Use the fetched value or set a default width
+		});
+	});
+
 	$(document).on('click', function (event) {
 		const target = event.target;
 		if (!$(target).closest('.atollmatrix-tabs a').length) {

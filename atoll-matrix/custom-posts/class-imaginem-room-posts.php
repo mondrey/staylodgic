@@ -198,7 +198,7 @@ class atollmatrix_Room_Posts
                 wp_enqueue_script('jquery-ui-sortable');
                 wp_enqueue_script('thickbox');
                 wp_enqueue_style('thickbox');
-                wp_enqueue_style('mtheme-room-sorter-CSS', plugin_dir_url(__FILE__) . '/css/style.css', false, '1.0', 'all');
+                wp_enqueue_style('mtheme-room-sorter-CSS', plugin_dir_url(__FILE__) . 'css/style.css', false, '1.0', 'all');
                 if (isset($_GET["page"])) {
                     if ($_GET["page"] == "class-imaginem-room-posts.php") {
                         wp_enqueue_script("post-sorter-JS", plugin_dir_url(__FILE__) . "js/post-sorter.js", array('jquery'), "1.1");

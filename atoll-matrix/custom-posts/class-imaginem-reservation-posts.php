@@ -13,10 +13,16 @@ class atollmatrix_Reservation_Posts
     // Kbase lister
     public function atmx_reservations_edit_columns($columns)
     {
+        unset($columns[ 'author' ]);
+        unset($columns[ 'date' ]);
         $new_columns = array(
-            "mreservation_section" => __('Section', 'mthemelocal'),
-            "reservation_customer" => __('Customer', 'mthemelocal'),
-            "reservation_room"     => __('Room', 'mthemelocal'),
+            //"mreservation_section" => __('Section', 'mthemelocal'),
+            "reservation_customer"   => __('Customer', 'mthemelocal'),
+            "reservation_checkinout" => __('Checkin / Checkout', 'mthemelocal'),
+            "reservation_nights"     => __('Nights', 'mthemelocal'),
+            "reservation_status"     => __('Status', 'mthemelocal'),
+            "reservation_substatus"  => __('Sub Status', 'mthemelocal'),
+            "reservation_room"       => __('Room', 'mthemelocal'),
         );
 
         return array_merge($columns, $new_columns);
@@ -29,8 +35,8 @@ class atollmatrix_Reservation_Posts
 
         $full_image_id  = get_post_thumbnail_id(($post->ID), 'fullimage');
         $full_image_url = wp_get_attachment_image_src($full_image_id, 'fullimage');
-        if (isset($full_image_url[0])) {
-            $full_image_url = $full_image_url[0];
+        if (isset($full_image_url[ 0 ])) {
+            $full_image_url = $full_image_url[ 0 ];
         }
 
         $reservation_instance = new \AtollMatrix\Reservations($date = false, $room_id = false, $reservation_id = $post->ID);
@@ -38,6 +44,37 @@ class atollmatrix_Reservation_Posts
             case "reservation_customer":
                 $customer_name = $reservation_instance->getCustomerEditLinkForReservation();
                 echo $customer_name;
+                break;
+            case "reservation_checkinout":
+                $reservation_checkin       = $reservation_instance->getCheckinDate();
+                $reservation_checkout      = $reservation_instance->getCheckoutDate();
+                $reservation_staying       = $reservation_instance->isGuestCurrentlyStaying();
+                $reservation_todaycheckin  = $reservation_instance->isGuestCheckingInToday();
+                $reservation_todaycheckout = $reservation_instance->isGuestCheckingOutToday();
+                if ($reservation_staying) {
+                    if ($reservation_todaycheckin) {
+                        echo '<p class="post-status-reservation post-status-reservation-checkin">' . __('Check-in', 'atollmatrix') . '</p>';
+                    } elseif ($reservation_todaycheckout) {
+                        echo '<p class="post-status-reservation post-status-reservation-checkout">' . __('Check-out', 'atollmatrix') . '</p>';
+                    } else {
+                        echo '<p class="post-status-reservation post-status-reservation-staying">' . __('Staying', 'atollmatrix') . '</p>';
+                    }
+                }
+                echo '<p class="post-status-reservation-date post-status-reservation-date-checkin"><i class="fa-solid fa-arrow-right"></i> ' . atollmatrix_formatDate($reservation_checkin) . '</p>';
+                echo '<p class="post-status-reservation-date post-status-reservation-date-checkout"><i class="fa-solid fa-arrow-left"></i> ' . atollmatrix_formatDate($reservation_checkout) . '</p>';
+
+                break;
+            case "reservation_nights":
+                $reservation_nights = $reservation_instance->countReservationDays();
+                echo $reservation_nights;
+                break;
+            case "reservation_status":
+                $reservation_status = $reservation_instance->getReservationStatus();
+                echo ucfirst($reservation_status);
+                break;
+            case "reservation_substatus":
+                $reservation_substatus = $reservation_instance->getReservationSubStatus();
+                echo ucfirst($reservation_substatus);
                 break;
             case "reservation_room":
                 $room_title = $reservation_instance->getRoomTitleForReservation();

@@ -1039,7 +1039,7 @@ return ob_get_clean();
 
                     $bedQty = $roomData[ 'bednumber' ][ $bedFieldID ];
                     for ($i = 0; $i < $bedQty; $i++) {
-                        $html .= get_BedLayout($bedName, $bedFieldID . '-' . $i);
+                        $html .= atollmatrix_get_BedLayout($bedName, $bedFieldID . '-' . $i);
                     }
                 }
                 $html .= '</div>';
@@ -1100,7 +1100,7 @@ return ob_get_clean();
 
                     $bedQty = $roomData[ 'bednumber' ][ $bedFieldID ];
                     for ($i = 0; $i < $bedQty; $i++) {
-                        $html .= get_BedLayout($bedName, $bedFieldID . '-' . $i);
+                        $html .= atollmatrix_get_BedLayout($bedName, $bedFieldID . '-' . $i);
                     }
                 }
                 $html .= '</div>';
@@ -1117,7 +1117,7 @@ return ob_get_clean();
         $html           = '';
         $bedNames_array = explode(' ', $bedNames);
         foreach ($bedNames_array as $key => $bedName) {
-            $html .= get_BedLayout($bedName, $key);
+            $html .= atollmatrix_get_BedLayout($bedName, $key);
         }
 
         return $html;

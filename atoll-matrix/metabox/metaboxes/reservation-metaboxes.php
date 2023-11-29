@@ -110,7 +110,7 @@ function atollmatrix_reservations_metadata()
                 'class'   => 'reservation_status',
                 'type'    => 'select',
                 'desc'    => esc_html__('Reservation Status', 'atollmatrix'),
-                'options' => get_booking_statuses(),
+                'options' => atollmatrix_get_booking_statuses(),
             ),
             array(
                 'name'    => esc_html__('Reservation Sub Status', 'atollmatrix'),
@@ -118,7 +118,7 @@ function atollmatrix_reservations_metadata()
                 'class'   => 'reservation_status',
                 'type'    => 'select',
                 'desc'    => esc_html__('Reservation Sub Status', 'atollmatrix'),
-                'options' => get_booking_substatuses(),
+                'options' => atollmatrix_get_booking_substatuses(),
             ),
             array(
                 'name'     => 'Bed Layout',
