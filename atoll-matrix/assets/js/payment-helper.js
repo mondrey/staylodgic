@@ -1,11 +1,11 @@
 (function ($) {
 	$(document).ready(function () {
 
-		$(document).on('click', '#bookingPayment', function(e) {
+		$(document).on('click', '#woo-bookingpayment', function(e) {
 			e.preventDefault();
 			// Get the total value from the form
-			var total = $('#totalField').val();
-			var booking_number = $('#booking_number').val();
+			var total = $(this).data("paytotal");
+			var booking_number = $(this).data("bookingnumber");
 			console.log(total);
 			// Send an AJAX request to trigger the server-side function
 			$.ajax({

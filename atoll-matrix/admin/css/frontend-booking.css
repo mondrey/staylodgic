@@ -262,6 +262,7 @@
 	font-size: 14px;
 }
 
+#woo-bookingpayment,
 .book-button {
 	padding: 10px;
 	box-sizing: border-box;
@@ -272,6 +273,11 @@
 	font-weight: 600;
 	padding: 10px 22px;
 	display: block;
+	cursor: pointer;
+}
+#woo-bookingpayment {
+	background: #ff0000;
+	margin-top: 10px;
 }
 
 .summary-icon i {
@@ -292,7 +298,8 @@
 #booking-summary-wrap.booking-summary-warning {
 	background: #ff0000;
 	color: #fff;
-	font-size: 14px;
+	font-size: 22px;
+	font-weight: 500;
 }
 
 .room-details-heading h2 {
@@ -1201,9 +1208,24 @@
 	text-decoration: underline;
 	cursor: pointer;
 	opacity: 1;
-	transform: 0.3s opacity;
+	transition: 0.3s opacity;
 }
 
 .recommended-dates-wrap:hover {
 	opacity: 0.8;
+}
+
+.booking-backto-roomschoice {
+	position: absolute;
+	top: -40px;
+	left: 7px;
+	opacity: 1;
+	transition: 0.5s opacity;
+	cursor: pointer;
+}
+.booking-backto-roomschoice:hover {
+	opacity: 0.5;
+}
+.booking-backto-roomschoice i {
+	font-size: 32px;
 }

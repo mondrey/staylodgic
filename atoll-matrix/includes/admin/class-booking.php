@@ -226,6 +226,7 @@ class Booking
         if (is_array($booking_results)) {
 
             $html = self::bookingSummary(
+                $bookingnumber,
                 $booking_results[ 'choice' ][ 'room_id' ],
                 $booking_results[ $room_id ][ 'roomtitle' ],
                 $booking_results[ 'checkin' ],
@@ -286,6 +287,7 @@ class Booking
     }
 
     public function bookingSummary(
+        $bookingnumber = null,
         $room_id = null,
         $room_name = null,
         $checkin = null,
@@ -374,6 +376,7 @@ class Booking
             $html .= '<div class="form-group">';
             $html .= '<div id="bookingResponse" class="booking-response"></div>';
             $html .= '<div id="booking-register" class="book-button">Book this room</div>';
+            $html .= self::paymentHelperButton( $totalprice[ 'total' ], $bookingnumber );
             $html .= '</div>';
         }
 
@@ -716,7 +719,6 @@ return ob_get_clean();
         echo '</div>';
         echo self::register_Guest_Form();
         echo '</form>';
-        echo self::paymentHelper_Form($this->bookingNumber);
         $output                       = ob_get_clean();
         $response[ 'booking_data' ]   = $combo_array;
         $response[ 'roomlist' ]       = $output;
@@ -1121,17 +1123,10 @@ return ob_get_clean();
         return $html;
     }
 
-    public function paymentHelper_Form()
+    public function paymentHelperButton( $total, $bookingnumber )
     {
-        $form_html = <<<HTML
-			<form action="" method="post" id="paymentForm">
-				<!-- Other form fields -->
-				<input type="hidden" name="total" id="totalField" value="100">
-				<input type="hidden" name="bookingNumber" id="bookingNumber" value="$this->bookingNumber">
-				<div id="bookingPayment" class="div-button">Pay</div>
-			</form>
-HTML;
-        return $form_html;
+        $payment_button = '<div data-paytotal="'.esc_attr($total).'" data-bookingnumber="'.esc_attr($bookingnumber).'" id="woo-bookingpayment" class="book-button">Pay Booking</div>';
+        return $payment_button;
     }
 
     public function register_Guest_Form()
@@ -1140,6 +1135,7 @@ HTML;
 
         $html = '<div class="registration-column registration-column-two" id="booking-summary">';
         $html .= self::bookingSummary(
+            $bookingnumber='',
             $room_id = '',
             $booking_results[ $room_id ][ 'roomtitle' ] = '',
             $this->checkinDate,
@@ -1157,7 +1153,7 @@ HTML;
 
         $form_html = <<<HTML
 		<div class="registration_form_outer">
-			<div class="booking-backto-roomschoice">Back to Room Choice</div>
+			<div class="booking-backto-roomschoice"><i class="fa-regular fa-circle-left"></i></div>
 			<div class="registration_form_wrap">
 				<div class="registration_form">
 				<form action="" method="post" id="guest-registration">

@@ -205,7 +205,7 @@ class Payments
             // Save the booking number in a session or transient for later use
             // Example: Save in session
             WC()->session->set('booking_number', $booking_number);
-            WC()->session->set('total_price', '232');
+            WC()->session->set('total_price', $total);
 
             // Prepare the response data
             $response_data = array();
