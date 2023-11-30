@@ -18,6 +18,7 @@ class atollmatrix_Reservation_Posts
         $new_columns = array(
             //"mreservation_section" => __('Section', 'mthemelocal'),
             "reservation_customer"   => __('Customer', 'mthemelocal'),
+            "reservation_bookingnr"  => __('Booking Number', 'mthemelocal'),
             "reservation_checkinout" => __('Checkin / Checkout', 'mthemelocal'),
             "reservation_nights"     => __('Nights', 'mthemelocal'),
             "reservation_status"     => __('Status', 'mthemelocal'),
@@ -44,6 +45,10 @@ class atollmatrix_Reservation_Posts
             case "reservation_customer":
                 $customer_name = $reservation_instance->getCustomerEditLinkForReservation();
                 echo $customer_name;
+                break;
+            case "reservation_bookingnr":
+                $bookingnumber = $reservation_instance->getBookingNumber();
+                echo $bookingnumber;
                 break;
             case "reservation_checkinout":
                 $reservation_checkin       = $reservation_instance->getCheckinDate();
