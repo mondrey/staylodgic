@@ -183,6 +183,23 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 		return $today_status_class;
 	}
 
+	public function startOfMonthCSSTag($occupancydate) {
+		$startOfMonth_class = '';
+	
+		// Assuming $occupancydate is in 'Y-m-d' format, extract year and month
+		$yearMonth = substr($occupancydate, 0, 7); // This gives 'YYYY-MM'
+	
+		// Create the first day of the month string for the given date
+		$firstDayOfOccupancyMonth = $yearMonth . '-01';
+	
+		// Compare the provided date with the first day of its month
+		if ($occupancydate == $firstDayOfOccupancyMonth) {
+			$startOfMonth_class = "start-of-month";
+		}
+	
+		return $startOfMonth_class;
+	}
+
 	private function displayAdrOccupancyRange_TableDataBlock( $dates ) {
 		$number_of_columns = 0;
 		foreach ( $dates as $date ) :
@@ -190,7 +207,7 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 			$occupancydate = $date->format( 'Y-m-d' );
 			ob_start();
 			?>
-			<td class="calendarCell monthHeader occupancy-stats <?php echo esc_attr( $this->todayCSSTag( $occupancydate ) ); ?>">
+			<td class="calendarCell monthHeader occupancy-stats <?php echo esc_attr( $this->todayCSSTag( $occupancydate ) ); ?> <?php echo esc_attr( $this->startOfMonthCSSTag( $occupancydate ) ); ?>">
 				<div class="occupancyStats-wrap">
 					<div class="occupancyStats-inner">
 						<div class="occupancy-adr">
@@ -232,7 +249,7 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 			}
 			ob_start();
 			?>
-			<td class="calendarCell monthHeader <?php echo esc_attr( $this->todayCSSTag( $occupancydate ) ); ?> <?php echo esc_attr( $column_class ); ?>">
+			<td class="calendarCell monthHeader <?php echo esc_attr( $this->todayCSSTag( $occupancydate ) ); ?> <?php echo esc_attr( $this->startOfMonthCSSTag( $occupancydate ) ); ?> <?php echo esc_attr( $column_class ); ?>">
 				<div class="monthDayinfo-wrap">
 					<div class="month">
 						<?php echo esc_html( $month ); ?>
@@ -467,11 +484,7 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 						if ( $reservation_instance->isRoom_For_Day_Fullybooked() ) {
 							$occupancy_status_class = "fully-booked";
 						}
-						$today_status_class = '';
-						if ( $dateString == $today ) {
-							$today_status_class = "is-today";
-						}
-						echo '<td class="calendarCell ' . esc_attr( $today_status_class ) . ' ' . esc_attr( $occupancy_status_class ) . '">';
+						echo '<td class="calendarCell ' . esc_attr( $this->todayCSSTag( $dateString ) ) . ' ' . esc_attr( $this->startOfMonthCSSTag( $dateString ) ) . ' ' . esc_attr( $occupancy_status_class ) . '">';
 						?>
 						<div class="calendar-info-wrap">
 							<div class="calendar-info">

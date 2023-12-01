@@ -1,18 +1,18 @@
 #container {
-display: flex;
-overflow-x: auto;
-max-width: 100%;
+	display: flex;
+	overflow-x: auto;
+	max-width: 100%;
 }
 
 #rowHeaders {
-flex-shrink: 0;
-min-width: 100px;
+	flex-shrink: 0;
+	min-width: 100px;
 }
 
 #calendar {
-overflow-x: auto;
-width: 100%;
-position: relative;
+	overflow-x: auto;
+	width: 100%;
+	position: relative;
 }
 
 #calendarTable {
@@ -26,37 +26,37 @@ position: relative;
 }
 
 .calendarRow {
-display: flex;
+	display: flex;
 }
 
 .calendarCell {
-flex-grow: 1;
-border-right: 1px solid #ccc;
-transition: border-color 0.3s ease-in-out;
-text-align: center;
-width: 80px;
-height: 80px;
-position: relative;
-vertical-align: bottom;
+	flex-grow: 1;
+	border-right: 1px solid #ccc;
+	transition: border-color 0.3s ease-in-out;
+	text-align: center;
+	width: 80px;
+	height: 80px;
+	position: relative;
+	vertical-align: bottom;
 }
 
 .calendarCell:first-child {
-border-left: none;
+	border-left: none;
 }
 
 .calendarRow .rowHeader {
-font-weight: bold;
-background-color: #eee;
-position: sticky;
-left: 0;
-z-index: 1;
-width: 290px;
-font-size: 12px;
-padding: 20px;
+	font-weight: bold;
+	background-color: #eee;
+	position: sticky;
+	left: 0;
+	z-index: 1;
+	width: 290px;
+	font-size: 12px;
+	padding: 20px;
 }
 
 .calendarRow .rowHeader:first-child {
-border-top: none;
+	border-top: none;
 }
 
 .calendarRow .rowHeader::before {
@@ -72,42 +72,44 @@ border-top: none;
 
 
 #calendarTable {
-display: table;
-table-layout: fixed;
-width: 100%;
+	display: table;
+	table-layout: fixed;
+	width: 100%;
 }
 
 .calendarRow {
-display: table-row;
+	display: table-row;
 }
 
 .calendarCell {
-display: table-cell;
-border-bottom: 1px solid #ccc;
-text-align: left;
+	display: table-cell;
+	border-bottom: 1px solid #ccc;
+	text-align: left;
 }
 
 .rowHeader {
-font-weight: bold;
+	font-weight: bold;
 }
 
 .status {
-margin-bottom: 5px;
+	margin-bottom: 5px;
 }
 
 .quantity,
 .rate {
-font-size: 12px;
+	font-size: 12px;
 }
 
 .reserved-tab-wrap {
 	position: relative;
 	z-index: 0;
 }
+
 .reserved-tab-wrap::before {
 	position: absolute;
 
 }
+
 .reserved-tab {
 	position: absolute;
 	overflow: hidden;
@@ -115,31 +117,38 @@ font-size: 12px;
 	box-shadow: 1px 2px 5px transparent;
 	transition: box-shadow 0.3s ease-in-out;
 }
+
 .reserved-from-past .reserved-tab {
 	border-top-left-radius: 0;
 	border-bottom-left-radius: 0;
 }
+
 .reserved-tab:hover {
 	position: absolute;
 	overflow: hidden;
 	box-shadow: 1px 2px 5px #0000004f;
 }
+
 .quantity-link,
 .rate-link {
 	display: block;
 }
+
 .calendar-info-wrap {
 	position: absolute;
 	top: 0;
 	left: 0;
 }
+
 .calendar-info {
 	position: relative;
 	height: 100px;
 }
+
 .reservation-tab-wrap {
 	padding-top: 60px;
 }
+
 .reserved-tab-inner {
 	border: 1px solid #000;
 	font-size: 11px;
@@ -148,15 +157,18 @@ font-size: 12px;
 	transition: opacity 1s ease-in, width 1s ease-in;
 	opacity: 0;
 }
+
 .reserved-extended {
 	width: 80px;
 }
+
 .reserved-extended .reserved-tab-inner {
 	border: 1px solid transparent;
 	font-size: 11px;
 	padding: 3px 3px 3px 7px;
 	border-radius: 4px;
 }
+
 .reserved-from-past .reserved-tab-inner {
 	border-top-left-radius: 0;
 	border-bottom-left-radius: 0;
@@ -165,12 +177,15 @@ font-size: 12px;
 .calendarCell.monthHeader.rangeSelected {
 	border-top: 2px solid #f00;
 }
+
 .calendarCell.fully-booked {
 	background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQVQYV2NkIALsU1Y2ZiSkDqTI6e7ds3gVwhSBDMOpEFkRToXoirAqxKYIQyEuRSgK8SmCKySkCKyQGEUghQCl2yVCPSoUNwAAAABJRU5ErkJggg==) repeat;
 }
+
 body .tooltip .tooltip-inner {
-    text-align: left;
+	text-align: left;
 }
+
 .roomrate-link,
 .quantity-link {
 	text-decoration: navajowhite;
@@ -178,15 +193,18 @@ body .tooltip .tooltip-inner {
 	font-size: 11px;
 	line-height: 0;
 }
+
 .calendar-info-wrap {
 	position: absolute;
 	top: 16px;
 	left: 10px;
 }
+
 .monthDayinfo-wrap {
 	padding: 10px;
 	position: relative;
 }
+
 .monthDayinfo-wrap .day-letter {
 	text-transform: uppercase;
 	font-size: 9px;
@@ -195,28 +213,34 @@ body .tooltip .tooltip-inner {
 	position: absolute;
 	left: 11px;
 }
+
 .monthDayinfo-wrap .month {
 	position: relative;
 	top: 3px;
 }
+
 .monthDayinfo-wrap .day {
 	font-weight: bold;
 	position: relative;
 	top: 7px;
 }
+
 .reserved-tab-inner .fa-solid.fa-arrow-right-from-bracket {
 	font-size: 9px;
 	position: absolute;
 	left: -3px;
 	top: 8px;
 }
+
 .reserved-tab-inner,
 .reserved-extended .reserved-tab-inne {
 	height: 38px;
 }
+
 .reserved-tab-wrap {
 	height: 40px;
 }
+
 .ota-sign {
 	position: absolute;
 	height: 32px;
@@ -226,6 +250,7 @@ body .tooltip .tooltip-inner {
 	left: 3px;
 	top: 3px;
 }
+
 .guest-name {
 	position: absolute;
 	top: 8px;
@@ -235,24 +260,30 @@ body .tooltip .tooltip-inner {
 	font-weight: 500;
 	text-transform: uppercase;
 }
+
 .reserved-tab-inner {
-	background-image: linear-gradient( 68.4deg,  rgba(99,251,215,1) -0.4%, rgba(5,222,250,1) 100.2% );
+	background-image: linear-gradient(68.4deg, rgba(99, 251, 215, 1) -0.4%, rgba(5, 222, 250, 1) 100.2%);
 	border: 0;
 }
+
 .reservation-cancelled .reserved-tab-inner {
-	background-image: radial-gradient( circle farthest-corner at 10% 20%, rgba(255, 1, 132, 0.19) 20.8%, rgba(201, 255, 250, 0.57) 74.4% );
+	background-image: radial-gradient(circle farthest-corner at 10% 20%, rgba(255, 1, 132, 0.19) 20.8%, rgba(201, 255, 250, 0.57) 74.4%);
 	border: 0;
 }
+
 .reservation-pending .reserved-tab-inner {
-	background-image: radial-gradient( circle farthest-corner at 10% 20%, rgba(208, 208, 208, 0.3) 20.8%, rgba(201, 255, 250, 0.57) 74.4% );
+	background-image: radial-gradient(circle farthest-corner at 10% 20%, rgba(208, 208, 208, 0.3) 20.8%, rgba(201, 255, 250, 0.57) 74.4%);
 	border: 0;
 }
+
 .reservation-cancelled .ota-sign {
 	background: #ff0c738a;
 }
+
 .reservation-pending .ota-sign {
 	background: #0c32ff42;
 }
+
 .guest-name span {
 	display: block;
 	font-size: 7px;
@@ -263,40 +294,48 @@ body .tooltip .tooltip-inner {
 .calendarRow .rowHeader {
 	box-shadow: 33px 0px 35px 6px #0000001f;
 }
+
 .calendarCell.is-today {
 	background: #ff006c1c;
 }
+
 .occupancyStats-wrap {
 	font-size: 11px;
 	padding: 10px;
 	color: #9b9b9b;
 }
+
 .occupancy-percentage {
 	font-size: 14px;
 	color: #d9d9d9;
 }
+
 .calendarCell.monthHeader.occupancy-stats {
 	background: #1a1a1a;
 	box-shadow: inset 11px 1px 31px #ffffff26;
 }
+
 .occupancy-total {
 	font-size: 14px;
 	font-weight: normal;
 }
+
 .guest-name,
 a.reservation-edit-link {
 	color: #000;
 }
+
 a.reservation-edit-link:focus {
 	box-shadow: none;
 }
+
 .tooltip.fade:not(.show) {
-    opacity: 0;
+	opacity: 0;
 }
 
 .tooltip.fade.show {
-    transition: opacity 0.2s linear;
-    opacity: 1;
+	transition: opacity 0.2s linear;
+	opacity: 1;
 }
 
 #calendarTable .hovered-mousecolumn {
@@ -306,19 +345,23 @@ a.reservation-edit-link:focus {
 .calendar-controls-wrap {
 	margin-bottom: 14px;
 }
+
 #guest-age {
 	margin-top: 10px;
 }
+
 .notify-number-over-max {
 	color: #ff0000;
 	margin-top: 10px;
 	margin-bottom: 10px;
 }
+
 .adult-number-max-notice,
 .child-number-max-notice {
 	margin-top: 10px;
 	color: #5e5e5e;
 }
+
 .notify-number-over-max,
 .adult-number-max-notice,
 .child-number-max-notice,
@@ -326,23 +369,49 @@ a.reservation-edit-link:focus {
 .combined-child-number-max-notice {
 	display: none;
 }
+
 .combined-child-number-max-notice,
 .combined-adult-number-max-notice {
 	margin-top: 10px;
 }
+
 ul.existing-customer li {
 	margin: 0 0 10px;
 }
 
 #result {
-	width: 50%;
-	float: right;
+	width: auto;
 	font-size: 8px;
 }
+
 #result table {
 	font-size: 8px;
 }
+
 #sync-form {
 	float: left;
 	width: 50%;
+}
+
+.calendarCell.start-of-month {
+	border-left: 2px solid #000;
+}
+
+#result-notice ol {
+	padding: 0;
+	margin: 0 0 20px 26px;
+	font-size: 9px;
+}
+
+#result p {
+	font-size: 9px;
+}
+.process-ical-sync {
+	margin-top: 20px;
+}
+.before-importing-content {
+	margin-bottom: 16px;
+}
+#result-missing-bookings {
+	font-size: 8px;
 }

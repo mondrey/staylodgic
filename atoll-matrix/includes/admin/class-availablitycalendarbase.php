@@ -26,7 +26,7 @@ class AvailablityCalendarBase
     public function setStartDate($startDate)
     {
         if ($startDate === null) {
-            $week_ago        = (new \DateTime())->modify('-9 days');  // will be -9 by default
+            $week_ago        = (new \DateTime())->modify('-3 days');  // will be -3 by default
             $this->startDate = $week_ago->format('Y-m-d');
         } else {
             $this->startDate = (new \DateTime($startDate))->format('Y-m-d');
@@ -36,7 +36,7 @@ class AvailablityCalendarBase
     public function setEndDate($endDate)
     {
         if ($endDate === null) {
-            $end_date      = (new \DateTime())->modify('+30 days');  // will be 30 by default
+            $end_date      = (new \DateTime())->modify('+90 days');  // will be 30 by default
             $this->endDate = $end_date->format('Y-m-d');
         } else {
             $this->endDate = (new \DateTime($endDate))->format('Y-m-d');
@@ -73,8 +73,10 @@ class AvailablityCalendarBase
             $end_date   = $endDate;
         }
 
+        $number_of_days = self::setNumDays( $startDate, $endDate);
+
         $dates = [];
-        for ($day = 0; $day < 30; $day++) {
+        for ($day = 0; $day < $number_of_days; $day++) {
             if ($startDate instanceof \DateTime) {
                 $currentDate = clone $startDate;
             } else {

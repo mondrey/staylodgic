@@ -5,14 +5,35 @@
 		var processedEvents = []; // Array to store all processed events
 		var tbody; // Variable to store the reference to the tbody element
 
+		var roomID;
+		var icsURL;
+		var icsID;
+		var total_process = 0;
+		var segment_complete = 0;
+		var totalSuccess = 0;
+
 		$('.room_ical_links_wrapper').on('click', '.sync_button', function(e) {
+			e.preventDefault();
+			$('#sync-popup').modal('show');
+
+			$('#ical-sync-progress').attr('aria-valuenow', 0).css('width', '0%');
+			$('#result-notice').html('');
+			$('#result').html('');
+			$('#result-missing-bookings').html('');
+			$(".process-ical-sync").prop("disabled", false).text('Import Bookings');
+			$(".ical-close-button").prop("disabled", false);
+			
+			roomID = $(this).data('room-id');
+			icsURL = $(this).data('ics-url');
+			icsID = $(this).data('ics-id');
+		});
+
+		$('#sync-popup').on('click', '.process-ical-sync', function(e) {
 			e.preventDefault();
 
 			$(".sync_button").prop("disabled", true);
-
-			var roomID = $(this).data('room-id');
-			var icsURL = $(this).data('ics-url');
-			var icsID = $(this).data('ics-id');
+			$(".process-ical-sync").prop("disabled", true).text('Importing');
+			$(".ical-close-button").prop("disabled", true);
 
 			// Function to process and send events in batches
 			function processEventsBatch(events) {
@@ -41,10 +62,6 @@
 								fileSignature = event.SIGNATURE;
 								if (index < successCount) {
 									var row = $('<tr>');
-									row.append('<td>' + event.SIGNATURE + '</td>');
-									row.append('<td>' + event.CREATED + '</td>');
-									row.append('<td>' + event.DTEND + '</td>');
-									row.append('<td>' + event.DTSTART + '</td>');
 									row.append('<td>' + event.SUMMARY + '</td>');
 									row.append('<td>' + event.CHECKIN + '</td>');
 									row.append('<td>' + event.CHECKOUT + '</td>');
@@ -52,11 +69,19 @@
 									tbody.append(row);
 								} else if (index < successCount + skippedCount) {
 									// Display a message for skipped posts
-									$('#result').append('<p>Post with booking number ' + event.UID + ' already exists. Skipped.</p>');
+									$('#result').append('<p>' + event.UID + ' already exists --- Skipped.</p>');
 								}
 							});
 
-							$('#result').append('<p>' + successCount + ' reservation posts inserted successfully.</p>');
+							totalSuccess = totalSuccess + successCount;
+
+							segment_complete = ( totalSuccess * 100 ) / total_process;
+							// Use jQuery to select the progress bar and update its attributes and styles
+							$('#ical-sync-progress').addClass('progress-bar-animated');
+							$('#ical-sync-progress').attr('aria-valuenow', segment_complete).css('width', segment_complete + '%');
+
+
+							$('#result-notice').html('<p>' + totalSuccess + ' of ' + total_process + ' reservation posts inserted successfully.</p>');
 
 							// Check if there are more events to process
 							if (events.length > 0) {
@@ -66,16 +91,18 @@
 								}, 1000);
 							} else {
 								console.log('processedEvents');
+								$('#ical-sync-progress').removeClass('progress-bar-animated');
+								$(".ical-close-button").prop("disabled", false);
 								console.log(fileSignature);
 								// No more events to process, trigger AJAX call to find future cancelled reservations
 								findFutureCancelledReservations(fileSignature);
 							}
 						} else {
-							$('#result').append('<p>Error inserting reservation posts.</p>');
+							$('#result-notice').append('<p>Error inserting reservation posts.</p>');
 						}
 					},
 					error: function(xhr, status, error) {
-						$('#result').append('<p>An error occurred while inserting reservation posts: ' + error + '</p>');
+						$('#result-notice').append('<p>An error occurred while inserting reservation posts: ' + error + '</p>');
 
 						// Check if there are more events to process
 						if (events.length > 0) {
@@ -107,26 +134,26 @@
 						  var cancelledReservations = response.data.cancelledReservations;
 						  if (cancelledReservations.length > 0) {
 							// Display the list of future cancelled reservations
-							var resultList = $('<ul>');
+							var resultList = $('<ol>');
 							$.each(cancelledReservations, function(index, bookingNumber) {
 							  var listItem = $('<li>').text(bookingNumber);
 							  resultList.append(listItem);
 							});
-							$('#result').append('<p>Future Cancelled Reservations:</p>').append(resultList);
+							$('#result-missing-bookings').html('<p>Future Cancelled Reservations:</p>').append(resultList);
 						  } else {
-							$('#result').append('<p>No future cancelled reservations found.</p>');
+							$('#result-missing-bookings').html('<p>No future cancelled reservations found.</p>');
 						  }
 
 						  $("button.sync_button[data-ics-id='" + response.data.icsID + "']").text('Sync');
 						  $(".sync_button").prop("disabled", false);
 
 						} else {
-						  $('#result').append('<p>Error occurred while retrieving future cancelled reservations.</p>');
+						  $('#result-notice').append('<p>Error occurred while retrieving future cancelled reservations.</p>');
 						}
 					},
 					error: function(xhr, status, error) {
 						// Handle error
-						$('#result').append('<p>Error occurred while retrieving future cancelled reservations.</p>');
+						$('#result-notice').append('<p>Error occurred while retrieving future cancelled reservations.</p>');
 					}
 				});
 			}
@@ -154,10 +181,6 @@
 
 						// Create table headers
 						var headerRow = $('<tr>');
-						headerRow.append('<th>SIGNATURE</th>');
-						headerRow.append('<th>CREATED</th>');
-						headerRow.append('<th>DTEND</th>');
-						headerRow.append('<th>DTSTART</th>');
 						headerRow.append('<th>SUMMARY</th>');
 						headerRow.append('<th>CHECKIN</th>');
 						headerRow.append('<th>CHECKOUT</th>');
@@ -169,14 +192,17 @@
 						table.append(tbody);
 						$('#result').empty().append(table);
 
-						$('#result').append('<p>Processing ' + processedEvents.length + ' events...</p>');
+						total_process = processedEvents.length;
+
+						segment_complete = 0;
+						totalSuccess = 0;
 
 						// Display a message in the #result element
-						if (transientUsed) {
-							$('#result').append('<p class="notice-heading">Events were processed using the existing transient.</p>');
-						} else {
-							$('#result').append('<p class="notice-heading">Events were processed by parsing the ICS file and storing them in the transient.</p>');
-						}
+						// if (transientUsed) {
+						// 	$('#result').append('<p class="notice-heading">Events were processed using the existing transient.</p>');
+						// } else {
+						// 	$('#result').append('<p class="notice-heading">Events were processed by parsing the ICS file and storing them in the transient.</p>');
+						// }
 
 						// Start processing events in batches
 						processEventsBatch(processedEvents);

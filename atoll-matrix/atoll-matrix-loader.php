@@ -136,6 +136,11 @@ class AtollMatrix_Init
                 wp_enqueue_style('fontawesome-6-brands');
                 wp_enqueue_style('fontawesome-6-solid');
 
+                wp_register_script('bootstrap', plugin_dir_url(__FILE__) . 'assets/js/bootstrap/js/bootstrap.bundle.min.js', array('jquery'), null, true);
+                wp_register_style('bootstrap', plugin_dir_url(__FILE__) . 'assets/js/bootstrap/css/bootstrap.min.css', false, 'screen');
+                wp_enqueue_style('bootstrap');
+                wp_enqueue_script('bootstrap');
+
             }
             if ($current_admin_screen && $current_admin_screen->base == 'edit' && $current_admin_screen->post_type == 'atmx_reservations') {
 

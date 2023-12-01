@@ -720,12 +720,12 @@ $panel_args = [
     'slug'            => 'atollmatrix-settings-panel',
     'user_capability' => 'manage_options',
     'tabs'            => [
-        'general'   => esc_html__('General', 'atollmatrix'),
-        'tab-2'     => esc_html__('Tab 2', 'atollmatrix'),
-        'currency'  => esc_html__('Currency', 'atollmatrix'),
-        'mealplan'  => esc_html__('Meal Plan', 'atollmatrix'),
-        'perperson' => esc_html__('Per person price', 'atollmatrix'),
-        'tax'       => esc_html__('Tax', 'atollmatrix'),
+        'general'       => esc_html__('General', 'atollmatrix'),
+        'import-export' => esc_html__('Import/Export', 'atollmatrix'),
+        'currency'      => esc_html__('Currency', 'atollmatrix'),
+        'mealplan'      => esc_html__('Meal Plan', 'atollmatrix'),
+        'perperson'     => esc_html__('Per person price', 'atollmatrix'),
+        'tax'           => esc_html__('Tax', 'atollmatrix'),
      ],
  ];
 
@@ -741,6 +741,17 @@ foreach ($currencies as $currencyCode => $currencyName) {
 
 $panel_settings = [
     // Tab 1
+    'import_missing'    => [
+        'label'       => esc_html__('Action for missing bookings', 'atollmatrix'),
+        'type'        => 'select',
+        'inputwidth'  => '250',
+        'description' => 'Action for missing bookings on import.',
+        'choices'     => [
+            'cancel'         => esc_html__('Cancel', 'atollmatrix'),
+            'delete' => esc_html__('Delete', 'atollmatrix'),
+         ],
+        'tab'         => 'import-export',
+     ],
     'enable_taxes'         => [
         'label'       => esc_html__('Enable Taxes', 'atollmatrix'),
         'type'        => 'checkbox',

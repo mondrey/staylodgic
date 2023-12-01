@@ -40,12 +40,27 @@ class EventBatchProcessor
         //     $removedUID = array_pop($processedUIDs);
         //     $removedUID = array_pop($processedUIDs);
         // }
-
+        error_log( '--------------- Post Events array -----------' );
+        error_log( print_r( $_POST['processedEvents'], 1 ) );
+        $earliestDate = null;
+        foreach ($_POST['processedEvents'] as $event) {
+            if (isset($event['DTSTART']) && !empty($event['DTSTART'])) {
+                // Convert DTSTART to a DateTime object
+                $eventDate = \DateTime::createFromFormat('Ymd', $event['DTSTART']);
+        
+                if ($earliestDate === null || $eventDate < $earliestDate) {
+                    $earliestDate = $eventDate;
+                }
+            }
+        }
         // // Get the signature from the $_POST data
         $signature = $_POST[ 'signature_id' ];
 
         // Get today's date
-        $today = date('Y-m-d');
+        $daystart = '';
+        if ($earliestDate instanceof \DateTime) {
+            $daystart = $earliestDate->format('Y-m-d');
+        }
 
         // Run a query for reservation posts
         $args = array(
@@ -59,7 +74,7 @@ class EventBatchProcessor
                 ),
                 array(
                     'key'     => 'atollmatrix_checkin_date',
-                    'value'   => $today,
+                    'value'   => $daystart,
                     'compare' => '>=',
                     // check-in date is today or in the future
                     'type'    => 'DATE',
@@ -86,9 +101,24 @@ class EventBatchProcessor
                 // If the booking number doesn't exist in processed UIDs, it's potentially cancelled
                 if (!in_array($booking_number, $processedUIDs)) {
                     $potentiallyCancelled[  ] = $booking_number;
-                    if ( 'cancelled' !== $reservation_status ) {
-                        update_post_meta($reservation_id, 'atollmatrix_reservation_status', 'cancelled');
+                    
+                    $import_missing = atollmatrix_get_option('import_missing');
+                    error_log( '--------------- Import Action Status -----------' );
+                    error_log( $import_missing );
+                    if ( 'cancel' == $import_missing ) {
+                        if ( 'cancelled' !== $reservation_status ) {
+                            update_post_meta($reservation_id, 'atollmatrix_reservation_status', 'cancelled');
+                        }
                     }
+                    if ( 'delete' == $import_missing ) {
+                        $reservation_instance = new \AtollMatrix\Reservations($date = false, $room_id = false, $reservation_id);
+                        $customer_post_id = $reservation_instance->getGuest_id_forReservation( $booking_number );
+                        // Delete Customer for Reservation
+                        wp_delete_post($customer_post_id, true);
+                        // Delete Booking
+                        wp_delete_post($reservation_id, true);
+                    }
+
                 }
             }
 
@@ -249,7 +279,6 @@ class EventBatchProcessor
     {
         // The HTML content of your 'Import iCal' page goes here
         echo "<div class='main-sync-form-wrap'>";
-        echo "<div id='result'></div>";
         echo "<div id='sync-form'>";
         echo "<h1>Welcome to Atoll Matrix</h1>";
 
@@ -298,6 +327,7 @@ class EventBatchProcessor
         echo "</form>";
         echo "</div>";
         echo "</div>";
+        echo \AtollMatrix\Modals::syncModal();
     }
 
     public function save_ical_room_meta()
