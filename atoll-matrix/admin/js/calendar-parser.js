@@ -96,7 +96,7 @@
 					data: {
 						action: 'find_future_cancelled_reservations',
 						processedEvents: originalProcessedEvents, // Convert to JSON string
-						signature: signature, // Pass the signature in the AJAX request
+						signature_id: signature, // Pass the signature in the AJAX request
 						room_id: roomID,
 						ics_id: icsID,
 					},
@@ -117,7 +117,7 @@
 							$('#result').append('<p>No future cancelled reservations found.</p>');
 						  }
 
-						  $("button.sync_button[data-ics-id='" + response.data.icsID + "']").text('Active');
+						  $("button.sync_button[data-ics-id='" + response.data.icsID + "']").text('Sync');
 						  $(".sync_button").prop("disabled", false);
 
 						} else {
@@ -181,7 +181,12 @@
 						// Start processing events in batches
 						processEventsBatch(processedEvents);
 					} else {
-						$('#result').html('<p>Error processing events.</p>');
+						// Display the custom error message from the server
+						var errorMessage = 'Error processing events.';
+						if (response.data) {
+							errorMessage = response.data;
+						}
+						$('#result').html('<p>' + errorMessage + '</p>');
 					}
 				},
 				error: function(xhr, status, error) {
