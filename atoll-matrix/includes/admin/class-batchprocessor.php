@@ -50,6 +50,7 @@ class EventBatchProcessor
         // Run a query for reservation posts
         $args = array(
             'post_type'  => 'atmx_reservations',
+            'posts_per_page' => -1,
             'meta_query' => array(
                 'relation' => 'AND',
                 array(
@@ -77,6 +78,7 @@ class EventBatchProcessor
                 $query->the_post();
 
 				$reservation_id = get_the_ID();
+                $reservation_status = get_post_meta($reservation_id, 'atollmatrix_reservation_status', true);
                 // Get the post meta
                 $booking_number = get_post_meta( $reservation_id, 'atollmatrix_booking_number', true);
 				error_log( '--------------- duplicate checking booking_number -----------' );
@@ -84,7 +86,9 @@ class EventBatchProcessor
                 // If the booking number doesn't exist in processed UIDs, it's potentially cancelled
                 if (!in_array($booking_number, $processedUIDs)) {
                     $potentiallyCancelled[  ] = $booking_number;
-					update_post_meta($reservation_id, 'atollmatrix_reservation_status', 'cancelled');
+                    if ( 'cancelled' !== $reservation_status ) {
+                        update_post_meta($reservation_id, 'atollmatrix_reservation_status', 'cancelled');
+                    }
                 }
             }
 

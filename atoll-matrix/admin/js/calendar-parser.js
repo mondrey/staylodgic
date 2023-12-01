@@ -34,7 +34,7 @@
 						if (response.success) {
 							var successCount = response.data.successCount;
 							var skippedCount = response.data.skippedCount;
-							var skippedCount = response.data.icsID;
+							//var skippedCount = response.data.icsID;
 
 							// Display the successfully inserted reservation posts
 							$.each(eventsBatch, function(index, event) {
@@ -173,9 +173,9 @@
 
 						// Display a message in the #result element
 						if (transientUsed) {
-							$('#result').append('<p>Events were processed using the existing transient.</p>');
+							$('#result').append('<p class="notice-heading">Events were processed using the existing transient.</p>');
 						} else {
-							$('#result').append('<p>Events were processed by parsing the ICS file and storing them in the transient.</p>');
+							$('#result').append('<p class="notice-heading">Events were processed by parsing the ICS file and storing them in the transient.</p>');
 						}
 
 						// Start processing events in batches
@@ -186,11 +186,11 @@
 						if (response.data) {
 							errorMessage = response.data;
 						}
-						$('#result').html('<p>' + errorMessage + '</p>');
+						$('#result').html('<p class="notice-heading">' + errorMessage + '</p>');
 					}
 				},
 				error: function(xhr, status, error) {
-					$('#result').html('<p>An error occurred while processing events: ' + error + '</p>');
+					$('#result').html('<p class="notice-heading">An error occurred while processing events: ' + error + '</p>');
 				}
 			});
 		});

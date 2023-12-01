@@ -166,3 +166,13 @@
 .perpersonpricing_number_setter {
 	width: 60px;
 }
+
+.main-sync-form-wrap p {
+	font-size: 8px;
+}
+.main-sync-form-wrap p.notice-heading {
+	font-size: 12px;
+}
+.main-sync-form-wrap th {
+	font-size: 11px;
+}
