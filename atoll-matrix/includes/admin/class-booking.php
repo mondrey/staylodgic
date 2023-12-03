@@ -376,7 +376,7 @@ class Booking
             $html .= '<div class="form-group">';
             $html .= '<div id="bookingResponse" class="booking-response"></div>';
             $html .= '<div id="booking-register" class="book-button">Book this room</div>';
-            $html .= self::paymentHelperButton( $totalprice[ 'total' ], $bookingnumber );
+            $html .= self::paymentHelperButton($totalprice[ 'total' ], $bookingnumber);
             $html .= '</div>';
         }
 
@@ -390,11 +390,11 @@ class Booking
         // Generate unique booking number
         atollmatrix_set_booking_transient('1', $this->bookingNumber);
         ob_start();
-        $searchbox_nonce = wp_create_nonce('atollmatrix-searchbox-nonce');
+        $searchbox_nonce       = wp_create_nonce('atollmatrix-searchbox-nonce');
         $availabilityDateArray = array();
 
         $availability_instance = new \AtollMatrix\AvailablityCalendar();
-        $fullybooked_dates = $availability_instance->fetchOccupancy_Percentage_For_Calendar_Range( false, false, true );
+        $fullybooked_dates     = $availability_instance->fetchOccupancy_Percentage_For_Calendar_Range(false, false, true);
         ?>
 		<div class="atollmatrix-content">
 		<div id="hotel-booking-form">
@@ -442,7 +442,7 @@ class Booking
                             <input data-childageinput="children_age[]" data-guest="child" data-guestmax="0" data-adultmax="0" data-childmax="0" id="number-of-children" value="0" name="number_of_children" type="text" class="number-value" readonly="">
                             <span class="plus-btn">+</span>
                         </div>
-                        
+
                     </div>
                     <div id="guest-age"></div>
                 </div>
@@ -652,7 +652,7 @@ return ob_get_clean();
             $checkinDate_obj = new \DateTime($chosenDate[ 'startDate' ]);
         }
         if (isset($chosenDate[ 'endDate' ])) {
-            $checkoutDate     = $chosenDate[ 'endDate' ];
+            $checkoutDate = $chosenDate[ 'endDate' ];
             //$checkoutDate     = date('Y-m-d', strtotime($checkoutDate . ' +1 day'));
             $checkoutDate_obj = new \DateTime($checkoutDate);
         }
@@ -1123,9 +1123,9 @@ return ob_get_clean();
         return $html;
     }
 
-    public function paymentHelperButton( $total, $bookingnumber )
+    public function paymentHelperButton($total, $bookingnumber)
     {
-        $payment_button = '<div data-paytotal="'.esc_attr($total).'" data-bookingnumber="'.esc_attr($bookingnumber).'" id="woo-bookingpayment" class="book-button">Pay Booking</div>';
+        $payment_button = '<div data-paytotal="' . esc_attr($total) . '" data-bookingnumber="' . esc_attr($bookingnumber) . '" id="woo-bookingpayment" class="book-button">Pay Booking</div>';
         return $payment_button;
     }
 
@@ -1135,7 +1135,7 @@ return ob_get_clean();
 
         $html = '<div class="registration-column registration-column-two" id="booking-summary">';
         $html .= self::bookingSummary(
-            $bookingnumber='',
+            $bookingnumber = '',
             $room_id = '',
             $booking_results[ $room_id ][ 'roomtitle' ] = '',
             $this->checkinDate,
@@ -1659,6 +1659,8 @@ HTML;
 
         $reservation_booking_uid = \AtollMatrix\Common::generateUuid();
 
+        $signature = md5('atollmatrix_booking_system');
+
         // Here you can also add other post data like post_title, post_content etc.
         $post_data = array(
             'post_type' => 'atmx_reservations', // Your custom post type
@@ -1681,8 +1683,9 @@ HTML;
                 'atollmatrix_reservation_subtotal_room_cost' => $reservationData[ 'subtotal' ],
                 'atollmatrix_reservation_total_room_cost'    => $reservationData[ 'total' ],
                 'atollmatrix_booking_number'                 => $booking_number,
-                'atollmatrix_booking_uid'                 => $reservation_booking_uid,
+                'atollmatrix_booking_uid'                    => $reservation_booking_uid,
                 'atollmatrix_customer_id'                    => $customer_post_id,
+                'atollmatrix_ics_signature'                  => $signature,
                 'atollmatrix_booking_data'                   => $reservationData,
             ),
         );

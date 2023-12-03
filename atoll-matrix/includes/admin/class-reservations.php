@@ -295,7 +295,7 @@ class Reservations
 
         // Get the check-in date for the reservation
         $checkin_date = get_post_meta($reservation_post_id, 'atollmatrix_checkin_date', true);
-        
+
         // Check if today's date is the check-in date
         return $today_date === $checkin_date;
     }
@@ -642,6 +642,21 @@ class Reservations
 
         return false;
 
+    }
+
+    // Checks if room was ever opened with a count, even zero.
+    public function wasRoom_Ever_Opened($dateString = false, $room_id = false)
+    {
+
+        if (!$room_id) {
+            $room_id = $this->room_id;
+        }
+        if (!$dateString) {
+            $dateString = $this->date;
+        }
+
+        $max_count = \AtollMatrix\Rooms::getMaxQuantityForRoom($room_id, $dateString);
+        return $max_count;
     }
 
     public function remainingRooms_For_Day($dateString = false, $room_id = false, $excluded_reservation_id = false)

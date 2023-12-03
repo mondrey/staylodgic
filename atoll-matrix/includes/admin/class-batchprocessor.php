@@ -22,17 +22,28 @@ class EventBatchProcessor
 
     }
 
-    public function find_future_cancelled_reservations()
+    public function find_future_cancelled_reservations(
+        $processRoomID = false,
+        $processICS_ID = false,
+        $processedEvents = false,
+        $signature = false
+    )
     {
 
-        $processRoomID = $_POST[ 'room_id' ];
-        $processICS_ID = $_POST[ 'ics_id' ];
+        $jsonOutput = false;
+        if ( ! $processRoomID ) {
+            $processRoomID = $_POST[ 'room_id' ];
+            $processICS_ID = $_POST[ 'ics_id' ];
+            $processedEvents = $_POST[ 'processedEvents' ];
+            $signature = $_POST[ 'signature_id' ];
+            $jsonOutput = true; 
+        }
 
         // error_log( print_r($_POST, true) );
         // // Extract UIDs from processedEvents
         $processedUIDs = array_map(function ($event) {
             return $event[ 'UID' ];
-        }, $_POST[ 'processedEvents' ]);
+        }, $processedEvents);
 
         // To Test - Remove records from the processedUIDs array as a test to see cancellations are reported
         // if (!empty($processedUIDs)) {
@@ -41,9 +52,9 @@ class EventBatchProcessor
         //     $removedUID = array_pop($processedUIDs);
         // }
         error_log( '--------------- Post Events array -----------' );
-        error_log( print_r( $_POST['processedEvents'], 1 ) );
+        error_log( print_r( $processedEvents, 1 ) );
         $earliestDate = null;
-        foreach ($_POST['processedEvents'] as $event) {
+        foreach ($processedEvents as $event) {
             if (isset($event['DTSTART']) && !empty($event['DTSTART'])) {
                 // Convert DTSTART to a DateTime object
                 $eventDate = \DateTime::createFromFormat('Ymd', $event['DTSTART']);
@@ -54,7 +65,6 @@ class EventBatchProcessor
             }
         }
         // // Get the signature from the $_POST data
-        $signature = $_POST[ 'signature_id' ];
 
         // Get today's date
         $daystart = '';
@@ -142,19 +152,26 @@ class EventBatchProcessor
         //error_log( print_r( $room_ical_data, true ) );
         update_post_meta($processRoomID, 'room_ical_data', $room_ical_data);
 
-        // Send the JSON response
-        wp_send_json_success($responseData);
+        if ( $jsonOutput ) {
+            // Send the JSON response
+            wp_send_json_success($responseData);
+        } else {
+            return $responseData;
+        }
     }
 
-	public function insert_events_batch()
+	public function insert_events_batch(
+        $processedEvents = false,
+        $processICS_ID = false
+    )
     {
-        // Get the processed events data from the request
-        $processedEvents = $_POST[ 'processedEvents' ];
-        $processRoomID   = $_POST[ 'room_id' ];
-        $processICS_URL  = $_POST[ 'ics_url' ];
-        $processICS_ID   = $_POST[ 'ics_id' ];
-
-        $get_ICS_array = get_post_meta(get_the_ID(), 'room_ical_links', true);
+        $jsonOutput = false;
+        if ( ! $processedEvents ) {
+            // Get the processed events data from the request
+            $processedEvents = $_POST[ 'processedEvents' ];
+            $processICS_ID   = $_POST[ 'ics_id' ];
+            $jsonOutput = true;
+        }
 
         $successCount = 0; // Counter for successfully inserted posts
         $skippedCount = 0; // Counter for skipped posts
@@ -170,7 +187,6 @@ class EventBatchProcessor
             $signature      = $event[ 'SIGNATURE' ];
 
             $room_id = $_POST[ 'room_id' ];
-            $ics_url = $_POST[ 'ics_url' ];
 
             $existing_post = get_posts(
                 array(
@@ -244,8 +260,12 @@ class EventBatchProcessor
             'icsID'        => $processICS_ID,
         );
 
-        // Send the JSON response
-        wp_send_json_success($responseData);
+        if ( $jsonOutput ) {
+            // Send the JSON response
+            wp_send_json_success($responseData);
+        } else {
+            return $responseData;
+        }
     }
 
     public function add_admin_menu()
@@ -261,11 +281,29 @@ class EventBatchProcessor
         add_submenu_page(
             'atoll-matrix',
             // This is the slug of the parent menu
-            'Import iCal',
-            'Import iCal',
+            'Import iCal Bookings',
+            'Import iCal Bookings',
             'manage_options',
             'import-ical',
-            array($this, 'display_admin_page')
+            array($this, 'ical_import')
+        );
+        add_submenu_page(
+            'atoll-matrix',
+            // This is the slug of the parent menu
+            'Export iCal Bookings',
+            'Export iCal Bookings',
+            'manage_options',
+            'export-ical',
+            array($this, 'ical_export')
+        );
+        add_submenu_page(
+            'atoll-matrix',
+            // This is the slug of the parent menu
+            'Import iCal Availabilitiy',
+            'Import iCal Availabilitiy',
+            'manage_options',
+            'import-availability',
+            array($this, 'ical_availability')
         );
     }
 
@@ -275,12 +313,18 @@ class EventBatchProcessor
         echo "<h1>Welcome to Atoll Matrix</h1>";
     }
 
-    public function display_admin_page()
+    public function ical_export()
+    {
+        // The HTML content of the 'Atoll Matrix' page goes here
+        echo "<h1>Export ICS Calendar</h1>";
+    }
+
+    public function ical_import()
     {
         // The HTML content of your 'Import iCal' page goes here
         echo "<div class='main-sync-form-wrap'>";
         echo "<div id='sync-form'>";
-        echo "<h1>Welcome to Atoll Matrix</h1>";
+        echo "<h1>Import ICS Calendar</h1>";
 
         echo "<form id='room_ical_form' method='post'>";
         echo '<input type="hidden" name="ical_form_nonce" value="' . wp_create_nonce('ical_form_nonce') . '">';
@@ -413,30 +457,41 @@ class EventBatchProcessor
         return true;
     }
 
-    public function process_event_batch()
+    public function process_event_batch(
+        $room_id = false,
+        $ics_url = false,
+    )
     {
 
         // Create a new instance of the parser.
         $parser = new \ICal\ICal();
 
-        $room_id = $_POST[ 'room_id' ];
-        $ics_url = $_POST[ 'ics_url' ];
+        $jsonOutput = false;
+        if ( ! $room_id ) {
+            $room_id = $_POST[ 'room_id' ];
+            $ics_url = $_POST[ 'ics_url' ];
+            $jsonOutput = true;
+        }
 
         // Check if the URL is ready for syncing.
-        // $sync_check = self::is_url_ready_for_sync($ics_url);
-        // if (is_numeric($sync_check)) {
-        //     wp_send_json_error('Error: Syncing is not allowed yet for this URL. Please wait for ' . $sync_check . ' more minutes.');
-        //     return;
-        // }
+        $sync_check = self::is_url_ready_for_sync($ics_url);
+        if (is_numeric($sync_check)) {
+            wp_send_json_error('Error: Syncing is not allowed yet for this URL. Please wait for ' . $sync_check . ' more minutes.');
+            return;
+        }
 
         $file_contents = file_get_contents($ics_url);
         // Check if the feed is empty or incomplete
         if ($file_contents === false || empty($file_contents)) {
-            wp_send_json_error('Error: The iCal feed is empty or could not be retrieved.');
+            if ( $jsonOutput ) {
+                wp_send_json_error('Error: The iCal feed is empty or could not be retrieved.');
+            }
             return;
         }
         if (strpos($file_contents, 'BEGIN:VCALENDAR') === false || strpos($file_contents, 'END:VCALENDAR') === false) {
-            wp_send_json_error('Error: The iCal feed is incomplete.');
+            if ( $jsonOutput ) {
+                wp_send_json_error('Error: The iCal feed is incomplete.');
+            }
             return;
         }
 
@@ -461,7 +516,9 @@ class EventBatchProcessor
         // Check if the events transient is empty.
         if (!$events) {
             // If empty, display an error or take appropriate action.
-            wp_send_json_error('No events found.');
+            if ( $jsonOutput ) {
+                wp_send_json_error('No events found.');
+            }
         }
 
         if (!$events) {
@@ -541,7 +598,13 @@ class EventBatchProcessor
                 'processedBookingNumbers' => array_column($processedEvents, 'UID'),
             ),
         );
-        wp_send_json($response);
+
+        if ( $jsonOutput ) {
+            wp_send_json($response);
+        } else {
+            return $response;
+        }
+        
     }
 }
 

@@ -213,10 +213,12 @@
 							errorMessage = response.data;
 						}
 						$('#result').html('<p class="notice-heading">' + errorMessage + '</p>');
+						$(".ical-close-button").prop("disabled", false);
 					}
 				},
 				error: function(xhr, status, error) {
 					$('#result').html('<p class="notice-heading">An error occurred while processing events: ' + error + '</p>');
+					$(".ical-close-button").prop("disabled", false);
 				}
 			});
 		});

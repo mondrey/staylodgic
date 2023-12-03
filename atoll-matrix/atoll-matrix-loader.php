@@ -93,7 +93,7 @@ class AtollMatrix_Init
         wp_register_script('select2', plugin_dir_url(__FILE__) . 'assets/js/select2/js/select2.full.min.js', array('jquery'), null, true);
         wp_register_style('select2', plugin_dir_url(__FILE__) . 'assets/js/select2/css/select2.min.css', array(), false, 'screen');
 
-        wp_register_script('atollmatrix-parser', plugin_dir_url(__FILE__) . 'admin/js/calendar-parser.js', array('jquery'), null, true);
+        wp_register_script('atollmatrix-parser', plugin_dir_url(__FILE__) . 'admin/js/booking-parser.js', array('jquery'), null, true);
 
         wp_register_style('flatpickr', plugin_dir_url(__FILE__) . 'assets/js/flatpickr/flatpickr.min.css', array(), '1.0', 'screen');
         wp_register_style('flatpickr-extra', plugin_dir_url(__FILE__) . 'assets/js/flatpickr/flatpickr-extra-style.css', array(), '1.0', 'screen');

@@ -476,6 +476,12 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 						$reserved_room_count  = $reservation_instance->countReservationsForDay();
 						$remaining_rooms      = $reservation_instance->remainingRooms_For_Day();
 						$reserved_rooms       = $reservation_instance->calculateReservedRooms();
+						if ( 0 == $remaining_rooms ) {
+							$room_was_opened      = $reservation_instance->wasRoom_Ever_Opened();
+							if ( false === $room_was_opened ) {
+								$remaining_rooms = '/';
+							}
+						}
 
 						$max_room_count = \AtollMatrix\Rooms::getMaxQuantityForRoom( $roomId, $dateString );
 

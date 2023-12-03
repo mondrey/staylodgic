@@ -11,11 +11,11 @@ class Modals
 	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="sync-popup-label">Modal title</h1>
+        <h1 class="modal-title fs-5" id="sync-popup-label">Import iCal Bookings</h1>
       </div>
       <div class="modal-body">
 	<div class="before-importing-content">
-	Quick Tip: Before importing, ensure you've backed up your site. This precaution safeguards your data against any unforeseen issues during the import process.
+	Importing can change status of existing bookings to cancelled if they are not found or deleted depending on your options settings. Please backup before proceeding.
 	</div>
 	  <div class="progress">
 		<div id="ical-sync-progress" class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>

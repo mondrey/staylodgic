@@ -36,7 +36,7 @@ class AvailablityCalendarBase
     public function setEndDate($endDate)
     {
         if ($endDate === null) {
-            $end_date      = (new \DateTime())->modify('+90 days');  // will be 30 by default
+            $end_date      = (new \DateTime())->modify('+40 days');  // default
             $this->endDate = $end_date->format('Y-m-d');
         } else {
             $this->endDate = (new \DateTime($endDate))->format('Y-m-d');
