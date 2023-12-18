@@ -594,8 +594,15 @@ class Reservations
                 $adjusted_date->modify('-1 day');
                 $adjusted_date_string = $adjusted_date->format("Y-m-d");
 
-                $max_room_count = \AtollMatrix\Rooms::getMaxQuantityForRoom($room->ID, $date_string);
-                $dailyRoomAvailability[$date_string] += $max_room_count;
+                //$max_room_count = \AtollMatrix\Rooms::getMaxQuantityForRoom($room->ID, $date_string);
+                $reservation_instance = new \AtollMatrix\Reservations( $date_string, $room->ID );
+                $remaining_rooms      = $reservation_instance->remainingRooms_For_Day();
+                error_log( '-------------------- Fully booked percent check');
+                error_log( $room->ID );
+                error_log( $date_string );
+                error_log( $remaining_rooms );
+                error_log( '-------------------- booked percent check');
+                $dailyRoomAvailability[$date_string] += $remaining_rooms;
             }
         }
     

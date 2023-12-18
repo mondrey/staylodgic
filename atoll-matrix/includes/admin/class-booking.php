@@ -662,15 +662,17 @@ return ob_get_clean();
         }
         if (isset($chosenDate[ 'endDate' ])) {
             $checkoutDate = $chosenDate[ 'endDate' ];
-            //$checkoutDate     = date('Y-m-d', strtotime($checkoutDate . ' +1 day'));
             $checkoutDate_obj = new \DateTime($checkoutDate);
+
+            $realCheckoutDate     = date('Y-m-d', strtotime($checkoutDate . ' +1 day'));
+            $realCheckoutDate_obj = new \DateTime($realCheckoutDate);
         }
 
         // Calculate the number of nights
-        $staynights = $checkinDate_obj->diff($checkoutDate_obj)->days;
+        $staynights = $checkinDate_obj->diff($realCheckoutDate_obj)->days;
 
         $this->checkinDate  = $checkinDate;
-        $this->checkoutDate = $checkoutDate;
+        $this->checkoutDate = $realCheckoutDate;
         $this->staynights   = $staynights;
 
         $this->bookingSearchResults                       = array();
@@ -690,7 +692,7 @@ return ob_get_clean();
         $room_instance = new \AtollMatrix\Rooms();
 
         // Get a combined array of rooms and rates which are available for the dates.
-        $combo_array = $room_instance->getAvailable_Rooms_Rates_Occupants_For_DateRange($this->checkinDate, $this->checkoutDate);
+        $combo_array = $room_instance->getAvailable_Rooms_Rates_Occupants_For_DateRange($this->checkinDate, $checkoutDate);
 
         $this->roomArray     = $combo_array[ 'rooms' ];
         $this->ratesArray    = $combo_array[ 'rates' ];
