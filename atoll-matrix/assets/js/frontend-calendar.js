@@ -193,22 +193,14 @@
 			// Function to fade in the guestsWrap
 			function fadeInGuestsWrap() {
 				guestsWrap.velocity('slideDown', {
-					duration: 200,
-					complete: function () {
-						// After sliding down, fade in the element
-						guestsWrap.velocity('fadeTo', { duration: 200, opacity: 1 });
-					}
+					duration: 200
 				});
 			}
 		
 			// Function to fade out the guestsWrap
 			function fadeOutGuestsWrap() {
 				guestsWrap.velocity('slideUp', {
-					duration: 200,
-					complete: function () {
-						// After sliding down, fade in the element
-						guestsWrap.velocity('fadeTo', { duration: 200, opacity: 1 });
-					}
+					duration: 200
 				});
 			}
 		
