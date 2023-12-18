@@ -1661,6 +1661,12 @@ HTML;
 
         $signature = md5('atollmatrix_booking_system');
 
+        $sync_status = 'complete';
+        $availabilityProcessor = new AvailabilityBatchProcessor();
+        if ($availabilityProcessor->isSyncingInProgress()) {
+            $sync_status = 'incomplete';
+        }
+
         // Here you can also add other post data like post_title, post_content etc.
         $post_data = array(
             'post_type' => 'atmx_reservations', // Your custom post type
@@ -1685,6 +1691,7 @@ HTML;
                 'atollmatrix_booking_number'                 => $booking_number,
                 'atollmatrix_booking_uid'                    => $reservation_booking_uid,
                 'atollmatrix_customer_id'                    => $customer_post_id,
+                'atollmatrix_sync_status'                    => $sync_status,
                 'atollmatrix_ics_signature'                  => $signature,
                 'atollmatrix_booking_data'                   => $reservationData,
             ),

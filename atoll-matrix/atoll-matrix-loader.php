@@ -57,7 +57,9 @@ class AtollMatrix_Init
 
         require_once plugin_dir_path(__FILE__) . 'vendors/ics-parser/src/ICal/ICal.php';
         require_once plugin_dir_path(__FILE__) . 'vendors/ics-parser/src/ICal/Event.php';
-        require_once plugin_dir_path(__FILE__) . 'includes/admin/class-batchprocessor.php';
+        require_once plugin_dir_path(__FILE__) . 'includes/admin/class-batchprocessorbase.php';
+        require_once plugin_dir_path(__FILE__) . 'includes/admin/class-bookingbatchprocessor.php';
+        require_once plugin_dir_path(__FILE__) . 'includes/admin/class-availabilitybatchprocessor.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-availablitycalendarbase.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-availablitycalendar.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-rooms.php';
@@ -129,7 +131,33 @@ class AtollMatrix_Init
 
                 wp_enqueue_script('jquery-ui-slider');
             }
-            if ($current_admin_screen->base == 'atoll-matrix_page_import-ical') {
+            if ($current_admin_screen->base == 'atoll-matrix_page_import-booking-ical') {
+
+                wp_enqueue_script('atollmatrix-parser');
+                wp_enqueue_style('fontawesome-6');
+                wp_enqueue_style('fontawesome-6-brands');
+                wp_enqueue_style('fontawesome-6-solid');
+
+                wp_register_script('bootstrap', plugin_dir_url(__FILE__) . 'assets/js/bootstrap/js/bootstrap.bundle.min.js', array('jquery'), null, true);
+                wp_register_style('bootstrap', plugin_dir_url(__FILE__) . 'assets/js/bootstrap/css/bootstrap.min.css', false, 'screen');
+                wp_enqueue_style('bootstrap');
+                wp_enqueue_script('bootstrap');
+
+            }
+            if ($current_admin_screen->base == 'atoll-matrix_page_import-availability-ical') {
+
+                wp_enqueue_script('atollmatrix-parser');
+                wp_enqueue_style('fontawesome-6');
+                wp_enqueue_style('fontawesome-6-brands');
+                wp_enqueue_style('fontawesome-6-solid');
+
+                wp_register_script('bootstrap', plugin_dir_url(__FILE__) . 'assets/js/bootstrap/js/bootstrap.bundle.min.js', array('jquery'), null, true);
+                wp_register_style('bootstrap', plugin_dir_url(__FILE__) . 'assets/js/bootstrap/css/bootstrap.min.css', false, 'screen');
+                wp_enqueue_style('bootstrap');
+                wp_enqueue_script('bootstrap');
+
+            }
+            if ($current_admin_screen->base == 'atoll-matrix_page_import-availablity') {
 
                 wp_enqueue_script('atollmatrix-parser');
                 wp_enqueue_style('fontawesome-6');

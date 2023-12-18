@@ -496,10 +496,6 @@ class Reservations
     public static function getRoomNameForReservation($reservation_id = false)
     {
 
-        if (!$reservation_id) {
-            $reservation_id = $this->reservation_id;
-        }
-
         // Get room id from post meta
         $room_id = get_post_meta($reservation_id, 'atollmatrix_room_id', true);
 

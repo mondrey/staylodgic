@@ -3,37 +3,42 @@ namespace AtollMatrix;
 
 class Modals
 {
-    public static function syncModal()
+    public static function syncBookingModal()
     {
         ?>
-<!-- Modal -->
-<div class="modal fade" id="sync-popup" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="sync-popup-label">Import iCal Bookings</h1>
-      </div>
-      <div class="modal-body">
-	<div class="before-importing-content">
-	Importing can change status of existing bookings to cancelled if they are not found or deleted depending on your options settings. Please backup before proceeding.
-	</div>
-	  <div class="progress">
-		<div id="ical-sync-progress" class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
-	</div>
-	<p><button type="button" class="process-ical-sync btn btn-outline-primary">Import Bookings</button>
-</p>
-<p><div id="result-notice"></div></p>
-<p><div id="result"></div></p>
-<p><div id="result-missing-bookings"></div></p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="ical-close-button btn btn-secondary" data-bs-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
-<?php
-}
+		<!-- Modal -->
+		<div class="modal fade" id="sync-booking-popup" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+			<div class="modal-content">
+			<div class="modal-header">
+				<h1 class="modal-title fs-5" id="sync-booking-popup-label">Import iCal Bookings</h1>
+			</div>
+			<div class="modal-body">
+			<div class="before-importing-content">
+			Importing can change status of existing bookings to cancelled if they are not found or deleted depending on your options settings. Please backup before proceeding.
+			</div>
+			<div class="progress">
+				<div id="ical-sync-progress" class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+			</div>
+			<p>
+			<button type="button" class="process-ical-booking-sync btn btn-outline-primary">
+			<span class="button-spinner-support spinner-border spinner-border-sm" aria-hidden="true"></span>
+			Import
+			</button>
+		</p>
+		<p><div id="result-notice"></div></p>
+		<p><div id="result"></div></p>
+		<p><div id="result-missing-bookings"></div></p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="ical-close-button btn btn-secondary" data-bs-dismiss="modal">Close</button>
+			</div>
+			</div>
+		</div>
+		</div>
+		<?php
+	}
+
     public static function quanityModal()
     {
         ?>
