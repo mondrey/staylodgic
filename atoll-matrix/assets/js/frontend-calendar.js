@@ -268,10 +268,14 @@
 					firstDayOfWeek: 1 // Start week on Monday
 				},
 				minDate: "today", // Disable navigation to months previous to the current month
+				onMonthChange: function(selectedDates, dateStr, instance) {
+					updateInfoDisplay(selectedDates);
+				},
 				onChange: function (selectedDates, dateStr, instance) {
 					if (selectedDates.length === 2) {
 						updateSelectedDates(selectedDates[0], selectedDates[1]);
 					}
+					updateInfoDisplay(selectedDates);
 				},
 				disable: [
 					// Use the disableFullyBookedDates function to disable specific dates
@@ -281,6 +285,45 @@
 				]
 			});
 
+			function updateInfoDisplay(selectedDates) {
+				const checkInSpan = document.querySelector('#check-in-display span');
+				const checkOutSpan = document.querySelector('#check-out-display span');
+				const lastNightSpan = document.querySelector('#last-night-display span');
+				const nightsSpan = document.querySelector('#nights-display span');
+			
+				if (selectedDates.length === 1) {
+					let checkInDate = selectedDates[0];
+					checkInSpan.textContent = formatDateToLocale(checkInDate);
+			
+					let checkOutDate = new Date(checkInDate);
+					checkOutDate.setDate(checkOutDate.getDate() + 1);
+					let lastNightDate = new Date(checkOutDate);
+					lastNightDate.setDate(lastNightDate.getDate() - 1); // Calculate last night
+			
+					checkOutSpan.textContent = formatDateToLocale(checkOutDate);
+					lastNightSpan.textContent = formatDateToLocale(lastNightDate); // Update last night
+					nightsSpan.textContent = '1';
+				} else if (selectedDates.length === 2) {
+					let checkInDate = selectedDates[0];
+					let checkOutDate = new Date(selectedDates[1]);
+					let lastNightDate = new Date(checkOutDate);
+					checkOutDate.setDate(checkOutDate.getDate() + 1); // Increment checkout date
+					const nights = (checkOutDate - checkInDate) / (1000 * 60 * 60 * 24);
+					checkInSpan.textContent = formatDateToLocale(checkInDate);
+					checkOutSpan.textContent = formatDateToLocale(checkOutDate);
+					lastNightSpan.textContent = formatDateToLocale(lastNightDate); // Update last night
+					nightsSpan.textContent = nights.toString();
+				}
+			}
+			
+			// Helper function to format date to YYYY-MM-DD
+			function formatDateToLocale(date) {
+				return date.getFullYear() + '-' +
+					   ('0' + (date.getMonth() + 1)).slice(-2) + '-' +
+					   ('0' + date.getDate()).slice(-2);
+			}
+					
+			
 			// Add click event listener to trigger flatpickr when .front-booking-calendar-wrap is clicked
 			var calendarWrap = document.querySelector('.front-booking-calendar-wrap');
 			calendarWrap.addEventListener('click', function () {

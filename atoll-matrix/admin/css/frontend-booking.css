@@ -1229,3 +1229,15 @@
 .booking-backto-roomschoice i {
 	font-size: 32px;
 }
+
+.calendar-insights-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Creates two columns */
+    grid-gap: 10px; /* Sets gap between grid items */
+    padding: 10px; /* Optional padding for better spacing */
+    /* You can adjust the grid-gap and padding values as per your design requirements */
+}
+
+.calendar-insights-wrap > div {
+    /* Styles for each individual div, if needed */
+}
