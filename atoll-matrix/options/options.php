@@ -752,6 +752,14 @@ $panel_settings = [
          ],
         'tab'         => 'import-export',
      ],
+    'qtysync_interval'    => [
+        'label'       => esc_html__('Availability Sync interval', 'atollmatrix'),
+        'type'        => 'select',
+        'inputwidth'  => '250',
+        'description' => 'Availability Sync interval',
+        'choices'     => atollmatrix_sync_intervals(),
+        'tab'         => 'import-export',
+     ],
     'enable_taxes'         => [
         'label'       => esc_html__('Enable Taxes', 'atollmatrix'),
         'type'        => 'checkbox',

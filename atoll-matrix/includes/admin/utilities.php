@@ -1,4 +1,23 @@
 <?php
+function atollmatrix_is_valid_sync_interval($qtysync_interval) {
+    // Retrieve the array of sync intervals
+    $sync_intervals = atollmatrix_sync_intervals();
+
+    // Check if the provided interval is a key in the sync intervals array
+    return array_key_exists($qtysync_interval, $sync_intervals);
+}
+
+function atollmatrix_sync_intervals() {
+	$sync_intervals = array(
+		'5' => esc_attr__('Five Minutes', 'atollmatrix'),
+		'10' => esc_attr__('Ten Minutes', 'atollmatrix'),
+		'15' => esc_attr__('Fifteen Minutes', 'atollmatrix'),
+		'30' => esc_attr__('Thirty Minutes', 'atollmatrix'),
+		'60' => esc_attr__('Sixty Minutes', 'atollmatrix')
+	);
+
+	return $sync_intervals;
+}
 function atollmatrix_formatDate($dateString, $formatChoice = 'monthshort_first')
 {
 	$formattedDate = '';

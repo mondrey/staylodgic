@@ -15,10 +15,8 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
         add_action('wp_ajax_nopriv_save_ical_availability_meta', array($this, 'save_ical_availability_meta'));
 
 
-        // Schedule the cron event
-        if (!wp_next_scheduled('atollmatrix_ical_availability_processor_event')) {
-            wp_schedule_event(time(), 'fifteen_minutes', 'atollmatrix_ical_availability_processor_event');
-        }
+        // Check and schedule the cron event
+        $this->schedule_cron_event();
 
         // Hook the function to the cron event
         add_action('atollmatrix_ical_availability_processor_event', array($this, 'ical_availability_processor'));
@@ -35,13 +33,50 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
         $this->add_cron_hook();
     }
 
-    // Custom interval for cron job
-    public function add_cron_interval($schedules)
-    {
-        $schedules['fifteen_minutes'] = array(
-            'interval' => 15 * 60,
-            'display'  => esc_html__('Every Fifteen Minutes'),
-        );
+    public function schedule_cron_event() {
+
+        $qtysync_interval = get_option('atollmatrix_settings')[ 'qtysync_interval' ];
+        
+        // Define the cron schedule based on the validated interval
+        switch ($qtysync_interval) {
+            case '5':
+                $schedule = 'atollmatrix_5_minutes';
+                break;
+            case '10':
+                $schedule = 'atollmatrix_10_minutes';
+                break;
+            case '15':
+                $schedule = 'atollmatrix_15_minutes';
+                break;
+            case '30':
+                $schedule = 'atollmatrix_30_minutes';
+                break;
+            case '60':
+                $schedule = 'atollmatrix_60_minutes';
+                break;
+            default:
+                $schedule = 'atollmatrix_5_minutes'; // Default case
+                break;
+        }
+    
+        // Schedule the cron event if it's not already scheduled
+        if (!wp_next_scheduled('atollmatrix_ical_availability_processor_event')) {
+            wp_schedule_event(time(), $schedule, 'atollmatrix_ical_availability_processor_event');
+        }
+    }    
+
+    // Custom intervals for cron job
+    public function add_cron_interval($schedules) {
+        $sync_intervals = atollmatrix_sync_intervals(); // Get intervals from your function
+
+        foreach ($sync_intervals as $interval => $display) {
+            $schedules["atollmatrix_{$interval}_minutes"] = array(
+                'interval' => intval($interval) * 60,
+                'display' => $display
+            );
+        }
+
+        // error_log( print_r( $schedules, true ) );
         return $schedules;
     }
 
@@ -98,7 +133,7 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
             // Update the meta field in the database.
             update_post_meta($room_id, 'availability_ical_data', $room_links);
         }
-        self::ical_availability_processor(true);
+        //self::ical_availability_processor(true);
         if (!wp_next_scheduled('continue_ical_availability_processing')) {
             wp_schedule_single_event(time(), 'continue_ical_availability_processing');
         }
