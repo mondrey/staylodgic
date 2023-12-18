@@ -564,6 +564,52 @@ class Reservations
         return $outputArray;
     }
 
+    public function daysFullyBooked_For_DateRange($checkin_date = false, $checkout_date = false)
+    {
+        // Initialize the date range
+        $start     = new \DateTime($checkin_date);
+        $end       = new \DateTime($checkout_date);
+        $interval  = new \DateInterval('P1D');
+        $daterange = new \DatePeriod($start, $interval, $end);
+    
+        // Array to store daily total room availability
+        $dailyRoomAvailability = array();
+    
+        // Query all rooms
+        $room_list = \AtollMatrix\Rooms::queryRooms();
+    
+        // Initialize the array for each date in the range
+        foreach ($daterange as $date) {
+            $date_string = $date->format("Y-m-d");
+            $dailyRoomAvailability[$date_string] = 0;
+        }
+    
+        // Accumulate room availability for each day
+        foreach ($room_list as $room) {
+            foreach ($daterange as $date) {
+                $date_string = $date->format("Y-m-d");
+
+                // Adjust the date string to be one day earlier
+                $adjusted_date = new \DateTime($date_string);
+                $adjusted_date->modify('-1 day');
+                $adjusted_date_string = $adjusted_date->format("Y-m-d");
+
+                $max_room_count = \AtollMatrix\Rooms::getMaxQuantityForRoom($room->ID, $date_string);
+                $dailyRoomAvailability[$date_string] += $max_room_count;
+            }
+        }
+    
+        // Identify fully booked days
+        $fullyBookedDays = array();
+        foreach ($dailyRoomAvailability as $date => $availability) {
+            if ($availability === 0) {
+                $fullyBookedDays[] = $date;
+            }
+        }
+    
+        return $fullyBookedDays;
+    }    
+
     public function Availability_of_Rooms_For_DateRange($checkin_date = false, $checkout_date = false)
     {
 

@@ -44,9 +44,32 @@ class Rooms
         return $roomlist;
     }
 
-    public static function getMaxQuantityForRoom($postID, $dateString)
+    public static function isChannelRoomBooked($room_id, $dateString)
     {
-        $quantityArray = get_post_meta($postID, 'quantity_array', true);
+        $channelArray = get_post_meta($room_id, 'channel_quantity_array', true);
+
+        // Check if the channel_quantity_array exists and the quanitity field is available
+        if (!empty($channelArray) && isset($channelArray['quantity'])) {
+            $quantityArray = $channelArray['quantity'];
+        }
+
+        // Check if the quantity_array exists and the date is available
+        if (!empty($quantityArray) && isset($quantityArray[$dateString])) {
+            if ( '0' == $quantityArray[$dateString] ) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static function getMaxQuantityForRoom($room_id, $dateString)
+    {
+
+        if ( self::isChannelRoomBooked($room_id, $dateString) ) {
+            return '0';
+        }
+        $quantityArray = get_post_meta($room_id, 'quantity_array', true);
 
         // Check if the quantity_array exists and the date is available
         if (!empty($quantityArray) && isset($quantityArray[$dateString])) {

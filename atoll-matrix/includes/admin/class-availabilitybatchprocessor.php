@@ -133,7 +133,10 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
             // Update the meta field in the database.
             update_post_meta($room_id, 'availability_ical_data', $room_links);
         }
-        //self::ical_availability_processor(true);
+        
+        // Sync on Save processing full batch ( process intensive )
+        self::ical_availability_processor(true);
+        
         if (!wp_next_scheduled('continue_ical_availability_processing')) {
             wp_schedule_single_event(time(), 'continue_ical_availability_processing');
         }
@@ -223,6 +226,8 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
             if (!$process_all && $count >= $this->batchSize) {
                 break; // Stop processing after reaching batch size
             }
+
+            update_post_meta($room->ID, 'channel_quantity_array', $blocked_dates['ical'][$room->ID]);
         }
 
         error_log( '----- Blocked dates being processed ' . $count );

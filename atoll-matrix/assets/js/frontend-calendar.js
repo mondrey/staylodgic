@@ -252,7 +252,10 @@
 			// Function to disable dates based on the fully booked dates
 			function disableFullyBookedDates(date) {
 				var fullyBookedDates = getFullyBookedDates();
-				var dateString = date.toISOString().split('T')[0]; // Convert date to YYYY-MM-DD format
+				// Convert date to local YYYY-MM-DD format
+				var dateString = date.getFullYear() + '-' + 
+								('0' + (date.getMonth() + 1)).slice(-2) + '-' + 
+								('0' + date.getDate()).slice(-2);
 
 				if (Array.isArray(fullyBookedDates)) {
 					return fullyBookedDates.includes(dateString);

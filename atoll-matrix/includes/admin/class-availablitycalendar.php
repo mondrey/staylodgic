@@ -42,6 +42,7 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 		}
 	
 		if ( isset( $startDate ) && isset( $endDate ) ) {
+			
 			$dates = \AtollMatrix\Common::getDates_Between( $startDate, $endDate );
 	
 			$occupancy_data = array();

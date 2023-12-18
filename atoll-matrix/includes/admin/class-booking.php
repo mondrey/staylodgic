@@ -393,8 +393,17 @@ class Booking
         $searchbox_nonce       = wp_create_nonce('atollmatrix-searchbox-nonce');
         $availabilityDateArray = array();
 
-        $availability_instance = new \AtollMatrix\AvailablityCalendar();
-        $fullybooked_dates     = $availability_instance->fetchOccupancy_Percentage_For_Calendar_Range(false, false, true);
+        // Calculate current date
+        $currentDate = current_time('Y-m-d');
+        // Calculate end date as 3 months from the current date
+        $endDate = date('Y-m-d', strtotime($currentDate . ' +4 months'));
+
+        $reservations_instance = new \AtollMatrix\Reservations();
+        $fullybooked_dates     = $reservations_instance->daysFullyBooked_For_DateRange($currentDate, $endDate);
+
+        // error_log( '-------------------- availability percent check');
+        // error_log( print_r( $fullybooked_dates, true ));
+        // error_log( '-------------------- availability percent check');
         ?>
 		<div class="atollmatrix-content">
 		<div id="hotel-booking-form">
