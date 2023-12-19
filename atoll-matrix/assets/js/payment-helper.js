@@ -3,6 +3,19 @@
 
 		$(document).on('click', '#woo-bookingpayment', function(e) {
 			e.preventDefault();
+
+			const $form = $('#hotel-room-listing');
+
+			// Check if form is valid
+			if ($form[0].checkValidity() === false) {
+				// $form.find(':input').each(function() {
+				// 	console.log(this.id + ' is valid: ' + this.checkValidity());
+				// });
+				e.stopPropagation(); // Stop further handling of the click event
+				$form.addClass('was-validated'); // Optional: for Bootstrap validation styling
+				return; // Do not proceed to AJAX if validation fails
+			}
+
 			// Get the total value from the form
 			var total = $(this).data("paytotal");
 			var booking_number = $(this).data("bookingnumber");

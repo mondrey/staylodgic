@@ -295,7 +295,6 @@ function atollmatrix_country_list($output_type = "select", $selected = "")
 {
     $countries = array
         (
-        'none' => "Choose Country",
         'AF'   => 'Afghanistan',
         'AX'   => 'Aland Islands',
         'AL'   => 'Albania',
@@ -545,6 +544,7 @@ function atollmatrix_country_list($output_type = "select", $selected = "")
     $country_list = false;
     if ($output_type == "select") {
         $country_list = "";
+        $country_list .= '<option selected disabled value="">Choose a country</option>';
         foreach ($countries as $key => $option) {
             if ($selected == $key) {
                 $country_selected = 'selected="selected"';

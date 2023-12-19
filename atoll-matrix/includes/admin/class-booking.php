@@ -307,6 +307,7 @@ class Booking
 
         $html = '<div id="booking-summary-wrap">';
         if ('' !== $room_name) {
+            $html .= '<div class="booking-backto-roomschoice"><button type="button" class="btn btn-outline-primary">Go back</button></div>';
             $html .= '<div class="room-summary"><span class="summary-room-name">' . $room_name . '</span></div>';
         }
 
@@ -376,7 +377,7 @@ class Booking
             $html .= '<div class="form-group">';
             $html .= '<div id="bookingResponse" class="booking-response"></div>';
             $html .= '<div id="booking-register" class="book-button">Book this room</div>';
-            $html .= self::paymentHelperButton($totalprice[ 'total' ], $bookingnumber);
+            //$html .= self::paymentHelperButton($totalprice[ 'total' ], $bookingnumber);
             $html .= '</div>';
         }
 
@@ -406,33 +407,32 @@ class Booking
         // error_log( '-------------------- availability percent check');
         ?>
 		<div class="atollmatrix-content">
-		<div id="hotel-booking-form">
-        
-        <div class="calendar-insights-wrap">
-            <div id="check-in-display">Check-in: <span>-</span></div>
-            <div id="check-out-display">Check-out: <span>-</span></div>
-            <div id="last-night-display">Last-night: <span>-</span></div>
-            <div id="nights-display">Nights: <span>-</span></div>
-        </div>
+            <div id="hotel-booking-form">
 
-			<form action="" method="post" id="hotel-booking">
-            <div class="front-booking-search">
-    <div class="front-booking-calendar-wrap">
-        <div class="front-booking-calendar-icon"><i class="fa-solid fa-calendar-days"></i></div>
-        <div class="front-booking-calendar-date">Choose stay dates</div>
-    </div>
-    <div class="front-booking-guests-wrap">
-        <div class="front-booking-guests-container"> <!-- New container -->
-            <div class="front-booking-guest-adult-wrap">
-                <div class="front-booking-guest-adult-icon"><span class="guest-adult-svg"></span><span class="front-booking-adult-adult-value">2</span></div>
+            <div class="calendar-insights-wrap">
+                <div id="check-in-display">Check-in: <span>-</span></div>
+                <div id="check-out-display">Check-out: <span>-</span></div>
+                <div id="last-night-display">Last-night: <span>-</span></div>
+                <div id="nights-display">Nights: <span>-</span></div>
             </div>
-            <div class="front-booking-guest-child-wrap">
-                <div class="front-booking-guest-child-icon"><span class="guest-child-svg"></span><span class="front-booking-adult-child-value">0</span></div>
-            </div>
-        </div>
-        <div id="bookingSearch" class="div-button">Search</div>
-    </div>
-</div>
+
+                <div class="front-booking-search">
+                    <div class="front-booking-calendar-wrap">
+                        <div class="front-booking-calendar-icon"><i class="fa-solid fa-calendar-days"></i></div>
+                        <div class="front-booking-calendar-date">Choose stay dates</div>
+                    </div>
+                    <div class="front-booking-guests-wrap">
+                        <div class="front-booking-guests-container"> <!-- New container -->
+                            <div class="front-booking-guest-adult-wrap">
+                                <div class="front-booking-guest-adult-icon"><span class="guest-adult-svg"></span><span class="front-booking-adult-adult-value">2</span></div>
+                            </div>
+                            <div class="front-booking-guest-child-wrap">
+                                <div class="front-booking-guest-child-icon"><span class="guest-child-svg"></span><span class="front-booking-adult-child-value">0</span></div>
+                            </div>
+                        </div>
+                        <div id="bookingSearch" class="div-button">Search</div>
+                    </div>
+                </div>
 
 
 				<div class="atollmatrix_reservation_datepicker">
@@ -467,7 +467,6 @@ class Booking
 					<div class="recommended-alt-title">Rooms unavailable</div><div class="recommended-alt-description">Following range from your selection is avaiable.</div>
 					<div id="recommended-alt-dates"></div>
 				</div>
-			</form>
 			<div class="available-list">
 				<div id="available-list-ajax"></div>
 			</div>
@@ -577,7 +576,7 @@ return ob_get_clean();
                 $formattedNextDay = date('jS', strtotime($checkOutAlt));
             }
 
-            $output .= "<span data-check-staylast='{$staylast}' data-check-in='{$checkInAlt}' data-check-out='{$checkOutAlt}'>{$formattedFirstDate} - {$formattedNextDay}</span>, ";
+            $output .= "<span data-check-staylast='{$staylast}' data-check-in='{$checkInAlt}' data-check-out='{$checkOutAlt}'>{$formattedFirstDate} - {$formattedNextDay}</span>";
         }
 
         // Remove the trailing comma and space
@@ -669,7 +668,7 @@ return ob_get_clean();
             $checkinDate_obj = new \DateTime($chosenDate[ 'startDate' ]);
         }
         if (isset($chosenDate[ 'endDate' ])) {
-            $checkoutDate = $chosenDate[ 'endDate' ];
+            $checkoutDate     = $chosenDate[ 'endDate' ];
             $checkoutDate_obj = new \DateTime($checkoutDate);
 
             $realCheckoutDate     = date('Y-m-d', strtotime($checkoutDate . ' +1 day'));
@@ -730,7 +729,7 @@ return ob_get_clean();
         $list = self::list_Rooms_And_Quantities();
 
         ob_start();
-        echo '<form action="" method="post" id="hotel-room-listing">';
+        echo '<form action="" method="post" id="hotel-room-listing" class="needs-validation" novalidate>';
         $roomlistingbox = wp_create_nonce('atollmatrix-roomlistingbox-nonce');
         echo '<input type="hidden" name="atollmatrix_roomlistingbox_nonce" value="' . esc_attr($roomlistingbox) . '" />';
         echo '<div id="reservation-data" data-bookingnumber="' . $this->bookingNumber . '" data-children="' . $this->childrenGuests . '" data-adults="' . $this->adultGuests . '" data-guests="' . $this->totalGuests . '" data-checkin="' . $this->checkinDate . '" data-checkout="' . $this->checkoutDate . '">';
@@ -1172,59 +1171,65 @@ return ob_get_clean();
 
         $form_html = <<<HTML
 		<div class="registration_form_outer">
-			<div class="booking-backto-roomschoice"><i class="fa-regular fa-circle-left"></i></div>
 			<div class="registration_form_wrap">
 				<div class="registration_form">
-				<form action="" method="post" id="guest-registration">
 					<div class="registration-column registration-column-one registration_form_inputs">
-					<div class="form-group">
-						<input type="text" class="form-control" id="full_name" name="full_name" >
-						<label for="full_name" class="control-label">Full Name</label><i class="bar"></i>
+                    <h3>Registration</h3>
+                    <div class="form-group form-floating">
+						<input placeholder="Full Name" type="text" class="form-control" id="full_name" name="full_name" required>
+						<label for="full_name" class="control-label">Full Name</label>
 					</div>
-					<div class="form-group">
-						<input type="text" class="form-control" id="passport" name="passport" >
-						<label for="passport" class="control-label">Passport No:</label><i class="bar"></i>
+					<div class="form-group form-floating">
+						<input placeholder="Passport No." type="text" class="form-control" id="passport" name="passport" required>
+						<label for="passport" class="control-label">Passport No:</label>
 					</div>
-					<div class="form-group">
-						<input type="email" class="form-control" id="email_address" name="email_address" >
-						<label for="email_address" class="control-label">Email Address</label><i class="bar"></i>
+					<div class="form-group form-floating">
+						<input placeholder="" type="email" class="form-control" id="email_address" name="email_address" required>
+						<label for="email_address" class="control-label">Email Address</label>
 					</div>
-					<div class="form-group">
-						<input type="tel" class="form-control" id="phone_number" name="phone_number" >
-						<label for="phone_number" class="control-label">Phone Number</label><i class="bar"></i>
+					<div class="form-group form-floating">
+						<input placeholder="" type="tel" class="form-control" id="phone_number" name="phone_number" required>
+						<label for="phone_number" class="control-label">Phone Number</label>
 					</div>
-					<div class="form-group">
-						<input type="text" class="form-control" id="street_address" name="street_address" >
-						<label for="street_address" class="control-label">Street Address</label><i class="bar"></i>
-					</div>
-					<div class="form-group">
-						<input type="text" class="form-control" id="city" name="city" >
-						<label for="city" class="control-label">City</label><i class="bar"></i>
-					</div>
-					<div class="form-group">
-						<input type="text" class="form-control" id="state" name="state">
-						<label for="state" class="control-label">State/Province</label><i class="bar"></i>
-					</div>
-					<div class="form-group">
-						<input type="text" class="form-control" id="zip_code" name="zip_code">
-						<label for="zip_code" class="control-label">Zip Code</label><i class="bar"></i>
-					</div>
-					<div class="form-group">
-						<select class="form-control" id="country" name="country" >
+                    <div class="form-group form-floating">
+                        <input placeholder="" type="text" class="form-control" id="street_address" name="street_address">
+                        <label for="street_address" class="control-label">Street Address</label>
+                    </div>
+                    <div class="form-group form-floating">
+                        <input placeholder="" type="text" class="form-control" id="city" name="city">
+                        <label for="city" class="control-label">City</label>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group form-floating">
+                                <input placeholder="" type="text" class="form-control" id="state" name="state">
+                                <label for="state" class="control-label">State/Province</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group form-floating">
+                                <input placeholder="" type="text" class="form-control" id="zip_code" name="zip_code">
+                                <label for="zip_code" class="control-label">Zip Code</label>
+                            </div>
+                        </div>
+                    </div>
+					<div class="form-group form-floating">
+						<select required placeholder="" class="form-control" id="country" name="country" >
 						$country_options
 						</select>
-						<label for="country" class="control-label">Country</label><i class="bar"></i>
+						<label for="country" class="control-label">Country</label>
 					</div>
-					<div class="form-group">
-					<textarea class="form-control" id="guest_comment" name="guest_comment"></textarea>
-					<label for="textarea" class="control-label">Textarea</label><i class="bar"></i>
+					<div class="form-group form-floating">
+					<textarea placeholder="" class="form-control" id="guest_comment" name="guest_comment"></textarea>
+					<label for="textarea" class="control-label">Notes</label>
 					</div>
-					<div class="checkbox">
-					<label>
-						<input type="checkbox" id="guest_consent" name="guest_consent" /><i class="helper"></i>I'm the label from a checkbox
-					</label>
+					<div class="checkbox guest-consent-checkbox">
+					<label></label>
+						<input type="checkbox" class="form-check-input" id="guest_consent" name="guest_consent" required /><span class="consent-notice">By clicking "Book this Room" you agree to our terms and conditions and privacy policy.</span>
+                        <div class="invalid-feedback">
+                            Consent is required to make the booking.
+                        </div>
 					</div>
-				</form>
 				</div>
 
 				$html
@@ -1680,7 +1685,7 @@ HTML;
 
         $signature = md5('atollmatrix_booking_system');
 
-        $sync_status = 'complete';
+        $sync_status           = 'complete';
         $availabilityProcessor = new AvailabilityBatchProcessor();
         if ($availabilityProcessor->isSyncingInProgress()) {
             $sync_status = 'incomplete';

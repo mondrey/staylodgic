@@ -123,6 +123,18 @@
 			const options = { month: 'short', day: 'numeric' };
 			return new Intl.DateTimeFormat('en-US', options).format(date);
 		}
+		function formatDateToYYYYMMDD(date) {
+			if (!(date instanceof Date)) {
+				console.error('Invalid Date object');
+				return '';
+			}
+		
+			var year = date.getFullYear();
+			var month = ('0' + (date.getMonth() + 1)).slice(-2); // months are 0-based
+			var day = ('0' + date.getDate()).slice(-2);
+		
+			return year + '-' + month + '-' + day;
+		}
 
 		// Function to update the selected dates and nights
 		function updateSelectedDates(checkIn, checkOut) {
@@ -148,6 +160,44 @@
 			$('.pre-book-nights').text(nights);
 		}
 
+		function updateInfoDisplay(selectedDates) {
+			const checkInSpan = document.querySelector('#check-in-display span');
+			const checkOutSpan = document.querySelector('#check-out-display span');
+			const lastNightSpan = document.querySelector('#last-night-display span');
+			const nightsSpan = document.querySelector('#nights-display span');
+
+			if (selectedDates.length === 1) {
+				let checkInDate = selectedDates[0];
+				checkInSpan.textContent = formatDateToLocale(checkInDate);
+
+				let checkOutDate = new Date(checkInDate);
+				checkOutDate.setDate(checkOutDate.getDate() + 1);
+				let lastNightDate = new Date(checkOutDate);
+				lastNightDate.setDate(lastNightDate.getDate() - 1); // Calculate last night
+
+				checkOutSpan.textContent = formatDateToLocale(checkOutDate);
+				lastNightSpan.textContent = formatDateToLocale(lastNightDate); // Update last night
+				nightsSpan.textContent = '1';
+			} else if (selectedDates.length === 2) {
+				let checkInDate = selectedDates[0];
+				let checkOutDate = new Date(selectedDates[1]);
+				let lastNightDate = new Date(checkOutDate);
+				checkOutDate.setDate(checkOutDate.getDate() + 1); // Increment checkout date
+				const nights = (checkOutDate - checkInDate) / (1000 * 60 * 60 * 24);
+				checkInSpan.textContent = formatDateToLocale(checkInDate);
+				checkOutSpan.textContent = formatDateToLocale(checkOutDate);
+				lastNightSpan.textContent = formatDateToLocale(lastNightDate); // Update last night
+				nightsSpan.textContent = nights.toString();
+			}
+		}
+
+		// Helper function to format date to YYYY-MM-DD
+		function formatDateToLocale(date) {
+			return date.getFullYear() + '-' +
+				('0' + (date.getMonth() + 1)).slice(-2) + '-' +
+				('0' + date.getDate()).slice(-2);
+		}
+
 		// Get the flatpickr input element
 		var flatpickrInput = $("#reservation-date");
 		// Attach click event to each span element
@@ -170,6 +220,11 @@
 			flatpickrInstance.setDate([checkInDate, checkOutDate]);
 
 			updateSelectedDates(checkInDate, checkOutDate);
+			var selectedDates = []; // Correct array declaration
+			selectedDates[0] = checkInDate; // Assuming checkInDate is already defined
+			selectedDates[1] = checkOutDate; // Assuming checkOutDate is already defined
+			updateInfoDisplay(selectedDates); // Call the function with the array
+			
 			// Trigger click on the bookingSearch button
 			$("#bookingSearch").trigger("click");
 		});
@@ -186,31 +241,31 @@
 		function setupGuestsContainer() {
 			var guestsContainer = $('.front-booking-guests-container');
 			var guestsWrap = $('.atollmatrix_reservation_room_guests_wrap');
-		
+
 			// Hide guestsWrap initially
 			guestsWrap.addClass('hidden');
-		
+
 			// Function to fade in the guestsWrap
 			function fadeInGuestsWrap() {
 				guestsWrap.velocity('slideDown', {
 					duration: 200
 				});
 			}
-		
+
 			// Function to fade out the guestsWrap
 			function fadeOutGuestsWrap() {
 				guestsWrap.velocity('slideUp', {
 					duration: 200
 				});
 			}
-		
+
 			// Toggle guestsWrap visibility when clicking .front-booking-guests-container
 			guestsContainer.on('click', function (event) {
 				// Toggle visibility by adding/removing the 'hidden' class
 				guestsWrap.hasClass('hidden') ? fadeInGuestsWrap() : fadeOutGuestsWrap();
 				event.stopPropagation(); // Prevent the click event from reaching the document click handler
 			});
-		
+
 			// Hide guestsWrap when clicking outside of it
 			$(document).on('click', function (event) {
 				if (!$(event.target).closest('.atollmatrix_reservation_room_guests_wrap').length) {
@@ -218,21 +273,21 @@
 					fadeOutGuestsWrap();
 				}
 			});
-		
+
 			// Prevent hiding when clicking inside the container
 			guestsWrap.on('click', function (event) {
 				event.stopPropagation(); // Prevent the click event from reaching the document click handler
 			});
 		}
-		
-		
-		
+
+
+
 		// Call the function to set up the guests container behavior
 		setupGuestsContainer();
-		
+
 
 		function ReservationDatePicker() {
-			
+
 			var flatpickrInstance;
 
 			// Function to get fully booked dates from the data attribute
@@ -245,9 +300,9 @@
 			function disableFullyBookedDates(date) {
 				var fullyBookedDates = getFullyBookedDates();
 				// Convert date to local YYYY-MM-DD format
-				var dateString = date.getFullYear() + '-' + 
-								('0' + (date.getMonth() + 1)).slice(-2) + '-' + 
-								('0' + date.getDate()).slice(-2);
+				var dateString = date.getFullYear() + '-' +
+					('0' + (date.getMonth() + 1)).slice(-2) + '-' +
+					('0' + date.getDate()).slice(-2);
 
 				if (Array.isArray(fullyBookedDates)) {
 					return fullyBookedDates.includes(dateString);
@@ -268,7 +323,7 @@
 					firstDayOfWeek: 1 // Start week on Monday
 				},
 				minDate: "today", // Disable navigation to months previous to the current month
-				onMonthChange: function(selectedDates, dateStr, instance) {
+				onMonthChange: function (selectedDates, dateStr, instance) {
 					updateInfoDisplay(selectedDates);
 				},
 				onChange: function (selectedDates, dateStr, instance) {
@@ -285,45 +340,6 @@
 				]
 			});
 
-			function updateInfoDisplay(selectedDates) {
-				const checkInSpan = document.querySelector('#check-in-display span');
-				const checkOutSpan = document.querySelector('#check-out-display span');
-				const lastNightSpan = document.querySelector('#last-night-display span');
-				const nightsSpan = document.querySelector('#nights-display span');
-			
-				if (selectedDates.length === 1) {
-					let checkInDate = selectedDates[0];
-					checkInSpan.textContent = formatDateToLocale(checkInDate);
-			
-					let checkOutDate = new Date(checkInDate);
-					checkOutDate.setDate(checkOutDate.getDate() + 1);
-					let lastNightDate = new Date(checkOutDate);
-					lastNightDate.setDate(lastNightDate.getDate() - 1); // Calculate last night
-			
-					checkOutSpan.textContent = formatDateToLocale(checkOutDate);
-					lastNightSpan.textContent = formatDateToLocale(lastNightDate); // Update last night
-					nightsSpan.textContent = '1';
-				} else if (selectedDates.length === 2) {
-					let checkInDate = selectedDates[0];
-					let checkOutDate = new Date(selectedDates[1]);
-					let lastNightDate = new Date(checkOutDate);
-					checkOutDate.setDate(checkOutDate.getDate() + 1); // Increment checkout date
-					const nights = (checkOutDate - checkInDate) / (1000 * 60 * 60 * 24);
-					checkInSpan.textContent = formatDateToLocale(checkInDate);
-					checkOutSpan.textContent = formatDateToLocale(checkOutDate);
-					lastNightSpan.textContent = formatDateToLocale(lastNightDate); // Update last night
-					nightsSpan.textContent = nights.toString();
-				}
-			}
-			
-			// Helper function to format date to YYYY-MM-DD
-			function formatDateToLocale(date) {
-				return date.getFullYear() + '-' +
-					   ('0' + (date.getMonth() + 1)).slice(-2) + '-' +
-					   ('0' + date.getDate()).slice(-2);
-			}
-					
-			
 			// Add click event listener to trigger flatpickr when .front-booking-calendar-wrap is clicked
 			var calendarWrap = document.querySelector('.front-booking-calendar-wrap');
 			calendarWrap.addEventListener('click', function () {
@@ -362,9 +378,31 @@
 		// Frontend codes
 		$('#bookingSearch').on('click', function (e) { // Changed here
 			e.preventDefault();
+			
+			// Retrieve the date from the input field
+			var inputVal = $('#reservation-date').val();
+			var dates = inputVal.split(' to ');
+
+			var checkInDate, checkOutDate;
+			var reservationDate;
+
+			console.log( inputVal );
+			if ( inputVal == '') {
+				// Only one date in input field, get date from #check-in-display
+				var checkInDateStr = $('#check-in-display span').text();
+				checkInDate = new Date(checkInDateStr);
+				checkOutDate = new Date(checkInDateStr); // Use the same date for check-out
+				updateSelectedDates(checkInDate, checkOutDate);
+				var formattedCheckIn = formatDateToYYYYMMDD(checkInDate);
+				var formattedCheckOut = formatDateToYYYYMMDD(checkOutDate);
+				reservationDate = formattedCheckIn + ' to ' + formattedCheckOut;
+				console.log( reservationDate );
+			} else {
+				reservationDate = $('#reservation-date').val();
+				console.log( reservationDate );
+			}
 
 			var bookingNumber = $('#booking-number').val();
-			var reservationDate = $('#reservation-date').val();
 			var numberOfAdults = $('#number-of-adults').val();
 			var numberOfChildren = $('#number-of-children').val();
 			var atollmatrix_searchbox_nonce = $('input[name="atollmatrix_searchbox_nonce"]').val();
@@ -389,6 +427,8 @@
 					atollmatrix_searchbox_nonce: atollmatrix_searchbox_nonce
 				},
 				success: function (response) {
+
+					$('.recommended-alt-wrap').hide();
 					var parsedResponse = JSON.parse(response);
 					console.log(parsedResponse); // Output: The parsed JavaScript object or array
 					// You can now work with the parsed data
@@ -400,8 +440,10 @@
 						storeData = parsedResponse.booking_data;
 						sessionStorage.setItem(bookingNumber, JSON.stringify(storeData));
 						$('#available-list-ajax').html(parsedResponse.roomlist);
+						$('#available-list-ajax').show();
 					} else {
 						// The array is not empty
+						$('#available-list-ajax').hide();
 						$('.recommended-alt-wrap').show();
 						$('#recommended-alt-dates').html(parsedResponse.alt_recommends);
 					}
@@ -415,6 +457,18 @@
 
 		$(document).on('click', '#booking-register', function (e) {
 			e.preventDefault();
+
+			const $form = $('#hotel-room-listing');
+
+			// Check if form is valid
+			if ($form[0].checkValidity() === false) {
+				// $form.find(':input').each(function() {
+				// 	console.log(this.id + ' is valid: ' + this.checkValidity());
+				// });
+				e.stopPropagation(); // Stop further handling of the click event
+				$form.addClass('was-validated'); // Optional: for Bootstrap validation styling
+				return; // Do not proceed to AJAX if validation fails
+			}
 
 			var atollmatrix_roomlistingbox_nonce = $('input[name="atollmatrix_roomlistingbox_nonce"]').val();
 			let data_booking_number = $('#reservation-data').data('bookingnumber');
@@ -433,7 +487,7 @@
 			let data_guest_consent = $('.registration_form_inputs #guest_consent').val();
 
 			// Serialize form data
-			const registration_data = $('#guest-registration').serialize();
+			const registration_data = $form.serialize();
 
 			//console.log(checkin, checkout, rooms);
 			$.ajax({
