@@ -1,4 +1,19 @@
 <?php
+function atollmatrix_get_pages_for_select() {
+    // Get an array of all pages
+    $pages = get_pages(); 
+    $page_list = array();
+
+	$page_list = array('none' => 'Choose a page');
+
+    // Loop through the pages and add them to the list
+    foreach ($pages as $page) {
+        $page_list[$page->ID] = $page->post_title;
+    }
+
+    return $page_list;
+}
+
 function atollmatrix_is_valid_sync_interval($qtysync_interval) {
     // Retrieve the array of sync intervals
     $sync_intervals = atollmatrix_sync_intervals();

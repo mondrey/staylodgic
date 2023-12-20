@@ -7,8 +7,8 @@ class Payments
     public function __construct()
     {
         // AJAX handler to save room metadata
-        add_action('wp_ajax_processReservation', array($this, 'processReservation'));
-        add_action('wp_ajax_nopriv_processReservation', array($this, 'processReservation'));
+        add_action('wp_ajax_processReservationPayment', array($this, 'processReservationPayment'));
+        add_action('wp_ajax_nopriv_processReservationPayment', array($this, 'processReservationPayment'));
 
         // Add the booking number to the checkout page
         add_action('woocommerce_checkout_before_customer_details', array($this, 'addBookingNumber_To_Checkout'));
@@ -185,7 +185,7 @@ class Payments
         }
     }
 
-    public function processReservation()
+    public function processReservationPayment()
     {
         if (isset($_POST['total'])) {
             $total          = sanitize_text_field($_POST['total']);

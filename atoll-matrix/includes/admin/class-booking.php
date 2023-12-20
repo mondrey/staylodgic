@@ -307,7 +307,6 @@ class Booking
 
         $html = '<div id="booking-summary-wrap">';
         if ('' !== $room_name) {
-            $html .= '<div class="booking-backto-roomschoice"><button type="button" class="btn btn-outline-primary">Go back</button></div>';
             $html .= '<div class="room-summary"><span class="summary-room-name">' . $room_name . '</span></div>';
         }
 
@@ -377,7 +376,7 @@ class Booking
             $html .= '<div class="form-group">';
             $html .= '<div id="bookingResponse" class="booking-response"></div>';
             $html .= '<div id="booking-register" class="book-button">Book this room</div>';
-            //$html .= self::paymentHelperButton($totalprice[ 'total' ], $bookingnumber);
+            // $html .= self::paymentHelperButton($totalprice[ 'total' ], $bookingnumber);
             $html .= '</div>';
         }
 
@@ -1170,7 +1169,84 @@ return ob_get_clean();
         $html .= '</div>';
 
         $form_html = <<<HTML
-		<div class="registration_form_outer">
+		<div class="registration_form_outer registration_request">
+			<div class="registration_form_wrap">
+				<div class="registration_form">
+					<div class="registration-column registration-column-one registration_form_inputs">
+                    <div class="booking-backto-roomschoice"><div class="booking-backto-roomchoice-inner"><i class="fa-solid fa-arrow-left"></i> Back</div></div>
+                    <h3>Registration</h3>
+                    <div class="form-group form-floating">
+						<input placeholder="Full Name" type="text" class="form-control" id="full_name" name="full_name" required>
+						<label for="full_name" class="control-label">Full Name</label>
+					</div>
+					<div class="form-group form-floating">
+						<input placeholder="Passport No." type="text" class="form-control" id="passport" name="passport" required>
+						<label for="passport" class="control-label">Passport No:</label>
+					</div>
+					<div class="form-group form-floating">
+						<input placeholder="" type="email" class="form-control" id="email_address" name="email_address" required>
+						<label for="email_address" class="control-label">Email Address</label>
+					</div>
+					<div class="form-group form-floating">
+						<input placeholder="" type="tel" class="form-control" id="phone_number" name="phone_number" required>
+						<label for="phone_number" class="control-label">Phone Number</label>
+					</div>
+                    <div class="form-group form-floating">
+                        <input placeholder="" type="text" class="form-control" id="street_address" name="street_address">
+                        <label for="street_address" class="control-label">Street Address</label>
+                    </div>
+                    <div class="form-group form-floating">
+                        <input placeholder="" type="text" class="form-control" id="city" name="city">
+                        <label for="city" class="control-label">City</label>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group form-floating">
+                                <input placeholder="" type="text" class="form-control" id="state" name="state">
+                                <label for="state" class="control-label">State/Province</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group form-floating">
+                                <input placeholder="" type="text" class="form-control" id="zip_code" name="zip_code">
+                                <label for="zip_code" class="control-label">Zip Code</label>
+                            </div>
+                        </div>
+                    </div>
+					<div class="form-group form-floating">
+						<select required placeholder="" class="form-control" id="country" name="country" >
+						$country_options
+						</select>
+						<label for="country" class="control-label">Country</label>
+					</div>
+					<div class="form-group form-floating">
+					<textarea placeholder="" class="form-control" id="guest_comment" name="guest_comment"></textarea>
+					<label for="guest_comment" class="control-label">Notes</label>
+					</div>
+					<div class="checkbox guest-consent-checkbox">
+					<label for="guest_consent">
+						<input type="checkbox" class="form-check-input" id="guest_consent" name="guest_consent" required /><span class="consent-notice">By clicking "Book this Room" you agree to our terms and conditions and privacy policy.</span>
+                        <div class="invalid-feedback">
+                            Consent is required for booking.
+                        </div>
+                    </label>
+					</div>
+				</div>
+
+				$html
+				</div>
+			</div>
+		</div>
+HTML;
+
+        return $form_html;
+    }
+
+    public function register_Successful()
+    {
+
+        $form_html = <<<HTML
+		<div class="registration_form_outer registration_successful">
 			<div class="registration_form_wrap">
 				<div class="registration_form">
 					<div class="registration-column registration-column-one registration_form_inputs">

@@ -721,6 +721,7 @@ $panel_args = [
     'user_capability' => 'manage_options',
     'tabs'            => [
         'general'       => esc_html__('General', 'atollmatrix'),
+        'pages'       => esc_html__('Pages', 'atollmatrix'),
         'import-export' => esc_html__('Import/Export', 'atollmatrix'),
         'currency'      => esc_html__('Currency', 'atollmatrix'),
         'mealplan'      => esc_html__('Meal Plan', 'atollmatrix'),
@@ -740,7 +741,22 @@ foreach ($currencies as $currencyCode => $currencyName) {
 }
 
 $panel_settings = [
-    // Tab 1
+    'page_bookingsearch'    => [
+        'label'       => esc_html__('Booking search page', 'atollmatrix'),
+        'type'        => 'select',
+        'inputwidth'  => '250',
+        'description' => 'Booking search page.',
+        'choices'     => atollmatrix_get_pages_for_select(),
+        'tab'         => 'pages',
+    ],
+    'page_bookingdetails'    => [
+        'label'       => esc_html__('Booking details', 'atollmatrix'),
+        'type'        => 'select',
+        'inputwidth'  => '250',
+        'description' => 'Booking details.',
+        'choices'     => atollmatrix_get_pages_for_select(),
+        'tab'         => 'pages',
+    ],
     'import_missing'    => [
         'label'       => esc_html__('Action for missing bookings', 'atollmatrix'),
         'type'        => 'select',

@@ -1,54 +1,19 @@
-@font-face {
-	font-family: 'jost';
-	font-display: auto;
-	src: url(../../assets/fonts/jost/Jost-Light/Jost-300-Light.woff2) format("woff2"), url(../../assets/fonts/jost/Jost-Light/Jost-300-Light.woff) format("woff");
-	font-weight: 300;
-	font-style: normal
-}
-
-@font-face {
-	font-family: 'jost';
-	font-display: auto;
-	src: url(../../assets/fonts/jost/Jost-Book/Jost-400-Book.woff2) format("woff2"), url(../../assets/fonts/jost/Jost-Book/Jost-400-Book.woff) format("woff");
-	font-weight: 400;
-	font-style: normal
-}
-
-@font-face {
-	font-family: 'jost';
-	font-display: auto;
-	src: url(../../assets/fonts/jost/Jost-Medium/Jost-500-Medium.woff2) format("woff2"), url(../../assets/fonts/jost/Jost-Medium/Jost-500-Medium.woff) format("woff");
-	font-weight: 500;
-	font-style: normal
-}
-
-@font-face {
-	font-family: 'jost';
-	font-display: auto;
-	src: url(../../assets/fonts/jost/Jost-Semi/Jost-600-Semi.woff2) format("woff2"), url(../../assets/fonts/jost/Jost-Semi/Jost-600-Semi.woff) format("woff");
-	font-weight: 600;
-	font-style: normal
-}
-
-@font-face {
-	font-family: 'jost';
-	font-display: auto;
-	src: url(../../assets/fonts/jost/Jost-Bold/Jost-700-Bold.woff2) format("woff2"), url(../../assets/fonts/jost/Jost-Bold/Jost-700-Bold.woff) format("woff");
-	font-weight: 700;
-	font-style: normal
-}
-
 .atollmatrix-content,
 .atollmatrix-content h1,
 .atollmatrix-content h2,
 .atollmatrix-content h3,
 .atollmatrix-content h4,
 .atollmatrix-content h5 {
-	font: 300 14px/1.5 "jost", Helvetica, Arial, sans-serif;
+	font: 300 14px/1.5 "Lato", Helvetica, Arial, sans-serif;
+}
+
+.atollmatrix-content {
+	max-width: 645px;
+	margin: 0 auto;
 }
 
 .room-details-stats {
-	font-size: 13px;
+	font-size: 11px;
 	font-weight: 500;
 	letter-spacing: 0.3px;
 }
@@ -61,12 +26,14 @@
 .booking-response {
 	padding: 15px;
 	margin-top: 20px;
-	border-radius: 5px;
 	color: white;
+	margin-bottom: 10px;
+	font-weight: 500;
+	display: none;
 }
 
 .booking-response.success {
-	background-color: green;
+	background-color: #7400ff;
 }
 
 .booking-response.error {
@@ -176,7 +143,6 @@
 #booking-summary-wrap {
 	box-sizing: border-box;
 	padding: 30px;
-	background: #f9f9f9;
 }
 
 .admin-bar #booking-summary {
@@ -221,7 +187,7 @@
 .price-summary-wrap {
 	font-size: 14px;
 	font-weight: 600;
-	margin-bottom: 14px;
+	margin-bottom: 35px;
 }
 
 .tax-summary {
@@ -277,7 +243,7 @@
 }
 #woo-bookingpayment {
 	background: #ff0000;
-	margin-top: 10px;
+	display: none;
 }
 
 .summary-icon i {
@@ -318,6 +284,7 @@
 
 .room-details .facility {
 	white-space: nowrap;
+	padding-right: 8px;
 }
 
 .room-summary-facilities {
@@ -348,7 +315,7 @@
 
 .room-details-column .room-price-total {
 	font-size: 20px;
-	letter-spacing: -0.8px;
+	letter-spacing: -0.1px;
 	font-weight: 500;
 	background: #caa100;
 	color: #fff;
@@ -408,6 +375,11 @@
 	padding: 5px 15px 5px 5px;
 	border-radius: 50px;
 	transition: 0.25s ease;
+	font-size: 13px;
+}
+.room-details label span.checkbox-label,
+.room-mealplan-price .price {
+	font-size: 13px;
 }
 
 .room-details label span.checkbox-bed-label {
@@ -526,12 +498,14 @@
 
 .registration-column.registration-column-two {
 	width: 40%;
+	background: #f9f9f9;
 }
 
 .registration-column.registration-column-one {
 	width: 60%;
 	padding: 30px 30px;
 	box-sizing: border-box;
+	position: relative;
 }
 
 .registration_form_outer {
@@ -775,20 +749,26 @@
 	top: 120px;
 	left: 14px;
 	opacity: 0;
+	z-index: -1;
 }
 .consent-notice {
 	font-size: 12px;
 	font-weight: 400;
+	position: relative;
+	top: 6px;
+	display: inline-block;
+	margin-bottom: 10px;
 }
 
 .available-list {
 	margin-top: 12px;
+	background: #fff;
 }
 
 .recommended-alt-wrap {
 	padding: 30px;
 	box-sizing: border-box;
-	background: #eee;
+	background: #e6ffff;
 }
 
 .recommended-alt-title {
@@ -809,7 +789,7 @@
 }
 .recommended-dates-wrap span {
 	margin-right: 10px;
-	background: #e1e1e1;
+	background: #fff;
 	padding: 2px 10px;
 	display: inline-block;
 	border-radius: 7px;
@@ -823,14 +803,30 @@
 }
 
 .booking-backto-roomschoice {
-	margin-bottom: 30px;
+	position: absolute;
+	top: 20px;
+	right: 30px;
+	cursor: pointer;
+	opacity: 1;
+	transition: 0.2s opacity;
+}
+.booking-backto-roomschoice:hover {
+	opacity: 0.7;
+}
+.booking-backto-roomchoice-inner {
+	font-size: 12px;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	font-weight: 500;
 }
 .calendar-insights-wrap {
     display: grid;
     grid-template-columns: 1fr 1fr; /* Creates two columns */
     grid-gap: 10px; /* Sets gap between grid items */
-    padding: 10px; /* Optional padding for better spacing */
-    /* You can adjust the grid-gap and padding values as per your design requirements */
+    padding: 15px 20px; /* Optional padding for better spacing */
+    background: #eeeeee4d;
+	border-radius: 6px;
+  	margin-bottom: 5px;
 }
 .calendar-insights-wrap span {
 	font-weight: 500;

@@ -25,7 +25,7 @@
 				url: frontendAjax.ajaxurl, // the localized URL
 				type: 'POST',
 				data: {
-					action: 'processReservation',
+					action: 'processReservationPayment',
 					total: total,
 					booking_number: booking_number
 				},

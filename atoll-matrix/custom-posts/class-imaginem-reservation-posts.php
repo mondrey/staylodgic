@@ -124,7 +124,7 @@ class atollmatrix_Reservation_Posts
                 'singular_name' => 'Reservation',
                 'all_items'     => 'All Reservations',
             ),
-            'singular_label'     => __('Reservation', 'mthemelocal'),
+            'singular_label'     => __('Reservation', 'atollmatrix'),
             'public'             => true,
             'publicly_queryable' => true,
             'show_ui'            => true,

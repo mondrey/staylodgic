@@ -51,7 +51,7 @@
 
 		// Back to Room Selection
 		$(document).on('click', '.booking-backto-roomschoice', function () {
-			$('.registration_form_outer').velocity('fadeOut', {
+			$('.registration_request').velocity('fadeOut', {
 				duration: 350,
 				complete: function () {
 					$('#reservation-data').velocity('fadeIn');
@@ -96,7 +96,7 @@
 					$('#reservation-data').velocity('fadeOut', {
 						duration: 350,
 						complete: function () {
-							$('.registration_form_outer').velocity('fadeIn')
+							$('.registration_request').velocity('fadeIn')
 						}
 					});
 					console.log(response);
@@ -514,7 +514,9 @@
 					// handle success
 					if (response.success) {
 						// handle success
-						$('#bookingResponse').removeClass('error').addClass('success').text('Booking successfully registered.');
+						$('#bookingResponse').show().removeClass('error').addClass('success').text('Booking successfully registered.');
+						$('.registration_request').remove();
+						$('.registration_succesful').show();
 					} else {
 						// handle error
 						$('#bookingResponse').removeClass('success').addClass('error').text(response.data);
