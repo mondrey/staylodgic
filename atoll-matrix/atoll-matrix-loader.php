@@ -74,6 +74,7 @@ class AtollMatrix_Init
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-modals.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-payments.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-booking.php';
+        require_once plugin_dir_path(__FILE__) . 'includes/admin/class-emaildispatcher.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/utilities.php';
     }
 

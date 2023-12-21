@@ -1146,6 +1146,25 @@ return ob_get_clean();
         return $payment_button;
     }
 
+    public function bookingDataFields()
+    {
+        $dataFields = [
+            'full_name'      => 'Full Name',
+            'passport'       => 'Passport No',
+            'email_address'  => 'Email Address',
+            'phone_number'   => 'Phone Number',
+            'street_address' => 'Street Address',
+            'city'           => 'City',
+            'state'          => 'State/Province',
+            'zip_code'       => 'Zip Code',
+            'country'        => 'Country',
+            'guest_comment'  => 'Notes',
+            'guest_consent'  => 'By clicking "Book this Room" you agree to our terms and conditions and privacy policy.',
+         ];
+
+        return $dataFields;
+    }
+
     public function register_Guest_Form()
     {
         $country_options = atollmatrix_country_list("select", "");
@@ -1170,6 +1189,8 @@ return ob_get_clean();
 
         $bookingsuccess = self::booking_Successful();
 
+        $formInputs = self::bookingDataFields();
+
         $form_html = <<<HTML
 		<div class="registration_form_outer registration_request">
 			<div class="registration_form_wrap">
@@ -1179,39 +1200,39 @@ return ob_get_clean();
                     <h3>Registration</h3>
                     <div class="form-group form-floating">
 						<input placeholder="Full Name" type="text" class="form-control" id="full_name" name="full_name" required>
-						<label for="full_name" class="control-label">Full Name</label>
+						<label for="full_name" class="control-label">$formInputs[full_name]</label>
 					</div>
 					<div class="form-group form-floating">
 						<input placeholder="Passport No." type="text" class="form-control" id="passport" name="passport" required>
-						<label for="passport" class="control-label">Passport No:</label>
+						<label for="passport" class="control-label">$formInputs[passport]</label>
 					</div>
 					<div class="form-group form-floating">
 						<input placeholder="" type="email" class="form-control" id="email_address" name="email_address" required>
-						<label for="email_address" class="control-label">Email Address</label>
+						<label for="email_address" class="control-label">$formInputs[email_address]</label>
 					</div>
 					<div class="form-group form-floating">
 						<input placeholder="" type="tel" class="form-control" id="phone_number" name="phone_number" required>
-						<label for="phone_number" class="control-label">Phone Number</label>
+						<label for="phone_number" class="control-label">$formInputs[phone_number]</label>
 					</div>
                     <div class="form-group form-floating">
                         <input placeholder="" type="text" class="form-control" id="street_address" name="street_address">
-                        <label for="street_address" class="control-label">Street Address</label>
+                        <label for="street_address" class="control-label">$formInputs[street_address]</label>
                     </div>
                     <div class="form-group form-floating">
                         <input placeholder="" type="text" class="form-control" id="city" name="city">
-                        <label for="city" class="control-label">City</label>
+                        <label for="city" class="control-label">$formInputs[city]</label>
                     </div>
                     <div class="row">
                         <div class="col">
                             <div class="form-group form-floating">
                                 <input placeholder="" type="text" class="form-control" id="state" name="state">
-                                <label for="state" class="control-label">State/Province</label>
+                                <label for="state" class="control-label">$formInputs[state]</label>
                             </div>
                         </div>
                         <div class="col">
                             <div class="form-group form-floating">
                                 <input placeholder="" type="text" class="form-control" id="zip_code" name="zip_code">
-                                <label for="zip_code" class="control-label">Zip Code</label>
+                                <label for="zip_code" class="control-label">$formInputs[zip_code]</label>
                             </div>
                         </div>
                     </div>
@@ -1219,15 +1240,15 @@ return ob_get_clean();
 						<select required placeholder="" class="form-control" id="country" name="country" >
 						$country_options
 						</select>
-						<label for="country" class="control-label">Country</label>
+						<label for="country" class="control-label">$formInputs[country]</label>
 					</div>
 					<div class="form-group form-floating">
 					<textarea placeholder="" class="form-control" id="guest_comment" name="guest_comment"></textarea>
-					<label for="guest_comment" class="control-label">Notes</label>
+					<label for="guest_comment" class="control-label">$formInputs[guest_comment]</label>
 					</div>
 					<div class="checkbox guest-consent-checkbox">
 					<label for="guest_consent">
-						<input type="checkbox" class="form-check-input" id="guest_consent" name="guest_consent" required /><span class="consent-notice">By clicking "Book this Room" you agree to our terms and conditions and privacy policy.</span>
+						<input type="checkbox" class="form-check-input" id="guest_consent" name="guest_consent" required /><span class="consent-notice">$formInputs[guest_consent]</span>
                         <div class="invalid-feedback">
                             Consent is required for booking.
                         </div>
@@ -1767,6 +1788,29 @@ HTML;
             // Successfully created a reservation post
             $data_instance = new \AtollMatrix\Data();
             $data_instance->updateReservationsArray_On_Save($reservation_post_id, get_post($reservation_post_id), true);
+
+            $roomName = \AtollMatrix\Rooms::getRoomName_FromID($room_id);
+
+            $bookingDetails = [
+                'guestName'      => $full_name,
+                'bookingNumber'  => $booking_number,
+                'roomTitle'      => $roomName,
+                'checkinDate'    => $checkin,
+                'checkoutDate'   => $checkout,
+                'adultGuests'    => $reservationData[ 'adults' ],
+                'childrenGuests' => $reservationData[ 'children' ],
+                'totalCost'      => $reservationData[ 'total' ],
+             ];
+
+            $email = new EmailDispatcher($email_address, 'Room Booking Confirmation for:' . $booking_number);
+            $email->setHTMLContent()->setBookingConfirmationTemplate($bookingDetails);
+
+            if ($email->send()) {
+                // echo 'Confirmation email sent successfully to the guest.';
+            } else {
+                // echo 'Failed to send the confirmation email.';
+            }
+
         } else {
             // Handle error
         }
