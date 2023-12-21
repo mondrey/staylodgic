@@ -516,7 +516,7 @@
 						// handle success
 						$('#bookingResponse').show().removeClass('error').addClass('success').text('Booking successfully registered.');
 						$('.registration_request').remove();
-						$('.registration_succesful').show();
+						$('.registration_successful').show();
 					} else {
 						// handle error
 						$('#bookingResponse').removeClass('success').addClass('error').text(response.data);

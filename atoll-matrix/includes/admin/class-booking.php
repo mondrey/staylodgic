@@ -1168,6 +1168,8 @@ return ob_get_clean();
         );
         $html .= '</div>';
 
+        $bookingsuccess = self::booking_Successful();
+
         $form_html = <<<HTML
 		<div class="registration_form_outer registration_request">
 			<div class="registration_form_wrap">
@@ -1234,87 +1236,48 @@ return ob_get_clean();
 				</div>
 
 				$html
+
 				</div>
 			</div>
 		</div>
 HTML;
 
-        return $form_html;
+        return $form_html . $bookingsuccess;
     }
 
-    public function register_Successful()
+    public function booking_Successful()
     {
 
-        $form_html = <<<HTML
+        $reservation_instance = new \AtollMatrix\Reservations();
+        $booking_page_link    = $reservation_instance->getBookingDetailsPageLinkForGuest();
+
+        $booking_details_link = '<a href="' . esc_attr(esc_url(get_page_link($booking_page_link))) . '">Booking Details</a>';
+
+        $success_html = <<<HTML
 		<div class="registration_form_outer registration_successful">
 			<div class="registration_form_wrap">
 				<div class="registration_form">
-					<div class="registration-column registration-column-one registration_form_inputs">
-                    <h3>Registration</h3>
-                    <div class="form-group form-floating">
-						<input placeholder="Full Name" type="text" class="form-control" id="full_name" name="full_name" required>
-						<label for="full_name" class="control-label">Full Name</label>
-					</div>
-					<div class="form-group form-floating">
-						<input placeholder="Passport No." type="text" class="form-control" id="passport" name="passport" required>
-						<label for="passport" class="control-label">Passport No:</label>
-					</div>
-					<div class="form-group form-floating">
-						<input placeholder="" type="email" class="form-control" id="email_address" name="email_address" required>
-						<label for="email_address" class="control-label">Email Address</label>
-					</div>
-					<div class="form-group form-floating">
-						<input placeholder="" type="tel" class="form-control" id="phone_number" name="phone_number" required>
-						<label for="phone_number" class="control-label">Phone Number</label>
-					</div>
-                    <div class="form-group form-floating">
-                        <input placeholder="" type="text" class="form-control" id="street_address" name="street_address">
-                        <label for="street_address" class="control-label">Street Address</label>
-                    </div>
-                    <div class="form-group form-floating">
-                        <input placeholder="" type="text" class="form-control" id="city" name="city">
-                        <label for="city" class="control-label">City</label>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <div class="form-group form-floating">
-                                <input placeholder="" type="text" class="form-control" id="state" name="state">
-                                <label for="state" class="control-label">State/Province</label>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="form-group form-floating">
-                                <input placeholder="" type="text" class="form-control" id="zip_code" name="zip_code">
-                                <label for="zip_code" class="control-label">Zip Code</label>
-                            </div>
-                        </div>
-                    </div>
-					<div class="form-group form-floating">
-						<select required placeholder="" class="form-control" id="country" name="country" >
-						$country_options
-						</select>
-						<label for="country" class="control-label">Country</label>
-					</div>
-					<div class="form-group form-floating">
-					<textarea placeholder="" class="form-control" id="guest_comment" name="guest_comment"></textarea>
-					<label for="textarea" class="control-label">Notes</label>
-					</div>
-					<div class="checkbox guest-consent-checkbox">
-					<label></label>
-						<input type="checkbox" class="form-check-input" id="guest_consent" name="guest_consent" required /><span class="consent-notice">By clicking "Book this Room" you agree to our terms and conditions and privacy policy.</span>
-                        <div class="invalid-feedback">
-                            Consent is required to make the booking.
-                        </div>
-					</div>
-				</div>
-
-				$html
-				</div>
-			</div>
-		</div>
+        <div class="registration-successful-inner">
+            <h3>Booking Successful</h3>
+            <p>
+                Hi,
+            </p>
+            <p>
+                Your booking number is: <span class="booking-number">$this->bookingNumber</span>
+            </p>
+            <p>
+                Please contact us to cancel, modify or if there's any questions regarding the booking.
+            </p>
+            <p>
+                <div id="booking-details" class="book-button not-fullwidth">$booking_details_link</div>
+            </p>
+        </div>
+        </div>
+        </div>
+        </div>
 HTML;
 
-        return $form_html;
+        return $success_html;
     }
 
     public function generate_MealPlanIncluded($room_id)

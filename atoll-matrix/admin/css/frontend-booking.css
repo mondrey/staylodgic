@@ -241,6 +241,14 @@
 	display: block;
 	cursor: pointer;
 }
+.book-button.not-fullwidth {
+	display: inline-block;
+}
+.page-content .book-button a,
+.book-button a {
+	color: #fff;
+	text-decoration: none;
+}
 #woo-bookingpayment {
 	background: #ff0000;
 	display: none;
@@ -834,4 +842,14 @@
 .registration_form h3 {
 	font-size: 28px;
 	margin-bottom: 18px;
+}
+.registration-successful-inner {
+	padding: 30px;
+}
+.registration-successful-inner .booking-number {
+	font-weight: 500;
+	color: #000;
+}
+.registration_successful {
+	display: none;
 }

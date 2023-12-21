@@ -230,6 +230,14 @@ class Reservations
         return 0;
     }
 
+    public function getBookingDetailsPageLinkForGuest()
+    {
+        // Get the booking number from the reservation post meta
+        $booking_page_link = atollmatrix_get_option('page_bookingdetails');
+
+        return $booking_page_link;
+    }
+
     public function getBookingNumber()
     {
         // Get the booking number from the reservation post meta
@@ -243,10 +251,12 @@ class Reservations
         return $booking_number;
     }
 
-    public function getReservationGuestName()
+    public function getReservationGuestName( $booking_number = false )
     {
         // Get the booking number from the reservation post meta
-        $booking_number = $this->getBookingNumber();
+        if (!$booking_number) {
+            $booking_number = $this->getBookingNumber();
+        }
 
         if (!$booking_number) {
             // Handle error if booking number not found
