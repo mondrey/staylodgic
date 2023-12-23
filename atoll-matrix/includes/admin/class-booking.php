@@ -49,6 +49,7 @@ class Booking
         $this->bookingNumber         = uniqid();
 
         add_shortcode('hotel_booking_search', array($this, 'hotelBooking_SearchForm'));
+        add_shortcode('hotel_booking_details', array($this, 'hotelBooking_Details'));
         // AJAX handler to save room metadata
 
         add_action('wp_ajax_booking_BookingSearch', array($this, 'booking_BookingSearch'));
@@ -468,6 +469,58 @@ class Booking
 				</div>
 			<div class="available-list">
 				<div id="available-list-ajax"></div>
+			</div>
+		</div>
+		</div>
+		<?php
+return ob_get_clean();
+    }
+
+    public function hotelBooking_Details()
+    {
+        // Generate unique booking number
+        atollmatrix_set_booking_transient('1', $this->bookingNumber);
+        ob_start();
+        $atollmatrix_bookingdetails_nonce       = wp_create_nonce('atollmatrix-bookingdetails-nonce');
+        $availabilityDateArray = array();
+
+        // Calculate current date
+        $currentDate = current_time('Y-m-d');
+        // Calculate end date as 3 months from the current date
+        $endDate = date('Y-m-d', strtotime($currentDate . ' +4 months'));
+
+        $reservations_instance = new \AtollMatrix\Reservations();
+        $fullybooked_dates     = $reservations_instance->daysFullyBooked_For_DateRange($currentDate, $endDate);
+
+        // error_log( '-------------------- availability percent check');
+        // error_log( print_r( $fullybooked_dates, true ));
+        // error_log( '-------------------- availability percent check');
+        ?>
+		<div class="atollmatrix-content">
+            <div id="hotel-booking-form">
+
+            <div class="calendar-insights-wrap">
+                <div id="check-in-display">Check-in: <span>-</span></div>
+                <div id="check-out-display">Check-out: <span>-</span></div>
+                <div id="last-night-display">Last-night: <span>-</span></div>
+                <div id="nights-display">Nights: <span>-</span></div>
+            </div>
+
+                <div class="front-booking-search">
+                    <div class="front-booking-number-wrap">
+                        <div class="front-booking-number-container">
+                            <div class="form-group form-floating form-floating-booking-number form-bookingnumber-request">
+                                <input type="hidden" name="atollmatrix_bookingdetails_nonce" value="<?php echo esc_attr($atollmatrix_bookingdetails_nonce); ?>" />
+                                <input placeholder="Booking No." type="text" class="form-control" id="booking_number" name="booking_number" required>
+                                <label for="booking_number" class="control-label">Booking No.</label>
+                            </div>
+                        </div>
+                        <div id="bookingDetails" class="div-button">Search</div>
+                    </div>
+                </div>
+
+			<div class="booking-details-lister">
+				<div id="booking-details-ajax"></div>
 			</div>
 		</div>
 		</div>

@@ -1,6 +1,43 @@
 (function ($) {
 	$(document).ready(function () {
 
+		$('#bookingDetails').on('click', function(e) {
+			e.preventDefault();
+	
+			// Retrieve the booking number
+			var bookingNumber = $('#booking_number').val();
+			var atollmatrix_bookingdetails_nonce = $('input[name="atollmatrix_bookingdetails_nonce"]').val();
+
+			console.log( bookingNumber );
+			console.log( frontendAjax.ajaxurl );
+			// Check if the booking number is entered
+			if (!bookingNumber) {
+				alert('Please enter a booking number.');
+				return;
+			}
+	
+			// AJAX call to get booking details
+			$.ajax({
+				url: frontendAjax.ajaxurl, // Replace with your AJAX URL
+				type: 'POST',
+				dataType: 'html', // Assuming the response is HTML
+				data: {
+					action: 'getBookingDetails', // Replace with your actual action hook
+					booking_number: bookingNumber,
+					atollmatrix_bookingdetails_nonce: atollmatrix_bookingdetails_nonce
+				},
+				success: function(response) {
+					// Display the booking details
+					var details = JSON.parse(response); // Parse the JSON string to HTML
+					$('#booking-details-ajax').html(details);
+				},
+				error: function(jqXHR, textStatus, errorThrown) {
+					console.error('Error fetching booking details:', textStatus, errorThrown);
+					$('#booking-details-ajax').html('Error fetching booking details. Please try again.');
+				}
+			});
+		});
+		
 		function processRoomPrice(roomOccupiedGroup) {
 			$('.room-occupied-group').removeClass('room-selected');
 			roomOccupiedGroup.addClass('room-selected');
@@ -340,11 +377,14 @@
 				]
 			});
 
-			// Add click event listener to trigger flatpickr when .front-booking-calendar-wrap is clicked
 			var calendarWrap = document.querySelector('.front-booking-calendar-wrap');
-			calendarWrap.addEventListener('click', function () {
-				flatpickrInstance.open();
-			});
+			if (calendarWrap) {
+				calendarWrap.addEventListener('click', function () {
+					flatpickrInstance.open();
+				});
+			} else {
+				console.log("Element with class 'front-booking-calendar-wrap' not found.");
+			}
 
 			return flatpickrInstance;
 		}

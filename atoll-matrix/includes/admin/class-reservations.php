@@ -26,7 +26,62 @@ class Reservations
         add_action('wp_ajax_get_AvailableRooms', array($this, 'get_AvailableRooms'));
         add_action('wp_ajax_nopriv_get_AvailableRooms', array($this, 'get_AvailableRooms'));
 
+        add_action('wp_ajax_getBookingDetails', array($this, 'getBookingDetails'));
+        add_action('wp_ajax_nopriv_getBookingDetails', array($this, 'getBookingDetails'));
+
     }
+
+    public function getBookingDetails($booking_number) {
+        $booking_number = $_POST['booking_number'];
+    
+        // Fetch reservation details
+        $reservationQuery = self::getReservationforBooking($booking_number);
+
+        // Verify the nonce
+        if (!isset($_POST[ 'atollmatrix_bookingdetails_nonce' ]) || !check_admin_referer('atollmatrix-bookingdetails-nonce', 'atollmatrix_bookingdetails_nonce')) {
+            // Nonce verification failed; handle the error or reject the request
+            // For example, you can return an error response
+            wp_send_json_error([ 'message' => 'Failed' ]);
+            return;
+        }
+    
+        ob_start(); // Start output buffering
+    
+        if ($reservationQuery->have_posts()) {
+            echo "<div class='reservation-details'>";
+            while ($reservationQuery->have_posts()) {
+                $reservationQuery->the_post();
+                $reservationID = get_the_ID();
+    
+                // Display reservation details
+                echo "<h3>Reservation ID: " . esc_html($reservationID) . "</h3>";
+                echo "<p>Check-in Date: " . esc_html(get_post_meta($reservationID, 'atollmatrix_checkin_date', true)) . "</p>";
+                echo "<p>Check-out Date: " . esc_html(get_post_meta($reservationID, 'atollmatrix_checkout_date', true)) . "</p>";
+                // Add other reservation details as needed
+            }
+            echo "</div>";
+        } else {
+            echo "<p>No reservation found for Booking Number: " . esc_html($booking_number) . "</p>";
+        }
+    
+        // Fetch guest details
+        $guestID = self::getGuest_id_forReservation($booking_number);
+        if ($guestID) {
+            echo "<div class='guest-details'>";
+            echo "<h3>Guest Information:</h3>";
+            echo "<p>Guest ID: " . esc_html($guestID) . "</p>";
+            echo "<p>Full Name: " . esc_html(get_post_meta($guestID, 'atollmatrix_full_name', true)) . "</p>";
+            echo "<p>Email Address: " . esc_html(get_post_meta($guestID, 'atollmatrix_email_address', true)) . "</p>";
+            // Add other guest details as needed
+            echo "</div>";
+        } else {
+            echo "<p>No guest details found for Booking Number: " . esc_html($booking_number) . "</p>";
+        }
+    
+        $informationSheet = ob_get_clean(); // Get the buffer content and clean the buffer
+        echo json_encode($informationSheet); // Encode the HTML content as JSON
+        wp_die(); // Terminate and return a proper response
+    }     
 
     public static function getConfirmedReservations()
     {
@@ -45,7 +100,7 @@ class Reservations
         return new \WP_Query($args);
     }
 
-    public static function getRoomsforReservation($booking_number)
+    public static function getReservationforBooking($booking_number)
     {
         $args = array(
             'post_type'      => 'atmx_reservations',
@@ -389,7 +444,7 @@ class Reservations
     public static function getRoomIDsForBooking_number($booking_number)
     {
 
-        $rooms_query = self::getRoomsforReservation($booking_number);
+        $rooms_query = self::getReservationforBooking($booking_number);
         $room_names  = array();
 
         if ($rooms_query->have_posts()) {

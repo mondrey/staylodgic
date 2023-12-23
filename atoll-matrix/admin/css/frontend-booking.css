@@ -578,6 +578,7 @@
 	box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.2);
 }
 
+.front-booking-details-wrap,
 .front-booking-calendar-wrap {
 	flex: 1;
 	/* Occupy 50% of the available space */
@@ -602,6 +603,7 @@
 	margin-bottom: 10px;
 }
 
+#bookingDetails,
 #bookingSearch {
 	background: #000;
 	color: #fff;
@@ -616,12 +618,14 @@
 	transition: 0.4s background-color;
 }
 
+#bookingDetails:hover,
 #bookingSearch:hover {
 	/* Styles for when the button is hovered */
 	background-color: #0064ff;
 	/* Example hover background color */
 }
 
+#bookingDetails:active,
 #bookingSearch:active {
 	/* Styles for when the button is clicked/active */
 	background-color: #0064ff;
@@ -629,6 +633,7 @@
 }
 
 
+.front-booking-number-wrap,
 .front-booking-guests-wrap {
 	flex: 1;
 	display: flex;
@@ -637,7 +642,30 @@
 	padding-left: 50px;
 	border-left: 1px dotted #0000004f;
 }
+.front-booking-number-wrap {
+	padding: 0;
+	border: 0;
+}
+.form-group.form-floating.form-bookingnumber-request {
+	padding-right: 10px;
+}
 
+
+.form-floating.form-floating-booking-number > .form-control,
+.form-floating.form-floating-booking-number > .form-control-plaintext {
+	height: 43px;
+	min-height: 43px;
+	font-size: 13px;
+}
+.form-floating.form-floating-booking-number > .form-control-plaintext:focus,
+.form-floating.form-floating-booking-number > .form-control-plaintext:not(:placeholder-shown),
+.form-floating.form-floating-booking-number > .form-control:focus,
+.form-floating.form-floating-booking-number > .form-control:not(:placeholder-shown) {
+	padding-top: 30px;
+	padding-bottom: .625rem;
+}
+
+.front-booking-number-container,
 .front-booking-guests-container {
 	display: flex;
 	/* Create a new container for the adult and child wraps */
@@ -647,6 +675,12 @@
 	/* Distribute space evenly between child elements */
 	align-items: flex-end;
 	/* Center align items vertically */
+}
+
+.front-booking-number-container,
+.form-group.form-floating.form-bookingnumber-request,
+.form-group.form-floating.form-fullname-request {
+	width: 100%;
 }
 
 .front-booking-guest-adult-wrap,
