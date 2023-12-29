@@ -677,6 +677,9 @@
 	/* Center align items vertically */
 }
 
+.atollmatrix-content .form-floating > .form-control {
+	transition: none;
+}
 .front-booking-number-container,
 .form-group.form-floating.form-bookingnumber-request,
 .form-group.form-floating.form-fullname-request {

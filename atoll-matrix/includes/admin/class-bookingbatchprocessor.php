@@ -280,27 +280,12 @@ class BookingBatchProcessor extends BatchProcessorBase
             'import-booking-ical',
             array($this, 'ical_import')
         );
-        add_submenu_page(
-            'atoll-matrix',
-            // This is the slug of the parent menu
-            'Export iCal Bookings',
-            'Export iCal Bookings',
-            'manage_options',
-            'export-ical',
-            array($this, 'ical_export')
-        );
     }
 
     public function ical_availability()
     {
         // The HTML content of the 'Atoll Matrix' page goes here
         echo "<h1>Welcome to ical_availability</h1>";
-    }
-
-    public function ical_export()
-    {
-        // The HTML content of the 'Atoll Matrix' page goes here
-        echo "<h1>Export ICS Calendar</h1>";
     }
 
     public function ical_import()

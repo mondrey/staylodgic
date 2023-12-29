@@ -16,14 +16,14 @@ class atollmatrix_Reservation_Posts
         unset($columns[ 'author' ]);
         unset($columns[ 'date' ]);
         $new_columns = array(
-            //"mreservation_section" => __('Section', 'mthemelocal'),
-            "reservation_customer"   => __('Customer', 'mthemelocal'),
-            "reservation_bookingnr"  => __('Booking Number', 'mthemelocal'),
-            "reservation_checkinout" => __('Checkin / Checkout', 'mthemelocal'),
-            "reservation_nights"     => __('Nights', 'mthemelocal'),
-            "reservation_status"     => __('Status', 'mthemelocal'),
-            "reservation_substatus"  => __('Sub Status', 'mthemelocal'),
-            "reservation_room"       => __('Room', 'mthemelocal'),
+            //"mreservation_section" => __('Section', 'atollmatrix'),
+            "reservation_customer"   => __('Customer', 'atollmatrix'),
+            "reservation_bookingnr"  => __('Booking Number', 'atollmatrix'),
+            "reservation_checkinout" => __('Checkin / Checkout', 'atollmatrix'),
+            "reservation_nights"     => __('Nights', 'atollmatrix'),
+            "reservation_status"     => __('Status', 'atollmatrix'),
+            "reservation_substatus"  => __('Sub Status', 'atollmatrix'),
+            "reservation_room"       => __('Room', 'atollmatrix'),
         );
 
         return array_merge($columns, $new_columns);

@@ -14,10 +14,10 @@ class AtollMatrix_Customer_Posts
     public function atmx_customers_edit_columns($columns)
     {
         $new_columns = array(
-            "customer_booking"      => __('Booking', 'mthemelocal'),
-            "customer_reservations" => __('Reservations', 'mthemelocal'),
-            "customer_rooms"        => __('Rooms', 'mthemelocal'),
-            "mcustomer_section"     => __('Section', 'mthemelocal'),
+            "customer_booking"      => __('Booking', 'atollmatrix'),
+            "customer_reservations" => __('Reservations', 'atollmatrix'),
+            "customer_rooms"        => __('Rooms', 'atollmatrix'),
+            "mcustomer_section"     => __('Section', 'atollmatrix'),
         );
 
         return array_merge($columns, $new_columns);
@@ -88,7 +88,7 @@ class AtollMatrix_Customer_Posts
                 'singular_name' => 'Customer',
                 'all_items'     => 'All Customers',
             ),
-            'singular_label'     => __('Customer', 'mthemelocal'),
+            'singular_label'     => __('Customer', 'atollmatrix'),
             'public'             => true,
             'publicly_queryable' => true,
             'show_ui'            => true,

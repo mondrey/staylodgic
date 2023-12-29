@@ -39,6 +39,31 @@
 			icsURL = $(this).data('ics-url');
 			icsID = $(this).data('ics-id');
 		});
+
+		$('.download_export_ical').on('click', function() {
+			var roomId = $(this).data('room-id');
+			$.ajax({
+				url: ajaxurl,
+				type: 'POST',
+				data: {
+					action: 'download_ical',
+					room_id: roomId
+				},
+				xhrFields: {
+					responseType: 'blob'
+				},
+				success: function(data, status, xhr) {
+					var a = document.createElement('a');
+					var url = window.URL.createObjectURL(data);
+					a.href = url;
+					a.download = xhr.getResponseHeader('Content-Disposition').split(';')[1].split('=')[1];
+					document.body.append(a);
+					a.click();
+					a.remove();
+					window.URL.revokeObjectURL(url);
+				}
+			});
+		});
 		
 		$('#sync-booking-popup').on('click', '.process-ical-availability-sync', function(e) {
 			e.preventDefault();

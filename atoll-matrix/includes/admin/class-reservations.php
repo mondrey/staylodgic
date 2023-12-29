@@ -172,28 +172,70 @@ class Reservations
         return new \WP_Query(); // Return an empty query if no guest found
     }
 
-    public function getReservationsForRoom($room_id = false)
-    {
-
+    public function getReservationsForRoom( $checkin_date = false, $checkout_date = false, $reservation_status = false, $reservation_substatus = false, $room_id = false ) {
+    
         if (!$room_id) {
             $room_id = $this->room_id;
         }
-
+    
+        // Start with the basic meta query for room ID
+        $meta_query = array(
+            'relation' => 'AND',
+            array(
+                'key'     => 'atollmatrix_room_id',
+                'value'   => $room_id,
+                'compare' => '=',
+            ),
+        );
+    
+        // Add reservation status to the meta query if provided
+        if ($reservation_status !== false) {
+            $meta_query[] = array(
+                'key'     => 'atollmatrix_reservation_status',
+                'value'   => $reservation_status,
+                'compare' => '=',
+            );
+        }
+    
+        // Add reservation substatus to the meta query if provided
+        if ($reservation_substatus !== false) {
+            $meta_query[] = array(
+                'key'     => 'atollmatrix_reservation_substatus',
+                'value'   => $reservation_substatus,
+                'compare' => '=',
+            );
+        }
+    
+        // Add check-in date to the meta query if provided
+        if ($checkin_date !== false) {
+            $meta_query[] = array(
+                'key'     => 'atollmatrix_checkin_date',
+                'value'   => $checkin_date,
+                'compare' => '>=',
+                'type'    => 'DATE'
+            );
+        }
+    
+        // Add check-out date to the meta query if provided
+        if ($checkout_date !== false) {
+            $meta_query[] = array(
+                'key'     => 'atollmatrix_checkout_date',
+                'value'   => $checkout_date,
+                'compare' => '<=',
+                'type'    => 'DATE'
+            );
+        }
+    
         $args = array(
             'post_type'      => 'atmx_reservations',
             'posts_per_page' => -1,
             'post_status'    => 'publish',
-            'meta_query'     => array(
-                'relation' => 'AND',
-                array(
-                    'key'     => 'atollmatrix_room_id',
-                    'value'   => $room_id,
-                    'compare' => '=',
-                ),
-            ),
+            'meta_query'     => $meta_query,
         );
+    
         return new \WP_Query($args);
     }
+     
 
     public function calculateReservedRooms()
     {
@@ -208,13 +250,16 @@ class Reservations
                 $reservation_id = get_the_ID();
                 $custom         = get_post_custom($reservation_id);
 
-                if (isset($custom[ 'atollmatrix_checkin_date' ][ 0 ]) && isset($custom[ 'atollmatrix_checkout_date' ][ 0 ])) {
-                    $checkin       = strtotime($custom[ 'atollmatrix_checkin_date' ][ 0 ]);
-                    $checkout      = strtotime($custom[ 'atollmatrix_checkout_date' ][ 0 ]);
-                    $selected_date = strtotime($this->date);
+                $reservation_status = get_post_meta($reservation_id, 'atollmatrix_reservation_status', true);
+                if ('confirmed' == $reservation_status) {
+                    if (isset($custom[ 'atollmatrix_checkin_date' ][ 0 ]) && isset($custom[ 'atollmatrix_checkout_date' ][ 0 ])) {
+                        $checkin       = strtotime($custom[ 'atollmatrix_checkin_date' ][ 0 ]);
+                        $checkout      = strtotime($custom[ 'atollmatrix_checkout_date' ][ 0 ]);
+                        $selected_date = strtotime($this->date);
 
-                    if ($selected_date >= $checkin && $selected_date < $checkout) {
-                        $reserved_rooms++;
+                        if ($selected_date >= $checkin && $selected_date < $checkout) {
+                            $reserved_rooms++;
+                        }
                     }
                 }
             }
@@ -798,7 +843,7 @@ class Reservations
     }
 
     // Function to check if a date falls within a reservation
-    public function isDate_Reserved($dateString = false, $room_id = false)
+    public function isDate_Reserved( $reservation_status = false, $reservation_substatus = false, $dateString = false, $room_id = false)
     {
 
         if (!$room_id) {
@@ -811,7 +856,7 @@ class Reservations
         $currentDate = strtotime($dateString);
         $start       = false;
 
-        $query = $this->getReservationsForRoom($room_id);
+        $query = $this->getReservationsForRoom(false, false, false, false, $room_id);
 
         $reservation_checkin  = '';
         $reservation_checkout = '';

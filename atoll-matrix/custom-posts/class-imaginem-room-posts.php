@@ -122,11 +122,11 @@ class atollmatrix_Room_Posts
     {
         $columns = array(
             "cb"                    => "<input type=\"checkbox\" />",
-            "title"                 => __('Room Title', 'mthemelocal'),
-            "theme_description"     => __('Description', 'mthemelocal'),
-            "video"                 => __('Video', 'mthemelocal'),
-            "atollmatrix_roomtypes" => __('atmx_roomtype', 'mthemelocal'),
-            "room_image"            => __('Image', 'mthemelocal'),
+            "title"                 => __('Room Title', 'atollmatrix'),
+            "theme_description"     => __('Description', 'atollmatrix'),
+            "video"                 => __('Video', 'atollmatrix'),
+            "atollmatrix_roomtypes" => __('atmx_roomtype', 'atollmatrix'),
+            "room_image"            => __('Image', 'atollmatrix'),
         );
 
         return $columns;
@@ -163,7 +163,7 @@ class atollmatrix_Room_Posts
         }
         $args = array(
             'label'           => $atollmatrix_room_singular_refer,
-            'singular_label'  => __('Room', 'mthemelocal'),
+            'singular_label'  => __('Room', 'atollmatrix'),
             'public'          => true,
             'show_ui'         => true,
             'capability_type' => 'post',
