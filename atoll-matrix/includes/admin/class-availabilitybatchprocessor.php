@@ -14,7 +14,12 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
         add_action('wp_ajax_save_ical_availability_meta', array($this, 'save_ical_availability_meta'));
         add_action('wp_ajax_nopriv_save_ical_availability_meta', array($this, 'save_ical_availability_meta'));
 
+        // Add the new admin page
+        add_action('admin_menu', array($this, 'add_export_availability_admin_menu'));
 
+        // Add the export handler hook
+        add_action('admin_init', array($this, 'handle_export_request'));
+        
         // Check and schedule the cron event
         $this->schedule_cron_event();
 
@@ -355,6 +360,115 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
         echo "</div>";
         echo "</div>";
     }
+
+    public function add_export_availability_admin_menu() {
+        add_submenu_page(
+            'atoll-matrix', // Replace with the slug of the parent menu item
+            'Export iCal Availability',
+            'Export iCal Availability',
+            'manage_options',
+            'export-availability-ical',
+            array($this, 'export_availability_ical_page')
+        );
+    }
+
+    public function export_availability_ical_page() {
+
+        // The HTML content of your 'Import iCal' page goes here
+        echo "<div class='main-sync-form-wrap'>";
+        echo "<div id='sync-form'>";
+        echo "<h1>Export ICS Calendar</h1>";
+        echo "<p>Use the following URL to export the availability data as an iCal file:</p>";
+        $rooms = Rooms::queryRooms();
+        foreach ($rooms as $room) {
+            // Get meta
+            $room_ical_data = get_post_meta($room->ID, 'availability_ical_data', true);
+
+            echo '<div class="room_ical_links_wrapper" data-room-id="' . $room->ID . '">';
+            echo "<h2>" . $room->post_title . "</h2>";
+
+            echo '<div class="room_ical_link_group">';
+            // The URL to trigger the export functionality
+            $exportUrl = admin_url('admin.php?page=export-availability-ical');
+
+            $exportUrl .='&room='.$room->ID;
+
+            // Page content
+            echo "<div class='export-ical-wrap'>";
+            echo "<input type='text' value='{$exportUrl}' readonly>";
+            echo "</div>";
+
+            echo '</div>';
+            echo '</div>';
+        }
+
+        echo "</div>";
+        echo "</div>";
+    }
+
+    public function handle_export_request() {
+        // Check if we are on the correct page and the 'room' parameter is set
+        if (isset($_GET['page']) && $_GET['page'] === 'export-availability-ical' && isset($_GET['room'])) {
+            $roomId = intval($_GET['room']);
+    
+            // Retrieve the 'quantity_array' and 'channel_quantity_array'
+            $quantityArray = get_post_meta($roomId, 'quantity_array', true);
+            $channelArray = get_post_meta($roomId, 'channel_quantity_array', true);
+            $channelQuantityArray = isset($channelArray['quantity']) ? $channelArray['quantity'] : [];
+    
+            // Merge the arrays - channelQuantityArray values will overwrite quantityArray values for any matching keys
+            $mergedArray = array_merge($quantityArray, $channelQuantityArray);
+    
+            // Generate the .ics file with the merged array
+            $this->generate_ics_file($roomId, $mergedArray);
+
+            error_log('---------channel-generate_ics_file------');
+            error_log( print_r($mergedArray,1) );
+            error_log('---------channel-generate_ics_file------');
+    
+            exit;
+        }
+    }
+    
+    private function generate_ics_file($roomId, $quantityArray) {
+        // Start of the ICS file
+        $icsContent = "BEGIN:VCALENDAR\r\n";
+        $icsContent .= "VERSION:2.0\r\n";
+        $icsContent .= "PRODID:-//Your Company//Your Calendar//EN\r\n";
+        error_log('---------generate_ics_file------');
+        error_log( print_r($quantityArray,1) );
+        error_log('---------generate_ics_file------');
+        // Iterate over the quantity array
+        foreach ($quantityArray as $date => $quantity) {
+            if ($quantity == 0) {
+                // Format the date for ICS
+                $icsDate = new \DateTime($date);
+                $icsDateStr = $icsDate->format('Ymd');
+    
+                // Create an event for the unavailable date
+                $icsContent .= "BEGIN:VEVENT\r\n";
+                $icsContent .= "UID:" . uniqid() . "@yourdomain.com\r\n";
+                $icsContent .= "DTSTAMP:" . gmdate('Ymd') . 'T' . gmdate('His') . "Z\r\n";
+                $icsContent .= "DTSTART;VALUE=DATE:" . $icsDateStr . "\r\n";
+                $icsContent .= "DTEND;VALUE=DATE:" . $icsDateStr . "\r\n";
+                $icsContent .= "SUMMARY:Unavailable\r\n";
+                $icsContent .= "STATUS:CONFIRMED\r\n";
+                $icsContent .= "END:VEVENT\r\n";
+            }
+        }
+    
+        // End of the ICS file
+        $icsContent .= "END:VCALENDAR";
+    
+        // Set headers for .ics file download
+        header('Content-Type: text/calendar; charset=utf-8');
+        header('Content-Disposition: attachment; filename="room-' . $roomId . '-availability.ics"');
+    
+        // Output the .ics content
+        echo $icsContent;
+    }
+    
+
 
 }
 
