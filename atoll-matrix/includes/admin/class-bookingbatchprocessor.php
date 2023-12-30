@@ -282,12 +282,6 @@ class BookingBatchProcessor extends BatchProcessorBase
         );
     }
 
-    public function ical_availability()
-    {
-        // The HTML content of the 'Atoll Matrix' page goes here
-        echo "<h1>Welcome to ical_availability</h1>";
-    }
-
     public function ical_import()
     {
         // The HTML content of your 'Import iCal' page goes here

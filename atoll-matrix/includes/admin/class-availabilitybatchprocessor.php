@@ -318,7 +318,7 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
         // The HTML content of your 'Import iCal' page goes here
         echo "<div class='main-sync-form-wrap'>";
         echo "<div id='sync-form'>";
-        echo "<h1>Import ICS Calendar</h1>";
+        echo "<h1>Import ICS Availability</h1>";
 
         echo "<form id='room_ical_form' method='post'>";
         echo '<input type="hidden" name="ical_form_nonce" value="' . wp_create_nonce('ical_form_nonce') . '">';
@@ -327,6 +327,7 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
         foreach ($rooms as $room) {
             // Get meta
             $room_ical_data = get_post_meta($room->ID, 'availability_ical_data', true);
+            $room_channel_availability = get_post_meta($room->ID, 'channel_quantity_array', true);
 
             echo '<div class="room_ical_links_wrapper" data-room-id="' . $room->ID . '">';
             echo "<h2>" . $room->post_title . "</h2>";
@@ -342,7 +343,19 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
                     echo '<input readonly type="url" name="room_ical_links_url[]" value="' . esc_attr($ical_link[ 'ical_url' ]) . '">';
                     echo '<input readonly type="text" name="room_ical_links_comment[]" value="' . esc_attr($ical_link[ 'ical_comment' ]) . '">';
                     echo '<button type="button" class="unlock_button"><i class="fas fa-lock"></i></button>'; // Unlock button
-
+                    if (is_array($room_channel_availability) && isset($room_channel_availability['stats'])) {
+                        foreach ($room_channel_availability['stats'] as $key => $value) {
+                            // Check if the key matches the pattern or criteria you're looking for
+                            if ($key === $ical_link[ 'ical_id' ] ) {
+                                echo '<p class="availability-sync-stats">';
+                                echo '<span>Last sync: '.$room_channel_availability['stats'][$key]['syncdate'].'</span>';
+                                echo '<span>Time: '.$room_channel_availability['stats'][$key]['synctime'].'</span>';
+                                echo '<span>Processed in: '.$room_channel_availability['stats'][$key]['syncprocessing_time'].'</span>';
+                                echo '</p>';
+                                break;
+                            }
+                        }
+                    }
                     echo '</div>';
                 }
             } else {
@@ -422,9 +435,17 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
             // Generate the .ics file with the merged array
             $this->generate_ics_file($roomId, $mergedArray);
 
+            error_log('---------base-generate_ics_file------');
+            error_log( print_r($quantityArray,1) );
+            error_log('---------base-generate_ics_file------');
+
             error_log('---------channel-generate_ics_file------');
+            error_log( print_r($channelQuantityArray,1) );
+            error_log('---------channel-generate_ics_file------');
+
+            error_log('---------merged-generate_ics_file------');
             error_log( print_r($mergedArray,1) );
-            error_log('---------channel-generate_ics_file------');
+            error_log('---------merged-generate_ics_file------');
     
             exit;
         }
