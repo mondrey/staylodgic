@@ -461,6 +461,10 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 			$this->roomlist = \AtollMatrix\Rooms::getRoomList();
 
 			foreach ( $this->roomlist as $roomId => $roomName ) :
+
+				$room_reservations_instance = new \AtollMatrix\Reservations( $dateString = false, $roomId );
+				$room_reservations_instance->calculateAndUpdateRemainingRoomCountsForAllDates();
+
 				$checkout_list = array();
 				?>
 				<tr class="calendarRow calendar-room-row" data-id="<?php echo esc_attr( $roomId ); ?>">
@@ -474,7 +478,7 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 
 						$reservation_instance = new \AtollMatrix\Reservations( $dateString, $roomId );
 						$reservation_data     = $reservation_instance->isDate_Reserved();
-						$reserved_room_count  = $reservation_instance->countReservationsForDay();
+						$remaining_room_count  = $reservation_instance->getDirectRemainingRoomCount();
 						$remaining_rooms      = $reservation_instance->remainingRooms_For_Day();
 						$reserved_rooms       = $reservation_instance->calculateReservedRooms();
 						if ( 0 == $remaining_rooms ) {
@@ -502,6 +506,7 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 								if ( ! empty( $room_rate ) && isset( $room_rate ) && $room_rate > 0 ) {
 									echo '<a class="roomrate-link" href="#">' . esc_html( $room_rate ) . '</a>';
 								}
+								echo $remaining_room_count;
 								?>
 							</div>
 						</div>

@@ -232,7 +232,9 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
                 break; // Stop processing after reaching batch size
             }
 
-            update_post_meta($room->ID, 'channel_quantity_array', $blocked_dates['ical'][$room->ID]);
+            if (isset($blocked_dates['ical'][$room->ID])) {
+                update_post_meta($room->ID, 'channel_quantity_array', $blocked_dates['ical'][$room->ID]);
+            }
         }
 
         error_log( '----- Blocked dates being processed ' . $count );
@@ -425,18 +427,20 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
             $roomId = intval($_GET['room']);
     
             // Retrieve the 'quantity_array' and 'channel_quantity_array'
-            $quantityArray = get_post_meta($roomId, 'quantity_array', true);
+            $room_reservations_instance = new \AtollMatrix\Reservations( $dateString = false, $roomId );
+            $room_reservations_instance->calculateAndUpdateRemainingRoomCountsForAllDates();
+            $remainingQuantityArray = $room_reservations_instance->getRemainingRoomCountArray();
             $channelArray = get_post_meta($roomId, 'channel_quantity_array', true);
             $channelQuantityArray = isset($channelArray['quantity']) ? $channelArray['quantity'] : [];
     
-            // Merge the arrays - channelQuantityArray values will overwrite quantityArray values for any matching keys
-            $mergedArray = array_merge($quantityArray, $channelQuantityArray);
+            // Merge the arrays - channelQuantityArray values will overwrite remainingQuantityArray values for any matching keys
+            $mergedArray = array_merge($remainingQuantityArray, $channelQuantityArray);
     
             // Generate the .ics file with the merged array
             $this->generate_ics_file($roomId, $mergedArray);
 
             error_log('---------base-generate_ics_file------');
-            error_log( print_r($quantityArray,1) );
+            error_log( print_r($remainingQuantityArray,1) );
             error_log('---------base-generate_ics_file------');
 
             error_log('---------channel-generate_ics_file------');

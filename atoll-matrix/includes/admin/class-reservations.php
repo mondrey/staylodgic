@@ -270,6 +270,171 @@ class Reservations
         return $reserved_rooms;
     }
 
+    /**
+     * Calculates and updates the remaining room count for all dates of a given room ID.
+     * 
+     * @param int $room_id The ID of the room.
+     * @return array An associative array with dates as keys and the number of remaining rooms as values.
+     */
+    public function calculateAndUpdateRemainingRoomCountsForAllDates($room_id = false) {
+        if (!$room_id) {
+            $room_id = $this->room_id;
+        }
+
+        // Retrieve the total rooms available for the room for all dates
+        $quantity_array = get_post_meta($room_id, 'quantity_array', true);
+
+        if (!is_array($quantity_array)) {
+            $quantity_array = [];
+        }
+
+        // Retrieve the reservations for the room for all dates
+        $reservations_array = $this->getReservations_Array($room_id);
+        if (!is_array($reservations_array)) {
+            $reservations_array = [];
+        }
+
+        // Initialize the remaining rooms count array
+        $remaining_rooms_count = self::getRemainingRoomCountArray( $room_id );
+        if (!is_array($remaining_rooms_count)) {
+            $remaining_rooms_count = [];
+        }
+
+        // Iterate over each date in the quantity array
+        foreach ($quantity_array as $date => $total_rooms) {
+            // Calculate the number of reserved rooms for the date
+            $reserved_rooms = isset($reservations_array[$date]) ? count($reservations_array[$date]) : 0;
+
+            // Calculate the remaining rooms for the date
+            $remaining_rooms = $total_rooms - $reserved_rooms;
+
+            // Update the remaining rooms count for the date
+            $remaining_rooms_count[$date] = $remaining_rooms;
+        }
+
+        // Update the remaining rooms count in the metadata
+        update_post_meta($room_id, 'remaining_rooms_count', json_encode($remaining_rooms_count));
+
+        return $remaining_rooms_count;
+    }
+
+
+
+    /**
+     * Calculates and updates the remaining room count for a given date and room ID.
+     * 
+     * @param string $date The date to check availability for.
+     * @param int $room_id The ID of the room.
+     * @return int The number of remaining rooms.
+     */
+    public function calculateAndUpdateRemainingRoomCount($date = false, $room_id = false) {
+
+        if (!$room_id) {
+            $room_id = $this->room_id;
+        }
+        if (!$date) {
+            $date = $this->date;
+        }
+        // Retrieve the total rooms available for the room on the given date
+        $quantity_array = get_post_meta($room_id, 'quantity_array', true);
+        $total_rooms = isset($quantity_array[$date]) ? $quantity_array[$date] : 0;
+
+        // Retrieve the reservations for the room on the given date
+        $reservations_array = $this->getReservations_Array($room_id);
+        
+        error_log( 'print_r( $reservations_array,1 )' );
+        error_log( print_r( $reservations_array,1 ) );
+        $reserved_rooms = isset($reservations_array[$date]) ? count($reservations_array[$date]) : 0;
+
+        // Calculate the remaining rooms
+        $remaining_rooms = $total_rooms - $reserved_rooms;
+
+        // Update the remaining rooms count in the metadata
+        $remaining_rooms_count = self::getRemainingRoomCountArray( $room_id );
+        if (!is_array($remaining_rooms_count)) {
+            $remaining_rooms_count = [];
+        }
+        $remaining_rooms_count[$date] = $remaining_rooms;
+        update_post_meta($room_id, 'remaining_rooms_count', json_encode($remaining_rooms_count));
+
+        return $remaining_rooms;
+    }
+
+    /**
+     * Retrieves and returns the remaining room count array for a given room ID.
+     * 
+     * @param int $roomId The ID of the room.
+     * @return array The associative array of remaining room counts, with dates as keys.
+     */
+    public function getRemainingRoomCountArray( $room_id = false ) {
+        if (!$room_id) {
+            $room_id = $this->room_id;
+        }
+        // Fetch the JSON-encoded remaining rooms count from metadata
+        $remainingQuantityArray_json = get_post_meta($room_id, 'remaining_rooms_count', true);
+
+        // Decode the JSON string
+        $remainingQuantityArray = json_decode($remainingQuantityArray_json, true);
+
+        // Check if the result is an array, if not, return an empty array
+        if (!is_array($remainingQuantityArray)) {
+            $remainingQuantityArray = [];
+        }
+
+        return $remainingQuantityArray;
+    }
+
+
+    /**
+     * Gets the remaining room count from the 'remaining_rooms_count' meta field for a given date and room ID.
+     * 
+     * @param string $date The date to check availability for.
+     * @param int $room_id The ID of the room.
+     * @return int The number of remaining rooms.
+     */
+    public function getDirectRemainingRoomCount($date = false, $room_id = false) {
+
+        if (!$room_id) {
+            $room_id = $this->room_id;
+        }
+        if (!$date) {
+            $date = $this->date;
+        }
+
+        if ( \AtollMatrix\Rooms::isChannelRoomBooked($room_id, $date) ) {
+            return '0';
+        }
+
+        // Retrieve the remaining rooms count array for the room
+        $remaining_rooms_count = self::getRemainingRoomCountArray( $room_id );
+
+        // Check if the array and the specific date entry exist
+        if (is_array($remaining_rooms_count) && isset($remaining_rooms_count[$date])) {
+            return $remaining_rooms_count[$date];
+        } else {
+            // Return 0 or an appropriate default/fallback value if the data is not found
+            return 0;
+        }
+    }
+
+    public function updateRemainingRoomCount($room_id) {
+        $reservations_array = $this->getReservations_Array($room_id);
+        $quantity_array = get_post_meta($room_id, 'quantity_array', true);
+        error_log( 'print_r( $reservations_array,1 )' );
+        error_log( print_r( $reservations_array,1 ) );
+        // Initialize remaining rooms count
+        $remainingRoomsCount = [];
+
+        // Calculate remaining rooms for each date
+        foreach ($quantity_array as $date => $totalRooms) {
+            $reservedRooms = isset($reservations_array[$date]) ? count($reservations_array[$date]) : 0;
+            $remainingRoomsCount[$date] = $totalRooms - $reservedRooms;
+        }
+
+        // Update the remaining rooms count meta field
+        update_post_meta($room_id, 'remaining_rooms_count', json_encode($remainingRoomsCount));
+    }
+
     public function countReservationsForDay($room_id = false, $day = false, $excluded_reservation_id = false)
     {
 

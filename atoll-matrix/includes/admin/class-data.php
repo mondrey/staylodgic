@@ -80,6 +80,17 @@ class Data
 
             // Call the remove_reservation_from_array function
             self::removeReservation_ID($room_type, $reservation_post_id);
+
+            // Update the remaining room count
+            if ($room_type) {
+                $reservation_instance = new \AtollMatrix\Reservations();
+                try {
+                    $reservation_instance->updateRemainingRoomCount($room_type);
+                } catch (\Exception $e) {
+                    // Handle exceptions or log errors
+                    error_log("Error updating remaining room count: " . $e->getMessage());
+                }
+            }
         }
     }
 
@@ -194,6 +205,12 @@ class Data
                 self::create_Customer_From_Reservation_Post($post_id);
             }
         }
+
+        // Assuming room_type is the ID of the room associated with the reservation
+        if ($room_type) {
+            $reservation_instance = new \AtollMatrix\Reservations();
+            $reservation_instance->updateRemainingRoomCount($room_type);
+        }
     }
 
     /**
@@ -201,23 +218,27 @@ class Data
      */
     public static function updateReservationsArray_On_Change($room_id, $checkin_date, $checkout_date, $reservation_post_id)
     {
-
         $reservation_instance = new \AtollMatrix\Reservations();
         $reservations_array   = $reservation_instance->getReservations_Array($room_id);
 
-        $previous_checkin_date  = get_post_meta($room_id, 'previous_checkin_date', true);
-        $previous_checkout_date = get_post_meta($room_id, 'previous_checkout_date', true);
+        $previous_checkin_date  = get_post_meta($reservation_post_id, 'previous_checkin_date', true);
+        $previous_checkout_date = get_post_meta($reservation_post_id, 'previous_checkout_date', true);
+
+        // Adjust the checkout dates to be one day earlier
+        $previous_checkout_date = date('Y-m-d', strtotime($previous_checkout_date . ' -1 day'));
+        $adjusted_checkout_date = date('Y-m-d', strtotime($checkout_date . ' -1 day'));
 
         $previous_dates = \AtollMatrix\Common::getDates_Between($previous_checkin_date, $previous_checkout_date);
-        $updated_dates  = \AtollMatrix\Common::getDates_Between($checkin_date, $checkout_date);
+        $updated_dates  = \AtollMatrix\Common::getDates_Between($checkin_date, $adjusted_checkout_date);
 
         $reservations_array = self::removeDates_From_ReservationsArray($previous_dates, $reservation_post_id, $reservations_array);
         $reservations_array = self::addDates_To_ReservationsArray($updated_dates, $reservation_post_id, $reservations_array);
 
         update_post_meta($room_id, 'reservations_array', json_encode($reservations_array));
-        update_post_meta($room_id, 'previous_checkin_date', $checkin_date);
-        update_post_meta($room_id, 'previous_checkout_date', $checkout_date);
+        update_post_meta($reservation_post_id, 'previous_checkin_date', $checkin_date);
+        update_post_meta($reservation_post_id, 'previous_checkout_date', $checkout_date); // Keeping original checkout date for records
     }
+
 
     /**
      * Remove dates from the reservations array for a given reservation post ID.
