@@ -165,9 +165,9 @@ class AvailablityCalendarBase
               // Increment the total number of occupied rooms
 
             $reservation_instance  = new \AtollMatrix\Reservations($currentdateString, $room->ID);
-            $totalOccupiedRooms   += $reservation_instance->calculateReservedRooms();
+            $totalOccupiedRooms   += $reservation_instance->getDirectRemainingRoomCount();
               // Increment the total number of available rooms
-            $totalAvailableRooms += \AtollMatrix\Rooms::getMaxQuantityForRoom($room->ID, $currentdateString);
+            $totalAvailableRooms += \AtollMatrix\Rooms::getRoomQtyForDate($room->ID, $currentdateString);
 
               //echo '<br>'.$currentdateString.'<br>'. $room->ID . '||' . $totalOccupiedRooms. '||' . $totalAvailableRooms . '<br>';
               //echo '<br>'. $room->ID . '||' . $totalOccupiedRooms. '||' . $totalAvailableRooms . '<br>';
@@ -177,12 +177,32 @@ class AvailablityCalendarBase
 
           // Calculate the occupancy percentage
         if ($totalAvailableRooms > 0) {
-            $occupancyPercentage = round(($totalOccupiedRooms / $totalAvailableRooms) * 100);
+            $occupancyPercentage = 100 - ( round(($totalOccupiedRooms / $totalAvailableRooms) * 100) );
         } else {
-            $occupancyPercentage = 0;
+            $occupancyPercentage = 100;
         }
 
         return $occupancyPercentage;
+    }
+
+    public function calculateRemainingRoomsForDate($currentdateString)
+    {
+        $totalRemainingRooms  = 0;
+        $this->rooms         = \AtollMatrix\Rooms::queryRooms();
+
+        foreach ($this->rooms as $room) {
+              // Increment the total number of occupied rooms
+
+            $reservation_instance  = new \AtollMatrix\Reservations($currentdateString, $room->ID);
+            $totalRemainingRooms   += $reservation_instance->getDirectRemainingRoomCount();
+
+              //echo '<br>'.$currentdateString.'<br>'. $room->ID . '||' . $totalOccupiedRooms. '||' . $totalAvailableRooms . '<br>';
+              //echo '<br>'. $room->ID . '||' . $totalOccupiedRooms. '||' . $totalAvailableRooms . '<br>';
+        }
+
+        wp_reset_postdata();
+
+        return $totalRemainingRooms;
     }
 
 }

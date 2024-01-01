@@ -63,6 +63,19 @@ class Rooms
         return false;
     }
 
+    public static function getRoomQtyForDate($room_id, $dateString)
+    {
+
+        $quantityArray = get_post_meta($room_id, 'quantity_array', true);
+
+        // Check if the quantity_array exists and the date is available
+        if (!empty($quantityArray) && isset($quantityArray[$dateString])) {
+            return $quantityArray[$dateString];
+        }
+
+        return false;
+    }
+
     public static function getMaxQuantityForRoom($room_id, $dateString)
     {
 

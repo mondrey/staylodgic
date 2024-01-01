@@ -153,7 +153,21 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 	}
 
 
-	private function displayOccupancy_TableDataBlock() {
+	private function displayOccupancy_TableDataBlock( $startDate = false, $endDate = false ) {
+		if ( ! $startDate ) {
+			$startDate = $this->startDate;
+			$endDate   = $this->endDate;
+		}
+		if ( $startDate instanceof \DateTime ) {
+			$startDateString = $startDate->format( 'Y-m-d' );
+		} else {
+			$startDateString = $startDate;
+		}
+		if ( $endDate instanceof \DateTime ) {
+			$endDateString = $endDate->format( 'Y-m-d' );
+		} else {
+			$endDateString = $endDate;
+		}
 		ob_start();
 		?>
 		<td class="calendarCell rowHeader">
@@ -163,7 +177,7 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 						<?php _e('Occupancy','atollmatrix'); ?>
 						<span class="occupancy-total-stats">
 							<?php
-							echo esc_html( $this->calculateOccupancyTotalForRange( $this->startDate, $this->endDate ) );
+							echo esc_html( $this->calculateOccupancyTotalForRange( $startDateString, $endDateString ) );
 							?>
 							<span>%</span>
 						</span>
@@ -216,7 +230,7 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 							<?php echo esc_html( $this->calculateAdrForDate( $occupancydate ) ); ?>
 						</div>
 						<div class="occupancy-percentage">
-							<?php echo esc_html( $this->calculateOccupancyForDate( $occupancydate ) ); ?><span>%</span>
+							<?php echo esc_html( $this->calculateRemainingRoomsForDate( $occupancydate ) ); ?><span></span>
 						</div>
 					</div>
 				</div>
@@ -445,7 +459,7 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 		<table id="calendarTable" data-calstart="<?php echo esc_attr( $startDateString ); ?>" data-calend="<?php echo esc_attr( $endDateString ); ?>">
 			<tr class="calendarRow">
 				<?php
-				echo self::displayOccupancy_TableDataBlock();
+				echo self::displayOccupancy_TableDataBlock( $startDate, $endDate);
 				echo self::displayAdrOccupancyRange_TableDataBlock( $dates );
 				?>
 			</tr>

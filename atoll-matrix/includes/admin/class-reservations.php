@@ -417,6 +417,42 @@ class Reservations
         }
     }
 
+    /**
+     * Calculates the total remaining rooms for all rooms on a given date.
+     * 
+     * @param string $date The date for which to calculate the total remaining rooms.
+     * @return int The total number of remaining rooms across all rooms for the given date.
+     */
+    public function getTotalRemainingForAllRoomsOnDate($date = false) {
+
+        if (!$date) {
+            $date = $this->date;
+        }
+        $totalRemaining = 0;
+
+        // Retrieve all rooms using the provided Rooms::queryRooms() method
+        $rooms = Rooms::queryRooms();
+
+        // Loop through each room
+        foreach ($rooms as $room) {
+            // Get the remaining room count array for the room
+            $remainingRoomsArray = $this->getRemainingRoomCountArray($room->ID);
+
+            // Add the remaining count for the specific date to the total
+            if (isset($remainingRoomsArray[$date])) {
+
+                if ( \AtollMatrix\Rooms::isChannelRoomBooked($room->ID, $date) ) {
+                    $remainingRoomsArray[$date] = 0;
+                }
+
+                $totalRemaining += $remainingRoomsArray[$date];
+            }
+        }
+
+        return $totalRemaining;
+    }
+
+
     public function updateRemainingRoomCount($room_id) {
         $reservations_array = $this->getReservations_Array($room_id);
         $quantity_array = get_post_meta($room_id, 'quantity_array', true);
