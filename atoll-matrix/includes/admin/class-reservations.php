@@ -640,6 +640,18 @@ class Reservations
         return $num_days;
     }
 
+    public function getReservationChannel($reservation_id = false)
+    {
+
+        if (!$reservation_id) {
+            $reservation_id = $this->reservation_id;
+        }
+        // Get the check-in and check-out dates for the reservation
+        $booking_channel = get_post_meta($reservation_id, 'atollmatrix_booking_channel', true);
+
+        return $booking_channel;
+    }
+
     public function getCheckinDate($reservation_id = false)
     {
 

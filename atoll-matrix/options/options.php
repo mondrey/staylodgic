@@ -798,18 +798,13 @@ $panel_settings = [
         'choices'     => atollmatrix_get_booking_substatuses(),
         'tab'         => 'general',
      ],
-    'option_2'             => [
-        'label'       => esc_html__('Select Option', 'atollmatrix'),
+    'timezone'             => [
+        'label'       => esc_html__('Select Time Zone', 'atollmatrix'),
         'type'        => 'select',
-        'description' => 'My select field description.',
-        'choices'     => [
-            ''         => esc_html__('Select', 'atollmatrix'),
-            'choice_1' => esc_html__('Choice 1', 'atollmatrix'),
-            'choice_2' => esc_html__('Choice 2', 'atollmatrix'),
-            'choice_3' => esc_html__('Choice 3', 'atollmatrix'),
-         ],
+        'description' => 'Select your time zone relative to GMT.',
+        'choices'     => atollmatrix_get_GmtTimezoneChoices(),
         'tab'         => 'general',
-     ],
+    ],
     // Tab 2
     'option_3'             => [
         'label'       => esc_html__('Text Option', 'atollmatrix'),

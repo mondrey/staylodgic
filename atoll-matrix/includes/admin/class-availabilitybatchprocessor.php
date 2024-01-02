@@ -317,6 +317,7 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
 
     public function ical_availability_import()
     {
+
         // The HTML content of your 'Import iCal' page goes here
         echo "<div class='main-sync-form-wrap'>";
         echo "<div id='sync-form'>";
@@ -349,9 +350,16 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
                         foreach ($room_channel_availability['stats'] as $key => $value) {
                             // Check if the key matches the pattern or criteria you're looking for
                             if ($key === $ical_link[ 'ical_id' ] ) {
+
+                                $syncDate = $room_channel_availability['stats'][$key]['syncdate'];
+                                $syncTime = $room_channel_availability['stats'][$key]['synctime'];
+                                $timezone = atollmatrix_get_option('timezone');
+                                
+                                $adjustedValues = atollmatrix_applyTimezoneToDateAndTime($syncDate, $syncTime, $timezone);
+
                                 echo '<p class="availability-sync-stats">';
-                                echo '<span>Last sync: '.$room_channel_availability['stats'][$key]['syncdate'].'</span>';
-                                echo '<span>Time: '.$room_channel_availability['stats'][$key]['synctime'].'</span>';
+                                echo '<span>Last sync: '.$adjustedValues['adjustedDate'].'</span>';
+                                echo '<span>Time: '.$adjustedValues['adjustedTime'].'</span>';
                                 echo '<span>Processed in: '.$room_channel_availability['stats'][$key]['syncprocessing_time'].'</span>';
                                 echo '</p>';
                                 break;
@@ -469,18 +477,26 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
                 // Format the date for ICS
                 $icsDate = new \DateTime($date);
                 $icsDateStr = $icsDate->format('Ymd');
-    
+        
+                // Create a copy of the date and add one day for DTEND
+                $icsEndDate = clone $icsDate;
+                $icsEndDate->modify('+1 day');
+                $icsEndDateStr = $icsEndDate->format('Ymd');
+        
+                $icsReadableDate = $icsDate->format('Y-m-d');
+                
                 // Create an event for the unavailable date
                 $icsContent .= "BEGIN:VEVENT\r\n";
-                $icsContent .= "UID:" . uniqid() . "@yourdomain.com\r\n";
+                $icsContent .= "UID:" . uniqid() . "@atollmatrix\r\n";
                 $icsContent .= "DTSTAMP:" . gmdate('Ymd') . 'T' . gmdate('His') . "Z\r\n";
                 $icsContent .= "DTSTART;VALUE=DATE:" . $icsDateStr . "\r\n";
-                $icsContent .= "DTEND;VALUE=DATE:" . $icsDateStr . "\r\n";
+                $icsContent .= "DTEND;VALUE=DATE:" . $icsEndDateStr . "\r\n"; // Use the next day date
                 $icsContent .= "SUMMARY:Unavailable\r\n";
+                $icsContent .= "DESCRIPTION:Unavailable on " . $icsReadableDate . "\r\n";
                 $icsContent .= "STATUS:CONFIRMED\r\n";
                 $icsContent .= "END:VEVENT\r\n";
             }
-        }
+        }        
     
         // End of the ICS file
         $icsContent .= "END:VCALENDAR";

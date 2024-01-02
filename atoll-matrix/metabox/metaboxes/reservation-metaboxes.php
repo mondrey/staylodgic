@@ -79,6 +79,15 @@ function atollmatrix_reservations_metadata()
             ),
             array(
                 'name'    => '',
+                'id'      => 'atollmatrix_booking_channel',
+                'type'    => 'offview',
+                'class'   => 'textsmall',
+                'heading' => 'subhead',
+                'desc'    => '',
+                'std'     => 'Admin: Atollmatrix',
+            ),
+            array(
+                'name'    => '',
                 'id'      => 'atollmatrix_checkin_date',
                 'type'    => 'offview',
                 'class'   => 'textsmall',

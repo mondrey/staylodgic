@@ -217,6 +217,8 @@ class BookingBatchProcessor extends BatchProcessorBase
 				continue;
 			}
 
+            $booking_channel = "External";
+
 			$post_data = array(
 				'post_type'   => 'atmx_reservations',
 				// Your custom post type
@@ -239,6 +241,7 @@ class BookingBatchProcessor extends BatchProcessorBase
 					'atollmatrix_ics_signature'      => $signature,
 					// ICS File hash
 					'atollmatrix_customer_choice'    => 'new',
+                    'atollmatrix_booking_channel'    => $booking_channel,
 					// ICS File hash
 					// add other meta data you need
 				),

@@ -1,4 +1,48 @@
 <?php
+function atollmatrix_applyTimezoneToDateAndTime($date, $time, $timezone) {
+    try {
+        // Parse the timezone offset
+        $offsetPattern = '/GMT([+-])(\d{1,2}):(\d{2})/';
+        if (!preg_match($offsetPattern, $timezone, $matches)) {
+            throw new Exception("Invalid timezone format");
+        }
+
+        $sign = $matches[1];
+        $hours = (int)$matches[2];
+        $minutes = (int)$matches[3];
+        $offsetInSeconds = ($hours * 3600 + $minutes * 60) * ($sign === '+' ? 1 : -1);
+
+        // Combine date and time and create DateTime object
+        $dateTime = new DateTime($date . ' ' . $time);
+
+        // Apply the offset
+        $dateTime->modify($offsetInSeconds . ' seconds');
+
+        // Return the adjusted date and time
+        return [
+            'adjustedDate' => $dateTime->format('Y-m-d'),
+            'adjustedTime' => $dateTime->format('H:i:s')
+        ];
+    } catch (Exception $e) {
+        // Handle exceptions or invalid input
+        return "Error: " . $e->getMessage();
+    }
+}
+
+function atollmatrix_get_GmtTimezoneChoices() {
+    $timezones = [];
+
+    // Start from GMT-12:00 to GMT+14:00
+    for ($i = -12; $i <= 14; $i++) {
+        $timezone = $i < 0 ? "GMT$i:00" : ($i > 0 ? "GMT+$i:00" : "GMT+00:00");
+        $timezones[$timezone] = esc_html__($timezone, 'atollmatrix');
+    }
+
+    // Add half-hour and 45-minute offsets if needed
+    // Example: $timezones['gmt+5:30'] = esc_html__('GMT+5:30', 'atollmatrix');
+
+    return $timezones;
+}
 function atollmatrix_get_pages_for_select() {
     // Get an array of all pages
     $pages = get_pages(); 

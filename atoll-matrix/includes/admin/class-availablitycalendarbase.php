@@ -167,7 +167,7 @@ class AvailablityCalendarBase
             $reservation_instance  = new \AtollMatrix\Reservations($currentdateString, $room->ID);
             $totalOccupiedRooms   += $reservation_instance->getDirectRemainingRoomCount();
               // Increment the total number of available rooms
-            $totalAvailableRooms += \AtollMatrix\Rooms::getRoomQtyForDate($room->ID, $currentdateString);
+            $totalAvailableRooms += \AtollMatrix\Rooms::getTotalRoomQtyForDate($room->ID, $currentdateString);
 
               //echo '<br>'.$currentdateString.'<br>'. $room->ID . '||' . $totalOccupiedRooms. '||' . $totalAvailableRooms . '<br>';
               //echo '<br>'. $room->ID . '||' . $totalOccupiedRooms. '||' . $totalAvailableRooms . '<br>';

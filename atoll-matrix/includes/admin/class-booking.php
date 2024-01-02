@@ -1804,6 +1804,8 @@ HTML;
             $sync_status = 'incomplete';
         }
 
+        $booking_channel = 'Atollmatrix';
+
         // Here you can also add other post data like post_title, post_content etc.
         $post_data = array(
             'post_type' => 'atmx_reservations', // Your custom post type
@@ -1831,6 +1833,7 @@ HTML;
                 'atollmatrix_sync_status'                    => $sync_status,
                 'atollmatrix_ics_signature'                  => $signature,
                 'atollmatrix_booking_data'                   => $reservationData,
+                'atollmatrix_booking_channel'                => $booking_channel,
             ),
         );
 

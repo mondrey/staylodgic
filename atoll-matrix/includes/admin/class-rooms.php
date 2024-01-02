@@ -63,14 +63,17 @@ class Rooms
         return false;
     }
 
-    public static function getRoomQtyForDate($room_id, $dateString)
+    public static function getTotalRoomQtyForDate($room_id, $dateString)
     {
 
         $quantityArray = get_post_meta($room_id, 'quantity_array', true);
 
+        $reservation_instance = new \AtollMatrix\Reservations($dateString, $room_id);
+        $remaining = $reservation_instance->getDirectRemainingRoomCount( $dateString, $room_id );
+
         // Check if the quantity_array exists and the date is available
         if (!empty($quantityArray) && isset($quantityArray[$dateString])) {
-            return $quantityArray[$dateString];
+            return $quantityArray[$dateString] + $remaining;
         }
 
         return false;
