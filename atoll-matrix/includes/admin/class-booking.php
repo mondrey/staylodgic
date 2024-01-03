@@ -18,6 +18,7 @@ class Booking
     protected $bookingNumber;
     protected $children_age;
     protected $bookingSearchResults;
+    protected $discountLabel;
 
     public function __construct(
         $bookingNumber = null,
@@ -32,7 +33,8 @@ class Booking
         $roomArray = null,
         $ratesArray = null,
         $canAccomodate = null,
-        $bookingSearchResults = null
+        $bookingSearchResults = null,
+        $discountLabel = null
     ) {
         $this->checkinDate           = $checkinDate;
         $this->checkoutDate          = $checkoutDate;
@@ -46,6 +48,7 @@ class Booking
         $this->ratesArray            = $ratesArray;
         $this->canAccomodate         = $canAccomodate;
         $this->bookingSearchResults  = $bookingSearchResults;
+        $this->discountLabel         = $discountLabel;
         $this->bookingNumber         = uniqid();
 
         add_shortcode('hotel_booking_search', array($this, 'hotelBooking_SearchForm'));
@@ -481,8 +484,8 @@ return ob_get_clean();
         // Generate unique booking number
         atollmatrix_set_booking_transient('1', $this->bookingNumber);
         ob_start();
-        $atollmatrix_bookingdetails_nonce       = wp_create_nonce('atollmatrix-bookingdetails-nonce');
-        $availabilityDateArray = array();
+        $atollmatrix_bookingdetails_nonce = wp_create_nonce('atollmatrix-bookingdetails-nonce');
+        $availabilityDateArray            = array();
 
         // Calculate current date
         $currentDate = current_time('Y-m-d');
@@ -927,10 +930,11 @@ return ob_get_clean();
                 // $html .= '</select>';
                 $html .= '<div class="checkin-staydate-wrap">';
 
-                $total_roomrate                                       = self::displayBookingTotal($id);
+                $total_roomrate                                       = self::calculateRoomPriceTotal($id);
                 $this->bookingSearchResults[ $id ][ 'totalroomrate' ] = $total_roomrate;
 
                 $html .= '<div class="room-price-total" data-roomprice="' . esc_attr($total_roomrate) . '">' . atollmatrix_price($total_roomrate) . '</div>';
+                $html .= '<div class="room-price-discount-label">'. $this->bookingSearchResults[ $id ]['discountlabel'] . '</div>';
                 $html .= self::generate_MealPlanIncluded($id);
 
                 $html .= '<div class="roomchoice-selection">';
@@ -989,24 +993,251 @@ return ob_get_clean();
 
         return $html;
     }
-    public function displayBookingTotal($room_id)
+
+    /**
+     * Calculates long-stay discount.
+     *
+     * @param string $checkinDate      The check-in date.
+     * @param string $checkoutDate     The check-out date.
+     * @param int    $longStayWindow   The number of days defining the long-stay window.
+     * @param float  $longStayDiscount The percentage discount to apply for long stays.
+     * @return float                   Calculated discount percentage or zero if not applicable.
+     */
+    public function calculateLongStayDiscount($checkinDate, $checkoutDate, $longStayWindow, $longStayDiscount)
+    {
+        $checkinDateTime  = new \DateTime($checkinDate);
+        $checkoutDateTime = new \DateTime($checkoutDate);
+
+        $interval = $checkinDateTime->diff($checkoutDateTime);
+        $stayDuration = (int) $interval->format('%a'); // Difference in days
+
+        // Check if the stay duration is equal to or greater than the long-stay window
+        if ($stayDuration >= $longStayWindow) {
+            return $longStayDiscount;
+        } else {
+            return 0; // No discount if the stay is shorter than the long-stay window
+        }
+    }
+
+    /**
+     * Calculates early booking discount.
+     *
+     * @param string $checkinDate          The check-in date.
+     * @param int    $earlyBookingWindow   The number of days defining the early booking window.
+     * @param float  $earlyBookingDiscount The percentage discount to apply.
+     * @return float                       Calculated discount percentage or zero if not applicable.
+     */
+    public function calculateEarlyBookingDiscount($checkinDate, $earlyBookingWindow, $earlyBookingDiscount)
+    {
+        $currentDate     = new \DateTime(); // Current date
+        $checkinDateTime = new \DateTime($checkinDate); // Check-in date
+
+        $interval         = $currentDate->diff($checkinDateTime);
+        $daysUntilCheckin = (int) $interval->format('%a'); // Difference in days
+
+        // Check if the booking is made sufficiently in advance
+        if ($daysUntilCheckin >= $earlyBookingWindow) {
+            return $earlyBookingDiscount;
+        } else {
+            return 0; // No discount if outside the early booking window
+        }
+    }
+
+    /**
+     * Calculates last-minute discount.
+     *
+     * @param string $checkinDate          The check-in date.
+     * @param int    $lastMinuteWindow     The number of days defining the last-minute window.
+     * @param float  $lastMinuteDiscount   The percentage discount to apply.
+     * @return float                       Calculated discount percentage or zero if not applicable.
+     */
+    public function calculateLastMinuteDiscount($checkinDate, $lastMinuteWindow, $lastMinuteDiscount)
+    {
+        $currentDate     = new \DateTime(); // Current date
+        $checkinDateTime = new \DateTime($checkinDate); // Check-in date
+
+        $interval         = $currentDate->diff($checkinDateTime);
+        $daysUntilCheckin = (int) $interval->format('%a'); // Difference in days
+
+        // Check if the booking is within the last-minute window
+        if ($daysUntilCheckin <= $lastMinuteWindow) {
+            return $lastMinuteDiscount;
+        } else {
+            return 0; // No discount if outside the last-minute window
+        }
+    }
+
+    /**
+     * Calculates the highest applicable discount among last-minute, early booking, and long-stay,
+     * and identifies the type of discount.
+     *
+     * @param string $checkinDate        The check-in date.
+     * @param string $checkoutDate       The check-out date.
+     * @param array  $discountParameters Parameters for each discount type.
+     * @return array                     An array with the highest discount value and its type.
+     */
+    public function calculateHighestDiscount($checkinDate, $checkoutDate)
+    {
+        $discountParameters = array();
+        $discountLabel = '';
+    
+        // Check and set parameters for last-minute discount
+        $discount_lastminute = atollmatrix_get_option('discount_lastminute');
+        if ($discount_lastminute && isset($discount_lastminute['days'], $discount_lastminute['percent'])) {
+            $discountParameters['lastminute'] = [
+                'window' => $discount_lastminute['days'],
+                'discount' => $discount_lastminute['percent'],
+                'label' => $discount_lastminute['label']
+            ];
+        }
+    
+        // Check and set parameters for early booking discount
+        $discount_earlybooking = atollmatrix_get_option('discount_earlybooking');
+        if ($discount_earlybooking && isset($discount_earlybooking['days'], $discount_earlybooking['percent'])) {
+            $discountParameters['earlybooking'] = [
+                'window' => $discount_earlybooking['days'],
+                'discount' => $discount_earlybooking['percent'],
+                'label' => $discount_earlybooking['label']
+            ];
+        }
+    
+        // Check and set parameters for long-stay discount
+        $discount_longstay = atollmatrix_get_option('discount_longstay');
+        if ($discount_longstay && isset($discount_longstay['days'], $discount_longstay['percent'])) {
+            $discountParameters['longstay'] = [
+                'window' => $discount_longstay['days'],
+                'discount' => $discount_longstay['percent'],
+                'label' => $discount_longstay['label']
+            ];
+        }
+    
+        // Initialize discounts
+        $lastMinuteDiscount = $earlyBookingDiscount = $longStayDiscount = 0;
+    
+        // Calculate discounts if parameters are set
+        if (isset($discountParameters['lastminute'])) {
+            $lastMinuteDiscount = $this->calculateLastMinuteDiscount(
+                $checkinDate,
+                $discountParameters['lastminute']['window'],
+                $discountParameters['lastminute']['discount']
+            );
+        }
+    
+        if (isset($discountParameters['earlybooking'])) {
+            $earlyBookingDiscount = $this->calculateEarlyBookingDiscount(
+                $checkinDate,
+                $discountParameters['earlybooking']['window'],
+                $discountParameters['earlybooking']['discount']
+            );
+        }
+    
+        if (isset($discountParameters['longstay'])) {
+            $longStayDiscount = $this->calculateLongStayDiscount(
+                $checkinDate,
+                $checkoutDate,
+                $discountParameters['longstay']['window'],
+                $discountParameters['longstay']['discount']
+            );
+        }
+    
+        // Find the highest discount and its type
+        $highestDiscount = max($lastMinuteDiscount, $earlyBookingDiscount, $longStayDiscount);
+        $discountType = '';
+    
+        if ($highestDiscount == $lastMinuteDiscount && isset($discountParameters['lastminute'])) {
+            $discountType = 'lastminute';
+        } elseif ($highestDiscount == $earlyBookingDiscount && isset($discountParameters['earlybooking'])) {
+            $discountType = 'earlybooking';
+        } elseif ($highestDiscount == $longStayDiscount && isset($discountParameters['longstay'])) {
+            $discountType = 'longstay';
+        }
+    
+        if ($discountType !== '') {
+            $discountLabel = $discountParameters[$discountType]['label'];
+        }
+    
+        return ['discountValue' => $highestDiscount, 'discountType' => $discountType, 'discountLabel' => $discountLabel];
+    }    
+
+    public function calculateRoomPriceTotal($room_id)
     {
         $total_roomrate = 0;
         $html           = '';
 
-        // error_log('---- Person Pricing');
-        // error_log(print_r($perPersonPricing, true));
+        // Assuming this finds the earliest check-in date from the rates
+        $checkinDate = $this->findCheckinDate($room_id);
+        $checkoutDate = $this->findCheckoutDate($room_id);
 
-        foreach ($this->ratesArray[ $room_id ][ 'date' ] as $staydate => $roomrate) {
+        // if ($lastminute_discountPercent > 0) {
+        //     $this->bookingSearchResults[ $room_id ]['discountlabel'] = $lastminute_label;
+        // }
 
+        $highestDiscountInfo = $this->calculateHighestDiscount($checkinDate, $checkoutDate);
+        $highestDiscountValue = $highestDiscountInfo['discountValue'];
+        $highestDiscountType = $highestDiscountInfo['discountType'];
+        $highestDiscountLabel = $highestDiscountInfo['discountLabel'];
+        // Use $highestDiscountValue and $highestDiscountType as needed
+        if ($highestDiscountValue > 0) {
+            $this->bookingSearchResults[ $room_id ]['discountlabel'] = $highestDiscountLabel;
+        }
+
+        // Apply the rates
+        foreach ($this->ratesArray[$room_id]['date'] as $staydate => $roomrate) {
             $roomrate = self::applyPricePerPerson($roomrate);
 
-            $this->bookingSearchResults[ $room_id ][ 'staydate' ][ $staydate ] = $roomrate;
+            if ($highestDiscountValue > 0) {
+                $roomrate = $roomrate - (($roomrate / 100) * $highestDiscountValue);
+            }
 
-            $total_roomrate = $total_roomrate + $roomrate;
+            $this->bookingSearchResults[$room_id]['staydate'][$staydate] = $roomrate;
+            $total_roomrate += $roomrate;
         }
 
         return $total_roomrate;
+    }
+
+    /**
+     * Finds the earliest check-in date for a given room.
+     *
+     * @param int $room_id The ID of the room.
+     * @return string      The earliest check-in date in 'Y-m-d' format, or an empty string if no dates are found.
+     */
+    public function findCheckinDate($room_id)
+    {
+        if (empty($this->ratesArray[ $room_id ][ 'date' ])) {
+            return ''; // Return empty string if there are no dates
+        }
+
+        $earliestDate = null;
+        foreach ($this->ratesArray[ $room_id ][ 'date' ] as $staydate => $roomrate) {
+            if (is_null($earliestDate) || strtotime($staydate) < strtotime($earliestDate)) {
+                $earliestDate = $staydate;
+            }
+        }
+
+        return $earliestDate;
+    }
+
+    /**
+     * Finds the latest checkout date for a given room.
+     *
+     * @param int $room_id The ID of the room.
+     * @return string      The latest checkout date in 'Y-m-d' format, or an empty string if no dates are found.
+     */
+    public function findCheckoutDate($room_id)
+    {
+        if (empty($this->ratesArray[$room_id]['date'])) {
+            return ''; // Return empty string if there are no dates
+        }
+
+        $latestDate = null;
+        foreach ($this->ratesArray[$room_id]['date'] as $staydate => $roomrate) {
+            if (is_null($latestDate) || strtotime($staydate) > strtotime($latestDate)) {
+                $latestDate = $staydate;
+            }
+        }
+
+        return $latestDate;
     }
 
     private function applyPricePerPerson($roomrate)

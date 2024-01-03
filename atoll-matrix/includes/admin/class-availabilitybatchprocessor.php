@@ -93,60 +93,82 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
             wp_send_json_error('Invalid nonce');
         }
 
-        $room_ids           = $_POST[ 'room_ids' ];
-        $room_links_id      = $_POST[ 'room_ical_links_id' ];
-        $room_links_url     = $_POST[ 'room_ical_links_url' ];
-        $room_links_comment = $_POST[ 'room_ical_links_comment' ];
+        $room_ids = null;
+        $room_links_id = null;
+        $room_links_url = null;
+        $room_links_comment = null;
 
-        //error_log( print_r( $_POST , true ) );
-        for ($i = 0; $i < count($room_ids); $i++) {
-            $room_id    = $room_ids[ $i ];
-            $room_links = array();
+        if (isset($_POST['room_ical_links_id'])) {
+            $room_links_id = $_POST['room_ical_links_id'];
+        }
+        if (isset($_POST['room_ical_links_url'])) {
+            $room_links_url = $_POST['room_ical_links_url'];
+        }
+        if (isset($_POST['room_ical_links_comment'])) {
+            $room_links_comment = $_POST['room_ical_links_comment'];
+        }
 
-            // Ensure that $room_links_url[$i] is an array before trying to count its elements
-            if (isset($room_links_url[ $i ]) && is_array($room_links_url[ $i ])) {
-                for ($j = 0; $j < count($room_links_url[ $i ]); $j++) {
+        if (isset($_POST['room_ids'])) {
+            $room_ids = $_POST['room_ids'];
+            
 
-                    // Get the old room data
-                    $old_room_links = get_post_meta($room_id, 'availability_ical_data', true);
+            //error_log( print_r( $_POST , true ) );
+            for ($i = 0; $i < count($room_ids); $i++) {
+                $room_id    = $room_ids[ $i ];
+                $room_links = array();
+                
+                $old_room_data = get_post_meta($room_id, 'channel_quantity_array', true);
+                error_log( '----- Before Stored iCal Data' );
+                error_log( print_r( $old_room_data , true ) );
+                // Ensure that $room_links_url[$i] is an array before trying to count its elements
+                if (isset($room_links_url[ $i ]) && is_array($room_links_url[ $i ])) {
+                    for ($j = 0; $j < count($room_links_url[ $i ]); $j++) {
 
-                    // Check if the URL is valid
-                    if (filter_var($room_links_url[ $i ][ $j ], FILTER_VALIDATE_URL)) {
-                        // Check if a unique ID is already assigned
-                        if ('' == $room_links_id[ $i ][ $j ]) {
-                            $room_links_id[ $i ][ $j ] = uniqid();
+                        // Get the old room data
+                        $old_room_links = get_post_meta($room_id, 'availability_ical_data', true);
+
+                        // Check if the URL is valid
+                        if (filter_var($room_links_url[ $i ][ $j ], FILTER_VALIDATE_URL)) {
+                            // Check if a unique ID is already assigned
+                            
+                            if (!isset($room_links_id[$i][$j]) || '' == $room_links_id[$i][$j]) {
+                                $room_links_id[ $i ][ $j ] = uniqid();
+                            }
+
+                            $file_md5Hash = md5(esc_url($room_links_url[ $i ][ $j ]));
+
+                            // Check if the URL is the same as before
+                            $ical_synced = false;
+                            if (isset($old_room_links[ $file_md5Hash ]) && $old_room_links[ $file_md5Hash ][ 'ical_url' ] == $room_links_url[ $i ][ $j ]) {
+                                $ical_synced = $old_room_links[ $file_md5Hash ][ 'ical_synced' ];
+                            }
+
+                            $room_links[ $file_md5Hash ] = array(
+                                'ical_id'      => sanitize_text_field($room_links_id[ $i ][ $j ]),
+                                'ical_synced'  => $ical_synced,
+                                'ical_url'     => esc_url($room_links_url[ $i ][ $j ]),
+                                'ical_comment' => sanitize_text_field($room_links_comment[ $i ][ $j ]),
+                            );
                         }
-
-                        $file_md5Hash = md5(esc_url($room_links_url[ $i ][ $j ]));
-
-                        // Check if the URL is the same as before
-                        $ical_synced = false;
-                        if (isset($old_room_links[ $file_md5Hash ]) && $old_room_links[ $file_md5Hash ][ 'ical_url' ] == $room_links_url[ $i ][ $j ]) {
-                            $ical_synced = $old_room_links[ $file_md5Hash ][ 'ical_synced' ];
-                        }
-
-                        $room_links[ $file_md5Hash ] = array(
-                            'ical_id'      => sanitize_text_field($room_links_id[ $i ][ $j ]),
-                            'ical_synced'  => $ical_synced,
-                            'ical_url'     => esc_url($room_links_url[ $i ][ $j ]),
-                            'ical_comment' => sanitize_text_field($room_links_comment[ $i ][ $j ]),
-                        );
                     }
                 }
-            }
 
-            // Update the meta field in the database.
-            update_post_meta($room_id, 'availability_ical_data', $room_links);
-        }
+                // Update the meta field in the database.
+                update_post_meta($room_id, 'availability_ical_data', $room_links);
+                delete_post_meta($room_id, 'channel_quantity_array', null);
+            }
+            
+            // Sync on Save processing full batch ( process intensive )
+            self::ical_availability_processor(true);
+            
+            if (!wp_next_scheduled('continue_ical_availability_processing')) {
+                wp_schedule_single_event(time(), 'continue_ical_availability_processing');
+            }
         
-        // Sync on Save processing full batch ( process intensive )
-        self::ical_availability_processor(true);
-        
-        if (!wp_next_scheduled('continue_ical_availability_processing')) {
-            wp_schedule_single_event(time(), 'continue_ical_availability_processing');
+            wp_send_json_success('Successfully stored and batch processing initiated');
+        } else {
+            wp_send_json_success('Room data not found');
         }
-    
-        wp_send_json_success('Successfully stored and batch processing initiated');
     }
 
     public function areCalendarsConfigured() {
@@ -237,9 +259,11 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
             }
         }
 
-        error_log( '----- Blocked dates being processed ' . $count );
-        error_log( print_r($blocked_dates, 1) );
-        error_log( '-----------------------------------' );
+        if ( isset($blocked_dates) && is_array( $blocked_dates ) ) {
+            error_log( '----- Blocked dates being processed ' . $count );
+            error_log( print_r($blocked_dates, 1) );
+            error_log( '-----------------------------------' );
+        }
 
         // Clear the is_syncing flag under two conditions:
         // 1. All rooms are processed in batch mode.

@@ -176,3 +176,6 @@
 .main-sync-form-wrap th {
 	font-size: 11px;
 }
+.nav-tab-wrapper.atollmatrix-tabs {
+	overflow: scroll;
+}

@@ -58,6 +58,7 @@ class AtollMatrixOptionsPanel
 
         add_action('admin_menu', [ $this, 'register_menu_page' ]);
         add_action('admin_init', [ $this, 'register_settings' ]);
+
     }
 
     /**
@@ -118,21 +119,46 @@ class AtollMatrixOptionsPanel
     /**
      * Saves our fields.
      */
-    public function sanitize_fields($value)
-    {
-        $value     = (array) $value;
-        $new_value = [  ];
+    public function sanitize_fields($values) {
+        $new_values = [];
         foreach ($this->settings as $key => $args) {
-            $field_type       = $args[ 'type' ];
-            $new_option_value = $value[ $key ] ?? '';
-            if ($new_option_value) {
-                $sanitize_callback = $args[ 'sanitize_callback' ] ?? $this->get_sanitize_callback_by_type($field_type);
-                $new_value[ $key ] = call_user_func($sanitize_callback, $new_option_value, $args);
-            } elseif ('checkbox' === $field_type) {
-                $new_value[ $key ] = 0;
+            if (isset($values[$key])) {
+                // List of keys that use the same sanitization function
+                $discount_keys = ['discount_lastminute', 'discount_earlybooking', 'discount_longstay'];
+        
+                if (in_array($key, $discount_keys)) {
+                    $new_values[$key] = $this->sanitize_discount_fileds($values[$key]);
+                } else {
+                    // Handle other fields as before
+                    $field_type = $args['type'];
+                    $sanitize_callback = $args['sanitize_callback'] ?? $this->get_sanitize_callback_by_type($field_type);
+                    $new_values[$key] = call_user_func($sanitize_callback, $values[$key], $args);
+                }
+            }
+        }        
+        return $new_values;
+    }
+    
+    protected function sanitize_discount_fileds($value) {
+        $sanitized_value = [];
+        if (is_array($value)) {
+            foreach ($value as $sub_key => $sub_value) {
+                switch ($sub_key) {
+                    case 'label':
+                        $sanitized_value['label'] = sanitize_text_field($sub_value);
+                        break;
+                    case 'days':
+                        // Assuming 'days' should be an integer
+                        $sanitized_value['days'] = intval($sub_value);
+                        break;
+                    case 'percent':
+                        // Assuming 'percent' should be a float
+                        $sanitized_value['percent'] = floatval($sub_value);
+                        break;
+                }
             }
         }
-        return $new_value;
+        return $sanitized_value;
     }
 
     /**
@@ -227,6 +253,8 @@ class AtollMatrixOptionsPanel
         ?>
         <div class="wrap">
             <h1><?php echo esc_html(get_admin_page_title()); ?></h1>
+
+            <div class="atollmatrix-tabform-wrapper">
             <?php $this->render_tabs();?>
             <form action="options.php" method="post" class="atollmatrix-options-form">
                 <?php
@@ -235,6 +263,7 @@ settings_fields($this->option_group_name);
         submit_button('Save Settings');
         ?>
             </form>
+            </div>
         </div>
         <?php
 }
@@ -602,6 +631,45 @@ if ($description) {
         <?php
 }
 
+/**
+ * Renders a text field.
+ */
+public function render_promotion_discount_field($args)
+{
+    $option_name = $args['label_for'];
+    $values = $this->get_option_value($option_name);
+    
+    // Ensure $values is an array and set default values if not set
+    $values = is_array($values) ? $values : ['label' => '', 'days' => '', 'percent' => ''];
+    error_log( print_r( $values,1 ));
+    $description = $this->settings[$option_name]['description'] ?? '';
+    ?>
+        <input
+            type="text"
+            id="<?php echo esc_attr($args['label_for']); ?>_label"
+            name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][label]"
+            value="<?php echo esc_attr($values['label']); ?>" placeholder="Label for discount">
+        <input
+            type="text"
+            id="<?php echo esc_attr($args['label_for']); ?>_days"
+            name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][days]"
+            value="<?php echo esc_attr($values['days']); ?>" placeholder="Number of days">
+        <input
+            type="text"
+            id="<?php echo esc_attr($args['label_for']); ?>_percent"
+            name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][percent]"
+            value="<?php echo esc_attr($values['percent']); ?>" placeholder="Discount percent">
+        <?php
+    if ($description) {
+        ?>
+            <p class="description"><?php echo esc_html($description); ?></p>
+            <p class="description"><strong>Discounts are not stackable. Only the maximum discount is applied if multiple discounts are eligible.</p>
+        <?php
+    }
+    ?>
+    <?php
+}
+
     /**
      * Renders a text field.
      */
@@ -721,8 +789,9 @@ $panel_args = [
     'user_capability' => 'manage_options',
     'tabs'            => [
         'general'       => esc_html__('General', 'atollmatrix'),
-        'pages'       => esc_html__('Pages', 'atollmatrix'),
+        'pages'         => esc_html__('Pages', 'atollmatrix'),
         'import-export' => esc_html__('Import/Export', 'atollmatrix'),
+        'discounts' => esc_html__('Discounts', 'atollmatrix'),
         'currency'      => esc_html__('Currency', 'atollmatrix'),
         'mealplan'      => esc_html__('Meal Plan', 'atollmatrix'),
         'perperson'     => esc_html__('Per person price', 'atollmatrix'),
@@ -741,40 +810,58 @@ foreach ($currencies as $currencyCode => $currencyName) {
 }
 
 $panel_settings = [
-    'page_bookingsearch'    => [
+    'page_bookingsearch'   => [
         'label'       => esc_html__('Booking search page', 'atollmatrix'),
         'type'        => 'select',
         'inputwidth'  => '250',
         'description' => 'Booking search page.',
         'choices'     => atollmatrix_get_pages_for_select(),
         'tab'         => 'pages',
-    ],
-    'page_bookingdetails'    => [
+     ],
+    'page_bookingdetails'  => [
         'label'       => esc_html__('Booking details', 'atollmatrix'),
         'type'        => 'select',
         'inputwidth'  => '250',
         'description' => 'Booking details.',
         'choices'     => atollmatrix_get_pages_for_select(),
         'tab'         => 'pages',
-    ],
-    'import_missing'    => [
+     ],
+    'import_missing'       => [
         'label'       => esc_html__('Action for missing bookings', 'atollmatrix'),
         'type'        => 'select',
         'inputwidth'  => '250',
         'description' => 'Action for missing bookings on import.',
         'choices'     => [
-            'cancel'         => esc_html__('Cancel', 'atollmatrix'),
+            'cancel' => esc_html__('Cancel', 'atollmatrix'),
             'delete' => esc_html__('Delete', 'atollmatrix'),
          ],
         'tab'         => 'import-export',
      ],
-    'qtysync_interval'    => [
+    'qtysync_interval'     => [
         'label'       => esc_html__('Availability Sync interval', 'atollmatrix'),
         'type'        => 'select',
         'inputwidth'  => '250',
         'description' => 'Availability Sync interval',
         'choices'     => atollmatrix_sync_intervals(),
         'tab'         => 'import-export',
+     ],
+    'discount_lastminute'             => [
+        'label'       => esc_html__('Last minute discount', 'atollmatrix'),
+        'type'        => 'promotion_discount',
+        'description' => 'Maximum days ahead for discount. More than the number of days from booking day the discount will not be applied.',
+        'tab'         => 'discounts',
+     ],
+    'discount_earlybooking'             => [
+        'label'       => esc_html__('Early booking discount', 'atollmatrix'),
+        'type'        => 'promotion_discount',
+        'description' => 'How many days ahead to apply discount. Less than the number of days from booking day the discount will not be applied.',
+        'tab'         => 'discounts',
+     ],
+    'discount_longstay'             => [
+        'label'       => esc_html__('Long stay discount', 'atollmatrix'),
+        'type'        => 'promotion_discount',
+        'description' => 'Lenght of days to stay to apply discount.',
+        'tab'         => 'discounts',
      ],
     'enable_taxes'         => [
         'label'       => esc_html__('Enable Taxes', 'atollmatrix'),
@@ -804,7 +891,7 @@ $panel_settings = [
         'description' => 'Select your time zone relative to GMT.',
         'choices'     => atollmatrix_get_GmtTimezoneChoices(),
         'tab'         => 'general',
-    ],
+     ],
     // Tab 2
     'option_3'             => [
         'label'       => esc_html__('Text Option', 'atollmatrix'),

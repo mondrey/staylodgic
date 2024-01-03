@@ -350,11 +350,6 @@ function atollmatrix_set_booking_transient($data, $bookingNumber)
 }
 function atollmatrix_get_booking_transient($bookingNumber = null)
 {
-    if ($bookingNumber === null) {
-        // Use $this->bookingNumber if $bookingNumber is not supplied
-        $bookingNumber = $this->bookingNumber;
-    }
-
     return get_transient($bookingNumber);
 }
 function atollmatrix_get_allowed_tags() {
