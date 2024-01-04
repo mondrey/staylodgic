@@ -18,7 +18,9 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
         add_action('admin_menu', array($this, 'add_export_availability_admin_menu'));
 
         // Add the export handler hook
-        add_action('admin_init', array($this, 'handle_export_request'));
+        add_action('init', array($this, 'add_ics_rewrite_rule'));
+        add_filter('query_vars', array($this, 'register_query_vars'));
+        add_action('template_redirect', array($this, 'handle_ics_export'));
         
         // Check and schedule the cron event
         $this->schedule_cron_event();
@@ -37,6 +39,21 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
         // Add the cron hook for batch processing
         $this->add_cron_hook();
     }
+
+    public function add_ics_rewrite_rule() {
+        add_rewrite_rule('^ics-export/room/([0-9]+)/?', 'index.php?atollmatrix_ics_room=$matches[1]', 'top');
+    }
+    public function register_query_vars($vars) {
+        $vars[] = 'atollmatrix_ics_room';
+        return $vars;
+    }
+    public function handle_ics_export() {
+        $roomId = get_query_var('atollmatrix_ics_room');
+        if ($roomId) {
+            $this->handle_export_request($roomId);
+            exit;
+        }
+    }    
 
     public function schedule_cron_event() {
 
@@ -445,7 +462,7 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
 
             echo '<div class="room_ical_link_group">';
             // The URL to trigger the export functionality
-            $exportUrl = admin_url('admin.php?page=export-availability-ical');
+            $exportUrl = home_url('/ics-export/room/') . $room->ID;
 
             $exportUrl .='&room='.$room->ID;
 
@@ -463,29 +480,25 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
     }
 
 
-    public function handle_export_request() {
-        // Check if we are on the correct page and the 'room' parameter is set
-        if (isset($_GET['page']) && $_GET['page'] === 'export-availability-ical' && isset($_GET['room'])) {
-            $roomId = intval($_GET['room']);
+    public function handle_export_request($roomId) {
     
-            // Retrieve the 'quantity_array' and 'channel_quantity_array'
-            $room_reservations_instance = new \AtollMatrix\Reservations( $dateString = false, $roomId );
-            $room_reservations_instance->calculateAndUpdateRemainingRoomCountsForAllDates();
-            $remainingQuantityArray = $room_reservations_instance->getRemainingRoomCountArray();
-            $channelArray = get_post_meta($roomId, 'channel_quantity_array', true);
-            $channelQuantityArray = isset($channelArray['quantity']) ? $channelArray['quantity'] : [];
-    
-            // Merge the arrays - channelQuantityArray values will overwrite remainingQuantityArray values for any matching keys
-            $mergedArray = array_merge($remainingQuantityArray, $channelQuantityArray);
-    
-            // Determine if the request is coming from a browser or a server
-            $mode = $this->detect_request_mode();
-    
-            // Generate the .ics file with the merged array
-            $this->generate_ics_file($roomId, $mergedArray, $mode);
-    
-            exit;
-        }
+        // Retrieve the 'quantity_array' and 'channel_quantity_array'
+        $room_reservations_instance = new \AtollMatrix\Reservations( $dateString = false, $roomId );
+        $room_reservations_instance->calculateAndUpdateRemainingRoomCountsForAllDates();
+        $remainingQuantityArray = $room_reservations_instance->getRemainingRoomCountArray();
+        $channelArray = get_post_meta($roomId, 'channel_quantity_array', true);
+        $channelQuantityArray = isset($channelArray['quantity']) ? $channelArray['quantity'] : [];
+
+        // Merge the arrays - channelQuantityArray values will overwrite remainingQuantityArray values for any matching keys
+        $mergedArray = array_merge($remainingQuantityArray, $channelQuantityArray);
+
+        // Determine if the request is coming from a browser or a server
+        $mode = $this->detect_request_mode();
+
+        // Generate the .ics file with the merged array
+        $this->generate_ics_file($roomId, $mergedArray, $mode);
+
+        exit;
     }
     
     private function detect_request_mode() {
