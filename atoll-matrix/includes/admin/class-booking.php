@@ -934,7 +934,9 @@ return ob_get_clean();
                 $this->bookingSearchResults[ $id ][ 'totalroomrate' ] = $total_roomrate;
 
                 $html .= '<div class="room-price-total" data-roomprice="' . esc_attr($total_roomrate) . '">' . atollmatrix_price($total_roomrate) . '</div>';
-                $html .= '<div class="room-price-discount-label">'. $this->bookingSearchResults[ $id ]['discountlabel'] . '</div>';
+                if ( isset( $this->bookingSearchResults[ $id ]['discountlabel'] ) ) {
+                    $html .= '<div class="room-price-discount-label">'. $this->bookingSearchResults[ $id ]['discountlabel'] . '</div>';
+                }
                 $html .= self::generate_MealPlanIncluded($id);
 
                 $html .= '<div class="roomchoice-selection">';
@@ -1244,23 +1246,25 @@ return ob_get_clean();
     {
 
         $perPersonPricing = atollmatrix_get_option('perpersonpricing');
-
-        foreach ($perPersonPricing as $pricing) {
-            if ($this->totalChargeableGuests == $pricing[ 'people' ]) {
-                if ($pricing[ 'type' ] === 'percentage' && $pricing[ 'total' ] === 'decrease') {
-                    // Decrease the rate by the given percentage
-                    $roomrate -= ($roomrate * $pricing[ 'number' ] / 100);
-                } elseif ($pricing[ 'type' ] === 'fixed' && $pricing[ 'total' ] === 'increase') {
-                    // Increase the rate by the fixed amount
-                    $roomrate += $pricing[ 'number' ];
-                } elseif ($pricing[ 'type' ] === 'percentage' && $pricing[ 'total' ] === 'increase') {
-                    // Increase the rate by the given percentage
-                    $roomrate += ($roomrate * $pricing[ 'number' ] / 100);
-                } elseif ($pricing[ 'type' ] === 'fixed' && $pricing[ 'total' ] === 'decrease') {
-                    // Decrease the rate by the fixed amount
-                    $roomrate -= $pricing[ 'number' ];
+        if ( isset( $perPersonPricing ) && is_array( $perPersonPricing ) ) {
+            foreach ($perPersonPricing as $pricing) {
+                if ($this->totalChargeableGuests == $pricing[ 'people' ]) {
+                    if ($pricing[ 'type' ] === 'percentage' && $pricing[ 'total' ] === 'decrease') {
+                        // Decrease the rate by the given percentage
+                        $roomrate -= ($roomrate * $pricing[ 'number' ] / 100);
+                    } elseif ($pricing[ 'type' ] === 'fixed' && $pricing[ 'total' ] === 'increase') {
+                        // Increase the rate by the fixed amount
+                        $roomrate += $pricing[ 'number' ];
+                    } elseif ($pricing[ 'type' ] === 'percentage' && $pricing[ 'total' ] === 'increase') {
+                        // Increase the rate by the given percentage
+                        $roomrate += ($roomrate * $pricing[ 'number' ] / 100);
+                    } elseif ($pricing[ 'type' ] === 'fixed' && $pricing[ 'total' ] === 'decrease') {
+                        // Decrease the rate by the fixed amount
+                        $roomrate -= $pricing[ 'number' ];
+                    }
                 }
             }
+            
         }
 
         return $roomrate;

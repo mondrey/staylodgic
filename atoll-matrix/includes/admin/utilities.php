@@ -182,23 +182,33 @@ function atollmatrix_readable_date($originalDate)
     return $formattedDate;
 }
 
-function atollmatrix_get_option($option, $default = '')
-{
-    $got_value = get_option('atollmatrix_settings')[ $option ] ?? $default;
+function atollmatrix_get_option($option, $default = '') {
+    $settings = get_option('atollmatrix_settings');
 
-    return $got_value;
+    if (is_array($settings) && isset($settings[$option])) {
+		//error_log( print_r($settings, true) );
+        return $settings[$option];
+    }
+
+    return $default;
 }
+
 function atollmatrix_price($originalPrice)
 {
-    $currency           = atollmatrix_get_option('currency');
-    $currency_position  = atollmatrix_get_option('currency_position');
-    $thousand_seperator = atollmatrix_get_option('thousand_seperator');
-    $decimal_seperator  = atollmatrix_get_option('decimal_seperator');
-    $number_of_decimals = atollmatrix_get_option('number_of_decimals');
+    $currency           = atollmatrix_get_option('currency', 'USD');
+    $currency_position  = atollmatrix_get_option('currency_position', 'left');
+    $thousand_seperator = atollmatrix_get_option('thousand_seperator', ',');
+    $decimal_seperator  = atollmatrix_get_option('decimal_seperator', '.');
+    $number_of_decimals = atollmatrix_get_option('number_of_decimals', '2');
 
+	error_log( '---------------------- NUMBER FORMAT-------------------------');
+	error_log( $originalPrice );
+	error_log ( $number_of_decimals );
+	error_log ( $decimal_seperator );
+	error_log ( $thousand_seperator );
     // Format the price using number_format
     $price = number_format($originalPrice, $number_of_decimals, $decimal_seperator, $thousand_seperator);
-
+	
     if ('' == $price) {
         $price = $originalPrice;
     }

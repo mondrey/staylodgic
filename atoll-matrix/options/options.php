@@ -954,6 +954,7 @@ $panel_settings = [
         'label'       => esc_html__('Currency', 'atollmatrix'),
         'type'        => 'select',
         'inputwidth'  => '250',
+        'default'        => 'USD',
         'description' => 'My select field description.',
         'choices'     => $curr_choices,
         'tab'         => 'currency',
@@ -962,6 +963,7 @@ $panel_settings = [
         'label'       => esc_html__('Currency position', 'atollmatrix'),
         'type'        => 'select',
         'inputwidth'  => '250',
+        'default'        => 'left_space',
         'description' => 'My select field description.',
         'choices'     => [
             'left_space'  => esc_html__('Left with space', 'atollmatrix'),
@@ -974,18 +976,21 @@ $panel_settings = [
     'thousand_seperator'   => [
         'label'       => esc_html__('Thousand seperator', 'atollmatrix'),
         'type'        => 'text',
+        'default'        => ',',
         'description' => 'My field 1 description.',
         'tab'         => 'currency',
      ],
     'decimal_seperator'    => [
         'label'       => esc_html__('Decimal seperator', 'atollmatrix'),
         'type'        => 'text',
+        'default'        => '.',
         'description' => 'My field 1 description.',
         'tab'         => 'currency',
      ],
     'number_of_decimals'   => [
         'label'       => esc_html__('Number of Decimals', 'atollmatrix'),
         'type'        => 'text',
+        'default'        => '2',
         'description' => 'My field 1 description.',
         'tab'         => 'currency',
      ],

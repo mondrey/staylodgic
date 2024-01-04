@@ -40,33 +40,39 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
 
     public function schedule_cron_event() {
 
-        $qtysync_interval = get_option('atollmatrix_settings')[ 'qtysync_interval' ];
+        $qtysync_interval = null; // or set a default value
+        $settings = get_option('atollmatrix_settings');
+
+        if (is_array($settings) && isset($settings['qtysync_interval'])) {
+            $qtysync_interval = $settings['qtysync_interval'];
+
+            // Define the cron schedule based on the validated interval
+            switch ($qtysync_interval) {
+                case '5':
+                    $schedule = 'atollmatrix_5_minutes';
+                    break;
+                case '10':
+                    $schedule = 'atollmatrix_10_minutes';
+                    break;
+                case '15':
+                    $schedule = 'atollmatrix_15_minutes';
+                    break;
+                case '30':
+                    $schedule = 'atollmatrix_30_minutes';
+                    break;
+                case '60':
+                    $schedule = 'atollmatrix_60_minutes';
+                    break;
+                default:
+                    $schedule = 'atollmatrix_5_minutes'; // Default case
+                    break;
+            }
         
-        // Define the cron schedule based on the validated interval
-        switch ($qtysync_interval) {
-            case '5':
-                $schedule = 'atollmatrix_5_minutes';
-                break;
-            case '10':
-                $schedule = 'atollmatrix_10_minutes';
-                break;
-            case '15':
-                $schedule = 'atollmatrix_15_minutes';
-                break;
-            case '30':
-                $schedule = 'atollmatrix_30_minutes';
-                break;
-            case '60':
-                $schedule = 'atollmatrix_60_minutes';
-                break;
-            default:
-                $schedule = 'atollmatrix_5_minutes'; // Default case
-                break;
-        }
-    
-        // Schedule the cron event if it's not already scheduled
-        if (!wp_next_scheduled('atollmatrix_ical_availability_processor_event')) {
-            wp_schedule_event(time(), $schedule, 'atollmatrix_ical_availability_processor_event');
+            // Schedule the cron event if it's not already scheduled
+            if (!wp_next_scheduled('atollmatrix_ical_availability_processor_event')) {
+                wp_schedule_event(time(), $schedule, 'atollmatrix_ical_availability_processor_event');
+            }
+
         }
     }    
 
@@ -297,14 +303,17 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
         // Create a new instance of the parser.
         $parser = new \ICal\ICal();
         $file_contents = file_get_contents($ics_url);
+        error_log('File Contents: ' . substr($file_contents, 0, 500)); // Log first 500 characters        
         // Check if the feed is empty or incomplete
         if ($file_contents === false || empty($file_contents)) {
+            error_log( '----- AVAILABILITY FILE FALSE ' );
             return $blocked_dates;
         }
         if (strpos($file_contents, 'BEGIN:VCALENDAR') === false || strpos($file_contents, 'END:VCALENDAR') === false) {
+            error_log( '----- AVAILABILITY FILE INVALID ' );
             return $blocked_dates;
         }
-    
+        error_log( '----- AVAILABILITY FILE VALID ' );
         // Parse the ICS file
         $parser->initString($file_contents);
         $events = $parser->events();
@@ -453,6 +462,7 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
         echo "</div>";
     }
 
+
     public function handle_export_request() {
         // Check if we are on the correct page and the 'room' parameter is set
         if (isset($_GET['page']) && $_GET['page'] === 'export-availability-ical' && isset($_GET['room'])) {
@@ -468,33 +478,32 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
             // Merge the arrays - channelQuantityArray values will overwrite remainingQuantityArray values for any matching keys
             $mergedArray = array_merge($remainingQuantityArray, $channelQuantityArray);
     
+            // Determine if the request is coming from a browser or a server
+            $mode = $this->detect_request_mode();
+    
             // Generate the .ics file with the merged array
-            $this->generate_ics_file($roomId, $mergedArray);
-
-            error_log('---------base-generate_ics_file------');
-            error_log( print_r($remainingQuantityArray,1) );
-            error_log('---------base-generate_ics_file------');
-
-            error_log('---------channel-generate_ics_file------');
-            error_log( print_r($channelQuantityArray,1) );
-            error_log('---------channel-generate_ics_file------');
-
-            error_log('---------merged-generate_ics_file------');
-            error_log( print_r($mergedArray,1) );
-            error_log('---------merged-generate_ics_file------');
+            $this->generate_ics_file($roomId, $mergedArray, $mode);
     
             exit;
         }
     }
     
-    private function generate_ics_file($roomId, $quantityArray) {
+    private function detect_request_mode() {
+        // Check for certain server variables typical in browser requests
+        if (isset($_SERVER['HTTP_USER_AGENT']) && !empty($_SERVER['HTTP_USER_AGENT'])) {
+            // Likely a browser request
+            return 'download';
+        }
+        // Default to server mode for API calls, scripts, etc.
+        return 'server';
+    }
+    
+    private function generate_ics_file($roomId, $quantityArray, $mode) {
         // Start of the ICS file
         $icsContent = "BEGIN:VCALENDAR\r\n";
         $icsContent .= "VERSION:2.0\r\n";
         $icsContent .= "PRODID:-//Your Company//Your Calendar//EN\r\n";
-        error_log('---------generate_ics_file------');
-        error_log( print_r($quantityArray,1) );
-        error_log('---------generate_ics_file------');
+    
         // Iterate over the quantity array
         foreach ($quantityArray as $date => $quantity) {
             if ($quantity == 0) {
@@ -514,7 +523,7 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
                 $icsContent .= "UID:" . uniqid() . "@atollmatrix\r\n";
                 $icsContent .= "DTSTAMP:" . gmdate('Ymd') . 'T' . gmdate('His') . "Z\r\n";
                 $icsContent .= "DTSTART;VALUE=DATE:" . $icsDateStr . "\r\n";
-                $icsContent .= "DTEND;VALUE=DATE:" . $icsEndDateStr . "\r\n"; // Use the next day date
+                $icsContent .= "DTEND;VALUE=DATE:" . $icsEndDateStr . "\r\n";
                 $icsContent .= "SUMMARY:Unavailable\r\n";
                 $icsContent .= "DESCRIPTION:Unavailable on " . $icsReadableDate . "\r\n";
                 $icsContent .= "STATUS:CONFIRMED\r\n";
@@ -525,12 +534,15 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
         // End of the ICS file
         $icsContent .= "END:VCALENDAR";
     
-        // Set headers for .ics file download
-        header('Content-Type: text/calendar; charset=utf-8');
-        header('Content-Disposition: attachment; filename="room-' . $roomId . '-availability.ics"');
-    
-        // Output the .ics content
-        echo $icsContent;
+        if ($mode === 'server') {
+            // Output the .ics content directly for server-to-server requests
+            echo $icsContent;
+        } else {
+            // Set headers for .ics file download for user requests
+            header('Content-Type: text/calendar; charset=utf-8');
+            header('Content-Disposition: attachment; filename="room-' . $roomId . '-availability.ics"');
+            echo $icsContent;
+        }
     }
     
 
