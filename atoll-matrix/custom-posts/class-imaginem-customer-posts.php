@@ -37,6 +37,7 @@ class AtollMatrix_Customer_Posts
         }
 
         $customer_instance = new \AtollMatrix\Customers();
+        $reservation_instance = new \AtollMatrix\Reservations();
 
         switch ($columns) {
             case "customer_booking":
@@ -44,7 +45,7 @@ class AtollMatrix_Customer_Posts
                 break;
             case "customer_reservations":
                 $reservation_array = \AtollMatrix\Reservations::getReservationIDsForCustomer($customer_post_id);
-                echo \AtollMatrix\Reservations::getEditLinksForReservations($reservation_array);
+                echo $reservation_instance->getEditLinksForReservations($reservation_array);
                 break;
             case "customer_rooms":
                 echo $customer_instance->generateCustomerRooms($customer_post_id);

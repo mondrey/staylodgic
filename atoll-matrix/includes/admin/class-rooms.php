@@ -63,17 +63,17 @@ class Rooms
         return false;
     }
 
-    public static function getTotalRoomQtyForDate($room_id, $dateString)
+    public static function getTotalOperatingRoomQtyForDate($room_id, $dateString)
     {
 
         $quantityArray = get_post_meta($room_id, 'quantity_array', true);
 
-        $reservation_instance = new \AtollMatrix\Reservations($dateString, $room_id);
-        $remaining = $reservation_instance->getDirectRemainingRoomCount( $dateString, $room_id );
+        // $reservation_instance = new \AtollMatrix\Reservations($dateString, $room_id);
+        // $remaining = $reservation_instance->getDirectRemainingRoomCount( $dateString, $room_id );
 
         // Check if the quantity_array exists and the date is available
         if (!empty($quantityArray) && isset($quantityArray[$dateString])) {
-            return $quantityArray[$dateString] + $remaining;
+            return $quantityArray[$dateString];
         }
 
         return false;
@@ -165,7 +165,7 @@ class Rooms
                 $available_roomrates[$room->ID] = self::getRoom_RATE_For_DateRange($room->ID, $checkin_date, $checkout_date);
                 // Get room occupany max numbers
                 $can_accomodate[$room->ID] = self::getMax_room_occupants($room->ID);
-                error_log(print_r($available_roomrates, true));
+                // error_log(print_r($available_roomrates, true));
             }
         }
 

@@ -1065,9 +1065,9 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                     break;
 
                 case 'reservation_for_customer':
-
+                    $reservation_instance = new \AtollMatrix\Reservations();
                     $reservation_array = \AtollMatrix\Reservations::getReservationIDsForCustomer($field['customer_id']);
-                    echo \AtollMatrix\Reservations::getEditLinksForReservations($reservation_array);
+                    echo $reservation_instance->getEditLinksForReservations($reservation_array);
                     break;
 
                 case 'get_customer_data':
@@ -1131,6 +1131,8 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
 
                     $child_age_input = '';
                     if ('child' == $field['occupant']) {
+                        error_log( '----- Number of Children ' );
+                        error_log( print_r( $meta,1 ) );
                         if (isset($meta['number'])) {
                             $meta_value = $meta['number'];
                         } else {
@@ -1154,7 +1156,7 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                         if (isset($meta['number'])) {
                             for ($i = 0; $i < $meta['number']; $i++) {
                                 $age = isset($meta['age'][$i]) ? $meta['age'][$i] : '';
-                                echo "<input name='".$child_age_input."' type='number' data-counter='" . $i . "' value='" . $age . "' placeholder='Enter age'>";
+                                echo "<input name='atollmatrix_reservation_room_children[age][]' type='number' data-counter='" . $i . "' value='" . $age . "' placeholder='Enter age'>";
                             }
                         }
                         echo '</div>';
@@ -1385,50 +1387,18 @@ function atollmatrix_checkdata($post_id)
         $atollmatrix_post_type_got = get_post_type($post_id);
 
         switch ($atollmatrix_post_type_got) {
-            case 'page':
-                $atollmatrix_common_page_box = atollmatrix_page_metadata();
-                atollmatrix_savedata($atollmatrix_common_page_box, $post_id);
-                break;
-            case 'clients':
-                $atollmatrix_client_box = atollmatrix_client_metadata();
-                atollmatrix_savedata($atollmatrix_client_box, $post_id);
-                break;
-            case 'events':
-                $events_box = atollmatrix_events_metadata();
-                atollmatrix_savedata($events_box, $post_id);
-                break;
-            case 'portfolio':
-                $portfolio_box = atollmatrix_portfolio_metadata();
-                atollmatrix_savedata($portfolio_box, $post_id);
-                break;
-            case 'atollmatrix_food':
-                $atollmatrix_food_box = atollmatrix_food_metadata();
-                atollmatrix_savedata($atollmatrix_food_box, $post_id);
-                break;
-            case 'fullscreen':
-                $atollmatrix_fullscreen_box = atollmatrix_fullscreen_metadata();
-                atollmatrix_savedata($atollmatrix_fullscreen_box, $post_id);
-                break;
-            case 'photostory':
-                $atollmatrix_photostory_box = atollmatrix_photostory_metadata();
-                atollmatrix_savedata($atollmatrix_photostory_box, $post_id);
-                break;
-            case 'product':
-                $atollmatrix_woocommerce_box = atollmatrix_woocommerce_metadata();
-                atollmatrix_savedata($atollmatrix_woocommerce_box, $post_id);
-                break;
-            case 'proofing':
-                $proofing_box = atollmatrix_proofing_metadata();
-                atollmatrix_savedata($proofing_box, $post_id);
-                break;
+            // case 'page':
+            //     $atollmatrix_common_page_box = atollmatrix_page_metadata();
+            //     atollmatrix_savedata($atollmatrix_common_page_box, $post_id);
+            //     break;
             case 'atmx_room':
                 $atollmatrix_room_box = atollmatrix_room_metadata();
                 atollmatrix_savedata($atollmatrix_room_box, $post_id);
                 break;
-            case 'atmx_payments':
-                $atollmatrix_payment_box = atollmatrix_payment_metadata();
-                atollmatrix_savedata($atollmatrix_payment_box, $post_id);
-                break;
+            // case 'atmx_payments':
+            //     $atollmatrix_payment_box = atollmatrix_payment_metadata();
+            //     atollmatrix_savedata($atollmatrix_payment_box, $post_id);
+            //     break;
             case 'atmx_reservations':
                 $reservations_box = atollmatrix_reservations_metadata();
                 atollmatrix_savedata($reservations_box, $post_id);
@@ -1436,16 +1406,6 @@ function atollmatrix_checkdata($post_id)
             case 'atmx_customers':
                 $customers_box = atollmatrix_customers_metadata();
                 atollmatrix_savedata($customers_box, $post_id);
-                break;
-            case 'post':
-                $atollmatrix_post_metapack = atollmatrix_post_metadata();
-
-                atollmatrix_savedata($atollmatrix_post_metapack['video'], $post_id);
-                atollmatrix_savedata($atollmatrix_post_metapack['link'], $post_id);
-                atollmatrix_savedata($atollmatrix_post_metapack['image'], $post_id);
-                atollmatrix_savedata($atollmatrix_post_metapack['quote'], $post_id);
-                atollmatrix_savedata($atollmatrix_post_metapack['audio'], $post_id);
-                atollmatrix_savedata($atollmatrix_post_metapack['main'], $post_id);
                 break;
 
             default:
@@ -1459,6 +1419,8 @@ function atollmatrix_checkdata($post_id)
 function atollmatrix_savedata($atollmatrix_metaboxdata, $post_id)
 {
     
+    error_log('------ Reservation Metabox-------');
+    error_log( print_r( $_POST, 1) );
     // delete_post_meta($post_id, 'atollmatrix_change_log');
     if (is_array($atollmatrix_metaboxdata['fields'])) {
         foreach ($atollmatrix_metaboxdata['fields'] as $field) {

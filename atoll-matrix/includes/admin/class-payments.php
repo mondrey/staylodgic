@@ -150,7 +150,7 @@ class Payments
                 );
 
                 $reservations = get_posts($args);
-                error_log(print_r($reservations, true));
+                // error_log(print_r($reservations, true));
 
                 if (!empty($reservations)) {
                     $links = array();

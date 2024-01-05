@@ -728,12 +728,13 @@
 	position: absolute;
 	width: 270px;
 	left: 30%;
-	top: 67px;
+	top: 152px;
 	border: 1px solid #00000012;
 	padding: 30px 30px 24px;
 	border-radius: 6px;
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 	background-color: #fff;
+	z-index: 1;
 }
 
 .atollmatrix_reservation_room_guests_wrap.hidden {
@@ -789,7 +790,7 @@
 	transition: 0.3s border-color;
 	border-radius: 4px;
 	line-height: 26px;
-	width: 121px;
+	width: 98px;
 	margin: 4px 3px;
 	text-align: center;
 }

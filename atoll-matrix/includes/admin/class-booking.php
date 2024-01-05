@@ -485,19 +485,6 @@ return ob_get_clean();
         atollmatrix_set_booking_transient('1', $this->bookingNumber);
         ob_start();
         $atollmatrix_bookingdetails_nonce = wp_create_nonce('atollmatrix-bookingdetails-nonce');
-        $availabilityDateArray            = array();
-
-        // Calculate current date
-        $currentDate = current_time('Y-m-d');
-        // Calculate end date as 3 months from the current date
-        $endDate = date('Y-m-d', strtotime($currentDate . ' +4 months'));
-
-        $reservations_instance = new \AtollMatrix\Reservations();
-        $fullybooked_dates     = $reservations_instance->daysFullyBooked_For_DateRange($currentDate, $endDate);
-
-        // error_log( '-------------------- availability percent check');
-        // error_log( print_r( $fullybooked_dates, true ));
-        // error_log( '-------------------- availability percent check');
         ?>
 		<div class="atollmatrix-content">
             <div id="hotel-booking-form">
@@ -661,6 +648,9 @@ return ob_get_clean();
             wp_send_json_error([ 'message' => 'Failed' ]);
             return;
         }
+
+        error_log('----booking search info');
+        error_log( print_r( $_POST,1 ));
 
         if (isset($_POST[ 'reservation_date' ])) {
             $reservation_date = $_POST[ 'reservation_date' ];
@@ -1300,9 +1290,9 @@ return ob_get_clean();
 
         $bedinputcount = 0;
 
-        error_log($room_id);
-        error_log($meta_field);
-        error_log($meta_value);
+        // error_log($room_id);
+        // error_log($meta_field);
+        // error_log($meta_value);
 
         if (isset($room_data[ "atollmatrix_alt_bedsetup" ][ 0 ])) {
             $bedsetup       = $room_data[ "atollmatrix_alt_bedsetup" ][ 0 ];
@@ -1965,13 +1955,13 @@ HTML;
 
         // Check if number of people can be occupied by room
         $can_accomodate = self::canAccomodate_to_rooms($rooms, $adults, $children);
-        error_log(print_r($can_accomodate, true));
+        // error_log(print_r($can_accomodate, true));
         if (false == $can_accomodate[ 'allow' ]) {
             wp_send_json_error($can_accomodate[ 'error' ]);
         }
-        error_log(print_r($can_accomodate, true));
-        error_log("Rooms:");
-        error_log(print_r($rooms, true));
+        // error_log(print_r($can_accomodate, true));
+        // error_log("Rooms:");
+        // error_log(print_r($rooms, true));
 
         //wp_send_json_error(' Temporary block for debugging ');
         // Create customer post

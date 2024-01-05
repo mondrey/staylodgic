@@ -315,7 +315,7 @@ $first_tab = false;
         // if (isset($array) && is_array($array)) {
         //     $setsOfThree = array_chunk($array, 4);
         // }
-        error_log(print_r($array, 1));
+        // error_log(print_r($array, 1));
 
         ?>
 <div class="repeatable-perperson-template" style="display: none;">
@@ -535,7 +535,7 @@ if ($description) {
         // if (isset($array) && is_array($array)) {
         //     $setsOfThree = array_chunk($array, 4);
         // }
-        error_log(print_r($array, 1));
+        // error_log(print_r($array, 1));
 
         ?>
 <div class="repeatable-tax-template" style="display: none;">
@@ -641,7 +641,7 @@ public function render_promotion_discount_field($args)
     
     // Ensure $values is an array and set default values if not set
     $values = is_array($values) ? $values : ['label' => '', 'days' => '', 'percent' => ''];
-    error_log( print_r( $values,1 ));
+    // error_log( print_r( $values,1 ));
     $description = $this->settings[$option_name]['description'] ?? '';
     ?>
         <input

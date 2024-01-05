@@ -450,7 +450,7 @@
 			var childrenAge = [];
 
 			// Loop through all select elements with the class 'children-age-selector'
-			$('.children-age-selector').each(function () {
+			$('#guest-age input[name="children_age[]"]').each(function() {
 				childrenAge.push($(this).val());
 			});
 

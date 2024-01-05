@@ -772,7 +772,7 @@ class Reservations
         return $reservation_ids;
     }
 
-    public static function getEditLinksForReservations($reservation_array)
+    public function getEditLinksForReservations($reservation_array)
     {
         $links = '<ul>';
         foreach ($reservation_array as $post_id) {
@@ -816,7 +816,7 @@ class Reservations
         return null;
     }
 
-    public static function getRoomNameForReservation($reservation_id = false)
+    public function getRoomNameForReservation($reservation_id = false)
     {
 
         // Get room id from post meta
@@ -1191,7 +1191,7 @@ class Reservations
 
         // Query the customer post with the matching booking number
         $customer_query = $this->getGuestforReservation($booking_number);
-        error_log(print_r($customer_query, true));
+        // error_log(print_r($customer_query, true));
         // Check if a customer post exists
         if ($customer_query->have_posts()) {
             // Restore the original post data

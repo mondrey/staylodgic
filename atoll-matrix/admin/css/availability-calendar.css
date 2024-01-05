@@ -415,3 +415,163 @@ ul.existing-customer li {
 #result-missing-bookings {
 	font-size: 8px;
 }
+
+/* Booking Button */
+#invoiceDetails,
+#bookingDetails,
+#bookingSearch {
+	background: #000;
+	color: #fff;
+	padding: 10px 20px;
+	border: none;
+	cursor: pointer;
+	width: 120px;
+	text-align: center;
+	border-radius: 5px;
+	font-size: 15px;
+	font-weight: 500;
+	transition: 0.4s background-color;
+}
+
+#invoiceDetails:hover,
+#bookingDetails:hover,
+#bookingSearch:hover {
+	/* Styles for when the button is hovered */
+	background-color: #0064ff;
+	/* Example hover background color */
+}
+
+#invoiceDetails:active,
+#bookingDetails:active,
+#bookingSearch:active {
+	/* Styles for when the button is clicked/active */
+	background-color: #0064ff;
+	/* Example active background color */
+}
+
+/* Invoice Form */
+.admin-atollmatrix-content {
+	max-width: 645px;
+	margin: 0 auto;
+}
+.calendar-insights-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Creates two columns */
+    grid-gap: 10px; /* Sets gap between grid items */
+    padding: 15px 20px; /* Optional padding for better spacing */
+    background: #eeeeee4d;
+	border-radius: 6px;
+  	margin-bottom: 5px;
+}
+.calendar-insights-wrap span {
+	font-weight: 500;
+}
+
+.front-booking-search {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	background-color: #fff;
+	padding: 10px;
+	border: 1px solid #ccccccba;
+	border-radius: 5px;
+	box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+.front-booking-details-wrap,
+.front-booking-calendar-wrap {
+	flex: 1;
+	/* Occupy 50% of the available space */
+	display: flex;
+	align-items: center;
+	height: 42px;
+}
+
+.front-booking-calendar-icon {
+	margin-right: 10px;
+	color: #000;
+	margin-left: 20px;
+}
+
+.front-booking-calendar-date {
+	font-size: 14px;
+	letter-spacing: 0.4px;
+	font-weight: 400;
+}
+.atollmatrix-content .form-floating > .form-control {
+	transition: none;
+}
+
+.front-booking-number-wrap,
+.front-booking-guests-wrap {
+	flex: 1;
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-end;
+	padding-left: 50px;
+	border-left: 1px dotted #0000004f;
+}
+.front-booking-number-wrap {
+	padding: 0;
+	border: 0;
+}
+.form-group.form-floating.form-bookingnumber-request {
+	padding-right: 10px;
+}
+
+
+.form-floating.form-floating-booking-number > .form-control,
+.form-floating.form-floating-booking-number > .form-control-plaintext {
+	height: 43px;
+	min-height: 43px;
+	font-size: 13px;
+}
+.form-floating.form-floating-booking-number > .form-control-plaintext:focus,
+.form-floating.form-floating-booking-number > .form-control-plaintext:not(:placeholder-shown),
+.form-floating.form-floating-booking-number > .form-control:focus,
+.form-floating.form-floating-booking-number > .form-control:not(:placeholder-shown) {
+	padding-top: 30px;
+	padding-bottom: .625rem;
+}
+
+.front-booking-number-container,
+.front-booking-guests-container {
+	display: flex;
+	/* Create a new container for the adult and child wraps */
+	width: 66%;
+	/* Occupy 66% of the available space within .front-booking-guests-wrap */
+	justify-content: space-between;
+	/* Distribute space evenly between child elements */
+	align-items: flex-end;
+	/* Center align items vertically */
+}
+
+.atollmatrix-content .form-floating > .form-control {
+	transition: none;
+}
+.front-booking-number-container,
+.form-group.form-floating.form-bookingnumber-request,
+.form-group.form-floating.form-fullname-request {
+	width: 100%;
+}
+
+.front-booking-guest-adult-wrap,
+.front-booking-guest-child-wrap,
+.front-booking-booking-search {
+	flex-grow: 1;
+	/* Equal flex-grow for each child to evenly distribute space */
+}
+
+.front-booking-guest-adult-icon,
+.front-booking-guest-child-icon {
+	margin-right: 5px;
+}
+
+.front-booking-adult-adult-value,
+.front-booking-adult-child-value {
+	font-weight: bold;
+	font-size: 16px;
+	color: #333;
+	/* Change the color as needed */
+}
+
