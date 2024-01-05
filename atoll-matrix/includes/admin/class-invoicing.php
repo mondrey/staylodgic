@@ -15,6 +15,8 @@ class Invoicing
     private $checkOutDate;
     private $roomType;
     private $numberOfGuests;
+    private $numberofAdults;
+    private $numberofChildren;
     private $roomPrice;
     private $subTotal;
     private $taxesAndFees;
@@ -31,26 +33,29 @@ class Invoicing
         $checkOutDate = null,
         $roomType = null,
         $numberOfGuests = null,
+        $numberofAdults = null,
+        $numberofChildren = null,
         $roomPrice = null,
         $subTotal = null,
         $taxesAndFees = null,
         $totalAmount = null
-    )
-    {
-        $this->bookingNumber = $bookingNumber;
-        $this->hotelName = $hotelName;
-        $this->hotelAddress = $hotelAddress;
-        $this->hotelPhone = $hotelPhone;
-        $this->customerName = $customerName;
-        $this->customerEmail = $customerEmail;
-        $this->checkInDate = $checkInDate;
-        $this->checkOutDate = $checkOutDate;
-        $this->roomType = $roomType;
-        $this->numberOfGuests = $numberOfGuests;
-        $this->roomPrice = $roomPrice;
-        $this->roomPrice = $subTotal;
-        $this->taxesAndFees = $taxesAndFees;
-        $this->totalAmount = $totalAmount;
+    ) {
+        $this->bookingNumber    = $bookingNumber;
+        $this->hotelName        = $hotelName;
+        $this->hotelAddress     = $hotelAddress;
+        $this->hotelPhone       = $hotelPhone;
+        $this->customerName     = $customerName;
+        $this->customerEmail    = $customerEmail;
+        $this->checkInDate      = $checkInDate;
+        $this->checkOutDate     = $checkOutDate;
+        $this->roomType         = $roomType;
+        $this->numberOfGuests   = $numberOfGuests;
+        $this->numberofAdults   = $numberofAdults;
+        $this->numberofChildren = $numberofChildren;
+        $this->roomPrice        = $roomPrice;
+        $this->roomPrice        = $subTotal;
+        $this->taxesAndFees     = $taxesAndFees;
+        $this->totalAmount      = $totalAmount;
 
         add_action('admin_menu', array($this, 'add_invoicing_admin_menu')); // This now points to the add_admin_menu function
 
@@ -81,37 +86,38 @@ class Invoicing
         echo self::hotelBooking_Search();
 
         // Hotel Information
-        $this->hotelName = "Ocean View Resort";
+        $this->hotelName    = "Ocean View Resort";
         $this->hotelAddress = "123 Seaside Lane, Coastal Town";
-        $this->hotelPhone = "555-0123";
+        $this->hotelPhone   = "555-0123";
 
         // Customer Information
-        $this->customerName = "John Doe";
+        $this->customerName  = "John Doe";
         $this->customerEmail = "johndoe@example.com";
 
         // Booking Details
-        $this->checkInDate = "2024-02-15";
-        $this->checkOutDate = "2024-02-20";
-        $this->roomType = "Deluxe Sea View";
+        $this->checkInDate    = "2024-02-15";
+        $this->checkOutDate   = "2024-02-20";
+        $this->roomType       = "Deluxe Sea View";
         $this->numberOfGuests = 2;
 
         // Pricing
-        $this->roomPrice = "200.00";
-        $this->subTotal = "200.00";
+        $this->roomPrice    = "200.00";
+        $this->subTotal     = "200.00";
         $this->taxesAndFees = "50.00";
-        $this->totalAmount = "250.00";
+        $this->totalAmount  = "250.00";
 
         echo '</div>';
 
     }
 
-    public function getInvoiceBookingDetails() {
-        
-        $booking_number = $_POST['booking_number'];
-    
+    public function getInvoiceBookingDetails()
+    {
+
+        $booking_number = $_POST[ 'booking_number' ];
+
         // Fetch reservation details
         $reservations_instance = new \AtollMatrix\Reservations();
-        $reservationQuery = $reservations_instance->getReservationforBooking($booking_number);
+        $reservationID         = $reservations_instance->getReservationIDforBooking($booking_number);
 
         // Verify the nonce
         if (!isset($_POST[ 'atollmatrix_bookingdetails_nonce' ]) || !check_admin_referer('atollmatrix-bookingdetails-nonce', 'atollmatrix_bookingdetails_nonce')) {
@@ -120,68 +126,61 @@ class Invoicing
             wp_send_json_error([ 'message' => 'Failed' ]);
             return;
         }
-        $this->bookingNumber = $booking_number;
-        if ($reservationQuery->have_posts()) {
-            echo "<div class='reservation-details'>";
-            while ($reservationQuery->have_posts()) {
-                $reservationQuery->the_post();
-                $reservationID = get_the_ID();
-    
-                $this->checkInDate = get_post_meta($reservationID, 'atollmatrix_checkin_date', true);
-                $this->checkOutDate = get_post_meta($reservationID, 'atollmatrix_checkout_date', true);
-                
-                $adults = get_post_meta($reservationID, 'atollmatrix_reservation_room_adults', true);
-                
-                $children = array();
-                $children = get_post_meta($reservationID, 'atollmatrix_reservation_room_children', true);
+        if ($reservationID) {
+            $this->bookingNumber = $booking_number;
+            $this->checkInDate   = get_post_meta($reservationID, 'atollmatrix_checkin_date', true);
+            $this->checkOutDate  = get_post_meta($reservationID, 'atollmatrix_checkout_date', true);
 
-                $totalGuests = intval( $adults + $children['number'] );
-                $this->numberOfGuests = $totalGuests;
+            $adults = get_post_meta($reservationID, 'atollmatrix_reservation_room_adults', true);
 
-                $this->roomType = $reservations_instance->getRoomNameForReservation($reservationID);
-                // Add other reservation details as needed
+            $children = array();
+            $children = get_post_meta($reservationID, 'atollmatrix_reservation_room_children', true);
 
-                $taxStatus = get_post_meta($reservationID, 'atollmatrix_tax', true);
-                $taxHTML = get_post_meta($reservationID, 'atollmatrix_tax_html_data', true);
-                $taxData = get_post_meta($reservationID, 'atollmatrix_tax_data', true);
-            
-                $tax_summary = '<div id="input-tax-summary">';
-                $tax_summary .= '<div class="input-tax-summary-wrap">';
-                if ( 'enabled' == $taxStatus ) {
-                    $tax_summary .= '<div class="input-tax-summary-wrap-inner">';
-                    $tax_summary .= $taxHTML;
-                    error_log( '------ tax out -------' );
-                    error_log( print_r( $taxHTML, true) );
-                    $tax_summary .= '</div>';
-                }
+            $this->numberofAdults   = $adults;
+            $this->numberofChildren = $children[ 'number' ];
+            $totalGuests            = intval($adults + $children[ 'number' ]);
+            $this->numberOfGuests   = $totalGuests;
+
+            $this->roomType = $reservations_instance->getRoomNameForReservation($reservationID);
+            // Add other reservation details as needed
+
+            $taxStatus = get_post_meta($reservationID, 'atollmatrix_tax', true);
+            $taxHTML   = get_post_meta($reservationID, 'atollmatrix_tax_html_data', true);
+            $taxData   = get_post_meta($reservationID, 'atollmatrix_tax_data', true);
+
+            $tax_summary = '<div id="input-tax-summary">';
+            $tax_summary .= '<div class="input-tax-summary-wrap">';
+            if ('enabled' == $taxStatus) {
+                $tax_summary .= '<div class="input-tax-summary-wrap-inner">';
+                $tax_summary .= $taxHTML;
+                error_log('------ tax out -------');
+                error_log(print_r($taxHTML, true));
                 $tax_summary .= '</div>';
-                $tax_summary .= '</div>';
-
-                $this->taxesAndFees = $tax_summary;
-
-                $ratePerNight = get_post_meta($reservationID, 'atollmatrix_reservation_rate_per_night', true);
-                $subTotal = get_post_meta($reservationID, 'atollmatrix_reservation_subtotal_room_cost', true);
-                $totalAmount = get_post_meta($reservationID, 'atollmatrix_reservation_total_room_cost', true);
-
-                $this->roomPrice = $ratePerNight;
-                $this->subTotal = $subTotal;
-                $this->totalAmount = $totalAmount;
-
             }
-            echo "</div>";
+            $tax_summary .= '</div>';
+            $tax_summary .= '</div>';
+
+            $this->taxesAndFees = $tax_summary;
+
+            $ratePerNight = get_post_meta($reservationID, 'atollmatrix_reservation_rate_per_night', true);
+            $subTotal     = get_post_meta($reservationID, 'atollmatrix_reservation_subtotal_room_cost', true);
+            $totalAmount  = get_post_meta($reservationID, 'atollmatrix_reservation_total_room_cost', true);
+
+            $this->roomPrice   = $ratePerNight;
+            $this->subTotal    = $subTotal;
+            $this->totalAmount = $totalAmount;
+
+            // Fetch guest details
+            $guestID = $reservations_instance->getGuest_id_forReservation($booking_number);
+            if ($guestID) {
+                $this->customerName  = get_post_meta($guestID, 'atollmatrix_full_name', true);
+                $this->customerEmail = get_post_meta($guestID, 'atollmatrix_email_address', true);
+            }
+
         } else {
             echo "<p>No reservation found for Booking Number: " . esc_html($booking_number) . "</p>";
         }
-    
-        // Fetch guest details
-        $guestID = $reservations_instance->getGuest_id_forReservation($booking_number);
-        if ($guestID) {
-            $this->customerName = get_post_meta($guestID, 'atollmatrix_full_name', true);
-            $this->customerEmail = get_post_meta($guestID, 'atollmatrix_email_address', true);
-        } else {
-            echo "<p>No guest details found for Booking Number: " . esc_html($booking_number) . "</p>";
-        }
-    
+
         $informationSheet = $this->invoiceTemplate(
             $this->bookingNumber,
             $this->hotelName,
@@ -193,6 +192,8 @@ class Invoicing
             $this->checkOutDate,
             $this->roomType,
             $this->numberOfGuests,
+            $this->numberofAdults,
+            $this->numberofChildren,
             $this->roomPrice,
             $this->subTotal,
             $this->taxesAndFees,
@@ -200,14 +201,14 @@ class Invoicing
         );
         echo $informationSheet; // Encode the HTML content as JSON
         wp_die(); // Terminate and return a proper response
-    }  
+    }
 
     public function hotelBooking_Search()
     {
         ob_start();
         $atollmatrix_bookingdetails_nonce = wp_create_nonce('atollmatrix-bookingdetails-nonce');
         ?>
-		
+
             <div id="hotel-booking-form">
 
             <div class="calendar-insights-wrap">
@@ -249,6 +250,8 @@ return ob_get_clean();
         $checkOutDate,
         $roomType,
         $numberOfGuests,
+        $numberofAdults,
+        $numberofChildren,
         $roomPrice,
         $subTotal,
         $taxesAndFees,
@@ -275,15 +278,31 @@ return ob_get_clean();
             <p>Check-in Date: <?php echo $checkInDate; ?></p>
             <p>Check-out Date: <?php echo $checkOutDate; ?></p>
             <p>Room Type: <?php echo $roomType; ?></p>
-            <p>Number of Guests: <?php echo $numberOfGuests; ?></p>
+            <p>Number of Adults: <?php echo $numberofAdults; ?></p>
+            <?php
+if ($numberofChildren > 0) {
+            ?>
+            <p>Number of Children: <?php echo $numberofChildren; ?></p>
+            <?php
+}
+        ?>
         </section>
 
         <section id="pricing">
             <h2>Pricing</h2>
-            <p>Room Price: <?php echo atollmatrix_price( $roomPrice ); ?></p>
-            <p>Sub Total: <?php echo atollmatrix_price( $subTotal ); ?></p>
+            <p>Room Price: <?php echo atollmatrix_price($roomPrice); ?></p>
+            <?php
+$reservations_instance = new \AtollMatrix\Reservations();
+        $reservationID         = $reservations_instance->getReservationIDforBooking($bookingNumber);
+        $taxStatus             = get_post_meta($reservationID, 'atollmatrix_tax', true);
+        if ('enabled' == $taxStatus) {
+            ?>
+            <p>Sub Total: <?php echo atollmatrix_price($subTotal); ?></p>
             <p>Taxes and Fees: <?php echo $taxesAndFees; ?></p>
-            <p>Total Amount: <?php echo atollmatrix_price( $totalAmount ); ?></p>
+            <?php
+}
+        ?>
+            <p>Total Amount: <?php echo atollmatrix_price($totalAmount); ?></p>
         </section>
 
         <footer>
@@ -291,7 +310,7 @@ return ob_get_clean();
             <p>Terms and conditions:</p>
         </footer>
         <?php
-        return ob_get_clean();
+return ob_get_clean();
     }
 
 }

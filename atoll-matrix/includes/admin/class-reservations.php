@@ -115,6 +115,28 @@ class Reservations
         );
         return new \WP_Query($args);
     }
+    public static function getReservationIDforBooking($booking_number)
+    {
+        $args = array(
+            'post_type'      => 'atmx_reservations',
+            'posts_per_page' => -1,
+            'post_status'    => 'publish',
+            'meta_query'     => array(
+                array(
+                    'key'   => 'atollmatrix_booking_number',
+                    'value' => $booking_number,
+                ),
+            ),
+        );
+        $reservation_query = new \WP_Query($args);
+
+        if ($reservation_query->have_posts()) {
+            $reservation = $reservation_query->posts[ 0 ];
+            return $reservation->ID;
+        }
+
+        return false; // Return an false if no reservatuib found
+    }
 
     public function getGuest_id_forReservation($booking_number)
     {
