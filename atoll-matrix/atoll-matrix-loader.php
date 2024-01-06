@@ -114,6 +114,7 @@ class AtollMatrix_Init
 
         wp_register_script('atollmatrix-parser', plugin_dir_url(__FILE__) . 'admin/js/booking-parser.js', array('jquery'), null, true);
         wp_register_script('atollmatrix-invoice', plugin_dir_url(__FILE__) . 'admin/js/invoice.js', array('jquery'), null, true);
+        wp_register_style('atollmatrix-invoice', plugin_dir_url(__FILE__) . 'admin/css/invoice.css', false, 'screen');
 
         wp_register_style('flatpickr', plugin_dir_url(__FILE__) . 'assets/js/flatpickr/flatpickr.min.css', array(), '1.0', 'screen');
         wp_register_style('flatpickr-extra', plugin_dir_url(__FILE__) . 'assets/js/flatpickr/flatpickr-extra-style.css', array(), '1.0', 'screen');
@@ -130,6 +131,9 @@ class AtollMatrix_Init
         wp_register_style('fontawesome-6', plugin_dir_url(__FILE__) . 'assets/fonts/fontawesome-free-6.4.0-web/css/fontawesome.css', false, 'screen');
         wp_register_style('fontawesome-6-brands', plugin_dir_url(__FILE__) . 'assets/fonts/fontawesome-free-6.4.0-web/css/all.css', false, 'screen');
         wp_register_style('fontawesome-6-solid', plugin_dir_url(__FILE__) . 'assets/fonts/fontawesome-free-6.4.0-web/css/solid.css', false, 'screen');
+
+        wp_register_script('bootstrap', plugin_dir_url(__FILE__) . 'assets/js/bootstrap/js/bootstrap.bundle.min.js', array('jquery'), null, true);
+        wp_register_style('bootstrap', plugin_dir_url(__FILE__) . 'assets/js/bootstrap/css/bootstrap.min.css', false, 'screen');
 
         if (function_exists('get_current_screen')) {
             $current_admin_screen = get_current_screen();
@@ -156,8 +160,6 @@ class AtollMatrix_Init
                 wp_enqueue_style('fontawesome-6-brands');
                 wp_enqueue_style('fontawesome-6-solid');
 
-                wp_register_script('bootstrap', plugin_dir_url(__FILE__) . 'assets/js/bootstrap/js/bootstrap.bundle.min.js', array('jquery'), null, true);
-                wp_register_style('bootstrap', plugin_dir_url(__FILE__) . 'assets/js/bootstrap/css/bootstrap.min.css', false, 'screen');
                 wp_enqueue_style('bootstrap');
                 wp_enqueue_script('bootstrap');
 
@@ -169,9 +171,7 @@ class AtollMatrix_Init
                 wp_enqueue_style('fontawesome-6-brands');
                 wp_enqueue_style('fontawesome-6-solid');
 
-                wp_register_script('bootstrap', plugin_dir_url(__FILE__) . 'assets/js/bootstrap/js/bootstrap.bundle.min.js', array('jquery'), null, true);
-                wp_register_style('bootstrap', plugin_dir_url(__FILE__) . 'assets/js/bootstrap/css/bootstrap.min.css', false, 'screen');
-                wp_enqueue_style('bootstrap');
+                 wp_enqueue_style('bootstrap');
                 wp_enqueue_script('bootstrap');
 
             }
@@ -182,8 +182,6 @@ class AtollMatrix_Init
                 wp_enqueue_style('fontawesome-6-brands');
                 wp_enqueue_style('fontawesome-6-solid');
 
-                wp_register_script('bootstrap', plugin_dir_url(__FILE__) . 'assets/js/bootstrap/js/bootstrap.bundle.min.js', array('jquery'), null, true);
-                wp_register_style('bootstrap', plugin_dir_url(__FILE__) . 'assets/js/bootstrap/css/bootstrap.min.css', false, 'screen');
                 wp_enqueue_style('bootstrap');
                 wp_enqueue_script('bootstrap');
 
@@ -195,8 +193,6 @@ class AtollMatrix_Init
                 wp_enqueue_style('fontawesome-6-brands');
                 wp_enqueue_style('fontawesome-6-solid');
 
-                wp_register_script('bootstrap', plugin_dir_url(__FILE__) . 'assets/js/bootstrap/js/bootstrap.bundle.min.js', array('jquery'), null, true);
-                wp_register_style('bootstrap', plugin_dir_url(__FILE__) . 'assets/js/bootstrap/css/bootstrap.min.css', false, 'screen');
                 wp_enqueue_style('bootstrap');
                 wp_enqueue_script('bootstrap');
 
@@ -204,12 +200,11 @@ class AtollMatrix_Init
             if ($current_admin_screen->base == 'atoll-matrix_page_atollmatrix-invoicing') {
 
                 wp_enqueue_script('atollmatrix-invoice');
+                wp_enqueue_style('atollmatrix-invoice');
                 wp_enqueue_style('fontawesome-6');
                 wp_enqueue_style('fontawesome-6-brands');
                 wp_enqueue_style('fontawesome-6-solid');
 
-                wp_register_script('bootstrap', plugin_dir_url(__FILE__) . 'assets/js/bootstrap/js/bootstrap.bundle.min.js', array('jquery'), null, true);
-                wp_register_style('bootstrap', plugin_dir_url(__FILE__) . 'assets/js/bootstrap/css/bootstrap.min.css', false, 'screen');
                 wp_enqueue_style('bootstrap');
                 wp_enqueue_script('bootstrap');
 

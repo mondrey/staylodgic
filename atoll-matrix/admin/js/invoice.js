@@ -34,5 +34,23 @@
 			
 		});
 		
+		$(document).on('click', '#print-invoice-button', function() {
+			var invoiceContent = $('.invoice-container').html();
+			var printFrame = $('<iframe id="print-frame" style="display:none;"></iframe>').appendTo('body');
+			
+			var frameDoc = printFrame[0].contentWindow ? printFrame[0].contentWindow : printFrame[0].contentDocument.document ? printFrame[0].contentDocument.document : printFrame[0].contentDocument;
+			frameDoc.document.open();
+			frameDoc.document.write('<html><head><title>Invoice</title>');
+			frameDoc.document.write('</head><body>');
+			frameDoc.document.write(invoiceContent);
+			frameDoc.document.write('</body></html>');
+			frameDoc.document.close();
+	
+			setTimeout(function () {
+				frameDoc.window.print();
+				printFrame.remove();
+			}, 500);
+		});
+		
 	});
 })(jQuery);

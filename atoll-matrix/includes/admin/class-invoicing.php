@@ -259,6 +259,9 @@ return ob_get_clean();
     ) {
         ob_start();
         ?>
+        <button id="print-invoice-button" class="print-invoice-button">Print Invoice</button>
+        <div class="invoice-container">
+        <div class="invoice-container-inner">
         <section id="hotel-info">
             <h2>Hotel Information</h2>
             <p>Name: <?php echo $hotelName; ?></p>
@@ -305,10 +308,12 @@ $reservations_instance = new \AtollMatrix\Reservations();
             <p>Total Amount: <?php echo atollmatrix_price($totalAmount); ?></p>
         </section>
 
+        </div>
         <footer>
             <p>Thank you for your booking!</p>
             <p>Terms and conditions:</p>
         </footer>
+        </div>
         <?php
 return ob_get_clean();
     }
