@@ -34,6 +34,35 @@
 			
 		});
 
+		$(document).on('click', '#save-pdf-invoice-button', function() {
+			// Convert HTML to Canvas
+			html2canvas(document.querySelector('.invoice-container'), { scale: 2 }).then(canvas => {
+				// Canvas dimensions
+				const canvasWidth = canvas.width;
+				const canvasHeight = canvas.height;
+			
+				// Convert dimensions to millimeters (1 mm = 3.78 pixels)
+				const pdfWidth = canvasWidth / 3.78;
+				const pdfHeight = canvasHeight / 3.78;
+			
+				// Initialize jsPDF with custom dimensions
+				var doc = new window.jspdf.jsPDF({
+					orientation: pdfWidth > pdfHeight ? 'landscape' : 'portrait',
+					unit: 'mm',
+					format: [pdfWidth, pdfHeight]
+				});
+			
+				// Add canvas as image
+				var imgData = canvas.toDataURL('image/png');
+				doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+			
+				// Save the PDF
+				doc.save('invoice.pdf');
+			});
+			
+		});
+				
+
 		$(document).on('click', '#print-invoice-button', function() {
 			var invoiceContent = $('.invoice-container').html();
 			var printFrame = $('<iframe id="print-frame" style="display:none;"></iframe>').appendTo('body');

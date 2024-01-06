@@ -24,7 +24,7 @@
     position: relative;
     min-height: 95vh;
     padding-bottom: 5vh;
-    box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12), 0 5px 5px -3px rgba(0, 0, 0, 0.2);
+	border: 1px solid #eee;
 }
 .invoice-container,
 .invoice-container * {
@@ -46,6 +46,7 @@
 	font-size: 11px;
 	letter-spacing: 2px;
 }
+.save-pdf-invoice-button,
 .print-invoice-button {
     /* Button styling */
     margin-top: 15px;
@@ -55,6 +56,7 @@
     border: none;
     cursor: pointer;
 }
+.save-pdf-invoice-button:hover,
 .print-invoice-button:hover {
     background-color: #45a049;
 }

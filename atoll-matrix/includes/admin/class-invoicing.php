@@ -286,6 +286,7 @@ return ob_get_clean();
         ob_start();
         ?>
         <button id="print-invoice-button" class="print-invoice-button">Print Invoice</button>
+        <button id="save-pdf-invoice-button" class="save-pdf-invoice-button">Save PDF</button>
         <div class="invoice-container">
         <div class="invoice-container-inner">
         <div id="invoice-hotel-header">
