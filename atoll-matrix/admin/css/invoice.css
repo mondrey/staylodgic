@@ -45,6 +45,8 @@
 	padding-bottom: 40px;
 	font-size: 11px;
 	letter-spacing: 2px;
+	background: #eee;
+	padding-top: 35px;
 }
 .save-pdf-invoice-button,
 .print-invoice-button {
@@ -70,6 +72,7 @@
 	margin-top: 20px;
 	margin-bottom: 19px;
 	padding-bottom: 22px;
+	border-bottom: 1px solid #000;
 }
 
 #invoice-hotel-info {
@@ -140,10 +143,6 @@
         padding-bottom: 0;
         box-shadow: none;
         aspect-ratio: auto; /* Let the browser handle the page size */
-    }
-
-    .invoice-container-inner {
-        padding: 20mm; /* Adjust for print */
     }
 
     /* Rest of your print styles */
