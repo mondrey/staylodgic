@@ -59,6 +59,13 @@ class AtollMatrixOptionsPanel
         add_action('admin_menu', [ $this, 'register_menu_page' ]);
         add_action('admin_init', [ $this, 'register_settings' ]);
 
+        add_action('admin_enqueue_scripts', [ $this, 'enqueue_media_uploader' ]);
+
+    }
+
+    public function enqueue_media_uploader() {
+        wp_enqueue_media();
+        wp_enqueue_style('thickbox'); // if not included
     }
 
     /**
@@ -185,6 +192,9 @@ class AtollMatrixOptionsPanel
             case 'repeatable_mealplan':
                 return [ $this, 'sanitize_tax_field' ];
                 break;
+            case 'media_upload':
+                return 'absint';
+                break;
             default:
             case 'text':
                 return 'sanitize_text_field';
@@ -301,6 +311,31 @@ $first_tab = false;
         }
         return $option[ $option_name ];
     }
+
+    // Media uploading
+    public function render_media_upload_field($args) {
+        $option_name = $args['label_for'];
+        $value = $this->get_option_value($option_name);
+        $image = ' button">Upload image';
+        $image_size = 'full'; // it should be thumbnail, medium or large
+        $display = 'none'; // display state of the "Remove image" button
+    
+        if ($value) {
+            $image_attributes = wp_get_attachment_image_src($value, $image_size);
+            if ($image_attributes) {
+                $image = '"><img src="' . esc_url($image_attributes[0]) . '" style="max-height:100px;display:block;" />';
+                $display = 'inline-block';
+            }
+        }
+    
+        echo '
+        <div>
+            <a href="#" class="upload_image_button' . $image . '</a>
+            <input type="hidden" name="' . $this->option_name . '[' . esc_attr($args['label_for']) . ']" id="' . esc_attr($args['label_for']) . '" value="' . esc_attr($value) . '" />
+            <a href="#" class="remove_image_button" style="display:' . esc_attr($display) . '">Remove image</a>
+        </div>';
+    }
+    
 
 /**
  * Renders perperson field.
@@ -788,6 +823,7 @@ $panel_args = [
     'slug'            => 'atollmatrix-settings-panel',
     'user_capability' => 'manage_options',
     'tabs'            => [
+        'property'       => esc_html__('Property', 'atollmatrix'),
         'general'       => esc_html__('General', 'atollmatrix'),
         'pages'         => esc_html__('Pages', 'atollmatrix'),
         'import-export' => esc_html__('Import/Export', 'atollmatrix'),
@@ -810,6 +846,42 @@ foreach ($currencies as $currencyCode => $currencyName) {
 }
 
 $panel_settings = [
+    'property_logo'         => [
+        'label'       => esc_html__('Upload Logo', 'atollmatrix'),
+        'type'        => 'media_upload',
+        'description' => 'Upload your logo here.',
+        'tab'         => 'property', // You can change the tab as per your requirement
+    ],
+    'property_name'             => [
+        'label'       => esc_html__('Name', 'atollmatrix'),
+        'type'        => 'text',
+        'description' => 'My field 1 description.',
+        'tab'         => 'property',
+    ],
+    'property_phone'             => [
+        'label'       => esc_html__('Phone', 'atollmatrix'),
+        'type'        => 'text',
+        'description' => 'My field 1 description.',
+        'tab'         => 'property',
+    ],
+    'property_address'   => [
+        'label'       => esc_html__('Address', 'atollmatrix'),
+        'type'        => 'text',
+        'description' => 'My field 1 description.',
+        'tab'         => 'property',
+    ],
+    'property_header'   => [
+        'label'       => esc_html__('Invoice header', 'atollmatrix'),
+        'type'        => 'text',
+        'description' => 'My field 1 description.',
+        'tab'         => 'property',
+    ],
+    'property_footer'   => [
+        'label'       => esc_html__('Invoice footer', 'atollmatrix'),
+        'type'        => 'text',
+        'description' => 'My field 1 description.',
+        'tab'         => 'property',
+    ],
     'page_bookingsearch'   => [
         'label'       => esc_html__('Booking search page', 'atollmatrix'),
         'type'        => 'select',

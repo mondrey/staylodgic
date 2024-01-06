@@ -200,6 +200,10 @@ class AtollMatrix_Init
             if ($current_admin_screen->base == 'atoll-matrix_page_atollmatrix-invoicing') {
 
                 wp_enqueue_script('atollmatrix-invoice');
+                wp_localize_script('atollmatrix-invoice', 'atollmatrixData', array(
+                    'pluginUrl' => plugin_dir_url(__FILE__),
+                ));
+            
                 wp_enqueue_style('atollmatrix-invoice');
                 wp_enqueue_style('fontawesome-6');
                 wp_enqueue_style('fontawesome-6-brands');

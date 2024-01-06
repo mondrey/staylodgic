@@ -5,8 +5,13 @@ namespace AtollMatrix;
 class Invoicing
 {
 
+    private $reservationID;
+    private $bookingStatus;
     private $bookingNumber;
+    private $numberDays;
+    private $hotelLogo;
     private $hotelName;
+    private $hotelHeader;
     private $hotelAddress;
     private $hotelPhone;
     private $customerName;
@@ -21,10 +26,16 @@ class Invoicing
     private $subTotal;
     private $taxesAndFees;
     private $totalAmount;
+    private $hotelFooter;
 
     public function __construct(
+        $reservationID = null,
+        $bookingStatus = null,
         $bookingNumber = null,
+        $numberDays = null,
+        $hotelLogo = null,
         $hotelName = null,
+        $hotelHeader = null,
         $hotelAddress = null,
         $hotelPhone = null,
         $customerName = null,
@@ -38,10 +49,16 @@ class Invoicing
         $roomPrice = null,
         $subTotal = null,
         $taxesAndFees = null,
-        $totalAmount = null
+        $totalAmount = null,
+        $hotelFooter = null
     ) {
+        $this->reservationID    = $reservationID;
+        $this->bookingStatus    = $bookingStatus;
         $this->bookingNumber    = $bookingNumber;
+        $this->numberDays    = $numberDays;
+        $this->hotelLogo        = $hotelLogo;
         $this->hotelName        = $hotelName;
+        $this->hotelHeader      = $hotelHeader;
         $this->hotelAddress     = $hotelAddress;
         $this->hotelPhone       = $hotelPhone;
         $this->customerName     = $customerName;
@@ -56,6 +73,7 @@ class Invoicing
         $this->roomPrice        = $subTotal;
         $this->taxesAndFees     = $taxesAndFees;
         $this->totalAmount      = $totalAmount;
+        $this->hotelFooter      = $hotelFooter;
 
         add_action('admin_menu', array($this, 'add_invoicing_admin_menu')); // This now points to the add_admin_menu function
 
@@ -85,27 +103,6 @@ class Invoicing
 
         echo self::hotelBooking_Search();
 
-        // Hotel Information
-        $this->hotelName    = "Ocean View Resort";
-        $this->hotelAddress = "123 Seaside Lane, Coastal Town";
-        $this->hotelPhone   = "555-0123";
-
-        // Customer Information
-        $this->customerName  = "John Doe";
-        $this->customerEmail = "johndoe@example.com";
-
-        // Booking Details
-        $this->checkInDate    = "2024-02-15";
-        $this->checkOutDate   = "2024-02-20";
-        $this->roomType       = "Deluxe Sea View";
-        $this->numberOfGuests = 2;
-
-        // Pricing
-        $this->roomPrice    = "200.00";
-        $this->subTotal     = "200.00";
-        $this->taxesAndFees = "50.00";
-        $this->totalAmount  = "250.00";
-
         echo '</div>';
 
     }
@@ -119,6 +116,7 @@ class Invoicing
         $reservations_instance = new \AtollMatrix\Reservations();
         $reservationID         = $reservations_instance->getReservationIDforBooking($booking_number);
 
+        $reservations_instance = new \AtollMatrix\Reservations($date = false, $room_id = false, $reservationID);
         // Verify the nonce
         if (!isset($_POST[ 'atollmatrix_bookingdetails_nonce' ]) || !check_admin_referer('atollmatrix-bookingdetails-nonce', 'atollmatrix_bookingdetails_nonce')) {
             // Nonce verification failed; handle the error or reject the request
@@ -126,6 +124,23 @@ class Invoicing
             wp_send_json_error([ 'message' => 'Failed' ]);
             return;
         }
+
+        // Hotel Information
+        $property_logo_id = atollmatrix_get_option('property_logo');
+        $property_name    = atollmatrix_get_option('property_name');
+        $property_phone   = atollmatrix_get_option('property_phone');
+        $property_address = atollmatrix_get_option('property_address');
+        $property_header  = atollmatrix_get_option('property_header');
+        $property_footer  = atollmatrix_get_option('property_footer');
+
+        $this->reservationID    = $reservationID;
+        $this->hotelName    = $property_name;
+        $this->hotelPhone   = $property_phone;
+        $this->hotelAddress = $property_address;
+        $this->hotelHeader  = $property_header;
+        $this->hotelFooter  = $property_footer;
+        $this->hotelLogo    = $property_logo_id ? wp_get_attachment_image_url($property_logo_id, 'full') : '';
+
         if ($reservationID) {
             $this->bookingNumber = $booking_number;
             $this->checkInDate   = get_post_meta($reservationID, 'atollmatrix_checkin_date', true);
@@ -141,7 +156,12 @@ class Invoicing
             $totalGuests            = intval($adults + $children[ 'number' ]);
             $this->numberOfGuests   = $totalGuests;
 
+            $this->bookingStatus = 'Booking Pending';
+            if ( $reservations_instance->isConfirmed_Reservation($reservationID) ) {
+                $this->bookingStatus = 'Booking Confirmed';
+            }
             $this->roomType = $reservations_instance->getRoomNameForReservation($reservationID);
+            $this->numberDays = $reservations_instance->countReservationDays($reservationID);
             // Add other reservation details as needed
 
             $taxStatus = get_post_meta($reservationID, 'atollmatrix_tax', true);
@@ -182,8 +202,13 @@ class Invoicing
         }
 
         $informationSheet = $this->invoiceTemplate(
+            $this->reservationID,
+            $this->bookingStatus,
             $this->bookingNumber,
+            $this->numberDays,
+            $this->hotelLogo,
             $this->hotelName,
+            $this->hotelHeader,
             $this->hotelAddress,
             $this->hotelPhone,
             $this->customerName,
@@ -197,7 +222,8 @@ class Invoicing
             $this->roomPrice,
             $this->subTotal,
             $this->taxesAndFees,
-            $this->totalAmount
+            $this->totalAmount,
+            $this->hotelFooter
         );
         echo $informationSheet; // Encode the HTML content as JSON
         wp_die(); // Terminate and return a proper response
@@ -210,13 +236,6 @@ class Invoicing
         ?>
 
             <div id="hotel-booking-form">
-
-            <div class="calendar-insights-wrap">
-                <div id="check-in-display">Check-in: <span>-</span></div>
-                <div id="check-out-display">Check-out: <span>-</span></div>
-                <div id="last-night-display">Last-night: <span>-</span></div>
-                <div id="nights-display">Nights: <span>-</span></div>
-            </div>
 
                 <div class="front-booking-search">
                     <div class="front-booking-number-wrap">
@@ -240,8 +259,13 @@ return ob_get_clean();
     }
 
     public function invoiceTemplate(
+        $reservationID,
+        $bookingStatus,
         $bookingNumber,
+        $numberDays,
+        $hotelLogo,
         $hotelName,
+        $hotelHeader,
         $hotelAddress,
         $hotelPhone,
         $customerName,
@@ -255,27 +279,40 @@ return ob_get_clean();
         $roomPrice,
         $subTotal,
         $taxesAndFees,
-        $totalAmount
+        $totalAmount,
+        $hotelFooter
     ) {
+        $currentDate = date('F jS, Y'); // Outputs: January 1st, 2024
         ob_start();
         ?>
         <button id="print-invoice-button" class="print-invoice-button">Print Invoice</button>
         <div class="invoice-container">
         <div class="invoice-container-inner">
-        <section id="hotel-info">
-            <h2>Hotel Information</h2>
-            <p>Name: <?php echo $hotelName; ?></p>
-            <p>Address: <?php echo $hotelAddress; ?></p>
-            <p>Phone: <?php echo $hotelPhone; ?></p>
+        <div id="invoice-hotel-header">
+            <section id="invoice-hotel-logo">
+                <img class="invoice-logo" src="<?php echo $hotelLogo; ?>" />
+            </section>
+            <section id="invoice-info">
+                <p><?php echo $hotelHeader; ?></p>
+                <p>Invoice No: <?php echo $bookingNumber . '-' . $reservationID; ?></p>
+                <p>Invoice Date: <?php echo $currentDate; ?></p>
+                <p class="invoice-booking-status"><?php echo $bookingStatus; ?></p>
+            </section>
+        </div>
+        <section id="invoice-hotel-info">
+                <p><strong><?php echo $hotelName; ?></strong></p>
+                <p><?php echo $hotelAddress; ?></p>
+                <p><?php echo $hotelPhone; ?></p>
         </section>
-
-        <section id="customer-info">
-            <h2>Customer Information</h2>
+        <section id="invoice-customer-info">
+            <h2>Bill to:</h2>
             <p>Name: <?php echo $customerName; ?></p>
             <p>Email: <?php echo $customerEmail; ?></p>
         </section>
 
-        <section id="booking-details">
+        <div id="invoice-booking-information">
+
+        <section id="invoice-booking-details">
             <h2>Booking Details</h2>
             <p>Booking No: <?php echo $bookingNumber; ?></p>
             <p>Check-in Date: <?php echo $checkInDate; ?></p>
@@ -291,9 +328,9 @@ if ($numberofChildren > 0) {
         ?>
         </section>
 
-        <section id="pricing">
-            <h2>Pricing</h2>
-            <p>Room Price: <?php echo atollmatrix_price($roomPrice); ?></p>
+        <section id="invoice-booking-pricing">
+            <h2>Room Price</h2>
+            <p><?php echo atollmatrix_price($roomPrice); ?> x <?php echo $numberDays; ?> Nights</p>
             <?php
 $reservations_instance = new \AtollMatrix\Reservations();
         $reservationID         = $reservations_instance->getReservationIDforBooking($bookingNumber);
@@ -305,13 +342,13 @@ $reservations_instance = new \AtollMatrix\Reservations();
             <?php
 }
         ?>
-            <p>Total Amount: <?php echo atollmatrix_price($totalAmount); ?></p>
+            <div class="invoice-total"><strong>Total Amount: <?php echo atollmatrix_price($totalAmount); ?></strong></div>
         </section>
+        </div>
 
         </div>
         <footer>
-            <p>Thank you for your booking!</p>
-            <p>Terms and conditions:</p>
+            <div class="invoice-footer"><?php echo $hotelFooter; ?></div>
         </footer>
         </div>
         <?php

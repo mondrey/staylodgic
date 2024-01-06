@@ -1,6 +1,26 @@
 jQuery(document).ready(function ($) {
 	"use strict";
 
+	$('.upload_image_button').click(function(e) {
+		e.preventDefault();
+
+		var button = $(this),
+			custom_uploader = wp.media({
+				title: 'Insert image',
+				library : { type : 'image' },
+				button: { text: 'Use this image' },
+				multiple: false
+			}).on('select', function() {
+				var attachment = custom_uploader.state().get('selection').first().toJSON();
+				$(button).html('<img src="' + attachment.url + '" style="max-height:100px;display:block;">').next().val(attachment.id).next().show();
+			}).open();
+	});
+
+	$('.remove_image_button').click(function(e) {
+		e.preventDefault();
+		$(this).hide().prev().val('').prev().addClass('button').html('Upload image');
+	});
+
 	$('.atollmatrix-options-form select').each(function () {
 		// Fetch the data-width attribute value
 		var widthAttribute = $(this).data('width');
