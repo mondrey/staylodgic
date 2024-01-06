@@ -74,6 +74,23 @@
 	padding-bottom: 22px;
 	border-bottom: 1px solid #000;
 }
+#invoice-booking-pricing .nightly-rate {
+	display: inline-block;
+	width: 50%;
+}
+#invoice-booking-pricing .subtotal-info .price,
+#invoice-booking-pricing .invoice-total .price {
+	width: 25%;
+}
+#invoice-booking-pricing .price {
+	display: inline-block;
+	width: 50%;
+}
+#invoice-booking-pricing .nights,
+#invoice-booking-pricing .tax-value {
+	width: 50%;
+	display: inline-block;
+}
 
 #invoice-hotel-info {
 	margin-top: 0;
@@ -131,6 +148,11 @@
 	color: #bb944a;
 }
 
+#invoice-booking-details span {
+	width: 50%;
+	display: inline-block;
+}
+
 
 @media print {
     body {
@@ -144,6 +166,10 @@
         box-shadow: none;
         aspect-ratio: auto; /* Let the browser handle the page size */
     }
+
+	.invoice-container-inner {
+		padding: 0;
+	}
 
     /* Rest of your print styles */
 }
