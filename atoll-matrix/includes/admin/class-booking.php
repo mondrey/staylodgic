@@ -481,8 +481,6 @@ return ob_get_clean();
 
     public function hotelBooking_Details()
     {
-        // Generate unique booking number
-        atollmatrix_set_booking_transient('1', $this->bookingNumber);
         ob_start();
         $atollmatrix_bookingdetails_nonce = wp_create_nonce('atollmatrix-bookingdetails-nonce');
         ?>
@@ -505,7 +503,7 @@ return ob_get_clean();
                                 <label for="booking_number" class="control-label">Booking No.</label>
                             </div>
                         </div>
-                        <div id="bookingDetails" class="div-button">Search</div>
+                        <div data-request="bookingdetails" id="bookingDetails" class="div-button">Search</div>
                     </div>
                 </div>
 

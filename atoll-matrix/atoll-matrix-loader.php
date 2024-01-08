@@ -50,6 +50,7 @@ class AtollMatrix_Init
     {
         require_once plugin_dir_path(__FILE__) . '/custom-posts/class-imaginem-reservation-posts.php';
         require_once plugin_dir_path(__FILE__) . '/custom-posts/class-imaginem-customer-posts.php';
+        require_once plugin_dir_path(__FILE__) . '/custom-posts/class-imaginem-registration-posts.php';
         require_once plugin_dir_path(__FILE__) . '/custom-posts/class-imaginem-room-posts.php';
     }
 
@@ -77,6 +78,7 @@ class AtollMatrix_Init
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-booking.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-emaildispatcher.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-invoicing.php';
+        require_once plugin_dir_path(__FILE__) . 'includes/admin/class-guestregistry.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/utilities.php';
     }
 

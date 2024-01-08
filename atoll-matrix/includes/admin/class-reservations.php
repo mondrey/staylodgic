@@ -79,9 +79,9 @@ class Reservations
         }
     
         $informationSheet = ob_get_clean(); // Get the buffer content and clean the buffer
-        echo json_encode($informationSheet); // Encode the HTML content as JSON
+        echo $informationSheet; // Encode the HTML content as JSON
         wp_die(); // Terminate and return a proper response
-    }     
+    }
 
     public static function getConfirmedReservations()
     {
@@ -551,6 +551,26 @@ class Reservations
         }
 
         return 0;
+    }
+
+    public function getNumberOfAdultsForReservation( $reservation_id = false )
+    {
+        $number_of_adults = get_post_meta($this->reservation_id, 'atollmatrix_reservation_room_adults', true);
+
+        return $number_of_adults;
+    }
+    public function getNumberOfChildrenForReservation( $reservation_id = false )
+    {
+        $number_of_children = get_post_meta($this->reservation_id, 'atollmatrix_reservation_room_children', true);
+
+        return $number_of_children['number'];
+    }
+    public function getTotalOccupantsForReservation( $reservation_id = false )
+    {
+        $number_of_adults = $this->getNumberOfAdultsForReservation();
+        $number_of_children = $this->getNumberOfChildrenForReservation();
+
+        return intval( $number_of_adults ) + intval( $number_of_children );
     }
 
     public function getBookingDetailsPageLinkForGuest()

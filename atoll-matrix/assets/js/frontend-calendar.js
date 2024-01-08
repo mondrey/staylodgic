@@ -8,6 +8,8 @@
 			var bookingNumber = $('#booking_number').val();
 			var atollmatrix_bookingdetails_nonce = $('input[name="atollmatrix_bookingdetails_nonce"]').val();
 
+			var requestType = $(this).data('request');
+
 			console.log( bookingNumber );
 			console.log( frontendAjax.ajaxurl );
 			// Check if the booking number is entered
@@ -16,26 +18,51 @@
 				return;
 			}
 	
-			// AJAX call to get booking details
-			$.ajax({
-				url: frontendAjax.ajaxurl, // Replace with your AJAX URL
-				type: 'POST',
-				dataType: 'html', // Assuming the response is HTML
-				data: {
-					action: 'getBookingDetails', // Replace with your actual action hook
-					booking_number: bookingNumber,
-					atollmatrix_bookingdetails_nonce: atollmatrix_bookingdetails_nonce
-				},
-				success: function(response) {
-					// Display the booking details
-					var details = JSON.parse(response); // Parse the JSON string to HTML
-					$('#booking-details-ajax').html(details);
-				},
-				error: function(jqXHR, textStatus, errorThrown) {
-					console.error('Error fetching booking details:', textStatus, errorThrown);
-					$('#booking-details-ajax').html('Error fetching booking details. Please try again.');
-				}
-			});
+			if ( 'guestregistration' == requestType ) {
+				// AJAX call to get booking details
+				$.ajax({
+					url: frontendAjax.ajaxurl, // Replace with your AJAX URL
+					type: 'POST',
+					dataType: 'html', // Assuming the response is HTML
+					data: {
+						action: 'requestRegistrationDetails', // Replace with your actual action hook
+						booking_number: bookingNumber,
+						atollmatrix_bookingdetails_nonce: atollmatrix_bookingdetails_nonce
+					},
+					success: function(response) {
+						// Display the booking details
+						var details = response; // Parse the JSON string to HTML
+						console.log( details );
+						$('#guestregistration-details-ajax').html(response);
+					},
+					error: function(jqXHR, textStatus, errorThrown) {
+						console.error('Error fetching booking details:', textStatus, errorThrown);
+						$('#booking-details-ajax').html('Error fetching booking details. Please try again.');
+					}
+				});		
+			}
+
+			if ( 'bookingdetails' == requestType ) {
+				// AJAX call to get booking details
+				$.ajax({
+					url: frontendAjax.ajaxurl, // Replace with your AJAX URL
+					type: 'POST',
+					dataType: 'html', // Assuming the response is HTML
+					data: {
+						action: 'getBookingDetails', // Replace with your actual action hook
+						booking_number: bookingNumber,
+						atollmatrix_bookingdetails_nonce: atollmatrix_bookingdetails_nonce
+					},
+					success: function(response) {
+						// Display the booking details
+						$('#booking-details-ajax').html(response);
+					},
+					error: function(jqXHR, textStatus, errorThrown) {
+						console.error('Error fetching booking details:', textStatus, errorThrown);
+						$('#booking-details-ajax').html('Error fetching booking details. Please try again.');
+					}
+				});
+			}
 		});
 		
 		function processRoomPrice(roomOccupiedGroup) {
