@@ -12,11 +12,29 @@ class GuestRegistry
         $this->bookingNumber = uniqid();
 
         add_shortcode('guest_registration', array($this, 'guestRegistration'));
+        
+        add_action('wpcf7_init', array($this, 'register_cf7_signature_tag'));
+        // add_shortcode('atollmatrix_cf7_digitalsignature', array($this, 'atollmatrix_cf7_digital_signature_shortcode'));
 
         add_action('wp_ajax_requestRegistrationDetails', array($this, 'requestRegistrationDetails'));
         add_action('wp_ajax_nopriv_requestRegistrationDetails', array($this, 'requestRegistrationDetails'));
     }
 
+    public function register_cf7_signature_tag() {
+        if ( function_exists('wpcf7_add_form_tag') ) {
+            wpcf7_add_form_tag('atollmatrix_cf7_digitalsignature', array($this, 'atollmatrix_cf7_signature_handler'));
+        }
+    }
+
+    public function atollmatrix_cf7_signature_handler($tag) {
+        return '<div class="signature-container">
+                    <canvas id="signature-pad" class="signature-pad" width="400" height="200"></canvas>
+                    <div id="clear-signature">Clear</div>
+                    <input type="hidden" id="signature-data" name="signature-data">
+                </div>';
+    }
+    
+    
     public function registrationSuccessful()
     {
 
@@ -84,64 +102,12 @@ HTML;
         $reservation_instance = new \AtollMatrix\Reservations( $date = false, $room_id = false, $reservation_id);
         $numberOfOccupants = $reservation_instance->getTotalOccupantsForReservation($reservation_id);
 
-        $form_loop = '';
-        for ($i = 1; $i <= $numberOfOccupants; $i++) {
-            $form_loop .= <<<HTML
-                            <h4>Guest {$i}</h4>
-                            <div class="form-group form-floating">
-                                <input placeholder="Full Name" type="text" class="form-control" id="full_name{$i}" name="full_name{$i}" required>
-                                <label for="full_name{$i}" class="control-label">{$formInputs['full_name']}</label>
-                            </div>
-                            <div class="form-group form-floating">
-                                <input placeholder="Passport No." type="text" class="form-control" id="passport{$i}" name="passport{$i}" required>
-                                <label for="passport{$i}" class="control-label">{$formInputs['passport']}</label>
-                            </div>
-                            <div class="form-group form-floating">
-                                <select required placeholder="" class="form-control" id="country{$i}" name="country{$i}">
-                                {$country_options}
-                                </select>
-                                <label for="country{$i}" class="control-label">{$formInputs['country']}</label>
-                            </div>
-                            <!-- Add any additional fields here -->
-            HTML;
-        }
+        $regsitration_contactform_id = '48b9210';
 
-        $form_html = <<<HTML
-		<div class="guest_registration_form_outer registration_request">
-			<div class="guest_registration_form_wrap">
-				<div class="registration_form">
-					<div class="registration-column registration-column-one registration_form_inputs">
-                    <h3>Registration</h3>
-                    
-                    $form_loop
+        $contactform = do_shortcode(('[contact-form-7 id="'.$regsitration_contactform_id.'"]'));
 
-					<div class="form-group form-floating">
-						<input placeholder="" type="email" class="form-control" id="email_address" name="email_address" required>
-						<label for="email_address" class="control-label">$formInputs[email_address]</label>
-					</div>
-					<div class="form-group form-floating">
-						<input placeholder="" type="tel" class="form-control" id="phone_number" name="phone_number" required>
-						<label for="phone_number" class="control-label">$formInputs[phone_number]</label>
-					</div>
+        return $contactform;
 
-					<div class="checkbox guest-consent-checkbox">
-					<label for="guest_consent">
-						<input type="checkbox" class="form-check-input" id="guest_consent" name="guest_consent" required /><span class="consent-notice">$formInputs[guest_consent]</span>
-                        <div class="invalid-feedback">
-                            Consent is required for booking.
-                        </div>
-                    </label>
-					</div>
-				</div>
-
-				$html
-
-				</div>
-			</div>
-		</div>
-HTML;
-
-        return $form_html . $registrationSuccess;
     }
 
     public function requestRegistrationDetails($booking_number) {

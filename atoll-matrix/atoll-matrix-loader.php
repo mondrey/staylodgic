@@ -313,6 +313,18 @@ class AtollMatrix_Init
         wp_enqueue_style('bootstrap');
         wp_enqueue_script('bootstrap');
 
+        // Check if we are viewing a single post/page
+        if (is_singular()) {
+            global $post;
+            // Check if the post content contains the Contact Form 7 shortcode
+            if (has_shortcode($post->post_content, 'contact-form-7')) {
+                // Enqueue the Signature Pad script
+                wp_enqueue_script('signature-pad', plugin_dir_url(__FILE__) . 'assets/js/signature_pad.umd.min.js', array(), '1.0.0', true);
+                // Enqueue any additional scripts required for the digital signature
+                wp_enqueue_script('atollmatrix-digital-signature', plugin_dir_url(__FILE__) . 'assets/js/digital-signature.js', array('signature-pad'), '1.0.0', true);
+                wp_enqueue_style('atollmatrix-digital-signature', plugin_dir_url(__FILE__) . 'assets/css/digital-signature.css', false, 'screen');
+            }
+        }
 
     }
 
