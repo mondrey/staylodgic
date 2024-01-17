@@ -1,10 +1,13 @@
 <?php
 namespace AtollMatrix;
 
+use WPCF7_Submission;
+
 class GuestRegistry
 {
 
     protected $bookingNumber;
+    private static $idLabelMap = [];
 
     public function __construct(
         $bookingNumber = null
@@ -18,6 +21,65 @@ class GuestRegistry
 
         add_action('wp_ajax_requestRegistrationDetails', array($this, 'requestRegistrationDetails'));
         add_action('wp_ajax_nopriv_requestRegistrationDetails', array($this, 'requestRegistrationDetails'));
+
+        add_action('wpcf7_before_send_mail', array($this, 'capture_form_data_with_placeholders'));
+
+        //add_shortcode('cf7_id_label_map', array($this, 'cf7_id_label_map_shortcode'));
+        add_action('wpcf7_init', array($this, 'register_cf7_id_label_map_tag'));
+    }
+    
+    public function register_cf7_id_label_map_tag() {
+        if (function_exists('wpcf7_add_form_tag')) {
+            wpcf7_add_form_tag('atollmatrix_cf7_id_label_map', array($this, 'cf7_id_label_map_handler'));
+        }
+    }
+
+    function cf7_id_label_map_handler($tag)
+    {
+        // Extract the values from the attr field
+        $attr_values = shortcode_parse_atts($tag->attr);
+        $id = $attr_values['id'] ?? '';
+        $label = $attr_values['label'] ?? '';
+    
+        // Generate the hidden input field
+        return '<input type="hidden" name="id_label_map[' . esc_attr($id) . ']" value="' . esc_attr($label) . '">';
+    }
+    
+    public function capture_form_data_with_placeholders($contact_form) {
+        $submission = WPCF7_Submission::get_instance();
+        if (!$submission) {
+            return;
+        }
+
+        // Retrieve the submitted data
+        $posted_data = $submission->get_posted_data();
+
+        // Prepare an array to hold the data with labels
+        $form_data_with_labels = [];
+
+        // Map the submitted data to the labels
+        foreach ($posted_data as $key => $value) {
+            if (isset(self::$idLabelMap[$key])) {
+                $form_data_with_labels[self::$idLabelMap[$key]] = $value;
+            } else {
+                // For fields without a specific label, use the key as is
+                $form_data_with_labels[$key] = $value;
+            }
+        }
+
+        // Check if the signature data is present in the posted data
+        if (isset($posted_data['signature-data'])) {
+            // Retrieve the signature data
+            $signature_data = $posted_data['signature-data'];
+            // Add the signature data to the form data array
+            $form_data_with_labels['signature-data'] = $signature_data;
+        }
+
+        // Do something with the labeled data
+        // For example, logging it
+        error_log('Labeled Form Data: ' . print_r($form_data_with_labels, true));
+
+        // ... any other processing you need ...
     }
 
     public function register_cf7_signature_tag() {

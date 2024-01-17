@@ -1,5 +1,12 @@
 (function ($) {
     $(document).ready(function () {
+
+        function updateSignatureData( signaturePad, signatureDataField ) {
+            console.log( 'Updating signature ')
+            if (signaturePad && !signaturePad.isEmpty()) {
+                signatureDataField.value = signaturePad.toDataURL();
+            }
+        }
         function initializeSignaturePad() {
             var signaturePadCanvas = document.getElementById('signature-pad');
             if (signaturePadCanvas) {
@@ -11,13 +18,18 @@
                 clearButton.addEventListener('click', function (e) {
                     e.preventDefault();
                     signaturePad.clear();
+                    signatureDataField.value = '';
+                });
+
+                signaturePad.addEventListener("endStroke", () => {
+                    updateSignatureData( signaturePad, signatureDataField);
                 });
         
-                $('.wpcf7-form').off('submit.signaturePad').on('submit.signaturePad', function () {
-                    if (signaturePad && !signaturePad.isEmpty()) {
-                        signatureDataField.value = signaturePad.toDataURL();
-                    }
-                });
+                // $('.wpcf7-form').off('submit.signaturePad').on('submit.signaturePad', function () {
+                //     if (signaturePad && !signaturePad.isEmpty()) {
+                //         signatureDataField.value = signaturePad.toDataURL();
+                //     }
+                // });
             }
         }
 
@@ -25,8 +37,8 @@
         initializeSignaturePad();
 
         // Reinitialize if the form is loaded via AJAX
-        $(document).ajaxComplete(function () {
-            initializeSignaturePad();
-        });
+        // $(document).ajaxComplete(function () {
+        //     initializeSignaturePad();
+        // });
     });
 })(jQuery);
