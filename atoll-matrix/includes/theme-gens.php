@@ -345,7 +345,7 @@ function atollmatrix_country_list($output_type = "select", $selected = "")
         'CO'   => 'Colombia',
         'KM'   => 'Comoros',
         'CG'   => 'Congo',
-        'CD'   => 'Congo, Democratic Republic',
+        'CD'   => 'Congo - Democratic Republic',
         'CK'   => 'Cook Islands',
         'CR'   => 'Costa Rica',
         'CI'   => 'Cote D\'Ivoire',
@@ -397,7 +397,7 @@ function atollmatrix_country_list($output_type = "select", $selected = "")
         'IS'   => 'Iceland',
         'IN'   => 'India',
         'ID'   => 'Indonesia',
-        'IR'   => 'Iran, Islamic Republic Of',
+        'IR'   => 'Iran - Islamic Republic Of',
         'IQ'   => 'Iraq',
         'IE'   => 'Ireland',
         'IM'   => 'Isle Of Man',
@@ -436,7 +436,7 @@ function atollmatrix_country_list($output_type = "select", $selected = "")
         'MU'   => 'Mauritius',
         'YT'   => 'Mayotte',
         'MX'   => 'Mexico',
-        'FM'   => 'Micronesia, Federated States Of',
+        'FM'   => 'Micronesia - Federated States Of',
         'MD'   => 'Moldova',
         'MC'   => 'Monaco',
         'MN'   => 'Mongolia',
@@ -462,7 +462,7 @@ function atollmatrix_country_list($output_type = "select", $selected = "")
         'OM'   => 'Oman',
         'PK'   => 'Pakistan',
         'PW'   => 'Palau',
-        'PS'   => 'Palestinian Territory, Occupied',
+        'PS'   => 'Palestinian Territory - Occupied',
         'PA'   => 'Panama',
         'PG'   => 'Papua New Guinea',
         'PY'   => 'Paraguay',
@@ -533,8 +533,8 @@ function atollmatrix_country_list($output_type = "select", $selected = "")
         'VU'   => 'Vanuatu',
         'VE'   => 'Venezuela',
         'VN'   => 'Viet Nam',
-        'VG'   => 'Virgin Islands, British',
-        'VI'   => 'Virgin Islands, U.S.',
+        'VG'   => 'Virgin Islands - British',
+        'VI'   => 'Virgin Islands - U.S.',
         'WF'   => 'Wallis And Futuna',
         'EH'   => 'Western Sahara',
         'YE'   => 'Yemen',
@@ -552,6 +552,17 @@ function atollmatrix_country_list($output_type = "select", $selected = "")
                 $country_selected = "";
             }
             $country_list .= '<option value="' . esc_attr($key) . '" ' . $country_selected . '>' . esc_attr($option) . '</option>';
+        }
+    }
+    if ($output_type == "select-alt") {
+        $country_list = "";
+        $count = 0;
+        foreach ($countries as $key => $option) {
+            if ( $count > 0 ) {
+                $country_list .= ',';
+            }
+            $count++;
+            $country_list .= $key . ':' . $option;
         }
     }
     if ($output_type == "display") {

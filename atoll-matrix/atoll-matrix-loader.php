@@ -79,6 +79,7 @@ class AtollMatrix_Init
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-emaildispatcher.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-invoicing.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-guestregistry.php';
+        require_once plugin_dir_path(__FILE__) . 'includes/admin/class-formgenerator.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/utilities.php';
     }
 
@@ -317,7 +318,7 @@ class AtollMatrix_Init
         if (is_singular()) {
             global $post;
             // Check if the post content contains the Contact Form 7 shortcode
-            if (has_shortcode($post->post_content, 'contact-form-7')) {
+            if ( has_shortcode($post->post_content, 'form_input') || get_post_type() == 'atmx_guestregistry' ) {
                 // Enqueue the Signature Pad script
                 wp_enqueue_script('signature-pad', plugin_dir_url(__FILE__) . 'assets/js/signature_pad.umd.min.js', array(), '1.0.0', true);
                 // Enqueue any additional scripts required for the digital signature

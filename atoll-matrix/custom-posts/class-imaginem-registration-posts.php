@@ -5,6 +5,7 @@ class AtollMatrix_GuestRegistration_Posts
     public function __construct()
     {
         add_action('init', array($this, 'init'));
+        add_action('admin_menu', array($this, 'add_guest_registration_submenu_page'));
 
         add_filter("manage_edit-atmx_registrations_columns", array($this, 'atmx_registrations_edit_columns'));
         add_filter('manage_posts_custom_column', array($this, 'atmx_registrations_custom_columns'));
@@ -123,6 +124,43 @@ class AtollMatrix_GuestRegistration_Posts
             )
         );
 
+    }
+
+    public function add_guest_registration_submenu_page() {
+        add_submenu_page(
+            'edit.php?post_type=atmx_guestregistry', // Parent slug
+            'Guest Registration Shortcodes', // Page title
+            'Form Shortcodes', // Menu title
+            'manage_options', // Capability
+            'atmx_guestregistry_shortcodes', // Menu slug
+            array($this, 'submenu_page_callback') // Callback function
+        );
+    }
+
+    public function submenu_page_callback() {
+        // Check if user has the required capability
+        if (!current_user_can('manage_options')) {
+            return;
+        }
+
+        // Check if data has been saved
+        if (isset($_POST['atollmatrix_guestregistry_shortcode'])) {
+            $shortcode_data = sanitize_textarea_field($_POST['atollmatrix_guestregistry_shortcode']);
+            update_option('atollmatrix_guestregistry_shortcode', $shortcode_data);
+        }
+
+        // Retrieve saved data
+        $saved_shortcode = get_option('atollmatrix_guestregistry_shortcode', '');
+        $saved_shortcode = stripslashes($saved_shortcode);
+
+        // HTML for the submenu page
+        echo '<div class="wrap">';
+        echo '<h1>Guest Registration Shortcodes</h1>';
+        echo '<form method="post">';
+        echo '<textarea name="atollmatrix_guestregistry_shortcode" style="width:100%;height:200px;">' . esc_textarea($saved_shortcode) . '</textarea>';
+        echo '<br><input type="submit" value="Save" class="button button-primary">';
+        echo '</form>';
+        echo '</div>';
     }
 
 }
