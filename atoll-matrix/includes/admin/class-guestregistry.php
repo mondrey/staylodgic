@@ -22,7 +22,28 @@ class GuestRegistry
         // Add a filter to modify the content of atmx_guestregistry posts
         add_filter('the_content', array($this, 'append_shortcode_to_content'));
 
+
+        add_action('wp_ajax_get_guest_post_permalink', array($this, 'get_guest_post_permalink'));
+        add_action('wp_ajax_nopriv_get_guest_post_permalink', array($this, 'get_guest_post_permalink'));
+
     }
+
+    function get_guest_post_permalink() {
+
+        // Verify the nonce
+        if (!isset($_POST[ 'nonce' ])) {
+            wp_send_json_error([ 'message' => 'Failed' ]);
+            return;
+        }
+
+        $post_id = isset($_POST['post_id']) ? intval($_POST['post_id']) : 0;
+        if ($post_id) {
+            $permalink = get_permalink($post_id);
+            wp_send_json_success($permalink);
+        } else {
+            wp_send_json_error('Post ID is invalid.');
+        }
+    }  
 
     /**
      * Appends the saved shortcode to the content of atmx_guestregistry posts.

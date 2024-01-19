@@ -1,6 +1,32 @@
 jQuery(document).ready(function($) {
 	"use strict";
 
+	function GenerateQrCode() {
+		$('#generate-qr-code').on('click', function(e) {
+			e.preventDefault();
+			$.ajax({
+				url: ajaxurl,
+				type: 'POST',
+				data: {
+					'action': 'get_guest_post_permalink',
+					'post_id': atollmatrix_admin_vars.post_id,
+					'nonce': atollmatrix_admin_vars.nonce
+				},
+				success: function(response) {
+					if (response.success) {
+						var qrcodeContainer = $('#qrcode');
+						qrcodeContainer.empty(); // Clear the container
+						new QRCode(qrcodeContainer[0], {
+							text: response.data,
+							// Other QR code options...
+						});
+					}
+				}
+			});
+		});
+	}
+	GenerateQrCode();	
+
 	function PaymentsAdjuster() {
 		// Attach a click event handler to the "remove" links
 		$('.remove-payment').on('click', function (e) {

@@ -445,6 +445,11 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                     echo '<input type="hidden" class="' . $class . '" name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '" value="' . esc_attr($text_value) . '" size="30" />';
                     break;
 
+                case 'generate-qrcode':
+                    echo '<button id="generate-qr-code">Generate QR Code</button>';
+                    echo '<div id="qrcode"></div>'; // Container for the QR code
+                    break;
+
                 case 'text':
                     $text_value = $meta ? $meta : $field['std'];
                     echo '<input type="text" class="' . $class . '" name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '" value="' . esc_attr($text_value) . '" size="30" />';
@@ -1399,6 +1404,10 @@ function atollmatrix_checkdata($post_id)
             //     $atollmatrix_payment_box = atollmatrix_payment_metadata();
             //     atollmatrix_savedata($atollmatrix_payment_box, $post_id);
             //     break;
+            case 'atmx_guestregistry':
+                $registry_box = atollmatrix_registry_metadata();
+                atollmatrix_savedata($registry_box, $post_id);
+                break;
             case 'atmx_reservations':
                 $reservations_box = atollmatrix_reservations_metadata();
                 atollmatrix_savedata($reservations_box, $post_id);

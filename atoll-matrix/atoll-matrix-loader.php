@@ -25,6 +25,7 @@ class AtollMatrix_Init
         add_action('wp_enqueue_scripts', array($this, 'atollmatrix_load_front_end_scripts_styles'));
         add_action('admin_enqueue_scripts', array($this, 'atollmatrix_load_admin_styles'));
 
+        add_action('admin_init', array($this, 'atollmatrix_registryitemmetabox_init'));
         add_action('admin_init', array($this, 'atollmatrix_reservationsitemmetabox_init'));
         add_action('admin_init', array($this, 'atollmatrix_customersitemmetabox_init'));
         add_action('admin_init', array($this, 'atollmatrix_roomitemmetabox_init'));
@@ -92,6 +93,7 @@ class AtollMatrix_Init
         require_once plugin_dir_path(__FILE__) . '/includes/google-fonts.php';
         require_once plugin_dir_path(__FILE__) . '/includes/theme-gens.php';
         require_once plugin_dir_path(__FILE__) . '/metabox/metaboxgen/metaboxgen.php';
+        require_once plugin_dir_path(__FILE__) . '/metabox/metaboxes/registry-metaboxes.php';
         require_once plugin_dir_path(__FILE__) . '/metabox/metaboxes/reservation-metaboxes.php';
         require_once plugin_dir_path(__FILE__) . '/metabox/metaboxes/customer-metaboxes.php';
         require_once plugin_dir_path(__FILE__) . '/metabox/metaboxes/room-metaboxes.php';
@@ -122,6 +124,7 @@ class AtollMatrix_Init
         wp_register_style('flatpickr-extra', plugin_dir_url(__FILE__) . 'assets/js/flatpickr/flatpickr-extra-style.css', array(), '1.0', 'screen');
         wp_register_script('flatpickr', plugin_dir_url(__FILE__) . 'assets/js/flatpickr/flatpickr.js', array('jquery'), '1.0', true);
         wp_register_script('admin-post-meta', plugin_dir_url(__FILE__) . 'admin/js/admin-post-meta.js', array('jquery', 'wp-api', 'wp-data'), null, true);
+        wp_register_script('qrcodejs', plugin_dir_url(__FILE__) . 'assets/js/qrcode.min.js', array('jquery'), null, true);
         wp_register_script('menu-image-admin', plugin_dir_url(__FILE__) . 'admin/js/menu-image-admin.js', array('jquery'), null, true);
         wp_register_style('menu-image-css', plugin_dir_url(__FILE__) . 'admin/js/menu-image-admin.css', array(), false, 'screen');
         wp_register_style('atollmatrix-admin-styles', plugin_dir_url(__FILE__) . 'admin/css/style.css', false, 'screen');
@@ -152,6 +155,7 @@ class AtollMatrix_Init
                 wp_enqueue_script('flatpickr');
                 wp_enqueue_style('flatpickr-extra');
                 wp_enqueue_script('admin-post-meta');
+                wp_enqueue_script('qrcodejs');
 
                 wp_enqueue_script('jquery-ui-slider');
             }
@@ -329,6 +333,12 @@ class AtollMatrix_Init
 
     }
 
+    // Registry Metabox
+    public function atollmatrix_registryitemmetabox_init()
+    {
+        add_meta_box('registryInfo-meta', esc_html__('Registry Options', 'imaginem-blocks-ii'), 'atollmatrix_registryitem_metaoptions', 'atmx_guestregistry', 'normal', 'low');
+        add_meta_box('registryInfo-changelog', esc_html__('Registry Changelog', 'imaginem-blocks-ii'), 'atollmatrix_registryitem_changelog', 'atmx_guestregistry', 'normal', 'low');
+    }
     // Reservations Metabox
     public function atollmatrix_reservationsitemmetabox_init()
     {
