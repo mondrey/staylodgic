@@ -6,7 +6,7 @@
             e.preventDefault();
     
             var formData = {};
-            $('form input, form select').each(function(){
+            $('form#guestregistration input, form#guestregistration select').each(function(){
                 var label = $(this).data('label');
                 var value = $(this).val();
                 formData[label] = value;

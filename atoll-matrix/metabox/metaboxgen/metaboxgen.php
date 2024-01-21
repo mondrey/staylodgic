@@ -413,13 +413,14 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                 case 'atollmatrix_registration_data':
 
                     $booking_data = get_post_meta($post_id, 'booking_data', true);
+
                     if (is_array($booking_data)) {
                         foreach ($booking_data as $label => $value) {
                             echo '<p><strong>' . esc_html($label) . ':</strong> ' . esc_html($value) . '</p>';
                         }
                     }
-                    if (isset($booking_data['Registration ID'])) {
-                        $registration_id = $booking_data['Registration ID'];
+                    if (isset($booking_data['registration_id'])) {
+                        $registration_id = $booking_data['registration_id'];
                         $upload_dir = wp_upload_dir();
                         $signature_url = $upload_dir['baseurl'] . '/signatures/' . $registration_id . '.png';
                     

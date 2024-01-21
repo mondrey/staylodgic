@@ -121,13 +121,15 @@ class FormGenerator
             'action' => '',
             'method' => 'post',
             'class'  => '',
+            'id'  => '',
          ], $atts);
 
         $action = esc_attr($attributes[ 'action' ]);
         $method = esc_attr($attributes[ 'method' ]);
         $class  = esc_attr($attributes[ 'class' ]);
+        $id  = esc_attr($attributes[ 'id' ]);
 
-        return "<form action='{$action}' method='{$method}' class='{$class}'>";
+        return "<form id='{$id}' action='{$action}' method='{$method}' class='{$class}'>";
     }
 
 // Shortcode for form end

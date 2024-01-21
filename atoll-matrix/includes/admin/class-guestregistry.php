@@ -64,7 +64,13 @@ class GuestRegistry
                     error_log('Failed to save signature file.');
                 } else {
                     error_log('Signature file saved successfully.');
-                    $booking_data['Registration ID'] = $registration_id;
+                    $booking_data['registration_id'] = $registration_id;
+                    if (isset($booking_data['signature_data'])) {
+                        unset($booking_data['signature_data']);
+                    }
+                    if (isset($booking_data['Sign'])) {
+                        unset($booking_data['Sign']);
+                    }
                     update_post_meta($post_id, 'booking_data', $booking_data);
                 }
             }
@@ -104,7 +110,7 @@ class GuestRegistry
             $saved_shortcode = get_option('atollmatrix_guestregistry_shortcode', '');
             $saved_shortcode = stripslashes($saved_shortcode);
 
-            $form_start = '[form_start action="submission_url" method="post"]';
+            $form_start = '[form_start id="guestregistration" class="guest-registration" action="submission_url" method="post"]';
             $form_submit = '[form_input type="submit" id="submitregistration" class="btn btn-primary" value="Save Registration"]';
             $form_end = '[form_end]';
 
