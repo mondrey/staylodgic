@@ -46,22 +46,22 @@ class FormGenerator
             case 'email':
             case 'password':
                 // Common types of inputs
-                echo "<input placeholder='$label' type='$type' id='$id' name='$name' class='$class' value='$value' placeholder='$placeholder' $required>";
+                echo "<input data-label='$label' placeholder='$label' type='$type' id='$id' name='$name' class='$class' value='$value' placeholder='$placeholder' $required>";
                 break;
             case 'textarea':
-                echo "<textarea placeholder='$label' id='$id' name='$name' class='$class' placeholder='$placeholder' $required>$value</textarea>";
+                echo "<textarea data-label='$label' placeholder='$label' id='$id' name='$name' class='$class' placeholder='$placeholder' $required>$value</textarea>";
                 break;
             case 'signature':
                 echo '<div class="signature-container">
                 <canvas id="signature-pad" class="signature-pad" width="400" height="200"></canvas>
                 <div id="clear-signature">Clear</div>
-                <input type="hidden" id="signature-data" name="signature-data">
+                <input data-label="'.$label.'" type="hidden" id="signature-data" name="signature-data">
                 </div>';
                 break;
             case 'checkbox':
                 // Checkbox inputs
                 $checked = isset($inputObject->checked) && $inputObject->checked ? 'checked' : '';
-                echo "<input type='checkbox' id='$id' name='$name' class='form-check-input' value='$value' $checked>";
+                echo "<input data-label='$label' type='checkbox' id='$id' name='$name' class='form-check-input' value='$value' $checked>";
                 $label_class = 'form-check-label';
                 break;
             case 'button':
@@ -80,7 +80,7 @@ class FormGenerator
                 $countries = atollmatrix_country_list('select-alt', '');
                 $options = $this->parseSelectOptions($countries);
                 error_log( print_r($options, true ) );
-                echo "<select id='$id' name='$name' class='form-select' aria-label='Default select example'>";
+                echo "<select data-label='$label' id='$id' name='$name' class='form-select' aria-label='Default select example'>";
                 foreach ($options as $optionValue => $optionLabel) {
                     $selected = $optionValue == $value ? 'selected' : '';
                     echo "<option value='$optionValue' $selected>$optionLabel</option>";

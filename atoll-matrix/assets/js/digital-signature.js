@@ -1,5 +1,6 @@
 (function ($) {
     $(document).ready(function () {
+        "use strict";
 
         function updateSignatureData( signaturePad, signatureDataField ) {
             console.log( 'Updating signature ')

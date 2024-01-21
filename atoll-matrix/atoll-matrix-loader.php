@@ -49,10 +49,10 @@ class AtollMatrix_Init
 
     public function atollmatrix_load_custom_posts()
     {
-        require_once plugin_dir_path(__FILE__) . '/custom-posts/class-imaginem-reservation-posts.php';
-        require_once plugin_dir_path(__FILE__) . '/custom-posts/class-imaginem-customer-posts.php';
-        require_once plugin_dir_path(__FILE__) . '/custom-posts/class-imaginem-registration-posts.php';
-        require_once plugin_dir_path(__FILE__) . '/custom-posts/class-imaginem-room-posts.php';
+        require_once plugin_dir_path(__FILE__) . '/custom-posts/class-atollmatrix-reservation-posts.php';
+        require_once plugin_dir_path(__FILE__) . '/custom-posts/class-atollmatrix-customer-posts.php';
+        require_once plugin_dir_path(__FILE__) . '/custom-posts/class-atollmatrix-registration-posts.php';
+        require_once plugin_dir_path(__FILE__) . '/custom-posts/class-atollmatrix-room-posts.php';
     }
 
     public function atollmatrix_load_availablity_calendar()
@@ -324,6 +324,7 @@ class AtollMatrix_Init
             // Check if the post content contains the Contact Form 7 shortcode
             if ( has_shortcode($post->post_content, 'form_input') || get_post_type() == 'atmx_guestregistry' ) {
                 // Enqueue the Signature Pad script
+                wp_enqueue_script('guest-registration', plugin_dir_url(__FILE__) . 'assets/js/guest-registration.js', array(), '1.0.0', true);
                 wp_enqueue_script('signature-pad', plugin_dir_url(__FILE__) . 'assets/js/signature_pad.umd.min.js', array(), '1.0.0', true);
                 // Enqueue any additional scripts required for the digital signature
                 wp_enqueue_script('atollmatrix-digital-signature', plugin_dir_url(__FILE__) . 'assets/js/digital-signature.js', array('signature-pad'), '1.0.0', true);

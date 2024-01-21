@@ -29,14 +29,10 @@ function atollmatrix_registry_metadata()
                 'std'  => '',
             ),
             array(
-                'name' => __('Max Guests', 'atollmatrix'),
-                'id'   => 'atollmatrix_registry_max_guests',
-                'type' => 'range',
-                'min'  => '1',
-                'max'  => '9',
-                'step' => '1',
-                'unit' => 'guests',
-                'desc' => __('Max guests allowed.', 'atollmatrix'),
+                'name' => __('Registration Data', 'atollmatrix'),
+                'id'   => 'atollmatrix_registration_data',
+                'type' => 'atollmatrix_registration_data',
+                'desc' => __('Registration Data', 'atollmatrix'),
                 'std'  => '',
             ),
             array(

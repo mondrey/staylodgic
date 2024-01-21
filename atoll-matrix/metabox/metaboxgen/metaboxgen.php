@@ -410,6 +410,24 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
 
                     break;
 
+                case 'atollmatrix_registration_data':
+
+                    $booking_data = get_post_meta($post_id, 'booking_data', true);
+                    if (is_array($booking_data)) {
+                        foreach ($booking_data as $label => $value) {
+                            echo '<p><strong>' . esc_html($label) . ':</strong> ' . esc_html($value) . '</p>';
+                        }
+                    }
+                    if (isset($booking_data['Registration ID'])) {
+                        $registration_id = $booking_data['Registration ID'];
+                        $upload_dir = wp_upload_dir();
+                        $signature_url = $upload_dir['baseurl'] . '/signatures/' . $registration_id . '.png';
+                    
+                        echo '<img src="' . esc_url($signature_url) . '" alt="Signature">';
+                    }                                        
+
+                    break;
+
                 case 'readonly':
                     $text_value = $meta ? $meta : $field['std'];
                     echo '<input readonly type="text" class="' . $class . '" name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '" value="' . esc_attr($text_value) . '" size="30" />';

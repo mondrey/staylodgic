@@ -22,11 +22,59 @@ class GuestRegistry
         // Add a filter to modify the content of atmx_guestregistry posts
         add_filter('the_content', array($this, 'append_shortcode_to_content'));
 
+        add_action('wp_ajax_save_guestregistration_data', array($this, 'save_guestregistration_data'));
+        add_action('wp_ajax_nopriv_save_guestregistration_data', array($this, 'save_guestregistration_data'));
 
         add_action('wp_ajax_get_guest_post_permalink', array($this, 'get_guest_post_permalink'));
         add_action('wp_ajax_nopriv_get_guest_post_permalink', array($this, 'get_guest_post_permalink'));
 
     }
+
+    function save_guestregistration_data() {
+        error_log(print_r($_POST, true)); // Log the POST data
+    
+        // Verify nonce
+        if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'atollmatrix-nonce-search')) {
+            wp_die('Security check failed');
+        }
+    
+        $post_id = intval($_POST['post_id']); // Sanitize post ID
+        $booking_data = $_POST['booking_data']; // Consider sanitizing this data
+        $signature_data = $_POST['signature_data']; // Base64 data
+    
+        // Create a directory if it doesn't exist
+        $upload_dir = wp_upload_dir();
+        $signatures_dir = $upload_dir['basedir'] . '/signatures';
+        if (!file_exists($signatures_dir)) {
+            wp_mkdir_p($signatures_dir);
+        }
+    
+        // Decode signature data and save as PNG
+        if (strpos($signature_data, 'data:image/png;base64,') === 0) {
+            $signature_data = str_replace('data:image/png;base64,', '', $signature_data);
+            $signature_data = str_replace(' ', '+', $signature_data);
+            $signature_data = base64_decode($signature_data);
+    
+            if ($signature_data === false) {
+                error_log('Decoding base64 signature failed.');
+            } else {
+                $registration_id = $post_id . '_' . rand(); // Random number prefixed with post_id
+                $file = $signatures_dir . '/' . $registration_id . '.png';
+                if (file_put_contents($file, $signature_data) === false) {
+                    error_log('Failed to save signature file.');
+                } else {
+                    error_log('Signature file saved successfully.');
+                    $booking_data['Registration ID'] = $registration_id;
+                    update_post_meta($post_id, 'booking_data', $booking_data);
+                }
+            }
+        } else {
+            error_log('Invalid signature data format.');
+        }
+    
+        echo 'Data Saved';
+        wp_die();
+    }    
 
     function get_guest_post_permalink() {
 
@@ -56,8 +104,15 @@ class GuestRegistry
             $saved_shortcode = get_option('atollmatrix_guestregistry_shortcode', '');
             $saved_shortcode = stripslashes($saved_shortcode);
 
+            $form_start = '[form_start action="submission_url" method="post"]';
+            $form_submit = '[form_input type="submit" id="submitregistration" class="btn btn-primary" value="Save Registration"]';
+            $form_end = '[form_end]';
+
+            $final_shortcode = $form_start . $saved_shortcode . $form_submit . $form_end;
+
+
             // Append the shortcode to the original content
-            $content .= '<div class="guestregistry-shortcode-content">' . do_shortcode($saved_shortcode) . '</div>';
+            $content .= '<div class="guestregistry-shortcode-content">' . do_shortcode($final_shortcode) . '</div>';
         }
 
         return $content;
@@ -112,32 +167,6 @@ HTML;
         return $dataFields;
     }
 
-    public function guestRegistrationForm( $booking_number )
-    {
-        $country_options = atollmatrix_country_list("select", "");
-
-        $html = '<div class="registration-column registration-column-two" id="booking-summary">';
-        $html .= '<p>Please enter registration details</p>';
-        $html .= '</div>';
-
-        $registrationSuccess = self::registrationSuccessful();
-
-        $formInputs = self::bookingDataFields();
-
-        $reservation_instance = new \AtollMatrix\Reservations();
-        $reservation_id    = $reservation_instance->getReservationIDforBooking($booking_number);
-        
-        $reservation_instance = new \AtollMatrix\Reservations( $date = false, $room_id = false, $reservation_id);
-        $numberOfOccupants = $reservation_instance->getTotalOccupantsForReservation($reservation_id);
-
-        $regsitration_contactform_id = '48b9210';
-
-        $contactform = do_shortcode(('[contact-form-7 id="'.$regsitration_contactform_id.'"]'));
-
-        return $contactform;
-
-    }
-
     public function requestRegistrationDetails($booking_number) {
         $booking_number = $_POST['booking_number'];
     
@@ -185,8 +214,6 @@ HTML;
         } else {
             echo "<p>No guest details found for Booking Number: " . esc_html($booking_number) . "</p>";
         }
-
-        echo $this->guestRegistrationForm( $booking_number );
     
         $informationSheet = ob_get_clean(); // Get the buffer content and clean the buffer
         echo $informationSheet; // Directly output the HTML content
