@@ -412,20 +412,69 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
 
                 case 'atollmatrix_registration_data':
 
-                    $booking_data = get_post_meta($post_id, 'booking_data', true);
+                    $registration_data = get_post_meta($post_id, 'registration_data', true);
 
-                    if (is_array($booking_data)) {
-                        foreach ($booking_data as $label => $value) {
-                            echo '<p><strong>' . esc_html($label) . ':</strong> ' . esc_html($value) . '</p>';
+                    error_log( 'registration_data' );
+                    error_log( print_r($registration_data, true) );
+
+                    if (is_array($registration_data)) {
+                        foreach ($registration_data as $guest_id => $guest_data) {
+                            foreach ($guest_data as $label => $value) {
+                                echo '<p><strong><span class="registration-label">' . esc_html($label) . ':</span></strong> <span class="registration-data">' . esc_html($value) . '</span></p>';
+                            }
+                            if (isset($guest_data['registration_id'])) {
+                                $registration_id = $guest_data['registration_id'];
+                                $upload_dir = wp_upload_dir();
+                                $signature_url = $upload_dir['baseurl'] . '/signatures/' . $registration_id . '.png';
+                            
+                                echo '<img src="' . esc_url($signature_url) . '" alt="Signature">';
+                            }
+                            // Add Edit and Delete buttons
+                            echo '<button class="edit-registration" data-guest-id="' . esc_attr($guest_id) . '">Edit</button>';
+                            echo '<button class="delete-registration" data-guest-id="' . esc_attr($guest_id) . '">Delete</button>';
                         }
-                    }
-                    if (isset($booking_data['registration_id'])) {
-                        $registration_id = $booking_data['registration_id'];
-                        $upload_dir = wp_upload_dir();
-                        $signature_url = $upload_dir['baseurl'] . '/signatures/' . $registration_id . '.png';
-                    
-                        echo '<img src="' . esc_url($signature_url) . '" alt="Signature">';
-                    }                                        
+                        
+                        // Delete Registration Modal
+                        echo '<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">';
+                          echo '<div class="modal-dialog">';
+                            echo '<div class="modal-content">';
+                              echo '<div class="modal-header">';
+                                echo '<h5 class="modal-title" id="deleteConfirmationModalLabel">Confirm Deletion</h5>';
+                                echo '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>';
+                              echo '</div>';
+                              echo '<div class="modal-body">';
+                                echo 'Are you sure you want to delete this registration?';
+                              echo '</div>';
+                              echo '<div class="modal-footer">';
+                                echo '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>';
+                                echo '<button type="button" class="btn btn-danger" id="confirmDelete">Delete</button>';
+                              echo '</div>';
+                            echo '</div>';
+                          echo '</div>';
+                        echo '</div>';
+
+
+                        // Edit Registration Modal
+                        echo '<div class="modal fade" id="editRegistrationModal" tabindex="-1" aria-labelledby="editRegistrationModalLabel" aria-hidden="true">';
+                        echo '<div class="modal-dialog">';
+                          echo '<div class="modal-content">';
+                            echo '<div class="modal-header">';
+                              echo '<h5 class="modal-title" id="editRegistrationModalLabel">Edit Registration</h5>';
+                              echo '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>';
+                            echo '</div>';
+                            echo '<div class="modal-body">';
+                              // Form fields will be inserted here via JavaScript
+                            echo '</div>';
+                            echo '<div class="modal-footer">';
+                              echo '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>';
+                              echo '<button type="button" class="btn btn-primary" id="saveEdit">Save Changes</button>';
+                            echo '</div>';
+                          echo '</div>';
+                        echo '</div>';
+                      echo '</div>';
+                      
+                        
+                    }                                   
 
                     break;
 

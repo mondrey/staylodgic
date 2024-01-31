@@ -1,6 +1,8 @@
 <?php
 namespace AtollMatrix;
 
+use Error;
+
 class GuestRegistry
 {
 
@@ -28,6 +30,12 @@ class GuestRegistry
         add_action('wp_ajax_get_guest_post_permalink', array($this, 'get_guest_post_permalink'));
         add_action('wp_ajax_nopriv_get_guest_post_permalink', array($this, 'get_guest_post_permalink'));
 
+        add_action('wp_ajax_delete_registration', array($this, 'delete_registration'));
+        add_action('wp_ajax_nopriv_delete_registration', array($this, 'delete_registration'));
+
+        add_action('wp_ajax_save_edited_registration', array($this, 'save_edited_registration'));
+        add_action('wp_ajax_nopriv_save_edited_registration', array($this, 'save_edited_registration'));
+
     }
 
     function save_guestregistration_data() {
@@ -41,6 +49,8 @@ class GuestRegistry
         $post_id = intval($_POST['post_id']); // Sanitize post ID
         $booking_data = $_POST['booking_data']; // Consider sanitizing this data
         $signature_data = $_POST['signature_data']; // Base64 data
+
+        $registration_data = array();
     
         // Create a directory if it doesn't exist
         $upload_dir = wp_upload_dir();
@@ -71,7 +81,11 @@ class GuestRegistry
                     if (isset($booking_data['Sign'])) {
                         unset($booking_data['Sign']);
                     }
-                    update_post_meta($post_id, 'booking_data', $booking_data);
+                    if ( null !== get_post_meta($post_id, 'registration_data', true) ) {
+                        $registration_data = get_post_meta($post_id, 'registration_data', true);
+                    }
+                    $registration_data[$registration_id] = $booking_data;
+                    update_post_meta($post_id, 'registration_data', $registration_data);
                 }
             }
         } else {
@@ -81,6 +95,62 @@ class GuestRegistry
         echo 'Data Saved';
         wp_die();
     }    
+
+    function delete_registration() {
+        
+        $guest_id = isset($_POST['guest_id']) ? $_POST['guest_id'] : 0;
+        $post_id = isset($_POST['post_id']) ? $_POST['post_id'] : 0;
+
+        // Remove registration data and signature
+        $registration_data = get_post_meta($post_id, 'registration_data', true);
+
+        error_log( 'Delete guest data' );
+        error_log( $post_id );
+        error_log( print_r($registration_data,true) );
+        error_log( 'Delete guest data -- end' );
+        if (isset($registration_data[$guest_id])) {
+            $registration_id = $registration_data[$guest_id]['registration_id'];
+            unset($registration_data[$guest_id]);
+            update_post_meta($post_id, 'registration_data', $registration_data);
+    
+            // Delete signature file
+            $upload_dir = wp_upload_dir();
+            $signature_file = $upload_dir['basedir'] . '/signatures/' . $registration_id . '.png';
+            if (file_exists($signature_file)) {
+                unlink($signature_file);
+            }
+    
+            wp_send_json_success();
+        } else {
+            wp_send_json_error();
+        }
+    
+        wp_die(); // This is required to terminate immediately and return a proper response
+    }
+
+    function save_edited_registration() {
+        check_ajax_referer('atollmatrix_secure_nonce', 'nonce');
+    
+        $post_id = isset($_POST['post_id']) ? intval($_POST['post_id']) : 0;
+        $guest_id = isset($_POST['guest_id']) ? sanitize_text_field($_POST['guest_id']) : '';
+        $edited_data = isset($_POST['edited_data']) ? $_POST['edited_data'] : array();
+    
+        // Update registration data
+        $registration_data = get_post_meta($post_id, 'registration_data', true);
+        if(isset($registration_data[$guest_id]) && is_array($edited_data)) {
+            foreach($edited_data as $key => $value) {
+                if($key !== 'registration_id') {
+                    $registration_data[$guest_id][$key] = sanitize_text_field($value);
+                }
+            }
+            update_post_meta($post_id, 'registration_data', $registration_data);
+            wp_send_json_success();
+        } else {
+            wp_send_json_error();
+        }
+    
+        wp_die();
+    }
 
     function get_guest_post_permalink() {
 
