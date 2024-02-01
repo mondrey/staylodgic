@@ -158,9 +158,13 @@ class AtollMatrix_Init
                 wp_enqueue_script('qrcodejs');
 
                 wp_enqueue_script('jquery-ui-slider');
-
-                wp_enqueue_style('bootstrap');
-                wp_enqueue_script('bootstrap');
+            
+                wp_enqueue_script('atollmatrix-invoice');
+                wp_localize_script('atollmatrix-invoice', 'atollmatrixData', array(
+                    'pluginUrl' => plugin_dir_url(__FILE__),
+                ));
+            
+                wp_enqueue_style('atollmatrix-invoice');
             }
             if ($current_admin_screen->base == 'atoll-matrix_page_import-booking-ical') {
 

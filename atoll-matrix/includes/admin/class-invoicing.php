@@ -321,11 +321,11 @@ return ob_get_clean();
             <p><span>Room Type:</span><?php echo $roomType; ?></p>
             <p><span>Adults:</span><?php echo $numberofAdults; ?></p>
             <?php
-if ($numberofChildren > 0) {
+            if ($numberofChildren > 0) {
             ?>
             <p><span>Children:</span><?php echo $numberofChildren; ?></p>
             <?php
-}
+            }
         ?>
         </section>
 
@@ -333,7 +333,7 @@ if ($numberofChildren > 0) {
             <h2>Room Price</h2>
             <p class="nightly-rate-info"><span class="nightly-rate"><?php echo atollmatrix_price($roomPrice); ?></span><span class="nights"> x <?php echo $numberDays; ?> Nights</span></p>
             <?php
-$reservations_instance = new \AtollMatrix\Reservations();
+        $reservations_instance = new \AtollMatrix\Reservations();
         $reservationID         = $reservations_instance->getReservationIDforBooking($bookingNumber);
         $taxStatus             = get_post_meta($reservationID, 'atollmatrix_tax', true);
         if ('enabled' == $taxStatus) {
@@ -341,7 +341,7 @@ $reservations_instance = new \AtollMatrix\Reservations();
             <div class="subtotal-info"><p class="subtotal">Sub Total:</p><p><?php echo atollmatrix_price($subTotal); ?></p></div>
             <p>Taxes and Fees: <?php echo $taxesAndFees; ?></p>
             <?php
-}
+        }
         ?>
             <div class="invoice-total"><strong>Total Amount:</p><p><?php echo atollmatrix_price($totalAmount); ?></strong></div>
         </section>

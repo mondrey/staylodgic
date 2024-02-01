@@ -66,6 +66,7 @@
 	max-width: 100px;
 }
 
+h2#invoice-subheading,
 .invoice-container h2 {
 	font-size: 16px;
 	font-weight: 600;
@@ -151,6 +152,13 @@
 #invoice-booking-details span {
 	width: 50%;
 	display: inline-block;
+}
+
+.registration-signature {
+	width: 140px;
+}
+.invoice-customer-registration {
+	padding: 0 10px;
 }
 
 

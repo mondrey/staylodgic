@@ -8,9 +8,23 @@ class GuestRegistry
 
     protected $bookingNumber;
     private static $idLabelMap = [];
+    private $reservationID;
+    private $hotelName;
+    private $hotelPhone;
+    private $hotelAddress;
+    private $hotelHeader;
+    private $hotelFooter;
+    private $hotelLogo;
 
     public function __construct(
-        $bookingNumber = null
+        $bookingNumber = null,
+        $reservationID = null,
+        $hotelName = null,
+        $hotelPhone = null,
+        $hotelAddress = null,
+        $hotelHeader = null,
+        $hotelFooter = null,
+        $hotelLogo = null
     ) {
         $this->bookingNumber = uniqid();
 
@@ -33,12 +47,140 @@ class GuestRegistry
         add_action('wp_ajax_delete_registration', array($this, 'delete_registration'));
         add_action('wp_ajax_nopriv_delete_registration', array($this, 'delete_registration'));
 
-        add_action('wp_ajax_save_edited_registration', array($this, 'save_edited_registration'));
-        add_action('wp_ajax_nopriv_save_edited_registration', array($this, 'save_edited_registration'));
+    }
 
+    public function display_registration() {
+
+        // Hotel Information
+        $property_logo_id = atollmatrix_get_option('property_logo');
+        $property_name    = atollmatrix_get_option('property_name');
+        $property_phone   = atollmatrix_get_option('property_phone');
+        $property_address = atollmatrix_get_option('property_address');
+        $property_header  = atollmatrix_get_option('property_header');
+        $property_footer  = atollmatrix_get_option('property_footer');
+
+        $this->hotelName    = $property_name;
+        $this->hotelPhone   = $property_phone;
+        $this->hotelAddress = $property_address;
+        $this->hotelHeader  = $property_header;
+        $this->hotelFooter  = $property_footer;
+        $this->hotelLogo    = $property_logo_id ? wp_get_attachment_image_url($property_logo_id, 'full') : '';
+
+        $registrationSheet = $this->registrationTemplate(
+            $this->bookingNumber,
+            $this->hotelName,
+            $this->hotelPhone,
+            $this->hotelAddress,
+            $this->hotelHeader,
+            $this->hotelFooter,
+            $this->hotelLogo
+        );
+        echo $registrationSheet;
+    }
+
+    public function registrationTemplate(
+        $bookingNumber,
+        $hotelName,
+        $hotelPhone,
+        $hotelAddress,
+        $hotelHeader,
+        $hotelFooter,
+        $hotelLogo
+    ) {
+        $currentDate = date('F jS, Y'); // Outputs: January 1st, 2024
+        
+        $registration_data = get_post_meta(get_the_id(), 'registration_data', true);
+
+        error_log( 'registration_data' );
+        error_log( print_r($registration_data, true) );
+
+        if (is_array($registration_data)) {
+            foreach ($registration_data as $guest_id => $guest_data) {
+
+        // Get the post URL
+        $post_url = get_permalink( get_the_id() ); // Assuming $post_id is the ID of the post
+    
+        // Append guest ID as a query parameter
+        $edit_url = add_query_arg('guest', $guest_id, $post_url);
+    
+        // Add Edit and Delete buttons
+        echo '<a href="' . esc_url($edit_url) . '" target="_blank" class="edit-registration button" data-guest-id="' . esc_attr($guest_id) . '">Edit</a>';
+        // Inside your PHP loop where you're echoing out the delete buttons
+        echo '<button class="delete-registration" data-guest-id="' . esc_attr($guest_id) . '">Delete</button>';
+        
+        ob_start();
+        ?>
+        <button id="print-invoice-button" class="print-invoice-button">Print Invoice</button>
+        <button id="save-pdf-invoice-button" class="save-pdf-invoice-button">Save PDF</button>
+        
+        <div class="invoice-container">
+        <div class="invoice-container-inner">
+        <div id="invoice-hotel-header">
+            <section id="invoice-hotel-logo">
+                <img class="invoice-logo" src="<?php echo $hotelLogo; ?>" />
+            </section>
+            <section id="invoice-info">
+                <p><?php echo $hotelHeader; ?></p>
+                <p>Booking No: <?php echo $bookingNumber; ?></p>
+                <p>Date: <?php echo $currentDate; ?></p>
+                <p class="invoice-booking-status">Guest registration</p>
+            </section>
+        </div>
+        <section id="invoice-hotel-info">
+                <p><strong><?php echo $hotelName; ?></strong></p>
+                <p><?php echo $hotelAddress; ?></p>
+                <p><?php echo $hotelPhone; ?></p>
+        </section>
+        <section id="invoice-customer-info">
+            <h2 id="invoice-subheading">Registration:</h2>
+            <div class="invoice-customer-registration">
+            <?php
+                    // Display guest information
+                    foreach ($guest_data as $info_key => $info_value) {
+                        // Skip the registration_id in the inner loop since it's handled separately
+                        if ($info_key != 'registration_id') {
+                            echo '<p class="type-container" data-type="' . esc_attr($info_value['type']) . '" data-id="' . esc_attr($info_key) . '"><strong><span class="registration-label">' . esc_html($info_value['label']) . ':</span></strong> <span class="registration-data">' . esc_html($info_value['value']) . '</span></p>';
+                        }
+                    }
+                
+                    // Handle registration_id and signature image separately
+                    if (isset($guest_data['registration_id'])) {
+                        $registration_id = $guest_data['registration_id'];
+                        $upload_dir = wp_upload_dir();
+                        $signature_url = $upload_dir['baseurl'] . '/signatures/' . $registration_id . '.png';
+                
+                        echo '<img class="registration-signature" src="' . esc_url($signature_url) . '" alt="Signature">';
+                    }
+                
+            ?>
+            </div>
+        </section>
+
+        </div>
+        <footer>
+            <div class="invoice-footer"><?php echo $hotelFooter; ?></div>
+        </footer>
+        </div>
+        <?php
+                }
+
+                // After the loop, add the modal HTML
+                echo '<div id="deleteConfirmationModal" class="modal" style="display: none;">';
+                    echo '<div class="modal-content">';
+                        echo '<span class="close-button">×</span>';
+                        echo '<h4>Confirm Deletion</h4>';
+                        echo '<p>Are you sure you want to delete this registration?</p>';
+                        echo '<button id="confirmDelete">Delete</button>';
+                        echo '<button id="cancelDelete">Cancel</button>';
+                    echo '</div>';
+                echo '</div>';
+                
+            }
+return ob_get_clean();
     }
 
     function save_guestregistration_data() {
+        error_log( 'Registration post save'); // Log the POST data
         error_log(print_r($_POST, true)); // Log the POST data
     
         // Verify nonce
@@ -49,6 +191,11 @@ class GuestRegistry
         $post_id = intval($_POST['post_id']); // Sanitize post ID
         $booking_data = $_POST['booking_data']; // Consider sanitizing this data
         $signature_data = $_POST['signature_data']; // Base64 data
+
+        $guest_id = false;
+        if ( isset( $_POST['guest_id'] )) {
+            $guest_id = $_POST['guest_id']; // data
+        }
 
         $registration_data = array();
     
@@ -78,11 +225,17 @@ class GuestRegistry
                     if (isset($booking_data['signature_data'])) {
                         unset($booking_data['signature_data']);
                     }
+                    if (isset($booking_data['signature-data'])) {
+                        unset($booking_data['signature-data']);
+                    }
                     if (isset($booking_data['Sign'])) {
                         unset($booking_data['Sign']);
                     }
                     if ( null !== get_post_meta($post_id, 'registration_data', true) ) {
                         $registration_data = get_post_meta($post_id, 'registration_data', true);
+                    }
+                    if ( $guest_id ) {
+                        $registration_id = $guest_id;
                     }
                     $registration_data[$registration_id] = $booking_data;
                     update_post_meta($post_id, 'registration_data', $registration_data);
@@ -126,30 +279,6 @@ class GuestRegistry
         }
     
         wp_die(); // This is required to terminate immediately and return a proper response
-    }
-
-    function save_edited_registration() {
-        check_ajax_referer('atollmatrix_secure_nonce', 'nonce');
-    
-        $post_id = isset($_POST['post_id']) ? intval($_POST['post_id']) : 0;
-        $guest_id = isset($_POST['guest_id']) ? sanitize_text_field($_POST['guest_id']) : '';
-        $edited_data = isset($_POST['edited_data']) ? $_POST['edited_data'] : array();
-    
-        // Update registration data
-        $registration_data = get_post_meta($post_id, 'registration_data', true);
-        if(isset($registration_data[$guest_id]) && is_array($edited_data)) {
-            foreach($edited_data as $key => $value) {
-                if($key !== 'registration_id') {
-                    $registration_data[$guest_id][$key] = sanitize_text_field($value);
-                }
-            }
-            update_post_meta($post_id, 'registration_data', $registration_data);
-            wp_send_json_success();
-        } else {
-            wp_send_json_error();
-        }
-    
-        wp_die();
     }
 
     function get_guest_post_permalink() {

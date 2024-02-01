@@ -15,13 +15,6 @@ function atollmatrix_registry_metadata()
         'priority' => 'high',
         'fields'   => array(
             array(
-                'name'         => __('Registry Settings', 'atollmatrix'),
-                'id'           => 'atollmatrix_page_section_id',
-                'type'         => 'break',
-                'sectiontitle' => __('Page Settings', 'atollmatrix'),
-                'std'          => '',
-            ),
-            array(
                 'name' => __('Booking Number', 'atollmatrix'),
                 'id'   => 'atollmatrix_registry_bookingnumber',
                 'type' => 'text',

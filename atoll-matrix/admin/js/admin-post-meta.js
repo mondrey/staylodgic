@@ -1,78 +1,22 @@
 jQuery(document).ready(function($) {
 	"use strict";
 
-
-	function EditRegistration() {
-		$('.edit-registration').click(function(e) {
-			e.preventDefault();
-			var guestId = $(this).data('guest-id');
-			
-			// Clear previous data
-			$('#editRegistrationModal .modal-body').empty();
-	
-			// Dynamically create form fields based on the registration data
-			$(this).prevAll('p').each(function() {
-				var label = $(this).find('.registration-label').text().replace(':', '').trim();
-				var value = $(this).find('.registration-data').text().trim();
-
-				if(label !== 'registration_id' && label !== 'Agree to Terms' ) { // Exclude registration_id from editable fields
-					var inputHtml = '<div class="mb-3"><label class="form-label">' + label + '</label><input type="text" class="form-control" name="' + label + '" value="' + value + '"></div>';
-					$('#editRegistrationModal .modal-body').append(inputHtml);
-				}
-			});
-	
-			// Show modal
-			$('#editRegistrationModal').modal('show');
-	
-			// Save Changes
-			$('#saveEdit').off('click').on('click', function() {
-				// Collect data to save
-				var editedData = {};
-				$('#editRegistrationModal .modal-body input').each(function() {
-					var name = $(this).attr('name');
-					var value = $(this).val();
-					editedData[name] = value;
-				});
-	
-				// AJAX call to save the edited data
-				$.ajax({
-					url: ajaxurl,
-					type: 'POST',
-					data: {
-						'action': 'save_edited_registration',
-						'post_id': atollmatrix_admin_vars.post_id,
-						'nonce': atollmatrix_admin_vars.nonce,
-						'guest_id': guestId,
-						'edited_data': editedData
-					},
-					success: function(response) {
-						if(response.success) {
-							// Handle success
-							alert('Registration updated successfully.');
-							location.reload(); // or update the page content dynamically
-						} else {
-							alert('Failed to update registration.');
-						}
-					}
-				});
-	
-				$('#editRegistrationModal').modal('hide');
-			});
-		});
-	}
-	EditRegistration();	
-
-
 	function DeleteRegistration() {
 		var guestIdToDelete = null;
-
+	
 		$('.delete-registration').click(function(e) {
 			e.preventDefault();
 			guestIdToDelete = $(this).data('guest-id');
-			$('#deleteConfirmationModal').modal('show');
+			$('#deleteConfirmationModal').show();
 		});
-
-		$('#confirmDelete').click(function() {
+	
+		$('.close-button, #cancelDelete').click(function(e) {
+			e.preventDefault(); // Prevent default action
+			$('#deleteConfirmationModal').hide();
+		});
+	
+		$('#confirmDelete').click(function(e) {
+			e.preventDefault(); // Prevent default action
 			if (guestIdToDelete !== null) {
 				$.ajax({
 					url: ajaxurl,
@@ -92,11 +36,11 @@ jQuery(document).ready(function($) {
 					}
 				});
 			}
-			$('#deleteConfirmationModal').modal('hide');
+			$('#deleteConfirmationModal').hide();
 			guestIdToDelete = null;
 		});
 	}
-	DeleteRegistration();
+	DeleteRegistration();	
 
 
 	function GenerateQrCode() {
