@@ -462,6 +462,16 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                     echo '<input type="text" class="' . $class . '" name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '" value="' . esc_attr($text_value) . '" size="30" />';
                     break;
 
+                case 'registration':
+                    $text_value = $meta ? $meta : $field['std'];
+                    echo '<input type="text" class="' . $class . '" name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '" value="' . esc_attr($text_value) . '" size="30" />';
+                    $reservation_array = array();
+                    $reservation_instance = new \AtollMatrix\Reservations();
+                    $reservation_id = $reservation_instance->getReservationIDforBooking($text_value);
+                    $reservation_array[] = $reservation_id;
+                    echo $reservation_instance->getEditLinksForReservations($reservation_array);
+                    break;
+
                 case 'currency':
                     $text_value = $meta ? $meta : $field['std'];
                     if ( isset( $field['datatype'] ) ) {

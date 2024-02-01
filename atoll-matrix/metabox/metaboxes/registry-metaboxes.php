@@ -17,7 +17,7 @@ function atollmatrix_registry_metadata()
             array(
                 'name' => __('Booking Number', 'atollmatrix'),
                 'id'   => 'atollmatrix_registry_bookingnumber',
-                'type' => 'text',
+                'type' => 'registration',
                 'desc' => __('Booking Number', 'atollmatrix'),
                 'std'  => '',
             ),
