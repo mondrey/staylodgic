@@ -1107,6 +1107,24 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                     echo \AtollMatrix\Customers::generateCustomerHtmlList($customer_data);
 
                     break;
+                case 'reservation_registration':
+
+                    $reservation_instance = new \AtollMatrix\Reservations($date = false, $room_id = false, $reservation_id = get_the_id() );
+                    $bookingnumber = $reservation_instance->getBookingNumber();
+
+                    if ( $bookingnumber ) {
+                        $registry_instance = new \AtollMatrix\GuestRegistry();
+                        $resRegIDs =  $registry_instance->fetchResRegIDsByBookingNumber( $bookingnumber );
+                        if ( isset( $resRegIDs['guestRegisterID'] ) ) {
+                            $registry_instance->outputRegistrationAndOccupancy($resRegIDs['reservationID'], $resRegIDs['guestRegisterID'], 'text');
+                            $registry_instance->outputRegistrationAndOccupancy($resRegIDs['reservationID'], $resRegIDs['guestRegisterID'], 'icons');
+                            $guestregistration_post_edit   = get_edit_post_link($resRegIDs['guestRegisterID']);
+                            echo '<a class="button button-primary button-large" href="' . $guestregistration_post_edit . '">Edit Guest Registration</a>';
+                        } else {
+                            echo '<a data-bookingnumber="'.$bookingnumber.'" class="create-guest-registration button button-primary button-large" href="#">Create Guest Registration</a>';
+                        }
+                    }
+                    break;
 
                 case 'guests':
                     $output = "";

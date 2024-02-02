@@ -45,6 +45,65 @@ class GuestRegistry
         add_action('wp_ajax_delete_registration', array($this, 'delete_registration'));
         add_action('wp_ajax_nopriv_delete_registration', array($this, 'delete_registration'));
 
+        add_action('wp_ajax_create_guest_registration', array($this, 'create_guest_registration_ajax_handler'));
+
+    }
+
+    public function create_guest_registration_ajax_handler() {
+        // Check user capabilities or nonce here for security, e.g.,
+        // if ( !current_user_can('edit_posts') ) wp_die();
+        $bookingNumber = isset($_POST['bookingNumber']) ? sanitize_text_field($_POST['bookingNumber']) : '';
+    
+        // Create a new guest registration post
+        $post_id = wp_insert_post(array(
+            'post_title'    => wp_strip_all_tags('Registration for ' . $bookingNumber),
+            'post_content'  => '',
+            'post_status'   => 'publish',
+            'post_type'     => 'atmx_guestregistry', // Ensure this is the correct post type
+            'meta_input'    => array(
+                'atollmatrix_registry_bookingnumber' => $bookingNumber,
+            ),
+        ));
+    
+        if ($post_id) {
+            // Successfully created post, return its ID
+            echo $post_id;
+        } else {
+            // There was an error
+            echo 'error';
+        }
+    
+        wp_die(); // this is required to terminate immediately and return a proper response
+    }
+
+    /**
+     * Checks if a guest registration post exists for a given booking number.
+     *
+     * @param string $bookingNumber The booking number to search for.
+     * @return bool|int Returns the guest register post ID if found, otherwise returns false.
+     */
+    public function checkGuestRegistrationByBookingNumber($bookingNumber) {
+        $guestRegisterArgs = array(
+            'post_type'      => 'atmx_guestregistry', // Adjust to your guest register post type
+            'posts_per_page' => 1,
+            'post_status'    => 'publish',
+            'meta_query'     => array(
+                array(
+                    'key'   => 'atollmatrix_registry_bookingnumber', // Ensure this matches your actual meta key
+                    'value' => $bookingNumber,
+                ),
+            ),
+        );
+
+        $guestRegisterQuery = new \WP_Query($guestRegisterArgs);
+
+        // Check if a guest register post is found
+        if ($guestRegisterQuery->have_posts()) {
+            // Return the ID of the guest registration post
+            return $guestRegisterQuery->posts[0]->ID;
+        }
+
+        return false; // Return false if no guest registration post is found
     }
 
     /**
@@ -341,7 +400,7 @@ class GuestRegistry
                     if (isset($booking_data[ 'Sign' ])) {
                         unset($booking_data[ 'Sign' ]);
                     }
-                    if (null !== get_post_meta($post_id, 'registration_data', true)) {
+                    if ( is_array( get_post_meta($post_id, 'registration_data', true) ) ) {
                         $registration_data = get_post_meta($post_id, 'registration_data', true);
                     }
                     if (isset($booking_data['registration_id']) && $guest_id) {

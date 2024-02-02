@@ -1,6 +1,30 @@
 jQuery(document).ready(function($) {
 	"use strict";
 
+	$(document).on('click', '.create-guest-registration', function(e) {
+		e.preventDefault(); // Prevent default anchor action
+	
+		var bookingNumber = $(this).data('bookingnumber'); // Get the booking number from the button's data attribute
+	
+		// AJAX call to the back-end
+		$.ajax({
+			url: ajaxurl, // This variable is automatically defined by WordPress in the admin
+			type: 'POST',
+			data: {
+				'action': 'create_guest_registration', // The action hook name
+				'bookingNumber': bookingNumber, // Pass the booking number to the back-end
+			},
+			success: function(response) {
+				// On successful AJAX response, reload the page
+				window.location.reload();
+			},
+			error: function() {
+				// Handle error
+				alert('Error creating guest registration.');
+			}
+		});
+	});
+	
 	function DeleteRegistration() {
 		var guestIdToDelete = null;
 	

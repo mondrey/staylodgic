@@ -263,6 +263,13 @@ function atollmatrix_reservations_metadata()
                 'type' => 'seperator',
             ),
             array(
+                'name'    => esc_html__('Guest Registration', 'atollmatrix'),
+                'id'      => 'atollmatrix_reservation_registration',
+                'class'   => 'reservation_registration',
+                'type'    => 'reservation_registration',
+                'desc'    => esc_html__('Customer choice', 'atollmatrix'),
+            ),
+            array(
                 'name'    => esc_html__('Customer', 'atollmatrix'),
                 'id'      => 'atollmatrix_customer_choice',
                 'class'   => 'customer_choice',
