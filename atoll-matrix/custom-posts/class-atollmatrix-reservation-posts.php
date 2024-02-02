@@ -20,6 +20,7 @@ class atollmatrix_Reservation_Posts
             "reservation_customer"   => __('Customer', 'atollmatrix'),
             "reservation_bookingnr"  => __('Booking Number', 'atollmatrix'),
             "reservation_checkinout" => __('Checkin / Checkout', 'atollmatrix'),
+            "reservation_registered" => __('Registered', 'atollmatrix'),
             "reservation_nights"     => __('Nights', 'atollmatrix'),
             "reservation_status"     => __('Status', 'atollmatrix'),
             "reservation_substatus"  => __('Sub Status', 'atollmatrix'),
@@ -41,13 +42,14 @@ class atollmatrix_Reservation_Posts
         }
 
         $reservation_instance = new \AtollMatrix\Reservations($date = false, $room_id = false, $reservation_id = $post->ID);
+        $bookingnumber = $reservation_instance->getBookingNumber();
+
         switch ($columns) {
             case "reservation_customer":
                 $customer_name = $reservation_instance->getCustomerEditLinkForReservation();
                 echo $customer_name;
                 break;
             case "reservation_bookingnr":
-                $bookingnumber = $reservation_instance->getBookingNumber();
                 echo $bookingnumber;
                 break;
             case "reservation_checkinout":
@@ -68,6 +70,13 @@ class atollmatrix_Reservation_Posts
                 echo '<p class="post-status-reservation-date post-status-reservation-date-checkin"><i class="fa-solid fa-arrow-right"></i> ' . atollmatrix_formatDate($reservation_checkin) . '</p>';
                 echo '<p class="post-status-reservation-date post-status-reservation-date-checkout"><i class="fa-solid fa-arrow-left"></i> ' . atollmatrix_formatDate($reservation_checkout) . '</p>';
 
+                break;
+            case "reservation_registered":
+                $registry_instance = new \AtollMatrix\GuestRegistry();
+                $resRegIDs =  $registry_instance->fetchResRegIDsByBookingNumber( $bookingnumber );
+                if ( $resRegIDs ) {
+                    $registry_instance->outputRegistrationAndOccupancy($resRegIDs['reservationID'], $resRegIDs['guestRegisterID'], 'icons');
+                }
                 break;
             case "reservation_nights":
                 $reservation_nights = $reservation_instance->countReservationDays();

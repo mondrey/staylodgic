@@ -47,55 +47,104 @@ class GuestRegistry
 
     }
 
-/**
- * Outputs the final registered and occupancy numbers for a given reservation in either text, fraction, or icons format.
- *
- * @param int $reservationID The ID of the reservation.
- * @param int $registerID The ID used for registering.
- * @param string $outputFormat Specifies the output format: 'text', 'fraction', or 'icons'.
- */
-public function outputRegistrationAndOccupancy($reservationID, $registerID, $outputFormat = 'text')
-{
-    $reservation_instance = new \AtollMatrix\Reservations();
+    /**
+     * Fetches the reservation and guest register post IDs based on a supplied booking number.
+     * Returns an associative array with 'reservationID' and 'guestRegisterID' if both are found,
+     * otherwise returns false.
+     *
+     * @param string $bookingNumber The booking number to search for.
+     * @return array|bool An associative array with 'reservationID' and 'guestRegisterID', or false if not both found.
+     */
+    public function fetchResRegIDsByBookingNumber($bookingNumber)
+    {
+        $reservationArgs = array(
+            'post_type'      => 'atmx_reservations', // Adjust to your reservation post type
+            'posts_per_page' => 1,
+            'post_status'    => 'publish',
+            'meta_query'     => array(
+                array(
+                    'key'   => 'atollmatrix_booking_number',
+                    'value' => $bookingNumber,
+                ),
+            ),
+        );
 
-    // Get total occupants for the reservation
-    $reservation_occupants = $reservation_instance->getTotalOccupantsForReservation($reservationID);
+        $guestRegisterArgs = array(
+            'post_type'      => 'atmx_guestregistry', // Adjust to your guest register post type
+            'posts_per_page' => 1,
+            'post_status'    => 'publish',
+            'meta_query'     => array(
+                array(
+                    'key'   => 'atollmatrix_registry_bookingnumber', // Adjust if the meta key is different
+                    'value' => $bookingNumber,
+                ),
+            ),
+        );
 
-    // Get registered guest count
-    $registeredGuestCount = $this->getRegisteredGuestCount($registerID);
+        $reservationQuery   = new \WP_Query($reservationArgs);
+        $guestRegisterQuery = new \WP_Query($guestRegisterArgs);
 
-    // Determine the output format
-    if ($outputFormat === 'icons' && $registeredGuestCount <= $reservation_occupants) {
-        echo '<div class="reservation-details">';
-        // Output filled circles for registered guests
-        for ($i = 0; $i < $registeredGuestCount; $i++) {
-            echo '<i class="fas fa-circle"></i> ';
+        // Check if both posts are found
+        if ($reservationQuery->have_posts() && $guestRegisterQuery->have_posts()) {
+            $result = array(
+                'reservationID'   => $reservationQuery->posts[0]->ID,
+                'guestRegisterID' => $guestRegisterQuery->posts[0]->ID,
+            );
+            return $result;
+        } else {
+            return false;
         }
-        // Output outline circles for the remaining occupancy
-        for ($i = $registeredGuestCount; $i < $reservation_occupants; $i++) {
-            echo '<i class="far fa-circle"></i> ';
-        }
-        echo '</div>';
-    } elseif ($outputFormat === 'fraction' || $registeredGuestCount > $reservation_occupants) {
-        // Fallback to fraction if registered guests exceed total occupancy or fraction is requested
-        echo '<div class="reservation-details">';
-        echo '<div class="occupancy-details">Registered: ' . esc_html($registeredGuestCount) . '/' . esc_html($reservation_occupants) . '</div>';
-        echo '</div>';
-    } else { // Default to text format
-        echo '<div class="reservation-details">';
-        echo '<div class="registered-occupants">Total guests: ' . esc_html($reservation_occupants) . '</div>';
-        echo '<div class="registered-guests">Registered guests: ' . esc_html($registeredGuestCount) . '</div>';
-        echo '</div>';
     }
-}
 
-/**
- * Returns the count of registered guests from the registration_data array for a given reservation ID.
- * If no ID is supplied, it attempts to fetch the current post ID.
- *
- * @param int|null $registrationID Optional. The ID of the reservation post. Default null.
- * @return int The number of registered guests.
- */
+    /**
+     * Outputs the final registered and occupancy numbers for a given reservation in either text, fraction, or icons format.
+     *
+     * @param int $reservationID The ID of the reservation.
+     * @param int $registerID The ID used for registering.
+     * @param string $outputFormat Specifies the output format: 'text', 'fraction', or 'icons'.
+     */
+    public function outputRegistrationAndOccupancy($reservationID, $registerID, $outputFormat = 'text')
+    {
+        $reservation_instance = new \AtollMatrix\Reservations();
+
+        // Get total occupants for the reservation
+        $reservation_occupants = $reservation_instance->getTotalOccupantsForReservation($reservationID);
+
+        // Get registered guest count
+        $registeredGuestCount = $this->getRegisteredGuestCount($registerID);
+
+        // Determine the output format
+        if ($outputFormat === 'icons' && $registeredGuestCount <= $reservation_occupants) {
+            echo '<div class="reservation-details">';
+            // Output filled circles for registered guests
+            for ($i = 0; $i < $registeredGuestCount; $i++) {
+                echo '<i class="fas fa-circle"></i> ';
+            }
+            // Output outline circles for the remaining occupancy
+            for ($i = $registeredGuestCount; $i < $reservation_occupants; $i++) {
+                echo '<i class="far fa-circle"></i> ';
+            }
+            echo '</div>';
+        } elseif ($outputFormat === 'fraction' || $registeredGuestCount > $reservation_occupants) {
+            // Fallback to fraction if registered guests exceed total occupancy or fraction is requested
+            echo '<div class="reservation-details">';
+            echo '<div class="occupancy-details">Registered: ' . esc_html($registeredGuestCount) . '/' . esc_html($reservation_occupants) . '</div>';
+            echo '</div>';
+        } else { // Default to text format
+            echo '<div class="reservation-details">';
+            echo '<div class="registered-occupants">Total guests: ' . esc_html($reservation_occupants) . '</div>';
+            echo '<div class="registered-guests">Registered guests: ' . esc_html($registeredGuestCount) . '</div>';
+            echo '</div>';
+        }
+    }
+
+    /**
+     * Returns the count of registered guests from the registration_data array for a given reservation ID.
+     * If no ID is supplied, it attempts to fetch the current post ID.
+     *
+     * @param int|null $registrationID Optional. The ID of the reservation post. Default null.
+     * @return int The number of registered guests.
+     */
     public function getRegisteredGuestCount($registrationID = null)
     {
         // Use the supplied ID or fallback to the current post ID
