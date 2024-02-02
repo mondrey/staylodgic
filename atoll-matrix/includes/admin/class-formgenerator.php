@@ -67,12 +67,15 @@ class FormGenerator
             case 'text':
             case 'number':
             case 'tel':
-            case 'date':
             case 'time':
             case 'email':
             case 'password':
                 // Common types of inputs
                 echo "<input data-label='$label' placeholder='$label' type='$type' id='$id' data-id='$id' name='$name' class='$class' value='$value' placeholder='$placeholder' $required>";
+                break;
+            case 'date':
+                // Common types of inputs
+                echo "<input data-label='$label' placeholder='$label' type='text' id='$id' data-id='$id' name='$name' class='flatpickr-date-time $class' value='$value' placeholder='$placeholder' $required>";
                 break;
             case 'textarea':
                 echo "<textarea data-label='$label' placeholder='$label' id='$id' data-id='$id' name='$name' class='$class' placeholder='$placeholder' $required>$value</textarea>";

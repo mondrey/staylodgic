@@ -158,6 +158,10 @@ class AtollMatrix_Init
                 wp_enqueue_script('qrcodejs');
 
                 wp_enqueue_script('jquery-ui-slider');
+
+                wp_enqueue_style('fontawesome-6');
+                wp_enqueue_style('fontawesome-6-brands');
+                wp_enqueue_style('fontawesome-6-solid');
             
                 wp_enqueue_script('atollmatrix-invoice');
                 wp_localize_script('atollmatrix-invoice', 'atollmatrixData', array(

@@ -2,6 +2,12 @@
     $(document).ready(function () {
         "use strict";
 
+        $('.flatpickr-date-time').flatpickr({
+            enableTime: true, // Enable time picker
+            dateFormat: "Y-m-d H:i", // Set the format to include date and time
+            // Additional options can be added here as needed
+        });
+
         $('#submitregistration').click(function(e){
             e.preventDefault();
     

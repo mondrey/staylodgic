@@ -555,18 +555,40 @@ class Reservations
 
     public function getNumberOfAdultsForReservation( $reservation_id = false )
     {
+
+        if (false !== $reservation_id) {
+            $this->reservation_id = $reservation_id;
+        }
+
         $number_of_adults = get_post_meta($this->reservation_id, 'atollmatrix_reservation_room_adults', true);
 
-        return $number_of_adults;
+        if ( isset($number_of_adults) && $number_of_adults ) {
+            return $number_of_adults;
+        }
+
+        return false;
     }
     public function getNumberOfChildrenForReservation( $reservation_id = false )
     {
-        $number_of_children = get_post_meta($this->reservation_id, 'atollmatrix_reservation_room_children', true);
 
-        return $number_of_children['number'];
+        if (false !== $reservation_id) {
+            $this->reservation_id = $reservation_id;
+        }
+
+        $number_of_children = get_post_meta($this->reservation_id, 'atollmatrix_reservation_room_children', true);
+        if ( isset($number_of_children['number']) && $number_of_children ) {
+            return $number_of_children['number'];
+        }
+
+        return false;
     }
     public function getTotalOccupantsForReservation( $reservation_id = false )
     {
+
+        if (false !== $reservation_id) {
+            $this->reservation_id = $reservation_id;
+        }
+
         $number_of_adults = $this->getNumberOfAdultsForReservation();
         $number_of_children = $this->getNumberOfChildrenForReservation();
 

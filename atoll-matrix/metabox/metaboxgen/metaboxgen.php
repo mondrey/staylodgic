@@ -468,8 +468,13 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                     $reservation_array = array();
                     $reservation_instance = new \AtollMatrix\Reservations();
                     $reservation_id = $reservation_instance->getReservationIDforBooking($text_value);
-                    $reservation_array[] = $reservation_id;
-                    echo $reservation_instance->getEditLinksForReservations($reservation_array);
+                    if ( $reservation_id ) {
+                        $reservation_array[] = $reservation_id;
+                        echo $reservation_instance->getEditLinksForReservations($reservation_array);
+
+                        $registry_instance = new \AtollMatrix\GuestRegistry();
+                        $registry_instance->outputRegistrationAndOccupancy($reservation_id, get_the_id(), 'icons');
+                    }
                     break;
 
                 case 'currency':
