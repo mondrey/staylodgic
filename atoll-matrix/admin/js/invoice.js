@@ -34,9 +34,13 @@
 			
 		});
 
-		$(document).on('click', '#save-pdf-invoice-button', function() {
+		$(document).on('click', '#save-pdf-invoice-button', function(e) {
+			e.preventDefault();
 			// Convert HTML to Canvas
-			html2canvas(document.querySelector('.invoice-container'), { scale: 2 }).then(canvas => {
+			var bookingNumber = $(this).data('id'); // Get the booking number from the button's data-id attribute
+			var bookingFile = $(this).data('file'); // Get the booking number from the button's data-id attribute
+			// Target the specific invoice container matching the booking number
+			html2canvas(document.querySelector('.invoice-container[data-bookingnumber="' + bookingNumber + '"]'), { scale: 2 }).then(canvas => {
 				// Canvas dimensions
 				const canvasWidth = canvas.width;
 				const canvasHeight = canvas.height;
@@ -57,33 +61,38 @@
 				doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
 			
 				// Save the PDF
-				doc.save('invoice.pdf');
+				doc.save(bookingFile + '.pdf');
 			});
 			
 		});
 				
 
-		$(document).on('click', '#print-invoice-button', function() {
-			var invoiceContent = $('.invoice-container').html();
+		$(document).on('click', '.print-invoice-button', function(e) {
+			e.preventDefault();
+			var bookingNumber = $(this).data('id'); // Get the booking number from the button's data-id attribute
+			var bookingTitle = $(this).data('title'); // Get the booking number from the button's data-id attribute
+			// Find the invoice container that matches the booking number
+			var invoiceContent = $('.invoice-container[data-bookingnumber="' + bookingNumber + '"]').html();
+			
 			var printFrame = $('<iframe id="print-frame" style="display:none;"></iframe>').appendTo('body');
 			
 			var frameDoc = printFrame[0].contentWindow ? printFrame[0].contentWindow : printFrame[0].contentDocument.document ? printFrame[0].contentDocument.document : printFrame[0].contentDocument;
 			frameDoc.document.open();
-			frameDoc.document.write('<html><head><title>Invoice</title>');
-
+			frameDoc.document.write('<html><head><title>' + bookingTitle + '</title>');
+			
 			// Include the external CSS file
 			frameDoc.document.write('<link rel="stylesheet" type="text/css" href="' + atollmatrixData.pluginUrl + 'admin/css/invoice.css">');
-
+			
 			frameDoc.document.write('</head><body>');
 			frameDoc.document.write(invoiceContent);
 			frameDoc.document.write('</body></html>');
 			frameDoc.document.close();
-
+			
 			setTimeout(function () {
 				frameDoc.window.print();
 				printFrame.remove();
 			}, 500);
-		});
+		});		
 
 		
 	});

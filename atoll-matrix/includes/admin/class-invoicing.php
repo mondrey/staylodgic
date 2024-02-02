@@ -285,9 +285,9 @@ return ob_get_clean();
         $currentDate = date('F jS, Y'); // Outputs: January 1st, 2024
         ob_start();
         ?>
-        <button id="print-invoice-button" class="print-invoice-button">Print Invoice</button>
-        <button id="save-pdf-invoice-button" class="save-pdf-invoice-button">Save PDF</button>
-        <div class="invoice-container">
+        <button data-title="Guest Registration <?php echo $bookingNumber; ?>" data-id="<?php echo $bookingNumber; ?>" id="print-invoice-button" class="print-invoice-button">Print Invoice</button>
+        <button data-file="registration-<?php echo $bookingNumber; ?>" data-id="<?php echo $bookingNumber; ?>" id="save-pdf-invoice-button" class="save-pdf-invoice-button">Save PDF</button>
+        <div class="invoice-container" data-bookingnumber="<?php echo $bookingNumber; ?>">
         <div class="invoice-container-inner">
         <div id="invoice-hotel-header">
             <section id="invoice-hotel-logo">

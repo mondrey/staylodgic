@@ -219,10 +219,10 @@ class GuestRegistry
 
                 ob_start();
                 ?>
-        <button id="print-invoice-button" class="print-invoice-button">Print Invoice</button>
-        <button id="save-pdf-invoice-button" class="save-pdf-invoice-button">Save PDF</button>
-
-        <div class="invoice-container">
+        <button data-title="Guest Registration <?php echo $guest_data['registration_id']; ?>" data-id="<?php echo $guest_data['registration_id']; ?>" id="print-invoice-button" class="print-invoice-button">Print Invoice</button>
+        <button data-file="registration-<?php echo $guest_data['registration_id']; ?>" data-id="<?php echo $guest_data['registration_id']; ?>" id="save-pdf-invoice-button" class="save-pdf-invoice-button">Save PDF</button>
+        
+        <div class="invoice-container" data-bookingnumber="<?php echo $guest_data['registration_id']; ?>">
         <div class="invoice-container-inner">
         <div id="invoice-hotel-header">
             <section id="invoice-hotel-logo">
