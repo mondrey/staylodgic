@@ -333,9 +333,9 @@ class GuestRegistry
 }
 
             // After the loop, add the modal HTML
-            echo '<div id="deleteConfirmationModal" class="modal" style="display: none;">';
-            echo '<div class="modal-content">';
-            echo '<span class="close-button">×</span>';
+            echo '<div id="deleteConfirmationModal" class="atollmatrox-modal" style="display: none;">';
+            echo '<div class="atollmatrox-modal-content">';
+            echo '<span class="atollmatrox-close-button">×</span>';
             echo '<h4>Confirm Deletion</h4>';
             echo '<p>Are you sure you want to delete this registration?</p>';
             echo '<button id="confirmDelete">Delete</button>';

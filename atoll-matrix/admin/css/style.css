@@ -927,7 +927,7 @@
 }
 
 
-.modal {
+.atollmatrix-modal {
     position: fixed;
     z-index: 999;
     padding-top: 100px;
@@ -939,7 +939,7 @@
     background-color: rgba(0, 0, 0, 0.4);
 }
 
-.modal-content {
+.atollmatrix-modal-content {
     background-color: #fefefe;
     margin: auto;
     padding: 20px;
@@ -947,15 +947,15 @@
     max-width: 320px;
 }
 
-.close-button {
+.atollmatrix-close-button {
     color: #aaa;
     float: right;
     font-size: 28px;
     font-weight: bold;
 }
 
-.close-button:hover,
-.close-button:focus {
+.atollmatrix-close-button:hover,
+.atollmatrix-close-button:focus {
     color: black;
     text-decoration: none;
     cursor: pointer;
