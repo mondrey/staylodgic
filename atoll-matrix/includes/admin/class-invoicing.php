@@ -150,12 +150,19 @@ class Invoicing
 
             $children = array();
             $children = get_post_meta($reservationID, 'atollmatrix_reservation_room_children', true);
-
+            error_log('children array');
+            error_log( print_r( $children, true ));
             $this->numberofAdults   = $adults;
-            $this->numberofChildren = $children[ 'number' ];
-            $totalGuests            = intval($adults + $children[ 'number' ]);
-            $this->numberOfGuests   = $totalGuests;
 
+            $totalGuests            = intval($adults);
+            
+            if ( isset( $children[ 'number' ] )) {
+                $this->numberofChildren = $children[ 'number' ];
+                $totalGuests            += intval( $children[ 'number' ]);
+            }
+            
+            $this->numberOfGuests   = $totalGuests;
+            
             $this->bookingStatus = 'Booking Pending';
             if ( $reservations_instance->isConfirmed_Reservation($reservationID) ) {
                 $this->bookingStatus = 'Booking Confirmed';

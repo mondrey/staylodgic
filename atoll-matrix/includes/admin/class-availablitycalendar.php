@@ -115,8 +115,9 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 		<div id="container">
 			<div id="calendar">
 				<?php
-				// Call the getAvailabilityCalendar() method
-				echo $this->getAvailabilityCalendar();
+				$calendar = $this->getAvailabilityCalendar();
+				// error_log ( $calendar );
+				echo $calendar;
 				?>
 			</div>
 		</div>
@@ -152,6 +153,124 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 		wp_die();
 	}
 
+	public function getAvailabilityCalendar( $startDate = false, $endDate = false ) {
+
+		if ( ! $startDate ) {
+			$startDate = $this->startDate;
+			$endDate   = $this->endDate;
+		} else {
+			$startDate = new \DateTime( $startDate );
+			$endDate   = new \DateTime( $endDate );
+		}
+
+		$dates = $this->getDates( $startDate, $endDate );
+		$today = $this->today;
+
+		if ( $startDate instanceof \DateTime ) {
+			$startDateString = $startDate->format( 'Y-m-d' );
+		} else {
+			$startDateString = $startDate;
+		}
+
+		if ( $endDate instanceof \DateTime ) {
+			$endDateString = $endDate->format( 'Y-m-d' );
+		} else {
+			$endDateString = $endDate;
+		}
+
+		$output = '<table id="calendarTable" data-calstart="' . esc_attr( $startDateString ) . '" data-calend="' . esc_attr( $endDateString ) . '">';
+			$output .= '<tr class="calendarRow">';
+				$output .= self::displayOccupancy_TableDataBlock( $startDate, $endDate);
+				$output .= self::displayOccupancyRange_TableDataBlock( $dates );
+			$output .= '</tr>';
+			$output .= '<tr class="calendarRow">';
+				$output .= '<td class="calendarCell rowHeader"></td>';
+				$numDays = $this->setNumDays( $startDateString, $endDateString );
+				$output .= self::displayDate_TableDataBlock( $dates, $numDays );
+			$output .= '</tr>';
+
+			$this->roomlist = \AtollMatrix\Rooms::getRoomList();
+			$room_output = '';
+			foreach ( $this->roomlist as $roomId => $roomName ) :
+				error_log('cache date');
+				error_log( $roomId . ' ' . $startDateString . ' ' . $endDateString );
+				error_log('----------');
+				$cache_instance = new \AtollMatrix\Cache( $roomId, $startDateString, $endDateString );
+				// $cache_instance->deleteCache();
+				$transient_key = $cache_instance->generateRoomCacheKey();
+				$cached_calendar = $cache_instance->getCache($transient_key);
+
+				if ( $cache_instance->hasCache($transient_key) && true == $cache_instance->isCacheAllowed() ) {
+					$room_output = $cached_calendar;
+				} else {
+
+					$room_reservations_instance = new \AtollMatrix\Reservations( $dateString = false, $roomId );
+					$room_reservations_instance->calculateAndUpdateRemainingRoomCountsForAllDates();
+
+					$checkout_list = array();
+
+					$room_output .= '<tr class="calendarRow calendar-room-row" data-id="' . esc_attr( $roomId ) . '">';
+						$room_output .= '<td class="calendarCell rowHeader">';
+							$room_output .= esc_html( $roomName );
+						$room_output .= '</td>';
+						foreach ( $dates as $date ) :
+							$dateString       = $date->format( 'Y-m-d' );
+							$reservation_data = array();
+
+							$reservation_instance = new \AtollMatrix\Reservations( $dateString, $roomId );
+							$reservation_data     = $reservation_instance->isDate_Reserved();
+							// $remaining_room_count  = $reservation_instance->getDirectRemainingRoomCount();
+							$remaining_rooms      = $reservation_instance->remainingRooms_For_Day();
+							// $reserved_rooms       = $reservation_instance->calculateReservedRooms();
+							if ( 0 == $remaining_rooms ) {
+								$room_was_opened      = $reservation_instance->wasRoom_Ever_Opened();
+								if ( false === $room_was_opened ) {
+									$remaining_rooms = '/';
+								}
+							}
+
+							// $max_room_count = \AtollMatrix\Rooms::getMaxQuantityForRoom( $roomId, $dateString );
+
+							$room_rate              = \AtollMatrix\Rates::getRoomRateByDate( $roomId, $dateString );
+							$occupancy_status_class = "";
+							if ( $reservation_instance->isRoom_For_Day_Fullybooked() ) {
+								$occupancy_status_class = "fully-booked";
+							} else {
+								$occupancy_status_class = "room-available";
+							}
+							$room_output .= '<td class="calendarCell ' . esc_attr( $this->todayCSSTag( $dateString ) ) . ' ' . esc_attr( $this->startOfMonthCSSTag( $dateString ) ) . ' ' . esc_attr( $occupancy_status_class ) . '">';
+							
+							$room_output .= '<div class="calendar-info-wrap">';
+								$room_output .= '<div class="calendar-info">';
+									$room_output .= '<a href="#" class="quantity-link" data-remaining="'. esc_attr( $remaining_rooms ) . '" data-date="' . esc_attr( $dateString ) . '" data-room="' . esc_attr( $roomId ) . '">'. esc_html( $remaining_rooms ) . '</a>';
+
+									if ( ! empty( $room_rate ) && isset( $room_rate ) && $room_rate > 0 ) {
+										$room_output .= '<a class="roomrate-link" href="#">' . esc_html( $room_rate ) . '</a>';
+									}
+								$room_output .= '</div>';
+							$room_output .= '</div>';
+							$room_output .= '<div class="reservation-tab-wrap" data-day="' . esc_attr( $dateString ) .'">';
+								if ( $reservation_data ) {
+									$reservation_module = array();
+									//echo atollmatrix_generate_reserved_tab( $reservation_data, $checkout_list );
+									$reservation_module = $this->ReservedTab( $reservation_data, $checkout_list, $dateString, $startDateString );
+									$room_output .= $reservation_module['tab'];
+									$checkout_list = $reservation_module['checkout'];
+									//print_r( $checkout_list );
+								}
+							$room_output .= '</div>';
+							$room_output .= '</td>';
+						endforeach;
+					$room_output .= '</tr>';
+
+					$cache_instance->setCache( $transient_key, $room_output);
+				}
+			endforeach;
+			$output .= $room_output;
+		$output .= '</table>';
+		return $output;
+	}
+
 
 	private function displayOccupancy_TableDataBlock( $startDate = false, $endDate = false ) {
 		if ( ! $startDate ) {
@@ -168,25 +287,19 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 		} else {
 			$endDateString = $endDate;
 		}
-		ob_start();
-		?>
-		<td class="calendarCell rowHeader">
-			<div class="occupancyStats-wrap">
-				<div class="occupancyStats-inner">
-					<div class="occupancy-total">
-						<?php _e('Occupancy','atollmatrix'); ?>
-						<span class="occupancy-total-stats">
-							<?php
-							echo esc_html( $this->calculateOccupancyTotalForRange( $startDateString, $endDateString ) );
-							?>
-							<span>%</span>
-						</span>
-					</div>
-				</div>
-			</div>
-		</td>
-		<?php
-		$output = ob_get_clean();
+		$output = '<td class="calendarCell rowHeader">';
+			$output .= '<div class="occupancyStats-wrap">';
+				$output .= '<div class="occupancyStats-inner">';
+					$output .= '<div class="occupancy-total">';
+					$output .= __('Occupancy','atollmatrix');
+						$output .= '<span class="occupancy-total-stats">';
+							$output .=  esc_html( $this->calculateOccupancyTotalForRange( $startDateString, $endDateString ) );
+							$output .= '<span>%</span>';
+						$output .= '</span>';
+					$output .= '</div>';
+				$output .= '</div>';
+			$output .= '</div>';
+		$output .= '</td>';
 		return $output;
 	}
 
@@ -215,29 +328,28 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 		return $startOfMonth_class;
 	}
 
-	private function displayAdrOccupancyRange_TableDataBlock( $dates ) {
+	private function displayOccupancyRange_TableDataBlock( $dates ) {
 		$number_of_columns = 0;
+		$output = '';
+
 		foreach ( $dates as $date ) :
 			$number_of_columns++;
 			$occupancydate = $date->format( 'Y-m-d' );
-			ob_start();
-			?>
-			<td class="calendarCell monthHeader occupancy-stats <?php echo esc_attr( $this->todayCSSTag( $occupancydate ) ); ?> <?php echo esc_attr( $this->startOfMonthCSSTag( $occupancydate ) ); ?>">
-				<div class="occupancyStats-wrap">
-					<div class="occupancyStats-inner">
-						<div class="occupancy-adr">
-							<?php _e('ADR:','atollmatrix'); ?>
-							<?php echo esc_html( $this->calculateAdrForDate( $occupancydate ) ); ?>
-						</div>
-						<div class="occupancy-percentage">
-							<?php echo esc_html( $this->calculateRemainingRoomsForDate( $occupancydate ) ); ?><span></span>
-						</div>
-					</div>
-				</div>
-			</td>
-			<?php
+			$output .= '<td class="calendarCell monthHeader occupancy-stats '. esc_attr( $this->todayCSSTag( $occupancydate ) ) . ' ' . esc_attr( $this->startOfMonthCSSTag( $occupancydate ) ) . '">';
+				$output .= '<div class="occupancyStats-wrap">';
+					$output .= '<div class="occupancyStats-inner">';
+						$output .= '<div class="occupancy-adr">';
+							$output .= __('Open','atollmatrix');
+						$output .= '</div>';
+					$output .= '<div class="occupancy-percentage">';
+						$output .= esc_html( $this->calculateRemainingRoomsForDate( $occupancydate ) );
+						$output .= '<span></span>';
+					$output .= '</div>';
+					$output .= '</div>';
+				$output .= '</div>';
+			$output .= '</td>';
 		endforeach;
-		$output = ob_get_clean();
+
 		return $output;
 	}
 
@@ -251,6 +363,8 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 			$markNumDays = $numDays + 1;
 		}
 
+		$output = '';
+
 		foreach ( $dates as $date ) :
 			$number_of_columns++;
 			$month        = $date->format( 'M' );
@@ -262,24 +376,20 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 			if ( $occupancydate == $today ) {
 				$month = 'Today';
 			}
-			ob_start();
-			?>
-			<td class="calendarCell monthHeader <?php echo esc_attr( $this->todayCSSTag( $occupancydate ) ); ?> <?php echo esc_attr( $this->startOfMonthCSSTag( $occupancydate ) ); ?> <?php echo esc_attr( $column_class ); ?>">
-				<div class="monthDayinfo-wrap">
-					<div class="month">
-						<?php echo esc_html( $month ); ?>
-					</div>
-					<div class="day-letter">
-						<?php echo esc_html( $date->format( 'D' ) ); ?>
-					</div>
-					<div class="day">
-						<?php echo esc_html( $date->format( 'j' ) ); ?>
-					</div>
-				</div>
-			</td>
-			<?php
+			$output .= '<td class="calendarCell monthHeader ' . esc_attr( $this->todayCSSTag( $occupancydate ) ) . ' ' . esc_attr( $this->startOfMonthCSSTag( $occupancydate ) ) . ' ' . esc_attr( $column_class ) . '">';
+				$output .= '<div class="monthDayinfo-wrap">';
+					$output .= '<div class="month">';
+						$output .= esc_html( $month );
+					$output .= '</div>';
+					$output .= '<div class="day-letter">';
+						$output .= esc_html( $date->format( 'D' ) );
+					$output .= '</div>';
+					$output .= '<div class="day">';
+						$output .= esc_html( $date->format( 'j' ) );
+					$output .= '</div>';
+				$output .= '</div>';
+			$output .= '</td>';
 		endforeach;
-		$output = ob_get_clean();
 		return $output;
 	}
 
@@ -426,124 +536,6 @@ class AvailablityCalendar extends AvailablityCalendarBase {
 		$tab_array['checkout'] = $checkout_list;
 
 		return $tab_array;
-	}
-
-
-	public function getAvailabilityCalendar( $startDate = false, $endDate = false ) {
-
-		if ( ! $startDate ) {
-			$startDate = $this->startDate;
-			$endDate   = $this->endDate;
-		} else {
-			$startDate = new \DateTime( $startDate );
-			$endDate   = new \DateTime( $endDate );
-		}
-
-		$dates = $this->getDates( $startDate, $endDate );
-		$today = $this->today;
-
-		if ( $startDate instanceof \DateTime ) {
-			$startDateString = $startDate->format( 'Y-m-d' );
-		} else {
-			$startDateString = $startDate;
-		}
-
-		if ( $endDate instanceof \DateTime ) {
-			$endDateString = $endDate->format( 'Y-m-d' );
-		} else {
-			$endDateString = $endDate;
-		}
-
-		ob_start();
-		?>
-		<table id="calendarTable" data-calstart="<?php echo esc_attr( $startDateString ); ?>" data-calend="<?php echo esc_attr( $endDateString ); ?>">
-			<tr class="calendarRow">
-				<?php
-				echo self::displayOccupancy_TableDataBlock( $startDate, $endDate);
-				echo self::displayAdrOccupancyRange_TableDataBlock( $dates );
-				?>
-			</tr>
-			<tr class="calendarRow">
-				<td class="calendarCell rowHeader"></td>
-				<?php
-				$numDays = $this->setNumDays( $startDateString, $endDateString );
-				echo self::displayDate_TableDataBlock( $dates, $numDays );
-				?>
-			</tr>
-			<?php
-
-			$this->roomlist = \AtollMatrix\Rooms::getRoomList();
-
-			foreach ( $this->roomlist as $roomId => $roomName ) :
-
-				$room_reservations_instance = new \AtollMatrix\Reservations( $dateString = false, $roomId );
-				$room_reservations_instance->calculateAndUpdateRemainingRoomCountsForAllDates();
-
-				$checkout_list = array();
-				?>
-				<tr class="calendarRow calendar-room-row" data-id="<?php echo esc_attr( $roomId ); ?>">
-					<td class="calendarCell rowHeader">
-						<?php echo esc_html( $roomName ); ?>
-					</td>
-					<?php foreach ( $dates as $date ) : ?>
-						<?php
-						$dateString       = $date->format( 'Y-m-d' );
-						$reservation_data = array();
-
-						$reservation_instance = new \AtollMatrix\Reservations( $dateString, $roomId );
-						$reservation_data     = $reservation_instance->isDate_Reserved();
-						// $remaining_room_count  = $reservation_instance->getDirectRemainingRoomCount();
-						$remaining_rooms      = $reservation_instance->remainingRooms_For_Day();
-						$reserved_rooms       = $reservation_instance->calculateReservedRooms();
-						if ( 0 == $remaining_rooms ) {
-							$room_was_opened      = $reservation_instance->wasRoom_Ever_Opened();
-							if ( false === $room_was_opened ) {
-								$remaining_rooms = '/';
-							}
-						}
-
-						$max_room_count = \AtollMatrix\Rooms::getMaxQuantityForRoom( $roomId, $dateString );
-
-						$room_rate              = \AtollMatrix\Rates::getRoomRateByDate( $roomId, $dateString );
-						$occupancy_status_class = "";
-						if ( $reservation_instance->isRoom_For_Day_Fullybooked() ) {
-							$occupancy_status_class = "fully-booked";
-						}
-						echo '<td class="calendarCell ' . esc_attr( $this->todayCSSTag( $dateString ) ) . ' ' . esc_attr( $this->startOfMonthCSSTag( $dateString ) ) . ' ' . esc_attr( $occupancy_status_class ) . '">';
-						?>
-						<div class="calendar-info-wrap">
-							<div class="calendar-info">
-								<a href="#" class="quantity-link" data-remaining="<?php echo esc_attr( $remaining_rooms ); ?>"
-									data-reserved="<?php echo esc_attr( $reserved_rooms ); ?>" data-date="<?php echo esc_attr( $dateString ); ?>"
-									data-room="<?php echo esc_attr( $roomId ); ?>"><?php echo esc_html( $remaining_rooms ); ?></a>
-								<?php
-								if ( ! empty( $room_rate ) && isset( $room_rate ) && $room_rate > 0 ) {
-									echo '<a class="roomrate-link" href="#">' . esc_html( $room_rate ) . '</a>';
-								}
-								// echo $remaining_room_count;
-								?>
-							</div>
-						</div>
-						<div class="reservation-tab-wrap" data-day="<?php echo esc_attr( $dateString ); ?>">
-							<?php
-							if ( $reservation_data ) {
-								$reservation_module = array();
-								//echo atollmatrix_generate_reserved_tab( $reservation_data, $checkout_list );
-								$reservation_module = $this->ReservedTab( $reservation_data, $checkout_list, $dateString, $startDateString );
-								echo $reservation_module['tab'];
-								$checkout_list = $reservation_module['checkout'];
-								//print_r( $checkout_list );
-							}
-							?>
-						</div>
-						</td>
-					<?php endforeach; ?>
-				</tr>
-			<?php endforeach; ?>
-		</table>
-		<?php
-		$output = ob_get_clean();
-		return $output;
 	}
 
 }

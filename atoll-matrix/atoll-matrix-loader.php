@@ -68,6 +68,7 @@ class AtollMatrix_Init
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-availabilitybatchprocessor.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-availablitycalendarbase.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-availablitycalendar.php';
+        require_once plugin_dir_path(__FILE__) . 'includes/admin/class-cache.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-rooms.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-rates.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-customers.php';
