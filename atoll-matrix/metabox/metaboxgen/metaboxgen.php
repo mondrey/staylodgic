@@ -1400,7 +1400,62 @@ function multo_gallery_save_images()
 }
 add_action('wp_ajax_multo_gallery_save_images', 'multo_gallery_save_images');
 // Save data from meta box
+add_action( 'save_post', 'atollmatrix_preProcess', 5, 3 );
 add_action('save_post', 'atollmatrix_checkdata');
+add_action( 'save_post', 'atollmatrix_postProcess', 15, 3 );
+
+function atollmatrix_preProcess( $post_id, $post, $update ) {
+    // Check if this is a revision or auto-save.
+    if ( wp_is_post_revision( $post_id ) || ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) ) {
+        return;
+    }
+
+    // Ensure the action is only run for the 'atmx_reservations' custom post type.
+    if ( $post->post_type != 'atmx_reservations' ) {
+        return;
+    }
+
+    // Now you can safely run your custom code here.
+    // For example, use post meta data
+    $checkin = get_post_meta( $post_id, 'atollmatrix_checkin_date', true );
+    $checkout = get_post_meta( $post_id, 'atollmatrix_checkout_date', true );
+    $room_id = get_post_meta( $post_id, 'atollmatrix_room_id', true );
+
+    error_log('-------- removeCache atollmatrix_preProcess ---------');
+    error_log($checkin . ' ++++ ' . $checkout);
+    \AtollMatrix\Cache::invalidateCachesByRoomAndDate($room_id, $checkin, $checkout);
+
+    // Perform actions or operations based on the meta value.
+    // For example:
+    // update_post_meta($post_id, 'another_meta_key', $new_meta_value);
+}
+function atollmatrix_postProcess( $post_id, $post, $update ) {
+    // Check if this is a revision or auto-save.
+    if ( wp_is_post_revision( $post_id ) || ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) ) {
+        return;
+    }
+
+    // Ensure the action is only run for the 'atmx_reservations' custom post type.
+    if ( $post->post_type != 'atmx_reservations' ) {
+        return;
+    }
+
+    // Now you can safely run your custom code here.
+    // For example, use post meta data
+    $checkin = get_post_meta( $post_id, 'atollmatrix_checkin_date', true );
+    $checkout = get_post_meta( $post_id, 'atollmatrix_checkout_date', true );
+    $room_id = get_post_meta( $post_id, 'atollmatrix_room_id', true );
+
+    error_log('-------- removeCache atollmatrix_postProcess ---------');
+    error_log($checkin . ' ++++ ' . $checkout);
+    \AtollMatrix\Cache::invalidateCachesByRoomAndDate($room_id, $checkin, $checkout);
+
+    // Perform actions or operations based on the meta value.
+    // For example:
+    // update_post_meta($post_id, 'another_meta_key', $new_meta_value);
+}
+
+// Hook the function to 'save_post' action.
 function atollmatrix_checkdata($post_id)
 {
 
@@ -1466,8 +1521,8 @@ function atollmatrix_checkdata($post_id)
 function atollmatrix_savedata($atollmatrix_metaboxdata, $post_id)
 {
     
-    error_log('------ Reservation Metabox-------');
-    error_log( print_r( $_POST, 1) );
+    //error_log('------ Reservation Metabox-------');
+    // error_log( print_r( $_POST, 1) );
     // delete_post_meta($post_id, 'atollmatrix_change_log');
     if (is_array($atollmatrix_metaboxdata['fields'])) {
         foreach ($atollmatrix_metaboxdata['fields'] as $field) {

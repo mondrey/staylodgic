@@ -17,7 +17,7 @@ class Cache
      * @param mixed $reservation_id
      * @param mixed $reservation_id_excluded
      */
-    public function __construct($start_date = false, $end_date = false, $room_id = false, $transient_key = false, $contents = false)
+    public function __construct($room_id = false, $start_date = false, $end_date = false, $transient_key = false, $contents = false)
     {
         $this->start_date    = $start_date;
         $this->end_date      = $end_date;
@@ -27,11 +27,16 @@ class Cache
 
     }
 
-    private function updateCacheIndex() {
+    private function updateCacheIndex( $transient_key = false ) {
+
+        if (!$transient_key) {
+            $transient_key = $this->transient_key;
+        }
+
         $cacheIndexKey = 'atollmatrix_avail_calendar_index';
         $cacheIndex = get_transient($cacheIndexKey) ?: [];
 
-        $cacheIndex[$this->transient_key] = [
+        $cacheIndex[$transient_key] = [
             'room_id' => $this->room_id,
             'start_date' => $this->start_date,
             'end_date' => $this->end_date
@@ -75,6 +80,10 @@ class Cache
         $cacheIndexKey = 'atollmatrix_avail_calendar_index';
         $cacheIndex = get_transient($cacheIndexKey);
 
+        error_log('-------- Removing Cache ---------');
+        error_log( $room_id );
+        error_log(print_r($cacheIndex,true));
+
         foreach ($cacheIndex as $transientKey => $details) {
             if ($details['room_id'] == $room_id && 
                 ($affectedStartDate <= $details['end_date'] && $affectedEndDate >= $details['start_date'])) {
@@ -97,7 +106,7 @@ class Cache
 		}
 
         set_transient($transient_key, $contents, 12 * HOUR_IN_SECONDS);
-        $this->updateCacheIndex();
+        $this->updateCacheIndex( $transient_key );
     }
 
     public function getCache($transient_key = false)

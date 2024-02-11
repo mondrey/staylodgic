@@ -29,7 +29,7 @@ class Reservations
         add_action('wp_ajax_getBookingDetails', array($this, 'getBookingDetails'));
         add_action('wp_ajax_nopriv_getBookingDetails', array($this, 'getBookingDetails'));
 
-    }
+    }    
 
     public function getBookingDetails($booking_number) {
         $booking_number = $_POST['booking_number'];
@@ -364,8 +364,8 @@ class Reservations
         // Retrieve the reservations for the room on the given date
         $reservations_array = $this->getReservations_Array($room_id);
         
-        error_log( 'print_r( $reservations_array,1 )' );
-        error_log( print_r( $reservations_array,1 ) );
+        // error_log( 'print_r( $reservations_array,1 )' );
+        // error_log( print_r( $reservations_array,1 ) );
         $reserved_rooms = isset($reservations_array[$date]) ? count($reservations_array[$date]) : 0;
 
         // Calculate the remaining rooms
@@ -478,8 +478,8 @@ class Reservations
     public function updateRemainingRoomCount($room_id) {
         $reservations_array = $this->getReservations_Array($room_id);
         $quantity_array = get_post_meta($room_id, 'quantity_array', true);
-        error_log( 'print_r( $reservations_array,1 )' );
-        error_log( print_r( $reservations_array,1 ) );
+        // error_log( 'print_r( $reservations_array,1 )' );
+        // error_log( print_r( $reservations_array,1 ) );
         // Initialize remaining rooms count
         $remainingRoomsCount = [];
 
