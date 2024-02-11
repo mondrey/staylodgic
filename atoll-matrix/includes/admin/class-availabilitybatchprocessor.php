@@ -237,6 +237,8 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
         }
 
         $count = 0;
+        $changedDateRanges = array();
+
         foreach ($rooms as $room) {
             if (in_array($room->ID, $processed_rooms)) {
                 continue; // Skip already processed rooms
@@ -278,11 +280,14 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
             }
 
             if (isset($blocked_dates['ical'][$room->ID])) {
+
                 update_post_meta($room->ID, 'channel_quantity_array', $blocked_dates['ical'][$room->ID]);
+                
             }
         }
 
         if ( isset($blocked_dates) && is_array( $blocked_dates ) ) {
+
             error_log( '----- Blocked dates being processed ' . $count );
             error_log( print_r($blocked_dates, 1) );
             error_log( '-----------------------------------' );
@@ -305,7 +310,7 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
         if (!wp_next_scheduled('continue_ical_availability_processing')) {
             wp_schedule_single_event(time() + 300, 'continue_ical_availability_processing'); // 300 seconds = 5 minutes
         }
-    }
+    } 
     
     public function add_cron_hook() {
         add_action('continue_ical_availability_processing', array($this, 'ical_availability_processor'));

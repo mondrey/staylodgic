@@ -27,6 +27,19 @@ class Cache
 
     }
 
+    private function updateCacheIndex() {
+        $cacheIndexKey = 'atollmatrix_avail_calendar_index';
+        $cacheIndex = get_transient($cacheIndexKey) ?: [];
+
+        $cacheIndex[$this->transient_key] = [
+            'room_id' => $this->room_id,
+            'start_date' => $this->start_date,
+            'end_date' => $this->end_date
+        ];
+
+        set_transient($cacheIndexKey, $cacheIndex, 0); // No expiration
+    }
+
     public function generateRoomCacheKey()
     {
         
@@ -35,12 +48,42 @@ class Cache
         return $transient_key;
     }
 
-    public function deleteCache() {
+    public function deleteCache( $transient_key = false ) {
+
+        if (!$transient_key) {
+            $transient_key = $this->transient_key;
+        }
         // Generate the transient key in the same way it was generated when set
         $transient_key = $this->generateRoomCacheKey();
         
         // Use delete_transient to remove it
         delete_transient($transient_key);
+        $this->deleteCacheIndexEntry();
+    }
+
+    private function deleteCacheIndexEntry() {
+        $cacheIndexKey = 'atollmatrix_avail_calendar_index';
+        $cacheIndex = get_transient($cacheIndexKey);
+
+        if (isset($cacheIndex[$this->transient_key])) {
+            unset($cacheIndex[$this->transient_key]);
+            set_transient($cacheIndexKey, $cacheIndex, 0); // Update the index without the deleted entry
+        }
+    }
+
+    public static function invalidateCachesByRoomAndDate($room_id, $affectedStartDate, $affectedEndDate) {
+        $cacheIndexKey = 'atollmatrix_avail_calendar_index';
+        $cacheIndex = get_transient($cacheIndexKey);
+
+        foreach ($cacheIndex as $transientKey => $details) {
+            if ($details['room_id'] == $room_id && 
+                ($affectedStartDate <= $details['end_date'] && $affectedEndDate >= $details['start_date'])) {
+                delete_transient($transientKey);
+                unset($cacheIndex[$transientKey]);
+            }
+        }
+
+        set_transient($cacheIndexKey, $cacheIndex, 0);
     }
 
     public function setCache($transient_key = false, $contents = false)
@@ -54,6 +97,7 @@ class Cache
 		}
 
         set_transient($transient_key, $contents, 12 * HOUR_IN_SECONDS);
+        $this->updateCacheIndex();
     }
 
     public function getCache($transient_key = false)
