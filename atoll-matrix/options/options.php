@@ -256,6 +256,8 @@ class AtollMatrixOptionsPanel
                 esc_html__('Settings Saved', 'atollmatrix'),
                 'updated'
             );
+
+            \AtollMatrix\Cache::clearAllCache();
         }
 
         settings_errors($this->option_name . '_mesages');
@@ -936,7 +938,13 @@ $panel_settings = [
         'tab'         => 'discounts',
      ],
     'enable_taxes'         => [
-        'label'       => esc_html__('Enable Taxes', 'atollmatrix'),
+        'label'       => esc_html__('Enable taxes', 'atollmatrix'),
+        'type'        => 'checkbox',
+        'description' => '',
+        'tab'         => 'general',
+    ],
+    'display_cancelled' => [
+        'label'       => esc_html__('Display cancelled bookings in availability calendar', 'atollmatrix'),
         'type'        => 'checkbox',
         'description' => '',
         'tab'         => 'general',

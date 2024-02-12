@@ -250,6 +250,14 @@ function atollmatrix_has_tax()
 
 }
 
+function atollmatrix_display_cancelled()
+{
+
+    $display_cancelled = atollmatrix_get_option('display_cancelled');
+    return $display_cancelled;
+
+}
+
 function atollmatrix_generate_tax_summary($tax)
 {
     $html = '<div class="input-tax-summary-wrap-inner">';

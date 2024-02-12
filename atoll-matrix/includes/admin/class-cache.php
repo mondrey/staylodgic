@@ -27,6 +27,24 @@ class Cache
 
     }
 
+    /**
+     * Deletes all cache entries and the cache index.
+     */
+    public static function clearAllCache() {
+        $cacheIndexKey = 'atollmatrix_avail_calendar_index';
+        $cacheIndex = get_transient($cacheIndexKey);
+
+        if (is_array($cacheIndex)) {
+            foreach ($cacheIndex as $transientKey => $details) {
+                // Delete each transient in the index
+                delete_transient($transientKey);
+            }
+        }
+
+        // Clear the cache index
+        delete_transient($cacheIndexKey);
+    }
+
     private function updateCacheIndex( $transient_key = false ) {
 
         if (!$transient_key) {

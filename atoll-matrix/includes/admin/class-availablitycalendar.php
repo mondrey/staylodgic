@@ -427,7 +427,7 @@ $calendar = $this->getAvailabilityCalendar();
             $output .= '<div class="occupancyStats-wrap">';
             $output .= '<div class="occupancyStats-inner">';
             $output .= '<div class="occupancy-adr">';
-            $output .= __('Open', 'atollmatrix');
+            $output .= __('Rooms<br/>Open', 'atollmatrix');
             $output .= '</div>';
             $output .= '<div class="occupancy-percentage">';
             $output .= esc_html($this->calculateRemainingRoomsForDate($occupancydate));
@@ -502,6 +502,10 @@ $calendar = $this->getAvailabilityCalendar();
             $reservation_substatus = $reservation_instance->getReservationSubStatus();
             $booking_channel       = $reservation_instance->getReservationChannel();
             $row++;
+
+            if ( 'cancelled' == $reservation_status && ! atollmatrix_display_cancelled() ) {
+                continue;
+            }
 
             if (!array_key_exists($reservatoin_id, $checkout_list)) {
 
