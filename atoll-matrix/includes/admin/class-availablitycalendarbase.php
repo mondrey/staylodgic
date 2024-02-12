@@ -26,23 +26,43 @@ class AvailablityCalendarBase
     public function setStartDate($startDate)
     {
         if ($startDate === null) {
-            $week_ago        = (new \DateTime())->modify('-3 days');  // will be -3 by default
-            $this->startDate = $week_ago->format('Y-m-d');
+            $currentDay = (int)date('d'); // Get the current day as a number
+            
+            if ($currentDay < 15) {
+                // If today is before the 15th, set startDate to the 1st of the current month
+                $this->startDate = date('Y-m-01');
+            } else if ($currentDay > 18) {
+                // If today is after the 18th, set startDate to the 15th of the current month
+                $this->startDate = date('Y-m-15');
+            } else {
+                // Default case if neither condition is met
+                $this->startDate = (new \DateTime())->modify('-3 days')->format('Y-m-d');
+            }
         } else {
             $this->startDate = (new \DateTime($startDate))->format('Y-m-d');
         }
     }
-
+    
     public function setEndDate($endDate)
     {
         if ($endDate === null) {
-            $end_date      = (new \DateTime())->modify('+40 days');  // default
-            $this->endDate = $end_date->format('Y-m-d');
+            $currentDay = (int)date('d'); // Get the current day as a number
+            
+            if ($currentDay < 15) {
+                // If today is before the 15th, set endDate to the end of the current month
+                $this->endDate = date('Y-m-t');
+            } else if ($currentDay > 18) {
+                // If today is after the 18th, set endDate to the 15th of the next month
+                $this->endDate = date('Y-m-d', strtotime(date('Y-m-15') . " +1 month"));
+            } else {
+                // Default case if neither condition is met
+                $this->endDate = (new \DateTime())->modify('+40 days')->format('Y-m-d');
+            }
         } else {
             $this->endDate = (new \DateTime($endDate))->format('Y-m-d');
         }
     }
-
+    
     public function setNumDays($startDate = false, $endDate = false)
     {
 
