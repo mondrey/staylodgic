@@ -1,6 +1,24 @@
 jQuery(document).ready(function ($) {
 	"use strict";
 
+	var modal = document.getElementById("import-settings-modal");
+	var btn = document.getElementById("import-settings-button");
+	var span = document.getElementsByClassName("atollmatrix-close")[0];
+
+	btn.onclick = function() {
+		modal.style.display = "block";
+	}
+
+	span.onclick = function() {
+		modal.style.display = "none";
+	}
+
+	window.onclick = function(event) {
+		if (event.target == modal) {
+			modal.style.display = "none";
+		}
+	}
+
 	$('.upload_image_button').click(function(e) {
 		e.preventDefault();
 

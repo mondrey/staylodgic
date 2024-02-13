@@ -59,10 +59,74 @@ class AtollMatrixOptionsPanel
         add_action('admin_menu', [ $this, 'export_settings' ]);
         add_action('admin_menu', [ $this, 'register_menu_page' ]);
         add_action('admin_init', [ $this, 'register_settings' ]);
+        // Hook into admin_init to catch the form submission
+        add_action('admin_init', [ $this, 'atollmatrix_import_settings' ]);
 
         add_action('admin_enqueue_scripts', [ $this, 'enqueue_media_uploader' ]);
 
     }
+
+    public function atollmatrix_import_settings() {
+        // Check if our nonce is set and verify it.
+        if (
+            isset($_POST['import_settings_nonce_field']) &&
+            wp_verify_nonce($_POST['import_settings_nonce_field'], 'import_settings_nonce')
+        ) {
+            // Check if action is set to import_settings
+            if (isset($_POST['action']) && $_POST['action'] === 'import_settings') {
+                // Decode the JSON data
+                $import_data = json_decode(stripslashes($_POST['import_settings_data']), true);
+
+                error_log( '---------- IMPORT DATA ----------');
+                error_log( print_r( $import_data, true ));
+
+                // Validate the decoded data. This depends on your settings structure.
+                // Here, we assume $import_data is an associative array matching your options structure.
+                if (is_array($import_data)) {
+                    // Iterate through each setting to validate and sanitize it
+                    $sanitized_data = [];
+                    foreach ($import_data as $key => $value) {
+                        if (isset($this->settings[$key]) && $this->settings[$key]['type'] == 'checkbox') {
+                            // Convert "1" to "on" for checkboxes
+                            $sanitized_data[$key] = ($value == "1") ? 'on' : ''; // Convert 1 to 'on', anything else to '' (unchecked)
+                        } elseif (is_array($value)) {
+                            // The value is an array, handle each element according to its expected type
+                            foreach ($value as $subKey => $subValue) {
+                                if (is_array($subValue)) {
+                                    // If the subValue is also an array, apply further sanitization as needed
+                                    // This example assumes subValue might be a structured array needing detailed sanitization
+                                    foreach ($subValue as $fieldKey => $fieldValue) {
+                                        // Apply sanitization based on fieldKey or expected data type
+                                        // This is a placeholder for actual sanitization logic
+                                        $sanitized_data[$key][$subKey][$fieldKey] = sanitize_text_field($fieldValue);
+                                    }
+                                } else {
+                                    // For simple nested arrays, directly apply a generic sanitization
+                                    $sanitized_data[$key][$subKey] = sanitize_text_field($subValue);
+                                }
+                            }
+                        } else {
+                            // For other non-array settings, apply generic sanitization or specific based on type
+                            $sanitized_data[$key] = sanitize_text_field($value);
+                        }
+                    }                    
+
+                    error_log( '---------- Santized DATA ----------');
+                    error_log( print_r( $sanitized_data, true ));
+
+                    // Update the settings in the database
+                    update_option('atollmatrix_settings', $sanitized_data);
+
+                    // Optionally, add a message to show success or redirect back to the settings page
+                    add_settings_error('atollmatrix_settings', 'settings_updated', 'Settings imported successfully.', 'updated');
+                } else {
+                    // Handle error in case JSON is invalid
+                    add_settings_error('atollmatrix_settings', 'settings_error', 'Invalid JSON data provided.', 'error');
+                }
+            }
+        }
+    }
+
 
     public function enqueue_media_uploader() {
         wp_enqueue_media();
@@ -309,6 +373,23 @@ settings_fields($this->option_group_name);
     echo '<input type="hidden" name="action" value="export_settings" />';
     submit_button('Export Settings');
     echo '</form>';
+?>
+<?php
+// Button to open the import modal
+echo '<button type="button" id="import-settings-button" class="button-secondary">Import Settings</button>';
+
+// Modal structure
+echo '<div id="import-settings-modal" class="atollmatrix-modal" style="display:none;">
+        <div class="atollmatrix-modal-content">
+            <span class="atollmatrix-close">&times;</span>
+            <form id="import-settings-form" method="post">
+                ' . wp_nonce_field('import_settings_nonce', 'import_settings_nonce_field', true, false) . '
+                <textarea name="import_settings_data" rows="10" cols="50" placeholder="Paste JSON data here"></textarea>
+                <input type="hidden" name="action" value="import_settings">
+                <input type="submit" class="button-primary" value="Import Settings">
+            </form>
+        </div>
+      </div>';
 ?>
             </div>
         </div>
@@ -1112,6 +1193,13 @@ $panel_settings = [
         'default'        => '2',
         'description' => 'My field 1 description.',
         'tab'         => 'currency',
+     ],
+     'import_settings_data'   => [
+        'label'       => esc_html__('Import Settings', 'atollmatrix'),
+        'type'        => 'textarea',
+        'default'        => '2',
+        'description' => 'My field 1 description.',
+        'tab'         => 'import',
      ],
  ];
 
