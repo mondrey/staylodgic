@@ -56,6 +56,7 @@ class AtollMatrixOptionsPanel
         $this->option_group_name = $this->option_name . '_group';
         $this->user_capability   = $args[ 'user_capability' ] ?? 'manage_options';
 
+        add_action('admin_menu', [ $this, 'export_settings' ]);
         add_action('admin_menu', [ $this, 'register_menu_page' ]);
         add_action('admin_init', [ $this, 'register_settings' ]);
 
@@ -81,6 +82,33 @@ class AtollMatrixOptionsPanel
             $this->slug,
             [ $this, 'render_options_page' ]
         );
+    }
+
+    /**
+     * Register the settings.
+     */
+    public function export_settings()
+    {
+        if (isset($_POST['action']) && $_POST['action'] === 'export_settings') {
+            // Security check, for example, check user permissions and nonces
+    
+            // Fetch all settings
+            $option_name = 'atollmatrix_settings'; // Replace with your actual option name
+            $settings = get_option($option_name);
+    
+            // Encode settings to JSON
+            $json_settings = json_encode($settings);
+    
+            // Set headers to force download
+            header('Content-Type: application/json');
+            header('Content-Disposition: attachment; filename="settings-export.json"');
+            header('Pragma: no-cache');
+            header('Expires: 0');
+    
+            // Serve the file
+            echo $json_settings;
+            exit;
+        }
     }
 
     /**
@@ -275,6 +303,13 @@ settings_fields($this->option_group_name);
         submit_button('Save Settings');
         ?>
             </form>
+<?php
+    // Add an export button
+    echo '<form method="post">';
+    echo '<input type="hidden" name="action" value="export_settings" />';
+    submit_button('Export Settings');
+    echo '</form>';
+?>
             </div>
         </div>
         <?php
@@ -308,8 +343,12 @@ $first_tab = false;
     protected function get_option_value($option_name)
     {
         $option = get_option($this->option_name);
-        if (!array_key_exists($option_name, $option)) {
-            return array_key_exists('default', $this->settings[ $option_name ]) ? $this->settings[ $option_name ][ 'default' ] : '';
+        if ( is_array( $option )) {
+            if (!array_key_exists($option_name, $option)) {
+                return array_key_exists('default', $this->settings[ $option_name ]) ? $this->settings[ $option_name ][ 'default' ] : '';
+            }
+        } else {
+            return '';
         }
         return $option[ $option_name ];
     }
@@ -579,12 +618,12 @@ if ($description) {
 <div class="repeatable">
 <span class="dashicons dashicons-sort drag-handle"></span>
             <input disabled
-                type="text"
+                type="text" placeholder = "Label"
                 id="<?php echo esc_attr($args[ 'label_for' ]); ?>_label"
                 name="label"
                 value="">
             <input disabled
-                type="text"
+                type="text" placeholder = "Value"
                 id="<?php echo esc_attr($args[ 'label_for' ]); ?>_number"
                 name="number"
                 value="">
@@ -991,13 +1030,7 @@ $panel_settings = [
         'description' => 'My textarea field description.',
         'tab'         => 'tax',
      ],
-    'perpersonpricing'     => [
-        'label'       => esc_html__('Per person price', 'atollmatrix'),
-        'type'        => 'repeatable_perperson',
-        'description' => 'My textarea field description.',
-        'tab'         => 'perperson',
-     ],
-    'childfreestay'        => [
+     'childfreestay'        => [
         'label'       => esc_html__('Children under the age can stay for free', 'atollmatrix'),
         'type'        => 'select',
         'inputwidth'  => '100',
@@ -1022,6 +1055,12 @@ $panel_settings = [
             '16' => esc_html__('16', 'atollmatrix'),
             '17' => esc_html__('17', 'atollmatrix'),
          ],
+        'tab'         => 'perperson',
+     ],
+    'perpersonpricing'     => [
+        'label'       => esc_html__('Per person price', 'atollmatrix'),
+        'type'        => 'repeatable_perperson',
+        'description' => 'My textarea field description.',
         'tab'         => 'perperson',
      ],
     'mealplan'             => [

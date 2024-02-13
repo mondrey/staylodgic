@@ -21,13 +21,23 @@ jQuery(document).ready(function ($) {
 		$(this).hide().prev().val('').prev().addClass('button').html('Upload image');
 	});
 
-	$('.atollmatrix-options-form select').each(function () {
-		// Fetch the data-width attribute value
-		var widthAttribute = $(this).data('width');
-		$(this).select2({
-			width: widthAttribute || '300px' // Use the fetched value or set a default width
-		});
-	});
+	// $('.atollmatrix-options-form select').each(function () {
+	// 	// Fetch the data-width attribute value
+	// 	var widthAttribute = $(this).data('width');
+	// 	$(this).select2({
+	// 		width: widthAttribute || '300px' // Use the fetched value or set a default width
+	// 	});
+	// });
+
+	// function select_input_process() {
+	// 	$('.atollmatrix-options-form select').not('.select2-hidden-accessible').each(function () {
+	// 		var widthAttribute = $(this).data('width') || 'style'; // 'style' uses the select's style attribute for width
+	// 		$(this).select2({
+	// 			width: widthAttribute
+	// 		});
+	// 	});
+	// }
+	
 
 	$(document).on('click', function (event) {
 		const target = event.target;
@@ -54,7 +64,7 @@ jQuery(document).ready(function ($) {
 
 	// Apply Sortable to the repeatable container
 	function applySortable() {
-		$('#repeatable-container').sortable();
+		$('#repeatable-tax-container').sortable();
 	}
 	applySortable();
 
@@ -63,6 +73,9 @@ jQuery(document).ready(function ($) {
 		// Clone the repeatable template and append it to the container
 		var $newRepeatable = $(templateSelector + ' .repeatable').clone();
 		$(containerSelector).append($newRepeatable);
+
+		// Ensure new select elements are enabled
+		$newRepeatable.find('select').prop('disabled', false);
 
 		// Update unique IDs for the new elements (if required) and remove disabled attribute
 		$newRepeatable.find('[id]').each(function () {
@@ -79,6 +92,9 @@ jQuery(document).ready(function ($) {
 			// Remove the 'disabled' attribute if present
 			$element.prop('disabled', false);
 		});
+
+		// Directly call select_input_process here to initialize Select2 for new elements
+		// select_input_process();
 
 		// Apply sortable if needed
 		if (applySortableFlag) {
@@ -128,6 +144,9 @@ jQuery(document).ready(function ($) {
 			'mealplan_price': 'mealplan_' + new_count + '_price',
 		};
 		addRepeatableSection('.repeatable-mealplan-template', '#repeatable-mealplan-container', idMappings, false);
+
+		// Re-initialize select2 for new select elements
+		// select_input_process();
 
 		return false;
 	});
