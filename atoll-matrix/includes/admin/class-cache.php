@@ -63,6 +63,14 @@ class Cache
         set_transient($cacheIndexKey, $cacheIndex, 0); // No expiration
     }
 
+    public function generateAnalyticsCacheKey( $key )
+    {
+        
+        $transient_key = 'atollmatrix_analytics_' . md5($key);
+
+        return $transient_key;
+    }
+
     public function generateRoomCacheKey()
     {
         

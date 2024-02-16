@@ -3,6 +3,7 @@
         let delayed;
 
         $('canvas.atollmatrix-chart[data-type]').each(function() {
+            
             var ctx = this.getContext('2d');
             var type = $(this).data('type');
             var data = $(this).data('data');

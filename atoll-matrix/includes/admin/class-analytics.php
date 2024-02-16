@@ -9,22 +9,24 @@ class Analytics {
     private $data;
     private $options;
     private $guests;
+    private $bookings;
 
-    public function __construct($id, $info = 'today', $type = 'bar', $data = [], $options = [], $guests = array() ) {
+    public function __construct($id, $info = 'today', $type = 'bar', $data = [], $options = [], $guests = array(), $bookings = array() ) {
         $this->id = $id;
         $this->info = $info;
         $this->type = $type;
         $this->data = $data;
         $this->options = $options;
         $this->guests = $guests;
+        $this->bookings = $bookings;
     }
 
     public function get_chart_config($id) {
         $configs = [
             'chart1' => [
                 'info' => 'past_twelve_months_bookings',
+                'cache' => true,
                 'type' => 'line',
-                'data' => self::get_past_twelve_months_bookings_data(),
                 'options' => [
                     'scales' => [
                         'y' => [
@@ -35,8 +37,8 @@ class Analytics {
             ],
             'chart2' => [
                 'info' => 'past_twelve_months_revenue',
+                'cache' => true,
                 'type' => 'bar',
-                'data' => self::get_past_twelve_months_revenue_data(),
                 'options' => [
                     'scales' => [
                         'y' => [
@@ -47,8 +49,8 @@ class Analytics {
             ],
             'chart3' => [
                 'info' => 'past_twelve_months_adr',
+                'cache' => true,
                 'type' => 'bar',
-                'data' => self::get_past_twelve_months_adr_data(),
                 'options' => [
                     'scales' => [
                         'y' => [
@@ -59,8 +61,8 @@ class Analytics {
             ],
             'chart4' => [
                 'info' => 'today',
+                'cache' => false,
                 'type' => 'polarArea',
-                'data' => $this->get_current_day_stats_data(),
                 'options' => [
                     'responsive' => true,
                     'scales' => [
@@ -78,8 +80,8 @@ class Analytics {
             ],
             'chart5' => [
                 'info' => 'tomorrow',
+                'cache' => false,
                 'type' => 'polarArea',
-                'data' => $this->get_tomorrow_stats_data(),
                 'options' => [
                     'responsive' => true,
                     'scales' => [
@@ -97,8 +99,8 @@ class Analytics {
             ],
             'chart6' => [
                 'info' => 'dayafter',
+                'cache' => false,
                 'type' => 'polarArea',
-                'data' => $this->get_dayafter_stats_data(),
                 'options' => [
                     'responsive' => true,
                     'scales' => [
@@ -116,6 +118,31 @@ class Analytics {
             ],
             // Add more chart configurations here...
         ];
+
+        // Only process data for the requested chart
+        if (isset($configs[$id])) {
+            switch ($id) {
+                case 'chart1':
+                    $configs[$id]['data'] = $this->get_past_twelve_months_bookings_data();
+                    break;
+                case 'chart2':
+                    $configs[$id]['data'] = $this->get_past_twelve_months_revenue_data();
+                    break;
+                case 'chart3':
+                    $configs[$id]['data'] = $this->get_past_twelve_months_adr_data();
+                    break;
+                case 'chart4':
+                    $configs[$id]['data'] = $this->get_current_day_stats_data();
+                    break;
+                case 'chart5':
+                    $configs[$id]['data'] = $this->get_tomorrow_stats_data();
+                    break;
+                case 'chart6':
+                    $configs[$id]['data'] = $this->get_dayafter_stats_data();
+                    break;
+                // Add cases for other charts as needed...
+            }
+        }
     
         return $configs[$id] ?? null;
     }
@@ -351,52 +378,74 @@ class Analytics {
         ];
     }
 
-    private static function get_past_twelve_months_adr_data() {
+    private function get_past_twelve_months_adr_data() {
         $labels = [];
         $adrData = [];
         $currentMonth = date('Y-m');
-        for ($i = 12; $i >= 1; $i--) {
+
+        $cache = new \AtollMatrix\Cache();
+
+        for ($i = 12; $i >= 0; $i--) {
             $month = date('Y-m', strtotime("$currentMonth -$i month"));
             $labels[] = date('F', strtotime($month));
     
-            $revenueQuery = new \WP_Query([
-                'post_type' => 'atmx_reservations',
-                'posts_per_page' => -1,
-                'meta_query' => [
-                    'relation' => 'AND',
-                    [
-                        'key' => 'atollmatrix_checkin_date',
-                        'value' => $month,
-                        'compare' => 'LIKE',
-                    ],
-                    [
-                        'key' => 'atollmatrix_reservation_status',
-                        'value' => 'confirmed',
-                        'compare' => '=',
-                    ],
-                ],
-            ]);
+            // Check if the data is cached
+            $cacheKey = $cache->generateAnalyticsCacheKey('twelve_months_adr_'. $month);
     
-            $totalRevenue = 0;
-            $totalNights = 0;
-            if ($revenueQuery->have_posts()) {
-                while ($revenueQuery->have_posts()) {
-                    $revenueQuery->the_post();
-                    $totalRevenue += (float)get_post_meta(get_the_ID(), 'atollmatrix_reservation_total_room_cost', true);
-                    
-                    $checkin = get_post_meta(get_the_ID(), 'atollmatrix_checkin_date', true);
-                    $checkout = get_post_meta(get_the_ID(), 'atollmatrix_checkout_date', true);
-                    if ($checkin && $checkout) {
-                        $checkinDate = new \DateTime($checkin);
-                        $checkoutDate = new \DateTime($checkout);
-                        $nights = $checkoutDate->diff($checkinDate)->days;
-                        $totalNights += $nights;
+            if ($cache->hasCache($cacheKey)) {
+                // Use cached data
+                $cachedData = $cache->getCache($cacheKey);
+                $adr = $cachedData;
+            } else {
+
+                error_log('Not using Cache adr data:' . $month );
+
+                // Query for revenue and nights
+                $revenueQuery = new \WP_Query([
+                    'post_type' => 'atmx_reservations',
+                    'posts_per_page' => -1,
+                    'meta_query' => [
+                        'relation' => 'AND',
+                        [
+                            'key' => 'atollmatrix_checkin_date',
+                            'value' => $month,
+                            'compare' => 'LIKE',
+                        ],
+                        [
+                            'key' => 'atollmatrix_reservation_status',
+                            'value' => 'confirmed',
+                            'compare' => '=',
+                        ],
+                    ],
+                ]);
+    
+                $totalRevenue = 0;
+                $totalNights = 0;
+                if ($revenueQuery->have_posts()) {
+                    while ($revenueQuery->have_posts()) {
+                        $revenueQuery->the_post();
+                        $totalRevenue += (float)get_post_meta(get_the_ID(), 'atollmatrix_reservation_total_room_cost', true);
+                        
+                        $checkin = get_post_meta(get_the_ID(), 'atollmatrix_checkin_date', true);
+                        $checkout = get_post_meta(get_the_ID(), 'atollmatrix_checkout_date', true);
+                        if ($checkin && $checkout) {
+                            $checkinDate = new \DateTime($checkin);
+                            $checkoutDate = new \DateTime($checkout);
+                            $nights = $checkoutDate->diff($checkinDate)->days;
+                            $totalNights += $nights;
+                        }
                     }
                 }
-            }
-            wp_reset_postdata();
+                wp_reset_postdata();
     
-            $adr = $totalNights > 0 ? round($totalRevenue / $totalNights) : 0; // Round the ADR value
+                $adr = $totalNights > 0 ? round($totalRevenue / $totalNights) : 0; // Round the ADR value
+    
+                // Cache the data if it's not the current month
+                if ($month != $currentMonth) {
+                    $cache->setCache($cacheKey, $adr);
+                }
+            }
+    
             $adrData[] = $adr;
         }
     
@@ -415,44 +464,69 @@ class Analytics {
             ],
         ];
     }
+    
 
-    private static function get_past_twelve_months_revenue_data() {
+    private function get_past_twelve_months_revenue_data() {
         $labels = [];
         $revenueData = [];
         $currentMonth = date('Y-m');
-        for ($i = 12; $i >= 1; $i--) {
+        $revenue_count = 0;
+
+        $cache = new \AtollMatrix\Cache();
+    
+        for ($i = 12; $i >= 0; $i--) {
             $month = date('Y-m', strtotime("$currentMonth -$i month"));
             $labels[] = date('F', strtotime($month));
+
+            // Check if the data is cached
+            $cacheKey = $cache->generateAnalyticsCacheKey('twelve_months_revenue_'. $month);
     
-            $revenueQuery = new \WP_Query([
-                'post_type' => 'atmx_reservations',
-                'posts_per_page' => -1,
-                'meta_query' => [
-                    'relation' => 'AND',
-                    [
-                        'key' => 'atollmatrix_checkin_date',
-                        'value' => $month,
-                        'compare' => 'LIKE',
+            if ($cache->hasCache($cacheKey)) {
+                // Use cached data
+                $cachedData = $cache->getCache($cacheKey);
+                $totalRevenue = $cachedData;
+            } else {
+
+                error_log('Not using Cache revenue data:' . $month );
+                // Query for revenue
+                $revenueQuery = new \WP_Query([
+                    'post_type' => 'atmx_reservations',
+                    'posts_per_page' => -1,
+                    'meta_query' => [
+                        'relation' => 'AND',
+                        [
+                            'key' => 'atollmatrix_checkin_date',
+                            'value' => $month,
+                            'compare' => 'LIKE',
+                        ],
+                        [
+                            'key' => 'atollmatrix_reservation_status',
+                            'value' => 'confirmed',
+                            'compare' => '=',
+                        ],
                     ],
-                    [
-                        'key' => 'atollmatrix_reservation_status',
-                        'value' => 'confirmed',
-                        'compare' => '=',
-                    ],
-                ],
-            ]);
+                ]);
     
-            $totalRevenue = 0;
-            if ($revenueQuery->have_posts()) {
-                while ($revenueQuery->have_posts()) {
-                    $revenueQuery->the_post();
-                    $totalRevenue += (float)get_post_meta(get_the_ID(), 'atollmatrix_reservation_total_room_cost', true);
+                $totalRevenue = 0;
+                if ($revenueQuery->have_posts()) {
+                    while ($revenueQuery->have_posts()) {
+                        $revenueQuery->the_post();
+                        $totalRevenue += (float)get_post_meta(get_the_ID(), 'atollmatrix_reservation_total_room_cost', true);
+                    }
+                }
+                wp_reset_postdata();
+    
+                // Cache the data if it's not the current month
+                if ($month != $currentMonth) {
+                    $cache->setCache($cacheKey, $totalRevenue);
                 }
             }
-            wp_reset_postdata();
     
             $revenueData[] = $totalRevenue;
+            $revenue_count += $totalRevenue;
         }
+    
+        $this->bookings['revenue'] = $revenue_count;
     
         return [
             'labels' => $labels,
@@ -471,57 +545,94 @@ class Analytics {
     }
     
     
-
-    private static function get_past_twelve_months_bookings_data() {
+    
+    private function get_past_twelve_months_bookings_data() {
         $labels = [];
         $confirmedData = [];
         $cancelledData = [];
         $currentMonth = date('Y-m');
-        for ($i = 12; $i >= 1; $i--) {
+    
+        $confirmed_count = 0;
+        $cancelled_count = 0;
+
+        $cache = new \AtollMatrix\Cache();
+    
+        for ($i = 12; $i >= 0; $i--) {
             $month = date('Y-m', strtotime("$currentMonth -$i month"));
             $labels[] = date('F', strtotime($month));
     
-            // Query for confirmed bookings
-            $confirmedQuery = new \WP_Query([
-                'post_type' => 'atmx_reservations',
-                'posts_per_page' => -1,
-                'meta_query' => [
-                    'relation' => 'AND',
-                    [
-                        'key' => 'atollmatrix_checkin_date',
-                        'value' => $month,
-                        'compare' => 'LIKE',
+            // Check if the data is cached
+            $cacheKey = $cache->generateAnalyticsCacheKey('bookings_data_'. $month);
+    // $cache->deleteCache($cacheKey);
+            if ($cache->hasCache($cacheKey)) {
+                // Use cached data
+                $cachedData = $cache->getCache($cacheKey);
+                $confirmedData[] = $cachedData['confirmed'];
+                $cancelledData[] = $cachedData['cancelled'];
+
+            } else {
+
+                error_log('Not using Cache bookings data:' . $month );
+                // Query for confirmed bookings
+                $confirmedQuery = new \WP_Query([
+                    'post_type' => 'atmx_reservations',
+                    'posts_per_page' => -1,
+                    'meta_query' => [
+                        'relation' => 'AND',
+                        [
+                            'key' => 'atollmatrix_checkin_date',
+                            'value' => $month,
+                            'compare' => 'LIKE',
+                        ],
+                        [
+                            'key' => 'atollmatrix_reservation_status',
+                            'value' => 'confirmed',
+                            'compare' => '=',
+                        ],
                     ],
-                    [
-                        'key' => 'atollmatrix_reservation_status',
-                        'value' => 'confirmed',
-                        'compare' => '=',
-                    ],
-                ],
-            ]);
-            $confirmedData[] = $confirmedQuery->found_posts;
+                ]);
+                $confirmedData[] = $confirmedQuery->found_posts;
     
-            // Query for cancelled bookings
-            $cancelledQuery = new \WP_Query([
-                'post_type' => 'atmx_reservations',
-                'posts_per_page' => -1,
-                'meta_query' => [
-                    'relation' => 'AND',
-                    [
-                        'key' => 'atollmatrix_checkin_date',
-                        'value' => $month,
-                        'compare' => 'LIKE',
+                // Query for cancelled bookings
+                $cancelledQuery = new \WP_Query([
+                    'post_type' => 'atmx_reservations',
+                    'posts_per_page' => -1,
+                    'meta_query' => [
+                        'relation' => 'AND',
+                        [
+                            'key' => 'atollmatrix_checkin_date',
+                            'value' => $month,
+                            'compare' => 'LIKE',
+                        ],
+                        [
+                            'key' => 'atollmatrix_reservation_status',
+                            'value' => 'cancelled',
+                            'compare' => '=',
+                        ],
                     ],
-                    [
-                        'key' => 'atollmatrix_reservation_status',
-                        'value' => 'cancelled',
-                        'compare' => '=',
-                    ],
-                ],
-            ]);
-            $cancelledData[] = $cancelledQuery->found_posts;
+                ]);
+                $cancelledData[] = $cancelledQuery->found_posts;
+    
+                if ($month != $currentMonth) {
+                    $cacheData = ['confirmed' => $confirmedQuery->found_posts, 'cancelled' => $cancelledQuery->found_posts];
+                    error_log('Caching Data: ' . print_r($cacheData, true));
+                    $cache->setCache($cacheKey, $cacheData);
+                }
+            }
+    
         }
-    
+
+        // Calculate the total counts
+        foreach ($confirmedData as $count) {
+            $confirmed_count += $count;
+        }
+        foreach ($cancelledData as $count) {
+            $cancelled_count += $count;
+        }
+
+        $this->bookings['confirmed'] = $confirmed_count;
+        $this->bookings['cancelled'] = $cancelled_count;
+        
         return [
             'labels' => $labels,
             'datasets' => [
@@ -542,46 +653,68 @@ class Analytics {
             ],
         ];
     }
-       
-
-    public function chart_shortcode($atts) {
-        $atts = shortcode_atts(['id' => ''], $atts, 'chart');
     
-        $config = $this->get_chart_config($atts['id']);
+    public function chart_generator($id) {
+        // $atts = shortcode_atts(['id' => ''], $atts, 'chart');
+    
+        $config = $this->get_chart_config($id);
         if (!$config) {
             return 'Chart not found.';
         }
     
-        $chart = new Analytics($atts['id'], $config['info'], $config['type'], $config['data'], $config['options'], $this->guests);
+        $chart = new Analytics($id, $config['info'], $config['type'], $config['data'], $config['options'], $this->guests);
         return $chart->render();
     }
+    public function stats_shortcode($atts) {
+        $atts = shortcode_atts(['id' => ''], $atts, 'stats');
 
-    public function render() {
-        $data = htmlspecialchars(json_encode($this->data), ENT_QUOTES, 'UTF-8');
-        $options = htmlspecialchars(json_encode($this->options), ENT_QUOTES, 'UTF-8');
-    
+        $chart1 = $this->chart_generator('chart1');
+        $chart2 = $this->chart_generator('chart2');
+        $chart3 = $this->chart_generator('chart3');
+        $chart4 = $this->chart_generator('chart4');
+        $chart5 = $this->chart_generator('chart5');
+        $chart6 = $this->chart_generator('chart6');
+
         // Initialize the guest list HTML
         $guestListHtml = '';
     
-        // Check if there are guests for the current chart type
-        if (isset($this->guests[$this->info])) {
-            if ( 'today' == $this->info ) {
+        // Iterate over each day in the guests array
+        foreach ($this->guests as $day => $statuses) {
+            // Add a heading for the day
+            if ('today' == $day) {
                 $guestListHtml .= "<h2>Today</h2>";
-            }
-            if ( 'tomorrow' == $this->info ) {
+            } elseif ('tomorrow' == $day) {
                 $guestListHtml .= "<h2>Tomorrow</h2>";
-            }
-            if ( 'dayafter' == $this->info ) {
+            } elseif ('dayafter' == $day) {
                 $guestListHtml .= "<h2>Day After</h2>";
+            } else {
+                $guestListHtml .= "<h2>" . ucfirst($day) . "</h2>";
             }
-            foreach ($this->guests[$this->info] as $status => $guests) {
+    
+            // Iterate over each status (staying, checkout, checkin) for the day
+            foreach ($statuses as $status => $guests) {
                 $guestListHtml .= "<h3>" . ucfirst($status) . " Guests</h3><ul>";
+    
+                // Iterate over each guest and add them to the list
                 foreach ($guests as $guestId => $guestName) {
                     $guestListHtml .= "<li>$guestName</li>";
                 }
                 $guestListHtml .= "</ul>";
             }
         }
+
+        error_log( print_r(  $this->bookings, true));
+    
+        return $guestListHtml . $chart1 . $chart2 . $chart3 . $chart4 . $chart5 . $chart6;
+
+    }
+    
+    public function render() {
+        $data = htmlspecialchars(json_encode($this->data), ENT_QUOTES, 'UTF-8');
+        $options = htmlspecialchars(json_encode($this->options), ENT_QUOTES, 'UTF-8');
+    
+        // Initialize the guest list HTML
+        $guestListHtml = '';
     
         return <<<HTML
     <canvas id="{$this->id}" class="atollmatrix-chart" data-type="{$this->type}" data-data="{$data}" data-options="{$options}"></canvas>
@@ -594,6 +727,5 @@ class Analytics {
 // Create an instance of the ChartGenerator class
 $analytics = new \AtollMatrix\Analytics( $id = false );
 
-// Register the shortcode using the instance
-add_shortcode('atollmatrix_chart', [$analytics, 'chart_shortcode']);
+add_shortcode('atollmatrix_stats', [$analytics, 'stats_shortcode']);
 

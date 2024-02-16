@@ -349,7 +349,7 @@ class AtollMatrix_Init
             }
 
             // Check if the post content contains the Contact Form 7 shortcode
-            if ( has_shortcode($post->post_content, 'atollmatrix_chart') ) {
+            if ( has_shortcode($post->post_content, 'atollmatrix_stats') ) {
                 wp_enqueue_script('atollmatrix-bookingchart', plugin_dir_url(__FILE__) . 'admin/js/booking-charts.js', array('jquery'), null, true);
             }
         }
