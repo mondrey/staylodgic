@@ -19,6 +19,31 @@ class Analytics {
         $this->options = $options;
         $this->guests = $guests;
         $this->bookings = $bookings;
+
+        add_action('admin_menu', array($this, 'atollmatrix_dashboard'));
+    }
+
+    public function atollmatrix_dashboard()
+    {
+        add_menu_page(
+            'Atollmatrix Dashboard',
+            'Atollmatrix Dashboard',
+            'manage_options',
+            'atmx-dashboard',
+            array($this, 'display_dashboard'),
+            '',
+            22 // Position parameter
+        );
+    }
+
+    public function display_dashboard()
+    {
+        // The HTML content of the 'Atoll Matrix' page goes here
+        echo "<h1>Dashboard</h1>";
+
+        // Create an instance of the ChartGenerator class
+        $analytics = new \AtollMatrix\Analytics( $id = false );
+        echo $analytics->display_stats();
     }
 
     public function get_chart_config($id) {
@@ -665,8 +690,7 @@ class Analytics {
         $chart = new Analytics($id, $config['info'], $config['type'], $config['data'], $config['options'], $this->guests);
         return $chart->render();
     }
-    public function stats_shortcode($atts) {
-        $atts = shortcode_atts(['id' => ''], $atts, 'stats');
+    public function display_stats() {
 
         $chart1 = $this->chart_generator('chart1');
         $chart2 = $this->chart_generator('chart2');
@@ -724,8 +748,5 @@ class Analytics {
     
 }
 
-// Create an instance of the ChartGenerator class
 $analytics = new \AtollMatrix\Analytics( $id = false );
-
-add_shortcode('atollmatrix_stats', [$analytics, 'stats_shortcode']);
 

@@ -142,6 +142,9 @@ class AtollMatrix_Init
         wp_register_script('bootstrap', plugin_dir_url(__FILE__) . 'assets/js/bootstrap/js/bootstrap.bundle.min.js', array('jquery'), null, true);
         wp_register_style('bootstrap', plugin_dir_url(__FILE__) . 'assets/js/bootstrap/css/bootstrap.min.css', false, 'screen');
 
+        wp_register_script('atollmatrix-chartjs', plugin_dir_url(__FILE__) . 'admin/js/chart.js', array('jquery'), null, true);
+        wp_register_script('atollmatrix-bookingchart', plugin_dir_url(__FILE__) . 'admin/js/booking-charts.js', array('atollmatrix-chartjs'), null, true);
+
         if (function_exists('get_current_screen')) {
             $current_admin_screen = get_current_screen();
         }
@@ -171,6 +174,10 @@ class AtollMatrix_Init
                 ));
             
                 wp_enqueue_style('atollmatrix-invoice');
+            }
+
+            if ($current_admin_screen->base == 'toplevel_page_atmx-dashboard') {
+                wp_enqueue_script('atollmatrix-bookingchart', plugin_dir_url(__FILE__) . 'admin/js/booking-charts.js', array('jquery'), null, true);                
             }
             if ($current_admin_screen->base == 'atoll-matrix_page_import-booking-ical') {
 
@@ -331,10 +338,6 @@ class AtollMatrix_Init
         wp_enqueue_style('bootstrap');
         wp_enqueue_script('bootstrap');
 
-        wp_register_script('atollmatrix-chartjs', plugin_dir_url(__FILE__) . 'admin/js/chart.js', array('jquery'), null, true);
-        wp_register_script('atollmatrix-bookingchart', plugin_dir_url(__FILE__) . 'admin/js/booking-charts.js', array('atollmatrix-chartjs'), null, true);
-
-
         // Check if we are viewing a single post/page
         if (is_singular()) {
             global $post;
@@ -346,11 +349,6 @@ class AtollMatrix_Init
                 // Enqueue any additional scripts required for the digital signature
                 wp_enqueue_script('atollmatrix-digital-signature', plugin_dir_url(__FILE__) . 'assets/js/digital-signature.js', array('signature-pad'), '1.0.0', true);
                 wp_enqueue_style('atollmatrix-digital-signature', plugin_dir_url(__FILE__) . 'assets/css/digital-signature.css', false, 'screen');
-            }
-
-            // Check if the post content contains the Contact Form 7 shortcode
-            if ( has_shortcode($post->post_content, 'atollmatrix_stats') ) {
-                wp_enqueue_script('atollmatrix-bookingchart', plugin_dir_url(__FILE__) . 'admin/js/booking-charts.js', array('jquery'), null, true);
             }
         }
 

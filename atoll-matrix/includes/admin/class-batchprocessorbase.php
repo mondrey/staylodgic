@@ -17,7 +17,9 @@ class BatchProcessorBase
             'Atoll Matrix',
             'manage_options',
             'atoll-matrix',
-            array($this, 'display_main_page')
+            array($this, 'display_main_page'),
+            '',
+            23 // Position parameter
         );
     }
 
@@ -25,6 +27,7 @@ class BatchProcessorBase
     {
         // The HTML content of the 'Atoll Matrix' page goes here
         echo "<h1>Welcome to Atoll Matrix</h1>";
+
     }
 
     /**

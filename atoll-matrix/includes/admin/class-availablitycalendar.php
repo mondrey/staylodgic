@@ -87,7 +87,7 @@ class AvailablityCalendar extends AvailablityCalendarBase
             'atmx-availability',
             array($this, 'room_Reservation_Plugin_Display_Availability_Calendar'),
             'dashicons-calendar-alt',
-            20
+            21
         );
     }
     // Callback function to display the Availability page
