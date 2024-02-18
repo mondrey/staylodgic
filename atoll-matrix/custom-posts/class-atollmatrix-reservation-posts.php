@@ -8,7 +8,34 @@ class atollmatrix_Reservation_Posts
 
         add_filter("manage_edit-atmx_reservations_columns", array($this, 'atmx_reservations_edit_columns'));
         add_filter('manage_posts_custom_column', array($this, 'atmx_reservations_custom_columns'));
+
+        add_filter('manage_edit-atmx_reservations_sortable_columns', array($this, 'atmx_reservations_sortable_columns'));
+
+        add_action('pre_get_posts', array($this, 'atmx_reservations_orderby'));
+
     }
+
+    public function atmx_reservations_orderby($query)
+    {
+        if (!is_admin() || !$query->is_main_query()) {
+            return;
+        }
+    
+        $orderby = $query->get('orderby');
+    
+        if ('reservation_checkinout' == $orderby) {
+            $query->set('meta_key', 'atollmatrix_checkin_date'); // Assuming 'reservation_checkin_date' is the meta key for check-in date
+            $query->set('orderby', 'meta_value');
+        }
+    }
+    
+    
+    public function atmx_reservations_sortable_columns($columns)
+    {
+        $columns['reservation_checkinout'] = 'reservation_checkinout';
+        return $columns;
+    }
+    
 
     // Kbase lister
     public function atmx_reservations_edit_columns($columns)

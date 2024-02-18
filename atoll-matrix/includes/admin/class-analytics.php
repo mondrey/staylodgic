@@ -219,15 +219,15 @@ class Analytics {
                 if ($status == 'confirmed') {
                     if ($checkin == $dayafter) {
                         $checkinCount++;
-                        $this->add_guest( $booking_number, 'dayafter', 'checkin');
+                        $this->add_guest( $booking_number, 'dayafter', 'checkin', $checkin, $checkout);
                     }
                     if ($checkout == $dayafter) {
                         $checkoutCount++;
-                        $this->add_guest( $booking_number, 'dayafter', 'checkout');
+                        $this->add_guest( $booking_number, 'dayafter', 'checkout', $checkin, $checkout);
                     }
                     if ($checkin < $dayafter && $checkout > $dayafter) {
                         $stayingCount++;
-                        $this->add_guest( $booking_number, 'dayafter', 'staying');
+                        $this->add_guest( $booking_number, 'dayafter', 'staying', $checkin, $checkout);
                     }
                 }
             }
@@ -245,14 +245,17 @@ class Analytics {
         ];
     }
 
-    private function add_guest( $booking_number = false, $day = 'today', $type = 'checkin' ) {
+    private function add_guest( $booking_number = false, $day = 'today', $type = 'checkin', $checkin = false, $checkout = false) {
         if ($booking_number) {
             // Fetch guest details
             $reservation_instance = new \AtollMatrix\Reservations();
             $guestID = $reservation_instance->getGuest_id_forReservation($booking_number);
             if ($guestID) {
                 $name = esc_html(get_post_meta($guestID, 'atollmatrix_full_name', true));
-                $this->guests[$day][$type][$guestID] = $name;
+                $this->guests[$day][$type][$guestID]['booking_number'] = $booking_number;
+                $this->guests[$day][$type][$guestID]['name'] = $name;
+                $this->guests[$day][$type][$guestID]['checkin'] = $checkin;
+                $this->guests[$day][$type][$guestID]['checkout'] = $checkout;
             }
         }
     }
@@ -304,15 +307,15 @@ class Analytics {
                 if ($status == 'confirmed') {
                     if ($checkin == $tomorrow) {
                         $checkinCount++;
-                        $this->add_guest( $booking_number, 'tomorrow', 'checkin');
+                        $this->add_guest( $booking_number, 'tomorrow', 'checkin', $checkin, $checkout);
                     }
                     if ($checkout == $tomorrow) {
                         $checkoutCount++;
-                        $this->add_guest( $booking_number, 'tomorrow', 'checkout');
+                        $this->add_guest( $booking_number, 'tomorrow', 'checkout', $checkin, $checkout);
                     }
                     if ($checkin < $tomorrow && $checkout > $tomorrow) {
                         $stayingCount++;
-                        $this->add_guest( $booking_number, 'tomorrow', 'staying');
+                        $this->add_guest( $booking_number, 'tomorrow', 'staying', $checkin, $checkout);
                     }
                 }
             }
@@ -377,15 +380,15 @@ class Analytics {
                 if ($status == 'confirmed') {
                     if ($checkin == $today) {
                         $checkinCount++;
-                        $this->add_guest( $booking_number, 'today', 'checkin');
+                        $this->add_guest( $booking_number, 'today', 'checkin', $checkin, $checkout);
                     }
                     if ($checkout == $today) {
                         $checkoutCount++;
-                        $this->add_guest( $booking_number, 'today', 'checkout');
+                        $this->add_guest( $booking_number, 'today', 'checkout', $checkin, $checkout);
                     }
                     if ($checkin < $today && $checkout > $today) {
                         $stayingCount++;
-                        $this->add_guest( $booking_number, 'today', 'staying');
+                        $this->add_guest( $booking_number, 'today', 'staying', $checkin, $checkout);
                     }
                 }
             }
@@ -702,8 +705,36 @@ class Analytics {
         // Initialize the guest list HTML
         $guestListHtml = '';
     
+        // // Iterate over each day in the guests array
+        // foreach ($this->guests as $day => $statuses) {
+        //     // Add a heading for the day
+        //     if ('today' == $day) {
+        //         $guestListHtml .= "<h2>Today</h2>";
+        //     } elseif ('tomorrow' == $day) {
+        //         $guestListHtml .= "<h2>Tomorrow</h2>";
+        //     } elseif ('dayafter' == $day) {
+        //         $guestListHtml .= "<h2>Day After</h2>";
+        //     } else {
+        //         $guestListHtml .= "<h2>" . ucfirst($day) . "</h2>";
+        //     }
+    
+        //     // Iterate over each status (staying, checkout, checkin) for the day
+        //     foreach ($statuses as $status => $guests) {
+        //         $guestListHtml .= "<h3>" . ucfirst($status) . " Guests</h3><ul>";
+    
+        //         // Iterate over each guest and add them to the list
+        //         foreach ($guests as $guestId => $guestInfo) {
+        //             $guestListHtml .= '<li>'.$guestInfo['name'].'</li>';
+        //         }
+        //         $guestListHtml .= "</ul>";
+        //     }
+        // }
+
+        // Initialize the guest list HTML
+        
         // Iterate over each day in the guests array
         foreach ($this->guests as $day => $statuses) {
+
             // Add a heading for the day
             if ('today' == $day) {
                 $guestListHtml .= "<h2>Today</h2>";
@@ -714,18 +745,42 @@ class Analytics {
             } else {
                 $guestListHtml .= "<h2>" . ucfirst($day) . "</h2>";
             }
-    
+
+            // Sort the statuses array
+            uksort($statuses, function($a, $b) {
+                $order = ['checkin', 'staying', 'checkout']; // Define your custom order
+                return array_search($a, $order) - array_search($b, $order);
+            });
+
             // Iterate over each status (staying, checkout, checkin) for the day
             foreach ($statuses as $status => $guests) {
-                $guestListHtml .= "<h3>" . ucfirst($status) . " Guests</h3><ul>";
-    
-                // Iterate over each guest and add them to the list
-                foreach ($guests as $guestId => $guestName) {
-                    $guestListHtml .= "<li>$guestName</li>";
+                $count = 0;
+                $guestListHtml .= "<h3>" . ucfirst($status) . " Guests</h3>";
+
+                $guestListHtml .= '<table class="table table-hover">';
+                $guestListHtml .= '<thead class="table-dark">';
+                $guestListHtml .= '<tr><th scope="col">#</th><th scope="col">Guest Name</th><th scope="col">Check-in Date</th><th scope="col">Check-out Date</th><th scope="col">Nights</th></tr>';
+                $guestListHtml .= '</thead>';
+                $guestListHtml .= '<tbody class="table-group-divider">';
+                // Iterate over each guest and add them to the table
+                foreach ($guests as $guestId => $guestInfo) {
+                    $count ++;
+                    $checkinDate = new \DateTime($guestInfo['checkin']);
+                    $checkoutDate = new \DateTime($guestInfo['checkout']);
+                    $nights = $checkoutDate->diff($checkinDate)->days;
+                    $guestListHtml .= '<tr>';
+                    $guestListHtml .= '<th scope="row">'.$count.'</th>';
+                    $guestListHtml .= '<td scope="row">' . ucwords(strtolower($guestInfo['name'])) . '</td>';
+                    $guestListHtml .= '<td scope="row">' . $guestInfo['checkin'] . '</td>';
+                    $guestListHtml .= '<td scope="row">' . $guestInfo['checkout'] . '</td>';
+                    $guestListHtml .= '<td scope="row">' . $nights . '</td>';
+                    $guestListHtml .= '</tr>';
                 }
-                $guestListHtml .= "</ul>";
+                $guestListHtml .= '</tbody>';
+                $guestListHtml .= '</table>';
             }
         }
+
 
         error_log( print_r(  $this->bookings, true));
     

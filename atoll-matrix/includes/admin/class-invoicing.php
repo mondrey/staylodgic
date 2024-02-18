@@ -85,8 +85,7 @@ class Invoicing
     public function add_invoicing_admin_menu()
     {
         add_submenu_page(
-            'atoll-matrix',
-            // This is the slug of the parent menu
+            'edit.php?post_type=atmx_reservations', // Set the parent slug to your custom post type slug
             'Invoices',
             'Invoices',
             'manage_options',
