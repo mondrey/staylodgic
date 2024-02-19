@@ -746,19 +746,30 @@ class Analytics {
             foreach ($statuses as $status => $guests) {
                 $count = 0;
 
+                $font_icon = '';
+                if ( 'checkin' == $status ) {
+                    $font_icon = '<i class="fas fa-sign-in-alt"></i>';
+                }
+                if ( 'checkout' == $status ) {
+                    $font_icon = '<i class="fas fa-sign-out-alt"></i>';
+                }
+                if ( 'staying' == $status ) {
+                    $font_icon = '<i class="fa-solid fa-bed"></i>';
+                }
+                
                 $guestListHtml .= '<div class="atollmatrix_table_outer">';
-                $guestListHtml .= "<h3>" . ucfirst($status) . "</h3>";
+                $guestListHtml .= "<h3>" . $font_icon . ucfirst($status) . "</h3>";
 
                 $guestListHtml .= '<table class="atollmatrix_analytics_table table table-hover">';
                 $guestListHtml .= '<thead class="table-light">';
                 $guestListHtml .= '<tr>';
-                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-number number-column" scope="col">#</th>';
-                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-name" scope="col">Guest Name</th>';
-                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-registration" scope="col">Registration</th>';
-                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-notes" scope="col">Notes</th>';
-                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-checkin" scope="col">Check-in Date</th>';
-                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-checkout" scope="col">Check-out Date</th>';
-                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-nights nights-column" scope="col">Nights</th>';
+                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-number number-column" scope="col"><i class="fas fa-hashtag"></i></th>';
+                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-name" scope="col"><i class="fas fa-user"></i> Guest Name</th>';
+                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-registration" scope="col"><i class="fas fa-clipboard-list"></i> Registration</th>';
+                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-notes" scope="col"><i class="fas fa-sticky-note"></i> Notes</th>';
+                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-checkin" scope="col"><i class="fas fa-sign-in-alt"></i> Check-in Date</th>';
+                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-checkout" scope="col"><i class="fas fa-sign-out-alt"></i> Check-out Date</th>';
+                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-nights nights-column" scope="col"><i class="fas fa-moon"></i> Nights</th>';                
                 $guestListHtml .= '</tr>';
                 $guestListHtml .= '</thead>';
                 $guestListHtml .= '<tbody class="table-group-divider">';
