@@ -1,0 +1,106 @@
+.atollmatrix-main-logo {
+	width: 406px;
+	height: 117px;
+	background-image: url( '../../assets/images/atollmatrix-logo.png' );
+	display: inline-block;
+	background-repeat: no-repeat;
+	position: relative;
+	background-size: contain;
+}
+body.wp-admin {
+	background: #f0f0f1;
+}
+.atollmatrix_anaytlics_row_one .atollmatrix_anaytlics_module {
+	width: 32.3%;
+	display: inline-block;
+	text-align: center;
+	margin: 0 0.5%;
+	box-sizing: border-box;
+}
+.atollmatrix_analytics_wrap {
+	background: #fff;
+	margin: 10px 20px 0 2px;
+	padding: 40px;
+}
+
+.atollmatrix_analytics_table {
+	margin: 14px 0 50px;
+	font-size: 14px;
+}
+
+.atollmatrix_dashboard_subheading {
+	font-size: 18px;
+	letter-spacing: 2px;
+}
+
+.atollmatrix_anaytlics_row_one {
+	padding: 40px 0;
+}
+
+.atollmatrix_analytics_wrap h3 {
+	font-size: 20px;
+	font-weight: 200;
+}
+
+.atollmatrix_analytics_wrap h2 {
+	font-size: 32px;
+	font-weight: 500;
+	margin-bottom: 20px;
+}
+
+.atollmatrix_analytics_table_wrap {
+	margin-bottom: 50px;
+}
+
+.atollmatrix_table_outer {
+	margin-top: 24px;
+}
+.atollmatrix_analytics_chart,
+.atollmatrix_analytics_table_wrap {
+	margin-bottom: 50px;
+	border: 1px solid #e1e1e1;
+	border-radius: 10px;
+	padding: 40px;
+}
+.atollmatrix_anaytlics_module {
+	padding: 40px 20px 0;
+	border-radius: 20px;
+}
+.atollmatrix_anaytlics_module.atollmatrix_chart_bookings_today {
+	background: #eef7fb;
+}
+.atollmatrix_anaytlics_module.atollmatrix_chart_bookings_tomorrow {
+	background: #f2f3fb;
+}
+.atollmatrix_anaytlics_module.atollmatrix_chart_bookings_dayafter {
+	background: #f7f4ed;
+}
+
+.atollmatrix_analytics_chart.atollmatrix_analytics_chart_polarArea {
+	border: 0;
+	padding: 0;
+	margin-bottom: 10px;
+}
+
+.nights-column,
+.number-column {
+	width: 5%;
+  }
+  
+  .atollmatrix_analytics_table th:not(.number-column,.nights-column),
+  .atollmatrix_analytics_table td:not(.number-column,.nights-column) {
+	width: calc(95% / 6); /* Adjust the denominator based on the number of columns */
+  }
+  
+
+h2.atollmatrix_analytics_subheading {
+	color:#a68b34;
+}
+.atollmatrix_analytics_table th.number-column {
+	color: #aeaeae;
+}
+
+.atollmatrix_analytics_chart:not(.atollmatrix_analytics_chart_polarArea),
+.atollmatrix_analytics_table_wrap {
+	box-shadow: 0px 10px 20px -3px rgba(0,0,0,0.1);
+}

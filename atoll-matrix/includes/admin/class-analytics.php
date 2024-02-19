@@ -38,18 +38,25 @@ class Analytics {
 
     public function display_dashboard()
     {
-        // The HTML content of the 'Atoll Matrix' page goes here
-        echo "<h1>Dashboard</h1>";
+
+        echo '<div class="atollmatrix_analytics_wrap">';
+
+        // Add the logo image below the heading
+        echo '<div class="atollmatrix-main-logo"></div>';
+
 
         // Create an instance of the ChartGenerator class
         $analytics = new \AtollMatrix\Analytics( $id = false );
         echo $analytics->display_stats();
+
+        echo '</div>';
     }
 
     public function get_chart_config($id) {
         $configs = [
-            'chart1' => [
+            'past_twelve_months_bookings' => [
                 'info' => 'past_twelve_months_bookings',
+                'heading' => 'Bookings for past twelve months',
                 'cache' => true,
                 'type' => 'line',
                 'options' => [
@@ -60,8 +67,9 @@ class Analytics {
                     ]
                 ]
             ],
-            'chart2' => [
+            'past_twelve_months_revenue' => [
                 'info' => 'past_twelve_months_revenue',
+                'heading' => 'Revenue for past twelve months',
                 'cache' => true,
                 'type' => 'bar',
                 'options' => [
@@ -72,8 +80,9 @@ class Analytics {
                     ]
                 ]
             ],
-            'chart3' => [
+            'past_twelve_months_adr' => [
                 'info' => 'past_twelve_months_adr',
+                'heading' => 'ADR for past twelve months',
                 'cache' => true,
                 'type' => 'bar',
                 'options' => [
@@ -84,8 +93,9 @@ class Analytics {
                     ]
                 ]
             ],
-            'chart4' => [
+            'bookings_today' => [
                 'info' => 'today',
+                'heading' => 'Today',
                 'cache' => false,
                 'type' => 'polarArea',
                 'options' => [
@@ -103,8 +113,9 @@ class Analytics {
                     ],
                 ]
             ],
-            'chart5' => [
+            'bookings_tomorrow' => [
                 'info' => 'tomorrow',
+                'heading' => 'Tomorrow',
                 'cache' => false,
                 'type' => 'polarArea',
                 'options' => [
@@ -122,8 +133,9 @@ class Analytics {
                     ],
                 ]
             ],
-            'chart6' => [
+            'bookings_dayafter' => [
                 'info' => 'dayafter',
+                'heading' => 'Day After',
                 'cache' => false,
                 'type' => 'polarArea',
                 'options' => [
@@ -147,22 +159,22 @@ class Analytics {
         // Only process data for the requested chart
         if (isset($configs[$id])) {
             switch ($id) {
-                case 'chart1':
+                case 'past_twelve_months_bookings':
                     $configs[$id]['data'] = $this->get_past_twelve_months_bookings_data();
                     break;
-                case 'chart2':
+                case 'past_twelve_months_revenue':
                     $configs[$id]['data'] = $this->get_past_twelve_months_revenue_data();
                     break;
-                case 'chart3':
+                case 'past_twelve_months_adr':
                     $configs[$id]['data'] = $this->get_past_twelve_months_adr_data();
                     break;
-                case 'chart4':
+                case 'bookings_today':
                     $configs[$id]['data'] = $this->get_current_day_stats_data();
                     break;
-                case 'chart5':
+                case 'bookings_tomorrow':
                     $configs[$id]['data'] = $this->get_tomorrow_stats_data();
                     break;
-                case 'chart6':
+                case 'bookings_dayafter':
                     $configs[$id]['data'] = $this->get_dayafter_stats_data();
                     break;
                 // Add cases for other charts as needed...
@@ -691,59 +703,37 @@ class Analytics {
         }
     
         $chart = new Analytics($id, $config['info'], $config['type'], $config['data'], $config['options'], $this->guests);
-        return $chart->render();
+        $rendered_chart = $chart->render();
+
+        $chart_output = '';
+
+        $chart_output .= '<div class="atollmatrix_analytics_chart atollmatrix_analytics_chart_'.$config['type'].' ">';
+        $chart_output .= '<h2 class="atollmatrix_analytics_subheading">';
+        $chart_output .= $config['heading'];
+        $chart_output .= '</h2>';
+        $chart_output .= $rendered_chart;
+        $chart_output .= '</div>';
+
+        return $chart_output;
     }
-    public function display_stats() {
 
-        $chart1 = $this->chart_generator('chart1');
-        $chart2 = $this->chart_generator('chart2');
-        $chart3 = $this->chart_generator('chart3');
-        $chart4 = $this->chart_generator('chart4');
-        $chart5 = $this->chart_generator('chart5');
-        $chart6 = $this->chart_generator('chart6');
-
+    public function guest_list() {
         // Initialize the guest list HTML
         $guestListHtml = '';
-    
-        // // Iterate over each day in the guests array
-        // foreach ($this->guests as $day => $statuses) {
-        //     // Add a heading for the day
-        //     if ('today' == $day) {
-        //         $guestListHtml .= "<h2>Today</h2>";
-        //     } elseif ('tomorrow' == $day) {
-        //         $guestListHtml .= "<h2>Tomorrow</h2>";
-        //     } elseif ('dayafter' == $day) {
-        //         $guestListHtml .= "<h2>Day After</h2>";
-        //     } else {
-        //         $guestListHtml .= "<h2>" . ucfirst($day) . "</h2>";
-        //     }
-    
-        //     // Iterate over each status (staying, checkout, checkin) for the day
-        //     foreach ($statuses as $status => $guests) {
-        //         $guestListHtml .= "<h3>" . ucfirst($status) . " Guests</h3><ul>";
-    
-        //         // Iterate over each guest and add them to the list
-        //         foreach ($guests as $guestId => $guestInfo) {
-        //             $guestListHtml .= '<li>'.$guestInfo['name'].'</li>';
-        //         }
-        //         $guestListHtml .= "</ul>";
-        //     }
-        // }
-
-        // Initialize the guest list HTML
         
         // Iterate over each day in the guests array
         foreach ($this->guests as $day => $statuses) {
 
+            $guestListHtml .= '<div class="atollmatrix_analytics_table_wrap">';
             // Add a heading for the day
             if ('today' == $day) {
-                $guestListHtml .= "<h2>Today</h2>";
+                $guestListHtml .= '<h2 class="atollmatrix_analytics_subheading atollmatrix_dayis_'.$day.'">Today</h2>';
             } elseif ('tomorrow' == $day) {
-                $guestListHtml .= "<h2>Tomorrow</h2>";
+                $guestListHtml .= '<h2 class="atollmatrix_analytics_subheading atollmatrix_dayis_'.$day.'">Tomorrow</h2>';
             } elseif ('dayafter' == $day) {
-                $guestListHtml .= "<h2>Day After</h2>";
+                $guestListHtml .= '<h2 class="atollmatrix_analytics_subheading atollmatrix_dayis_'.$day.'">Day After</h2>';
             } else {
-                $guestListHtml .= "<h2>" . ucfirst($day) . "</h2>";
+                $guestListHtml .= '<h2 class="atollmatrix_analytics_subheading atollmatrix_dayis_'.$day.'">' . ucfirst($day) . '</h2>';
             }
 
             // Sort the statuses array
@@ -755,36 +745,89 @@ class Analytics {
             // Iterate over each status (staying, checkout, checkin) for the day
             foreach ($statuses as $status => $guests) {
                 $count = 0;
-                $guestListHtml .= "<h3>" . ucfirst($status) . " Guests</h3>";
 
-                $guestListHtml .= '<table class="table table-hover">';
-                $guestListHtml .= '<thead class="table-dark">';
-                $guestListHtml .= '<tr><th scope="col">#</th><th scope="col">Guest Name</th><th scope="col">Check-in Date</th><th scope="col">Check-out Date</th><th scope="col">Nights</th></tr>';
+                $guestListHtml .= '<div class="atollmatrix_table_outer">';
+                $guestListHtml .= "<h3>" . ucfirst($status) . "</h3>";
+
+                $guestListHtml .= '<table class="atollmatrix_analytics_table table table-hover">';
+                $guestListHtml .= '<thead class="table-light">';
+                $guestListHtml .= '<tr>';
+                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-number number-column" scope="col">#</th>';
+                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-name" scope="col">Guest Name</th>';
+                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-registration" scope="col">Registration</th>';
+                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-notes" scope="col">Notes</th>';
+                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-checkin" scope="col">Check-in Date</th>';
+                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-checkout" scope="col">Check-out Date</th>';
+                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-nights nights-column" scope="col">Nights</th>';
+                $guestListHtml .= '</tr>';
                 $guestListHtml .= '</thead>';
                 $guestListHtml .= '<tbody class="table-group-divider">';
                 // Iterate over each guest and add them to the table
                 foreach ($guests as $guestId => $guestInfo) {
                     $count ++;
+
+                    $reservations_instance = new \AtollMatrix\Reservations();
+                    $reservation_id = $reservations_instance->getReservationIDforBooking( $guestInfo['booking_number'] );
+
                     $checkinDate = new \DateTime($guestInfo['checkin']);
                     $checkoutDate = new \DateTime($guestInfo['checkout']);
                     $nights = $checkoutDate->diff($checkinDate)->days;
+                    
                     $guestListHtml .= '<tr>';
-                    $guestListHtml .= '<th scope="row">'.$count.'</th>';
-                    $guestListHtml .= '<td scope="row">' . ucwords(strtolower($guestInfo['name'])) . '</td>';
+                    $guestListHtml .= '<th class="number-column" scope="row">'.$count.'</th>';
+                    $guestListHtml .= '<td scope="row">';
+                    $guestListHtml .= '<a href="' . esc_url( get_edit_post_link( $reservation_id ) ) . '">';
+                    $guestListHtml .= ucwords(strtolower($guestInfo['name']));
+                    $guestListHtml .= '</a>';
+                    $guestListHtml .= '</td>';
+                    $guestListHtml .= '<td scope="row">';
+
+                    $registry_instance = new \AtollMatrix\GuestRegistry();
+                    $resRegIDs =  $registry_instance->fetchResRegIDsByBookingNumber( $guestInfo['booking_number'] );
+                    if ( isset($resRegIDs) && is_array($resRegIDs) ) {
+                        $guestListHtml .= $registry_instance->outputRegistrationAndOccupancy($resRegIDs['reservationID'], $resRegIDs['guestRegisterID'], 'icons');    
+                    }
+                    $guestListHtml .= '</td>';
+
+                    $notes = get_post_meta($reservation_id, 'atollmatrix_reservation_notes', true);
+                    $notes_with_breaks = nl2br($notes);
+
+                    $guestListHtml .= '<td scope="row">' . $notes_with_breaks . '</td>';
                     $guestListHtml .= '<td scope="row">' . $guestInfo['checkin'] . '</td>';
                     $guestListHtml .= '<td scope="row">' . $guestInfo['checkout'] . '</td>';
-                    $guestListHtml .= '<td scope="row">' . $nights . '</td>';
+                    $guestListHtml .= '<td class="nights-column" scope="row">' . $nights . '</td>';
                     $guestListHtml .= '</tr>';
                 }
                 $guestListHtml .= '</tbody>';
                 $guestListHtml .= '</table>';
+                $guestListHtml .= '</div>';
             }
+            $guestListHtml .= '</div>';
         }
 
+        return $guestListHtml;
+    }
+    public function display_stats() {
 
-        error_log( print_r(  $this->bookings, true));
+        $past_twelve_months_bookings = $this->chart_generator('past_twelve_months_bookings');
+        $past_twelve_months_revenue = $this->chart_generator('past_twelve_months_revenue');
+        $past_twelve_months_adr = $this->chart_generator('past_twelve_months_adr');
+        $bookings_today = $this->chart_generator('bookings_today');
+        $bookings_tomorrow = $this->chart_generator('bookings_tomorrow');
+        $bookings_dayafter = $this->chart_generator('bookings_dayafter');
+
+        $guestListHtml = $this->guest_list();
+
+        $row_one = '';
+
+        $row_one .= '<div class="atollmatrix_anaytlics_row_one">';
+        $row_one .= '<div class="atollmatrix_anaytlics_module atollmatrix_chart_bookings_today">' . $bookings_today . '</div>';
+        $row_one .= '<div class="atollmatrix_anaytlics_module atollmatrix_chart_bookings_tomorrow">' . $bookings_tomorrow . '</div>';
+        $row_one .= '<div class="atollmatrix_anaytlics_module atollmatrix_chart_bookings_dayafter">' . $bookings_dayafter . '</div>';
+        $row_one .= '</div>';
     
-        return $guestListHtml . $chart1 . $chart2 . $chart3 . $chart4 . $chart5 . $chart6;
+        $dashboard = $row_one . $guestListHtml . $past_twelve_months_bookings . $past_twelve_months_revenue . $past_twelve_months_adr;
+        return $dashboard;
 
     }
     

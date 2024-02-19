@@ -469,8 +469,8 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                     if ( $text_value ) {
                         $registry_instance = new \AtollMatrix\GuestRegistry();
                         $resRegIDs =  $registry_instance->fetchResRegIDsByBookingNumber( $text_value );
-                        $registry_instance->outputRegistrationAndOccupancy($resRegIDs['reservationID'], $resRegIDs['guestRegisterID'], 'text');
-                        $registry_instance->outputRegistrationAndOccupancy($resRegIDs['reservationID'], $resRegIDs['guestRegisterID'], 'icons');
+                        echo $registry_instance->outputRegistrationAndOccupancy($resRegIDs['reservationID'], $resRegIDs['guestRegisterID'], 'text');
+                        echo $registry_instance->outputRegistrationAndOccupancy($resRegIDs['reservationID'], $resRegIDs['guestRegisterID'], 'icons');
                     }
 
                     break;
@@ -1116,8 +1116,8 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                         $registry_instance = new \AtollMatrix\GuestRegistry();
                         $resRegIDs =  $registry_instance->fetchResRegIDsByBookingNumber( $bookingnumber );
                         if ( isset( $resRegIDs['guestRegisterID'] ) ) {
-                            $registry_instance->outputRegistrationAndOccupancy($resRegIDs['reservationID'], $resRegIDs['guestRegisterID'], 'text');
-                            $registry_instance->outputRegistrationAndOccupancy($resRegIDs['reservationID'], $resRegIDs['guestRegisterID'], 'icons');
+                            echo $registry_instance->outputRegistrationAndOccupancy($resRegIDs['reservationID'], $resRegIDs['guestRegisterID'], 'text');
+                            echo $registry_instance->outputRegistrationAndOccupancy($resRegIDs['reservationID'], $resRegIDs['guestRegisterID'], 'icons');
                             $guestregistration_post_edit   = get_edit_post_link($resRegIDs['guestRegisterID']);
                             echo '<a class="button button-primary button-large" href="' . $guestregistration_post_edit . '">Edit Guest Registration</a>';
                         } else {

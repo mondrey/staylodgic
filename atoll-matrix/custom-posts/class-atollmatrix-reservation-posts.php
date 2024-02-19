@@ -102,7 +102,7 @@ class atollmatrix_Reservation_Posts
                 $registry_instance = new \AtollMatrix\GuestRegistry();
                 $resRegIDs =  $registry_instance->fetchResRegIDsByBookingNumber( $bookingnumber );
                 if ( $resRegIDs ) {
-                    $registry_instance->outputRegistrationAndOccupancy($resRegIDs['reservationID'], $resRegIDs['guestRegisterID'], 'icons');
+                    echo $registry_instance->outputRegistrationAndOccupancy($resRegIDs['reservationID'], $resRegIDs['guestRegisterID'], 'icons');
                 }
                 break;
             case "reservation_nights":

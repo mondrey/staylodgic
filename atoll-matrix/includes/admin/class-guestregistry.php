@@ -172,29 +172,33 @@ class GuestRegistry
         // Get registered guest count
         $registeredGuestCount = $this->getRegisteredGuestCount($registerID);
 
+        $registration_output = '';
+
         // Determine the output format
         if ($outputFormat === 'icons' && $registeredGuestCount <= $reservation_occupants) {
-            echo '<div class="reservation-details">';
+            $registration_output .= '<div class="reservation-details">';
             // Output filled circles for registered guests
             for ($i = 0; $i < $registeredGuestCount; $i++) {
-                echo '<i class="fas fa-circle"></i> ';
+                $registration_output .= '<i class="fas fa-circle"></i> ';
             }
             // Output outline circles for the remaining occupancy
             for ($i = $registeredGuestCount; $i < $reservation_occupants; $i++) {
-                echo '<i class="far fa-circle"></i> ';
+                $registration_output .= '<i class="far fa-circle"></i> ';
             }
-            echo '</div>';
+            $registration_output .= '</div>';
         } elseif ($outputFormat === 'fraction' || $registeredGuestCount > $reservation_occupants) {
             // Fallback to fraction if registered guests exceed total occupancy or fraction is requested
-            echo '<div class="reservation-details">';
-            echo '<div class="occupancy-details">Registered: ' . esc_html($registeredGuestCount) . '/' . esc_html($reservation_occupants) . '</div>';
-            echo '</div>';
+            $registration_output .= '<div class="reservation-details">';
+            $registration_output .= '<div class="occupancy-details">Registered: ' . esc_html($registeredGuestCount) . '/' . esc_html($reservation_occupants) . '</div>';
+            $registration_output .= '</div>';
         } else { // Default to text format
-            echo '<div class="reservation-details">';
-            echo '<div class="registered-occupants">Total guests: ' . esc_html($reservation_occupants) . '</div>';
-            echo '<div class="registered-guests">Registered guests: ' . esc_html($registeredGuestCount) . '</div>';
-            echo '</div>';
+            $registration_output .= '<div class="reservation-details">';
+            $registration_output .= '<div class="registered-occupants">Total guests: ' . esc_html($reservation_occupants) . '</div>';
+            $registration_output .= '<div class="registered-guests">Registered guests: ' . esc_html($registeredGuestCount) . '</div>';
+            $registration_output .= '</div>';
         }
+
+        return $registration_output;
     }
 
     /**

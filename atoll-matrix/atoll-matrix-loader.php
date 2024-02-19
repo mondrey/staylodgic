@@ -112,7 +112,7 @@ class AtollMatrix_Init
         echo '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>';
     }
 
-    public function atollmatrix_load_admin_styles()
+    public function atollmatrix_load_admin_styles( $hook )
     {
         wp_register_script('select2', plugin_dir_url(__FILE__) . 'assets/js/select2/js/select2.full.min.js', array('jquery'), null, true);
         wp_register_style('select2', plugin_dir_url(__FILE__) . 'assets/js/select2/css/select2.min.css', array(), false, 'screen');
@@ -122,6 +122,7 @@ class AtollMatrix_Init
         wp_register_script('jsPDF', plugin_dir_url(__FILE__) . 'assets/js/jspdf/jspdf.umd.js', array('jquery'), null, true);
         wp_register_script('atollmatrix-invoice', plugin_dir_url(__FILE__) . 'admin/js/invoice.js', array('jquery', 'jsPDF', 'html2canvas'), null, true);
         wp_register_style('atollmatrix-invoice', plugin_dir_url(__FILE__) . 'admin/css/invoice.css', false, 'screen');
+        wp_register_style('atollmatrix-dashboard', plugin_dir_url(__FILE__) . 'admin/css/dashboard.css', false, 'screen');
         wp_register_style('flatpickr', plugin_dir_url(__FILE__) . 'assets/js/flatpickr/flatpickr.min.css', array(), '1.0', 'screen');
         wp_register_style('flatpickr-extra', plugin_dir_url(__FILE__) . 'assets/js/flatpickr/flatpickr-extra-style.css', array(), '1.0', 'screen');
         wp_register_script('flatpickr', plugin_dir_url(__FILE__) . 'assets/js/flatpickr/flatpickr.js', array('jquery'), '1.0', true);
@@ -184,7 +185,14 @@ class AtollMatrix_Init
                 wp_enqueue_style('atollmatrix-invoice');
             }
             if ($current_admin_screen->base == 'toplevel_page_atmx-dashboard') {
+
+                wp_enqueue_style('atollmatrix-dashboard');
+
                 wp_enqueue_script('atollmatrix-bookingchart', plugin_dir_url(__FILE__) . 'admin/js/booking-charts.js', array('jquery'), null, true);
+
+                wp_enqueue_style('fontawesome-6');
+                wp_enqueue_style('fontawesome-6-brands');
+                wp_enqueue_style('fontawesome-6-solid');
 
                 wp_enqueue_style('bootstrap');
                 wp_enqueue_script('bootstrap');
@@ -255,6 +263,21 @@ class AtollMatrix_Init
                 wp_enqueue_style('fontawesome-6');
                 wp_enqueue_style('fontawesome-6-brands');
                 wp_enqueue_style('fontawesome-6-solid');
+
+            }
+            if ($current_admin_screen->post_type === 'atmx_guestregistry' && ($hook === 'post.php' || $hook === 'post-new.php')) {
+
+                wp_enqueue_style('atollmatrix-admin-styles');
+
+                wp_enqueue_style('bootstrap');
+                wp_enqueue_script('bootstrap');
+                
+                wp_enqueue_script('atollmatrix-invoice');
+                wp_localize_script('atollmatrix-invoice', 'atollmatrixData', array(
+                    'pluginUrl' => plugin_dir_url(__FILE__),
+                ));
+            
+                wp_enqueue_style('atollmatrix-invoice');
 
             }
             wp_localize_script(
