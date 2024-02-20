@@ -541,7 +541,7 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                     $bed_container = '
                         <div id="bed_setup_container" class="bed-setup-container-template">
                         <div class="metabox_label"><label for="atollmatrix_alt_bedsetup_${uniqueID}"></label></div>
-                        <div id="atollmatrix_alt_bedsetup_${uniqueID}-section-title" class="sectiontitle clearfix">Alternate Bed Setup #${uniqueID} ( optional )</div>
+                        <div id="atollmatrix_alt_bedsetup_${uniqueID}-section-title" class="sectiontitle clearfix">Alternate Bed Setup ( optional )</div>
                         <div class="bedlayout-wrap" data-repeat="atollmatrix_alt_bedsetup_${uniqueID}">
                         <div class="bedlayout">
                             <div class="bedlayout-box" id="bedlayout-box">
@@ -794,6 +794,62 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                     echo '<span class="add-box-notice">' . esc_html__('Max Reached!', 'atollmatrix') . '</span>';
                     echo '</div>';
                     break;
+
+                case 'event_schedule':
+                    $text_value = $meta ? $meta : $field['std'];
+                    error_log('------ Events Schedule ------');
+                    error_log(print_r($text_value, true));
+                
+                    // Set the HTML code for the event schedule
+                    $schedule_container = '
+                        <div id="event_schedule_container" class="event-schedule-container-template">
+                            <div class="metabox_label"><label for="atollmatrix_activity_schedule_${day}"></label></div>
+                            <div class="schedule-wrap" data-repeat="atollmatrix_activity_schedule_${day}">';
+                
+                    // Loop through each day of the week
+                    $days_of_week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+                    foreach ($days_of_week as $day) {
+                        $day_lower = strtolower($day);
+                        $schedule_container .= '
+                            <div class="day-schedule" id="day_schedule_' . $day_lower . '">
+                                <div class="day-title">' . $day . '</div>
+                                <div class="time-inputs">';
+                
+// Inside the loop where input fields are created
+if (!empty($text_value[$day_lower])) {
+    foreach ($text_value[$day_lower] as $time) {
+        $schedule_container .= '
+            <div class="time-input-wrapper">
+                <input type="time" name="atollmatrix_activity_schedule[' . $day_lower . '][]" value="' . esc_attr($time) . '">
+                <span class="remove-time-input">Remove</span>
+            </div>';
+    }
+} else {
+    // If no saved times, add an empty input field with a remove button
+    $schedule_container .= '
+        <div class="time-input-wrapper">
+            <input type="time" name="atollmatrix_activity_schedule[' . $day_lower . '][]" value="">
+            <span class="remove-time-input">Remove</span>
+        </div>';
+}
+
+                
+                        $schedule_container .= '
+                                </div>
+                                <span class="add-time-input">Add Time</span>
+                            </div>';
+                    }
+                
+                    $schedule_container .= '
+                            </div>
+                        </div>
+                    ';
+                
+                    echo $schedule_container;
+                    break;
+                    
+
+                        
                 case 'timepicker':
                     $text_value = $meta ? $meta : $field['std'];
                     echo '<select name="' . esc_attr($field['id']) . '" id="' . esc_attr($field['id']) . '">';
@@ -1493,10 +1549,10 @@ function atollmatrix_checkdata($post_id)
                 $atollmatrix_room_box = atollmatrix_room_metadata();
                 atollmatrix_savedata($atollmatrix_room_box, $post_id);
                 break;
-            // case 'atmx_payments':
-            //     $atollmatrix_payment_box = atollmatrix_payment_metadata();
-            //     atollmatrix_savedata($atollmatrix_payment_box, $post_id);
-            //     break;
+            case 'atmx_activity':
+                $atollmatrix_activity_box = atollmatrix_activity_metadata();
+                atollmatrix_savedata($atollmatrix_activity_box, $post_id);
+                break;
             case 'atmx_guestregistry':
                 $registry_box = atollmatrix_registry_metadata();
                 atollmatrix_savedata($registry_box, $post_id);

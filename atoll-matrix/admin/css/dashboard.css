@@ -1,15 +1,17 @@
 .atollmatrix-main-logo {
 	width: 406px;
 	height: 117px;
-	background-image: url( '../../assets/images/atollmatrix-logo.png' );
+	background-image: url('../../assets/images/atollmatrix-logo.png');
 	display: inline-block;
 	background-repeat: no-repeat;
 	position: relative;
 	background-size: contain;
 }
+
 body.wp-admin {
 	background: #f0f0f1;
 }
+
 .atollmatrix_anaytlics_row_one .atollmatrix_anaytlics_module {
 	width: 33.2%;
 	display: inline-block;
@@ -17,6 +19,7 @@ body.wp-admin {
 	margin: 0 0.1% 0 0;
 	box-sizing: border-box;
 }
+
 .atollmatrix_analytics_wrap {
 	background: #fff;
 	margin: 10px 20px 0 2px;
@@ -55,22 +58,27 @@ body.wp-admin {
 .atollmatrix_table_outer {
 	margin-top: 24px;
 }
+
 .atollmatrix_analytics_chart,
 .atollmatrix_analytics_table_wrap {
 	margin-bottom: 50px;
 	border-radius: 10px;
 	padding: 40px;
 }
+
 .atollmatrix_anaytlics_module {
 	padding: 40px 20px 0;
 	border-radius: 20px;
 }
+
 .atollmatrix_anaytlics_module.atollmatrix_chart_bookings_today {
 	background: #eef7fb;
 }
+
 .atollmatrix_anaytlics_module.atollmatrix_chart_bookings_tomorrow {
 	background: #f2f3fb;
 }
+
 .atollmatrix_anaytlics_module.atollmatrix_chart_bookings_dayafter {
 	background: #f7f4ed;
 }
@@ -84,21 +92,22 @@ body.wp-admin {
 .nights-column,
 .number-column {
 	width: 5%;
-  }
-  
+}
+
 .atollmatrix_analytics_table th.number-column {
 	text-align: center;
 }
 
-  .atollmatrix_analytics_table th:not(.number-column,.nights-column),
-  .atollmatrix_analytics_table td:not(.number-column,.nights-column) {
-	width: calc(95% / 6); /* Adjust the denominator based on the number of columns */
-  }
-  
+.atollmatrix_analytics_table th:not(.number-column, .nights-column),
+.atollmatrix_analytics_table td:not(.number-column, .nights-column) {
+	width: calc(95% / 6);
+}
+
 
 h2.atollmatrix_analytics_subheading {
-	color:#000;
+	color: #000;
 }
+
 .atollmatrix_analytics_table th.number-column {
 	color: #aeaeae;
 }
@@ -112,9 +121,11 @@ table.atollmatrix_analytics_table thead tr th {
 	background-image: linear-gradient(180deg, #9D9D9D21 0%, #B9ABAB21 100%);
 	padding: 20px 0;
 }
+
 table.atollmatrix_analytics_table thead tr th.number-column {
 	border-top-left-radius: 10px;
 }
+
 table.atollmatrix_analytics_table thead tr th.nights-column {
 	border-top-right-radius: 10px;
 }

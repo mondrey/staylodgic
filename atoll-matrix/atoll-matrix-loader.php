@@ -29,6 +29,7 @@ class AtollMatrix_Init
         add_action('admin_init', array($this, 'atollmatrix_reservationsitemmetabox_init'));
         add_action('admin_init', array($this, 'atollmatrix_customersitemmetabox_init'));
         add_action('admin_init', array($this, 'atollmatrix_roomitemmetabox_init'));
+        add_action('admin_init', array($this, 'atollmatrix_activityitemmetabox_init'));
 
         add_action('init', array($this, 'atollmatrix_load_textdomain'));
         add_action('init', array($this, 'atollmatrix_load_metaboxes'));
@@ -53,6 +54,8 @@ class AtollMatrix_Init
         require_once plugin_dir_path(__FILE__) . '/custom-posts/class-atollmatrix-customer-posts.php';
         require_once plugin_dir_path(__FILE__) . '/custom-posts/class-atollmatrix-registration-posts.php';
         require_once plugin_dir_path(__FILE__) . '/custom-posts/class-atollmatrix-room-posts.php';
+        require_once plugin_dir_path(__FILE__) . '/custom-posts/class-atollmatrix-activity-posts.php';
+        require_once plugin_dir_path(__FILE__) . '/custom-posts/class-atollmatrix-activityres-posts.php';
     }
 
     public function atollmatrix_load_availablity_calendar()
@@ -99,6 +102,7 @@ class AtollMatrix_Init
         require_once plugin_dir_path(__FILE__) . '/metabox/metaboxes/reservation-metaboxes.php';
         require_once plugin_dir_path(__FILE__) . '/metabox/metaboxes/customer-metaboxes.php';
         require_once plugin_dir_path(__FILE__) . '/metabox/metaboxes/room-metaboxes.php';
+        require_once plugin_dir_path(__FILE__) . '/metabox/metaboxes/activity-metaboxes.php';
     }
 
     function enqueue_google_fonts() {
@@ -409,6 +413,12 @@ class AtollMatrix_Init
     {
         add_meta_box("room-meta", esc_html__("Room Options", "imaginem-blocks"), "atollmatrix_roomitem_metaoptions", "atmx_room", "normal", "low");
         add_meta_box("room-changelog", esc_html__("Room Changelog", "imaginem-blocks"), "atollmatrix_roomitem_changelog", "atmx_room", "normal", "low");
+    }
+    // Room Metabox
+    public function atollmatrix_activityitemmetabox_init()
+    {
+        add_meta_box("activity-meta", esc_html__("Activity Options", "imaginem-blocks"), "atollmatrix_activityitem_metaoptions", "atmx_activity", "normal", "low");
+        add_meta_box("activity-changelog", esc_html__("Activity Changelog", "imaginem-blocks"), "atollmatrix_activityitem_changelog", "atmx_activity", "normal", "low");
     }
 }
 

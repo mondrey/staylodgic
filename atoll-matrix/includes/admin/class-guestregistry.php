@@ -49,22 +49,23 @@ class GuestRegistry
 
     }
 
-    public function create_guest_registration_ajax_handler() {
+    public function create_guest_registration_ajax_handler()
+    {
         // Check user capabilities or nonce here for security, e.g.,
         // if ( !current_user_can('edit_posts') ) wp_die();
-        $bookingNumber = isset($_POST['bookingNumber']) ? sanitize_text_field($_POST['bookingNumber']) : '';
-    
+        $bookingNumber = isset($_POST[ 'bookingNumber' ]) ? sanitize_text_field($_POST[ 'bookingNumber' ]) : '';
+
         // Create a new guest registration post
         $post_id = wp_insert_post(array(
-            'post_title'    => wp_strip_all_tags('Registration for ' . $bookingNumber),
-            'post_content'  => '',
-            'post_status'   => 'publish',
-            'post_type'     => 'atmx_guestregistry', // Ensure this is the correct post type
-            'meta_input'    => array(
+            'post_title'   => wp_strip_all_tags('Registration for ' . $bookingNumber),
+            'post_content' => '',
+            'post_status'  => 'publish',
+            'post_type'    => 'atmx_guestregistry', // Ensure this is the correct post type
+            'meta_input' => array(
                 'atollmatrix_registry_bookingnumber' => $bookingNumber,
             ),
         ));
-    
+
         if ($post_id) {
             // Successfully created post, return its ID
             echo $post_id;
@@ -72,7 +73,7 @@ class GuestRegistry
             // There was an error
             echo 'error';
         }
-    
+
         wp_die(); // this is required to terminate immediately and return a proper response
     }
 
@@ -82,14 +83,15 @@ class GuestRegistry
      * @param string $bookingNumber The booking number to search for.
      * @return bool|int Returns the guest register post ID if found, otherwise returns false.
      */
-    public function checkGuestRegistrationByBookingNumber($bookingNumber) {
+    public function checkGuestRegistrationByBookingNumber($bookingNumber)
+    {
         $guestRegisterArgs = array(
-            'post_type'      => 'atmx_guestregistry', // Adjust to your guest register post type
+            'post_type'   => 'atmx_guestregistry', // Adjust to your guest register post type
             'posts_per_page' => 1,
-            'post_status'    => 'publish',
-            'meta_query'     => array(
+            'post_status' => 'publish',
+            'meta_query'  => array(
                 array(
-                    'key'   => 'atollmatrix_registry_bookingnumber', // Ensure this matches your actual meta key
+                    'key' => 'atollmatrix_registry_bookingnumber', // Ensure this matches your actual meta key
                     'value' => $bookingNumber,
                 ),
             ),
@@ -100,7 +102,7 @@ class GuestRegistry
         // Check if a guest register post is found
         if ($guestRegisterQuery->have_posts()) {
             // Return the ID of the guest registration post
-            return $guestRegisterQuery->posts[0]->ID;
+            return $guestRegisterQuery->posts[ 0 ]->ID;
         }
 
         return false; // Return false if no guest registration post is found
@@ -117,10 +119,10 @@ class GuestRegistry
     public function fetchResRegIDsByBookingNumber($bookingNumber)
     {
         $reservationArgs = array(
-            'post_type'      => 'atmx_reservations', // Adjust to your reservation post type
+            'post_type'   => 'atmx_reservations', // Adjust to your reservation post type
             'posts_per_page' => 1,
-            'post_status'    => 'publish',
-            'meta_query'     => array(
+            'post_status' => 'publish',
+            'meta_query'  => array(
                 array(
                     'key'   => 'atollmatrix_booking_number',
                     'value' => $bookingNumber,
@@ -129,12 +131,12 @@ class GuestRegistry
         );
 
         $guestRegisterArgs = array(
-            'post_type'      => 'atmx_guestregistry', // Adjust to your guest register post type
+            'post_type'   => 'atmx_guestregistry', // Adjust to your guest register post type
             'posts_per_page' => 1,
-            'post_status'    => 'publish',
-            'meta_query'     => array(
+            'post_status' => 'publish',
+            'meta_query'  => array(
                 array(
-                    'key'   => 'atollmatrix_registry_bookingnumber', // Adjust if the meta key is different
+                    'key' => 'atollmatrix_registry_bookingnumber', // Adjust if the meta key is different
                     'value' => $bookingNumber,
                 ),
             ),
@@ -146,8 +148,8 @@ class GuestRegistry
         // Check if both posts are found
         if ($reservationQuery->have_posts() && $guestRegisterQuery->have_posts()) {
             $result = array(
-                'reservationID'   => $reservationQuery->posts[0]->ID,
-                'guestRegisterID' => $guestRegisterQuery->posts[0]->ID,
+                'reservationID'   => $reservationQuery->posts[ 0 ]->ID,
+                'guestRegisterID' => $guestRegisterQuery->posts[ 0 ]->ID,
             );
             return $result;
         } else {
@@ -282,10 +284,10 @@ class GuestRegistry
 
                 ob_start();
                 ?>
-        <button data-title="Guest Registration <?php echo $guest_data['registration_id']; ?>" data-id="<?php echo $guest_data['registration_id']; ?>" id="print-invoice-button" class="print-invoice-button">Print Invoice</button>
-        <button data-file="registration-<?php echo $guest_data['registration_id']; ?>" data-id="<?php echo $guest_data['registration_id']; ?>" id="save-pdf-invoice-button" class="save-pdf-invoice-button">Save PDF</button>
-        
-        <div class="invoice-container" data-bookingnumber="<?php echo $guest_data['registration_id']; ?>">
+        <button data-title="Guest Registration <?php echo $guest_data[ 'registration_id' ]; ?>" data-id="<?php echo $guest_data[ 'registration_id' ]; ?>" id="print-invoice-button" class="print-invoice-button">Print Invoice</button>
+        <button data-file="registration-<?php echo $guest_data[ 'registration_id' ]; ?>" data-id="<?php echo $guest_data[ 'registration_id' ]; ?>" id="save-pdf-invoice-button" class="save-pdf-invoice-button">Save PDF</button>
+
+        <div class="invoice-container" data-bookingnumber="<?php echo $guest_data[ 'registration_id' ]; ?>">
         <div class="invoice-container-inner">
         <div id="invoice-hotel-header">
             <section id="invoice-hotel-logo">
@@ -404,10 +406,10 @@ class GuestRegistry
                     if (isset($booking_data[ 'Sign' ])) {
                         unset($booking_data[ 'Sign' ]);
                     }
-                    if ( is_array( get_post_meta($post_id, 'registration_data', true) ) ) {
+                    if (is_array(get_post_meta($post_id, 'registration_data', true))) {
                         $registration_data = get_post_meta($post_id, 'registration_data', true);
                     }
-                    if (isset($booking_data['registration_id']) && $guest_id) {
+                    if (isset($booking_data[ 'registration_id' ]) && $guest_id) {
                         $registration_id = $guest_id;
                     }
                     $registration_data[ $registration_id ] = $booking_data;

@@ -1,6 +1,19 @@
 jQuery(document).ready(function($) {
 	"use strict";
 
+
+	function acitivity_schedule() {
+		$(document).on('click', '.remove-time-input', function() {
+			$(this).closest('.time-input-wrapper').remove();
+		});
+		$(document).on('click', '.day-schedule .add-time-input', function () {
+			var daySchedule = $(this).closest('.day-schedule');
+			var newTimeInput = $('<input type="time" name="atollmatrix_activity_schedule[' + daySchedule.attr('id').replace('day_schedule_', '') + '][]" value="">');
+			daySchedule.find('.time-inputs').append(newTimeInput);
+		});
+	}
+	acitivity_schedule();
+
 	$(document).on('click', '.create-guest-registration', function(e) {
 		e.preventDefault(); // Prevent default anchor action
 	
