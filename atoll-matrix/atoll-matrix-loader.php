@@ -27,6 +27,7 @@ class AtollMatrix_Init
 
         add_action('admin_init', array($this, 'atollmatrix_registryitemmetabox_init'));
         add_action('admin_init', array($this, 'atollmatrix_reservationsitemmetabox_init'));
+        add_action('admin_init', array($this, 'atollmatrix_activityresitemmetabox_init'));
         add_action('admin_init', array($this, 'atollmatrix_customersitemmetabox_init'));
         add_action('admin_init', array($this, 'atollmatrix_roomitemmetabox_init'));
         add_action('admin_init', array($this, 'atollmatrix_activityitemmetabox_init'));
@@ -100,6 +101,7 @@ class AtollMatrix_Init
         require_once plugin_dir_path(__FILE__) . '/metabox/metaboxgen/metaboxgen.php';
         require_once plugin_dir_path(__FILE__) . '/metabox/metaboxes/registry-metaboxes.php';
         require_once plugin_dir_path(__FILE__) . '/metabox/metaboxes/reservation-metaboxes.php';
+        require_once plugin_dir_path(__FILE__) . '/metabox/metaboxes/activityres-metaboxes.php';
         require_once plugin_dir_path(__FILE__) . '/metabox/metaboxes/customer-metaboxes.php';
         require_once plugin_dir_path(__FILE__) . '/metabox/metaboxes/room-metaboxes.php';
         require_once plugin_dir_path(__FILE__) . '/metabox/metaboxes/activity-metaboxes.php';
@@ -138,6 +140,7 @@ class AtollMatrix_Init
 
         wp_enqueue_style('availability-styles', plugin_dir_url(__FILE__) . 'admin/css/availability-calendar.css', false, 'screen');
         wp_enqueue_script('availability-scripts', plugin_dir_url(__FILE__) . 'admin/js/availability-calendar.js', array('jquery'), null, true);
+        wp_enqueue_script('activity-scripts', plugin_dir_url(__FILE__) . 'admin/js/activity-calendar.js', array('jquery'), null, true);
         wp_enqueue_script('common-scripts', plugin_dir_url(__FILE__) . 'admin/js/common.js', array('jquery'), null, true);
 
         wp_register_style('fontawesome-6', plugin_dir_url(__FILE__) . 'assets/fonts/fontawesome-free-6.4.0-web/css/fontawesome.css', false, 'screen');
@@ -399,6 +402,12 @@ class AtollMatrix_Init
     }
     // Reservations Metabox
     public function atollmatrix_reservationsitemmetabox_init()
+    {
+        add_meta_box('activityresInfo-meta', esc_html__('Activity Reservations Options', 'imaginem-blocks-ii'), 'atollmatrix_activityresitem_metaoptions', 'atmx_activityres', 'normal', 'low');
+        add_meta_box('activityresInfo-changelog', esc_html__('Activity Reservations Changelog', 'imaginem-blocks-ii'), 'atollmatrix_activityresitem_changelog', 'atmx_activityres', 'normal', 'low');
+    }
+    // ActivityRes Metabox
+    public function atollmatrix_activityresitemmetabox_init()
     {
         add_meta_box('reservationsInfo-meta', esc_html__('Reservation Options', 'imaginem-blocks-ii'), 'atollmatrix_reservationsitem_metaoptions', 'atmx_reservations', 'normal', 'low');
         add_meta_box('reservationsInfo-changelog', esc_html__('Reservation Changelog', 'imaginem-blocks-ii'), 'atollmatrix_reservationsitem_changelog', 'atmx_reservations', 'normal', 'low');

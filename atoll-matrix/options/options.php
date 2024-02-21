@@ -360,6 +360,7 @@ class AtollMatrixOptionsPanel
 
             <div class="atollmatrix-tabform-wrapper">
             <?php $this->render_tabs();?>
+            <div class="atollmatrix-tab-content active" id="tab-property">
             <form action="options.php" method="post" class="atollmatrix-options-form">
                 <?php
 settings_fields($this->option_group_name);
@@ -367,7 +368,9 @@ settings_fields($this->option_group_name);
         submit_button('Save Settings');
         ?>
             </form>
-<?php
+            </div>
+            </div>
+            <?php
     // Add an export button
     echo '<form method="post">';
     echo '<input type="hidden" name="action" value="export_settings" />';
@@ -391,32 +394,40 @@ echo '<div id="import-settings-modal" class="atollmatrix-modal" style="display:n
         </div>
       </div>';
 ?>
-            </div>
         </div>
         <?php
 }
 
-    /**
-     * Renders options page tabs.
-     */
-    protected function render_tabs()
-    {
-        if (empty($this->args[ 'tabs' ])) {
-            return;
-        }
+protected function render_tabs()
+{
+    if (empty($this->args['tabs'])) {
+        return;
+    }
 
-        $tabs = $this->args[ 'tabs' ];
-        ?>
-        <h2 class="nav-tab-wrapper atollmatrix-tabs"><?php
-$first_tab = true;
-        foreach ($tabs as $id => $label) {?>
+    $tabs = $this->args['tabs'];
+    ?>
+    <div class="nav-tab-wrapper atollmatrix-tabs">
+        <div class="atollmatrix-tabs-container">
+            <?php
+            $first_tab = true;
+            // Example heading for a group of tabs
+            echo '<h3 class="atollmatrix-tab-heading">General Settings</h3>';
+            foreach ($tabs as $id => $label) {
+                // Example condition to add a heading before a specific tab
+                if ($id === 'general') {
+                    echo '<h3 class="atollmatrix-tab-heading">Hotel Settings</h3>';
+                }
+                ?>
                 <a href="#" data-tab="<?php echo esc_attr($id); ?>" class="nav-tab<?php echo ($first_tab) ? ' nav-tab-active' : ''; ?>"><?php echo ucfirst($label); ?></a>
                 <?php
-$first_tab = false;
-        }
-        ?></h2>
-        <?php
+                $first_tab = false;
+            }
+            ?>
+        </div>
+    </div>
+    <?php
 }
+
 
     /**
      * Returns an option value.
@@ -946,14 +957,14 @@ $panel_args = [
     'user_capability' => 'manage_options',
     'tabs'            => [
         'property'       => esc_html__('Property', 'atollmatrix'),
+        'currency'      => esc_html__('Currency', 'atollmatrix'),
         'general'       => esc_html__('General', 'atollmatrix'),
         'pages'         => esc_html__('Pages', 'atollmatrix'),
-        'import-export' => esc_html__('Import/Export', 'atollmatrix'),
         'discounts' => esc_html__('Discounts', 'atollmatrix'),
-        'currency'      => esc_html__('Currency', 'atollmatrix'),
         'mealplan'      => esc_html__('Meal Plan', 'atollmatrix'),
         'perperson'     => esc_html__('Per person price', 'atollmatrix'),
         'tax'           => esc_html__('Tax', 'atollmatrix'),
+        'import-export' => esc_html__('Import/Export', 'atollmatrix'),
      ],
  ];
 

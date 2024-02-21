@@ -446,6 +446,30 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                     echo '</div>';
                     echo '</div>';
                     break;
+                case 'activitytaxgenerate':
+
+                    $the_post_id = get_the_ID();
+                    $taxStatus = get_post_meta($the_post_id, 'atollmatrix_tax', true);
+                    $taxHTML = get_post_meta($the_post_id, 'atollmatrix_tax_html_data', true);
+                    $taxData = get_post_meta($the_post_id, 'atollmatrix_tax_data', true);
+                
+                    echo '<div id="input-tax-summary">';
+                    echo '<div class="input-tax-summary-wrap">';
+                    if ( 'enabled' == $taxStatus ) {
+                        echo '<div class="input-tax-summary-wrap-inner">';
+                        echo $taxHTML;
+                        error_log( '------ tax out -------' );
+                        error_log( print_r( $taxHTML, true) );
+                        echo '</div>';
+                    }
+                    if ( 'excluded' == $taxStatus ) {
+                        echo '<div class="input-tax-summary-wrap-inner">';
+                        echo 'Tax Exluded';
+                        echo '</div>';
+                    }
+                    echo '</div>';
+                    echo '</div>';
+                    break;
 
                 case 'offview':
                     $text_value = $meta ? $meta : $field['std'];
@@ -893,6 +917,11 @@ if (!empty($text_value[$day_lower])) {
                 case 'hidden':
                     $text_value = $meta ? $meta : $field['std'];
                     echo '<input type="hidden" name="', esc_attr($field['id']), '_hidden" id="', esc_attr($field['id']), '_hidden" value="' . esc_attr($text_value) . '" />';
+                    break;
+                case 'activity_reservation':
+                    $text_value = $meta ? $meta : $field['std'];
+                    echo '<input data-postid="' . get_the_id() . '" type="text" class="' . $class . ' activity-reservation" name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '" value="' . esc_attr($text_value) . '" size="30" />';
+                    echo '<div id="activity-reservation-details"></div>';
                     break;
                 case 'reservation':
                     $text_value = $meta ? $meta : $field['std'];
@@ -1348,6 +1377,10 @@ if (!empty($text_value[$day_lower])) {
             echo '<br/><span id="reservation-tax-generate" class="button button-primary button-small">Generate Tax</span>&nbsp;';
             echo '<span id="reservation-tax-exclude" class="button button-secondary button-small">Exclude Tax</span><br/><br/>';
         }
+        if ( isset( $field['datatype'] ) && 'activitysubtotal' == $field['datatype'] ) {
+            echo '<br/><span id="activity-tax-generate" class="button button-primary button-small">Generate Tax</span>&nbsp;';
+            echo '<span id="activity-tax-exclude" class="button button-secondary button-small">Exclude Tax</span><br/><br/>';
+        }
         echo '</div>';
     }
 
@@ -1552,6 +1585,10 @@ function atollmatrix_checkdata($post_id)
             case 'atmx_activity':
                 $atollmatrix_activity_box = atollmatrix_activity_metadata();
                 atollmatrix_savedata($atollmatrix_activity_box, $post_id);
+                break;
+            case 'atmx_activityres':
+                $atollmatrix_activityres_box = atollmatrix_activityres_metadata();
+                atollmatrix_savedata($atollmatrix_activityres_box, $post_id);
                 break;
             case 'atmx_guestregistry':
                 $registry_box = atollmatrix_registry_metadata();

@@ -51,6 +51,16 @@
 					$('.front-booking-adult-adult-value').text( value + 1 );
 				}
 			}
+
+			updateActivityPrices( totalPeople ) {
+				var activityPerPerson = $('[data-priceof="activityperperson"]').val();
+				
+				console.log( totalPeople );
+				var totalRate = totalPeople * activityPerPerson;
+				$('[data-priceof="activitysubtotal"]').val( totalRate.toFixed(2) );
+				$('[data-priceof="activitytotal"]').val('');
+				$('.input-tax-summary-wrap-inner').remove();
+			}
 		
 			calculateSum() {
 				var sum = 0;
@@ -58,6 +68,9 @@
 					sum += parseInt($(this).val());
 				});
 				console.log('Total sum:', sum);
+				if ($('[data-priceof="activityperperson"]').length > 0) {
+					this.updateActivityPrices(sum);
+				}
 				return sum;
 			}
 		}

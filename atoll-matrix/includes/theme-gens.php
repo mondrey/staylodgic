@@ -215,6 +215,18 @@ function atollmatrix_get_select_target_options($type)
                 $list_options[0] = "Rooms not found.";
             }
             break;
+        case 'activity_names':
+            // Pull all the Featured into an array
+            $featured_pages       = get_posts('post_type=atmx_activity&orderby=title&numberposts=-1&order=ASC');
+            $list_options['none'] = "Not Selected";
+            if ($featured_pages) {
+                foreach ($featured_pages as $key => $list) {
+                    $list_options[$list->ID] = $list->post_title;
+                }
+            } else {
+                $list_options[0] = "Activities not found.";
+            }
+            break;
         case 'existing_customers':
             // Pull all the Featured into an array
             $featured_pages       = get_posts('post_type=atmx_customers&orderby=title&numberposts=-1&order=ASC');
