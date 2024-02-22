@@ -1,10 +1,43 @@
 (function ($) {
 	$(document).ready(function () {
 
+		// Initialize Select2 on the activity ID select menu
+		$('#atollmatrix_activity_id').select2();
+
+		$(document).on('click', '.time-slot', function (e) {
+			// Get the time and activity ID from the data attributes
+			var time = $(this).data('time');
+			var activityId = $(this).data('activity');
+
+			// Set the time value to the input field
+			$('input[name="atollmatrix_activity_time"]').val(time);
+
+			// Set the selected activity ID in the select menu
+			$('#atollmatrix_activity_id').val(activityId).trigger('change');
+			
+		});
+
 		const flatpickrInstance = flatpickr(".activity-reservation", {
 			showMonths: 1,
 			dateFormat: "Y-m-d",
 			enableTime: false,
+			onChange: function(selectedDates, dateStr, instance) {
+				// Send an AJAX request with the selected date
+				$.ajax({
+					url: ajaxurl, // 'ajaxurl' is a global variable defined by WordPress
+					type: 'POST',
+					data: {
+						action: 'get_activity_schedules',
+						selected_date: dateStr
+					},
+					success: function(response) {
+						if (response.success) {
+							// Update the activity schedules container with the response data
+							$('.activity-schedules-container').html(response.data);
+						}
+					}
+				});
+			}
 		});
 
 		function getActivityGuestNumbers() {

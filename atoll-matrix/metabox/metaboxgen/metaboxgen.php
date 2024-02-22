@@ -449,6 +449,19 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                     echo '</div>';
                     break;
 
+                case 'activity_list_generate':
+
+                    $the_post_id = get_the_ID();
+                    if ( null !== get_post_meta($the_post_id, 'atollmatrix_reservation_checkin', true) ) {
+                        $activity_date = get_post_meta($the_post_id, 'atollmatrix_reservation_checkin', true);
+                    }
+
+                    // Create an instance of the Activity class
+                    $activity = new AtollMatrix\Activity();
+                    $activity->display_activity_schedules_with_availability( $activity_date ); // Today's date
+
+                    break;
+
                 case 'offview':
                     $text_value = $meta ? $meta : $field['std'];
                     echo '<input type="hidden" class="' . $class . '" name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '" value="' . esc_attr($text_value) . '" size="30" />';
@@ -1246,7 +1259,7 @@ if (!empty($text_value[$day_lower])) {
                         }
                         $name_property = $field['id'] . '[number]';
 
-                        $child_age_input = 'data-childageinput="atollmatrix_reservation_room_children[age][]"';
+                        $child_age_input = 'data-childageinput="'.$field['id'].'[age][]"';
                     } else {
                         $meta_value    = $meta;
                         $name_property = $field['id'];
@@ -1262,7 +1275,7 @@ if (!empty($text_value[$day_lower])) {
                         if (isset($meta['number'])) {
                             for ($i = 0; $i < $meta['number']; $i++) {
                                 $age = isset($meta['age'][$i]) ? $meta['age'][$i] : '';
-                                echo "<input name='atollmatrix_reservation_room_children[age][]' type='number' data-counter='" . $i . "' value='" . $age . "' placeholder='Enter age'>";
+                                echo "<input name='".$field['id']."[age][]' type='number' data-counter='" . $i . "' value='" . $age . "' placeholder='Enter age'>";
                             }
                         }
                         echo '</div>';
