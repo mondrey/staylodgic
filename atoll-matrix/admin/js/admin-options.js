@@ -83,6 +83,7 @@ jQuery(document).ready(function ($) {
 	// Apply Sortable to the repeatable container
 	function applySortable() {
 		$('#repeatable-tax-container').sortable();
+		$('#repeatable-activitytax-container').sortable();
 	}
 	applySortable();
 
@@ -133,6 +134,22 @@ jQuery(document).ready(function ($) {
 			'taxes_duration': 'option_' + new_count + '_duration',
 		};
 		addRepeatableSection('.repeatable-tax-template', '#repeatable-tax-container', idMappings, true);
+
+		return false;
+	});
+	
+	// Add event listener to the "Add New Section" button
+	$('#addtax-activity-repeatable').click(function () {
+		var new_count = getNextUniqueId();
+		var new_id = generateUniqueId();
+		var idMappings = {
+			'name': 'atollmatrix_settings[activity_taxes][' + new_id + ']',
+			'taxes_label': 'option_' + new_count + '_label',
+			'taxes_number': 'option_' + new_count + '_number',
+			'taxes_type': 'option_' + new_count + '_type',
+			'taxes_duration': 'option_' + new_count + '_duration',
+		};
+		addRepeatableSection('.repeatable-activitytax-template', '#repeatable-activitytax-container', idMappings, true);
 
 		return false;
 	});

@@ -435,30 +435,8 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                         echo '<div class="input-tax-summary-wrap-inner">';
                         echo $taxHTML;
                         error_log( '------ tax out -------' );
-                        error_log( print_r( $taxHTML, true) );
-                        echo '</div>';
-                    }
-                    if ( 'excluded' == $taxStatus ) {
-                        echo '<div class="input-tax-summary-wrap-inner">';
-                        echo 'Tax Exluded';
-                        echo '</div>';
-                    }
-                    echo '</div>';
-                    echo '</div>';
-                    break;
-                case 'activitytaxgenerate':
-
-                    $the_post_id = get_the_ID();
-                    $taxStatus = get_post_meta($the_post_id, 'atollmatrix_tax', true);
-                    $taxHTML = get_post_meta($the_post_id, 'atollmatrix_tax_html_data', true);
-                    $taxData = get_post_meta($the_post_id, 'atollmatrix_tax_data', true);
-                
-                    echo '<div id="input-tax-summary">';
-                    echo '<div class="input-tax-summary-wrap">';
-                    if ( 'enabled' == $taxStatus ) {
-                        echo '<div class="input-tax-summary-wrap-inner">';
-                        echo $taxHTML;
-                        error_log( '------ tax out -------' );
+                        error_log( $the_post_id );
+                        error_log( $taxStatus );
                         error_log( print_r( $taxHTML, true) );
                         echo '</div>';
                     }

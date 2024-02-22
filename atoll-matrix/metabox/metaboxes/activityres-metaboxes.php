@@ -144,7 +144,7 @@ function atollmatrix_activityres_metadata()
             array(
                 'name'    => '',
                 'id'      => 'atollmatrix_activity_tax',
-                'type'    => 'activitytaxgenerate',
+                'type'    => 'taxgenerate',
                 'class'   => 'textsmall',
                 'heading' => 'subhead',
                 'desc'    => '',
@@ -228,13 +228,6 @@ function atollmatrix_activityres_metadata()
                 'name' => esc_html__('Registration', 'atollmatrix'),
                 'id'   => 'atollmatrix_sep_page_options',
                 'type' => 'seperator',
-            ),
-            array(
-                'name'    => esc_html__('Guest Registration', 'atollmatrix'),
-                'id'      => 'atollmatrix_reservation_registration',
-                'class'   => 'reservation_registration',
-                'type'    => 'reservation_registration',
-                'desc'    => esc_html__('Customer choice', 'atollmatrix'),
             ),
             array(
                 'name'    => esc_html__('Customer', 'atollmatrix'),

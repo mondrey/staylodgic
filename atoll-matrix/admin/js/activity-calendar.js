@@ -68,7 +68,8 @@
 				nonce: atollmatrix_admin_vars.nonce,
 				subtotal: subtotal_for_tax,
 				staynights: totalStayNights,
-				total_guests: totalGuests
+				total_guests: totalGuests,
+				tax_type: 'activities'
 			  },
 			  success: function(response) {
 				console.log( response );

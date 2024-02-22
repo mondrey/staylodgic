@@ -68,81 +68,7 @@ class Booking
 
         add_action('wp_ajax_bookRooms', array($this, 'bookRooms'));
         add_action('wp_ajax_nopriv_bookRooms', array($this, 'bookRooms'));
-
-        add_action('wp_ajax_generateTax', array($this, 'generateTax'));
-        add_action('wp_ajax_nopriv_generateTax', array($this, 'generateTax'));
-
-        add_action('wp_ajax_excludeTax', array($this, 'excludeTax'));
-        add_action('wp_ajax_nopriv_excludeTax', array($this, 'excludeTax'));
-    }
-
-    public function excludeTax()
-    {
-        $response = array();
-
-        $the_post_id = sanitize_text_field($_POST[ 'post_id' ]);
-        $subtotal    = sanitize_text_field($_POST[ 'subtotal' ]);
-
-        // Verify the nonce
-        if (!isset($_POST[ 'nonce' ])) {
-            wp_send_json_error([ 'message' => 'Failed' ]);
-            return;
-        }
-        update_post_meta($the_post_id, 'atollmatrix_tax', 'excluded');
-        delete_post_meta($the_post_id, 'atollmatrix_tax_html_data');
-        delete_post_meta($the_post_id, 'atollmatrix_tax_data');
-        update_post_meta($the_post_id, 'atollmatrix_reservation_total_room_cost', $subtotal);
-
-        // Send the JSON response
-        wp_send_json('Tax Exluded');
-
-    }
-
-    public function generateTax()
-    {
-        // Initialize the response array
-        $response = array();
-
-        // Check if the necessary POST data is set
-        if (isset($_POST[ 'subtotal' ], $_POST[ 'staynights' ], $_POST[ 'total_guests' ])) {
-            // Sanitize and retrieve the input data
-            $subtotal    = sanitize_text_field($_POST[ 'subtotal' ]);
-            $staynights  = sanitize_text_field($_POST[ 'staynights' ]);
-            $totalGuests = sanitize_text_field($_POST[ 'total_guests' ]);
-            $the_post_id = sanitize_text_field($_POST[ 'post_id' ]);
-
-            // Verify the nonce
-            if (!isset($_POST[ 'nonce' ])) {
-                wp_send_json_error([ 'message' => 'Failed' ]);
-                return;
-            }
-
-            // Calculate the total price
-            $tax_data = atollmatrix_apply_tax($subtotal, $staynights, $totalGuests, $output = 'data');
-            $tax      = atollmatrix_apply_tax($subtotal, $staynights, $totalGuests, $output = 'html');
-
-            if ($tax) {
-
-                $html = atollmatrix_generate_tax_summary($tax[ 'details' ]);
-
-                $response[ 'html' ]  = $html;
-                $response[ 'total' ] = $tax[ 'total' ];
-
-                // Add the response data as post meta
-                update_post_meta($the_post_id, 'atollmatrix_tax', 'enabled');
-                update_post_meta($the_post_id, 'atollmatrix_tax_html_data', $html);
-                update_post_meta($the_post_id, 'atollmatrix_tax_data', $tax_data);
-                update_post_meta($the_post_id, 'atollmatrix_reservation_total_room_cost', $tax[ 'total' ]);
-
-            } else {
-                $response[ 'error' ] = 'Calculation error';
-            }
-        } else {
-            $response[ 'error' ] = 'Missing input data';
-        }
-
-        // Send the JSON response
-        wp_send_json($response);
+        
     }
 
     public function process_RoomData(
@@ -367,7 +293,8 @@ class Booking
 
             $html .= '<div class="summary-heading total-summary-heading">Total:</div>';
 
-            $totalprice = atollmatrix_apply_tax($subtotalprice, $staynights, $totalguests, $output = 'html');
+            $tax_instance = new \AtollMatrix\Tax('room');
+            $totalprice = $tax_instance->apply_tax($subtotalprice, $staynights, $totalguests, $output = 'html');
             foreach ($totalprice[ 'details' ] as $totalID => $totalvalue) {
                 $html .= '<div class="tax-summary tax-summary-details">' . $totalvalue . '</div>';
             }
@@ -1864,9 +1791,11 @@ HTML;
             $reservationArray[ 'currency' ] = $currency;
         }
 
+        $tax_instance = new \AtollMatrix\Tax('room');
+
         $subtotalprice                  = intval($reservationArray[ 'room_data' ][ 'totalroomrate' ]) + intval($reservationArray[ 'mealplan_price' ]);
-        $reservationArray[ 'tax' ]      = atollmatrix_apply_tax($subtotalprice, $reservationArray[ 'staynights' ], $reservationArray[ 'totalguest' ], $output = 'data');
-        $reservationArray[ 'tax_html' ] = atollmatrix_apply_tax($subtotalprice, $reservationArray[ 'staynights' ], $reservationArray[ 'totalguest' ], $output = 'html');
+        $reservationArray[ 'tax' ]      = $tax_instance->apply_tax($subtotalprice, $reservationArray[ 'staynights' ], $reservationArray[ 'totalguest' ], $output = 'data');
+        $reservationArray[ 'tax_html' ] = $tax_instance->apply_tax($subtotalprice, $reservationArray[ 'staynights' ], $reservationArray[ 'totalguest' ], $output = 'html');
 
         $ratepernight                       = intval($subtotalprice) / intval($reservationArray[ 'staynights' ]);
         $ratepernight_rounded               = round($ratepernight, 2);
@@ -2005,7 +1934,8 @@ HTML;
         $tax_html   = false;
         if (atollmatrix_has_tax()) {
             $tax_status = 'enabled';
-            $tax_html   = atollmatrix_generate_tax_summary($reservationData[ 'tax_html' ][ 'details' ]);
+            $tax_instance = new \AtollMatrix\Tax('room');
+            $tax_html   = $tax_instance->tax_summary($reservationData[ 'tax_html' ][ 'details' ]);
         }
 
         $new_bookingstatus = atollmatrix_get_option('new_bookingstatus');

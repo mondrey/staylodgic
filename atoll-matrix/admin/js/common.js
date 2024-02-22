@@ -6,7 +6,7 @@
 				this.element = element;
 				this.input = this.element.find('.number-value');
 				this.setupEvents();
-				this.calculateSum();
+				this.calculateSum('none');
 			}
 		
 			setupEvents() {
@@ -23,7 +23,7 @@
 				}
 				if (value > minValue) {
 					this.input.val(value - 1);
-					this.calculateSum();
+					this.calculateSum('minus');
 					if (guest === "child") {
 						$('.front-booking-adult-child-value').text( value - 1 );
 						$("#guest-age input[data-counter='" + (value - 1) + "']").remove();
@@ -41,7 +41,7 @@
 				}
 				$('.child-number-notice').hide();
 				this.input.val(value + 1);
-				this.calculateSum();
+				this.calculateSum('plus');
 				if (guest === "child") {
 					var child_age_input = this.input.attr('data-childageinput');
 					$('.front-booking-adult-child-value').text( value + 1 );
@@ -62,12 +62,13 @@
 				$('.input-tax-summary-wrap-inner').remove();
 			}
 		
-			calculateSum() {
+			calculateSum( process ) {
 				var sum = 0;
 				$('.number-input .number-value').each(function () {
 					sum += parseInt($(this).val());
 				});
 				console.log('Total sum:', sum);
+				if ( process === 'plus' || process === 'minus' )
 				if ($('[data-priceof="activityperperson"]').length > 0) {
 					this.updateActivityPrices(sum);
 				}

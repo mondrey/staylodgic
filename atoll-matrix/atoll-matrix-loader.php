@@ -87,11 +87,12 @@ class AtollMatrix_Init
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-guestregistry.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-formgenerator.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-analytics.php';
+        require_once plugin_dir_path(__FILE__) . 'includes/admin/class-taxes.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/utilities.php';
     }
 
     public function atollmatrix_load_themeoptions() {
-        require_once plugin_dir_path(__FILE__) . '/options/options.php';
+        require_once plugin_dir_path(__FILE__) . 'includes/admin/class-optionspanel.php';
     }
 
     public function atollmatrix_load_metaboxes()

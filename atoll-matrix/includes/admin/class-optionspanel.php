@@ -1,5 +1,8 @@
 <?php
-class AtollMatrixOptionsPanel
+
+namespace AtollMatrix;
+
+class OptionsPanel
 {
 
     /**
@@ -276,6 +279,9 @@ class AtollMatrixOptionsPanel
                 return [ $this, 'sanitize_checkbox_field' ];
                 break;
             case 'repeatable_tax':
+                return [ $this, 'sanitize_tax_field' ];
+                break;
+            case 'activity_repeatable_tax':
                 return [ $this, 'sanitize_tax_field' ];
                 break;
             case 'repeatable_perperson':
@@ -799,6 +805,111 @@ if ($description) {
         <?php
 }
 
+    /**
+     * Renders tax field.
+     */
+    public function render_activity_repeatable_tax_field($args)
+    {
+        $option_name = $args[ 'label_for' ];
+        $array       = $this->get_option_value($option_name);
+        $description = $this->settings[ $option_name ][ 'description' ] ?? '';
+
+        // $setsOfThree = array();
+        // if (isset($array) && is_array($array)) {
+        //     $setsOfThree = array_chunk($array, 4);
+        // }
+        // error_log(print_r($array, 1));
+
+        ?>
+<div class="repeatable-activitytax-template" style="display: none;">
+<div class="repeatable">
+<span class="dashicons dashicons-sort drag-handle"></span>
+            <input disabled
+                type="text" placeholder = "Label"
+                id="<?php echo esc_attr($args[ 'label_for' ]); ?>_label"
+                name="label"
+                value="">
+            <input disabled
+                type="text" placeholder = "Value"
+                id="<?php echo esc_attr($args[ 'label_for' ]); ?>_number"
+                name="number"
+                value="">
+
+            <select disabled
+            id="<?php echo esc_attr($args[ 'label_for' ]); ?>_type"
+            name="type"
+            >
+            <option value="fixed">Fixed</option>
+            <option value="percentage">Percentage</option>
+            </select>
+            <select disabled
+            id="<?php echo esc_attr($args[ 'label_for' ]); ?>_duration"
+            name="duration"
+            >
+            <option value="inrate"><?php _e('Add to rate', 'atollmatrix');?></option>
+            <option value="perperson"><?php _e('Per person', 'atollmatrix');?></option>
+            </select>
+            <span class="remove-set-button"><i class="dashicons dashicons-remove"></i></span>
+            <br/>
+            </div>
+</div>
+<div id="repeatable-activitytax-container">
+<?php
+
+        $count = 0;
+        if (is_array($array)) {
+            foreach ($array as $key => $value) {
+                $count++;
+                if (isset($value[ 'label' ])) {
+                    ?>
+            <div class="repeatable">
+            <span class="dashicons dashicons-sort drag-handle"></span>
+            <input
+                type="text"
+                id="<?php echo esc_attr($args[ 'label_for' ]); ?>_label_<?php echo $count; ?>"
+                name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args[ 'label_for' ]); ?>][<?php echo $key; ?>][label]"
+                value="<?php echo esc_attr($value[ 'label' ]); ?>">
+
+            <input
+                type="text"
+                id="<?php echo esc_attr($args[ 'label_for' ]); ?>_number_<?php echo $count; ?>"
+                name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args[ 'label_for' ]); ?>][<?php echo $key; ?>][number]"
+                value="<?php echo esc_attr($value[ 'number' ]); ?>">
+
+            <select
+            id="<?php echo esc_attr($args[ 'label_for' ]); ?>_type_<?php echo $count; ?>"
+            name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args[ 'label_for' ]); ?>][<?php echo $key; ?>][type]"
+            >
+            <option value="fixed" <?php selected('fixed', $value[ 'type' ], true);?>><?php _e('Fixed', 'atollmatrix');?></option>
+            <option value="percentage" <?php selected('percentage', $value[ 'type' ], true);?>><?php _e('Percentage', 'atollmatrix');?></option>
+            </select>
+            <select
+            id="<?php echo esc_attr($args[ 'label_for' ]); ?>_duration_<?php echo $count; ?>"
+            name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args[ 'label_for' ]); ?>][<?php echo $key; ?>][duration]"
+            >
+            <option value="inrate" <?php selected('inrate', $value[ 'duration' ], true);?>><?php _e('Add to rate', 'atollmatrix');?></option>
+            <option value="perperson" <?php selected('perperson', $value[ 'duration' ], true);?>><?php _e('Per person', 'atollmatrix');?></option>
+            </select>
+            <span class="remove-set-button"><i class="dashicons dashicons-remove"></i></span>
+            <br/>
+            </div>
+        <?php
+}
+            }
+        }
+        ?>
+        </div>
+        <button id="addtax-activity-repeatable"><?php _e('Add New Section', 'atollmatrix');?></button>
+            <?php
+if ($description) {
+            ?>
+                <p class="description"><?php echo esc_html($description); ?></p>
+            <?php
+}
+        ?>
+        <?php
+}
+
 /**
  * Renders a text field.
  */
@@ -963,7 +1074,8 @@ $panel_args = [
         'discounts' => esc_html__('Discounts', 'atollmatrix'),
         'mealplan'      => esc_html__('Meal Plan', 'atollmatrix'),
         'perperson'     => esc_html__('Per person price', 'atollmatrix'),
-        'tax'           => esc_html__('Tax', 'atollmatrix'),
+        'tax'           => esc_html__('Room Tax', 'atollmatrix'),
+        'activity-tax'           => esc_html__('Activity Tax', 'atollmatrix'),
         'import-export' => esc_html__('Import/Export', 'atollmatrix'),
      ],
  ];
@@ -1117,10 +1229,16 @@ $panel_settings = [
         'tab'         => 'tab-2',
      ],
     'taxes'                => [
-        'label'       => esc_html__('Taxes', 'atollmatrix'),
+        'label'       => esc_html__('Room taxes', 'atollmatrix'),
         'type'        => 'repeatable_tax',
         'description' => 'My textarea field description.',
         'tab'         => 'tax',
+     ],
+    'activity_taxes'                => [
+        'label'       => esc_html__('Activity taxes', 'atollmatrix'),
+        'type'        => 'activity_repeatable_tax',
+        'description' => 'My textarea field description.',
+        'tab'         => 'activity-tax',
      ],
      'childfreestay'        => [
         'label'       => esc_html__('Children under the age can stay for free', 'atollmatrix'),
@@ -1214,4 +1332,4 @@ $panel_settings = [
      ],
  ];
 
-new AtollMatrixOptionsPanel($panel_args, $panel_settings);
+new \AtollMatrix\OptionsPanel($panel_args, $panel_settings);
