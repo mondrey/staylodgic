@@ -63,7 +63,7 @@ function atollmatrix_activity_metadata()
             array(
                 'name'    => esc_html__('Activity Schedule', 'atollmatrix'),
                 'id'      => 'atollmatrix_activity_schedule',
-                'type'    => 'event_schedule',
+                'type'    => 'actvity_schedule',
                 'desc'    => esc_html__('Activity Schedule Setup', 'atollmatrix'),
                 'std'     => '',
             ),

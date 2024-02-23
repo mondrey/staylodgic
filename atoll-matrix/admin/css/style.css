@@ -1139,3 +1139,305 @@
     cursor: pointer;
     color: red;
 }
+
+
+.day-schedule .time-slot {
+	border: 1px solid #000;
+	background-color: #fff;
+	padding: 12px;
+	display: inline-block;
+	border-radius: 10px;
+
+	-webkit-transition:  border-color 0.2s ease-in-out, opacity 0.2s ease-in-out, background-color 0.2s ease-in-out;
+	-moz-transition:  border-color 0.2s ease-in-out, opacity 0.2s ease-in-out, background-color 0.2s ease-in-out;
+	-o-transition:  border-color 0.2s ease-in-out, opacity 0.2s ease-in-out, background-color 0.2s ease-in-out;
+	transition:  border-color 0.2s ease-in-out, opacity 0.2s ease-in-out, background-color 0.2s ease-in-out;
+}
+.day-schedule .time-slot:hover {
+	cursor:pointer;
+	border-color: #d00;
+}
+.day-schedule .time-slot.time-disabled {
+	opacity: 0.2;
+}
+.day-schedule .time-slot span {
+	font-size: 11px;
+	display: block;
+}
+.day-schedule .time-slot .activity-time-slot {
+	font-size: 16px;
+	font-weight: 600;
+}
+.day-schedule .time-slot .time-slots-remaining {
+	font-size: 11px;
+	display: block;
+	color: #808080;
+	letter-spacing: 0.5px;
+}
+.day-schedule .time-slot.time-choice {
+	border-color: #d00;
+	background-color: #d00;
+}
+.day-schedule .time-slot.time-choice .activity-time-slot,
+.day-schedule .time-slot.time-choice .time-slots-remaining {
+	color: #fff;
+}
+.activity-schedules-container-wrap.ajax-processing {
+	opacity: 0.4;
+	pointer-events: none;
+}
+.activity-schedules-container-wrap.ajax-processing .spinner {
+	visibility: visible;
+}
+.activity-schedules-container-wrap .spinner {
+	position: absolute;
+	top: 20px;
+	left: 50%;
+}
+.activity-schedules-container-wrap {
+	position: relative;
+}
+
+.metaboxtype_activity_list_generate {
+	background: #effdff;
+	padding-bottom: 30px;
+}
+
+.activity-schedules-container-wrap h3 {
+	font-size: 22px;
+	font-weight: 200;
+}
+
+.activity-schedules-container-wrap h4 {
+	font-size: 14px;
+	font-weight: 600;
+}
+
+
+/* TICKET */
+.atollmatrix-ticket-wrap {
+    display: flex;
+    border: 2px solid #000;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: #f9f9f9;
+    margin-bottom: 10px;
+    min-height: 120px; /* Adjust the height as needed */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.atollmatrix-ticket-first-half,
+.atollmatrix-ticket-second-half {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.atollmatrix-ticket-first-half {
+    border-right: 2px dashed #000;
+    background-color: #fff;
+	background-image: radial-gradient( circle 489px at 49.3% 46.6%,  rgba(255,214,126,1) 0%, rgba(253,200,0,1) 100.2% );
+}
+
+.atollmatrix-ticket-second-half {
+    background-image: linear-gradient( 174.2deg,  rgba(255,244,228,1) 7.1%, rgba(240,246,238,1) 67.4% );
+}
+
+.atollmatrix-ticket-event {
+    font-size: 22px;
+    font-weight: 500;
+    color: #333;
+}
+
+.atollmatrix-ticket-total {
+    font-size: 16px;
+    margin-top: 10px;
+    color: #666;
+}
+
+.atollmatrix-ticket-second-half {
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+}
+
+/* Adding a notch to the ticket */
+.atollmatrix-ticket-wrap:before,
+.atollmatrix-ticket-wrap:after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    background-color: #2854d7;
+    border-radius: 50%;
+    z-index: 1;
+}
+
+.atollmatrix-ticket-wrap:before {
+    left: -10px;
+    border: 2px solid #2854d7;
+    border-right: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.atollmatrix-ticket-wrap:after {
+    right: -10px;
+    border: 2px solid #2854d7;
+    border-left: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.atollmatrix-ticket-date {
+	font-size: 14px;
+	font-weight: 300;
+}
+.atollmatrix-ticket-price {
+	font-weight: 100;
+}
+
+
+
+
+.ticket {
+    width: 285px;
+    background-color: #fff;
+    border-radius: 15px;
+    overflow: hidden;
+    font-family: 'Arial', sans-serif;
+}
+
+.ticket-header {
+	background: #000;
+    color: #fff;
+    padding: 16px;
+    text-align: center;
+}
+
+.ticket-header h1 {
+	margin: 0;
+	font-size: 24px;
+	color: #fff;
+	font-weight: 100;
+	padding: 10px;
+}
+
+.ticket-header p {
+    margin: 0;
+}
+
+.ticket-image img {
+    width: 100%;
+    display: block;
+}
+
+.ticket-info {
+    padding: 16px;
+    text-align: center;
+    background-color: #ececec;
+    color: #000;
+}
+
+.ticket-barcode {
+    padding: 8px;
+    text-align: center;
+    background-color: #fff;
+}
+
+.ticket-barcode img {
+    width: 80%;
+}
+
+.ticket {
+    position: relative;
+    width: 285px;
+    background-color: #fff;
+    border-radius: 15px;
+    overflow: hidden;
+    font-family: 'Arial', sans-serif;
+    /* Add more styles here */
+}
+.ticket p {
+	margin: 0;
+}
+
+.ticket-image {
+	overflow: hidden;
+	height: 182px;
+}
+/* Other styles remain the same */
+
+/* Add pseudo-elements for the slots */
+.ticket::before,
+.ticket::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    background-color: #fff;
+    border-radius: 50%;
+    z-index: 1;
+}
+
+.ticket::before {
+    left: -10px;
+}
+
+.ticket::after {
+    right: -10px;
+}
+
+/* Style the button to match the ticket */
+.ticket-button {
+	display: block;
+	width: 100%;
+	padding: 12px 0;
+	background: #d00;
+	color: #fff;
+	border: none;
+	cursor: pointer;
+	font-size: 13px;
+	border-bottom-left-radius: 15px;
+	border-bottom-right-radius: 15px;
+	text-align: center;
+	text-transform: uppercase;
+	letter-spacing: 4px;
+}
+
+/* Add any additional styles you need here */
+
+#ticketqrcode {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	/* Set a specific height and width if desired, or use the default size of the QR code */
+	height: 150px; /* Example height - adjust as necessary */
+	width: 100%;  /* Example width - adjust as necessary */
+	background-color: #ececec;
+  }
+
+  #ticketqrcode img {
+	position: relative;
+	top: -14px;
+}
+  
+.ticket-date {
+	font-size: 13px;
+	letter-spacing: 1px;
+}
+.ticket-name {
+	font-size: 18px;
+	font-weight: 100;
+}
+.ticket-price {
+	font-weight: 600;
+	font-size: 18px;
+}

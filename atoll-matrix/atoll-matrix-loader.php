@@ -143,6 +143,8 @@ class AtollMatrix_Init
         wp_enqueue_style('availability-styles', plugin_dir_url(__FILE__) . 'admin/css/availability-calendar.css', false, 'screen');
         wp_enqueue_script('availability-scripts', plugin_dir_url(__FILE__) . 'admin/js/availability-calendar.js', array('jquery'), null, true);
         wp_enqueue_script('activity-scripts', plugin_dir_url(__FILE__) . 'admin/js/activity-calendar.js', array('jquery'), null, true);
+        
+        wp_enqueue_script('atollmatrix-moment', plugin_dir_url(__FILE__) . 'assets/js/moment.min.js', array('jquery'), null, true);
         wp_enqueue_script('common-scripts', plugin_dir_url(__FILE__) . 'admin/js/common.js', array('jquery'), null, true);
 
         wp_register_style('fontawesome-6', plugin_dir_url(__FILE__) . 'assets/fonts/fontawesome-free-6.4.0-web/css/fontawesome.css', false, 'screen');

@@ -1,12 +1,44 @@
 (function ($) {
 	$(document).ready(function () {
 
+		// Check if the element with the 'ticketqrcode' ID exists
+		var qrcodeElement = document.getElementById('ticketqrcode');
+		if (qrcodeElement) {
+			var qrcodeValue = qrcodeElement.getAttribute('data-qrcode');
+			
+			// Generate the QR Code
+			new QRCode(qrcodeElement, {
+				text: qrcodeValue,
+				width: 128,
+				height: 128,
+				colorDark : "#000000",
+				colorLight : "#ececec",
+				correctLevel : QRCode.CorrectLevel.H
+			});
+		}
+
+        // Debounce function
+        function debounce(func, wait) {
+            var timeout;
+            return function() {
+                var context = this, args = arguments;
+                var later = function() {
+                    timeout = null;
+                    func.apply(context, args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
 		class GuestInput {
 			constructor(element) {
 				this.element = element;
 				this.input = this.element.find('.number-value');
 				this.setupEvents();
 				this.calculateSum('none');
+
+				this.debouncedUpdateActivityPrices = debounce(this.updateActivityPrices.bind(this), 500);
 			}
 		
 			setupEvents() {
@@ -57,9 +89,46 @@
 				
 				console.log( totalPeople );
 				var totalRate = totalPeople * activityPerPerson;
-				$('[data-priceof="activitysubtotal"]').val( totalRate.toFixed(2) );
-				$('[data-priceof="activitytotal"]').val('');
-				$('.input-tax-summary-wrap-inner').remove();
+				
+				if ($('#atollmatrix_reservation_checkin').length > 0) {
+
+					var dateStr = $('#atollmatrix_reservation_checkin').val();
+					var isValidDate = moment(dateStr, 'YYYY-MM-DD', true).isValid(); // Using moment.js for date validation
+				
+					$('[data-priceof="activitysubtotal"]').val( totalRate.toFixed(2) );
+					$('[data-priceof="activitytotal"]').val('');
+					$('.input-tax-summary-wrap-inner').remove();
+
+					if (isValidDate) {
+						$.ajax({
+							url: ajaxurl, // 'ajaxurl' is a global variable defined by WordPress
+							type: 'POST',
+							data: {
+								action: 'get_activity_schedules',
+								selected_date: dateStr,
+								the_post_id: atollmatrix_admin_vars.post_id,
+								totalpeople: totalPeople
+							},
+							beforeSend: function( xhr ) {
+								$('.activity-schedules-container-wrap').addClass('ajax-processing');
+							},
+							success: function(response) {
+								if (response.success) {
+									// Update the activity schedules container with the response data
+									$('.activity-schedules-container-wrap').html(response.data);
+								}
+							},
+							complete: function() {
+								// Remove the class after the AJAX request is complete
+								$('.activity-schedules-container-wrap').removeClass('ajax-processing');
+							}
+						});
+					} else {
+						console.log('Invalid date');
+					}
+
+
+				}
 			}
 		
 			calculateSum( process ) {
@@ -70,7 +139,7 @@
 				console.log('Total sum:', sum);
 				if ( process === 'plus' || process === 'minus' )
 				if ($('[data-priceof="activityperperson"]').length > 0) {
-					this.updateActivityPrices(sum);
+					this.debouncedUpdateActivityPrices(sum);
 				}
 				return sum;
 			}

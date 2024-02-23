@@ -1,19 +1,16 @@
 (function ($) {
 	$(document).ready(function () {
 
-		// Initialize Select2 on the activity ID select menu
-		$('#atollmatrix_activity_id').select2();
-
-		$(document).on('click', '.time-slot', function (e) {
+		$(document).on('click', '.time-slot.time-active', function (e) {
 			// Get the time and activity ID from the data attributes
 			var time = $(this).data('time');
 			var activityId = $(this).data('activity');
-
-			// Set the time value to the input field
+			$('.time-slot').removeClass('time-choice');
+			$(this).addClass('time-choice');
+			
+			// Set the JSON string to the input field
+			$('input[name="atollmatrix_activity_id"]').val(activityId);			
 			$('input[name="atollmatrix_activity_time"]').val(time);
-
-			// Set the selected activity ID in the select menu
-			$('#atollmatrix_activity_id').val(activityId).trigger('change');
 			
 		});
 
@@ -28,13 +25,22 @@
 					type: 'POST',
 					data: {
 						action: 'get_activity_schedules',
-						selected_date: dateStr
+						selected_date: dateStr,
+						the_post_id: atollmatrix_admin_vars.post_id,
+						totalpeople: getActivityGuestNumbers()
+					},
+					beforeSend: function( xhr ) {
+						$('.activity-schedules-container-wrap').addClass('ajax-processing');
 					},
 					success: function(response) {
 						if (response.success) {
 							// Update the activity schedules container with the response data
-							$('.activity-schedules-container').html(response.data);
+							$('.activity-schedules-container-wrap').html(response.data);
 						}
+					},
+					complete: function() {
+						// Remove the class after the AJAX request is complete
+						$('.activity-schedules-container-wrap').removeClass('ajax-processing');
 					}
 				});
 			}
@@ -44,9 +50,8 @@
 			var totalPeople;
 			var activityAdults = $('#atollmatrix_reservation_activity_adults').val();
 			var activityChildren = $('#atollmatrix_reservation_activity_children').val();
-
+			
 			totalPeople = parseInt(activityAdults) + parseInt(activityChildren);
-
 			return totalPeople;
 		}
 		function activityCurrencyKeyIn() {
