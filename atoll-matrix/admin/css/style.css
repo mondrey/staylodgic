@@ -1314,7 +1314,7 @@
 }
 
 .ticket-header {
-	background: #000;
+	background-image: linear-gradient( 110.3deg,  rgba(73,93,109,1) 4.3%, rgba(49,55,82,1) 96.7% );
     color: #fff;
     padding: 16px;
     text-align: center;
@@ -1326,6 +1326,7 @@
 	color: #fff;
 	font-weight: 100;
 	padding: 10px;
+	padding-top: 14px;
 }
 
 .ticket-header p {
@@ -1340,7 +1341,7 @@
 .ticket-info {
     padding: 16px;
     text-align: center;
-    background-color: #ececec;
+	background-image: radial-gradient( circle 1224px at 10.6% 8.8%,  rgba(255,255,255,1) 0%, rgba(153,202,251,1) 100.2% );
     color: #000;
 }
 
@@ -1366,7 +1367,11 @@
 .ticket p {
 	margin: 0;
 }
-
+p.ticket-break {
+	background: #fff3;
+	height: 1px;
+	margin-top: 12px;
+}
 .ticket-image {
 	overflow: hidden;
 	height: 182px;
@@ -1374,11 +1379,14 @@
 /* Other styles remain the same */
 
 /* Add pseudo-elements for the slots */
-.ticket::before,
-.ticket::after {
+.ticket-info {
+	position: relative;
+}
+.ticket-info::before,
+.ticket-info::after {
     content: '';
     position: absolute;
-    top: 50%;
+    top: 0;
     transform: translateY(-50%);
     width: 20px;
     height: 20px;
@@ -1387,11 +1395,11 @@
     z-index: 1;
 }
 
-.ticket::before {
+.ticket-info::before {
     left: -10px;
 }
 
-.ticket::after {
+.ticket-info::after {
     right: -10px;
 }
 
@@ -1400,7 +1408,7 @@
 	display: block;
 	width: 100%;
 	padding: 12px 0;
-	background: #d00;
+	background-image: linear-gradient( 109.6deg,  rgba(255,174,0,1) 11.2%, rgba(255,0,0,1) 100.2% );
 	color: #fff;
 	border: none;
 	cursor: pointer;
@@ -1421,7 +1429,7 @@
 	/* Set a specific height and width if desired, or use the default size of the QR code */
 	height: 150px; /* Example height - adjust as necessary */
 	width: 100%;  /* Example width - adjust as necessary */
-	background-color: #ececec;
+	padding-top: 30px;
   }
 
   #ticketqrcode img {
@@ -1430,8 +1438,10 @@
 }
   
 .ticket-date {
-	font-size: 13px;
-	letter-spacing: 1px;
+	font-size: 10px;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	color: #ffffffa3;
 }
 .ticket-name {
 	font-size: 18px;
@@ -1441,3 +1451,14 @@
 	font-weight: 600;
 	font-size: 18px;
 }
+.ticket-company,
+.ticket-phone,
+.ticket-address {
+	font-size: 9px;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+  }
+.ticket-company {
+	font-weight: 900;
+	font-size: 11px;
+  }

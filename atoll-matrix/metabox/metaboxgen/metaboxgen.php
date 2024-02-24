@@ -486,6 +486,15 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                     $the_post_id = get_the_ID();
                     if (null !== get_post_meta($the_post_id, 'atollmatrix_activity_time', true)) {
 
+                        $property_logo_id = atollmatrix_get_option('property_logo');
+                        $property_name    = atollmatrix_get_option('property_name');
+                        $property_phone   = atollmatrix_get_option('property_phone');
+                        $property_address = atollmatrix_get_option('property_address');
+                        $property_header  = atollmatrix_get_option('property_header');
+                        $property_footer  = atollmatrix_get_option('property_footer');
+
+                        $hotelLogo    = $property_logo_id ? wp_get_attachment_image_url($property_logo_id, 'full') : '';
+
                         if (null !== get_post_meta($the_post_id, 'atollmatrix_activity_id', true)) {
                             $activity_id = get_post_meta($the_post_id, 'atollmatrix_activity_id', true);
                             $activity_image = atollmatrix_featured_image_link( $activity_id );
@@ -517,6 +526,10 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
 
                             echo '<div class="ticket">
                             <div class="ticket-header">
+                                <p class="ticket-company">'.$property_name.'</p>
+                                <p class="ticket-phone">'.$property_phone.'</p>
+                                <p class="ticket-address">'.$property_address.'</p>
+                                <p class="ticket-break"></p>
                                 <h1>'.$data_array[$text_value].'</h1>
                                 <p class="ticket-date">'.date("F jS Y", strtotime($activity_date)).'</p>
                             </div>
@@ -528,8 +541,8 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                                 <p class="ticket-name">'.$full_name.'</p>
                                 <p class="ticket-time">'.$time . '</p>
                                 <p class="ticket-price">'.atollmatrix_price($ticket_price).'</p>
+                                <div id="ticketqrcode" data-qrcode="'.$booking_number.'" class="qrcode"></div>
                             </div>
-                            <div id="ticketqrcode" data-qrcode="'.$booking_number.'" class="qrcode"></div>
                             <div class="ticket-button">'.$reservation_status.'</div>
                             </div>';
                         
