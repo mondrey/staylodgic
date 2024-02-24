@@ -23,12 +23,17 @@ function atollmatrix_string_to_html_spans($input_string, $class) {
 
 function atollmatrix_featured_image_link($the_image_id)
 {
+    $image_url = '';
+    
     if (!isset($the_image_id)) {
         $the_image_id = get_the_id();
     }
     $image_id  = get_post_thumbnail_id($the_image_id, 'full');
     $image_url = wp_get_attachment_image_src($image_id, 'full');
-    $image_url = $image_url[0];
+    if ( isset( $image_url[0])) {
+
+        $image_url = $image_url[0];
+    }
     return $image_url;
 }
 function atollmatrix_rev_slider_selectors()

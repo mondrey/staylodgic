@@ -451,24 +451,8 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
 
                 case 'activity_list_generate':
 
-                    $the_post_id = get_the_ID();
-                    if (null !== get_post_meta($the_post_id, 'atollmatrix_reservation_checkin', true)) {
-                        $activity_date = get_post_meta($the_post_id, 'atollmatrix_reservation_checkin', true);
-                        
-                        // Check if $activity_date is a valid date
-                        if (strtotime($activity_date) !== false) {
-                            // Create an instance of the Activity class
-                            $activity = new AtollMatrix\Activity();
-                            $reservedForGuests = $activity->getActivityReservationNumbers( $the_post_id );
-                            $existing_spots_for_day = $reservedForGuests['total'];
-                            echo '<div class="activity-schedules-container-wrap">';
-                            $activity->display_activity_schedules_with_availability($activity_date, $the_post_id, $existing_spots_for_day); // Today's date
-                            echo '</div>';
-                        } else {
-                            // Handle the case where $activity_date is not a valid date
-                            echo '<div class="activity-schedules-container-wrap"></div>';
-                        }
-                    }                    
+                    $activity = new AtollMatrix\Activity();
+                    echo $activity->getActivities( get_the_ID() );
 
                     break;
 
@@ -483,94 +467,11 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
 
                     error_log ( '------- off view display ------' );
 
-                    $the_post_id = get_the_ID();
-                    if (null !== get_post_meta($the_post_id, 'atollmatrix_activity_time', true)) {
+                    $activity = new AtollMatrix\Activity();
+                    $ticket = $activity->displayTicket( get_the_ID(), $text_value );
 
-                        $property_logo_id = atollmatrix_get_option('property_logo');
-                        $property_name    = atollmatrix_get_option('property_name');
-                        $property_phone   = atollmatrix_get_option('property_phone');
-                        $property_address = atollmatrix_get_option('property_address');
-                        $property_header  = atollmatrix_get_option('property_header');
-                        $property_footer  = atollmatrix_get_option('property_footer');
+                    echo $ticket;
 
-                        $hotelLogo    = $property_logo_id ? wp_get_attachment_image_url($property_logo_id, 'full') : '';
-
-                        if (null !== get_post_meta($the_post_id, 'atollmatrix_activity_id', true)) {
-                            $activity_id = get_post_meta($the_post_id, 'atollmatrix_activity_id', true);
-                            $activity_image = atollmatrix_featured_image_link( $activity_id );
-                        }
-                        if (null !== get_post_meta($the_post_id, 'atollmatrix_reservation_checkin', true)) {
-                            $activity_date = get_post_meta($the_post_id, 'atollmatrix_reservation_checkin', true);
-                        }
-                        if (null !== get_post_meta($the_post_id, 'atollmatrix_full_name', true)) {
-                            $full_name = get_post_meta($the_post_id, 'atollmatrix_full_name', true);
-                        }
-                        if (null !== get_post_meta($the_post_id, 'atollmatrix_reservation_total_room_cost', true)) {
-                            $ticket_price = get_post_meta($the_post_id, 'atollmatrix_reservation_total_room_cost', true);
-                        }
-                        if (null !== get_post_meta($the_post_id, 'atollmatrix_booking_number', true)) {
-                            $booking_number = get_post_meta($the_post_id, 'atollmatrix_booking_number', true);
-                        }
-                        if (null !== get_post_meta($the_post_id, 'atollmatrix_reservation_status', true)) {
-                            $reservation_status = get_post_meta($the_post_id, 'atollmatrix_reservation_status', true);
-                        }
-
-                        $data_array = atollmatrix_get_select_target_options($field['display_by_id']);
-                        $time = get_post_meta($the_post_id, 'atollmatrix_activity_time', true);
-
-                        $activity = new AtollMatrix\Activity();
-                        $reservedForGuests = $activity->getActivityReservationNumbers( $the_post_id );
-                        $reservedTotal = $reservedForGuests['total'];
-
-                        if ( isset( $data_array[$text_value] ) ) {
-
-                            echo '<div class="ticket">
-                            <div class="ticket-header">
-                                <p class="ticket-company">'.$property_name.'</p>
-                                <p class="ticket-phone">'.$property_phone.'</p>
-                                <p class="ticket-address">'.$property_address.'</p>
-                                <p class="ticket-break"></p>
-                                <h1>'.$data_array[$text_value].'</h1>
-                                <p class="ticket-date">'.date("F jS Y", strtotime($activity_date)).'</p>
-                            </div>
-                            <div style="background: url('.esc_url($activity_image).'); background-size:cover" class="ticket-image">
-
-                            </div>
-                            <div class="ticket-info">
-                                <p>'.$reservedTotal . ' Pax</p>
-                                <p class="ticket-name">'.$full_name.'</p>
-                                <p class="ticket-time">'.$time . '</p>
-                                <p class="ticket-price">'.atollmatrix_price($ticket_price).'</p>
-                                <div id="ticketqrcode" data-qrcode="'.$booking_number.'" class="qrcode"></div>
-                            </div>
-                            <div class="ticket-button">'.$reservation_status.'</div>
-                            </div>';
-                        
-
-
-                            // echo '<div class="atollmatrix-ticket-wrap">';
-                            //     echo '<div class="atollmatrix-ticket-first-half">';
-                            //         echo '<div class="atollmatrix-ticket-total">';
-                            //         echo $reservedTotal . ' Pax';
-                            //         echo '</div>';
-                            //         echo '<div class="atollmatrix-ticket-event">';
-                            //         echo $data_array[$text_value];
-                            //         echo '</div>';
-                            //     echo '</div>';
-                            //     echo '<div class="atollmatrix-ticket-second-half">';
-                            //         echo '<div class="atollmatrix-ticket-time">';
-                            //             echo $time;
-                            //         echo '</div>';
-                            //         echo '<div class="atollmatrix-ticket-date">';
-                            //             echo date("F jS Y", strtotime($activity_date));
-                            //         echo '</div>';
-                            //         echo '<div class="atollmatrix-ticket-price">';
-                            //         echo atollmatrix_price($ticket_price);
-                            //         echo '</div>';
-                            //     echo '</div>';
-                            // echo '</div>';
-                        }
-                    }
                     break;
 
                 case 'generate-qrcode':
@@ -937,24 +838,23 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                                 <div class="day-title">' . $day . '</div>
                                 <div class="time-inputs">';
                 
-// Inside the loop where input fields are created
-if (!empty($text_value[$day_lower])) {
-    foreach ($text_value[$day_lower] as $time) {
-        $schedule_container .= '
-            <div class="time-input-wrapper">
-                <input type="time" name="atollmatrix_activity_schedule[' . $day_lower . '][]" value="' . esc_attr($time) . '">
-                <span class="remove-time-input">Remove</span>
-            </div>';
-    }
-} else {
-    // If no saved times, add an empty input field with a remove button
-    $schedule_container .= '
-        <div class="time-input-wrapper">
-            <input type="time" name="atollmatrix_activity_schedule[' . $day_lower . '][]" value="">
-            <span class="remove-time-input">Remove</span>
-        </div>';
-}
-
+                            // Inside the loop where input fields are created
+                            if (!empty($text_value[$day_lower])) {
+                                foreach ($text_value[$day_lower] as $time) {
+                                    $schedule_container .= '
+                                        <div class="time-input-wrapper">
+                                            <input type="time" name="atollmatrix_activity_schedule[' . $day_lower . '][]" value="' . esc_attr($time) . '">
+                                            <span class="remove-time-input">Remove</span>
+                                        </div>';
+                                }
+                            } else {
+                                // If no saved times, add an empty input field with a remove button
+                                $schedule_container .= '
+                                    <div class="time-input-wrapper">
+                                        <input type="time" name="atollmatrix_activity_schedule[' . $day_lower . '][]" value="">
+                                        <span class="remove-time-input">Remove</span>
+                                    </div>';
+                            }
                 
                         $schedule_container .= '
                                 </div>
