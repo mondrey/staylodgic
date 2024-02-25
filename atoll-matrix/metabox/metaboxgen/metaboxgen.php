@@ -1455,7 +1455,7 @@ add_action('wp_ajax_atollmatrix_save_images', 'atollmatrix_save_images');
 /**
  * Save image ids
  */
-function multo_gallery_save_images()
+function atollmatrix_multo_gallery_save_images()
 {
 
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
@@ -1485,7 +1485,7 @@ function multo_gallery_save_images()
 
     die();
 }
-add_action('wp_ajax_multo_gallery_save_images', 'multo_gallery_save_images');
+add_action('wp_ajax_atollmatrix_multo_gallery_save_images', 'atollmatrix_multo_gallery_save_images');
 // Save data from meta box
 add_action( 'save_post', 'atollmatrix_preProcess', 5, 3 );
 add_action('save_post', 'atollmatrix_checkdata');

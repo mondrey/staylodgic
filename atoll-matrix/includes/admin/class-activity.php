@@ -3,12 +3,104 @@ namespace AtollMatrix;
 
 class Activity
 {
+
+    protected $bookingNumber;
     
-    public function __construct()
+    public function __construct(
+        $bookingNumber = null
+    )
     {
+
+        add_shortcode('activity_booking_search', array($this, 'activityBooking_SearchForm'));
         add_action('wp_ajax_get_activity_schedules', array($this, 'get_activity_schedules_ajax_handler'));
         add_action('wp_ajax_nopriv_get_activity_schedules', array($this, 'get_activity_schedules_ajax_handler'));
 
+        $this->bookingNumber         = uniqid();
+
+    }
+
+    public function activityBooking_SearchForm()
+    {
+        
+        // Generate unique booking number
+        atollmatrix_set_booking_transient('1', $this->bookingNumber);
+        ob_start();
+        $searchbox_nonce       = wp_create_nonce('atollmatrix-searchbox-nonce');
+        $availabilityDateArray = array();
+
+        // Calculate current date
+        $currentDate = current_time('Y-m-d');
+        // Calculate end date as 3 months from the current date
+        $endDate = date('Y-m-d', strtotime($currentDate . ' +4 months'));
+
+        $reservations_instance = new \AtollMatrix\Reservations();
+        $fullybooked_dates     = $reservations_instance->daysFullyBooked_For_DateRange($currentDate, $endDate);
+
+        // error_log( '-------------------- availability percent check');
+        // error_log( print_r( $fullybooked_dates, true ));
+        // error_log( '-------------------- availability percent check');
+        ?>
+		<div class="atollmatrix-content">
+            <div id="hotel-booking-form">
+
+                <div class="front-booking-search">
+                    <div class="front-booking-calendar-wrap">
+                        <div class="front-booking-calendar-icon"><i class="fa-solid fa-calendar-days"></i></div>
+                        <div class="front-booking-calendar-date">Choose stay dates</div>
+                    </div>
+                    <div class="front-booking-guests-wrap">
+                        <div class="front-booking-guests-container"> <!-- New container -->
+                            <div class="front-booking-guest-adult-wrap">
+                                <div class="front-booking-guest-adult-icon"><span class="guest-adult-svg"></span><span class="front-booking-adult-adult-value">2</span></div>
+                            </div>
+                            <div class="front-booking-guest-child-wrap">
+                                <div class="front-booking-guest-child-icon"><span class="guest-child-svg"></span><span class="front-booking-adult-child-value">0</span></div>
+                            </div>
+                        </div>
+                        <div id="bookingSearch" class="div-button">Search</div>
+                    </div>
+                </div>
+
+
+				<div class="atollmatrix_reservation_datepicker">
+					<input type="hidden" name="atollmatrix_searchbox_nonce" value="<?php echo esc_attr($searchbox_nonce); ?>" />
+					<input data-booked="<?php echo htmlspecialchars(json_encode($fullybooked_dates), ENT_QUOTES, 'UTF-8'); ?>" type="date" id="reservation-date" name="reservation_date">
+				</div>
+                <div class="atollmatrix_reservation_room_guests_wrap">
+                    <div id="atollmatrix_reservation_room_adults_wrap" class="number-input occupant-adult occupants-range">
+                        <div class="column-one">
+                            <label for="number-of-adults">Adults</label>
+                        </div>
+                        <div class="column-two">
+                            <span class="minus-btn">-</span>
+                            <input data-guest="adult" data-guestmax="0" data-adultmax="0" data-childmax="0" id="number-of-adults" value="2" name="number_of_adults" type="text" class="number-value" readonly="">
+                            <span class="plus-btn">+</span>
+                        </div>
+                    </div>
+                    <div id="atollmatrix_reservation_room_children_wrap" class="number-input occupant-child occupants-range">
+                        <div class="column-one">
+                            <label for="number-of-adults">Children</label>
+                        </div>
+                        <div class="column-two">
+                            <span class="minus-btn">-</span>
+                            <input data-childageinput="children_age[]" data-guest="child" data-guestmax="0" data-adultmax="0" data-childmax="0" id="number-of-children" value="0" name="number_of_children" type="text" class="number-value" readonly="">
+                            <span class="plus-btn">+</span>
+                        </div>
+
+                    </div>
+                    <div id="guest-age"></div>
+                </div>
+				<div class="recommended-alt-wrap">
+					<div class="recommended-alt-title">Rooms unavailable</div><div class="recommended-alt-description">Following range from your selection is avaiable.</div>
+					<div id="recommended-alt-dates"></div>
+				</div>
+			<div class="available-list">
+				<div id="available-list-ajax"></div>
+			</div>
+		</div>
+		</div>
+		<?php
+return ob_get_clean();
     }
 
     public function getActivities( $the_post_id ) {

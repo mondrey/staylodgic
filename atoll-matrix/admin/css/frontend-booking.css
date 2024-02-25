@@ -543,6 +543,7 @@
 	margin: 0 5px;
 }
 
+
 .number-input span {
 	display: inline-block;
 	width: 30px;
@@ -565,11 +566,27 @@
 	background-color: #ccc;
 }
 
+.number-input .minus-btn,
+.number-input .plus-btn {
+	flex-shrink: 0; /* Prevent the buttons from shrinking */
+	width: 30px; /* Set a fixed width for the buttons */
+	height: 30px; /* Set a fixed height for the buttons */
+	border-radius: 50%; /* Makes the button circular */
+	display: flex; /* Use flexbox to center content inside the button */
+	align-items: center; /* Center the content vertically */
+	justify-content: center; /* Center the content horizontally */
+	margin: 0; /* Remove any default margin */
+	padding: 0; /* Remove any default padding */
+}
 .occupants-range input {
 	border: 2px solid #000;
 	transition: 0.3s border-color;
 	border-radius: 4px;
 	line-height: 26px;
+}
+.occupants-range input[type="text"] {
+	padding: 0;
+	width: 40px;
 }
 
 .occupants-range:active input {
