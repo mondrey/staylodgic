@@ -287,7 +287,7 @@ function atollmatrix_activityres_metadata()
         ),
     );
 
-    $reservation_instance = new \AtollMatrix\Reservations();
+    $reservation_instance = new \AtollMatrix\Activity();
     if (!$reservation_instance->haveCustomer($reservation_id)) {
         $activityres_box[ 'fields' ] = array_merge($activityres_box[ 'fields' ], $customer);
     } else {

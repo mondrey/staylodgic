@@ -115,6 +115,14 @@ class Common
 	/**
 	 * Checks if the post is valid for processing
 	 */
+	public static function isActivities_valid_post($post_id, $post)
+	{
+		return !wp_is_post_autosave($post_id) && !wp_is_post_revision($post_id) && $post->post_type === 'atmx_activityres' && get_post_status($post_id) !== 'draft';
+	}
+
+	/**
+	 * Checks if the post is valid for processing
+	 */
 	public static function isCustomer_valid_post($post_id)
 	{
 		$post = get_post($post_id);

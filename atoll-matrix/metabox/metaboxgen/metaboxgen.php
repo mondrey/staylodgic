@@ -1181,12 +1181,19 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                 case 'get_customer_data':
 
                     $customer_array       = atollmatrix_get_customer_array();
-                    $reservation_instance = new \AtollMatrix\Reservations();
+                    
+                    $post_type = get_post_type( get_the_ID() );
+
+                    if ( 'atmx_activityres' == $post_type ) {
+                        $reservation_instance = new \AtollMatrix\Activity();   
+                    } else {
+                        $reservation_instance = new \AtollMatrix\Reservations();
+                    }
                     $customer_post_id     = $reservation_instance->getReservation_Customer_ID($field['id']);
                     $customer_post_edit   = get_edit_post_link($customer_post_id);
                     echo '<a class="button button-primary button-large" href="' . $customer_post_edit . '">Edit Customer</a>';
-                    $customer_data = $reservation_instance->getCustomer_MetaData($customer_array, $customer_post_id);
-
+                    $customer_data = \AtollMatrix\Data::getCustomer_MetaData($customer_array, $customer_post_id);
+                    
                     echo \AtollMatrix\Customers::generateCustomerHtmlList($customer_data);
 
                     break;

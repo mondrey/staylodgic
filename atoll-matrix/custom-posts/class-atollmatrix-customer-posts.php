@@ -44,8 +44,23 @@ class AtollMatrix_Customer_Posts
                 echo $customer_instance->generateCustomerBookingNumbers($customer_post_id);
                 break;
             case "customer_reservations":
+
+                $post_type = get_post_type( get_the_ID() );
+
+                $reservation_instance = new \AtollMatrix\Activity();
+                $reservation_array = \AtollMatrix\Activity::getActivityIDsForCustomer($customer_post_id);
+                if ( is_array( $reservation_array ) && !empty( $reservation_array ) ) {
+                    echo '<i class="fas fa-umbrella-beach"></i>';
+                    echo $reservation_instance->getEditLinksForActivity($reservation_array);
+                }
+
+                $reservation_instance = new \AtollMatrix\Reservations();
                 $reservation_array = \AtollMatrix\Reservations::getReservationIDsForCustomer($customer_post_id);
-                echo $reservation_instance->getEditLinksForReservations($reservation_array);
+                if ( is_array( $reservation_array ) && !empty( $reservation_array ) ) {
+                    echo '<i class="fas fa-bed"></i>';
+                    echo $reservation_instance->getEditLinksForReservations($reservation_array);
+                }
+
                 break;
             case "customer_rooms":
                 echo $customer_instance->generateCustomerRooms($customer_post_id);

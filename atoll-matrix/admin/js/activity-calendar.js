@@ -14,37 +14,39 @@
 			
 		});
 
-		const flatpickrInstance = flatpickr(".activity-reservation", {
-			showMonths: 1,
-			dateFormat: "Y-m-d",
-			enableTime: false,
-			onChange: function(selectedDates, dateStr, instance) {
-				// Send an AJAX request with the selected date
-				$.ajax({
-					url: ajaxurl, // 'ajaxurl' is a global variable defined by WordPress
-					type: 'POST',
-					data: {
-						action: 'get_activity_schedules',
-						selected_date: dateStr,
-						the_post_id: atollmatrix_admin_vars.post_id,
-						totalpeople: getActivityGuestNumbers()
-					},
-					beforeSend: function( xhr ) {
-						$('.activity-schedules-container-wrap').addClass('ajax-processing');
-					},
-					success: function(response) {
-						if (response.success) {
-							// Update the activity schedules container with the response data
-							$('.activity-schedules-container-wrap').html(response.data);
+		if (typeof flatpickr !== "undefined") {
+			const flatpickrInstance = flatpickr(".activity-reservation", {
+				showMonths: 1,
+				dateFormat: "Y-m-d",
+				enableTime: false,
+				onChange: function(selectedDates, dateStr, instance) {
+					// Send an AJAX request with the selected date
+					$.ajax({
+						url: ajaxurl, // 'ajaxurl' is a global variable defined by WordPress
+						type: 'POST',
+						data: {
+							action: 'get_activity_schedules',
+							selected_date: dateStr,
+							the_post_id: atollmatrix_admin_vars.post_id,
+							totalpeople: getActivityGuestNumbers()
+						},
+						beforeSend: function( xhr ) {
+							$('.activity-schedules-container-wrap').addClass('ajax-processing');
+						},
+						success: function(response) {
+							if (response.success) {
+								// Update the activity schedules container with the response data
+								$('.activity-schedules-container-wrap').html(response.data);
+							}
+						},
+						complete: function() {
+							// Remove the class after the AJAX request is complete
+							$('.activity-schedules-container-wrap').removeClass('ajax-processing');
 						}
-					},
-					complete: function() {
-						// Remove the class after the AJAX request is complete
-						$('.activity-schedules-container-wrap').removeClass('ajax-processing');
-					}
-				});
-			}
-		});
+					});
+				}
+			});
+		}
 
 		function getActivityGuestNumbers() {
 			var totalPeople;

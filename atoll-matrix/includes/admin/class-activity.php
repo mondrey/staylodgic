@@ -5,9 +5,11 @@ class Activity
 {
 
     protected $bookingNumber;
+    private $reservation_id;
     
     public function __construct(
-        $bookingNumber = null
+        $bookingNumber = null,
+        $reservation_id = false
     )
     {
 
@@ -16,7 +18,168 @@ class Activity
         add_action('wp_ajax_nopriv_get_activity_schedules', array($this, 'get_activity_schedules_ajax_handler'));
 
         $this->bookingNumber         = uniqid();
+        $this->reservation_id        = $reservation_id;
 
+    }
+
+    public function getNameForActivity($reservation_id = false)
+    {
+
+        // Get room id from post meta
+        $activity_id = get_post_meta($reservation_id, 'atollmatrix_activity_id', true);
+
+        // If room id exists, get the room's post title
+        if ($activity_id) {
+            $acitivity_post = get_post($activity_id);
+            if ($acitivity_post) {
+                return $acitivity_post->post_title;
+            }
+        }
+
+        return null;
+    }
+
+    public function getEditLinksForActivity($reservation_array)
+    {
+        $links = '<ul>';
+        foreach ($reservation_array as $post_id) {
+            $room_name = self::getNameForActivity($post_id);
+            $edit_link = admin_url('post.php?post=' . $post_id . '&action=edit');
+            $links .= '<li><p><a href="' . $edit_link . '" title="' . $room_name . '">Edit Reservation ' . $post_id . '<br/><small>' . $room_name . '</small></a></p></li>';
+        }
+        $links .= '</ul>';
+        return $links;
+    }
+
+    /**
+     * Summary of getReservationIDsForCustomer
+     * @param mixed $customer_id
+     * @return array
+     */
+    public static function getActivityIDsForCustomer($customer_id)
+    {
+        $args = array(
+            'post_type'  => 'atmx_activityres',
+            'meta_query' => array(
+                array(
+                    'key'     => 'atollmatrix_customer_id',
+                    'value'   => $customer_id,
+                    'compare' => '=',
+                ),
+            ),
+        );
+        $posts           = get_posts($args);
+        $reservation_ids = array();
+        foreach ($posts as $post) {
+            $reservation_ids[  ] = $post->ID;
+        }
+        return $reservation_ids;
+    }
+
+    public function getGuest_id_forActivity($booking_number)
+    {
+        $args = array(
+            'post_type'      => 'atmx_activityres',
+            'posts_per_page' => -1,
+            'post_status'    => 'publish',
+            'meta_query'     => array(
+                array(
+                    'key'   => 'atollmatrix_booking_number',
+                    'value' => $booking_number,
+                ),
+            ),
+        );
+        $reservation_query = new \WP_Query($args);
+
+        if ($reservation_query->have_posts()) {
+            $reservation = $reservation_query->posts[ 0 ];
+            $customer_id = get_post_meta($reservation->ID, 'atollmatrix_customer_id', true);
+            return $customer_id;
+        }
+
+        return false; // Return an empty query if no guest found
+    }
+
+    public function getGuestforActivity($booking_number)
+    {
+        $args = array(
+            'post_type'      => 'atmx_activityres',
+            'posts_per_page' => -1,
+            'post_status'    => 'publish',
+            'meta_query'     => array(
+                array(
+                    'key'   => 'atollmatrix_booking_number',
+                    'value' => $booking_number,
+                ),
+            ),
+        );
+        $reservation_query = new \WP_Query($args);
+
+        if ($reservation_query->have_posts()) {
+            $reservation = $reservation_query->posts[ 0 ];
+            $customer_id = get_post_meta($reservation->ID, 'atollmatrix_customer_id', true);
+
+            if (!empty($customer_id)) {
+                $customer_args = array(
+                    'post_type'   => 'atmx_customers',
+                    'p'           => $customer_id,
+                    'post_status' => 'publish',
+                );
+                return new \WP_Query($customer_args);
+            }
+        }
+
+        return new \WP_Query(); // Return an empty query if no guest found
+    }
+
+    public function haveCustomer($reservation_id)
+    {
+
+        if (!$reservation_id) {
+            $reservation_id = $this->reservation_id;
+        }
+        // Get the booking number from the reservation post meta
+        $booking_number = get_post_meta($reservation_id, 'atollmatrix_booking_number', true);
+
+        if (!$booking_number) {
+            // Handle error if booking number not found
+            return false;
+        }
+
+        // Query the customer post with the matching booking number
+        $customer_query = $this->getGuestforActivity($booking_number);
+        // error_log(print_r($customer_query, true));
+        // Check if a customer post exists
+        if ($customer_query->have_posts()) {
+            // Restore the original post data
+            wp_reset_postdata();
+
+            // Return true if a matching customer post is found
+            return true;
+        }
+
+        // No matching customer found, return false
+        return false;
+    }
+
+    public function getReservation_Customer_ID($reservation_id = false)
+    {
+
+        if (!$reservation_id) {
+            $reservation_id = $this->reservation_id;
+        }
+        // Get the booking number from the reservation post meta
+        $booking_number = get_post_meta($reservation_id, 'atollmatrix_booking_number', true);
+
+        if (!$booking_number) {
+            // Handle error if booking number not found
+            return '';
+        }
+
+        // Query the customer post with the matching booking number
+        $customer_id = $this->getGuest_id_forActivity($booking_number);
+        // No matching customer found
+        return $customer_id;
     }
 
     public function activityBooking_SearchForm()

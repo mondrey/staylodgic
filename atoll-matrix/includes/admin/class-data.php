@@ -8,9 +8,73 @@ class Data
     {
         // Hook into the save_post action
         add_action('save_post', array($this, 'updateReservationsArray_On_Save'), 13, 3);
+        add_action('save_post', array($this, 'createActivitiesCustomer_On_Save'), 13, 3);
         // Hook into the wp_trash_post action
         add_action('wp_trash_post', array($this, 'removeReservation_From_Array'));
         add_action('trashed_post', array($this, 'removeReservation_From_Array'));
+    }
+
+    public static function getCustomer_MetaData($customer_array, $customer_post_id)
+    {
+        $output = array();
+
+        // Loop through the customer array
+        foreach ($customer_array as $item) {
+            if ('seperator' !== $item[ 'type' ]) {
+                // Get the meta value for the current item's 'id'
+                $meta_value = get_post_meta($customer_post_id, $item[ 'id' ], true);
+                // Add an entry to the output array, with 'name' as the key and the meta value as the value
+                $output[ $item[ 'name' ] ] = $meta_value;
+            }
+        }
+
+        return $output;
+    }
+
+    /**
+     * Triggered when a post is saved. If the post type is 'atmx_reservations' and is not autosaved or revision, it updates the reservation details.
+     */
+    public function createActivitiesCustomer_On_Save($post_id, $post, $update)
+    {
+
+        error_log("It is here " . $post_id);
+
+        if (!\AtollMatrix\Common::isActivities_valid_post($post_id, $post)) {
+            return;
+        }
+
+        $customer_choice    = get_post_meta($post_id, 'atollmatrix_customer_choice', true);
+        $booking_number     = get_post_meta($post_id, 'atollmatrix_booking_number', true);
+        $existing_customer  = get_post_meta($post_id, 'atollmatrix_existing_customer', true);
+
+        $full_name = get_post_meta($post_id, 'atollmatrix_full_name', true);
+
+        // Check if customer post exists
+        error_log("customer_choice: " . $customer_choice . '||' . $booking_number);
+        $customer_id = get_post_meta($post_id, 'atollmatrix_customer_id', true);
+        error_log("checking customer post: " . $customer_id . '||' . $post_id . '||' . $full_name);
+
+        if (\AtollMatrix\Common::isCustomer_valid_post($existing_customer)) {
+            if ('existing' == $customer_choice) {
+
+                error_log("Updating: " . $existing_customer . '||' . $booking_number);
+                update_post_meta($post_id, 'atollmatrix_customer_id', $existing_customer);
+
+            }
+        }
+
+        // Check if the post is being trashed
+        if ($post->post_status === 'trash') {
+            return; // Exit the function if the post is being trashed
+        }
+
+        if (!\AtollMatrix\Common::isCustomer_valid_post($customer_id)) {
+            if ('existing' !== $customer_choice) {
+                error_log("Customer does not exist: " . $customer_id . '||' . $full_name);
+                // Create new customer from the filled inputs in reservation
+                self::create_Customer_From_Reservation_Post($post_id);
+            }
+        }
     }
 
     public function create_Customer_From_Reservation_Post($reservation_post_id)
@@ -38,7 +102,7 @@ class Data
 
         if ('existing' !== $customer_choice) {
             if ('' !== $full_name) {
-                error_log("Customer saving: " . $reservation_post_id . '||' . $full_name);
+                error_log("Customer saving: " . $reservation_post_id . '||' . $full_name . '||' . $booking_number);
                 // Create customer post
                 $customer_post_data = array(
                     'post_type' => 'atmx_customers', // Your custom post type for customers

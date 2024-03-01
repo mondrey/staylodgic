@@ -160,6 +160,14 @@ class AtollMatrix_Init
         if (function_exists('get_current_screen')) {
             $current_admin_screen = get_current_screen();
         }
+
+        if ($current_admin_screen->post_type === 'atmx_customers') {
+
+            wp_enqueue_style('fontawesome-6');
+            wp_enqueue_style('fontawesome-6-brands');
+            wp_enqueue_style('fontawesome-6-solid');
+
+        }
         if (isset($current_admin_screen)) {
             if ($current_admin_screen->base == 'post') {
                 wp_enqueue_media();

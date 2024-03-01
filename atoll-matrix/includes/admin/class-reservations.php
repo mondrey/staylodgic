@@ -1269,23 +1269,6 @@ class Reservations
         return false;
     }
 
-    public function getCustomer_MetaData($customer_array, $customer_post_id)
-    {
-        $output = array();
-
-        // Loop through the customer array
-        foreach ($customer_array as $item) {
-            if ('seperator' !== $item[ 'type' ]) {
-                // Get the meta value for the current item's 'id'
-                $meta_value = get_post_meta($customer_post_id, $item[ 'id' ], true);
-                // Add an entry to the output array, with 'name' as the key and the meta value as the value
-                $output[ $item[ 'name' ] ] = $meta_value;
-            }
-        }
-
-        return $output;
-    }
-
     /**
      * Retrieves and validates the reservations array for the given room type
      */

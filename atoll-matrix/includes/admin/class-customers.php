@@ -80,6 +80,9 @@ class Customers
 
     public function get_booking_numbers_by_customer($customer_id)
     {
+
+        $booking_numbers = array();
+
         $args = array(
             'post_type'   => 'atmx_reservations',
             'post_status' => 'publish',
@@ -92,7 +95,26 @@ class Customers
         );
 
         $posts           = get_posts($args);
-        $booking_numbers = array();
+
+        foreach ($posts as $post) {
+            $booking_number = get_post_meta($post->ID, 'atollmatrix_booking_number', true);
+            if (!empty($booking_number)) {
+                $booking_numbers[] = $booking_number;
+            }
+        }
+
+        $args = array(
+            'post_type'   => 'atmx_activityres',
+            'post_status' => 'publish',
+            'meta_query'  => array(
+                array(
+                    'key'   => 'atollmatrix_customer_id',
+                    'value' => $customer_id,
+                ),
+            ),
+        );
+
+        $posts           = get_posts($args);
 
         foreach ($posts as $post) {
             $booking_number = get_post_meta($post->ID, 'atollmatrix_booking_number', true);
