@@ -37,7 +37,6 @@ class AtollMatrix_Customer_Posts
         }
 
         $customer_instance = new \AtollMatrix\Customers();
-        $reservation_instance = new \AtollMatrix\Reservations();
 
         switch ($columns) {
             case "customer_booking":
