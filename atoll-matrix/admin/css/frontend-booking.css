@@ -630,7 +630,7 @@
 }
 
 #bookingDetails,
-#bookingSearch {
+.form-search-button {
 	background: #000;
 	color: #fff;
 	padding: 10px 20px;
@@ -645,14 +645,14 @@
 }
 
 #bookingDetails:hover,
-#bookingSearch:hover {
+.form-search-button:hover {
 	/* Styles for when the button is hovered */
 	background-color: #0064ff;
 	/* Example hover background color */
 }
 
 #bookingDetails:active,
-#bookingSearch:active {
+.form-search-button:active {
 	/* Styles for when the button is clicked/active */
 	background-color: #0064ff;
 	/* Example active background color */
@@ -822,6 +822,16 @@
 	left: 14px;
 	opacity: 0;
 	z-index: -1;
+}
+#activity-reservation-date {
+	position: absolute;
+	top: 25px;
+	left: 14px;
+	opacity: 0;
+	z-index: -1;
+}
+.atollmatrix-activity-booking .atollmatrix_reservation_room_guests_wrap {
+	top: 65px;
 }
 .consent-notice {
 	font-size: 12px;

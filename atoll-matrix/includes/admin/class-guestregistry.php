@@ -626,7 +626,7 @@ HTML;
                                 <label for="booking_number" class="control-label">Booking No.</label>
                             </div>
                         </div>
-                        <div data-request="guestregistration" id="bookingDetails" class="div-button">Search</div>
+                        <div data-request="guestregistration" id="bookingDetails" class="form-search-button">Search</div>
                     </div>
                 </div>
 

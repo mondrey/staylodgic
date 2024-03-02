@@ -12,14 +12,24 @@ class Activity
         $reservation_id = false
     )
     {
-
-        add_shortcode('activity_booking_search', array($this, 'activityBooking_SearchForm'));
         add_action('wp_ajax_get_activity_schedules', array($this, 'get_activity_schedules_ajax_handler'));
         add_action('wp_ajax_nopriv_get_activity_schedules', array($this, 'get_activity_schedules_ajax_handler'));
+
+
+        add_filter('the_content', array($this, 'atmx_activity_content'));
 
         $this->bookingNumber         = uniqid();
         $this->reservation_id        = $reservation_id;
 
+    }
+
+    function atmx_activity_content($content) {
+        if (is_singular('atmx_activity')) {
+            $custom_content = $this->activityBooking_SearchForm();
+            $content = $custom_content . $content; // Prepend custom content
+            // $content .= $custom_content; // Append custom content
+        }
+        return $content;
     }
 
     public function getNameForActivity($reservation_id = false)
@@ -203,13 +213,13 @@ class Activity
         // error_log( print_r( $fullybooked_dates, true ));
         // error_log( '-------------------- availability percent check');
         ?>
-		<div class="atollmatrix-content">
+		<div class="atollmatrix-content atollmatrix-activity-booking">
             <div id="hotel-booking-form">
 
                 <div class="front-booking-search">
                     <div class="front-booking-calendar-wrap">
                         <div class="front-booking-calendar-icon"><i class="fa-solid fa-calendar-days"></i></div>
-                        <div class="front-booking-calendar-date">Choose stay dates</div>
+                        <div class="front-booking-calendar-date">Choose activity date</div>
                     </div>
                     <div class="front-booking-guests-wrap">
                         <div class="front-booking-guests-container"> <!-- New container -->
@@ -220,14 +230,14 @@ class Activity
                                 <div class="front-booking-guest-child-icon"><span class="guest-child-svg"></span><span class="front-booking-adult-child-value">0</span></div>
                             </div>
                         </div>
-                        <div id="bookingSearch" class="div-button">Search</div>
+                        <div id="activitySearch" class="form-search-button">Search</div>
                     </div>
                 </div>
 
 
 				<div class="atollmatrix_reservation_datepicker">
 					<input type="hidden" name="atollmatrix_searchbox_nonce" value="<?php echo esc_attr($searchbox_nonce); ?>" />
-					<input data-booked="<?php echo htmlspecialchars(json_encode($fullybooked_dates), ENT_QUOTES, 'UTF-8'); ?>" type="date" id="reservation-date" name="reservation_date">
+					<input data-booked="<?php echo htmlspecialchars(json_encode($fullybooked_dates), ENT_QUOTES, 'UTF-8'); ?>" type="date" id="activity-reservation-date" name="reservation_date">
 				</div>
                 <div class="atollmatrix_reservation_room_guests_wrap">
                     <div id="atollmatrix_reservation_room_adults_wrap" class="number-input occupant-adult occupants-range">

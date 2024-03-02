@@ -378,31 +378,51 @@
 				return false;
 			}
 
-			flatpickrInstance = flatpickr("#reservation-date", {
-				mode: "range",
-				dateFormat: "Y-m-d",
-				showMonths: 2,
-				enableTime: false,
-				locale: {
-					firstDayOfWeek: 1 // Start week on Monday
-				},
-				minDate: "today", // Disable navigation to months previous to the current month
-				onMonthChange: function (selectedDates, dateStr, instance) {
-					updateInfoDisplay(selectedDates);
-				},
-				onChange: function (selectedDates, dateStr, instance) {
-					if (selectedDates.length === 2) {
-						updateSelectedDates(selectedDates[0], selectedDates[1]);
-					}
-					updateInfoDisplay(selectedDates);
-				},
-				disable: [
-					// Use the disableFullyBookedDates function to disable specific dates
-					function (date) {
-						return disableFullyBookedDates(date);
-					}
-				]
-			});
+			if (document.getElementById('reservation-date')) {
+				flatpickrInstance = flatpickr("#reservation-date", {
+					mode: "range",
+					dateFormat: "Y-m-d",
+					showMonths: 2,
+					enableTime: false,
+					locale: {
+						firstDayOfWeek: 1 // Start week on Monday
+					},
+					minDate: "today", // Disable navigation to months previous to the current month
+					onMonthChange: function (selectedDates, dateStr, instance) {
+						updateInfoDisplay(selectedDates);
+					},
+					onChange: function (selectedDates, dateStr, instance) {
+						if (selectedDates.length === 2) {
+							updateSelectedDates(selectedDates[0], selectedDates[1]);
+						}
+						updateInfoDisplay(selectedDates);
+					},
+					disable: [
+						// Use the disableFullyBookedDates function to disable specific dates
+						function (date) {
+							return disableFullyBookedDates(date);
+						}
+					]
+				});
+			}
+
+			if (document.getElementById('activity-reservation-date')) {
+				flatpickrInstance = flatpickr("#activity-reservation-date", {
+					mode: "single",
+					dateFormat: "Y-m-d",
+					showMonths: 2,
+					enableTime: false,
+					locale: {
+						firstDayOfWeek: 1 // Start week on Monday
+					},
+					minDate: "today",
+					onChange: function (selectedDates, dateStr, instance) {
+						var formattedCheckIn = formatDate(selectedDates[0]);
+						$('.front-booking-calendar-date').text(formattedCheckIn);
+
+					},
+				});
+			}
 
 			var calendarWrap = document.querySelector('.front-booking-calendar-wrap');
 			if (calendarWrap) {

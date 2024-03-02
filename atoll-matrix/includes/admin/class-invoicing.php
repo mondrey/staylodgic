@@ -252,7 +252,7 @@ class Invoicing
                                 <label for="booking_number" class="control-label">Booking No.</label>
                             </div>
                         </div>
-                        <div id="invoiceDetails" class="div-button">Search</div>
+                        <div id="invoiceDetails" class="form-search-button">Search</div>
                     </div>
                 </div>
 

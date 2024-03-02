@@ -360,7 +360,7 @@ class Booking
                                 <div class="front-booking-guest-child-icon"><span class="guest-child-svg"></span><span class="front-booking-adult-child-value">0</span></div>
                             </div>
                         </div>
-                        <div id="bookingSearch" class="div-button">Search</div>
+                        <div id="bookingSearch" class="form-search-button">Search</div>
                     </div>
                 </div>
 
@@ -430,7 +430,7 @@ return ob_get_clean();
                                 <label for="booking_number" class="control-label">Booking No.</label>
                             </div>
                         </div>
-                        <div data-request="bookingdetails" id="bookingDetails" class="div-button">Search</div>
+                        <div data-request="bookingdetails" id="bookingDetails" class="form-search-button">Search</div>
                     </div>
                 </div>
 
