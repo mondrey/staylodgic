@@ -6,24 +6,244 @@ class Activity
 
     protected $bookingNumber;
     private $reservation_id;
+    protected $checkinDate;
+    protected $staynights;
+    protected $adultGuests;
+    protected $childrenGuests;
+    protected $children_age;
+    protected $totalGuests;
     
     public function __construct(
         $bookingNumber = null,
-        $reservation_id = false
+        $reservation_id = false,
+        $checkinDate = null,
+        $staynights = null,
+        $adultGuests = null,
+        $childrenGuests = null,
+        $children_age = null,
+        $totalGuests = null,
     )
     {
         add_action('wp_ajax_get_activity_schedules', array($this, 'get_activity_schedules_ajax_handler'));
         add_action('wp_ajax_nopriv_get_activity_schedules', array($this, 'get_activity_schedules_ajax_handler'));
 
+        add_action('wp_ajax_get_activity_frontend_schedules', array($this, 'get_activity_frontend_schedules_ajax_handler'));
+        add_action('wp_ajax_nopriv_get_activity_frontend_schedules', array($this, 'get_activity_frontend_schedules_ajax_handler'));
 
-        add_filter('the_content', array($this, 'atmx_activity_content'));
+
+        add_filter('the_content', array($this, 'activity_content'));
 
         $this->bookingNumber         = uniqid();
         $this->reservation_id        = $reservation_id;
+        $this->checkinDate           = $checkinDate;
+        $this->staynights            = $staynights;
+        $this->adultGuests           = $adultGuests;
+        $this->childrenGuests        = $childrenGuests;
+        $this->children_age          = $children_age;
+        $this->totalGuests           = $totalGuests;
 
     }
 
-    function atmx_activity_content($content) {
+    public function get_activity_schedules_ajax_handler() {
+        $selected_date = isset($_POST['selected_date']) ? sanitize_text_field($_POST['selected_date']) : null;
+        $total_people = isset($_POST['totalpeople']) ? sanitize_text_field($_POST['totalpeople']) : null;
+        $the_post_id = isset($_POST['the_post_id']) ? sanitize_text_field($_POST['the_post_id']) : null;
+
+        error_log('AJAX handler triggered. Selected date: ' . $selected_date);
+    
+        // Call the method and capture the output
+        ob_start();
+        $this->display_activity_schedules_with_availability($selected_date, $the_post_id, $total_people);
+        $output = ob_get_clean();
+    
+        // Return the output as a JSON response
+        wp_send_json_success($output);
+    }
+
+    public function get_activity_frontend_schedules_ajax_handler() {
+
+        // Verify the nonce
+        if (!isset($_POST[ 'atollmatrix_searchbox_nonce' ]) || !check_admin_referer('atollmatrix-searchbox-nonce', 'atollmatrix_searchbox_nonce')) {
+            // Nonce verification failed; handle the error or reject the request
+            // For example, you can return an error response
+            wp_send_json_error([ 'message' => 'Failed' ]);
+            return;
+        }
+        
+        $selected_date = isset($_POST['selected_date']) ? sanitize_text_field($_POST['selected_date']) : null;
+        $total_people = isset($_POST['totalpeople']) ? sanitize_text_field($_POST['totalpeople']) : null;
+        $the_post_id = isset($_POST['the_post_id']) ? sanitize_text_field($_POST['the_post_id']) : null;
+
+        $number_of_children = 0;
+        $number_of_adults   = 0;
+        $number_of_guests   = 0;
+        $children_age       = array();
+
+        if (isset($_POST[ 'number_of_adults' ])) {
+            $number_of_adults = $_POST[ 'number_of_adults' ];
+        }
+
+        if (isset($_POST[ 'number_of_children' ])) {
+            $number_of_children = $_POST[ 'number_of_children' ];
+        }
+
+        if (isset($_POST[ 'children_age' ])) {
+            // Loop through all the select elements with the class 'children-age-selector'
+            foreach ($_POST[ 'children_age' ] as $selected_age) {
+                // Sanitize and store the selected values in an array
+                $children_age[  ] = sanitize_text_field($selected_age);
+            }
+        }
+
+        error_log('AJAX handler triggered. Selected date: ' . $selected_date);
+    
+        // Call the method and capture the output
+        ob_start();
+        $this->display_activity_frontend_schedules_with_availability(
+            $selected_date,
+            $the_post_id,
+            $total_people,
+            $children_age,
+            $number_of_children,
+            $number_of_adults
+        );
+        $output = ob_get_clean();
+    
+        // Return the output as a JSON response
+        wp_send_json_success($output);
+    }
+
+    public function display_activity_frontend_schedules_with_availability(
+        $selected_date = null,
+        $the_post_id = false,
+        $total_people = false,
+        $children_age = null,
+        $number_of_children = null,
+        $number_of_adults = null
+    ) {
+
+        $this->children_age = $children_age;
+        $this->childrenGuests = $number_of_children;
+        $this->adultGuests = $number_of_adults;
+        $this->checkinDate = $selected_date;
+
+        $number_of_guests = intval($number_of_adults) + intval($number_of_children);
+
+        $this->totalGuests = $number_of_guests;
+
+        // Use today's date if $selected_date is not provided
+        if (is_null($selected_date)) {
+            $selected_date = date('Y-m-d');
+        }
+
+        if (null !== get_post_meta($the_post_id, 'atollmatrix_activity_time', true)) {
+            $existing_activity_time = get_post_meta($the_post_id, 'atollmatrix_activity_time', true);
+        }
+        if (null !== get_post_meta($the_post_id, 'atollmatrix_activity_id', true)) {
+            $existing_activity_id = get_post_meta($the_post_id, 'atollmatrix_activity_id', true);
+        }
+    
+        // Get the day of the week for the selected date
+        $day_of_week = strtolower(date('l', strtotime($selected_date)));
+    
+        // Query all activity posts
+        $args = array(
+            'post_type' => 'atmx_activity',
+            'posts_per_page' => -1,
+        );
+        $activities = new \WP_Query($args);
+    
+        echo '<div id="activity-data" data-bookingnumber="' . $this->bookingNumber . '" data-children="' . $this->childrenGuests . '" data-adults="' . $this->adultGuests . '" data-guests="' . $this->totalGuests . '" data-checkin="' . $this->checkinDate . '">';
+        // Start the container div
+        echo '<div class="spinner"></div><div class="activity-schedules-container">';
+    
+
+        echo '<h3>' . ucfirst($day_of_week) . '</h3>';
+        // Loop through each activity post
+        if ($activities->have_posts()) {
+            while ($activities->have_posts()) {
+                $activities->the_post();
+                $post_id = get_the_ID();
+
+                $activity_schedule = get_post_meta($post_id, 'atollmatrix_activity_schedule', true);
+                $max_guests = get_post_meta($post_id, 'atollmatrix_max_guests', true);
+
+                if (null !== get_post_meta($post_id, 'atollmatrix_activity_rate', true)) {
+                    $activity_rate= get_post_meta($post_id, 'atollmatrix_activity_rate', true);
+                }
+    
+                // Display the activity identifier (e.g., post title)
+                echo '<div class="activity-schedule" id="activity-schedule-' . $post_id . '">';
+
+                if (null !== get_post_meta($post_id, 'atollmatrix_activity_desc', true)) {
+                    $activity_desc = get_post_meta($post_id, 'atollmatrix_activity_desc', true);
+                }
+
+                if (null !== $post_id) {
+                    $activity_image = atollmatrix_featured_image_link($post_id);
+                }
+
+                echo '<div class="activity-column-one">';
+                echo '<div class="activity-image" style="background-image: url('.esc_url($activity_image).');"></div>';
+                echo '</div>';
+                echo '<div class="activity-column-two">';
+                echo '<h4 class="activity-title">' . get_the_title() . '</h4>';
+                echo '<div class="activity-desc">'.$activity_desc.'</div>';
+
+    
+                // Display the time slots for the day of the week that matches the selected date
+                if (!empty($activity_schedule) && isset($activity_schedule[$day_of_week])) {
+                    echo '<div class="day-schedule">';
+                    foreach ($activity_schedule[$day_of_week] as $index => $time) {
+                        // Calculate remaining spots for this time slot
+                        
+                        $remaining_spots = $this->calculate_remaining_spots($post_id, $selected_date, $time, $max_guests);
+
+                        $remaining_spots_compare = $remaining_spots;
+                        $existing_found = false;
+
+                        if ( $existing_activity_id == $post_id && $time == $existing_activity_time ) {
+
+                            $reservedForGuests = $this->getActivityReservationNumbers( $the_post_id );
+                            $existing_spots_for_day = $reservedForGuests['total'];
+
+                            $remaining_spots_compare = $remaining_spots + $existing_spots_for_day;
+                            $existing_found = true;
+                        }
+                        // echo $selected_date;
+                        $active_class = "time-disabled";
+
+                        if ( $total_people <= $remaining_spots_compare && 0 !== $remaining_spots ) {
+                            $active_class = "time-active";
+                            if ( $existing_found ) {
+                                $active_class .= ' time-choice';
+                            }
+                        }
+                        if ( '' !== $time) {
+                            echo '<span class="time-slot '.$active_class.'" id="time-slot-' . $day_of_week . '-' . $index . '" data-activity="'.$post_id.'" data-time="' . $time . '"><span class="activity-time-slot"><i class="fa-regular fa-clock"></i> ' . $time . '</span><span class="time-slots-remaining">( ' . $remaining_spots . ' of ' .$max_guests. ' remaining )</span><div class="activity-rate">'. atollmatrix_price( $activity_rate ) . '</div></span> ';
+                        } else {
+                            echo '<span class="time-slot-unavailable time-slot '.$active_class.'" id="time-slot-' . $day_of_week . '-' . $index . '" data-activity="'.$post_id.'" data-time="' . $time . '"><span class="activity-time-slot">Unavailable</span></span> ';
+                        }
+                        
+                    }
+                    echo '</div>';
+                }
+                echo '</div>';
+    
+                echo '</div>'; // Close the activity-schedule div
+            }
+        }
+    
+        // Close the container div
+        echo '</div>';
+        echo '</div>';
+    
+        // Reset post data
+        wp_reset_postdata();
+    }
+
+
+    function activity_content($content) {
         if (is_singular('atmx_activity')) {
             $custom_content = $this->activityBooking_SearchForm();
             $content = $custom_content . $content; // Prepend custom content
@@ -361,22 +581,6 @@ return ob_get_clean();
         return $ticket;
     }
 
-    public function get_activity_schedules_ajax_handler() {
-        $selected_date = isset($_POST['selected_date']) ? sanitize_text_field($_POST['selected_date']) : null;
-        $total_people = isset($_POST['totalpeople']) ? sanitize_text_field($_POST['totalpeople']) : null;
-        $the_post_id = isset($_POST['the_post_id']) ? sanitize_text_field($_POST['the_post_id']) : null;
-
-        error_log('AJAX handler triggered. Selected date: ' . $selected_date);
-    
-        // Call the method and capture the output
-        ob_start();
-        $this->display_activity_schedules_with_availability($selected_date, $the_post_id, $total_people);
-        $output = ob_get_clean();
-    
-        // Return the output as a JSON response
-        wp_send_json_success($output);
-    }
-
     /**
      * Get the number of adults, children, and the total for a reservation.
      *
@@ -486,7 +690,7 @@ return ob_get_clean();
     
         // Reset post data
         wp_reset_postdata();
-    }     
+    }  
     
     public function calculate_remaining_spots($activity_id, $selected_date, $selected_time, $max_guests) {
         // Query all reservation posts for this activity, date, and time

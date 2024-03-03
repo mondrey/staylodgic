@@ -462,6 +462,108 @@
 		// 	}
 		// });
 
+	// Process room choice and registration
+	$(document).on('click', '#activity-data .time-slot.time-active', function () {
+
+		$(this).addClass('time-choice');
+		var chosenActivity = $(this).data('activity');
+		var activityChoice = $(this).closest('.activity-schedule');
+		processActivityData(activityChoice);
+
+	});
+
+	// Process Room Data
+	function processActivityData(activityChoice) {
+
+		var atollmatrix_roomlistingbox_nonce = $('input[name="atollmatrix_roomlistingbox_nonce"]').val();
+		var bookingnumber = $('#reservation-data').data('bookingnumber');
+		var roomId = activityChoice.data('room-id');
+		var roomPriceTotal = activityChoice.find('.room-price-total').data('roomprice');
+		var bedLayout = $("input[name='room[" + roomId + "][bedlayout]']:checked").val();
+		var mealPlanInput = $("input[name='room[" + roomId + "][meal_plan][optional]']:checked");
+		var mealPlan = mealPlanInput.val();
+		var mealPlanPrice = mealPlanInput.data('mealprice');
+		console.log(mealPlanPrice);
+
+		var dataToSend = {
+			action: 'process_SelectedActivity',
+			bookingnumber: bookingnumber,
+			room_id: roomId,
+			room_price: roomPriceTotal,
+			bed_layout: bedLayout,
+			meal_plan: mealPlan,
+			meal_plan_price: mealPlanPrice,
+			atollmatrix_roomlistingbox_nonce: atollmatrix_roomlistingbox_nonce
+		};
+
+		$.ajax({
+			type: 'POST',
+			url: frontendAjax.ajaxurl,
+			data: dataToSend,
+			success: function (response) {
+				// Handle the response from the server
+				$('#booking-summary').html(response);
+
+				$('#reservation-data').velocity('fadeOut', {
+					duration: 350,
+					complete: function () {
+						$('.registration_request').velocity('fadeIn')
+					}
+				});
+				console.log(response);
+				// You can update the page content or perform other actions here
+			}
+		});
+	}
+	// Frontend codes
+	$('#activitySearch').on('click', function (e) { // Changed here
+		e.preventDefault();
+		
+		// Retrieve the date from the input field
+		var inputVal = $('#activity-reservation-date').val();
+		var dates = inputVal.split(' to ');
+
+		var checkInDate, checkOutDate;
+		var reservationDate;
+
+		reservationDate = $('#activity-reservation-date').val();
+
+		var bookingNumber = $('#booking-number').val();
+		var numberOfAdults = $('#number-of-adults').val();
+		var numberOfChildren = $('#number-of-children').val();
+		var atollmatrix_searchbox_nonce = $('input[name="atollmatrix_searchbox_nonce"]').val();
+
+		var childrenAge = [];
+
+		// Loop through all select elements with the class 'children-age-selector'
+		$('#guest-age input[name="children_age[]"]').each(function() {
+			childrenAge.push($(this).val());
+		});
+
+		$.ajax({
+			url: frontendAjax.ajaxurl, // the localized URL
+			type: 'POST',
+			data: {
+				action: 'get_activity_frontend_schedules',
+				selected_date: reservationDate,
+				number_of_adults: numberOfAdults,
+				number_of_children: numberOfChildren,
+				children_age: childrenAge,
+				atollmatrix_searchbox_nonce: atollmatrix_searchbox_nonce
+			},
+			success: function (response) {
+
+				$('#available-list-ajax').html(response.data);
+				$('#available-list-ajax').show();
+
+			},
+			error: function (err) {
+				// Handle error here
+				console.log(err);
+			}
+		});
+	});
+
 		// Frontend codes
 		$('#bookingSearch').on('click', function (e) { // Changed here
 			e.preventDefault();

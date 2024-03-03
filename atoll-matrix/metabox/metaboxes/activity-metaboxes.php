@@ -54,6 +54,13 @@ function atollmatrix_activity_metadata()
                 'std'  => '',
             ),
             array(
+                'name' => __('Rate', 'atollmatrix'),
+                'id'   => 'atollmatrix_activity_rate',
+                'type' => 'text',
+                'desc' => __('Rate for this activity.', 'atollmatrix'),
+                'std'  => '',
+            ),
+            array(
                 'name'         => esc_html__('Page Settings', 'atollmatrix'),
                 'id'           => 'atollmatrix_page_section_id',
                 'type'         => 'break',
