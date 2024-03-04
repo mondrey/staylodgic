@@ -12,6 +12,7 @@ class Activity
     protected $childrenGuests;
     protected $children_age;
     protected $totalGuests;
+    protected $activitiesArray;
     
     public function __construct(
         $bookingNumber = null,
@@ -22,6 +23,7 @@ class Activity
         $childrenGuests = null,
         $children_age = null,
         $totalGuests = null,
+        $activitiesArray = array()
     )
     {
         add_action('wp_ajax_get_activity_schedules', array($this, 'get_activity_schedules_ajax_handler'));
@@ -41,6 +43,7 @@ class Activity
         $this->childrenGuests        = $childrenGuests;
         $this->children_age          = $children_age;
         $this->totalGuests           = $totalGuests;
+        $this->activitiesArray           = $activitiesArray;
 
     }
 
@@ -126,6 +129,8 @@ class Activity
         $this->childrenGuests = $number_of_children;
         $this->adultGuests = $number_of_adults;
         $this->checkinDate = $selected_date;
+
+        $this->activitiesArray = array();
 
         $number_of_guests = intval($number_of_adults) + intval($number_of_children);
 
@@ -213,16 +218,21 @@ class Activity
                         // echo $selected_date;
                         $active_class = "time-disabled";
 
-                        if ( $total_people <= $remaining_spots_compare && 0 !== $remaining_spots ) {
+                        if ( $this->totalGuests <= $remaining_spots_compare && 0 !== $remaining_spots ) {
                             $active_class = "time-active";
                             if ( $existing_found ) {
                                 $active_class .= ' time-choice';
                             }
                         }
+
+                        $time_index = $day_of_week . '-' . $index;
+
                         if ( '' !== $time) {
-                            echo '<span class="time-slot '.$active_class.'" id="time-slot-' . $day_of_week . '-' . $index . '" data-activity="'.$post_id.'" data-time="' . $time . '"><span class="activity-time-slot"><i class="fa-regular fa-clock"></i> ' . $time . '</span><span class="time-slots-remaining">( ' . $remaining_spots . ' of ' .$max_guests. ' remaining )</span><div class="activity-rate">'. atollmatrix_price( $activity_rate ) . '</div></span> ';
+                            $total_rate = intval( $activity_rate * $this->totalGuests );
+                            $this->activitiesArray[$post_id][$time] = $total_rate;
+                            echo '<span class="time-slot '.$active_class.'" id="time-slot-' . $time_index . '" data-activity="'.$post_id.'" data-time="' . $time . '"><span class="activity-time-slot"><i class="fa-regular fa-clock"></i> ' . $time . '</span><span class="time-slots-remaining">( ' . $remaining_spots . ' of ' .$max_guests. ' remaining )</span><div class="activity-rate">'. atollmatrix_price( $total_rate ) . '</div></span> ';
                         } else {
-                            echo '<span class="time-slot-unavailable time-slot '.$active_class.'" id="time-slot-' . $day_of_week . '-' . $index . '" data-activity="'.$post_id.'" data-time="' . $time . '"><span class="activity-time-slot">Unavailable</span></span> ';
+                            echo '<span class="time-slot-unavailable time-slot '.$active_class.'" id="time-slot-' . $time_index . '" data-activity="'.$post_id.'" data-time="' . $time . '"><span class="activity-time-slot">Unavailable</span></span> ';
                         }
                         
                     }
@@ -237,7 +247,12 @@ class Activity
         // Close the container div
         echo '</div>';
         echo '</div>';
-    
+        error_log('Activities array');
+        error_log(print_r( $this->activitiesArray, true ));
+        atollmatrix_set_booking_transient($this->activitiesArray, $this->bookingNumber);
+        $activities_data = atollmatrix_get_booking_transient( $this->bookingNumber );
+        error_log('Activities array from transient');
+        error_log(print_r($activities_data, true ));
         // Reset post data
         wp_reset_postdata();
     }
