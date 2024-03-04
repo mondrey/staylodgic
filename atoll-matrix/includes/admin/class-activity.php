@@ -32,6 +32,9 @@ class Activity
         add_action('wp_ajax_get_activity_frontend_schedules', array($this, 'get_activity_frontend_schedules_ajax_handler'));
         add_action('wp_ajax_nopriv_get_activity_frontend_schedules', array($this, 'get_activity_frontend_schedules_ajax_handler'));
 
+        add_action('wp_ajax_process_SelectedActivity', array($this, 'process_SelectedActivity'));
+        add_action('wp_ajax_nopriv_process_SelectedActivity', array($this, 'process_SelectedActivity'));
+
 
         add_filter('the_content', array($this, 'activity_content'));
 
@@ -147,6 +150,12 @@ class Activity
         if (null !== get_post_meta($the_post_id, 'atollmatrix_activity_id', true)) {
             $existing_activity_id = get_post_meta($the_post_id, 'atollmatrix_activity_id', true);
         }
+
+        $this->activitiesArray['date'] = $selected_date;
+        $this->activitiesArray['adults'] = $this->adultGuests;
+        $this->activitiesArray['children'] = $this->childrenGuests;
+        $this->activitiesArray['children_age'] = $this->children_age;
+        $this->activitiesArray['person_total'] = $this->totalGuests;
     
         // Get the day of the week for the selected date
         $day_of_week = strtolower(date('l', strtotime($selected_date)));
@@ -158,9 +167,13 @@ class Activity
         );
         $activities = new \WP_Query($args);
     
+        echo '<form action="" method="post" id="hotel-acitivity-listing" class="needs-validation" novalidate>';
+        $roomlistingbox = wp_create_nonce('atollmatrix-roomlistingbox-nonce');
+        echo '<input type="hidden" name="atollmatrix_roomlistingbox_nonce" value="' . esc_attr($roomlistingbox) . '" />';
+
         echo '<div id="activity-data" data-bookingnumber="' . $this->bookingNumber . '" data-children="' . $this->childrenGuests . '" data-adults="' . $this->adultGuests . '" data-guests="' . $this->totalGuests . '" data-checkin="' . $this->checkinDate . '">';
         // Start the container div
-        echo '<div class="spinner"></div><div class="activity-schedules-container">';
+        echo '<div class="activity-schedules-container">';
     
 
         echo '<h3>' . ucfirst($day_of_week) . '</h3>';
@@ -178,7 +191,7 @@ class Activity
                 }
     
                 // Display the activity identifier (e.g., post title)
-                echo '<div class="activity-schedule" id="activity-schedule-' . $post_id . '">';
+                echo '<div class="activity-schedule room-occupied-group" id="activity-schedule-' . $post_id . '">';
 
                 if (null !== get_post_meta($post_id, 'atollmatrix_activity_desc', true)) {
                     $activity_desc = get_post_meta($post_id, 'atollmatrix_activity_desc', true);
@@ -230,7 +243,7 @@ class Activity
                         if ( '' !== $time) {
                             $total_rate = intval( $activity_rate * $this->totalGuests );
                             $this->activitiesArray[$post_id][$time] = $total_rate;
-                            echo '<span class="time-slot '.$active_class.'" id="time-slot-' . $time_index . '" data-activity="'.$post_id.'" data-time="' . $time . '"><span class="activity-time-slot"><i class="fa-regular fa-clock"></i> ' . $time . '</span><span class="time-slots-remaining">( ' . $remaining_spots . ' of ' .$max_guests. ' remaining )</span><div class="activity-rate">'. atollmatrix_price( $total_rate ) . '</div></span> ';
+                            echo '<span class="time-slot '.$active_class.'" id="time-slot-' . $time_index . '" data-activity="'.$post_id.'" data-time="' . $time . '"><span class="activity-time-slot"><i class="fa-regular fa-clock"></i> ' . $time . '</span><span class="time-slots-remaining">( ' . $remaining_spots . ' of ' .$max_guests. ' remaining )</span><div class="activity-rate" data-activityprice="'.$total_rate.'">'. atollmatrix_price( $total_rate ) . '</div></span> ';
                         } else {
                             echo '<span class="time-slot-unavailable time-slot '.$active_class.'" id="time-slot-' . $time_index . '" data-activity="'.$post_id.'" data-time="' . $time . '"><span class="activity-time-slot">Unavailable</span></span> ';
                         }
@@ -247,6 +260,8 @@ class Activity
         // Close the container div
         echo '</div>';
         echo '</div>';
+        echo $this->register_Guest_Form();
+        echo '</form>';
         error_log('Activities array');
         error_log(print_r( $this->activitiesArray, true ));
         atollmatrix_set_booking_transient($this->activitiesArray, $this->bookingNumber);
@@ -255,6 +270,339 @@ class Activity
         error_log(print_r($activities_data, true ));
         // Reset post data
         wp_reset_postdata();
+    }
+
+    public function process_SelectedActivity()
+    {
+
+        $bookingnumber   = sanitize_text_field($_POST[ 'bookingnumber' ]);
+        $activity_id         = sanitize_text_field($_POST[ 'activity_id' ]);
+        $activity_date         = sanitize_text_field($_POST[ 'activity_date' ]);
+        $activity_time         = sanitize_text_field($_POST[ 'activity_time' ]);
+        $activity_price      = sanitize_text_field($_POST[ 'activity_price' ]);
+
+        // Verify the nonce
+        if (!isset($_POST[ 'atollmatrix_roomlistingbox_nonce' ]) || !check_admin_referer('atollmatrix-roomlistingbox-nonce', 'atollmatrix_roomlistingbox_nonce')) {
+            // Nonce verification failed; handle the error or reject the request
+            // For example, you can return an error response
+            wp_send_json_error([ 'message' => 'Failed' ]);
+            return;
+        }
+
+        $booking_results = $this->process_ActivityData(
+            $bookingnumber,
+            $activity_id,
+            $activity_date,
+            $activity_time,
+            $activity_price
+        );
+
+        if (is_array($booking_results)) {
+
+            $html = $this->bookingSummary(
+                $bookingnumber,
+                $booking_results[ 'choice' ][ 'activity_id' ],
+                $booking_results[ 'choice' ][ 'activity_name' ],
+                $booking_results[ 'date' ],
+                $booking_results[ 'choice' ][ 'time' ],
+                $booking_results[ 'adults' ],
+                $booking_results[ 'children' ],
+                $booking_results[ 'choice' ][ 'price' ],
+            );
+
+        } else {
+            $html = '<div id="booking-summary-wrap" class="booking-summary-warning"><i class="fa-solid fa-circle-exclamation"></i>Session timed out. Please reload the page.</div>';
+        }
+
+        // Send the JSON response
+        wp_send_json($html);
+    }
+
+    public function process_ActivityData(
+        $bookingnumber = null,
+        $activity_id = null,
+        $activity_date = null,
+        $activity_time = null,
+        $activity_price = null
+    ) {
+        // Get the data sent via AJAX
+
+        $activityName = $this->getActivityName_FromID($activity_id);
+
+        $booking_results = atollmatrix_get_booking_transient($bookingnumber);
+
+        // Perform any processing you need with the data
+        // For example, you can save it to the database or perform calculations
+
+        // Return a response (you can modify this as needed)
+        $response = array(
+            'success' => true,
+            'message' => 'Data: ' . $activityName . ',received successfully.',
+        );
+
+        if (is_array($booking_results)) {
+
+            error_log('====== From Transient ======');
+            error_log(print_r($booking_results, true));
+
+            $booking_results['choice'][ 'activity_id' ] = $activity_id;
+            $booking_results['choice'][ 'activity_name' ] = $activityName;
+            $booking_results['choice'][ 'date' ] = $activity_date;
+            $booking_results['choice'][ 'time' ] = $activity_time;
+            $booking_results['choice'][ 'price' ] = $booking_results[$activity_id][$activity_time];
+
+            atollmatrix_set_booking_transient($booking_results, $bookingnumber);
+
+            error_log('====== Saved Activity Transient ======');
+            error_log(print_r($booking_results, true));
+
+            error_log('====== Specific Activity ======');
+            error_log(print_r($booking_results[ 'choice' ], true));
+
+        } else {
+            $booking_results = false;
+        }
+
+        // Send the JSON response
+        return $booking_results;
+    }
+
+    public function getActivityName_FromID($activity_id)
+    {
+        $activity_post = get_post($activity_id);
+        if ($activity_post) {
+            $activity_name = $activity_post->post_title;
+        }
+
+        return $activity_name;
+    }
+
+    public function bookingDataFields()
+    {
+        $dataFields = [
+            'full_name'      => 'Full Name',
+            'passport'       => 'Passport No',
+            'email_address'  => 'Email Address',
+            'phone_number'   => 'Phone Number',
+            'street_address' => 'Street Address',
+            'city'           => 'City',
+            'state'          => 'State/Province',
+            'zip_code'       => 'Zip Code',
+            'country'        => 'Country',
+            'guest_comment'  => 'Notes',
+            'guest_consent'  => 'By clicking "Book this Room" you agree to our terms and conditions and privacy policy.',
+         ];
+
+        return $dataFields;
+    }
+
+    public function register_Guest_Form()
+    {
+        $country_options = atollmatrix_country_list("select", "");
+
+        $html = '<div class="registration-column registration-column-two" id="booking-summary">';
+        $html .= self::bookingSummary(
+            $bookingnumber = '',
+            $activity_id = '',
+            $booking_results[ $activity_id ][ 'roomtitle' ] = '',
+            $this->checkinDate,
+            $this->staynights,
+            $this->adultGuests,
+            $this->childrenGuests,
+            $perdayprice = '',
+            $total = ''
+        );
+        $html .= '</div>';
+
+        $bookingsuccess = self::booking_Successful();
+
+        $formInputs = self::bookingDataFields();
+
+        $form_html = <<<HTML
+		<div class="registration_form_outer registration_request">
+			<div class="registration_form_wrap">
+				<div class="registration_form">
+					<div class="registration-column registration-column-one registration_form_inputs">
+                    <div class="booking-backto-activitychoice"><div class="booking-backto-roomchoice-inner"><i class="fa-solid fa-arrow-left"></i> Back</div></div>
+                    <h3>Registration</h3>
+                    <div class="form-group form-floating">
+						<input placeholder="Full Name" type="text" class="form-control" id="full_name" name="full_name" required>
+						<label for="full_name" class="control-label">$formInputs[full_name]</label>
+					</div>
+					<div class="form-group form-floating">
+						<input placeholder="Passport No." type="text" class="form-control" id="passport" name="passport" required>
+						<label for="passport" class="control-label">$formInputs[passport]</label>
+					</div>
+					<div class="form-group form-floating">
+						<input placeholder="" type="email" class="form-control" id="email_address" name="email_address" required>
+						<label for="email_address" class="control-label">$formInputs[email_address]</label>
+					</div>
+					<div class="form-group form-floating">
+						<input placeholder="" type="tel" class="form-control" id="phone_number" name="phone_number" required>
+						<label for="phone_number" class="control-label">$formInputs[phone_number]</label>
+					</div>
+                    <div class="form-group form-floating">
+                        <input placeholder="" type="text" class="form-control" id="street_address" name="street_address">
+                        <label for="street_address" class="control-label">$formInputs[street_address]</label>
+                    </div>
+                    <div class="form-group form-floating">
+                        <input placeholder="" type="text" class="form-control" id="city" name="city">
+                        <label for="city" class="control-label">$formInputs[city]</label>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group form-floating">
+                                <input placeholder="" type="text" class="form-control" id="state" name="state">
+                                <label for="state" class="control-label">$formInputs[state]</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group form-floating">
+                                <input placeholder="" type="text" class="form-control" id="zip_code" name="zip_code">
+                                <label for="zip_code" class="control-label">$formInputs[zip_code]</label>
+                            </div>
+                        </div>
+                    </div>
+					<div class="form-group form-floating">
+						<select required placeholder="" class="form-control" id="country" name="country" >
+						$country_options
+						</select>
+						<label for="country" class="control-label">$formInputs[country]</label>
+					</div>
+					<div class="form-group form-floating">
+					<textarea placeholder="" class="form-control" id="guest_comment" name="guest_comment"></textarea>
+					<label for="guest_comment" class="control-label">$formInputs[guest_comment]</label>
+					</div>
+					<div class="checkbox guest-consent-checkbox">
+					<label for="guest_consent">
+						<input type="checkbox" class="form-check-input" id="guest_consent" name="guest_consent" required /><span class="consent-notice">$formInputs[guest_consent]</span>
+                        <div class="invalid-feedback">
+                            Consent is required for booking.
+                        </div>
+                    </label>
+					</div>
+				</div>
+
+				$html
+
+				</div>
+			</div>
+		</div>
+HTML;
+
+        return $form_html . $bookingsuccess;
+    }
+
+    public function booking_Successful()
+    {
+
+        $reservation_instance = new \AtollMatrix\Reservations();
+        $booking_page_link    = $reservation_instance->getBookingDetailsPageLinkForGuest();
+
+        $booking_details_link = '<a href="' . esc_attr(esc_url(get_page_link($booking_page_link))) . '">Booking Details</a>';
+
+        $success_html = <<<HTML
+		<div class="registration_form_outer registration_successful">
+			<div class="registration_form_wrap">
+				<div class="registration_form">
+        <div class="registration-successful-inner">
+            <h3>Booking Successful</h3>
+            <p>
+                Hi,
+            </p>
+            <p>
+                Your booking number is: <span class="booking-number">$this->bookingNumber</span>
+            </p>
+            <p>
+                Please contact us to cancel, modify or if there's any questions regarding the booking.
+            </p>
+            <p>
+                <div id="booking-details" class="book-button not-fullwidth">$booking_details_link</div>
+            </p>
+        </div>
+        </div>
+        </div>
+        </div>
+HTML;
+
+        return $success_html;
+    }
+
+    public function bookingSummary(
+        $bookingnumber = null,
+        $activity_id = null,
+        $activity_name = null,
+        $checkin = null,
+        $time = null,
+        $adults = null,
+        $children = null,
+        $totalrate = null
+    ) {
+
+        $totalguests = intval($adults) + intval($children);
+        $totalprice  = array();
+
+        $html = '<div id="booking-summary-wrap">';
+        if ('' !== $activity_name) {
+            $html .= '<div class="room-summary"><span class="summary-room-name">' . $activity_name . '</span></div>';
+        }
+
+        $html .= '<div class="main-summary-wrap">';
+        if ($adults > 0) {
+            for ($displayAdultCount = 0; $displayAdultCount < $adults; $displayAdultCount++) {
+                $html .= '<span class="guest-adult-svg"></span>';
+            }
+        }
+        if ($children > 0) {
+            for ($displayChildrenCount = 0; $displayChildrenCount < $children; $displayChildrenCount++) {
+                $html .= '<span class="guest-child-svg"></span>';
+            }
+        }
+        $html .= '</div>';
+
+        $html .= '<div class="stay-summary-wrap">';
+
+        $html .= '<div class="summary-icon checkin-summary-icon"><i class="fa-regular fa-calendar-check"></i></div>';
+        $html .= '<div class="summary-heading checkin-summary-heading">Activity Time:</div>';
+        $html .= '<div class="checkin-summary">' . $checkin . '</div>';
+        $html .= '<div class="checkin-summary">' . $time . '</div>';
+
+        $html .= '<div class="summary-icon stay-summary-icon"><i class="fa-solid fa-moon"></i></div>';
+        $html .= '</div>';
+
+        if ('' !== $totalrate) {
+            $subtotalprice = intval($totalrate);
+            $html .= '<div class="price-summary-wrap">';
+
+            if (atollmatrix_has_tax()) {
+                $html .= '<div class="summary-heading total-summary-heading">Subtotal:</div>';
+                $html .= '<div class="price-summary">' . atollmatrix_price($subtotalprice) . '</div>';
+            }
+
+            $html .= '<div class="summary-heading total-summary-heading">Total:</div>';
+
+            $staynights = 1;
+            $tax_instance = new \AtollMatrix\Tax('room');
+            $totalprice = $tax_instance->apply_tax($subtotalprice, $staynights, $totalguests, $output = 'html');
+            foreach ($totalprice[ 'details' ] as $totalID => $totalvalue) {
+                $html .= '<div class="tax-summary tax-summary-details">' . $totalvalue . '</div>';
+            }
+
+            $html .= '<div class="tax-summary tax-summary-total">' . atollmatrix_price($totalprice[ 'total' ]) . '</div>';
+            $html .= '</div>';
+        }
+
+        if ('' !== $activity_id) {
+            $html .= '<div class="form-group">';
+            $html .= '<div id="bookingResponse" class="booking-response"></div>';
+            $html .= '<div id="booking-register" class="book-button">Book this room</div>';
+            // $html .= self::paymentHelperButton($totalprice[ 'total' ], $bookingnumber);
+            $html .= '</div>';
+        }
+
+        $html .= '</div>';
+
+        return $html;
     }
 
 

@@ -884,6 +884,7 @@
 	opacity: 0.8;
 }
 
+.booking-backto-activitychoice,
 .booking-backto-roomschoice {
 	position: absolute;
 	top: 20px;
@@ -892,6 +893,7 @@
 	opacity: 1;
 	transition: 0.2s opacity;
 }
+.booking-backto-activitychoice:hover,
 .booking-backto-roomschoice:hover {
 	opacity: 0.7;
 }
@@ -931,15 +933,12 @@
 .activity-schedule {
 	display: flex;
 	justify-content: space-between;
-	border-bottom: 1px solid #000;
-	margin-bottom: 30px;
-	padding-bottom: 30px;
 }
 
 .activity-column-one {
 	flex: 0;
 	text-align: left;
-	padding: 0 20px 20px 0;
+	padding: 0 35px 20px 0;
 }
 
 .activity-desc {
@@ -952,8 +951,8 @@
 }
 
 .activity-image {
-	width: 270px;
-	height: 270px;
+	width: 220px;
+	height: 220px;
 	border-radius: 10px;
 	background-size: cover;
 	background-position: center center;

@@ -122,6 +122,15 @@
 				}
 			});
 		});
+		// Back to Room Selection
+		$(document).on('click', '.booking-backto-activitychoice', function () {
+			$('.registration_request').velocity('fadeOut', {
+				duration: 350,
+				complete: function () {
+					$('#activity-data').velocity('fadeIn');
+				}
+			});
+		});
 
 		// Process Room Data
 		function processRoomData(roomOccupiedGroup) {
@@ -476,23 +485,21 @@
 	function processActivityData(activityChoice) {
 
 		var atollmatrix_roomlistingbox_nonce = $('input[name="atollmatrix_roomlistingbox_nonce"]').val();
-		var bookingnumber = $('#reservation-data').data('bookingnumber');
-		var roomId = activityChoice.data('room-id');
-		var roomPriceTotal = activityChoice.find('.room-price-total').data('roomprice');
-		var bedLayout = $("input[name='room[" + roomId + "][bedlayout]']:checked").val();
-		var mealPlanInput = $("input[name='room[" + roomId + "][meal_plan][optional]']:checked");
-		var mealPlan = mealPlanInput.val();
-		var mealPlanPrice = mealPlanInput.data('mealprice');
-		console.log(mealPlanPrice);
+		var bookingnumber = $('#activity-data').data('bookingnumber');
+		var activityId = activityChoice.find('.time-choice').data('activity');
+		var activityDate = $('#activity-data').data('checkin');
+		var activityTime = activityChoice.find('.time-choice').data('time');
+		var activityPriceTotal = activityChoice.find('.activity-rate').data('activityprice');
+
+		console.log( atollmatrix_roomlistingbox_nonce, bookingnumber, activityId, activityDate, activityTime, activityPriceTotal );
 
 		var dataToSend = {
 			action: 'process_SelectedActivity',
 			bookingnumber: bookingnumber,
-			room_id: roomId,
-			room_price: roomPriceTotal,
-			bed_layout: bedLayout,
-			meal_plan: mealPlan,
-			meal_plan_price: mealPlanPrice,
+			activity_id: activityId,
+			activity_date: activityDate,
+			activity_time: activityTime,
+			activity_price: activityPriceTotal,
 			atollmatrix_roomlistingbox_nonce: atollmatrix_roomlistingbox_nonce
 		};
 
@@ -504,7 +511,7 @@
 				// Handle the response from the server
 				$('#booking-summary').html(response);
 
-				$('#reservation-data').velocity('fadeOut', {
+				$('#activity-data').velocity('fadeOut', {
 					duration: 350,
 					complete: function () {
 						$('.registration_request').velocity('fadeIn')
@@ -563,6 +570,7 @@
 			}
 		});
 	});
+
 
 		// Frontend codes
 		$('#bookingSearch').on('click', function (e) { // Changed here
