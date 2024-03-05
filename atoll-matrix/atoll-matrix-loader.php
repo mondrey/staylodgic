@@ -88,7 +88,7 @@ class AtollMatrix_Init
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-formgenerator.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-analytics.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-activity.php';
-        require_once plugin_dir_path(__FILE__) . 'includes/admin/class-taxes.php';
+        require_once plugin_dir_path(__FILE__) . 'includes/admin/class-tax.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/utilities.php';
     }
 

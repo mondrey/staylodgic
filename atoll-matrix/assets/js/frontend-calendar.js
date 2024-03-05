@@ -471,106 +471,6 @@
 		// 	}
 		// });
 
-	// Process room choice and registration
-	$(document).on('click', '#activity-data .time-slot.time-active', function () {
-
-		$(this).addClass('time-choice');
-		var chosenActivity = $(this).data('activity');
-		var activityChoice = $(this).closest('.activity-schedule');
-		processActivityData(activityChoice);
-
-	});
-
-	// Process Room Data
-	function processActivityData(activityChoice) {
-
-		var atollmatrix_roomlistingbox_nonce = $('input[name="atollmatrix_roomlistingbox_nonce"]').val();
-		var bookingnumber = $('#activity-data').data('bookingnumber');
-		var activityId = activityChoice.find('.time-choice').data('activity');
-		var activityDate = $('#activity-data').data('checkin');
-		var activityTime = activityChoice.find('.time-choice').data('time');
-		var activityPriceTotal = activityChoice.find('.activity-rate').data('activityprice');
-
-		console.log( atollmatrix_roomlistingbox_nonce, bookingnumber, activityId, activityDate, activityTime, activityPriceTotal );
-
-		var dataToSend = {
-			action: 'process_SelectedActivity',
-			bookingnumber: bookingnumber,
-			activity_id: activityId,
-			activity_date: activityDate,
-			activity_time: activityTime,
-			activity_price: activityPriceTotal,
-			atollmatrix_roomlistingbox_nonce: atollmatrix_roomlistingbox_nonce
-		};
-
-		$.ajax({
-			type: 'POST',
-			url: frontendAjax.ajaxurl,
-			data: dataToSend,
-			success: function (response) {
-				// Handle the response from the server
-				$('#booking-summary').html(response);
-
-				$('#activity-data').velocity('fadeOut', {
-					duration: 350,
-					complete: function () {
-						$('.registration_request').velocity('fadeIn')
-					}
-				});
-				console.log(response);
-				// You can update the page content or perform other actions here
-			}
-		});
-	}
-	// Frontend codes
-	$('#activitySearch').on('click', function (e) { // Changed here
-		e.preventDefault();
-		
-		// Retrieve the date from the input field
-		var inputVal = $('#activity-reservation-date').val();
-		var dates = inputVal.split(' to ');
-
-		var checkInDate, checkOutDate;
-		var reservationDate;
-
-		reservationDate = $('#activity-reservation-date').val();
-
-		var bookingNumber = $('#booking-number').val();
-		var numberOfAdults = $('#number-of-adults').val();
-		var numberOfChildren = $('#number-of-children').val();
-		var atollmatrix_searchbox_nonce = $('input[name="atollmatrix_searchbox_nonce"]').val();
-
-		var childrenAge = [];
-
-		// Loop through all select elements with the class 'children-age-selector'
-		$('#guest-age input[name="children_age[]"]').each(function() {
-			childrenAge.push($(this).val());
-		});
-
-		$.ajax({
-			url: frontendAjax.ajaxurl, // the localized URL
-			type: 'POST',
-			data: {
-				action: 'get_activity_frontend_schedules',
-				selected_date: reservationDate,
-				number_of_adults: numberOfAdults,
-				number_of_children: numberOfChildren,
-				children_age: childrenAge,
-				atollmatrix_searchbox_nonce: atollmatrix_searchbox_nonce
-			},
-			success: function (response) {
-
-				$('#available-list-ajax').html(response.data);
-				$('#available-list-ajax').show();
-
-			},
-			error: function (err) {
-				// Handle error here
-				console.log(err);
-			}
-		});
-	});
-
 
 		// Frontend codes
 		$('#bookingSearch').on('click', function (e) { // Changed here
@@ -692,6 +592,186 @@
 				type: 'POST',
 				data: {
 					action: 'bookRooms',
+					bookingdata: registration_data,
+					booking_number: data_booking_number,
+					full_name: data_full_name,
+					passport: data_passport,
+					email_address: data_email_address,
+					phone_number: data_phone_number,
+					street_address: data_street_address,
+					city: data_city,
+					state: data_state,
+					zip_code: data_zip_code,
+					country: data_country,
+					guest_comment: data_guest_comment,
+					guest_consent: data_guest_consent,
+					atollmatrix_roomlistingbox_nonce: atollmatrix_roomlistingbox_nonce
+				},
+				success: function (response) {
+					// handle success
+					if (response.success) {
+						// handle success
+						$('#bookingResponse').show().removeClass('error').addClass('success').text('Booking successfully registered.');
+						$('.registration_request').remove();
+						$('.registration_successful').show();
+					} else {
+						// handle error
+						$('#bookingResponse').removeClass('success').addClass('error').text(response.data);
+					}
+				},
+				error: function (jqXHR, textStatus, errorThrown) {
+					// handle network errors, bad URLs, etc.
+					$('#bookingResponse').removeClass('success').addClass('error').text(errorMessage);
+				}
+			});
+		});
+
+
+
+		// ***********************
+		// ****** Activities
+		// ***********************
+
+		// Process room choice and registration
+		$(document).on('click', '#activity-data .time-slot.time-active', function () {
+
+			$(this).addClass('time-choice');
+			var chosenActivity = $(this).data('activity');
+			var activityChoice = $(this).closest('.activity-schedule');
+			processActivityData(activityChoice);
+
+		});
+
+		// Process Room Data
+		function processActivityData(activityChoice) {
+
+			var atollmatrix_roomlistingbox_nonce = $('input[name="atollmatrix_roomlistingbox_nonce"]').val();
+			var bookingnumber = $('#activity-data').data('bookingnumber');
+			var activityId = activityChoice.find('.time-choice').data('activity');
+			var activityDate = $('#activity-data').data('checkin');
+			var activityTime = activityChoice.find('.time-choice').data('time');
+			var activityPriceTotal = activityChoice.find('.activity-rate').data('activityprice');
+
+			console.log( atollmatrix_roomlistingbox_nonce, bookingnumber, activityId, activityDate, activityTime, activityPriceTotal );
+
+			var dataToSend = {
+				action: 'process_SelectedActivity',
+				bookingnumber: bookingnumber,
+				activity_id: activityId,
+				activity_date: activityDate,
+				activity_time: activityTime,
+				activity_price: activityPriceTotal,
+				atollmatrix_roomlistingbox_nonce: atollmatrix_roomlistingbox_nonce
+			};
+
+			$.ajax({
+				type: 'POST',
+				url: frontendAjax.ajaxurl,
+				data: dataToSend,
+				success: function (response) {
+					// Handle the response from the server
+					$('#booking-summary').html(response);
+
+					$('#activity-data').velocity('fadeOut', {
+						duration: 350,
+						complete: function () {
+							$('.registration_request').velocity('fadeIn')
+						}
+					});
+					console.log(response);
+					// You can update the page content or perform other actions here
+				}
+			});
+		}
+		// Frontend codes
+		$('#activitySearch').on('click', function (e) { // Changed here
+			e.preventDefault();
+			
+			// Retrieve the date from the input field
+			var inputVal = $('#activity-reservation-date').val();
+			var dates = inputVal.split(' to ');
+
+			var checkInDate, checkOutDate;
+			var reservationDate;
+
+			reservationDate = $('#activity-reservation-date').val();
+
+			var bookingNumber = $('#booking-number').val();
+			var numberOfAdults = $('#number-of-adults').val();
+			var numberOfChildren = $('#number-of-children').val();
+			var atollmatrix_searchbox_nonce = $('input[name="atollmatrix_searchbox_nonce"]').val();
+
+			var childrenAge = [];
+
+			// Loop through all select elements with the class 'children-age-selector'
+			$('#guest-age input[name="children_age[]"]').each(function() {
+				childrenAge.push($(this).val());
+			});
+
+			$.ajax({
+				url: frontendAjax.ajaxurl, // the localized URL
+				type: 'POST',
+				data: {
+					action: 'get_activity_frontend_schedules',
+					selected_date: reservationDate,
+					number_of_adults: numberOfAdults,
+					number_of_children: numberOfChildren,
+					children_age: childrenAge,
+					atollmatrix_searchbox_nonce: atollmatrix_searchbox_nonce
+				},
+				success: function (response) {
+
+					$('#available-list-ajax').html(response.data);
+					$('#available-list-ajax').show();
+
+				},
+				error: function (err) {
+					// Handle error here
+					console.log(err);
+				}
+			});
+		});
+
+		$(document).on('click', '#activity-register', function (e) {
+			e.preventDefault();
+
+			const $form = $('#hotel-acitivity-listing');
+
+			// Check if form is valid
+			if ($form[0].checkValidity() === false) {
+				// $form.find(':input').each(function() {
+				// 	console.log(this.id + ' is valid: ' + this.checkValidity());
+				// });
+				e.stopPropagation(); // Stop further handling of the click event
+				$form.addClass('was-validated'); // Optional: for Bootstrap validation styling
+				return; // Do not proceed to AJAX if validation fails
+			}
+
+			var atollmatrix_roomlistingbox_nonce = $('input[name="atollmatrix_roomlistingbox_nonce"]').val();
+			let data_booking_number = $('#activity-data').data('bookingnumber');
+			console.log('booking-number:' + data_booking_number);
+
+			let data_full_name = $('.registration_form_inputs #full_name').val();
+			let data_passport = $('.registration_form_inputs #passport').val();
+			let data_email_address = $('.registration_form_inputs #email_address').val();
+			let data_phone_number = $('.registration_form_inputs #phone_number').val();
+			let data_street_address = $('.registration_form_inputs #street_address').val();
+			let data_city = $('.registration_form_inputs #city').val();
+			let data_state = $('.registration_form_inputs #state').val();
+			let data_zip_code = $('.registration_form_inputs #zip_code').val();
+			let data_country = $('.registration_form_inputs #country').val();
+			let data_guest_comment = $('.registration_form_inputs #guest_comment').val();
+			let data_guest_consent = $('.registration_form_inputs #guest_consent').val();
+
+			// Serialize form data
+			const registration_data = $form.serialize();
+
+			//console.log(checkin, checkout, rooms);
+			$.ajax({
+				url: frontendAjax.ajaxurl, // the localized URL
+				type: 'POST',
+				data: {
+					action: 'bookActivity',
 					bookingdata: registration_data,
 					booking_number: data_booking_number,
 					full_name: data_full_name,

@@ -1182,10 +1182,10 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
 
                     $customer_array       = atollmatrix_get_customer_array();
                     
-                    $post_type = get_post_type( get_the_ID() );
-
+                    $post_type = get_post_type( $field['id'] );
+                    
                     if ( 'atmx_activityres' == $post_type ) {
-                        $reservation_instance = new \AtollMatrix\Activity();   
+                        $reservation_instance = new \AtollMatrix\Activity();
                     } else {
                         $reservation_instance = new \AtollMatrix\Reservations();
                     }

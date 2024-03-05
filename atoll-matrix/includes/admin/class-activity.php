@@ -35,6 +35,9 @@ class Activity
         add_action('wp_ajax_process_SelectedActivity', array($this, 'process_SelectedActivity'));
         add_action('wp_ajax_nopriv_process_SelectedActivity', array($this, 'process_SelectedActivity'));
 
+        add_action('wp_ajax_bookActivity', array($this, 'bookActivity'));
+        add_action('wp_ajax_nopriv_bookActivity', array($this, 'bookActivity'));
+
 
         add_filter('the_content', array($this, 'activity_content'));
 
@@ -344,7 +347,9 @@ class Activity
 
             error_log('====== From Transient ======');
             error_log(print_r($booking_results, true));
-
+            
+            $booking_results['bookingnumber'] = $bookingnumber;
+            
             $booking_results['choice'][ 'activity_id' ] = $activity_id;
             $booking_results['choice'][ 'activity_name' ] = $activityName;
             $booking_results['choice'][ 'date' ] = $activity_date;
@@ -582,7 +587,7 @@ HTML;
             $html .= '<div class="summary-heading total-summary-heading">Total:</div>';
 
             $staynights = 1;
-            $tax_instance = new \AtollMatrix\Tax('room');
+            $tax_instance = new \AtollMatrix\Tax('activities');
             $totalprice = $tax_instance->apply_tax($subtotalprice, $staynights, $totalguests, $output = 'html');
             foreach ($totalprice[ 'details' ] as $totalID => $totalvalue) {
                 $html .= '<div class="tax-summary tax-summary-details">' . $totalvalue . '</div>';
@@ -595,7 +600,7 @@ HTML;
         if ('' !== $activity_id) {
             $html .= '<div class="form-group">';
             $html .= '<div id="bookingResponse" class="booking-response"></div>';
-            $html .= '<div id="booking-register" class="book-button">Book this room</div>';
+            $html .= '<div id="activity-register" class="book-button">Book this activity</div>';
             // $html .= self::paymentHelperButton($totalprice[ 'total' ], $bookingnumber);
             $html .= '</div>';
         }
@@ -904,7 +909,15 @@ return ob_get_clean();
             }
             
             $activity_date = get_post_meta($the_post_id, 'atollmatrix_reservation_checkin', true);
-            $full_name = get_post_meta($the_post_id, 'atollmatrix_full_name', true);
+            
+            $atollmatrix_customer_choice = get_post_meta($the_post_id, 'atollmatrix_customer_choice', true);
+            if ( 'existing' == $atollmatrix_customer_choice ) {
+                $atollmatrix_existing_customer = get_post_meta($the_post_id, 'atollmatrix_existing_customer', true);
+                $full_name = get_post_meta($atollmatrix_existing_customer, 'atollmatrix_full_name', true);
+            } else {
+                $full_name = get_post_meta($the_post_id, 'atollmatrix_full_name', true);
+            }
+            
             $ticket_price = get_post_meta($the_post_id, 'atollmatrix_reservation_total_room_cost', true);
             $booking_number = get_post_meta($the_post_id, 'atollmatrix_booking_number', true);
             $reservation_status = get_post_meta($the_post_id, 'atollmatrix_reservation_status', true);            
@@ -1092,6 +1105,269 @@ return ob_get_clean();
         $remaining_spots = $max_guests - $total_guests;
     
         return $remaining_spots;
+    }
+
+    public function buildReservationArray($booking_data)
+    {
+        $reservationArray = [  ];
+
+        if (array_key_exists('bookingnumber', $booking_data)) {
+            $reservationArray[ 'bookingnumber' ] = $booking_data[ 'bookingnumber' ];
+        }
+        if (array_key_exists('choice', $booking_data)) {
+            $reservationArray[ 'date' ] = $booking_data[ 'choice' ]['date'];
+        }
+        if (array_key_exists('choice', $booking_data)) {
+            $reservationArray[ 'activity_id' ] = $booking_data[ 'choice' ]['activity_id'];
+        }
+        if (array_key_exists('choice', $booking_data)) {
+            $reservationArray[ 'time' ] = $booking_data[ 'choice' ]['time'];
+        }
+        if (array_key_exists('choice', $booking_data)) {
+            $reservationArray[ 'price' ] = $booking_data[ 'choice' ]['price'];
+        }
+        if (array_key_exists('adults', $booking_data)) {
+            $reservationArray[ 'adults' ] = $booking_data[ 'adults' ];
+        }
+        if (array_key_exists('children', $booking_data)) {
+            $reservationArray[ 'children' ] = $booking_data[ 'children' ];
+        }
+        if (array_key_exists('children_age', $booking_data)) {
+            $reservationArray[ 'children_age' ] = $booking_data[ 'children_age' ];
+        }
+        if (array_key_exists('person_total', $booking_data)) {
+            $reservationArray[ 'person_total' ] = $booking_data[ 'person_total' ];
+        }
+
+        $reservationArray[ 'staynights' ] = 1;
+
+        $currency = atollmatrix_get_option('currency');
+        if (isset($currency)) {
+            $reservationArray[ 'currency' ] = $currency;
+        }
+
+        $tax_instance = new \AtollMatrix\Tax('activities');
+
+        $subtotalprice                  = intval($reservationArray[ 'price' ]);
+        $reservationArray[ 'tax' ]      = $tax_instance->apply_tax($subtotalprice, $reservationArray[ 'staynights' ], $reservationArray[ 'person_total' ], $output = 'data');
+        $reservationArray[ 'tax_html' ] = $tax_instance->apply_tax($subtotalprice, $reservationArray[ 'staynights' ], $reservationArray[ 'person_total' ], $output = 'html');
+
+        $rateperperson                       = intval($subtotalprice) / intval($reservationArray[ 'person_total' ]);
+        $rateperperson_rounded               = round($rateperperson, 2);
+        $reservationArray[ 'rateperperson' ] = $rateperperson_rounded;
+        $reservationArray[ 'subtotal' ]     = round($subtotalprice, 2);
+        $reservationArray[ 'total' ]        = $reservationArray[ 'tax' ][ 'total' ];
+
+        return $reservationArray;
+    }
+
+
+    // Ajax function to book rooms
+    public function bookActivity()
+    {
+
+        error_log('------- acitvity posted data -------');
+        error_log(print_r($_POST, true));
+
+        $serializedData = $_POST[ 'bookingdata' ];
+        // Parse the serialized data into an associative array
+        parse_str($serializedData, $formData);
+
+        error_log('------- acitvity posted deserialized data -------');
+        error_log(print_r($formData, true));
+
+        // Verify the nonce
+        if (!isset($_POST[ 'atollmatrix_roomlistingbox_nonce' ]) || !check_admin_referer('atollmatrix-roomlistingbox-nonce', 'atollmatrix_roomlistingbox_nonce')) {
+            // Nonce verification failed; handle the error or reject the request
+            // For example, you can return an error response
+            wp_send_json_error([ 'message' => 'Failed' ]);
+            return;
+        }
+
+        // Generate unique booking number
+        $booking_number = sanitize_text_field($_POST[ 'booking_number' ]);
+        $booking_data   = atollmatrix_get_booking_transient($booking_number);
+
+        if (!isset($booking_data)) {
+            wp_send_json_error('Invalid or timeout. Please try again');
+        }
+        // Obtain customer details from form submission
+        $bookingdata    = sanitize_text_field($_POST[ 'bookingdata' ]);
+        $booking_number = sanitize_text_field($_POST[ 'booking_number' ]);
+        $full_name      = sanitize_text_field($_POST[ 'full_name' ]);
+        $passport       = sanitize_text_field($_POST[ 'passport' ]);
+        $email_address  = sanitize_email($_POST[ 'email_address' ]);
+        $phone_number   = sanitize_text_field($_POST[ 'phone_number' ]);
+        $street_address = sanitize_text_field($_POST[ 'street_address' ]);
+        $city           = sanitize_text_field($_POST[ 'city' ]);
+        $state          = sanitize_text_field($_POST[ 'state' ]);
+        $zip_code       = sanitize_text_field($_POST[ 'zip_code' ]);
+        $country        = sanitize_text_field($_POST[ 'country' ]);
+        $guest_comment  = sanitize_text_field($_POST[ 'guest_comment' ]);
+        $guest_consent  = sanitize_text_field($_POST[ 'guest_consent' ]);
+
+        error_log('------- Transient acitvity Data -------');
+        error_log($booking_number);
+        error_log(print_r($booking_data, true));
+        error_log('------- Transient acitvity Data End -------');
+        // add other fields as necessary
+
+        $rooms                      = array();
+        $rooms[ '0' ][ 'id' ]       = $booking_data[ 'choice' ][ 'activity_id' ];
+        $rooms[ '0' ][ 'quantity' ] = '1';
+        $adults                     = $booking_data[ 'adults' ];
+        $children                   = $booking_data[ 'children' ];
+
+        $reservationData = self::buildReservationArray($booking_data);
+
+        $reservationData[ 'customer' ][ 'full_name' ]      = $full_name;
+        $reservationData[ 'customer' ][ 'passport' ]       = $passport;
+        $reservationData[ 'customer' ][ 'email_address' ]  = $email_address;
+        $reservationData[ 'customer' ][ 'phone_number' ]   = $phone_number;
+        $reservationData[ 'customer' ][ 'street_address' ] = $street_address;
+        $reservationData[ 'customer' ][ 'city' ]           = $city;
+        $reservationData[ 'customer' ][ 'state' ]          = $state;
+        $reservationData[ 'customer' ][ 'zip_code' ]       = $zip_code;
+        $reservationData[ 'customer' ][ 'country' ]        = $country;
+        $reservationData[ 'customer' ][ 'guest_comment' ]  = $guest_comment;
+        $reservationData[ 'customer' ][ 'guest_consent' ]  = $guest_consent;
+
+        error_log('------- Final acitvity Data -------');
+        error_log(print_r($reservationData, true));
+        error_log('------- Final acitvity Data End -------');
+
+        // error_log(print_r($can_accomodate, true));
+        // error_log("Rooms:");
+        // error_log(print_r($rooms, true));
+
+        //wp_send_json_error(' Temporary block for debugging ');
+        // Create customer post
+        $customer_post_data = array(
+            'post_type' => 'atmx_customers', // Your custom post type for customers
+            'post_title' => $full_name, // Set the customer's full name as post title
+            'post_status' => 'publish', // The status you want to give new posts
+            'meta_input' => array(
+                'atollmatrix_full_name'      => $full_name,
+                'atollmatrix_email_address'  => $email_address,
+                'atollmatrix_phone_number'   => $phone_number,
+                'atollmatrix_street_address' => $street_address,
+                'atollmatrix_city'           => $city,
+                'atollmatrix_state'          => $state,
+                'atollmatrix_zip_code'       => $zip_code,
+                'atollmatrix_country'        => $country,
+                'atollmatrix_guest_comment'  => $guest_comment,
+                'atollmatrix_guest_consent'  => $guest_consent,
+                // add other meta data you need
+            ),
+        );
+
+        // Insert the post
+        $customer_post_id = wp_insert_post($customer_post_data);
+
+        if (!$customer_post_id) {
+            wp_send_json_error('Could not save Customer: ' . $customer_post_id);
+            return;
+        }
+
+        $checkin  = $reservationData[ 'date' ];
+        $room_id  = $reservationData[ 'activity_id' ];
+
+        $children_array             = array();
+        $children_array[ 'number' ] = $reservationData[ 'children' ];
+
+        foreach ($reservationData[ 'children_age' ] as $key => $value) {
+            $children_array[ 'age' ][  ] = $value;
+        }
+
+        $tax_status = 'excluded';
+        $tax_html   = false;
+        if (atollmatrix_has_tax()) {
+            $tax_status = 'enabled';
+            $tax_instance = new \AtollMatrix\Tax('activities');
+            $tax_html   = $tax_instance->tax_summary($reservationData[ 'tax_html' ][ 'details' ]);
+        }
+
+        $new_bookingstatus = atollmatrix_get_option('new_bookingstatus');
+        if ('pending' !== $new_bookingstatus && 'confirmed' !== $new_bookingstatus) {
+            $new_bookingstatus = 'pending';
+        }
+        $new_bookingsubstatus = atollmatrix_get_option('new_bookingsubstatus');
+        if ('' !== $new_bookingstatus) {
+            $new_bookingsubstatus = 'onhold';
+        }
+
+        $reservation_booking_uid = \AtollMatrix\Common::generateUuid();
+
+        $signature = md5('atollmatrix_booking_system');
+
+        $booking_channel = 'Atollmatrix';
+
+        // Here you can also add other post data like post_title, post_content etc.
+        $post_data = array(
+            'post_type' => 'atmx_activityres', // Your custom post type
+            'post_title' => $booking_number, // Set the booking number as post title
+            'post_status' => 'publish', // The status you want to give new posts
+            'meta_input' => array(
+                'atollmatrix_activity_id'                        => $reservationData[ 'activity_id' ],
+                'atollmatrix_reservation_status'             => $new_bookingstatus,
+                'atollmatrix_reservation_substatus'          => $new_bookingsubstatus,
+                'atollmatrix_reservation_checkin'                   => $checkin,
+                'atollmatrix_activity_time'                   => $reservationData[ 'time' ],
+                'atollmatrix_checkin_date'                   => $checkin,
+                'atollmatrix_tax'                            => $tax_status,
+                'atollmatrix_tax_html_data'                  => $tax_html,
+                'atollmatrix_tax_data'                       => $reservationData[ 'tax' ],
+                'atollmatrix_reservation_activity_adults'        => $reservationData[ 'adults' ],
+                'atollmatrix_reservation_activity_children'      => $children_array,
+                'atollmatrix_reservation_rate_per_person'     => $reservationData[ 'rateperperson' ],
+                'atollmatrix_reservation_subtotal_activity_cost' => $reservationData[ 'subtotal' ],
+                'atollmatrix_reservation_total_room_cost'    => $reservationData[ 'total' ],
+                'atollmatrix_booking_number'                 => $booking_number,
+                'atollmatrix_booking_uid'                    => $reservation_booking_uid,
+                'atollmatrix_customer_choice'                    => 'existing',
+                'atollmatrix_existing_customer'                    => $customer_post_id,
+                'atollmatrix_ics_signature'                  => $signature,
+                'atollmatrix_booking_data'                   => $reservationData,
+                'atollmatrix_booking_channel'                => $booking_channel,
+            ),
+        );
+
+        // Insert the post
+        $reservation_post_id = wp_insert_post($post_data);
+
+        if ($reservation_post_id) {
+            // Successfully created a reservation post
+            $data_instance = new \AtollMatrix\Data();
+            $data_instance->updateReservationsArray_On_Save($reservation_post_id, get_post($reservation_post_id), true);
+
+            $roomName = \AtollMatrix\Rooms::getRoomName_FromID($room_id);
+
+            $bookingDetails = [
+                'guestName'      => $full_name,
+                'bookingNumber'  => $booking_number,
+                'roomTitle'      => $roomName,
+                'checkinDate'    => $checkin,
+                'adultGuests'    => $reservationData[ 'adults' ],
+                'childrenGuests' => $reservationData[ 'children' ],
+                'totalCost'      => $reservationData[ 'total' ],
+            ];
+
+            $email = new EmailDispatcher($email_address, 'Room Booking Confirmation for:' . $booking_number);
+            $email->setHTMLContent()->setBookingConfirmationTemplate($bookingDetails);
+
+            if ($email->send()) {
+                // echo 'Confirmation email sent successfully to the guest.';
+            } else {
+                // echo 'Failed to send the confirmation email.';
+            }
+
+        } else {
+            // Handle error
+        }
+
+        // Send a success response at the end of your function, if all operations are successful
+        wp_send_json_success('Booking successfully registered.');
+        wp_die();
     }
     
 
