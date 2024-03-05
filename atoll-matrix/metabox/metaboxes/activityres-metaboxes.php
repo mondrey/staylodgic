@@ -37,6 +37,8 @@ function atollmatrix_activityres_metadata()
         $options_room_names[ 0 ] = "Rooms not found.";
     }
 
+    $reservation_id = get_the_ID();
+
     // Generate unique booking number
     $booking_number = uniqid();
 
@@ -109,6 +111,7 @@ function atollmatrix_activityres_metadata()
                 'name'    => '',
                 'id'      => 'atollmatrix_activity_list',
                 'type'    => 'activity_list_generate',
+                'page_id'      => $reservation_id,
                 'class'   => 'textsmall',
                 'heading' => 'subhead',
                 'desc'    => '',
@@ -163,6 +166,7 @@ function atollmatrix_activityres_metadata()
             array(
                 'name'    => '',
                 'id'      => 'atollmatrix_activity_tax',
+                'page_id'      => $reservation_id,
                 'type'    => 'taxgenerate',
                 'class'   => 'textsmall',
                 'heading' => 'subhead',
@@ -272,8 +276,6 @@ function atollmatrix_activityres_metadata()
     );
 
     $customer = atollmatrix_get_customer_array();
-
-    $reservation_id = get_the_ID();
 
     $customer_datafetch = array(
         array(

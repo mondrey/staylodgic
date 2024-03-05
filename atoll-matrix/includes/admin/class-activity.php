@@ -1066,7 +1066,7 @@ return ob_get_clean();
     
         // Reset post data
         wp_reset_postdata();
-    }  
+    }
     
     public function calculate_remaining_spots($activity_id, $selected_date, $selected_time, $max_guests) {
         // Query all reservation posts for this activity, date, and time
@@ -1101,6 +1101,7 @@ return ob_get_clean();
             }
         }
     
+        wp_reset_postdata();
         // Calculate remaining spots
         $remaining_spots = $max_guests - $total_guests;
     
@@ -1324,8 +1325,7 @@ return ob_get_clean();
                 'atollmatrix_reservation_total_room_cost'    => $reservationData[ 'total' ],
                 'atollmatrix_booking_number'                 => $booking_number,
                 'atollmatrix_booking_uid'                    => $reservation_booking_uid,
-                'atollmatrix_customer_choice'                    => 'existing',
-                'atollmatrix_existing_customer'                    => $customer_post_id,
+                'atollmatrix_customer_id'                    => $customer_post_id,
                 'atollmatrix_ics_signature'                  => $signature,
                 'atollmatrix_booking_data'                   => $reservationData,
                 'atollmatrix_booking_channel'                => $booking_channel,

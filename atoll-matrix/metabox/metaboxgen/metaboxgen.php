@@ -424,7 +424,7 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
 
                 case 'taxgenerate':
 
-                    $the_post_id = get_the_ID();
+                    $the_post_id = $field['page_id'];
                     $taxStatus = get_post_meta($the_post_id, 'atollmatrix_tax', true);
                     $taxHTML = get_post_meta($the_post_id, 'atollmatrix_tax_html_data', true);
                     $taxData = get_post_meta($the_post_id, 'atollmatrix_tax_data', true);
@@ -451,8 +451,9 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
 
                 case 'activity_list_generate':
 
+                    $the_post_id = $field['page_id'];
                     $activity = new AtollMatrix\Activity();
-                    echo $activity->getActivities( get_the_ID() );
+                    echo $activity->getActivities( $the_post_id );
 
                     break;
 
@@ -1183,7 +1184,7 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                     $customer_array       = atollmatrix_get_customer_array();
                     
                     $post_type = get_post_type( $field['id'] );
-                    
+
                     if ( 'atmx_activityres' == $post_type ) {
                         $reservation_instance = new \AtollMatrix\Activity();
                     } else {
