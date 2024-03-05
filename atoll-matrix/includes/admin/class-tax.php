@@ -114,16 +114,21 @@ class Tax
         $price = array();
         $count = 0;
 
+        $tax_has_status = false;
         if ('room' == $this->tax_type) {
             $taxPricing = atollmatrix_get_option('taxes');
+
+            $tax_has_status = atollmatrix_has_tax();
         }
         if ('activities' == $this->tax_type) {
             $taxPricing = atollmatrix_get_option('activity_taxes');
+
+            $tax_has_status = atollmatrix_has_activity_tax();
         }
 
         $subtotal = $roomrate;
 
-        if (atollmatrix_has_tax()) {
+        if ( $tax_has_status ) {
             foreach ($taxPricing as $tax) {
                 $percentage = '';
                 if ($tax[ 'type' ] === 'percentage') {

@@ -1181,10 +1181,16 @@ $panel_settings = [
         'tab'         => 'discounts',
      ],
     'enable_taxes'         => [
-        'label'       => esc_html__('Enable taxes', 'atollmatrix'),
+        'label'       => esc_html__('Enable Room Taxes', 'atollmatrix'),
         'type'        => 'checkbox',
         'description' => '',
-        'tab'         => 'general',
+        'tab'         => 'tax',
+    ],
+    'enable_activitytaxes'         => [
+        'label'       => esc_html__('Enable Activties Taxes', 'atollmatrix'),
+        'type'        => 'checkbox',
+        'description' => '',
+        'tab'         => 'activity-tax',
     ],
     'display_cancelled' => [
         'label'       => esc_html__('Display cancelled bookings in availability calendar', 'atollmatrix'),

@@ -417,6 +417,7 @@ ul.existing-customer li {
 }
 
 /* Booking Button */
+#invoiceActivityDetails,
 #invoiceDetails,
 #bookingDetails,
 #bookingSearch {
@@ -433,6 +434,7 @@ ul.existing-customer li {
 	transition: 0.4s background-color;
 }
 
+#invoiceActivityDetails:hover,
 #invoiceDetails:hover,
 #bookingDetails:hover,
 #bookingSearch:hover {
@@ -441,6 +443,7 @@ ul.existing-customer li {
 	/* Example hover background color */
 }
 
+#invoiceActivityDetails:active,
 #invoiceDetails:active,
 #bookingDetails:active,
 #bookingSearch:active {

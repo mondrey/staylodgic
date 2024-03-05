@@ -260,6 +260,22 @@ class AtollMatrix_Init
                 wp_enqueue_script('bootstrap');
 
             }
+            if ($current_admin_screen->base == 'atmx_activityres_page_atollmatrix-activity-invoicing') {
+
+                wp_enqueue_script('atollmatrix-invoice');
+                wp_localize_script('atollmatrix-invoice', 'atollmatrixData', array(
+                    'pluginUrl' => plugin_dir_url(__FILE__),
+                ));
+            
+                wp_enqueue_style('atollmatrix-invoice');
+                wp_enqueue_style('fontawesome-6');
+                wp_enqueue_style('fontawesome-6-brands');
+                wp_enqueue_style('fontawesome-6-solid');
+
+                wp_enqueue_style('bootstrap');
+                wp_enqueue_script('bootstrap');
+
+            }
             if ($current_admin_screen->base == 'atoll-matrix_page_atollmatrix-invoicing') {
 
                 wp_enqueue_script('atollmatrix-invoice');
@@ -282,6 +298,21 @@ class AtollMatrix_Init
                 wp_enqueue_style('fontawesome-6');
                 wp_enqueue_style('fontawesome-6-brands');
                 wp_enqueue_style('fontawesome-6-solid');
+
+            }
+            if ($current_admin_screen && $current_admin_screen->post_type == 'atmx_activityres') {
+
+                wp_enqueue_style('atollmatrix-admin-styles');
+
+                wp_enqueue_style('bootstrap');
+                wp_enqueue_script('bootstrap');
+                
+                wp_enqueue_script('atollmatrix-invoice');
+                wp_localize_script('atollmatrix-invoice', 'atollmatrixData', array(
+                    'pluginUrl' => plugin_dir_url(__FILE__),
+                ));
+            
+                wp_enqueue_style('atollmatrix-invoice');
 
             }
             if ($current_admin_screen->post_type === 'atmx_guestregistry' && ($hook === 'post.php' || $hook === 'post-new.php')) {

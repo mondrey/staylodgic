@@ -100,7 +100,8 @@ function atollmatrix_activityres_metadata()
             array(
                 'name'    => '',
                 'id'      => 'atollmatrix_activity_id',
-                'type'    => 'offview_display_result',
+                'type'    => 'offview_display_ticket_result',
+                'page_id'      => $reservation_id,
                 'display_by_id' => 'activity_names',
                 'class'   => 'textsmall',
                 'heading' => 'subhead',

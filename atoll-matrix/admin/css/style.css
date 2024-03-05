@@ -1463,3 +1463,9 @@ p.ticket-break {
 	font-weight: 900;
 	font-size: 11px;
   }
+
+  .ticket-container-outer {
+	padding: 20px;
+	margin: 0 auto;
+	display: inline-block;
+  }

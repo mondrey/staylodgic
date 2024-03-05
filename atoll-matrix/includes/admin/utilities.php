@@ -249,6 +249,13 @@ function atollmatrix_has_tax()
     return $taxFlag;
 
 }
+function atollmatrix_has_activity_tax()
+{
+
+    $taxFlag = atollmatrix_get_option('enable_activitytaxes');
+    return $taxFlag;
+
+}
 
 function atollmatrix_display_cancelled()
 {

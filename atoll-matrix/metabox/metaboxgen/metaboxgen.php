@@ -462,16 +462,19 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                     echo '<input type="hidden" class="' . $class . '" name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '" value="' . esc_attr($text_value) . '" size="30" />';
                     break;
 
-                case 'offview_display_result':
+                case 'offview_display_ticket_result':
                     $text_value = $meta ? $meta : $field['std'];
-                    echo '<input type="hidden" class="' . $class . '" name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '" value="' . esc_attr($text_value) . '" size="30" />';
+                    echo '<input type="hidden" class="' . $class . '" name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '" value="' . $text_value . '" size="30" />';
 
                     error_log ( '------- off view display ------' );
-
+                    
                     $activity = new AtollMatrix\Activity();
-                    $ticket = $activity->displayTicket( get_the_ID(), $text_value );
+                    $ticket = $activity->displayTicket( $field['page_id'], $text_value );
 
                     echo $ticket;
+                    echo '<div class="ticket-save-pdf-button">';
+                    echo '<button data-file="registration-'. $field['page_id'] .'" data-id="'.$field['page_id'].'" id="save-pdf-ticket-button" class="save-pdf-ticket-button">Save PDF</button>';
+                    echo '</div>';
 
                     break;
 

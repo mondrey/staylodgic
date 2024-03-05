@@ -53,6 +53,87 @@ class Activity
 
     }
 
+    public function getGuest_id_forReservation($booking_number)
+    {
+        $args = array(
+            'post_type'      => 'atmx_activityres',
+            'posts_per_page' => -1,
+            'post_status'    => 'publish',
+            'meta_query'     => array(
+                array(
+                    'key'   => 'atollmatrix_booking_number',
+                    'value' => $booking_number,
+                ),
+            ),
+        );
+        $reservation_query = new \WP_Query($args);
+
+        if ($reservation_query->have_posts()) {
+            $reservation = $reservation_query->posts[ 0 ];
+            $customer_id = get_post_meta($reservation->ID, 'atollmatrix_customer_id', true);
+            return $customer_id;
+        }
+
+        return false; // Return an empty query if no guest found
+    }
+
+    public function getActivityNameForReservation($reservation_id = false)
+    {
+
+        // Get room id from post meta
+        $room_id = get_post_meta($reservation_id, 'atollmatrix_activity_id', true);
+
+        // If room id exists, get the room's post title
+        if ($room_id) {
+            $room_post = get_post($room_id);
+            if ($room_post) {
+                return $room_post->post_title;
+            }
+        }
+
+        return null;
+    }
+
+    public function isConfirmed_Reservation($reservation_id)
+    {
+
+        if (!$reservation_id) {
+            $reservation_id = $this->reservation_id;
+        }
+        // Get the reservation status for the reservation
+        $reservation_status = get_post_meta($reservation_id, 'atollmatrix_reservation_status', true);
+
+        if ('confirmed' == $reservation_status) {
+            return true;
+        }
+
+        return false;
+
+    }
+
+    public static function getActivityIDforBooking($booking_number)
+    {
+        $args = array(
+            'post_type'      => 'atmx_activityres',
+            'posts_per_page' => -1,
+            'post_status'    => 'publish',
+            'meta_query'     => array(
+                array(
+                    'key'   => 'atollmatrix_booking_number',
+                    'value' => $booking_number,
+                ),
+            ),
+        );
+        $reservation_query = new \WP_Query($args);
+
+        if ($reservation_query->have_posts()) {
+            $reservation = $reservation_query->posts[ 0 ];
+            return $reservation->ID;
+        }
+
+        return false; // Return an false if no reservatuib found
+    }
+
     public function get_activity_schedules_ajax_handler() {
         $selected_date = isset($_POST['selected_date']) ? sanitize_text_field($_POST['selected_date']) : null;
         $total_people = isset($_POST['totalpeople']) ? sanitize_text_field($_POST['totalpeople']) : null;
@@ -904,19 +985,16 @@ return ob_get_clean();
             $hotelLogo    = $property_logo_id ? wp_get_attachment_image_url($property_logo_id, 'full') : '';
 
             $activity_id = get_post_meta($the_post_id, 'atollmatrix_activity_id', true);
+
             if (null !== $activity_id) {
                 $activity_image = atollmatrix_featured_image_link($activity_id);
             }
             
+            $booking_number = get_post_meta($the_post_id, 'atollmatrix_booking_number', true);
             $activity_date = get_post_meta($the_post_id, 'atollmatrix_reservation_checkin', true);
             
-            $atollmatrix_customer_choice = get_post_meta($the_post_id, 'atollmatrix_customer_choice', true);
-            if ( 'existing' == $atollmatrix_customer_choice ) {
-                $atollmatrix_existing_customer = get_post_meta($the_post_id, 'atollmatrix_existing_customer', true);
-                $full_name = get_post_meta($atollmatrix_existing_customer, 'atollmatrix_full_name', true);
-            } else {
-                $full_name = get_post_meta($the_post_id, 'atollmatrix_full_name', true);
-            }
+            $atollmatrix_customer_id = get_post_meta($the_post_id, 'atollmatrix_customer_id', true);
+            $full_name = get_post_meta($atollmatrix_customer_id, 'atollmatrix_full_name', true);
             
             $ticket_price = get_post_meta($the_post_id, 'atollmatrix_reservation_total_room_cost', true);
             $booking_number = get_post_meta($the_post_id, 'atollmatrix_booking_number', true);
@@ -930,7 +1008,8 @@ return ob_get_clean();
 
             if ( isset( $data_array[$activity_id] ) && isset($ticket_price) && 0 < $ticket_price ) {
 
-                $ticket = '<div class="ticket">';
+                $ticket = '<div class="ticket-container-outer">';
+                $ticket .= '<div data-file="'.$booking_number.'-'.$the_post_id.'" data-postid="'.$the_post_id.'" id="ticket-'.$booking_number.'" data-bookingnumber="'.$booking_number.'" class="ticket ticket-container">';
                 $ticket .= '<div class="ticket-header">';
                 $ticket .= '<p class="ticket-company">'.$property_name.'</p>';
                 $ticket .= '<p class="ticket-phone">'.$property_phone.'</p>';
@@ -949,6 +1028,7 @@ return ob_get_clean();
                 $ticket .= '<div id="ticketqrcode" data-qrcode="'.$booking_number.'" class="qrcode"></div>';
                 $ticket .= '</div>';
                 $ticket .= '<div class="ticket-button">'.$reservation_status.'</div>';
+                $ticket .= '</div>';
                 $ticket .= '</div>';
                 
             }
@@ -986,7 +1066,7 @@ return ob_get_clean();
         if (is_null($selected_date)) {
             $selected_date = date('Y-m-d');
         }
-
+        
         if (null !== get_post_meta($the_post_id, 'atollmatrix_activity_time', true)) {
             $existing_activity_time = get_post_meta($the_post_id, 'atollmatrix_activity_time', true);
         }
@@ -1045,13 +1125,17 @@ return ob_get_clean();
                         // echo $selected_date;
                         $active_class = "time-disabled";
 
-                        if ( $total_people <= $remaining_spots_compare && 0 !== $remaining_spots ) {
+                        if ( $total_people <= $remaining_spots_compare && 0 !== $remaining_spots && '' !== $time ) {
                             $active_class = "time-active";
                             if ( $existing_found ) {
                                 $active_class .= ' time-choice';
                             }
+
+                            echo '<span class="time-slot '.$active_class.'" id="time-slot-' . $day_of_week . '-' . $index . '" data-activity="'.$post_id.'" data-time="' . $time . '"><span class="activity-time-slot"><i class="fa-regular fa-clock"></i> ' . $time . '</span><span class="time-slots-remaining">( ' . $remaining_spots . ' of ' .$max_guests. ' remaining )</span></span> ';
+                        } else {
+                            echo '<span class="time-slot '.$active_class.'" id="time-slot-' . $day_of_week . '-' . $index . '" data-activity="'.$post_id.'" data-time="' . $time . '"><span class="activity-time-slot"><i class="fa-regular fa-clock"></i> Unavailable</span><span class="time-slots-remaining">( - of - )</span></span> ';
                         }
-                        echo '<span class="time-slot '.$active_class.'" id="time-slot-' . $day_of_week . '-' . $index . '" data-activity="'.$post_id.'" data-time="' . $time . '"><span class="activity-time-slot"><i class="fa-regular fa-clock"></i> ' . $time . '</span><span class="time-slots-remaining">( ' . $remaining_spots . ' of ' .$max_guests. ' remaining )</span></span> ';
+                       
                         
                     }
                     echo '</div>';
@@ -1282,7 +1366,7 @@ return ob_get_clean();
 
         $tax_status = 'excluded';
         $tax_html   = false;
-        if (atollmatrix_has_tax()) {
+        if (atollmatrix_has_activity_tax()) {
             $tax_status = 'enabled';
             $tax_instance = new \AtollMatrix\Tax('activities');
             $tax_html   = $tax_instance->tax_summary($reservationData[ 'tax_html' ][ 'details' ]);
