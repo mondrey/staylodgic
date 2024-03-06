@@ -38,6 +38,8 @@ class Activity
         add_action('wp_ajax_bookActivity', array($this, 'bookActivity'));
         add_action('wp_ajax_nopriv_bookActivity', array($this, 'bookActivity'));
 
+        add_shortcode('activity_booking_search', array($this, 'activity_search_shortcode'));
+
 
         add_filter('the_content', array($this, 'activity_content'));
 
@@ -51,6 +53,22 @@ class Activity
         $this->totalGuests           = $totalGuests;
         $this->activitiesArray           = $activitiesArray;
 
+    }
+
+    public static function getReservationforActivity($booking_number)
+    {
+        $args = array(
+            'post_type'      => 'atmx_activityres',
+            'posts_per_page' => -1,
+            'post_status'    => 'publish',
+            'meta_query'     => array(
+                array(
+                    'key'   => 'atollmatrix_booking_number',
+                    'value' => $booking_number,
+                ),
+            ),
+        );
+        return new \WP_Query($args);
     }
 
     public function getGuest_id_forReservation($booking_number)
@@ -699,6 +717,11 @@ HTML;
             // $content .= $custom_content; // Append custom content
         }
         return $content;
+    }
+
+    function activity_search_shortcode() {
+        $search_form = $this->activityBooking_SearchForm();
+        return $search_form;
     }
 
     public function getNameForActivity($reservation_id = false)

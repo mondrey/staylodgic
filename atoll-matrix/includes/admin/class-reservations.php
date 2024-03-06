@@ -34,8 +34,17 @@ class Reservations
     public function getBookingDetails($booking_number) {
         $booking_number = $_POST['booking_number'];
     
+        $activityFound = false;
+
         // Fetch reservation details
         $reservationQuery = self::getReservationforBooking($booking_number);
+
+        if ( ! $reservationQuery->have_posts() ) {
+            $reservation_instance = new \AtollMatrix\Activity();
+            $reservationQuery     = $reservation_instance->getReservationforActivity($booking_number);
+
+            $activityFound = true;
+        }
 
         // Verify the nonce
         if (!isset($_POST[ 'atollmatrix_bookingdetails_nonce' ]) || !check_admin_referer('atollmatrix-bookingdetails-nonce', 'atollmatrix_bookingdetails_nonce')) {
@@ -55,8 +64,18 @@ class Reservations
     
                 // Display reservation details
                 echo "<h3>Reservation ID: " . esc_html($reservationID) . "</h3>";
-                echo "<p>Check-in Date: " . esc_html(get_post_meta($reservationID, 'atollmatrix_checkin_date', true)) . "</p>";
-                echo "<p>Check-out Date: " . esc_html(get_post_meta($reservationID, 'atollmatrix_checkout_date', true)) . "</p>";
+                if ( $activityFound ) {
+                    echo "<p>Activity Date: " . esc_html(get_post_meta($reservationID, 'atollmatrix_checkin_date', true)) . "</p>";
+
+                    $guestID = self::getGuest_id_forActivity($booking_number);
+                    
+                } else {
+                    echo "<p>Check-in Date: " . esc_html(get_post_meta($reservationID, 'atollmatrix_checkin_date', true)) . "</p>";
+                    echo "<p>Check-out Date: " . esc_html(get_post_meta($reservationID, 'atollmatrix_checkout_date', true)) . "</p>";
+
+                    $guestID = self::getGuest_id_forReservation($booking_number);
+                }
+                
                 // Add other reservation details as needed
             }
             echo "</div>";
@@ -65,7 +84,6 @@ class Reservations
         }
     
         // Fetch guest details
-        $guestID = self::getGuest_id_forReservation($booking_number);
         if ($guestID) {
             echo "<div class='guest-details'>";
             echo "<h3>Guest Information:</h3>";
@@ -136,6 +154,30 @@ class Reservations
         }
 
         return false; // Return an false if no reservatuib found
+    }
+
+    public function getGuest_id_forActivity($booking_number)
+    {
+        $args = array(
+            'post_type'      => 'atmx_activityres',
+            'posts_per_page' => -1,
+            'post_status'    => 'publish',
+            'meta_query'     => array(
+                array(
+                    'key'   => 'atollmatrix_booking_number',
+                    'value' => $booking_number,
+                ),
+            ),
+        );
+        $reservation_query = new \WP_Query($args);
+
+        if ($reservation_query->have_posts()) {
+            $reservation = $reservation_query->posts[ 0 ];
+            $customer_id = get_post_meta($reservation->ID, 'atollmatrix_customer_id', true);
+            return $customer_id;
+        }
+
+        return false; // Return an empty query if no guest found
     }
 
     public function getGuest_id_forReservation($booking_number)

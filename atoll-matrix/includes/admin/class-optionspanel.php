@@ -1135,6 +1135,14 @@ $panel_settings = [
         'choices'     => atollmatrix_get_pages_for_select(),
         'tab'         => 'pages',
      ],
+     'page_activitybookingsearch'   => [
+        'label'       => esc_html__('Activities search page', 'atollmatrix'),
+        'type'        => 'select',
+        'inputwidth'  => '250',
+        'description' => 'Activities search page.',
+        'choices'     => atollmatrix_get_pages_for_select(),
+        'tab'         => 'pages',
+     ],
     'page_bookingdetails'  => [
         'label'       => esc_html__('Booking details', 'atollmatrix'),
         'type'        => 'select',
