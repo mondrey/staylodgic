@@ -182,6 +182,14 @@ class Booking
     public function process_RoomPrice()
     {
 
+        // Verify the nonce
+        if (!isset($_POST[ 'atollmatrix_searchbox_nonce' ]) || !check_admin_referer('atollmatrix-searchbox-nonce', 'atollmatrix_searchbox_nonce')) {
+            // Nonce verification failed; handle the error or reject the request
+            // For example, you can return an error response
+            wp_send_json_error([ 'message' => 'Failed' ]);
+            return;
+        }
+
         $bookingnumber   = sanitize_text_field($_POST[ 'booking_number' ]);
         $room_id         = sanitize_text_field($_POST[ 'room_id' ]);
         $room_price      = sanitize_text_field($_POST[ 'room_price' ]);
@@ -327,11 +335,15 @@ class Booking
         // Calculate current date
         $currentDate = current_time('Y-m-d');
         // Calculate end date as 3 months from the current date
-        $endDate = date('Y-m-d', strtotime($currentDate . ' +4 months'));
+        $endDate = date('Y-m-d', strtotime($currentDate . ' +1 month'));
 
-        $reservations_instance = new \AtollMatrix\Reservations();
-        $fullybooked_dates     = $reservations_instance->daysFullyBooked_For_DateRange($currentDate, $endDate);
-
+        $fullybooked_dates = array();
+        $display_fullbooked_status = false;
+        if ( true === $display_fullbooked_status ) {
+            $reservations_instance = new \AtollMatrix\Reservations();
+            $fullybooked_dates     = $reservations_instance->daysFullyBooked_For_DateRange($currentDate, $endDate);    
+        }
+        
         // error_log( '-------------------- availability percent check');
         // error_log( print_r( $fullybooked_dates, true ));
         // error_log( '-------------------- availability percent check');
@@ -775,7 +787,7 @@ return ob_get_clean();
                 $html .= '<div class="room-details-image">';
                 $image_id  = get_post_thumbnail_id($id);
                 $image_url = wp_get_attachment_image_url($image_id, 'atollmatrix-large-square'); // Get the URL of the custom-sized image
-                $html .= '<img class="room-summary-image" src="' . esc_url($image_url) . '" alt="Room featured image">';
+                $html .= '<img class="lightbox-trigger room-summary-image" data-image="' . esc_url($image_url) . '" src="' . esc_url($image_url) . '" alt="Room featured image">';
                 $html .= '</div>';
 
                 $html .= '<div class="room-details-stats">';

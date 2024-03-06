@@ -112,7 +112,7 @@ h2#invoice-subheading,
 #invoice-hotel-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: start;
 }
 
 #invoice-hotel-logo {

@@ -896,11 +896,14 @@ HTML;
         // Calculate current date
         $currentDate = current_time('Y-m-d');
         // Calculate end date as 3 months from the current date
-        $endDate = date('Y-m-d', strtotime($currentDate . ' +4 months'));
+        $endDate = date('Y-m-d', strtotime($currentDate . ' +1 month'));
 
-        $reservations_instance = new \AtollMatrix\Reservations();
-        $fullybooked_dates     = $reservations_instance->daysFullyBooked_For_DateRange($currentDate, $endDate);
-
+        $fullybooked_dates = array();
+        $display_fullbooked_status = false;
+        if ( true === $display_fullbooked_status ) {
+            $reservations_instance = new \AtollMatrix\Reservations();
+            $fullybooked_dates     = $reservations_instance->daysFullyBooked_For_DateRange($currentDate, $endDate);    
+        }
         // error_log( '-------------------- availability percent check');
         // error_log( print_r( $fullybooked_dates, true ));
         // error_log( '-------------------- availability percent check');

@@ -426,7 +426,7 @@
 
 .room-details-row .guest-bed-wrap {
 	position: absolute;
-	top: 0;
+	top: -3px;
 	left: 33px;
 }
 
@@ -850,17 +850,20 @@
 .recommended-alt-wrap {
 	padding: 30px;
 	box-sizing: border-box;
-	background: #e6ffff;
+	background: #fbf6f6;
 }
 
 .recommended-alt-title {
 	font-size: 20px;
-	margin-bottom: 2px;
+	margin-bottom: 12px;
+	font-weight: 500;
+	color: #000;
 }
 
 .recommended-alt-description {
 	font-size: 14px;
-	margin-bottom: 7px;
+	margin-bottom: 12px;
+	font-weight: 400;
 }
 
 .recommended-dates-wrap {
@@ -904,13 +907,20 @@
 	font-weight: 500;
 }
 .calendar-insights-wrap {
-    display: grid;
-    grid-template-columns: 1fr 1fr; /* Creates two columns */
-    grid-gap: 10px; /* Sets gap between grid items */
-    padding: 15px 20px; /* Optional padding for better spacing */
-    background: #eeeeee4d;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-gap: 10px;
+	padding: 15px 20px;
+	background: #edfdff;
 	border-radius: 6px;
-  	margin-bottom: 5px;
+	margin-bottom: 5px;
+	color: #595959;
+	font-size: 12px;
+	letter-spacing: 0.8px;
+}
+#check-in-display, #check-out-display {
+	border-bottom: 1px solid #00000014;
+	padding-bottom: 16px;
 }
 .calendar-insights-wrap span {
 	font-weight: 500;
@@ -1048,4 +1058,26 @@
 .day-schedule .activity-rate span {
 	font-size: 13px;
 	font-weight: 600;
+}
+
+.room-details-column {
+	font-size: 12px;
+	color: #6f6f6f;
+	line-height: 1.7;
+	font-weight: 400;
+}
+.room-details .facility {
+	font-size: 11px;
+	font-weight: 400;
+}
+.stay-summary-wrap {
+	font-size: 10px;
+	border-top: 1px solid #d9d7d7;
+	margin-top: 30px;
+	padding-top: 12px;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	line-height: 1.9;
+	font-weight: 500;
+	color: #000;
 }

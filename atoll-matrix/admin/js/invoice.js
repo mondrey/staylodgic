@@ -3,7 +3,6 @@
 
 		$('#invoiceActivityDetails').on('click', function(e) {
 			e.preventDefault();
-			console.log('sdkfjhsdkjfhksdjfh');
 			var bookingNumber = $('#booking_number').val();
 			var atollmatrix_bookingdetails_nonce = $('input[name="atollmatrix_bookingdetails_nonce"]').val();
 

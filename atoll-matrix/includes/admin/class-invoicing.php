@@ -151,12 +151,12 @@ class Invoicing
         }
 
         // Hotel Information
-        $property_logo_id = atollmatrix_get_option('property_logo');
-        $property_name    = atollmatrix_get_option('property_name');
-        $property_phone   = atollmatrix_get_option('property_phone');
-        $property_address = atollmatrix_get_option('property_address');
-        $property_header  = atollmatrix_get_option('property_header');
-        $property_footer  = atollmatrix_get_option('property_footer');
+        $property_logo_id = atollmatrix_get_option('activity_property_logo');
+        $property_name    = atollmatrix_get_option('activity_property_name');
+        $property_phone   = atollmatrix_get_option('activity_property_phone');
+        $property_address = atollmatrix_get_option('activity_property_address');
+        $property_header  = atollmatrix_get_option('activity_property_header');
+        $property_footer  = atollmatrix_get_option('activity_property_footer');
 
         $this->reservationID    = $reservationID;
         $this->hotelName    = $property_name;

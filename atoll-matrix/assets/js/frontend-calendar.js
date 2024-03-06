@@ -76,6 +76,7 @@
 			var mealPlanInput = $("input[name='room[" + roomId + "][meal_plan][optional]']:checked");
 			var mealPlan = mealPlanInput.val();
 			var mealPlanPrice = mealPlanInput.data('mealprice');
+			var atollmatrix_searchbox_nonce = $('input[name="atollmatrix_searchbox_nonce"]').val();
 			console.log('Got:' + bookingnumber);
 
 			var dataToSend = {
@@ -85,7 +86,8 @@
 				room_price: roomPriceTotal,
 				bed_layout: bedLayout,
 				meal_plan: mealPlan,
-				meal_plan_price: mealPlanPrice
+				meal_plan_price: mealPlanPrice,
+				atollmatrix_searchbox_nonce: atollmatrix_searchbox_nonce
 			};
 
 			$.ajax({

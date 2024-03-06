@@ -386,6 +386,7 @@ class AtollMatrix_Init
         wp_register_style('frontendstyle', plugin_dir_url(__FILE__) . 'admin/css/frontend-booking.css', array(), '1.0', 'screen');
         wp_register_style('flatpickr', plugin_dir_url(__FILE__) . 'assets/js/flatpickr/flatpickr.min.css', array(), '1.0', 'screen');
         wp_register_style('flatpickr-extra', plugin_dir_url(__FILE__) . 'assets/js/flatpickr/flatpickr-extra-style.css', array(), '1.0', 'screen');
+     
         wp_register_script('flatpickr', plugin_dir_url(__FILE__) . 'assets/js/flatpickr/flatpickr.js', array('jquery'), '1.0', true);
         wp_register_script('frontend-calendar', plugins_url('assets/js/frontend-calendar.js', __FILE__), array('jquery'), '1.0', true);
         wp_register_script('payment-helper', plugins_url('assets/js/payment-helper.js', __FILE__), array('jquery'), '1.0', true);

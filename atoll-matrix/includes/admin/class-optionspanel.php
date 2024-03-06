@@ -1068,6 +1068,7 @@ $panel_args = [
     'user_capability' => 'manage_options',
     'tabs'            => [
         'property'       => esc_html__('Property', 'atollmatrix'),
+        'activity-property'       => esc_html__('Activity Property', 'atollmatrix'),
         'currency'      => esc_html__('Currency', 'atollmatrix'),
         'general'       => esc_html__('General', 'atollmatrix'),
         'pages'         => esc_html__('Pages', 'atollmatrix'),
@@ -1127,6 +1128,44 @@ $panel_settings = [
         'description' => 'My field 1 description.',
         'tab'         => 'property',
     ],
+
+    'activity_property_logo'         => [
+        'label'       => esc_html__('Upload Logo', 'atollmatrix'),
+        'type'        => 'media_upload',
+        'description' => 'Upload your logo here.',
+        'tab'         => 'activity-property', // You can change the tab as per your requirement
+    ],
+    'activity_property_name'             => [
+        'label'       => esc_html__('Name', 'atollmatrix'),
+        'type'        => 'text',
+        'description' => 'My field 1 description.',
+        'tab'         => 'activity-property',
+    ],
+    'activity_property_phone'             => [
+        'label'       => esc_html__('Phone', 'atollmatrix'),
+        'type'        => 'text',
+        'description' => 'My field 1 description.',
+        'tab'         => 'activity-property',
+    ],
+    'activity_property_address'   => [
+        'label'       => esc_html__('Address', 'atollmatrix'),
+        'type'        => 'text',
+        'description' => 'My field 1 description.',
+        'tab'         => 'activity-property',
+    ],
+    'activity_property_header'   => [
+        'label'       => esc_html__('Invoice header', 'atollmatrix'),
+        'type'        => 'text',
+        'description' => 'My field 1 description.',
+        'tab'         => 'activity-property',
+    ],
+    'activity_property_footer'   => [
+        'label'       => esc_html__('Invoice footer', 'atollmatrix'),
+        'type'        => 'text',
+        'description' => 'My field 1 description.',
+        'tab'         => 'activity-property',
+    ],
+
     'page_bookingsearch'   => [
         'label'       => esc_html__('Booking search page', 'atollmatrix'),
         'type'        => 'select',
