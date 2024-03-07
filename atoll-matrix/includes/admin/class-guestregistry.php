@@ -565,8 +565,9 @@ HTML;
         }
 
         ob_start(); // Start output buffering
-
+        echo "<div class='element-container-group'>";
         if ($reservationQuery->have_posts()) {
+            
             echo "<div class='reservation-details'>";
             while ($reservationQuery->have_posts()) {
                 $reservationQuery->the_post();
@@ -596,6 +597,7 @@ HTML;
         } else {
             echo "<p>No guest details found for Booking Number: " . esc_html($booking_number) . "</p>";
         }
+        echo "</div>";
 
         $informationSheet = ob_get_clean(); // Get the buffer content and clean the buffer
         echo $informationSheet; // Directly output the HTML content
@@ -608,15 +610,13 @@ HTML;
         $atollmatrix_bookingdetails_nonce = wp_create_nonce('atollmatrix-bookingdetails-nonce');
         ?>
 		<div class="atollmatrix-content">
-            <div id="hotel-booking-form">
-
             <div class="calendar-insights-wrap">
                 <div id="check-in-display">Check-in: <span>-</span></div>
                 <div id="check-out-display">Check-out: <span>-</span></div>
                 <div id="last-night-display">Last-night: <span>-</span></div>
                 <div id="nights-display">Nights: <span>-</span></div>
             </div>
-
+            <div id="hotel-booking-form">
                 <div class="front-booking-search">
                     <div class="front-booking-number-wrap">
                         <div class="front-booking-number-container">

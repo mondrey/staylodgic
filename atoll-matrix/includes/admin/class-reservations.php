@@ -55,15 +55,16 @@ class Reservations
         }
     
         ob_start(); // Start output buffering
-    
+        echo "<div class='element-container-group'>";
         if ($reservationQuery->have_posts()) {
             echo "<div class='reservation-details'>";
             while ($reservationQuery->have_posts()) {
                 $reservationQuery->the_post();
                 $reservationID = get_the_ID();
     
+                $reservation_details_status = get_post_meta($reservationID, 'atollmatrix_reservation_status', true);
                 // Display reservation details
-                echo "<h3>Reservation ID: " . esc_html($reservationID) . "</h3>";
+                echo "<h3>Reservation ID: " . esc_html($booking_number) . "</h3>";
                 if ( $activityFound ) {
                     echo "<p>Activity Date: " . esc_html(get_post_meta($reservationID, 'atollmatrix_checkin_date', true)) . "</p>";
 
@@ -72,6 +73,7 @@ class Reservations
                 } else {
                     echo "<p>Check-in Date: " . esc_html(get_post_meta($reservationID, 'atollmatrix_checkin_date', true)) . "</p>";
                     echo "<p>Check-out Date: " . esc_html(get_post_meta($reservationID, 'atollmatrix_checkout_date', true)) . "</p>";
+                    echo "<p class='reservation-details-status-outer ".esc_attr( $reservation_details_status )."'>Status: <span class='reservation-details-status'>" . esc_html( $reservation_details_status ) . "</span></p>";
 
                     $guestID = self::getGuest_id_forReservation($booking_number);
                 }
@@ -83,6 +85,7 @@ class Reservations
             echo "<p>No reservation found for Booking Number: " . esc_html($booking_number) . "</p>";
         }
     
+        $guestID = false;
         // Fetch guest details
         if ($guestID) {
             echo "<div class='guest-details'>";
@@ -93,9 +96,10 @@ class Reservations
             // Add other guest details as needed
             echo "</div>";
         } else {
-            echo "<p>No guest details found for Booking Number: " . esc_html($booking_number) . "</p>";
+            //echo "<p>No guest details found for Booking Number: " . esc_html($booking_number) . "</p>";
         }
-    
+        echo "</div>";
+
         $informationSheet = ob_get_clean(); // Get the buffer content and clean the buffer
         echo $informationSheet; // Encode the HTML content as JSON
         wp_die(); // Terminate and return a proper response

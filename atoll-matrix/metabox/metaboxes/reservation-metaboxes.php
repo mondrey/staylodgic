@@ -40,6 +40,8 @@ function atollmatrix_reservations_metadata()
     // Generate unique booking number
     $booking_number = uniqid();
 
+    $reservation_id = get_the_ID();
+
     $reservations_box = array(
         'id'       => 'reservationsmeta-box',
         'title'    => esc_html__('Reservations Metabox', 'atollmatrix'),
@@ -177,6 +179,7 @@ function atollmatrix_reservations_metadata()
             array(
                 'name'    => '',
                 'id'      => 'atollmatrix_reservation_tax',
+                'page_id'      => $reservation_id,
                 'type'    => 'taxgenerate',
                 'class'   => 'textsmall',
                 'heading' => 'subhead',

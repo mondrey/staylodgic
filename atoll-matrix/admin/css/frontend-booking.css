@@ -1,12 +1,3 @@
-.atollmatrix-content,
-.atollmatrix-content h1,
-.atollmatrix-content h2,
-.atollmatrix-content h3,
-.atollmatrix-content h4,
-.atollmatrix-content h5 {
-	font: 300 14px/1.5 "Lato", Helvetica, Arial, sans-serif;
-}
-
 .atollmatrix-content {
 	max-width: 645px;
 	margin: 0 auto;
@@ -125,6 +116,7 @@
 	padding-right: 40px;
 }
 
+.element-container-group,
 .room-occupied-group {
 	border: 1px solid #ececec;
 	margin-bottom: 10px;
@@ -143,6 +135,7 @@
 #booking-summary-wrap {
 	box-sizing: border-box;
 	padding: 30px;
+	color: #000;
 }
 
 .admin-bar #booking-summary {
@@ -151,11 +144,18 @@
 
 .summary-room-name {
 	display: block;
-	font-size: 20px;
+	font-size: 28px;
 	letter-spacing: -0.5px;
-	line-height: 1;
-	font-weight: 700;
+	line-height: 1.2;
+	font-weight: 100;
 	margin-bottom: 22px;
+}
+
+.entry-content .registration-column h3 {
+	font-size: 30px;
+	font-weight: 500;
+	line-height: 1.1;
+	letter-spacing: -0.7px;
 }
 
 .bed-summary {
@@ -174,15 +174,12 @@
 
 .summary-heading {
 	font-weight: 600;
-	font-size: 15px;
-	letter-spacing: -0.5px;
+	font-size: 13px;
+	letter-spacing: 2px;
 	margin-top: 14px;
-}
+	text-transform: uppercase;
+  }
 
-.summary-heading.total-summary-heading {
-	font-size: 18px;
-	font-weight: 800;
-}
 
 .price-summary-wrap {
 	font-size: 14px;
@@ -213,6 +210,9 @@
 .tax-summary-total {
 	font-size: 18px;
 	font-weight: 800;
+	border-top: 1px solid #00000021;
+	padding-top: 7px;
+	margin-top: 14px;
 }
 
 .bed-summary .type-kingbed-twinbed-two {
@@ -232,7 +232,7 @@
 .book-button {
 	padding: 10px;
 	box-sizing: border-box;
-	background: #0064ff;
+	background: #012aff;
 	color: #fff;
 	border-radius: 8px;
 	font-size: 14px;
@@ -240,6 +240,15 @@
 	padding: 10px 22px;
 	display: block;
 	cursor: pointer;
+	transition: 0.3s background-color;
+}
+#woo-bookingpayment:hover,
+.book-button:hover {
+	background: #00abff;
+}
+#woo-bookingpayment:hover:active,
+.book-button:hover:active {
+	background: #015884;
 }
 .book-button.not-fullwidth {
 	display: inline-block;
@@ -254,11 +263,16 @@
 	display: none;
 }
 
+.book-button.booking-disabled {
+	background: #e4e4e4;
+	pointer-events:none;
+}
+
 .summary-icon i {
 	font-size: 20px;
 	top: 13px;
 	position: relative;
-	color: #0b0b0b;
+	color: #8000ff;
 }
 
 .fa-solid.fa-circle-exclamation {
@@ -451,7 +465,7 @@
 }
 
 .stay-summary-wrap {
-	font-size: 10px;
+	font-size: 12px;
 	border-top: 1px solid #d9d7d7;
 	margin-top: 30px;
 	padding-top: 12px;
@@ -515,7 +529,7 @@
 
 .registration-column.registration-column-two {
 	width: 40%;
-	background: #f9f9f9;
+	background: linear-gradient( 90.2deg, rgb(235, 255, 255) 0.3%, rgb(212, 248, 255) 99.8% )
 }
 
 .registration-column.registration-column-one {
@@ -640,21 +654,22 @@
 	text-align: center;
 	border-radius: 5px;
 	font-size: 15px;
-	font-weight: 500;
+	letter-spacing: 0.5px;
+	font-weight: 600;
 	transition: 0.4s background-color;
 }
 
 #bookingDetails:hover,
 .form-search-button:hover {
 	/* Styles for when the button is hovered */
-	background-color: #0064ff;
+	background-color: #012aff;
 	/* Example hover background color */
 }
 
 #bookingDetails:active,
 .form-search-button:active {
 	/* Styles for when the button is clicked/active */
-	background-color: #0064ff;
+	background-color: #012aff;
 	/* Example active background color */
 }
 
@@ -687,8 +702,8 @@
 .form-floating.form-floating-booking-number > .form-control-plaintext:not(:placeholder-shown),
 .form-floating.form-floating-booking-number > .form-control:focus,
 .form-floating.form-floating-booking-number > .form-control:not(:placeholder-shown) {
-	padding-top: 30px;
-	padding-bottom: .625rem;
+	padding-top: 32px;
+	padding-bottom: 12px;
 }
 
 .front-booking-number-container,
@@ -744,8 +759,8 @@
 	width: 100%;
 	position: absolute;
 	width: 270px;
-	left: 30%;
-	top: 152px;
+	right: 80px;
+	top: 67px;
 	border: 1px solid #00000012;
 	padding: 30px 30px 24px;
 	border-radius: 6px;
@@ -818,11 +833,21 @@
 
 #reservation-date {
 	position: absolute;
-	top: 120px;
+	top: 30px;
 	left: 14px;
 	opacity: 0;
 	z-index: -1;
 }
+.reservation-details-status-outer {
+	border-bottom: 3px solid #f00;
+	display: inline-block;
+	color: #ff0000;
+}
+.reservation-details-status-outer.confirmed {
+	border-bottom: 3px solid rgb(0, 17, 255);
+	color: rgb(0, 17, 255);
+}
+
 #activity-reservation-date {
 	position: absolute;
 	top: 25px;
@@ -834,7 +859,7 @@
 	top: 65px;
 }
 .consent-notice {
-	font-size: 12px;
+	font-size: 14px;
 	font-weight: 400;
 	position: relative;
 	top: 6px;
@@ -850,7 +875,7 @@
 .recommended-alt-wrap {
 	padding: 30px;
 	box-sizing: border-box;
-	background: #fbf6f6;
+	background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(234,249,249,0.67) 0.1%, rgba(239,249,251,0.63) 90.1% );
 }
 
 .recommended-alt-title {
@@ -874,13 +899,16 @@
 }
 .recommended-dates-wrap span {
 	margin-right: 10px;
-	background: #fff;
-	padding: 2px 10px;
+	background: #3012ff;
+	padding: 2px 15px;
 	display: inline-block;
 	border-radius: 7px;
 	margin-bottom: 4px;
-	font-size: 12px;
+	font-size: 14px;
 	letter-spacing: 0.6px;
+	color: #fff;
+	font-weight: 500;
+	transition: 0.2s opacity;
 }
 
 .recommended-dates-wrap span:hover {
@@ -890,8 +918,8 @@
 .booking-backto-activitychoice,
 .booking-backto-roomschoice {
 	position: absolute;
-	top: 20px;
-	right: 30px;
+	top: 12px;
+	right: 32px;
 	cursor: pointer;
 	opacity: 1;
 	transition: 0.2s opacity;
@@ -905,25 +933,36 @@
 	text-transform: uppercase;
 	letter-spacing: 1px;
 	font-weight: 500;
+	background: #0070ff;
+	color: #fff;
+	padding: 0 10px;
+	border-radius: 6px;
 }
 .calendar-insights-wrap {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	grid-gap: 10px;
 	padding: 15px 20px;
-	background: #edfdff;
+	background: linear-gradient( 111.2deg, rgb(232, 5, 5) 1.7%, rgb(245, 49, 191) 98.7% );
 	border-radius: 6px;
 	margin-bottom: 5px;
-	color: #595959;
+	color: #fff;
 	font-size: 12px;
 	letter-spacing: 0.8px;
+	font-weight: 700;
 }
 #check-in-display, #check-out-display {
 	border-bottom: 1px solid #00000014;
 	padding-bottom: 16px;
 }
+.entry-content .calendar-insights-wrap strong {
+	font-weight: 600;
+}
 .calendar-insights-wrap span {
-	font-weight: 500;
+	font-weight: 600;
+	background: #0000001a;
+	padding: 3px 7px;
+	border-radius: 5px;
 }
 .registration_form h3 {
 	font-size: 28px;
@@ -938,6 +977,23 @@
 }
 .registration_successful {
 	display: none;
+}
+.reservation-details-status {
+	text-transform: capitalize;
+}
+
+.element-container-group {
+	background: linear-gradient( 174.2deg, rgba(255, 244, 228, 0.6) 7.1%, rgba(240, 246, 238, 0.18) 67.4% );
+}
+.entry-content .element-container-group h3 {
+	font-size: 20px;
+	margin-bottom: 20px;
+}
+.entry-content .element-container-group p {
+	margin-bottom: 8px;
+}
+.entry-content .element-container-group .reservation-details {
+	margin-bottom: 30px;
 }
 
 .activity-schedule {
@@ -1061,18 +1117,18 @@
 }
 
 .room-details-column {
-	font-size: 12px;
+	font-size: 14px;
 	color: #6f6f6f;
 	line-height: 1.7;
 	font-weight: 400;
 }
 .room-details .facility {
-	font-size: 11px;
+	font-size: 12px;
 	font-weight: 400;
 }
 .stay-summary-wrap {
 	font-size: 10px;
-	border-top: 1px solid #d9d7d7;
+	border-top: 1px solid #00000021;
 	margin-top: 30px;
 	padding-top: 12px;
 	text-transform: uppercase;
@@ -1080,4 +1136,40 @@
 	line-height: 1.9;
 	font-weight: 500;
 	color: #000;
+	border-bottom: 1px solid #00000021;
+	padding-bottom: 16px;
 }
+
+/* HTML: <div class="loader"></div> */
+.preloader-element-outer {
+
+	display: inline-block;
+}
+.preloader-element {
+	width: 15px;
+	aspect-ratio: 1;
+	border-radius: 50%;
+	display: block;
+  position: relative;
+  left: 10px;
+	border: 2px solid #514b82;
+	animation:
+	  l20-1 0.8s infinite linear alternate,
+	  l20-2 1.6s infinite linear;
+	  opacity: 0;
+  }
+  @keyframes l20-1{
+	 0%    {clip-path: polygon(50% 50%,0       0,  50%   0%,  50%    0%, 50%    0%, 50%    0%, 50%    0% )}
+	 12.5% {clip-path: polygon(50% 50%,0       0,  50%   0%,  100%   0%, 100%   0%, 100%   0%, 100%   0% )}
+	 25%   {clip-path: polygon(50% 50%,0       0,  50%   0%,  100%   0%, 100% 100%, 100% 100%, 100% 100% )}
+	 50%   {clip-path: polygon(50% 50%,0       0,  50%   0%,  100%   0%, 100% 100%, 50%  100%, 0%   100% )}
+	 62.5% {clip-path: polygon(50% 50%,100%    0, 100%   0%,  100%   0%, 100% 100%, 50%  100%, 0%   100% )}
+	 75%   {clip-path: polygon(50% 50%,100% 100%, 100% 100%,  100% 100%, 100% 100%, 50%  100%, 0%   100% )}
+	 100%  {clip-path: polygon(50% 50%,50%  100%,  50% 100%,   50% 100%,  50% 100%, 50%  100%, 0%   100% )}
+  }
+  @keyframes l20-2{ 
+	0%    {transform:scaleY(1)  rotate(0deg)}
+	49.99%{transform:scaleY(1)  rotate(135deg)}
+	50%   {transform:scaleY(-1) rotate(0deg)}
+	100%  {transform:scaleY(-1) rotate(-135deg)}
+  }

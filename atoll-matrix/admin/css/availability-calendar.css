@@ -439,7 +439,7 @@ ul.existing-customer li {
 #bookingDetails:hover,
 #bookingSearch:hover {
 	/* Styles for when the button is hovered */
-	background-color: #0064ff;
+	background-color: #012aff;
 	/* Example hover background color */
 }
 
@@ -448,7 +448,7 @@ ul.existing-customer li {
 #bookingDetails:active,
 #bookingSearch:active {
 	/* Styles for when the button is clicked/active */
-	background-color: #0064ff;
+	background-color: #012aff;
 	/* Example active background color */
 }
 

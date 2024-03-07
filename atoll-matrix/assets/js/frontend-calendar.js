@@ -66,6 +66,9 @@
 		});
 		
 		function processRoomPrice(roomOccupiedGroup) {
+
+			$('.preloader-element').velocity('fadeIn');
+			$('.choose-room-button').addClass('booking-disabled');
 			$('.room-occupied-group').removeClass('room-selected');
 			roomOccupiedGroup.addClass('room-selected');
 
@@ -103,6 +106,8 @@
 							price_element.html(response);
 						}
 					});
+					$('.preloader-element').velocity('fadeOut');
+					$('.choose-room-button').removeClass('booking-disabled');
 					console.log(response);
 					// You can update the page content or perform other actions here
 				}
@@ -136,6 +141,7 @@
 
 		// Process Room Data
 		function processRoomData(roomOccupiedGroup) {
+			$('.choose-room-button').addClass('booking-disabled');
 			$('.room-occupied-group').removeClass('room-selected');
 			roomOccupiedGroup.addClass('room-selected');
 
@@ -171,7 +177,8 @@
 					$('#reservation-data').velocity('fadeOut', {
 						duration: 350,
 						complete: function () {
-							$('.registration_request').velocity('fadeIn')
+							$('.registration_request').velocity('fadeIn');
+							$('.choose-room-button').removeClass('booking-disabled');
 						}
 					});
 					console.log(response);
@@ -181,7 +188,7 @@
 		}
 
 		// Process room choice and registration
-		$(document).on('click', '#reservation-data .choose-room-button', function () {
+		$(document).on('click', '#reservation-data .choose-room-button:not(".booking-disabled")', function () {
 
 			var roomOccupiedGroup = $(this).closest('.room-occupied-group');
 			processRoomData(roomOccupiedGroup);
@@ -558,6 +565,7 @@
 			e.preventDefault();
 
 			const $form = $('#hotel-room-listing');
+			$('#booking-register').addClass('booking-disabled');
 
 			// Check if form is valid
 			if ($form[0].checkValidity() === false) {
@@ -566,6 +574,7 @@
 				// });
 				e.stopPropagation(); // Stop further handling of the click event
 				$form.addClass('was-validated'); // Optional: for Bootstrap validation styling
+				$('#booking-register').removeClass('booking-disabled');
 				return; // Do not proceed to AJAX if validation fails
 			}
 

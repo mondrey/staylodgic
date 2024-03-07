@@ -349,15 +349,13 @@ class Booking
         // error_log( '-------------------- availability percent check');
         ?>
 		<div class="atollmatrix-content">
-            <div id="hotel-booking-form">
-
-            <div class="calendar-insights-wrap">
-                <div id="check-in-display">Check-in: <span>-</span></div>
-                <div id="check-out-display">Check-out: <span>-</span></div>
-                <div id="last-night-display">Last-night: <span>-</span></div>
-                <div id="nights-display">Nights: <span>-</span></div>
+             <div class="calendar-insights-wrap">
+                <div id="check-in-display"><strong>Check-in:</strong> <span>-</span></div>
+                <div id="check-out-display"><strong>Check-out:</strong> <span>-</span></div>
+                <div id="last-night-display"><strong>Last-night:</strong> <span>-</span></div>
+                <div id="nights-display"><strong>Nights:</strong> <span>-</span></div>
             </div>
-
+            <div id="hotel-booking-form">
                 <div class="front-booking-search">
                     <div class="front-booking-calendar-wrap">
                         <div class="front-booking-calendar-icon"><i class="fa-solid fa-calendar-days"></i></div>
@@ -857,6 +855,9 @@ return ob_get_clean();
                 if ( isset( $this->bookingSearchResults[ $id ]['discountlabel'] ) ) {
                     $html .= '<div class="room-price-discount-label">'. $this->bookingSearchResults[ $id ]['discountlabel'] . '</div>';
                 }
+
+                $html .= '<div class="preloader-element-outer"><div class="preloader-element"></div></div>';
+
                 $html .= self::generate_MealPlanIncluded($id);
 
                 $html .= '<div class="roomchoice-selection">';
