@@ -535,20 +535,24 @@ return ob_get_clean();
             $staylast    = $key[ 'staylast' ];
             $checkInAlt  = $key[ 'check-in' ];
             $checkOutAlt = $key[ 'check-out' ];
-
+        
             // Format the dates as "Month Day" (e.g., "July 13th")
             $formattedFirstDate = date('F jS', strtotime($checkInAlt));
-
-            $formattedNextDay = date('F jS', strtotime($checkOutAlt));
+        
+            // Add one day to the checkout date
+            $checkoutPlusOne = date('Y-m-d', strtotime($checkOutAlt . ' +1 day'));
+        
+            // Format the next day
+            $formattedNextDay = date('F jS', strtotime($checkoutPlusOne));
             if (date('F', strtotime($staylast)) !== date('F', strtotime($checkInAlt))) {
-                $formattedNextDay = date('F jS', strtotime($checkOutAlt));
+                $formattedNextDay = date('F jS', strtotime($checkoutPlusOne));
             } else {
-                $formattedNextDay = date('jS', strtotime($checkOutAlt));
+                $formattedNextDay = date('jS', strtotime($checkoutPlusOne));
             }
-
-            $output .= "<span data-check-staylast='{$staylast}' data-check-in='{$checkInAlt}' data-check-out='{$checkOutAlt}'>{$formattedFirstDate} - {$formattedNextDay}</span>";
+        
+            $output .= "<span data-check-staylast='{$staylast}' data-check-in='{$checkInAlt}' data-check-out='{$checkoutPlusOne}'>{$formattedFirstDate} - {$formattedNextDay}</span>";
         }
-
+        
         // Remove the trailing comma and space
         $output = rtrim($output, ', ');
 

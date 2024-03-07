@@ -981,6 +981,9 @@
 .reservation-details-status {
 	text-transform: capitalize;
 }
+.entry-content .registration-successful-inner h3 {
+	font-size: 24px;
+}
 
 .element-container-group {
 	background: linear-gradient( 174.2deg, rgba(255, 244, 228, 0.6) 7.1%, rgba(240, 246, 238, 0.18) 67.4% );

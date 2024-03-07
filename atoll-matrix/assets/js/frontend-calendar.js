@@ -264,13 +264,15 @@
 				let checkInDate = selectedDates[0];
 				let checkOutDate = new Date(selectedDates[1]);
 				let lastNightDate = new Date(checkOutDate);
-				checkOutDate.setDate(checkOutDate.getDate() + 1); // Increment checkout date
+				checkOutDate.setDate(checkOutDate.getDate()); // Increment checkout date
+				lastNightDate.setDate(checkOutDate.getDate() - 1); // Increment checkout date
 				const nights = (checkOutDate - checkInDate) / (1000 * 60 * 60 * 24);
 				checkInSpan.textContent = formatDateToLocale(checkInDate);
 				checkOutSpan.textContent = formatDateToLocale(checkOutDate);
 				lastNightSpan.textContent = formatDateToLocale(lastNightDate); // Update last night
 				nightsSpan.textContent = nights.toString();
 			}
+			
 		}
 
 		// Helper function to format date to YYYY-MM-DD
@@ -369,15 +371,14 @@
 
 
 		function ReservationDatePicker() {
-
 			var flatpickrInstance;
-
+		
 			// Function to get fully booked dates from the data attribute
 			function getFullyBookedDates() {
 				var bookedData = document.getElementById("reservation-date").getAttribute("data-booked");
 				return JSON.parse(bookedData);
 			}
-
+		
 			// Function to disable dates based on the fully booked dates
 			function disableFullyBookedDates(date) {
 				var fullyBookedDates = getFullyBookedDates();
@@ -385,17 +386,17 @@
 				var dateString = date.getFullYear() + '-' +
 					('0' + (date.getMonth() + 1)).slice(-2) + '-' +
 					('0' + date.getDate()).slice(-2);
-
+		
 				if (Array.isArray(fullyBookedDates)) {
 					return fullyBookedDates.includes(dateString);
 				} else if (typeof fullyBookedDates === 'object') {
 					// Check if the date is in the object keys
 					return fullyBookedDates.hasOwnProperty(dateString);
 				}
-
+		
 				return false;
 			}
-
+		
 			if (document.getElementById('reservation-date')) {
 				flatpickrInstance = flatpickr("#reservation-date", {
 					mode: "range",
@@ -406,24 +407,33 @@
 						firstDayOfWeek: 1 // Start week on Monday
 					},
 					minDate: "today", // Disable navigation to months previous to the current month
-					onMonthChange: function (selectedDates, dateStr, instance) {
+					onMonthChange: function(selectedDates, dateStr, instance) {
 						updateInfoDisplay(selectedDates);
 					},
-					onChange: function (selectedDates, dateStr, instance) {
+					onChange: function(selectedDates, dateStr, instance) {
 						if (selectedDates.length === 2) {
 							updateSelectedDates(selectedDates[0], selectedDates[1]);
 						}
 						updateInfoDisplay(selectedDates);
 					},
+					onDayCreate: function(dObj, dStr, fp, dayElem) {
+						// Disable the start date in the end date selection
+						if (fp.selectedDates.length === 1 && dayElem.dateObj.getTime() === fp.selectedDates[0].getTime()) {
+							dayElem.classList.add("disabled");
+							dayElem.onclick = function() {
+								return false;
+							};
+						}
+					},
 					disable: [
 						// Use the disableFullyBookedDates function to disable specific dates
-						function (date) {
+						function(date) {
 							return disableFullyBookedDates(date);
 						}
 					]
 				});
 			}
-
+		
 			if (document.getElementById('activity-reservation-date')) {
 				flatpickrInstance = flatpickr("#activity-reservation-date", {
 					mode: "single",
@@ -434,29 +444,28 @@
 						firstDayOfWeek: 1 // Start week on Monday
 					},
 					minDate: "today",
-					onChange: function (selectedDates, dateStr, instance) {
+					onChange: function(selectedDates, dateStr, instance) {
 						var formattedCheckIn = formatDate(selectedDates[0]);
 						$('.front-booking-calendar-date').text(formattedCheckIn);
-
 					},
 				});
 			}
-
+		
 			var calendarWrap = document.querySelector('.front-booking-calendar-wrap');
 			if (calendarWrap) {
-				calendarWrap.addEventListener('click', function () {
+				calendarWrap.addEventListener('click', function() {
 					flatpickrInstance.open();
 				});
 			} else {
 				console.log("Element with class 'front-booking-calendar-wrap' not found.");
 			}
-
+		
 			return flatpickrInstance;
 		}
-
-
+		
 		// Initialize flatpickr and get the instance
 		var flatpickrInstance = ReservationDatePicker();
+		
 
 
 
@@ -494,71 +503,95 @@
 
 			console.log( inputVal );
 			if ( inputVal == '') {
+				console.log( 'One' );
 				// Only one date in input field, get date from #check-in-display
-				var checkInDateStr = $('#check-in-display span').text();
-				checkInDate = new Date(checkInDateStr);
-				checkOutDate = new Date(checkInDateStr); // Use the same date for check-out
-				updateSelectedDates(checkInDate, checkOutDate);
-				var formattedCheckIn = formatDateToYYYYMMDD(checkInDate);
-				var formattedCheckOut = formatDateToYYYYMMDD(checkOutDate);
-				reservationDate = formattedCheckIn + ' to ' + formattedCheckOut;
-				console.log( reservationDate );
+				// var checkInDateStr = $('#check-in-display span').text();
+				// checkInDate = new Date(checkInDateStr);
+				// checkOutDate = new Date(checkInDateStr); // Use the same date for check-out
+				// updateSelectedDates(checkInDate, checkOutDate);
+				// var formattedCheckIn = formatDateToYYYYMMDD(checkInDate);
+				// var formattedCheckOut = formatDateToYYYYMMDD(checkOutDate);
+				// reservationDate = formattedCheckIn + ' to ' + formattedCheckOut;
+				// console.log( reservationDate );
 			} else {
-				reservationDate = $('#reservation-date').val();
-				console.log( reservationDate );
-			}
+				//reservationDate = $('#reservation-date').val();
+				console.log( 'Two' );
+				//console.log( reservationDate );
 
-			var bookingNumber = $('#booking-number').val();
-			var numberOfAdults = $('#number-of-adults').val();
-			var numberOfChildren = $('#number-of-children').val();
-			var atollmatrix_searchbox_nonce = $('input[name="atollmatrix_searchbox_nonce"]').val();
+				var inputVal = $('#reservation-date').val();
+				var dates = inputVal.split(' to ');
+				
+				if (dates.length === 2) {
+					// Parse the second date and subtract one day
+					var endDate = new Date(dates[1]);
+					endDate.setDate(endDate.getDate() - 1);
+				
+					// Format the date back into a string in the format "YYYY-MM-DD"
+					var formattedEndDate = endDate.getFullYear() + '-' +
+						('0' + (endDate.getMonth() + 1)).slice(-2) + '-' +
+						('0' + endDate.getDate()).slice(-2);
+				
+					// Combine the first date and the adjusted second date
+					var reservationDate = dates[0] + ' to ' + formattedEndDate;
+				
+					console.log(reservationDate); // Output the combined dates
+			
 
-			var childrenAge = [];
+					var bookingNumber = $('#booking-number').val();
+					var numberOfAdults = $('#number-of-adults').val();
+					var numberOfChildren = $('#number-of-children').val();
+					var atollmatrix_searchbox_nonce = $('input[name="atollmatrix_searchbox_nonce"]').val();
 
-			// Loop through all select elements with the class 'children-age-selector'
-			$('#guest-age input[name="children_age[]"]').each(function() {
-				childrenAge.push($(this).val());
-			});
+					var childrenAge = [];
 
-			$.ajax({
-				url: frontendAjax.ajaxurl, // the localized URL
-				type: 'POST',
-				data: {
-					action: 'booking_BookingSearch', // the PHP function to trigger
-					booking_number: bookingNumber,
-					reservation_date: reservationDate,
-					number_of_adults: numberOfAdults,
-					number_of_children: numberOfChildren,
-					children_age: childrenAge,
-					atollmatrix_searchbox_nonce: atollmatrix_searchbox_nonce
-				},
-				success: function (response) {
+					// Loop through all select elements with the class 'children-age-selector'
+					$('#guest-age input[name="children_age[]"]').each(function() {
+						childrenAge.push($(this).val());
+					});
 
-					$('.recommended-alt-wrap').hide();
-					var parsedResponse = JSON.parse(response);
-					console.log(parsedResponse); // Output: The parsed JavaScript object or array
-					// You can now work with the parsed data
+					$.ajax({
+						url: frontendAjax.ajaxurl, // the localized URL
+						type: 'POST',
+						data: {
+							action: 'booking_BookingSearch', // the PHP function to trigger
+							booking_number: bookingNumber,
+							reservation_date: reservationDate,
+							number_of_adults: numberOfAdults,
+							number_of_children: numberOfChildren,
+							children_age: childrenAge,
+							atollmatrix_searchbox_nonce: atollmatrix_searchbox_nonce
+						},
+						success: function (response) {
 
-					// Check if the array is null or empty
-					if (parsedResponse.alt_recommends === false || parsedResponse.alt_recommends.length === 0) {
-						// The array is empty
-						var storeData = []; // Create a new empty array
-						storeData = parsedResponse.booking_data;
-						sessionStorage.setItem(bookingNumber, JSON.stringify(storeData));
-						$('#available-list-ajax').html(parsedResponse.roomlist);
-						$('#available-list-ajax').show();
-					} else {
-						// The array is not empty
-						$('#available-list-ajax').hide();
-						$('.recommended-alt-wrap').show();
-						$('#recommended-alt-dates').html(parsedResponse.alt_recommends);
-					}
-				},
-				error: function (err) {
-					// Handle error here
-					console.log(err);
+							$('.recommended-alt-wrap').hide();
+							var parsedResponse = JSON.parse(response);
+							console.log(parsedResponse); // Output: The parsed JavaScript object or array
+							// You can now work with the parsed data
+
+							// Check if the array is null or empty
+							if (parsedResponse.alt_recommends === false || parsedResponse.alt_recommends.length === 0) {
+								// The array is empty
+								var storeData = []; // Create a new empty array
+								storeData = parsedResponse.booking_data;
+								sessionStorage.setItem(bookingNumber, JSON.stringify(storeData));
+								$('#available-list-ajax').html(parsedResponse.roomlist);
+								$('#available-list-ajax').show();
+							} else {
+								// The array is not empty
+								$('#available-list-ajax').hide();
+								$('.recommended-alt-wrap').show();
+								$('#recommended-alt-dates').html(parsedResponse.alt_recommends);
+							}
+						},
+						error: function (err) {
+							// Handle error here
+							console.log(err);
+						}
+					});
+				} else {
+					console.log("Invalid date range format.");
 				}
-			});
+			}
 		});
 
 		$(document).on('click', '#booking-register', function (e) {
