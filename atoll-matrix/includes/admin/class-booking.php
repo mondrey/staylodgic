@@ -700,12 +700,19 @@ return ob_get_clean();
         $list = self::list_Rooms_And_Quantities();
 
         ob_start();
-        echo '<form action="" method="post" id="hotel-room-listing" class="needs-validation" novalidate>';
-        $roomlistingbox = wp_create_nonce('atollmatrix-roomlistingbox-nonce');
-        echo '<input type="hidden" name="atollmatrix_roomlistingbox_nonce" value="' . esc_attr($roomlistingbox) . '" />';
-        echo '<div id="reservation-data" data-bookingnumber="' . esc_attr($this->bookingNumber) . '" data-children="' . esc_attr($this->childrenGuests) . '" data-adults="' . esc_attr($this->adultGuests) . '" data-guests="' . esc_attr($this->totalGuests) . '" data-checkin="' . esc_attr($this->checkinDate) . '" data-checkout="' . esc_attr($this->checkoutDate) . '">';
-        echo $list;
-        echo '</div>';
+        if ( $list ) {
+            echo '<form action="" method="post" id="hotel-room-listing" class="needs-validation" novalidate>';
+            $roomlistingbox = wp_create_nonce('atollmatrix-roomlistingbox-nonce');
+            echo '<input type="hidden" name="atollmatrix_roomlistingbox_nonce" value="' . esc_attr($roomlistingbox) . '" />';
+            echo '<div id="reservation-data" data-bookingnumber="' . esc_attr($this->bookingNumber) . '" data-children="' . esc_attr($this->childrenGuests) . '" data-adults="' . esc_attr($this->adultGuests) . '" data-guests="' . esc_attr($this->totalGuests) . '" data-checkin="' . esc_attr($this->checkinDate) . '" data-checkout="' . esc_attr($this->checkoutDate) . '">';
+            echo $list;
+            echo '</div>';
+        } else {
+            echo '<div class="no-rooms-found">';
+            echo '<div class="no-rooms-title">'. __('Rooms unavailable for choice','atollmatrix') .'</div>';
+            echo '<div class="no-rooms-description">'. __('Please choose a different range.','atollmatrix') .'</div>';
+            echo '</div>';
+        }
         echo self::register_Guest_Form();
         echo '</form>';
         $output                       = ob_get_clean();

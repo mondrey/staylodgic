@@ -584,7 +584,7 @@
 
 							$('.recommended-alt-wrap').hide();
 							var parsedResponse = JSON.parse(response);
-							console.log(parsedResponse); // Output: The parsed JavaScript object or array
+							console.log(parsedResponse.booking_data.rooms); // Output: The parsed JavaScript object or array
 							// You can now work with the parsed data
 
 							// Check if the array is null or empty
