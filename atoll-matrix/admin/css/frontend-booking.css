@@ -691,6 +691,9 @@
 	padding-right: 10px;
 }
 
+.form-check-input:hover {
+	cursor: pointer;
+}
 
 .form-floating.form-floating-booking-number > .form-control,
 .form-floating.form-floating-booking-number > .form-control-plaintext {

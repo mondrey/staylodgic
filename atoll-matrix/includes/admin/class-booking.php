@@ -245,7 +245,7 @@ class Booking
 
         $html = '<div id="booking-summary-wrap">';
         if ('' !== $room_name) {
-            $html .= '<div class="room-summary"><span class="summary-room-name">' . $room_name . '</span></div>';
+            $html .= '<div class="room-summary"><span class="summary-room-name">' . esc_html( $room_name ) . '</span></div>';
         }
 
         $html .= '<div class="main-summary-wrap">';
@@ -271,7 +271,7 @@ class Booking
             }
             if ('none' !== $mealtype) {
                 $html .= '<div class="summary-icon mealplan-summary-icon"><i class="fa-solid fa-utensils"></i></div>';
-                $html .= '<div class="summary-heading mealplan-summary-heading">Mealplan:</div>';
+                $html .= '<div class="summary-heading mealplan-summary-heading">'. __('Mealplan','atollmatrix') . ':</div>';
                 $html .= '<div class="meal-summary"><span class="summary-mealtype-name">' . atollmatrix_get_mealplan_labels($mealtype) . '</span></div>';
             }
             $html .= '</div>';
@@ -280,14 +280,14 @@ class Booking
         $html .= '<div class="stay-summary-wrap">';
 
         $html .= '<div class="summary-icon checkin-summary-icon"><i class="fa-regular fa-calendar-check"></i></div>';
-        $html .= '<div class="summary-heading checkin-summary-heading">Check-in:</div>';
-        $html .= '<div class="checkin-summary">' . $checkin . '</div>';
+        $html .= '<div class="summary-heading checkin-summary-heading">'. __('Check-in:','atollmatrix') . '</div>';
+        $html .= '<div class="checkin-summary">' . esc_html( $checkin ) . '</div>';
         $html .= '<div class="summary-heading checkout-summary-heading">Check-out:</div>';
-        $html .= '<div class="checkout-summary">' . $checkout . '</div>';
+        $html .= '<div class="checkout-summary">' . esc_html( $checkout ) . '</div>';
 
         $html .= '<div class="summary-icon stay-summary-icon"><i class="fa-solid fa-moon"></i></div>';
-        $html .= '<div class="summary-heading staynight-summary-heading">Nights:</div>';
-        $html .= '<div class="staynight-summary">' . $staynights . '</div>';
+        $html .= '<div class="summary-heading staynight-summary-heading">'. __('Nights:','atollmatrix') . '</div>';
+        $html .= '<div class="staynight-summary">' . esc_html( $staynights ) . '</div>';
         $html .= '</div>';
 
         if ('' !== $totalroomrate) {
@@ -295,16 +295,16 @@ class Booking
             $html .= '<div class="price-summary-wrap">';
 
             if (atollmatrix_has_tax()) {
-                $html .= '<div class="summary-heading total-summary-heading">Subtotal:</div>';
+                $html .= '<div class="summary-heading total-summary-heading">'. __('Subtotal:','atollmatrix') . '</div>';
                 $html .= '<div class="price-summary">' . atollmatrix_price($subtotalprice) . '</div>';
             }
 
-            $html .= '<div class="summary-heading total-summary-heading">Total:</div>';
+            $html .= '<div class="summary-heading total-summary-heading">'. __('Total:','atollmatrix') . '</div>';
 
             $tax_instance = new \AtollMatrix\Tax('room');
             $totalprice = $tax_instance->apply_tax($subtotalprice, $staynights, $totalguests, $output = 'html');
             foreach ($totalprice[ 'details' ] as $totalID => $totalvalue) {
-                $html .= '<div class="tax-summary tax-summary-details">' . $totalvalue . '</div>';
+                $html .= '<div class="tax-summary tax-summary-details">' . wp_kses( $totalvalue, atollmatrix_get_allowed_tags() ) . '</div>';
             }
 
             $html .= '<div class="tax-summary tax-summary-total">' . atollmatrix_price($totalprice[ 'total' ]) . '</div>';
@@ -314,7 +314,7 @@ class Booking
         if ('' !== $room_id) {
             $html .= '<div class="form-group">';
             $html .= '<div id="bookingResponse" class="booking-response"></div>';
-            $html .= '<div id="booking-register" class="book-button">Book this room</div>';
+            $html .= '<div id="booking-register" class="book-button">'. __('Book this room','atollmatrix') . '</div>';
             // $html .= self::paymentHelperButton($totalprice[ 'total' ], $bookingnumber);
             $html .= '</div>';
         }
@@ -349,15 +349,11 @@ class Booking
         // error_log( '-------------------- availability percent check');
         ?>
 		<div class="atollmatrix-content">
-             <div class="calendar-insights-wrap">
-                <div id="check-in-display"><strong>Stay:</strong> <span>-</span></div>
-                <div id="nights-display"><strong>Nights:</strong> <span>-</span></div>
-            </div>
             <div id="hotel-booking-form">
                 <div class="front-booking-search">
                     <div class="front-booking-calendar-wrap">
                         <div class="front-booking-calendar-icon"><i class="fa-solid fa-calendar-days"></i></div>
-                        <div class="front-booking-calendar-date">Choose stay dates</div>
+                        <div class="front-booking-calendar-date"><?php _e('Choose stay dates','atollmatrix'); ?></div>
                     </div>
                     <div class="front-booking-guests-wrap">
                         <div class="front-booking-guests-container"> <!-- New container -->
@@ -368,7 +364,7 @@ class Booking
                                 <div class="front-booking-guest-child-icon"><span class="guest-child-svg"></span><span class="front-booking-adult-child-value">0</span></div>
                             </div>
                         </div>
-                        <div id="bookingSearch" class="form-search-button">Search</div>
+                        <div id="bookingSearch" class="form-search-button"><?php _e('Search','atollmatrix'); ?></div>
                     </div>
                 </div>
 
@@ -380,7 +376,7 @@ class Booking
                 <div class="atollmatrix_reservation_room_guests_wrap">
                     <div id="atollmatrix_reservation_room_adults_wrap" class="number-input occupant-adult occupants-range">
                         <div class="column-one">
-                            <label for="number-of-adults">Adults</label>
+                            <label for="number-of-adults"><?php _e('Adults','atollmatrix'); ?></label>
                         </div>
                         <div class="column-two">
                             <span class="minus-btn">-</span>
@@ -390,7 +386,7 @@ class Booking
                     </div>
                     <div id="atollmatrix_reservation_room_children_wrap" class="number-input occupant-child occupants-range">
                         <div class="column-one">
-                            <label for="number-of-adults">Children</label>
+                            <label for="number-of-adults"><?php _e('Children','atollmatrix'); ?></label>
                         </div>
                         <div class="column-two">
                             <span class="minus-btn">-</span>
@@ -402,7 +398,7 @@ class Booking
                     <div id="guest-age"></div>
                 </div>
 				<div class="recommended-alt-wrap">
-					<div class="recommended-alt-title">Rooms unavailable</div><div class="recommended-alt-description">Following range from your selection is avaiable.</div>
+					<div class="recommended-alt-title"><?php _e('Rooms unavailable','atollmatrix'); ?></div><div class="recommended-alt-description"><?php _e('Following range from your selection is avaiable.','atollmatrix'); ?></div>
 					<div id="recommended-alt-dates"></div>
 				</div>
 			<div class="available-list">
@@ -427,11 +423,11 @@ return ob_get_clean();
                         <div class="front-booking-number-container">
                             <div class="form-group form-floating form-floating-booking-number form-bookingnumber-request">
                                 <input type="hidden" name="atollmatrix_bookingdetails_nonce" value="<?php echo esc_attr($atollmatrix_bookingdetails_nonce); ?>" />
-                                <input placeholder="Booking No." type="text" class="form-control" id="booking_number" name="booking_number" required>
-                                <label for="booking_number" class="control-label">Booking No.</label>
+                                <input placeholder="<?php _e('Booking No.','atollmatrix'); ?>" type="text" class="form-control" id="booking_number" name="booking_number" required>
+                                <label for="booking_number" class="control-label"><?php _e('Booking No.','atollmatrix'); ?></label>
                             </div>
                         </div>
-                        <div data-request="bookingdetails" id="bookingDetails" class="form-search-button">Search</div>
+                        <div data-request="bookingdetails" id="bookingDetails" class="form-search-button"><?php _e('Search','atollmatrix'); ?></div>
                     </div>
                 </div>
 
@@ -548,7 +544,7 @@ return ob_get_clean();
                 $formattedNextDay = date('jS', strtotime($checkoutPlusOne));
             }
         
-            $output .= "<span data-check-staylast='{$staylast}' data-check-in='{$checkInAlt}' data-check-out='{$checkoutPlusOne}'>{$formattedFirstDate} - {$formattedNextDay}</span>";
+            $output .= "<span data-check-staylast='".esc_attr($staylast)."' data-check-in='".esc_attr($checkInAlt)."' data-check-out='".esc_attr($checkoutPlusOne)."'>".esc_attr($formattedFirstDate)." - ".esc_attr($formattedNextDay)."</span>";
         }
         
         // Remove the trailing comma and space
@@ -669,7 +665,7 @@ return ob_get_clean();
         $this->bookingSearchResults[ 'chargeableguests' ] = $this->totalChargeableGuests;
 
         // Perform your query here, this is just an example
-        $result = "Check-in Date: $checkinDate, Check-out Date: $checkoutDate, Number of Adults: $number_of_adults, Number of Children: $number_of_children";
+        //$result = "Check-in Date: $checkinDate, Check-out Date: $checkoutDate, Number of Adults: $number_of_adults, Number of Children: $number_of_children";
         // error_log(print_r($result, true));
         $room_instance = new \AtollMatrix\Rooms();
 
@@ -707,7 +703,7 @@ return ob_get_clean();
         echo '<form action="" method="post" id="hotel-room-listing" class="needs-validation" novalidate>';
         $roomlistingbox = wp_create_nonce('atollmatrix-roomlistingbox-nonce');
         echo '<input type="hidden" name="atollmatrix_roomlistingbox_nonce" value="' . esc_attr($roomlistingbox) . '" />';
-        echo '<div id="reservation-data" data-bookingnumber="' . $this->bookingNumber . '" data-children="' . $this->childrenGuests . '" data-adults="' . $this->adultGuests . '" data-guests="' . $this->totalGuests . '" data-checkin="' . $this->checkinDate . '" data-checkout="' . $this->checkoutDate . '">';
+        echo '<div id="reservation-data" data-bookingnumber="' . esc_attr($this->bookingNumber) . '" data-children="' . esc_attr($this->childrenGuests) . '" data-adults="' . esc_attr($this->adultGuests) . '" data-guests="' . esc_attr($this->totalGuests) . '" data-checkin="' . esc_attr($this->checkinDate) . '" data-checkout="' . esc_attr($this->checkoutDate) . '">';
         echo $list;
         echo '</div>';
         echo self::register_Guest_Form();
@@ -776,7 +772,7 @@ return ob_get_clean();
             $max_guest_number       = intval($this->canAccomodate[ $id ][ 'guests' ]);
             $max_child_guest_number = intval($this->canAccomodate[ $id ][ 'guests' ] - 1);
             // Append a div for the room with the room ID as a data attribute
-            $html .= '<div class="room-occupied-group" data-adults="' . $this->canAccomodate[ $id ][ 'adults' ] . '" data-children="' . $this->canAccomodate[ $id ][ 'children' ] . '" data-guests="' . $this->canAccomodate[ $id ][ 'guests' ] . '" data-room-id="' . $id . '">';
+            $html .= '<div class="room-occupied-group" data-adults="' . esc_attr($this->canAccomodate[ $id ][ 'adults' ]) . '" data-children="' . esc_attr($this->canAccomodate[ $id ][ 'children' ]) . '" data-guests="' . esc_attr($this->canAccomodate[ $id ][ 'guests' ]) . '" data-room-id="' . esc_attr($id) . '">';
             $html .= '<div class="room-details">';
 
             foreach ($room_info as $quantity => $title) {
@@ -796,13 +792,13 @@ return ob_get_clean();
                     $roomview       = $room_data[ "atollmatrix_roomview" ][ 0 ];
                     $roomview_array = atollmatrix_get_room_views();
                     if (array_key_exists($roomview, $roomview_array)) {
-                        $html .= '<div class="room-summary-roomview"><span class="room-summary-icon"><i class="fa-regular fa-eye"></i></span>' . $roomview_array[ $roomview ] . '</div>';
+                        $html .= '<div class="room-summary-roomview"><span class="room-summary-icon"><i class="fa-regular fa-eye"></i></span>' . esc_html($roomview_array[ $roomview ]) . '</div>';
                     }
                 }
 
                 if (isset($room_data[ "atollmatrix_room_size" ][ 0 ])) {
                     $roomsize = $room_data[ "atollmatrix_room_size" ][ 0 ];
-                    $html .= '<div class="room-summary-roomsize"><span class="room-summary-icon"><i class="fa-solid fa-vector-square"></i></span>' . $roomsize . ' ft²</div>';
+                    $html .= '<div class="room-summary-roomsize"><span class="room-summary-icon"><i class="fa-solid fa-vector-square"></i></span>' . esc_html($roomsize) . ' ft²</div>';
                 }
                 $html .= '</div>';
 
@@ -811,13 +807,13 @@ return ob_get_clean();
 
                 $this->bookingSearchResults[ $id ][ 'roomtitle' ] = $title;
 
-                $html .= '<h2>' . $title . '</h2>';
+                $html .= '<h2>' . esc_html($title) . '</h2>';
 
                 $html .= '</div>';
 
                 if (isset($room_data[ "atollmatrix_room_desc" ][ 0 ])) {
                     $room_desc = $room_data[ "atollmatrix_room_desc" ][ 0 ];
-                    $html .= '<div class="room-summary-roomdesc">' . $room_desc . '</div>';
+                    $html .= '<div class="room-summary-roomdesc">' . esc_html($room_desc) . '</div>';
                 }
 
                 $html .= '<div class="room-details-facilities">';
@@ -856,7 +852,7 @@ return ob_get_clean();
                 $html .= '<div class="room-price-total" data-roomprice="' . esc_attr($total_roomrate) . '">' . atollmatrix_price($total_roomrate) . '</div>';
                 $html .= '<div class="preloader-element-outer"><div class="preloader-element"></div></div>';
                 if ( isset( $this->bookingSearchResults[ $id ]['discountlabel'] ) ) {
-                    $html .= '<div class="room-price-discount-label">'. $this->bookingSearchResults[ $id ]['discountlabel'] . '</div>';
+                    $html .= '<div class="room-price-discount-label">'. esc_html($this->bookingSearchResults[ $id ]['discountlabel']) . '</div>';
                 }
 
                 $html .= self::generate_MealPlanIncluded($id);
@@ -867,7 +863,7 @@ return ob_get_clean();
                 $html .= '<div class="bedlayout-wrap">';
                 $html .= '<div class="room-summary-heading room-bedlayout-heading" for="room-number-input">Bed Layout</div>';
                 $html .= '</div>';
-                $html .= '<input class="roomchoice" name="room[' . $id . '][quantity]" type="hidden" data-type="room-number" data-roominputid="' . $id . '" data-roomqty="' . $quantity . '" id="room-input-' . $id . '" min="0" max="' . $quantity . '" value="1">';
+                $html .= '<input class="roomchoice" name="room[' . esc_attr($id) . '][quantity]" type="hidden" data-type="room-number" data-roominputid="' . esc_attr($id) . '" data-roomqty="' . esc_attr($quantity) . '" id="room-input-' . esc_attr($id) . '" min="0" max="' . esc_attr($quantity) . '" value="1">';
                 $html .= self::generate_BedInformation($id);
                 $html .= '</div>';
 
@@ -876,7 +872,7 @@ return ob_get_clean();
                 $html .= '</div>';
 
                 $html .= '<div class="room-button-wrap">';
-                $html .= '<div data-room-button-id="' . $id . '" class="choose-room-button book-button">' . __('Choose this room', 'atollmatrix') . '</div>';
+                $html .= '<div data-room-button-id="' . esc_attr($id) . '" class="choose-room-button book-button">' . __('Choose this room', 'atollmatrix') . '</div>';
                 $html .= '</div>';
 
                 $html .= '</div>';
@@ -890,7 +886,7 @@ return ob_get_clean();
             $html .= '<div class="stay-summary-wrap">';
             $html .= '<div class="checkin-summary">Check-in: ' . atollmatrix_readable_date($this->checkinDate) . '</div>';
             $html .= '<div class="checkout-summary">Check-out: ' . atollmatrix_readable_date($this->checkoutDate) . '</div>';
-            $html .= '<div class="staynight-summary">Nights: ' . $this->staynights . '</div>';
+            $html .= '<div class="staynight-summary">Nights: ' . esc_attr($this->staynights) . '</div>';
             $html .= '</div>';
 
             $html .= '</div>';
@@ -908,7 +904,7 @@ return ob_get_clean();
         $total_roomrate = 0;
         $html           = '';
         foreach ($ratesArray_date as $staydate => $roomrate) {
-            $html .= '<div class="checkin-staydate"><span class="number-of-rooms"></span>' . $staydate . ' - ' . atollmatrix_price($roomrate) . '</div>';
+            $html .= '<div class="checkin-staydate"><span class="number-of-rooms"></span>' . esc_html($staydate) . ' - ' . atollmatrix_price($roomrate) . '</div>';
 
             $roomrate = self::applyPricePerPerson($roomrate);
 
@@ -1207,7 +1203,7 @@ return ob_get_clean();
         if ('' !== $room_id) {
             $html = self::generate_BedMetabox($room_id, $meta_field, $meta_value);
         } else {
-            $html = '<span class="bedlayout-room-notfound-error">Room not found!</span>';
+            $html = '<span class="bedlayout-room-notfound-error">'. __('Room not found!','atollmatrix') . '</span>';
         }
 
         wp_send_json($html);
@@ -1251,8 +1247,8 @@ return ob_get_clean();
 
                 $bedinputcount++;
 
-                $html .= "<label for='" . esc_attr($meta_field) . "-" . $bedinputcount . "'>";
-                $html .= "<input type='radio' id='" . esc_attr($meta_field) . "-" . $bedinputcount . "' name='" . esc_attr($meta_field) . "' value='$bedLayout'";
+                $html .= "<label for='" . esc_attr($meta_field) . "-" . esc_attr($bedinputcount) . "'>";
+                $html .= "<input type='radio' id='" . esc_attr($meta_field) . "-" . esc_attr($bedinputcount) . "' name='" . esc_attr($meta_field) . "' value='".esc_attr($bedLayout)."'";
 
                 // Check the first radio input by default
                 if ($meta_value === $bedLayout) {
@@ -1312,8 +1308,8 @@ return ob_get_clean();
 
                 $this->bookingSearchResults[ $room_id ][ 'bedlayout' ][ sanitize_title($bedLayout) ] = true;
 
-                $html .= "<label for='room-$room_id-bedlayout-$bedLayout'>";
-                $html .= "<input type='radio' id='room-$room_id-bedlayout-$bedLayout' name='room[$room_id][bedlayout]' value='$bedLayout'";
+                $html .= "<label for='room-".esc_attr($room_id)."-bedlayout-".esc_attr($bedLayout)."'>";
+                $html .= "<input type='radio' id='room-".esc_attr($room_id)."-bedlayout-".esc_attr($bedLayout)."' name='room[".esc_attr($room_id)."][bedlayout]' value='".esc_attr($bedLayout)."'";
 
                 // Check the first radio input by default
                 if ($roomId === $firstRoomId) {
@@ -1352,24 +1348,24 @@ return ob_get_clean();
 
     public function paymentHelperButton($total, $bookingnumber)
     {
-        $payment_button = '<div data-paytotal="' . esc_attr($total) . '" data-bookingnumber="' . esc_attr($bookingnumber) . '" id="woo-bookingpayment" class="book-button">Pay Booking</div>';
+        $payment_button = '<div data-paytotal="' . esc_attr($total) . '" data-bookingnumber="' . esc_attr($bookingnumber) . '" id="woo-bookingpayment" class="book-button">'.__('Pay Booking','atollmatrix').'</div>';
         return $payment_button;
     }
 
     public function bookingDataFields()
     {
         $dataFields = [
-            'full_name'      => 'Full Name',
-            'passport'       => 'Passport No',
-            'email_address'  => 'Email Address',
-            'phone_number'   => 'Phone Number',
-            'street_address' => 'Street Address',
-            'city'           => 'City',
-            'state'          => 'State/Province',
-            'zip_code'       => 'Zip Code',
-            'country'        => 'Country',
-            'guest_comment'  => 'Notes',
-            'guest_consent'  => 'By clicking "Book this Room" you agree to our terms and conditions and privacy policy.',
+            'full_name'      => __('Full Name','atollmatrix'),
+            'passport'       => __('Passport No','atollmatrix'),
+            'email_address'  => __('Email Address','atollmatrix'),
+            'phone_number'   => __('Phone Number','atollmatrix'),
+            'street_address' => __('Street Address','atollmatrix'),
+            'city'           => __('City','atollmatrix'),
+            'state'          => __('State/Province','atollmatrix'),
+            'zip_code'       => __('Zip Code','atollmatrix'),
+            'country'        => __('Country','atollmatrix'),
+            'guest_comment'  => __('Notes','atollmatrix'),
+            'guest_consent'  => __('By clicking "Book this Room" you agree to our terms and conditions and privacy policy.','atollmatrix'),
          ];
 
         return $dataFields;
@@ -1400,6 +1396,8 @@ return ob_get_clean();
         $bookingsuccess = self::booking_Successful();
 
         $formInputs = self::bookingDataFields();
+
+        $consent_text = __('Consent is required for booking.','atollmatrix');
 
         $form_html = <<<HTML
 		<div class="registration_form_outer registration_request">
@@ -1460,7 +1458,7 @@ return ob_get_clean();
 					<label for="guest_consent">
 						<input type="checkbox" class="form-check-input" id="guest_consent" name="guest_consent" required /><span class="consent-notice">$formInputs[guest_consent]</span>
                         <div class="invalid-feedback">
-                            Consent is required for booking.
+                            $consent_text
                         </div>
                     </label>
 					</div>
@@ -1478,38 +1476,43 @@ HTML;
 
     public function booking_Successful()
     {
-
         $reservation_instance = new \AtollMatrix\Reservations();
         $booking_page_link    = $reservation_instance->getBookingDetailsPageLinkForGuest();
-
-        $booking_details_link = '<a href="' . esc_attr(esc_url(get_page_link($booking_page_link))) . '">Booking Details</a>';
-
+    
+        $booking_details_link_text = __('Booking Details', 'atollmatrix');
+        $booking_details_link = '<a href="' . esc_attr(esc_url(get_page_link($booking_page_link))) . '">' . $booking_details_link_text . '</a>';
+    
+        $booking_successful_text = __('Booking Successful', 'atollmatrix');
+        $hi_text = __('Hi,', 'atollmatrix');
+        $your_booking_number_is_text = __('Your booking number is:', 'atollmatrix');
+        $please_contact_us_text = __('Please contact us to cancel, modify or if there\'s any questions regarding the booking.', 'atollmatrix');
+    
         $success_html = <<<HTML
-		<div class="registration_form_outer registration_successful">
-			<div class="registration_form_wrap">
-				<div class="registration_form">
-        <div class="registration-successful-inner">
-            <h3>Booking Successful</h3>
-            <p>
-                Hi,
-            </p>
-            <p>
-                Your booking number is: <span class="booking-number">$this->bookingNumber</span>
-            </p>
-            <p>
-                Please contact us to cancel, modify or if there's any questions regarding the booking.
-            </p>
-            <p>
-                <div id="booking-details" class="book-button not-fullwidth">$booking_details_link</div>
-            </p>
+        <div class="registration_form_outer registration_successful">
+            <div class="registration_form_wrap">
+                <div class="registration_form">
+                <div class="registration-successful-inner">
+                    <h3>$booking_successful_text</h3>
+                    <p>
+                        $hi_text
+                    </p>
+                    <p>
+                        $your_booking_number_is_text <span class="booking-number">$this->bookingNumber</span>
+                    </p>
+                    <p>
+                        $please_contact_us_text
+                    </p>
+                    <p>
+                        <div id="booking-details" class="book-button not-fullwidth">$booking_details_link</div>
+                    </p>
+                </div>
+                </div>
+            </div>
         </div>
-        </div>
-        </div>
-        </div>
-HTML;
-
+    HTML;
+    
         return $success_html;
-    }
+    }    
 
     public function generate_MealPlanIncluded($room_id)
     {
@@ -1535,7 +1538,7 @@ HTML;
                     $html .= '<i class="fa-solid fa-square-check"></i>';
                     $html .= atollmatrix_get_mealplan_labels($plan[ 'mealtype' ]) . __(' included.', 'atollmatrix');
                     $html .= '<label>';
-                    $html .= '<input hidden type="text" name="room[' . $room_id . '][meal_plan][included]" value="' . $plan[ 'mealtype' ] . '">';
+                    $html .= '<input hidden type="text" name="room[' . esc_attr($room_id) . '][meal_plan][included]" value="' . esc_attr($plan[ 'mealtype' ]) . '">';
                     $html .= '</label>';
                     $this->bookingSearchResults[ $room_id ][ 'meal_plan' ][ $plan[ 'mealtype' ] ] = 'included';
                 }
@@ -1569,15 +1572,15 @@ HTML;
                 $html .= '<div class="room-summary-heading room-mealplans-heading">Mealplans</div>';
                 $html .= '<div class="room-mealplan-input-wrap">';
                 $html .= '<div class="room-mealplan-input">';
-                $html .= '<label for="room-' . $room_id . '-meal_plan-optional-none">';
-                $html .= '<input class="mealtype-input" type="radio" data-mealprice="none" id="room-' . $room_id . '-meal_plan-optional-none" name="room[' . $room_id . '][meal_plan][optional]" value="none" checked><span class="checkbox-label">' . __('Not selected', 'atollmatrix') . '</span>';
+                $html .= '<label for="room-' . esc_attr($room_id) . '-meal_plan-optional-none">';
+                $html .= '<input class="mealtype-input" type="radio" data-mealprice="none" id="room-' . esc_attr($room_id) . '-meal_plan-optional-none" name="room[' . esc_attr($room_id) . '][meal_plan][optional]" value="none" checked><span class="checkbox-label">' . __('Not selected', 'atollmatrix') . '</span>';
                 $html .= '</label>';
                 $html .= '</div>';
                 foreach ($optionalMealPlans as $id => $plan) {
                     $html .= '<div class="room-mealplan-input">';
                     $mealprice = $plan[ 'price' ] * $this->staynights;
-                    $html .= '<label for="room-' . $room_id . '-meal_plan-optional-' . $plan[ 'mealtype' ] . '">';
-                    $html .= '<input class="mealtype-input" type="radio" data-mealprice="' . $mealprice . '" id="room-' . $room_id . '-meal_plan-optional-' . $plan[ 'mealtype' ] . '" name="room[' . $room_id . '][meal_plan][optional]" value="' . $plan[ 'mealtype' ] . '"><span class="room-mealplan-price checkbox-label">' . atollmatrix_price($mealprice) . '<span class="mealplan-text">' . atollmatrix_get_mealplan_labels($plan[ 'mealtype' ]) . '</span></span>';
+                    $html .= '<label for="room-' . esc_attr($room_id) . '-meal_plan-optional-' . esc_attr($plan[ 'mealtype' ]) . '">';
+                    $html .= '<input class="mealtype-input" type="radio" data-mealprice="' . esc_attr($mealprice) . '" id="room-' . esc_attr($room_id) . '-meal_plan-optional-' . esc_attr($plan[ 'mealtype' ]) . '" name="room[' . esc_attr($room_id) . '][meal_plan][optional]" value="' . esc_attr($plan[ 'mealtype' ]) . '"><span class="room-mealplan-price checkbox-label">' . atollmatrix_price($mealprice) . '<span class="mealplan-text">' . atollmatrix_get_mealplan_labels($plan[ 'mealtype' ]) . '</span></span>';
                     $html .= '</label>';
                     $this->bookingSearchResults[ $room_id ][ 'meal_plan' ][ $plan[ 'mealtype' ] ] = $mealprice;
 

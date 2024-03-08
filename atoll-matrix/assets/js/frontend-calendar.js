@@ -232,13 +232,20 @@
 
 			// Update the selected dates in the specified format
 			var formattedDateRange = formattedCheckIn + ' to ' + formattedCheckOut;
-			$('.front-booking-calendar-date').text(formattedDateRange);
+			var nights = calculateDaysBetweenDates(checkIn, checkOut);
+
+			nightsSuffix = 'Nights';
+			if ( 1 == nights ) {
+				nightsSuffix = 'Night';
+			}
+			var nightsText = ' ( ' + nights +  ' ' + nightsSuffix + ' )';
+
+			$('.front-booking-calendar-date').text(formattedDateRange + nightsText );
 
 			$('.pre-book-check-in').text(formattedCheckIn);
 			$('.pre-book-stay-night').text(formattedStayLast);
 			$('.pre-book-check-out').text(formattedCheckOut);
 
-			var nights = calculateDaysBetweenDates(checkIn, checkOut);
 			$('.pre-book-nights').text(nights);
 		}
 
@@ -304,7 +311,7 @@
 			var selectedDates = []; // Correct array declaration
 			selectedDates[0] = checkInDate; // Assuming checkInDate is already defined
 			selectedDates[1] = checkOutDate; // Assuming checkOutDate is already defined
-			updateInfoDisplay(selectedDates); // Call the function with the array
+			// updateInfoDisplay(selectedDates); // Call the function with the array
 			
 			// Trigger click on the bookingSearch button
 			$("#bookingSearch").trigger("click");
@@ -405,7 +412,7 @@
 					},
 					minDate: "today", // Disable navigation to months previous to the current month
 					onMonthChange: function(selectedDates, dateStr, instance) {
-						updateInfoDisplay(selectedDates);
+						//updateInfoDisplay(selectedDates);
 					},
 					onChange: function(selectedDates, dateStr, instance) {
 						if (selectedDates.length === 2) {
@@ -413,13 +420,13 @@
 							var diffInDays = (selectedDates[1] - selectedDates[0]) / (1000 * 60 * 60 * 24);
 							if (diffInDays > 60) {
 								// If the difference exceeds 30 days, show an alert and clear the selection
-								$('#check-in-display span').html('Cannot exceed 60 days');
+								$('.front-booking-calendar-date').html('Cannot exceed 60 days');
 								instance.clear(); // Clear the selected dates
 							} else {
 								// Otherwise, update the selected dates
 								updateSelectedDates(selectedDates[0], selectedDates[1]);
 
-								updateInfoDisplay(selectedDates);
+								//updateInfoDisplay(selectedDates);
 							}
 						}
 					},
