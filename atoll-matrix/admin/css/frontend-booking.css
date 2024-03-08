@@ -351,7 +351,7 @@
 	box-sizing: border-box;
 	margin-bottom: 10px;
 	font-size: 14px;
-	color: #f00;
+	color: #3b12ff;
 	font-weight: 600;
 	letter-spacing: 0.4px;
 }
@@ -657,6 +657,10 @@
 	letter-spacing: 0.5px;
 	font-weight: 600;
 	transition: 0.4s background-color;
+}
+.form-search-button.booking-disabled {
+	background: #e4e4e4;
+	pointer-events:none;
 }
 
 #bookingDetails:hover,
@@ -1141,7 +1145,25 @@
 	border-bottom: 1px solid #00000021;
 	padding-bottom: 16px;
 }
-
+.supporting-image-gallery .main-image {
+	width: 30px;
+	margin-right: 4px;
+}
+.room-details-image .supporting-image-gallery {
+	margin-top: -23px;
+	width: calc( 100% - 35px );
+	margin-left: 18px;
+}
+.supporting-image-gallery .main-image {
+	width: 30px;
+	margin-right: 4px;
+	border: 2px solid #fff;
+	box-shadow: 1px 1px 8px 1px rgba(0,0,0,0.5);
+	transition: box-shadow 0.4s;
+}
+.supporting-image-gallery .main-image:hover {
+	box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.5);
+}
 /* HTML: <div class="loader"></div> */
 .preloader-element-outer {
 

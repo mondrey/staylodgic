@@ -207,7 +207,7 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                 case 'image_gallery':
                     // SPECIAL CASE:
                     // std controls button text; unique meta key for image uploads
-                    $meta          = get_post_meta($post_id, '_atollmatrix_image_ids', true);
+                    $meta          = get_post_meta($post_id, 'atollmatrix_image_ids', true);
                     $thumbs_output = '';
                     $button_text   = ($meta) ? esc_html__('Edit Gallery', 'atollmatrix') : $field['std'];
                     $renew_meta    = '';
@@ -238,7 +238,7 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                     '<td>
 			    		<input type="button" class="button" name="' . esc_attr($field['id']) . '" id="atollmatrix_images_upload" value="' . esc_attr($button_text) . '" />
 
-			    		<input type="hidden" name="atollmatrix_meta[_atollmatrix_image_ids]" id="_atollmatrix_image_ids" value="' . esc_attr($renew_meta ? $renew_meta : 'false') . '" />
+			    		<input type="hidden" name="atollmatrix_meta[atollmatrix_image_ids]" id="atollmatrix_image_ids" value="' . esc_attr($renew_meta ? $renew_meta : 'false') . '" />
 
 			    		<ul class="mtheme-gallery-thumbs">' . $thumbs_output . '</ul>
 			    	</td>';
@@ -1451,7 +1451,7 @@ function atollmatrix_save_images()
     }
 
     $ids = strip_tags(rtrim($_POST['ids'], ','));
-    update_post_meta($_POST['post_id'], '_atollmatrix_image_ids', $ids);
+    update_post_meta($_POST['post_id'], 'atollmatrix_image_ids', $ids);
 
     // update thumbs
     $thumbs        = explode(',', $ids);

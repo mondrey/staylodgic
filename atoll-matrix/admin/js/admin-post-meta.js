@@ -806,7 +806,7 @@ $('body').on('click', '.remove-taxlayout', function() {
 							},
 							success: function(){
 								selection = loadImages(ids);
-								$('#_atollmatrix_image_ids').val( ids );
+								$('#atollmatrix_image_ids').val( ids );
 								frame.close();
 							},
 							dataType: 'html'

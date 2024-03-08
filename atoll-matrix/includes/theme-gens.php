@@ -611,11 +611,47 @@ function atollmatrix_get_proofing_attachments($page_id)
 function atollmatrix_get_custom_attachments($page_id)
 {
     $filter_image_ids = false;
-    $the_image_ids    = get_post_meta($page_id, '_atollmatrix_image_ids');
+    $the_image_ids    = get_post_meta($page_id, 'atollmatrix_image_ids');
     if ($the_image_ids) {
         $filter_image_ids = explode(',', $the_image_ids[0]);
         return $filter_image_ids;
     }
+}
+function atollmatrix_get_custom_attachment_images($page_id)
+{
+    $images = array();
+    $the_image_ids = get_post_meta($page_id, 'atollmatrix_image_ids', true);
+    if ($the_image_ids) {
+        $filter_image_ids = explode(',', $the_image_ids);
+        foreach ($filter_image_ids as $image_id) {
+            $thumbnail_url = wp_get_attachment_image_src($image_id, 'thumbnail')[0];
+            $full_image_url = wp_get_attachment_image_src($image_id, 'full')[0];
+            $images[] = array(
+                'thumbnail' => $thumbnail_url,
+                'full_image' => $full_image_url
+            );
+        }
+    }
+    return $images;
+}
+function atollmatrix_output_custom_image_links($page_id)
+{
+    $images = atollmatrix_get_custom_attachment_images($page_id);
+    $output = '';
+
+    if (empty($images)) {
+        return false;
+    }
+
+    $output .= '<div class="supporting-image-gallery">';
+    foreach ($images as $image) {
+        $output .= '<a class="lightbox-image"  data-gallery="lightbox-gallery-'.esc_attr($page_id).'" data-toggle="lightbox" href="' . esc_url($image['full_image']) . '">';
+        $output .= '<img class="main-image" src="' . esc_url($image['thumbnail']) . '" alt="main image">';
+        $output .= '</a>';
+    }
+    $output .= '</div>';
+
+    return $output;
 }
 function atollmatrix_page_is_built_with_elementor($post_id)
 {

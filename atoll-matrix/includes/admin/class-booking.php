@@ -782,8 +782,15 @@ return ob_get_clean();
 
                 $html .= '<div class="room-details-image">';
                 $image_id  = get_post_thumbnail_id($id);
+                $fullimage_url = wp_get_attachment_image_url($image_id, 'atollmatrix-full'); // Get the URL of the custom-sized image
                 $image_url = wp_get_attachment_image_url($image_id, 'atollmatrix-large-square'); // Get the URL of the custom-sized image
-                $html .= '<img class="lightbox-trigger room-summary-image" data-image="' . esc_url($image_url) . '" src="' . esc_url($image_url) . '" alt="Room featured image">';
+                $html .= '<a href="' . esc_url($fullimage_url) . '" data-toggle="lightbox" data-gallery="lightbox-gallery-'.esc_attr($id).'">';
+                $html .= '<img class="lightbox-trigger room-summary-image" data-image="' . esc_url($image_url) . '" src="' . esc_url($image_url) . '" alt="Room">';
+                $html .= '</a>';
+                $supported_gallery = atollmatrix_output_custom_image_links($id);
+                if ( $supported_gallery ) {
+                    $html .= atollmatrix_output_custom_image_links($id);
+                }
                 $html .= '</div>';
 
                 $html .= '<div class="room-details-stats">';
@@ -852,7 +859,7 @@ return ob_get_clean();
                 $html .= '<div class="room-price-total" data-roomprice="' . esc_attr($total_roomrate) . '">' . atollmatrix_price($total_roomrate) . '</div>';
                 $html .= '<div class="preloader-element-outer"><div class="preloader-element"></div></div>';
                 if ( isset( $this->bookingSearchResults[ $id ]['discountlabel'] ) ) {
-                    $html .= '<div class="room-price-discount-label">'. esc_html($this->bookingSearchResults[ $id ]['discountlabel']) . '</div>';
+                    $html .= '<div class="room-price-discount-label"><i class="fa fa-star" aria-hidden="true"></i> '. esc_html($this->bookingSearchResults[ $id ]['discountlabel']) . '</div>';
                 }
 
                 $html .= self::generate_MealPlanIncluded($id);

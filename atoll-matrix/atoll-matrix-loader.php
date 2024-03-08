@@ -422,6 +422,8 @@ class AtollMatrix_Init
         wp_enqueue_style('bootstrap');
         wp_enqueue_script('bootstrap');
 
+        wp_enqueue_script('bs5-lightbox', plugin_dir_url(__FILE__) . 'assets/js/bs5-lightbox/index.bundle.min.js', array('bootstrap'), null, true);
+
         // Check if we are viewing a single post/page
         if (is_singular()) {
             global $post;

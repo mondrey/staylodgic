@@ -1,6 +1,8 @@
 (function ($) {
 	$(document).ready(function () {
 
+		$(document).on('click', Lightbox.defaultSelector, Lightbox.initialize);
+
 		$('#bookingDetails').on('click', function(e) {
 			e.preventDefault();
 	
@@ -507,6 +509,8 @@
 		// Frontend codes
 		$('#bookingSearch').on('click', function (e) { // Changed here
 			e.preventDefault();
+
+			$('#bookingSearch').addClass('booking-disabled');
 			
 			// Retrieve the date from the input field
 			var inputVal = $('#reservation-date').val();
@@ -527,6 +531,7 @@
 				// var formattedCheckOut = formatDateToYYYYMMDD(checkOutDate);
 				// reservationDate = formattedCheckIn + ' to ' + formattedCheckOut;
 				// console.log( reservationDate );
+				$('#bookingSearch').removeClass('booking-disabled');
 			} else {
 				//reservationDate = $('#reservation-date').val();
 				console.log( 'Two' );
@@ -596,6 +601,7 @@
 								$('.recommended-alt-wrap').show();
 								$('#recommended-alt-dates').html(parsedResponse.alt_recommends);
 							}
+							$('#bookingSearch').removeClass('booking-disabled');
 						},
 						error: function (err) {
 							// Handle error here
