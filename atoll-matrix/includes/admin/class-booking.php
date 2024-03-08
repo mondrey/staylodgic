@@ -350,9 +350,7 @@ class Booking
         ?>
 		<div class="atollmatrix-content">
              <div class="calendar-insights-wrap">
-                <div id="check-in-display"><strong>Check-in:</strong> <span>-</span></div>
-                <div id="check-out-display"><strong>Check-out:</strong> <span>-</span></div>
-                <div id="last-night-display"><strong>Last-night:</strong> <span>-</span></div>
+                <div id="check-in-display"><strong>Stay:</strong> <span>-</span></div>
                 <div id="nights-display"><strong>Nights:</strong> <span>-</span></div>
             </div>
             <div id="hotel-booking-form">
@@ -856,11 +854,10 @@ return ob_get_clean();
                 $this->bookingSearchResults[ $id ][ 'totalroomrate' ] = $total_roomrate;
 
                 $html .= '<div class="room-price-total" data-roomprice="' . esc_attr($total_roomrate) . '">' . atollmatrix_price($total_roomrate) . '</div>';
+                $html .= '<div class="preloader-element-outer"><div class="preloader-element"></div></div>';
                 if ( isset( $this->bookingSearchResults[ $id ]['discountlabel'] ) ) {
                     $html .= '<div class="room-price-discount-label">'. $this->bookingSearchResults[ $id ]['discountlabel'] . '</div>';
                 }
-
-                $html .= '<div class="preloader-element-outer"><div class="preloader-element"></div></div>';
 
                 $html .= self::generate_MealPlanIncluded($id);
 

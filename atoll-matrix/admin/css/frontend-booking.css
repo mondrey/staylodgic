@@ -350,9 +350,9 @@
 	display: block;
 	box-sizing: border-box;
 	margin-bottom: 10px;
-	font-size: 12px;
+	font-size: 14px;
 	color: #f00;
-	font-weight: 700;
+	font-weight: 600;
 	letter-spacing: 0.4px;
 }
 
@@ -950,10 +950,6 @@
 	font-size: 12px;
 	letter-spacing: 0.8px;
 	font-weight: 700;
-}
-#check-in-display, #check-out-display {
-	border-bottom: 1px solid #00000014;
-	padding-bottom: 16px;
 }
 .entry-content .calendar-insights-wrap strong {
 	font-weight: 600;

@@ -1052,34 +1052,38 @@ class Reservations
 
     public function Availability_of_Rooms_For_DateRange($checkin_date = false, $checkout_date = false)
     {
-
         // get the date range
         $start     = new \DateTime($checkin_date);
         $end       = new \DateTime($checkout_date);
         $interval  = new \DateInterval('P1D');
         $daterange = new \DatePeriod($start, $interval, $end);
-
+    
         $room_availablity = array();
-
+    
         $room_list = \AtollMatrix\Rooms::queryRooms();
-
+    
+        $count = 0;
+    
         foreach ($room_list as $room) {
             foreach ($daterange as $date) {
                 $date_string = $date->format("Y-m-d");
                 // Check if the room is fully booked for the given date
                 if (!$this->isRoom_For_Day_Fullybooked($room->ID, $date_string, $reservationid = false)) {
                     // If the room is fully booked for any of the dates in the range, return true
-                    $room_availablity[ $room->ID ][ $date_string ] = '1';
+                    $room_availablity[$room->ID][$date_string] = '1';
+                    $count++;
+                    if ($count >= 3) {
+                        break 2; // Exit the loop after adding 3 rooms
+                    }
                 }
             }
-
         }
-
+    
         // If the room is not fully booked for any of the dates in the range, return false
         $sub_set_room_availablity = self::splitArray_By_ContinuousDays($room_availablity);
-
+    
         return $sub_set_room_availablity;
-    }
+    }    
 
     public function isRoom_Fullybooked_For_DateRange($roomId = false, $checkin_date = false, $checkout_date = false, $reservationid = false)
     {

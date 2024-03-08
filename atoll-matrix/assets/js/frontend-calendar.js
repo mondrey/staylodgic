@@ -244,21 +244,18 @@
 
 		function updateInfoDisplay(selectedDates) {
 			const checkInSpan = document.querySelector('#check-in-display span');
-			const checkOutSpan = document.querySelector('#check-out-display span');
-			const lastNightSpan = document.querySelector('#last-night-display span');
 			const nightsSpan = document.querySelector('#nights-display span');
 
 			if (selectedDates.length === 1) {
 				let checkInDate = selectedDates[0];
-				checkInSpan.textContent = formatDateToLocale(checkInDate);
 
 				let checkOutDate = new Date(checkInDate);
 				checkOutDate.setDate(checkOutDate.getDate() + 1);
 				let lastNightDate = new Date(checkOutDate);
 				lastNightDate.setDate(lastNightDate.getDate() - 1); // Calculate last night
 
-				checkOutSpan.textContent = formatDateToLocale(checkOutDate);
-				lastNightSpan.textContent = formatDateToLocale(lastNightDate); // Update last night
+				checkInSpan.textContent = formatDateToLocale(checkInDate) + ' to ' + formatDateToLocale(checkOutDate);
+
 				nightsSpan.textContent = '1';
 			} else if (selectedDates.length === 2) {
 				let checkInDate = selectedDates[0];
@@ -267,9 +264,9 @@
 				checkOutDate.setDate(checkOutDate.getDate()); // Increment checkout date
 				lastNightDate.setDate(checkOutDate.getDate() - 1); // Increment checkout date
 				const nights = (checkOutDate - checkInDate) / (1000 * 60 * 60 * 24);
-				checkInSpan.textContent = formatDateToLocale(checkInDate);
-				checkOutSpan.textContent = formatDateToLocale(checkOutDate);
-				lastNightSpan.textContent = formatDateToLocale(lastNightDate); // Update last night
+
+				checkInSpan.textContent = formatDateToLocale(checkInDate) + ' to ' + formatDateToLocale(checkOutDate);
+
 				nightsSpan.textContent = nights.toString();
 			}
 			
@@ -277,9 +274,9 @@
 
 		// Helper function to format date to YYYY-MM-DD
 		function formatDateToLocale(date) {
-			return date.getFullYear() + '-' +
-				('0' + (date.getMonth() + 1)).slice(-2) + '-' +
-				('0' + date.getDate()).slice(-2);
+			return ('0' + (date.getMonth() + 1)).slice(-2) + '-' +
+				('0' + date.getDate()).slice(-2) + '-' +
+				date.getFullYear();
 		}
 
 		// Get the flatpickr input element
@@ -412,9 +409,19 @@
 					},
 					onChange: function(selectedDates, dateStr, instance) {
 						if (selectedDates.length === 2) {
-							updateSelectedDates(selectedDates[0], selectedDates[1]);
+							// Calculate the difference in days between the start and end dates
+							var diffInDays = (selectedDates[1] - selectedDates[0]) / (1000 * 60 * 60 * 24);
+							if (diffInDays > 60) {
+								// If the difference exceeds 30 days, show an alert and clear the selection
+								$('#check-in-display span').html('Cannot exceed 60 days');
+								instance.clear(); // Clear the selected dates
+							} else {
+								// Otherwise, update the selected dates
+								updateSelectedDates(selectedDates[0], selectedDates[1]);
+
+								updateInfoDisplay(selectedDates);
+							}
 						}
-						updateInfoDisplay(selectedDates);
 					},
 					onDayCreate: function(dObj, dStr, fp, dayElem) {
 						// Disable the start date in the end date selection

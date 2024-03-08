@@ -611,10 +611,8 @@ HTML;
         ?>
 		<div class="atollmatrix-content">
             <div class="calendar-insights-wrap">
-                <div id="check-in-display">Check-in: <span>-</span></div>
-                <div id="check-out-display">Check-out: <span>-</span></div>
-                <div id="last-night-display">Last-night: <span>-</span></div>
-                <div id="nights-display">Nights: <span>-</span></div>
+                <div id="check-in-display"><strong>Stay:</strong> <span>-</span></div>
+                <div id="nights-display"><strong>Nights:</strong> <span>-</span></div>
             </div>
             <div id="hotel-booking-form">
                 <div class="front-booking-search">
