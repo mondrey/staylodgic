@@ -398,7 +398,6 @@ class Booking
                     <div id="guest-age"></div>
                 </div>
 				<div class="recommended-alt-wrap">
-					<div class="recommended-alt-title"><?php _e('Rooms unavailable','atollmatrix'); ?></div><div class="recommended-alt-description"><?php _e('Following range from your selection is avaiable.','atollmatrix'); ?></div>
 					<div id="recommended-alt-dates"></div>
 				</div>
 			<div class="available-list">
@@ -440,7 +439,7 @@ return ob_get_clean();
 return ob_get_clean();
     }
 
-    public function alternative_BookingDates($checkinDate, $checkoutDate)
+    public function alternative_BookingDates($checkinDate, $checkoutDate, $maxOccpuants)
     {
 
         // Perform the greedy search by adjusting the check-in and check-out dates
@@ -449,8 +448,9 @@ return ob_get_clean();
         //$newCheckoutDate->add(new \DateInterval('P1D'));
 
         $reservation_instance = new \AtollMatrix\Reservations();
+        $room_instance = new \AtollMatrix\Rooms();
 
-        $availableRoomDates = $reservation_instance->Availability_of_Rooms_For_DateRange($newCheckinDate->format('Y-m-d'), $newCheckoutDate->format('Y-m-d'));
+        $availableRoomDates = $reservation_instance->Availability_of_Rooms_For_DateRange($newCheckinDate->format('Y-m-d'), $newCheckoutDate->format('Y-m-d') , 3);
 
         // error_log('---- Alternative Rooms Matrix Early');
         // error_log(print_r($availableRoomDates, true));
@@ -473,9 +473,17 @@ return ob_get_clean();
                     'check-out' => $lastKey,
                 );
             }
-
-            // Add the new sub-array to the new room availability array
-            $new_room_availability_array[ $roomId ] = $newSubArray;
+            $can_accomodate = $room_instance->getMax_room_occupants($roomId);
+            error_log( '------------ can maxOccpuants ' );
+            error_log( print_r( $maxOccpuants,1 ));
+            error_log( '------------ can accomodate ' );
+            error_log( print_r( $can_accomodate,1) );
+            error_log( '------------ can guests ' );
+            error_log( $can_accomodate['guests'] );
+            if ( $can_accomodate['guests'] >= $maxOccpuants ) {
+                // Add the new sub-array to the new room availability array
+                $new_room_availability_array[ $roomId ] = $newSubArray;
+            }
         }
         $roomAvailabityArray = $new_room_availability_array;
 
@@ -550,8 +558,13 @@ return ob_get_clean();
         // Remove the trailing comma and space
         $output = rtrim($output, ', ');
 
+        if ( '' !== $output ) {
+            $output_text = '<div class="recommended-alt-title"><i class="fas fa-calendar-times"></i>' . __('Rooms unavailable','atollmatrix'). '</div><div class="recommended-alt-description">'.__('Following range from your selection is avaiable.','atollmatrix').'</div>';
+        } else {
+            $output_text = '<div class="recommended-alt-title"><i class="fas fa-calendar-times"></i>' . __('Rooms unavailable','atollmatrix'). '</div><div class="recommended-alt-description">'.__('No rooms found within your selection.','atollmatrix').'</div>';
+        }
         // Print the output
-        $roomAvailabity = '<div class="recommended-dates-wrap">' . $output . '</div>';
+        $roomAvailabity = '<div class="recommended-dates-wrap">' . $output_text . $output . '</div>';
         // error_log('---- Alternative Room Availability Matrix for Range');
         // error_log(print_r($roomAvailabity, true));
 
@@ -683,9 +696,12 @@ return ob_get_clean();
 
         $roomAvailability = false;
 
+        error_log( '------------ can number_of_guests ' );
+        error_log( $number_of_guests );
+
         if (count($combo_array[ 'rooms' ]) == 0) {
 
-            $roomAvailability = self::alternative_BookingDates($checkinDate, $checkoutDate);
+            $roomAvailability = self::alternative_BookingDates($checkinDate, $checkoutDate, $number_of_guests);
         }
 
         //set_transient($bookingNumber, $combo_array, 20 * MINUTE_IN_SECONDS);

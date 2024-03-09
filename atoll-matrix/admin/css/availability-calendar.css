@@ -40,6 +40,12 @@
 	vertical-align: bottom;
 }
 
+.calendar-room-row .calendarCell.rowHeader {
+	white-space: normal;
+	font-size: 16px;
+	font-weight: 300;
+}
+
 .calendarCell:first-child {
 	border-left: none;
 }
@@ -186,18 +192,25 @@ body .tooltip .tooltip-inner {
 	text-align: left;
 }
 
-.roomrate-link,
-.quantity-link {
-	text-decoration: navajowhite;
+.roomrate-link, .quantity-link {
+	text-decoration: none;
 	color: #000;
 	font-size: 11px;
-	line-height: 0;
+	line-height: 1;
+	padding: 1px 6px;
+	border-radius: 9px;
+	transition: 0.2s background-color,0.2s color;
+}
+.roomrate-link:hover,
+.quantity-link:hover {
+	background: #b722c4;
+	color: #fff;
 }
 
 .calendar-info-wrap {
 	position: absolute;
-	top: 16px;
-	left: 10px;
+	top: 8px;
+	left: 5px;
 }
 
 .monthDayinfo-wrap {
@@ -295,19 +308,23 @@ body .tooltip .tooltip-inner {
 	box-shadow: 33px 0px 35px 6px #0000001f;
 }
 
-.calendarCell.is-today {
-	background: #ff006c1c;
+.calendarCell.monthHeader.is-today:not(.occupancy-stats) {
+	background-image: radial-gradient( circle 400px at 6.8% 8.3%,  rgba(255,244,169,1) 0%, rgba(255,244,234,1) 100.2% );
 }
-
 .occupancyStats-wrap {
-	font-size: 11px;
+	font-size: 10px;
+	letter-spacing: 1px;
+	font-weight: 600;
 	padding: 10px;
-	color: #9b9b9b;
+	color: #ffffff96;
+}
+.occupancyStats-wrap.occupancy-percentage {
+	padding: 0;
 }
 
 .occupancy-percentage {
-	font-size: 14px;
-	color: #d9d9d9;
+	font-size: 20px;
+	color: #fff;
 }
 
 .calendarCell.monthHeader.occupancy-stats {
@@ -317,7 +334,11 @@ body .tooltip .tooltip-inner {
 
 .occupancy-total {
 	font-size: 14px;
-	font-weight: normal;
+	font-weight: 600;
+	color: #000;
+}
+.occupancy-total .occupancy-total-stats {
+	margin-left: 10px;
 }
 
 .guest-name,

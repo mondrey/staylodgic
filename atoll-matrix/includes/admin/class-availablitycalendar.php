@@ -302,7 +302,7 @@ $calendar = $this->getAvailabilityCalendar();
                     } else {
                         $occupancy_status_class = "room-available";
                     }
-                    $room_output .= '<td class="calendarCell ' . esc_attr($this->todayCSSTag($dateString)) . ' ' . esc_attr($this->startOfMonthCSSTag($dateString)) . ' ' . esc_attr($occupancy_status_class) . '">';
+                    $room_output .= '<td class="calendarCell ' . esc_attr($this->startOfMonthCSSTag($dateString)) . ' ' . esc_attr($occupancy_status_class) . '">';
 
                     $room_output .= '<div class="calendar-info-wrap">';
                     $room_output .= '<div class="calendar-info">';
@@ -373,7 +373,7 @@ $calendar = $this->getAvailabilityCalendar();
             $endDateString = $endDate;
         }
         $output = '<td class="calendarCell rowHeader">';
-        $output .= '<div class="occupancyStats-wrap">';
+        $output .= '<div class="occupancyStats-wrap occupancy-percentage">';
         $output .= '<div class="occupancyStats-inner">';
         $output .= '<div class="occupancy-total">';
         $output .= __('Occupancy', 'atollmatrix');

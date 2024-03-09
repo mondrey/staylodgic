@@ -892,11 +892,16 @@
 	font-weight: 500;
 	color: #000;
 }
+.no-rooms-title i,
+.recommended-alt-title i {
+	margin-right: 7px;
+}
 .no-rooms-description,
 .recommended-alt-description {
 	font-size: 14px;
 	margin-bottom: 12px;
 	font-weight: 400;
+	color: #4d4d4d;
 }
 
 .recommended-dates-wrap {
@@ -908,9 +913,9 @@
 .recommended-dates-wrap span {
 	margin-right: 10px;
 	background: #3012ff;
-	padding: 2px 15px;
+	padding: 2px 14px;
 	display: inline-block;
-	border-radius: 7px;
+	border-radius: 15px;
 	margin-bottom: 4px;
 	font-size: 14px;
 	letter-spacing: 0.6px;

@@ -1050,7 +1050,7 @@ class Reservations
         return $fullyBookedDays;
     }    
 
-    public function Availability_of_Rooms_For_DateRange($checkin_date = false, $checkout_date = false)
+    public function Availability_of_Rooms_For_DateRange($checkin_date = false, $checkout_date = false, $limit = 10)
     {
         // get the date range
         $start     = new \DateTime($checkin_date);
@@ -1072,7 +1072,7 @@ class Reservations
                     // If the room is fully booked for any of the dates in the range, return true
                     $room_availablity[$room->ID][$date_string] = '1';
                     $count++;
-                    if ($count >= 3) {
+                    if ($count >= $limit) {
                         break 2; // Exit the loop after adding 3 rooms
                     }
                 }
