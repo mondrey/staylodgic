@@ -44,7 +44,7 @@
 				var bookingnumber = $(this).data('bookingnumber');
 				var checkin = $(this).data('checkin');
 				var checkout = $(this).data('checkout');
-				var tooltipContent = 'Guest: ' + guest + '<br><br/>Room: ' + room + '<br><br/>Booking Number:<br/>' + bookingnumber + '<br><br/>Check-in: ' + checkin + '<br>Check-out: ' + checkout;
+				var tooltipContent = guest + '<br/>' + bookingnumber + '<br/>Check-in: ' + checkin + '<br/>Check-out: ' + checkout;
 
 				$(this).attr('data-bs-toggle', 'tooltip');
 				$(this).attr('data-bs-html', 'true'); // Allow HTML content in the tooltip
@@ -141,15 +141,17 @@
 			e.preventDefault();
 			var date = $(this).data('date');
 			var room = $(this).data('room');
+			var rate = $(this).data('rate');
 
 			// Open the modal with the selected date and room
-			openRoomRateModal(date, room);
+			openRoomRateModal(date, room, rate);
 		});
 
 		// Function to open the modal with the selected date and room
-		function openRoomRateModal(date, room) {
+		function openRoomRateModal(date, room, rate) {
 			// Set the date and room values in the modal inputs
 			$('#rates-popup input[name="modaldatepicker"]').val(date);
+			$('#rates-popup input[name="rate"]').val(rate);
 			$('#rates-popup select[name="room"]').val(room);
 
 			// Open the modal
@@ -161,15 +163,17 @@
 			e.preventDefault();
 			var date = $(this).data('date');
 			var room = $(this).data('room');
+			var remaining = $(this).data('remaining');
 
 			// Open the modal with the selected date and room
-			openQuantityModal(date, room);
+			openQuantityModal(date, room, remaining);
 		});
 
 		// Function to open the modal with the selected date and room
-		function openQuantityModal(date, room) {
+		function openQuantityModal(date, room, remaining) {
 			// Set the date and room values in the modal inputs
 			$('#quantity-popup input[name="modaldatepicker"]').val(date);
+			$('#quantity-popup input[name="quantity"]').val(remaining);
 			$('#quantity-popup select[name="room"]').val(room);
 
 			// Open the modal
@@ -518,18 +522,62 @@
 
 			function initializeFlatpickr(newStartDate, newEndDate) {
 				fp = flatpickr(".availabilitycalendar", {
-					mode: "range",
-					dateFormat: "Y-m-d",
-					showMonths: 2,
-					enableTime: false,
-					defaultDate: [newStartDate, newEndDate], // Set the defaultDate to the start and end dates
+					mode: "single", // Change to single mode for month selection
+					plugins: [
+						new monthSelectPlugin({
+							shorthand: true,
+							dateFormat: "Y-m",
+							altFormat: "F Y",
+							theme: "light"
+						})
+					],
+					defaultDate: newStartDate, // Set the defaultDate to the start date only
 					onChange: function (selectedDates, dateStr, instance) {
-						if (selectedDates.length == 2) {
-							updateCalendarData(selectedDates);
+						if (selectedDates.length > 0) {
+							var selectedMonth = selectedDates[0].getMonth();
+							var selectedYear = selectedDates[0].getFullYear();
+			
+							// Create the start date (1st of the selected month)
+							var startDate = new Date(selectedYear, selectedMonth, 1);
+			
+							// Create the end date (5th of the next month)
+							var endDate = new Date(selectedYear, selectedMonth + 1, 5);
+			
+							// Update the calendar data with the constructed range
+							updateCalendarData([startDate, endDate]);
 						}
 					}
 				});
 			}
+			
+			function shiftDates(buttonId, months) {
+				$(buttonId).click(function () {
+					var currentDate = fp.selectedDates[0];
+					var newMonth = currentDate.getMonth() + months;
+					var newYear = currentDate.getFullYear();
+			
+					if (newMonth < 0) {
+						newMonth = 11;
+						newYear -= 1;
+					} else if (newMonth > 11) {
+						newMonth = 0;
+						newYear += 1;
+					}
+			
+					var newStartDate = new Date(newYear, newMonth, 1);
+					var newEndDate = new Date(newYear, newMonth + 1, 5);
+			
+					// Destroy the current instance
+					fp.destroy();
+			
+					// Initialize a new flatpickr instance with the new dates
+					initializeFlatpickr(newStartDate, newEndDate);
+			
+					debouncedCalendarUpdate([newStartDate, newEndDate]);
+				});
+			}
+			shiftDates('#prevmonth', -1);
+			shiftDates('#nextmonth', 1);
 
 			// Call the initialize function with the initial dates
 			initializeFlatpickr(startDate, endDate);
@@ -558,30 +606,6 @@
 					}
 				});
 			}
-
-			function shiftDates(buttonId, days) {
-				$(buttonId).click(function () {
-					var newStartDate = fp.selectedDates[0].fp_incr(days);
-					var newEndDate = fp.selectedDates[1].fp_incr(days);
-
-					// Destroy the current instance
-					fp.destroy();
-
-					// Initialize a new flatpickr instance with the new dates
-					initializeFlatpickr(newStartDate, newEndDate);
-
-					debouncedCalendarUpdate(fp.selectedDates);
-				});
-			}
-
-			// Now call this function with the parameters you want:
-			shiftDates('#prev-week', -7);
-			shiftDates('#next-week', 7);
-			shiftDates('#prev-half', -15);
-			shiftDates('#next-half', 15);
-			shiftDates('#prev', -30);
-			shiftDates('#next', 30);
-
 
 		}
 

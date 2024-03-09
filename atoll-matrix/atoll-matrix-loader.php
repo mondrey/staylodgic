@@ -134,6 +134,8 @@ class AtollMatrix_Init
         wp_register_style('flatpickr', plugin_dir_url(__FILE__) . 'assets/js/flatpickr/flatpickr.min.css', array(), '1.0', 'screen');
         wp_register_style('flatpickr-extra', plugin_dir_url(__FILE__) . 'assets/js/flatpickr/flatpickr-extra-style.css', array(), '1.0', 'screen');
         wp_register_script('flatpickr', plugin_dir_url(__FILE__) . 'assets/js/flatpickr/flatpickr.js', array('jquery'), '1.0', true);
+        wp_register_script('flatpickr-monthselect', plugin_dir_url(__FILE__) . 'assets/js/flatpickr/monthselect.js', array('flatpickr'), '1.0', true);
+        wp_register_style('flatpickr-monthselect', plugin_dir_url(__FILE__) . 'assets/js/flatpickr/monthselect.css', false, 'screen');
         wp_register_script('admin-post-meta', plugin_dir_url(__FILE__) . 'admin/js/admin-post-meta.js', array('jquery', 'wp-api', 'wp-data'), null, true);
         wp_register_script('qrcodejs', plugin_dir_url(__FILE__) . 'assets/js/qrcode.min.js', array('jquery'), null, true);
         wp_register_script('menu-image-admin', plugin_dir_url(__FILE__) . 'admin/js/menu-image-admin.js', array('jquery'), null, true);
@@ -373,6 +375,8 @@ class AtollMatrix_Init
                 wp_enqueue_style('chosen');
                 wp_enqueue_style('flatpickr');
                 wp_enqueue_script('flatpickr');
+                wp_enqueue_script('flatpickr-monthselect');
+                wp_enqueue_style('flatpickr-monthselect');
                 wp_enqueue_style('flatpickr-extra');
                 wp_enqueue_script('admin-post-meta');
 

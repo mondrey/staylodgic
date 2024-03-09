@@ -107,13 +107,9 @@ class AvailablityCalendar extends AvailablityCalendarBase
         ?>
 		</div>
 		<div class="calendar-controls-wrap">
-			<button id="prev">Previous</button>
-			<button id="prev-half">Prev 15</button>
-			<button id="prev-week">Prev 7</button>
+			<button id="prevmonth">Previous</button>
 			<input type="text" class="availabilitycalendar" id="availabilitycalendar" name="availabilitycalendar" value="" />
-			<button id="next-week">Next 7</button>
-			<button id="next-half">Next 15</button>
-			<button id="next">Next</button>
+			<button id="nextmonth">Next</button>
 			<a href="#" id="quantity-popup-link" data-bs-toggle="modal" data-bs-target="#quantity-popup">Update Quantity</a>
 			<a href="#" id="rates-popup-link" data-bs-toggle="modal" data-bs-target="#rates-popup">Update Rates</a>
 		</div>
@@ -306,10 +302,10 @@ $calendar = $this->getAvailabilityCalendar();
 
                     $room_output .= '<div class="calendar-info-wrap">';
                     $room_output .= '<div class="calendar-info">';
-                    $room_output .= '<a href="#" class="quantity-link" data-remaining="' . esc_attr($remaining_rooms) . '" data-date="' . esc_attr($dateString) . '" data-room="' . esc_attr($roomId) . '">' . esc_html($remaining_rooms) . '</a>';
+                    $room_output .= '<a data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Quantity" href="#" class="quantity-link" data-remaining="' . esc_attr($remaining_rooms) . '" data-date="' . esc_attr($dateString) . '" data-room="' . esc_attr($roomId) . '">' . esc_html($remaining_rooms) . '</a>';
 
                     if (!empty($room_rate) && isset($room_rate) && $room_rate > 0) {
-                        $room_output .= '<a class="roomrate-link" href="#">' . esc_html($room_rate) . '</a>';
+                        $room_output .= '<a data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Rate" class="roomrate-link" href="#" data-rate="' . esc_attr($room_rate) . '" data-date="' . esc_attr($dateString) . '" data-room="' . esc_attr($roomId) . '">' . esc_html($room_rate) . '</a>';
                     }
 
                     $cache_qty_rate[ $dateString ][ 'qty' ] = $remaining_rooms;
