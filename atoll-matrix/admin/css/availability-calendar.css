@@ -1,7 +1,21 @@
+.notice.notice-warning {
+	display: none !important;
+}
+#wpfooter {
+	display: none !important;
+}
+#wpwrap {
+	background: #444;
+}
+#wpwrap h1 {
+	color: #fff;
+}
+
 #container {
 	display: flex;
 	overflow-x: auto;
 	max-width: 100%;
+	background: #fff;
 }
 
 #rowHeaders {
@@ -31,7 +45,7 @@
 
 .calendarCell {
 	flex-grow: 1;
-	border-right: 1px solid #ccc;
+	border-right: 1px solid #eaeaea;
 	transition: border-color 0.3s ease-in-out;
 	text-align: center;
 	width: 80px;
@@ -52,19 +66,19 @@
 
 .calendarRow .rowHeader {
 	font-weight: bold;
-	background-color: #eee;
+	background-color: #131313;
 	position: sticky;
 	left: 0;
 	z-index: 1;
 	width: 290px;
 	font-size: 12px;
 	padding: 20px;
+	color: #cacaca;
 }
 
 .calendarRow .rowHeader:first-child {
 	border-top: none;
 }
-
 .calendarRow .rowHeader::before {
 	content: "";
 	position: absolute;
@@ -72,7 +86,7 @@
 	left: -1px;
 	height: 1px;
 	width: 100%;
-	background-color: #dfdfdf;
+	background-color: #3e3e3e;
 	z-index: -1;
 }
 
@@ -89,7 +103,7 @@
 
 .calendarCell {
 	display: table-cell;
-	border-bottom: 1px solid #ccc;
+	border-bottom: 1px solid #3a3a3a;
 	text-align: left;
 }
 
@@ -340,7 +354,7 @@ body .tooltip .tooltip-inner {
 .occupancy-total {
 	font-size: 14px;
 	font-weight: 600;
-	color: #000;
+	color: #ffcb00;
 }
 .occupancy-total .occupancy-total-stats {
 	margin-left: 10px;
