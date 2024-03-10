@@ -17,6 +17,52 @@
 
 		// updateCalendarCells();
 
+	function markToday() {
+		// Find the index of the .is-today cell in the second row
+		var todayIndex = $('#calendarTable .calendarRow:eq(1) .calendarCell.monthHeader.is-today').index();
+	
+		// Check if .is-today was found
+		if (todayIndex !== -1) {
+			// Add the .is-today class to all cells in the same column
+			$('#calendarTable .calendarRow').each(function() {
+				$(this).find('.calendarCell:eq(' + todayIndex + ')').addClass('is-today');
+			});
+		}
+	}
+	markToday();
+	
+	function generateOpacityforRemainingRooms() {
+		// Find the maximum number of rooms
+		var maxRooms = 0;
+		$('#calendarTable .monthHeader.occupancy-stats').each(function() {
+			var roomsRemaining = parseInt($(this).data('roomsremaining'));
+			if (roomsRemaining > maxRooms) {
+				maxRooms = roomsRemaining;
+			}
+		});
+	
+		// Apply opacity based on the remaining rooms
+		$('#calendarTable .monthHeader.occupancy-stats').each(function() {
+			var roomsRemaining = parseInt($(this).data('roomsremaining'));
+			var opacity;
+			if (roomsRemaining === 0) {
+				opacity = 0.6; // Set opacity to 0.6 for 0 remaining rooms
+			} else {
+				// Scale opacity from 0.4 (for 1 room remaining) to 1 (for maxRooms remaining)
+				opacity = 0.3 * (roomsRemaining - 1) / (maxRooms - 1) + 0.7;
+			}
+			// Generate a random duration between 500 and 1500 milliseconds
+			var randomDuration = Math.floor(Math.random() * (1500 - 500 + 1)) + 500;
+			
+			// Animate the opacity change using Velocity.js with a random duration
+			$(this).velocity({ opacity: opacity }, { duration: randomDuration });
+		});
+	}
+	generateOpacityforRemainingRooms();
+	
+	
+	
+
 		function runCalendarAnimation() {
 			$('#calendarTable .calendarRow').each(function (rowIndex) {
 				var row = $(this);
@@ -608,6 +654,9 @@
 						$('.preloader-element').velocity('fadeOut');
 						$('.calendar-nav-buttons').removeClass('disabled');
 						$('.availabilitycalendar').removeClass('disabled');
+
+						generateOpacityforRemainingRooms();
+						markToday();
 					},
 					error: function (data) {
 						alert('Error: Unable to retrieve calendar data.');

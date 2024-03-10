@@ -436,14 +436,17 @@ $calendar = $this->getAvailabilityCalendar();
         foreach ($dates as $date):
             $number_of_columns++;
             $occupancydate = $date->format('Y-m-d');
-            $output .= '<td class="calendarCell monthHeader occupancy-stats ' . esc_attr($this->todayCSSTag($occupancydate)) . ' ' . esc_attr($this->startOfMonthCSSTag($occupancydate)) . '">';
+            
+            $remaining_rooms = $this->calculateRemainingRoomsForDate($occupancydate);
+
+            $output .= '<td data-roomsremaining="'.esc_attr( $remaining_rooms ).'" class="calendarCell monthHeader occupancy-stats occupancy-percent-' . esc_attr($remaining_rooms) . ' ' . esc_attr($this->todayCSSTag($occupancydate)) . ' ' . esc_attr($this->startOfMonthCSSTag($occupancydate)) . '">';
             $output .= '<div class="occupancyStats-wrap">';
             $output .= '<div class="occupancyStats-inner">';
             $output .= '<div class="occupancy-adr">';
             $output .= __('Rooms<br/>Open', 'atollmatrix');
             $output .= '</div>';
             $output .= '<div class="occupancy-percentage">';
-            $output .= esc_html($this->calculateRemainingRoomsForDate($occupancydate));
+            $output .= esc_html( $remaining_rooms );
             $output .= '<span></span>';
             $output .= '</div>';
             $output .= '</div>';

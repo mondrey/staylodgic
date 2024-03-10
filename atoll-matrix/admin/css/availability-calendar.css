@@ -180,12 +180,15 @@
 	border-bottom-left-radius: 0;
 }
 
-.calendarCell.monthHeader.rangeSelected {
-	border-top: 2px solid #f00;
-}
 
 .calendarCell.fully-booked {
 	background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQVQYV2NkIALsU1Y2ZiSkDqTI6e7ds3gVwhSBDMOpEFkRToXoirAqxKYIQyEuRSgK8SmCKySkCKyQGEUghQCl2yVCPSoUNwAAAABJRU5ErkJggg==) repeat;
+}
+.calendarCell.is-today {
+	background: #ffbf001c;
+}
+.calendarCell.monthHeader.is-today:not(.occupancy-stats) {
+	background: radial-gradient( circle 400px at 6.8% 8.3%,  rgba(255,244,169,1) 0%, rgba(255,244,234,1) 100.2% );
 }
 
 body .tooltip .tooltip-inner {
@@ -311,9 +314,6 @@ body .tooltip .tooltip-inner {
 	box-shadow: 33px 0px 35px 6px #0000001f;
 }
 
-.calendarCell.monthHeader.is-today:not(.occupancy-stats) {
-	background-image: radial-gradient( circle 400px at 6.8% 8.3%,  rgba(255,244,169,1) 0%, rgba(255,244,234,1) 100.2% );
-}
 .occupancyStats-wrap {
 	font-size: 10px;
 	letter-spacing: 1px;
@@ -331,10 +331,10 @@ body .tooltip .tooltip-inner {
 }
 
 .calendarCell.monthHeader.occupancy-stats {
-	background: #1a1a1a;
+	background-image: linear-gradient( 180.8deg, rgb(10, 13, 174) 6.9%, rgb(76, 0, 151) 73.2% );
 }
 .calendarCell.monthHeader.occupancy-stats {
-	border-color: #4d4d4d;
+	border: 0;
 }
 
 .occupancy-total {
@@ -420,7 +420,7 @@ ul.existing-customer li {
 }
 
 .calendarCell.start-of-month {
-	border-left: 2px solid #000;
+	background: #0040ff0d;
 }
 
 #result-notice ol {
