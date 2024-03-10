@@ -552,6 +552,11 @@
 			
 			function shiftDates(buttonId, months) {
 				$(buttonId).click(function () {
+
+					$('.preloader-element').velocity('fadeIn');
+					$('.calendar-nav-buttons').addClass('disabled');
+					$('.availabilitycalendar').addClass('disabled');
+
 					var currentDate = fp.selectedDates[0];
 					var newMonth = currentDate.getMonth() + months;
 					var newYear = currentDate.getFullYear();
@@ -576,8 +581,8 @@
 					debouncedCalendarUpdate([newStartDate, newEndDate]);
 				});
 			}
-			shiftDates('#prevmonth', -1);
-			shiftDates('#nextmonth', 1);
+			shiftDates('#prevmonth:not(".disabled")', -1);
+			shiftDates('#nextmonth:not(".disabled")', 1);
 
 			// Call the initialize function with the initial dates
 			initializeFlatpickr(startDate, endDate);
@@ -600,6 +605,9 @@
 						runCalendarAnimation();
 						// After updating the content, initialize the tooltips again
 						initializeTooltips();
+						$('.preloader-element').velocity('fadeOut');
+						$('.calendar-nav-buttons').removeClass('disabled');
+						$('.availabilitycalendar').removeClass('disabled');
 					},
 					error: function (data) {
 						alert('Error: Unable to retrieve calendar data.');

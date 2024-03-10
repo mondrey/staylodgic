@@ -106,13 +106,30 @@ class AvailablityCalendar extends AvailablityCalendarBase
 // Add any custom HTML content here
         ?>
 		</div>
-		<div class="calendar-controls-wrap">
-			<button id="prevmonth">Previous</button>
-			<input type="text" class="availabilitycalendar" id="availabilitycalendar" name="availabilitycalendar" value="" />
-			<button id="nextmonth">Next</button>
-			<a href="#" id="quantity-popup-link" data-bs-toggle="modal" data-bs-target="#quantity-popup">Update Quantity</a>
-			<a href="#" id="rates-popup-link" data-bs-toggle="modal" data-bs-target="#rates-popup">Update Rates</a>
-		</div>
+        <div class="calendar-controls-wrap">
+            <div class="calendar-controls">
+                <ul class="calendar-controls-list">
+                    <li class="nav-item">
+                    <div class="preloader-element-outer"><div class="preloader-element"></div></div>
+                    </li>
+                    <li class="nav-item">
+                        <div class="calendar-nav-buttons" id="prevmonth"><i class="fa-solid fa-arrow-left"></i></div>
+                    </li>
+                    <li class="nav-item">
+                        <input type="text" class="availabilitycalendar" id="availabilitycalendar" name="availabilitycalendar" value="" />
+                    </li>
+                    <li class="nav-item">
+                        <div class="calendar-nav-buttons" id="nextmonth"><i class="fa-solid fa-arrow-right"></i></div>
+                    </li>
+                    <li class="nav-item nav-item-seperator">
+                        <div class="calendar-nav-buttons calendar-text-button" id="quantity-popup-link" data-bs-toggle="modal" data-bs-target="#quantity-popup"><i class="fas fa-hashtag"></i>Quanity</div>
+                    </li>
+                    <li class="nav-item">
+                        <div class="calendar-nav-buttons calendar-text-button" id="rates-popup-link" data-bs-toggle="modal" data-bs-target="#rates-popup"><i class="fas fa-dollar-sign"></i>Rate</div>
+                    </li>
+                </ul>
+            </div>
+        </div>
 		<div id="container">
 			<div id="calendar">
 				<?php

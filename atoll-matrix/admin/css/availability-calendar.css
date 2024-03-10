@@ -18,7 +18,7 @@
 #calendarTable {
 	display: flex;
 	flex-direction: column;
-	border: 1px solid #ccc;
+	border: 0
 	border-collapse: collapse;
 	white-space: nowrap;
 	min-width: fit-content;
@@ -332,7 +332,9 @@ body .tooltip .tooltip-inner {
 
 .calendarCell.monthHeader.occupancy-stats {
 	background: #1a1a1a;
-	box-shadow: inset 11px 1px 31px #ffffff26;
+}
+.calendarCell.monthHeader.occupancy-stats {
+	border-color: #4d4d4d;
 }
 
 .occupancy-total {
@@ -602,3 +604,114 @@ ul.existing-customer li {
 	/* Change the color as needed */
 }
 
+
+.calendar-controls-wrap {
+	margin-bottom: 0;
+	background: #000;
+	padding-top: 15px;
+	padding-bottom: 11px;
+}
+
+.calendar-controls-list li {
+	display: inline-block;
+	position: relative;
+}
+.preloader-element-outer {
+	display: inline-block;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+.calendar-controls {
+	text-align: left;
+}
+.calendar-controls-wrap ul {
+	margin-bottom: 0;
+	padding-left: 63px;
+}
+
+.calendar-nav-buttons {
+	border: 0;
+	display: block;
+	border-radius: 6px;
+	width: 30px;
+	height: 30px;
+	line-height: 29px;
+	font-size: 13px;
+	text-align: center;
+	background: #3437ff;
+	color: #fff;
+	transition: background-color 0.3s ease-in-out;
+}
+.calendar-nav-buttons:hover {
+	background: #5255ff;
+	cursor: pointer;
+}
+.calendar-text-button {
+	width: 120px;
+	font-size: 13px;
+}
+.calendar-text-button i {
+	margin-right: 5px;
+}
+.calendar-controls-list {
+	margin-right: 30px;
+}
+#availabilitycalendar {
+	background: none;
+	color: #fff;
+	font-size: 12px;
+	width: 70px;
+	border: 1px solid #ffffff61;
+	position: relative;
+	top: 0;
+	transition: border-color 0.3s ease-in-out;
+}
+#availabilitycalendar:hover {
+	border-color: #fff;
+}
+.nav-item.nav-item-seperator {
+	margin-left: 80px;
+}
+
+/* HTML: <div class="loader"></div> */
+.preloader-element-outer {
+
+	display: inline-block;
+}
+.preloader-element {
+	width: 15px;
+	aspect-ratio: 1;
+	border-radius: 50%;
+	display: block;
+	position: relative;
+	left: -38px;
+	border: 2px solid #fff;
+	animation: l20-1 0.8s infinite linear alternate, l20-2 1.6s infinite linear;
+	opacity: 0;
+	top: -7px;
+}
+  @keyframes l20-1{
+	 0%    {clip-path: polygon(50% 50%,0       0,  50%   0%,  50%    0%, 50%    0%, 50%    0%, 50%    0% )}
+	 12.5% {clip-path: polygon(50% 50%,0       0,  50%   0%,  100%   0%, 100%   0%, 100%   0%, 100%   0% )}
+	 25%   {clip-path: polygon(50% 50%,0       0,  50%   0%,  100%   0%, 100% 100%, 100% 100%, 100% 100% )}
+	 50%   {clip-path: polygon(50% 50%,0       0,  50%   0%,  100%   0%, 100% 100%, 50%  100%, 0%   100% )}
+	 62.5% {clip-path: polygon(50% 50%,100%    0, 100%   0%,  100%   0%, 100% 100%, 50%  100%, 0%   100% )}
+	 75%   {clip-path: polygon(50% 50%,100% 100%, 100% 100%,  100% 100%, 100% 100%, 50%  100%, 0%   100% )}
+	 100%  {clip-path: polygon(50% 50%,50%  100%,  50% 100%,   50% 100%,  50% 100%, 50%  100%, 0%   100% )}
+  }
+  @keyframes l20-2{ 
+	0%    {transform:scaleY(1)  rotate(0deg)}
+	49.99%{transform:scaleY(1)  rotate(135deg)}
+	50%   {transform:scaleY(-1) rotate(0deg)}
+	100%  {transform:scaleY(-1) rotate(-135deg)}
+  }
+
+.calendar-nav-buttons.disabled {
+	background: #4b4646;
+	pointer-events:none;
+}
+.availabilitycalendar.disabled {
+	opacity: 0.4;
+	pointer-events:none;
+}
