@@ -101,7 +101,7 @@ class AvailablityCalendar extends AvailablityCalendarBase
         // Output the HTML for the Availability page
         ?>
 		<div class="wrap">
-			<h1>Availability</h1>
+			<h1><?php _e('Availability Calendar','atollmatrix'); ?></h1>
 			<?php
 // Add any custom HTML content here
         ?>
@@ -117,15 +117,19 @@ class AvailablityCalendar extends AvailablityCalendarBase
                     </li>
                     <li class="nav-item">
                         <input type="text" class="availabilitycalendar" id="availabilitycalendar" name="availabilitycalendar" value="" />
+                        <?php
+                        $availabilitycalendar = wp_create_nonce('atollmatrix-availabilitycalendar-nonce');
+                        echo '<input type="hidden" name="atollmatrix_availabilitycalendar_nonce" value="' . esc_attr($availabilitycalendar) . '" />';
+                        ?>
                     </li>
                     <li class="nav-item">
                         <div class="calendar-nav-buttons" id="nextmonth"><i class="fa-solid fa-arrow-right"></i></div>
                     </li>
                     <li class="nav-item nav-item-seperator">
-                        <div class="calendar-nav-buttons calendar-text-button" id="quantity-popup-link" data-bs-toggle="modal" data-bs-target="#quantity-popup"><i class="fas fa-hashtag"></i>Quanity</div>
+                        <div class="calendar-nav-buttons calendar-text-button" id="quantity-modal-link" data-bs-toggle="modal" data-bs-target="#quantity-modal"><i class="fas fa-hashtag"></i>Quanity</div>
                     </li>
                     <li class="nav-item">
-                        <div class="calendar-nav-buttons calendar-text-button" id="rates-popup-link" data-bs-toggle="modal" data-bs-target="#rates-popup"><i class="fas fa-dollar-sign"></i>Rate</div>
+                        <div class="calendar-nav-buttons calendar-text-button" id="rates-modal-link" data-bs-toggle="modal" data-bs-target="#rates-modal"><i class="fas fa-dollar-sign"></i>Rate</div>
                     </li>
                 </ul>
             </div>
@@ -147,6 +151,14 @@ $calendar = $this->getAvailabilityCalendar();
 
     public function get_Selected_Range_AvailabilityCalendar()
     {
+
+        // Verify the nonce
+        if (!isset($_POST[ 'atollmatrix_availabilitycalendar_nonce' ]) || !check_admin_referer('atollmatrix-availabilitycalendar-nonce', 'atollmatrix_availabilitycalendar_nonce')) {
+            // Nonce verification failed; handle the error or reject the request
+            // For example, you can return an error response
+            wp_send_json_error([ 'message' => 'Failed' ]);
+            return;
+        }
 
         // Check if the request has necessary data
         if (!isset($_POST[ 'start_date' ], $_POST[ 'end_date' ])) {
@@ -375,16 +387,22 @@ $calendar = $this->getAvailabilityCalendar();
             $startDate = $this->startDate;
             $endDate   = $this->endDate;
         }
+    
         if ($startDate instanceof \DateTime) {
             $startDateString = $startDate->format('Y-m-d');
         } else {
             $startDateString = $startDate;
         }
+    
         if ($endDate instanceof \DateTime) {
+            $endDate->modify('-5 days');
             $endDateString = $endDate->format('Y-m-d');
         } else {
-            $endDateString = $endDate;
+            $endDate = new \DateTime($endDate);
+            $endDate->modify('-5 days');
+            $endDateString = $endDate->format('Y-m-d');
         }
+    
         $output = '<td class="calendarCell rowHeader">';
         $output .= '<div class="occupancyStats-wrap occupancy-percentage">';
         $output .= '<div class="occupancyStats-inner">';
@@ -399,7 +417,7 @@ $calendar = $this->getAvailabilityCalendar();
         $output .= '</div>';
         $output .= '</td>';
         return $output;
-    }
+    }    
 
     public function todayCSSTag($occupancydate)
     {

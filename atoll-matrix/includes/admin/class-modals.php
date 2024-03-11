@@ -37,30 +37,30 @@ class Modals
 		</div>
 		</div>
 		<?php
-	}
+}
 
     public static function quanityModal()
     {
         ?>
 		<!-- Bootstrap Modal -->
-		<div class="modal fade" id="quantity-popup" tabindex="-1" aria-labelledby="quantity-popup-label" aria-hidden="true">
+		<div class="modal fade" id="quantity-modal" tabindex="-1" aria-labelledby="quantity-modal-label" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered">
 			<div class="modal-content">
 				<div class="modal-header">
-						<h5 class="modal-title" id="quantity-popup-label">Calendar Set Quantity</h5>
+						<h5 class="modal-title" id="quantity-modal-label"><?php _e('Quantity', 'atollmatrix');?></h5>
 						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 					</div>
 					<div class="modal-body">
 						<div class="form-group">
-							<label for="quantity-popup-input">Quantity:</label>
+							<label for="quantity-modal-input"><i class="fa-solid fa-hashtag"></i> <?php _e('Quantity', 'atollmatrix');?></h5>
 							<input type="number" class="form-control" name="quantity" placeholder="Quantity" value="0" min="0">
 						</div>
 						<div class="form-group">
-							<label for="modaldatepicker">Date:</label>
+							<label for="modaldatepicker"><i class="fa-solid fa-calendar"></i> <?php _e('Date:', 'atollmatrix');?></label>
 							<input type="text" class="form-control modaldatepicker" name="modaldatepicker" placeholder="Select date">
 						</div>
 						<div class="form-group">
-							<label for="room">Room:</label>
+							<label for="room"><i class="fa-solid fa-bed"></i> <?php _e('Room:', 'atollmatrix');?></label>
 							<select class="form-select" name="room">
 								<?php
 $featured_pages         = get_posts('post_type=atmx_room&orderby=title&numberposts=-1&order=ASC');
@@ -70,7 +70,7 @@ $featured_pages         = get_posts('post_type=atmx_room&orderby=title&numberpos
                 $list_options[ $list->ID ] = $list->post_title;
             }
         } else {
-            $list_options[ 0 ] = "Rooms not found.";
+            $list_options[ 0 ] = __('Rooms not found.','atollmatrix');
         }
         foreach ($list_options as $key => $option) {
             echo '<option value="' . esc_attr($key) . '">', esc_attr($option), '</option>';
@@ -80,8 +80,9 @@ $featured_pages         = get_posts('post_type=atmx_room&orderby=title&numberpos
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-						<button type="button" class="btn btn-primary save-changes">Save changes</button>
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?php _e('Close', 'atollmatrix');?></button>
+						<button type="button" class="btn btn-primary save-changes">
+						<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> <?php _e('Save changes', 'atollmatrix');?></button>
 					</div>
 				</div>
 			</div>
@@ -93,24 +94,24 @@ $featured_pages         = get_posts('post_type=atmx_room&orderby=title&numberpos
     {
         ?>
 		<!-- Bootstrap Modal -->
-		<div class="modal fade" id="rates-popup" tabindex="-1" aria-labelledby="rates-popup-label" aria-hidden="true">
+		<div class="modal fade" id="rates-modal" tabindex="-1" aria-labelledby="rates-modal-label" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered">
 			<div class="modal-content">
 				<div class="modal-header">
-						<h5 class="modal-title" id="rates-popup-label">Calendar Set Rates</h5>
+						<h5 class="modal-title" id="rates-modal-label"><?php _e('Set Rate', 'atollmatrix');?></h5>
 						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 					</div>
 					<div class="modal-body">
 						<div class="form-group">
-							<label for="rates-popup-input">Rate:</label>
+							<label for="rates-modal-input"><i class="fas fa-dollar-sign"></i> <?php _e('Rate:', 'atollmatrix');?></label>
 							<input type="number" class="form-control" name="rate" placeholder="Rate" value="0" min="0">
 						</div>
 						<div class="form-group">
-							<label for="modaldatepicker">Date:</label>
+							<label for="modaldatepicker"><i class="fa-solid fa-calendar"></i> <?php _e('Date:', 'atollmatrix');?></label>
 							<input type="text" class="form-control modaldatepicker" name="modaldatepicker" placeholder="Select date">
 						</div>
 						<div class="form-group">
-							<label for="room">Room:</label>
+							<label for="room"><i class="fa-solid fa-bed"></i> <?php _e('Room:', 'atollmatrix');?></label>
 							<select class="form-select" name="room">
 								<?php
 $featured_pages         = get_posts('post_type=atmx_room&orderby=title&numberposts=-1&order=ASC');
@@ -120,7 +121,7 @@ $featured_pages         = get_posts('post_type=atmx_room&orderby=title&numberpos
                 $list_options[ $list->ID ] = $list->post_title;
             }
         } else {
-            $list_options[ 0 ] = "Rooms not found.";
+            $list_options[ 0 ] = __('Rooms not found.','atollmatrix');
         }
         foreach ($list_options as $key => $option) {
             echo '<option value="' . esc_attr($key) . '">', esc_attr($option), '</option>';
@@ -130,8 +131,9 @@ $featured_pages         = get_posts('post_type=atmx_room&orderby=title&numberpos
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-						<button type="button" class="btn btn-primary save-changes">Save changes</button>
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?php _e('Close', 'atollmatrix');?></button>
+						<button type="button" class="btn btn-primary save-changes">
+							<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> <?php _e('Save changes', 'atollmatrix');?></button>
 					</div>
 				</div>
 			</div>

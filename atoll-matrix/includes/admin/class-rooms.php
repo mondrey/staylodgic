@@ -294,6 +294,15 @@ class Rooms
 
     public function update_RoomAvailability()
     {
+
+        // Verify the nonce
+        if (!isset($_POST[ 'atollmatrix_availabilitycalendar_nonce' ]) || !check_admin_referer('atollmatrix-availabilitycalendar-nonce', 'atollmatrix_availabilitycalendar_nonce')) {
+            // Nonce verification failed; handle the error or reject the request
+            // For example, you can return an error response
+            wp_send_json_error([ 'message' => 'Failed' ]);
+            return;
+        }
+        
         if (isset($_POST['dateRange'])) {
             $dateRange = $_POST['dateRange'];
         } else {
@@ -411,6 +420,15 @@ class Rooms
 
     public function update_RoomRate()
     {
+
+        // Verify the nonce
+        if (!isset($_POST[ 'atollmatrix_availabilitycalendar_nonce' ]) || !check_admin_referer('atollmatrix-availabilitycalendar-nonce', 'atollmatrix_availabilitycalendar_nonce')) {
+            // Nonce verification failed; handle the error or reject the request
+            // For example, you can return an error response
+            wp_send_json_error([ 'message' => 'Failed' ]);
+            return;
+        }
+        
         if (isset($_POST['dateRange'])) {
             $dateRange = $_POST['dateRange'];
         } else {

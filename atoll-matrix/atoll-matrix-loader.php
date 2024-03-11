@@ -142,7 +142,7 @@ class AtollMatrix_Init
         wp_register_style('menu-image-css', plugin_dir_url(__FILE__) . 'admin/js/menu-image-admin.css', array(), false, 'screen');
         wp_register_style('atollmatrix-admin-styles', plugin_dir_url(__FILE__) . 'admin/css/style.css', false, 'screen');
 
-        wp_enqueue_style('availability-styles', plugin_dir_url(__FILE__) . 'admin/css/availability-calendar.css', false, 'screen');
+        wp_register_style('availability-styles', plugin_dir_url(__FILE__) . 'admin/css/availability-calendar.css', false, 'screen');
         wp_enqueue_script('availability-scripts', plugin_dir_url(__FILE__) . 'admin/js/availability-calendar.js', array('jquery'), null, true);
         wp_enqueue_script('activity-scripts', plugin_dir_url(__FILE__) . 'admin/js/activity-calendar.js', array('jquery'), null, true);
         
@@ -355,6 +355,11 @@ class AtollMatrix_Init
             }
             if ($current_admin_screen->base == 'toplevel_page_atmx-availability') {
 
+                
+
+                wp_enqueue_style('availability-styles');
+                wp_enqueue_script('availability-scripts');
+                
                 wp_enqueue_script('velocity', plugin_dir_url(__FILE__) . 'assets/js/velocity.min.js', array('jquery'), null, true);
                 wp_enqueue_script('velocity-ui', plugin_dir_url(__FILE__) . 'assets/js/velocity.ui.js', array('jquery'), null, true);
 

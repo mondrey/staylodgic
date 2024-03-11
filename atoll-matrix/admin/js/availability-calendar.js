@@ -111,7 +111,7 @@
 
 		if ($.fn.flatpickr) {
 			// Initialize Flatpickr
-			$('#quantity-popup .modaldatepicker').flatpickr(
+			$('#quantity-modal .modaldatepicker').flatpickr(
 				{
 					mode: "range",
 					showMonths: 2,
@@ -127,7 +127,7 @@
 			);
 
 			// Initialize Flatpickr
-			$('#rates-popup .modaldatepicker').flatpickr(
+			$('#rates-modal .modaldatepicker').flatpickr(
 				{
 					mode: "range",
 					showMonths: 2,
@@ -144,10 +144,16 @@
 		}
 
 		// Handle click event on the "Save changes" button
-		$('#rates-popup .save-changes').click(function () {
-			var dateRange = $('#rates-popup input[name="modaldatepicker"]').val();
-			var rate = $('#rates-popup input[name="rate"]').val();
-			var postID = $('#rates-popup select[name="room"]').val();
+		$('#rates-modal .save-changes').click(function () {
+			var dateRange = $('#rates-modal input[name="modaldatepicker"]').val();
+			var rate = $('#rates-modal input[name="rate"]').val();
+			var postID = $('#rates-modal select[name="room"]').val();
+			
+			var save_button = $('#rates-modal .save-changes');
+			save_button.find('.spinner-border').css('opacity', '1');
+			save_button.prop('disabled', true);
+
+			var atollmatrix_availabilitycalendar_nonce = $('input[name="atollmatrix_availabilitycalendar_nonce"]').val();
 
 			console.log(ajaxurl, dateRange, rate, postID);
 
@@ -159,21 +165,23 @@
 					action: 'update_RoomRate',
 					postID: postID,
 					dateRange: dateRange,
-					rate: rate
+					rate: rate,
+					atollmatrix_availabilitycalendar_nonce: atollmatrix_availabilitycalendar_nonce
 				},
 				success: function (response) {
 					// Handle the AJAX response here
 					if (response.success) {
 						// Metadata stored successfully
 						console.log(response.data.message);
+
+						// Close the modal
+						$('#rates-modal').modal('hide');
+						location.reload();
+
 					} else {
 						// Error storing metadata
 						console.error(response.data.message);
 					}
-
-					// Close the modal
-					$('#rates-popup').modal('hide');
-					location.reload();
 				},
 				error: function (xhr, status, error) {
 					// Handle AJAX error here
@@ -196,12 +204,12 @@
 		// Function to open the modal with the selected date and room
 		function openRoomRateModal(date, room, rate) {
 			// Set the date and room values in the modal inputs
-			$('#rates-popup input[name="modaldatepicker"]').val(date);
-			$('#rates-popup input[name="rate"]').val(rate);
-			$('#rates-popup select[name="room"]').val(room);
+			$('#rates-modal input[name="modaldatepicker"]').val(date);
+			$('#rates-modal input[name="rate"]').val(rate);
+			$('#rates-modal select[name="room"]').val(room);
 
 			// Open the modal
-			$('#rates-popup').modal('show');
+			$('#rates-modal').modal('show');
 		}
 
 		// Handle click event on quantity link
@@ -218,30 +226,36 @@
 		// Function to open the modal with the selected date and room
 		function openQuantityModal(date, room, remaining) {
 			// Set the date and room values in the modal inputs
-			$('#quantity-popup input[name="modaldatepicker"]').val(date);
-			$('#quantity-popup input[name="quantity"]').val(remaining);
-			$('#quantity-popup select[name="room"]').val(room);
+			$('#quantity-modal input[name="modaldatepicker"]').val(date);
+			$('#quantity-modal input[name="quantity"]').val(remaining);
+			$('#quantity-modal select[name="room"]').val(room);
 
 			// Open the modal
-			$('#quantity-popup').modal('show');
+			$('#quantity-modal').modal('show');
 		}
 
 		// Handle click event on the link that triggers the popup
-		$('#quantity-popup-link').click(function (e) {
+		$('#quantity-modal-link').click(function (e) {
 			e.preventDefault();
 
 			// Show the popup
-			$('#quantity-popup').modal('show');
+			$('#quantity-modal').modal('show');
 
 			// Focus on the input field inside the popup
-			$('#quantity-popup input').focus();
+			$('#quantity-modal input').focus();
 		});
 
 		// Handle click event on the "Save changes" button
-		$('#quantity-popup .save-changes').click(function () {
-			var dateRange = $('#quantity-popup input[name="modaldatepicker"]').val();
-			var quantity = $('#quantity-popup input[name="quantity"]').val();
-			var postID = $('#quantity-popup select[name="room"]').val();
+		$('#quantity-modal .save-changes').click(function () {
+			var dateRange = $('#quantity-modal input[name="modaldatepicker"]').val();
+			var quantity = $('#quantity-modal input[name="quantity"]').val();
+			var postID = $('#quantity-modal select[name="room"]').val();
+
+			var save_button = $('#quantity-modal .save-changes');
+			save_button.find('.spinner-border').css('opacity', '1');
+			save_button.prop('disabled', true);
+
+			var atollmatrix_availabilitycalendar_nonce = $('input[name="atollmatrix_availabilitycalendar_nonce"]').val();
 
 			console.log(ajaxurl, dateRange, quantity, postID);
 
@@ -253,7 +267,8 @@
 					action: 'update_RoomAvailability',
 					postID: postID,
 					dateRange: dateRange,
-					quantity: quantity
+					quantity: quantity,
+					atollmatrix_availabilitycalendar_nonce: atollmatrix_availabilitycalendar_nonce
 				},
 				success: function (response) {
 					// Handle the AJAX response here
@@ -266,7 +281,7 @@
 					}
 
 					// Close the modal
-					$('#quantity-popup').modal('hide');
+					$('#quantity-modal').modal('hide');
 					location.reload();
 				},
 				error: function (xhr, status, error) {
@@ -599,10 +614,6 @@
 			function shiftDates(buttonId, months) {
 				$(buttonId).click(function () {
 
-					$('.preloader-element').velocity('fadeIn');
-					$('.calendar-nav-buttons').addClass('disabled');
-					$('.availabilitycalendar').addClass('disabled');
-
 					var currentDate = fp.selectedDates[0];
 					var newMonth = currentDate.getMonth() + months;
 					var newYear = currentDate.getFullYear();
@@ -638,13 +649,20 @@
 				var end_date = selectedDates[1].toLocaleDateString('en-US').substr(0, 10);
 				console.log(start_date, end_date, ajaxurl);
 
+				$('.preloader-element').velocity('fadeIn');
+				$('.calendar-nav-buttons').addClass('disabled');
+				$('.availabilitycalendar').addClass('disabled');
+
+				var atollmatrix_availabilitycalendar_nonce = $('input[name="atollmatrix_availabilitycalendar_nonce"]').val();
+
 				$.ajax({
 					type: 'POST',
 					url: ajaxurl,
 					data: {
 						'action': 'get_Selected_Range_AvailabilityCalendar',
 						'start_date': start_date,
-						'end_date': end_date
+						'end_date': end_date,
+						atollmatrix_availabilitycalendar_nonce: atollmatrix_availabilitycalendar_nonce
 					},
 					success: function (data) {
 						$('#calendar').html(data);

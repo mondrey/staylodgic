@@ -15,6 +15,7 @@
 	display: flex;
 	overflow-x: auto;
 	max-width: 100%;
+	width: calc( 100% - 20px );
 	background: #fff;
 }
 
@@ -52,6 +53,15 @@
 	height: 80px;
 	position: relative;
 	vertical-align: bottom;
+}
+.calendarCell.rowHeader::after {
+	content: ' ';
+	position: absolute;
+	right: -1px;
+	top: 0;
+	height: 100%;
+	width: 1px;
+	background: #000;
 }
 
 .calendar-room-row .calendarCell.rowHeader {
@@ -382,10 +392,6 @@ a.reservation-edit-link:focus {
 	border-right-color: #0000006d;
 }
 
-.calendar-controls-wrap {
-	margin-bottom: 14px;
-}
-
 #guest-age {
 	margin-top: 10px;
 }
@@ -624,6 +630,7 @@ ul.existing-customer li {
 	background: #000;
 	padding-top: 15px;
 	padding-bottom: 11px;
+	width: calc( 100% - 20px );
 }
 
 .calendar-controls-list li {
@@ -672,20 +679,69 @@ ul.existing-customer li {
 	margin-right: 30px;
 }
 #availabilitycalendar {
-	background: none;
+	background: #444;
 	color: #fff;
 	font-size: 12px;
 	width: 70px;
-	border: 1px solid #ffffff61;
+	border: 0;
 	position: relative;
 	top: 0;
-	transition: border-color 0.3s ease-in-out;
+	transition: background-color 0.3s ease-in-out;
 }
 #availabilitycalendar:hover {
-	border-color: #fff;
+	background-color: #111;
+	border:0;
+}
+#availabilitycalendar:active {
+	border:0;
 }
 .nav-item.nav-item-seperator {
 	margin-left: 80px;
+}
+
+
+#quantity-modal .modal-body,
+#rates-modal .modal-body {
+	width: 100%;
+	margin: 0 auto;
+	padding: 30px 120px 40px;
+	background: #f0f0f0;
+}
+#quantity-modal .form-group,
+#rates-modal .form-group {
+	margin-bottom: 12px;
+}
+#quantity-modal .modal-header,
+#rates-modal .modal-header {
+	background: #3a5de6;
+	color: #fff;
+}
+#quantity-modal .form-group label,
+#rates-modal .form-group label {
+	font-size: 12px;
+	margin-bottom: 2px;
+	color: #000;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+}
+#quantity-modal i,
+#rates-modal i {
+	color: #555;
+}
+#quantity-modal .form-control,
+#rates-modal .form-control,
+#quantity-modal select,
+#rates-modal select {
+	font-size: 13px;
+	background: #fff;
+}
+#quantity-modal .spinner-border,
+#rates-modal .spinner-border {
+	opacity: 0;
+}
+#quantity-modal .modal-footer,
+#rates-modal .modal-footer {
+	background: #d9d9d9;
 }
 
 /* HTML: <div class="loader"></div> */
