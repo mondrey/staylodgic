@@ -3,6 +3,53 @@ namespace AtollMatrix;
 
 class Modals
 {
+
+	public static function rateQtyToasts() {
+		$toast = '<div aria-live="polite" aria-atomic="true" class="availability-calendar-toasts position-relative">';
+		$toast .= '<div class="toast-container top-0 end-0 p-3">';
+	
+		$toast .= '<div id="rateToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">';
+		$toast .= '<div class="toast-header">';
+		$toast .= '<div class="toast-square"></div>';
+		$toast .= '<strong class="me-auto">Rate Update</strong>';
+		$toast .= '<small class="text-muted toast-time">just now</small>';
+		$toast .= '<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>';
+		$toast .= '</div>';
+		$toast .= '<div class="toast-body">';
+		$toast .= 'Rate updated successfully.';
+		$toast .= '</div>';
+		$toast .= '</div>';
+	
+		$toast .= '<div id="quantityToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">';
+		$toast .= '<div class="toast-header">';
+		$toast .= '<div class="toast-square"></div>';
+		$toast .= '<strong class="me-auto">Quantity Update</strong>';
+		$toast .= '<small class="text-muted toast-time">just now</small>';
+		$toast .= '<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>';
+		$toast .= '</div>';
+		$toast .= '<div class="toast-body">';
+		$toast .= 'Quantity updated successfully.';
+		$toast .= '</div>';
+		$toast .= '</div>';
+
+		$toast .= '<div id="calendarToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">';
+		$toast .= '<div class="toast-header">';
+		$toast .= '<div class="toast-square"></div>';
+		$toast .= '<strong class="me-auto">Calendar</strong>';
+		$toast .= '<small class="text-muted toast-time">just now</small>';
+		$toast .= '<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>';
+		$toast .= '</div>';
+		$toast .= '<div class="toast-body">';
+		$toast .= 'Calendar loaded.';
+		$toast .= '</div>';
+		$toast .= '</div>';
+	
+		$toast .= '</div>';
+		$toast .= '</div>';
+	
+		return $toast;
+	}
+	
     public static function syncBookingModal()
     {
         ?>
@@ -52,7 +99,7 @@ class Modals
 					</div>
 					<div class="modal-body">
 						<div class="form-group">
-							<label for="quantity-modal-input"><i class="fa-solid fa-hashtag"></i> <?php _e('Quantity', 'atollmatrix');?></h5>
+							<label for="quantity-modal-input"><i class="fa-solid fa-hashtag"></i> <?php _e('Quantity', 'atollmatrix');?></label>
 							<input type="number" class="form-control" name="quantity" placeholder="Quantity" value="0" min="0">
 						</div>
 						<div class="form-group">

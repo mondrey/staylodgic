@@ -103,6 +103,7 @@ class AvailablityCalendar extends AvailablityCalendarBase
 		<div class="wrap">
 			<h1><?php _e('Availability Calendar','atollmatrix'); ?></h1>
 			<?php
+            echo \AtollMatrix\Modals::rateQtyToasts();
 // Add any custom HTML content here
         ?>
 		</div>
@@ -144,7 +145,6 @@ $calendar = $this->getAvailabilityCalendar();
 			</div>
 		</div>
 		<?php
-
         \AtollMatrix\Modals::quanityModal();
         \AtollMatrix\Modals::ratesModal();
     }

@@ -17,6 +17,18 @@
 
 		// updateCalendarCells();
 
+	function showToast(toastId) {
+		var toastEl = document.getElementById(toastId);
+		var timeElement = toastEl.querySelector('.toast-time');
+	
+		// Update the time to "just now"
+		timeElement.textContent = 'just now';
+	
+		var toast = new bootstrap.Toast(toastEl);
+		toast.show();
+	}
+		
+
 	function markToday() {
 		// Find the index of the .is-today cell in the second row
 		var todayIndex = $('#calendarTable .calendarRow:eq(1) .calendarCell.monthHeader.is-today').index();
@@ -176,7 +188,16 @@
 
 						// Close the modal
 						$('#rates-modal').modal('hide');
-						location.reload();
+						
+						save_button.find('.spinner-border').css('opacity', '0');
+						save_button.prop('disabled', false);
+						// Update the calendar without reloading the page
+						var currentDate = fp.selectedDates[0]; // Assuming fp is your flatpickr instance
+						var startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+						var endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 5);
+						debouncedCalendarUpdate([startDate, endDate]);
+
+						showToast('rateToast');
 
 					} else {
 						// Error storing metadata
@@ -282,7 +303,16 @@
 
 					// Close the modal
 					$('#quantity-modal').modal('hide');
-					location.reload();
+
+					save_button.find('.spinner-border').css('opacity', '0');
+					save_button.prop('disabled', false);
+					// Update the calendar without reloading the page
+					var currentDate = fp.selectedDates[0]; // Assuming fp is your flatpickr instance
+					var startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+					var endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 5);
+					debouncedCalendarUpdate([startDate, endDate]);
+
+					showToast('quantityToast');
 				},
 				error: function (xhr, status, error) {
 					// Handle AJAX error here
@@ -675,6 +705,7 @@
 
 						generateOpacityforRemainingRooms();
 						markToday();
+						showToast('calendarToast');
 					},
 					error: function (data) {
 						alert('Error: Unable to retrieve calendar data.');
