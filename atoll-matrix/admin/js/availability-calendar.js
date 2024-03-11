@@ -27,7 +27,6 @@
 		var toast = new bootstrap.Toast(toastEl);
 		toast.show();
 	}
-		
 
 	function markToday() {
 		// Find the index of the .is-today cell in the second row

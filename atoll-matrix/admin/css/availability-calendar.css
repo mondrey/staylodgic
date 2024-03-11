@@ -366,8 +366,13 @@ body .tooltip .tooltip-inner {
 	font-weight: 600;
 	color: #ffcb00;
 }
+
 .occupancy-total .occupancy-total-stats {
-	margin-left: 10px;
+	font-size: 25px;
+	font-weight: 100;
+}
+.occupancy-total .occupancy-percent-symbol {
+	margin-right: 10px;
 }
 
 .guest-name,
@@ -699,6 +704,13 @@ ul.existing-customer li {
 	margin-left: 80px;
 }
 
+.flatpickr-innerContainer .flatpickr-monthSelect-month.selected,
+.flatpickr-innerContainer .flatpickr-monthSelect-month.startRange,
+.flatpickr-innerContainer .flatpickr-monthSelect-month.endRange {
+	background-color: #7b00ff;
+	border-color: #7b00ff;
+}
+
 .toast-square {
 	width: 12px;
 	height: 12px;
@@ -759,6 +771,12 @@ ul.existing-customer li {
 #quantity-modal .modal-footer,
 #rates-modal .modal-footer {
 	background: #d9d9d9;
+}
+
+/* Tooltip background */
+.tooltip .tooltip-inner {
+	font-size: 12px;
+	line-height: 18px;
 }
 
 /* HTML: <div class="loader"></div> */

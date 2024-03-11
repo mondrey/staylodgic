@@ -114,7 +114,7 @@ class AvailablityCalendar extends AvailablityCalendarBase
                     <div class="preloader-element-outer"><div class="preloader-element"></div></div>
                     </li>
                     <li class="nav-item">
-                        <div class="calendar-nav-buttons" id="prevmonth"><i class="fa-solid fa-arrow-left"></i></div>
+                        <div data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Previous Month" class="calendar-nav-buttons" id="prevmonth"><i class="fa-solid fa-arrow-left"></i></div>
                     </li>
                     <li class="nav-item">
                         <input type="text" class="availabilitycalendar" id="availabilitycalendar" name="availabilitycalendar" value="" />
@@ -124,7 +124,7 @@ class AvailablityCalendar extends AvailablityCalendarBase
                         ?>
                     </li>
                     <li class="nav-item">
-                        <div class="calendar-nav-buttons" id="nextmonth"><i class="fa-solid fa-arrow-right"></i></div>
+                        <div data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Next Month" class="calendar-nav-buttons" id="nextmonth"><i class="fa-solid fa-arrow-right"></i></div>
                     </li>
                     <li class="nav-item nav-item-seperator">
                         <div class="calendar-nav-buttons calendar-text-button" id="quantity-modal-link" data-bs-toggle="modal" data-bs-target="#quantity-modal"><i class="fas fa-hashtag"></i>Quanity</div>
@@ -403,14 +403,16 @@ $calendar = $this->getAvailabilityCalendar();
             $endDateString = $endDate->format('Y-m-d');
         }
     
+        $occupancy_percent = esc_html($this->calculateOccupancyTotalForRange($startDateString, $endDateString));
+
         $output = '<td class="calendarCell rowHeader">';
-        $output .= '<div class="occupancyStats-wrap occupancy-percentage">';
+        $output .= '<div data-occupancypercent="'.esc_attr( $occupancy_percent ).'" class="occupancyStats-wrap occupancy-percentage">';
         $output .= '<div class="occupancyStats-inner">';
         $output .= '<div class="occupancy-total">';
-        $output .= __('Occupancy', 'atollmatrix');
         $output .= '<span class="occupancy-total-stats">';
-        $output .= esc_html($this->calculateOccupancyTotalForRange($startDateString, $endDateString));
-        $output .= '<span>%</span>';
+        $output .= esc_html( $occupancy_percent );
+        $output .= '<span class="occupancy-percent-symbol">%</span>';
+        $output .= __('Occupancy', 'atollmatrix');
         $output .= '</span>';
         $output .= '</div>';
         $output .= '</div>';
