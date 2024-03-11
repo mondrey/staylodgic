@@ -145,7 +145,19 @@ function atollmatrix_get_BedLayout($bedName, $bedFieldID = null)
 {
 
     switch ($bedName) {
+        case 'fullbed':
+            $html = '<div class="guest-bed guest-bed-' . sanitize_title($bedName) . '"></div>';
+            break;
+        case 'queenbed':
+            $html = '<div class="guest-bed guest-bed-' . sanitize_title($bedName) . '"></div>';
+            break;
         case 'kingbed':
+            $html = '<div class="guest-bed guest-bed-' . sanitize_title($bedName) . '"></div>';
+            break;
+        case 'sofabed':
+            $html = '<div class="guest-bed guest-bed-' . sanitize_title($bedName) . '"></div>';
+            break;
+        case 'bunkbed':
             $html = '<div class="guest-bed guest-bed-' . sanitize_title($bedName) . '"></div>';
             break;
         case 'twinbed':

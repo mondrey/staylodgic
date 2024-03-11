@@ -37,6 +37,16 @@ class AtollMatrix_Init
         add_action('init', array($this, 'atollmatrix_load_themeoptions'));
 
         add_action( 'after_setup_theme', array($this, 'atollmatrix_custom_image_size'));
+
+        add_action('admin_menu', array($this, 'remove_admin_notices_on_specific_page'));
+    }
+    public function remove_admin_notices_on_specific_page() {
+        if (isset($_GET['page']) && $_GET['page'] == 'atmx-availability') {
+            remove_all_actions('admin_notices');
+            remove_all_actions('all_admin_notices');
+            add_filter('admin_footer_text', '__return_empty_string', 11);
+            add_filter('update_footer', '__return_empty_string', 11);
+        }
     }
 
     public function atollmatrix_custom_image_size()
