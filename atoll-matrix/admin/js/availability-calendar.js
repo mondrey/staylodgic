@@ -611,33 +611,35 @@
 			var fp;
 
 			function initializeFlatpickr(newStartDate, newEndDate) {
-				fp = flatpickr(".availabilitycalendar", {
-					mode: "single", // Change to single mode for month selection
-					plugins: [
-						new monthSelectPlugin({
-							shorthand: true,
-							dateFormat: "Y-m",
-							altFormat: "F Y",
-							theme: "light"
-						})
-					],
-					defaultDate: newStartDate, // Set the defaultDate to the start date only
-					onChange: function (selectedDates, dateStr, instance) {
-						if (selectedDates.length > 0) {
-							var selectedMonth = selectedDates[0].getMonth();
-							var selectedYear = selectedDates[0].getFullYear();
-			
-							// Create the start date (1st of the selected month)
-							var startDate = new Date(selectedYear, selectedMonth, 1);
-			
-							// Create the end date (5th of the next month)
-							var endDate = new Date(selectedYear, selectedMonth + 1, 5);
-			
-							// Update the calendar data with the constructed range
-							updateCalendarData([startDate, endDate]);
+				if (typeof monthSelectPlugin !== 'undefined') {
+					fp = flatpickr(".availabilitycalendar", {
+						mode: "single", // Change to single mode for month selection
+						plugins: [
+							new monthSelectPlugin({
+								shorthand: true,
+								dateFormat: "Y-m",
+								altFormat: "F Y",
+								theme: "light"
+							})
+						],
+						defaultDate: newStartDate, // Set the defaultDate to the start date only
+						onChange: function (selectedDates, dateStr, instance) {
+							if (selectedDates.length > 0) {
+								var selectedMonth = selectedDates[0].getMonth();
+								var selectedYear = selectedDates[0].getFullYear();
+				
+								// Create the start date (1st of the selected month)
+								var startDate = new Date(selectedYear, selectedMonth, 1);
+				
+								// Create the end date (5th of the next month)
+								var endDate = new Date(selectedYear, selectedMonth + 1, 5);
+				
+								// Update the calendar data with the constructed range
+								updateCalendarData([startDate, endDate]);
+							}
 						}
-					}
-				});
+					});
+				}
 			}
 			
 			function shiftDates(buttonId, months) {
