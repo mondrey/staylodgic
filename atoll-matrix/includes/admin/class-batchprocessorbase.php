@@ -1,5 +1,5 @@
 <?php
-namespace AtollMatrix;
+namespace Staylodgic;
 
 class BatchProcessorBase
 {
@@ -13,10 +13,10 @@ class BatchProcessorBase
     public function add_admin_menu()
     {
         add_menu_page(
-            'Atoll Matrix',
-            'Atoll Matrix',
+            'Staylodgic',
+            'Staylodgic',
             'manage_options',
-            'atoll-matrix',
+            'staylodgic',
             array($this, 'display_main_page'),
             '',
             23 // Position parameter
@@ -25,8 +25,8 @@ class BatchProcessorBase
 
     public function display_main_page()
     {
-        // The HTML content of the 'Atoll Matrix' page goes here
-        echo "<h1>Welcome to Atoll Matrix</h1>";
+        // The HTML content of the 'Staylodgic' page goes here
+        echo "<h1>Welcome to Staylodgic</h1>";
 
     }
 
@@ -94,9 +94,9 @@ class BatchProcessorBase
         }
 
         // Delete the transient if it exists.
-        delete_transient('atollmatrix_unprocessed_reservation_import');
+        delete_transient('staylodgic_unprocessed_reservation_import');
         $transient_used = false;
-        if (false !== ($events = get_transient('atollmatrix_unprocessed_reservation_import'))) {
+        if (false !== ($events = get_transient('staylodgic_unprocessed_reservation_import'))) {
             // The events are stored in the transient
             $transient_used = true;
         }
@@ -106,10 +106,10 @@ class BatchProcessorBase
         $file_md5Hash = md5($file_path);
         $parser->initString($file_contents); // Change this line
         $events = $parser->events();
-        set_transient('atollmatrix_unprocessed_reservation_import', $events, 12 * HOUR_IN_SECONDS); // store for 12 hours
+        set_transient('staylodgic_unprocessed_reservation_import', $events, 12 * HOUR_IN_SECONDS); // store for 12 hours
 
         // Check if the events are already stored in a transient.
-        $events = get_transient('atollmatrix_unprocessed_reservation_import');
+        $events = get_transient('staylodgic_unprocessed_reservation_import');
 
         // Check if the events transient is empty.
         if (!$events) {
@@ -123,7 +123,7 @@ class BatchProcessorBase
             // If not, parse the ICS file and store the events in a transient.
             $parser->initFile($file_path);
             $events = $parser->events();
-            set_transient('atollmatrix_unprocessed_reservation_import', $events, 12 * HOUR_IN_SECONDS); // store for 12 hours
+            set_transient('staylodgic_unprocessed_reservation_import', $events, 12 * HOUR_IN_SECONDS); // store for 12 hours
         }
 
         // Define the batch size.
@@ -183,7 +183,7 @@ class BatchProcessorBase
 
             $processedEvents[  ] = $processedEvent;
             // Update the transient with the remaining events.
-            set_transient('atollmatrix_unprocessed_reservation_import', $events, 12 * HOUR_IN_SECONDS);
+            set_transient('staylodgic_unprocessed_reservation_import', $events, 12 * HOUR_IN_SECONDS);
         }
 
         // Return the processed events and the number of remaining events.

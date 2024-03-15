@@ -1,5 +1,5 @@
 <?php
-namespace AtollMatrix;
+namespace Staylodgic;
 
 class Payments
 {
@@ -88,10 +88,10 @@ class Payments
 
             // Query the reservations to get the room names for the selected booking number
             $reservation_args = array(
-                'post_type'  => 'atmx_reservations',
+                'post_type'  => 'slgc_reservations',
                 'meta_query' => array(
                     array(
-                        'key'     => 'atollmatrix_booking_number',
+                        'key'     => 'staylodgic_booking_number',
                         'value'   => $booking_number,
                         'compare' => '=',
                     ),
@@ -105,7 +105,7 @@ class Payments
 
             foreach ($reservations as $reservation) {
                 // Get the room name associated with the reservation
-                $room_name = get_the_title(get_post_meta($reservation->ID, 'atollmatrix_room_id', true));
+                $room_name = get_the_title(get_post_meta($reservation->ID, 'staylodgic_room_id', true));
 
                 // Get the reservation edit link
                 $reservation_edit_link = get_edit_post_link($reservation->ID);
@@ -138,14 +138,14 @@ class Payments
     {
         if ($column === 'booking_number') {
             // Get the booking number from the order meta data
-            $booking_number = get_post_meta($post_id, 'atollmatrix_booking_number', true);
+            $booking_number = get_post_meta($post_id, 'staylodgic_booking_number', true);
 
             if ($booking_number) {
                 $args = array(
-                    'post_type'      => 'atmx_reservations',
+                    'post_type'      => 'slgc_reservations',
                     'posts_per_page' => -1,
                     'post_status'    => 'publish',
-                    'meta_key'       => 'atollmatrix_booking_number',
+                    'meta_key'       => 'staylodgic_booking_number',
                     'meta_value'     => $booking_number,
                 );
 
@@ -156,10 +156,10 @@ class Payments
                     $links = array();
 
                     foreach ($reservations as $reservation) {
-                        $room_id   = get_post_meta($reservation->ID, 'atollmatrix_room_id', true);
+                        $room_id   = get_post_meta($reservation->ID, 'staylodgic_room_id', true);
                         $room_name = get_the_title($room_id);
 
-                        $customer_id = get_post_meta($reservation->ID, 'atollmatrix_customer_id', true);
+                        $customer_id = get_post_meta($reservation->ID, 'staylodgic_customer_id', true);
 
                         if (!empty($room_name)) {
                             $reservation_link = get_edit_post_link($reservation->ID);
@@ -257,7 +257,7 @@ class Payments
         // This function will be executed after the checkout is successful
 
         // Save the booking number to the order meta
-        $order->update_meta_data('atollmatrix_booking_number', $booking_number);
+        $order->update_meta_data('staylodgic_booking_number', $booking_number);
         $order->save();
     }
 
@@ -391,4 +391,4 @@ class Payments
 
 }
 
-new \AtollMatrix\Payments();
+new \Staylodgic\Payments();

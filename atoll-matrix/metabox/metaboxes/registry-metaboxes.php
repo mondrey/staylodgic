@@ -1,13 +1,13 @@
 <?php
-function atollmatrix_registry_metadata()
+function staylodgic_registry_metadata()
 {
 
-    $atollmatrix_imagepath     = get_template_directory_uri() . '/framework/options/images/metaboxes/';
-    $atollmatrix_imagepath_alt = get_template_directory_uri() . '/framework/options/images/';
+    $staylodgic_imagepath     = get_template_directory_uri() . '/framework/options/images/metaboxes/';
+    $staylodgic_imagepath_alt = get_template_directory_uri() . '/framework/options/images/';
 
-    $atollmatrix_imagepath = get_template_directory_uri() . '/framework/options/images/';
+    $staylodgic_imagepath = get_template_directory_uri() . '/framework/options/images/';
 
-    $atollmatrix_registry_box = array(
+    $staylodgic_registry_box = array(
         'id'       => 'registrymeta-box',
         'title'    => 'Registry Metabox',
         'page'     => 'page',
@@ -15,34 +15,34 @@ function atollmatrix_registry_metadata()
         'priority' => 'high',
         'fields'   => array(
             array(
-                'name' => __('Booking Number', 'atollmatrix'),
-                'id'   => 'atollmatrix_registry_bookingnumber',
+                'name' => __('Booking Number', 'staylodgic'),
+                'id'   => 'staylodgic_registry_bookingnumber',
                 'type' => 'registration',
-                'desc' => __('Booking Number', 'atollmatrix'),
+                'desc' => __('Booking Number', 'staylodgic'),
                 'std'  => '',
             ),
             array(
-                'name' => __('Registration Data', 'atollmatrix'),
-                'id'   => 'atollmatrix_registration_data',
-                'type' => 'atollmatrix_registration_data',
-                'desc' => __('Registration Data', 'atollmatrix'),
+                'name' => __('Registration Data', 'staylodgic'),
+                'id'   => 'staylodgic_registration_data',
+                'type' => 'staylodgic_registration_data',
+                'desc' => __('Registration Data', 'staylodgic'),
                 'std'  => '',
             ),
             array(
-                'name' => __('QR Code for URL', 'atollmatrix'),
-                'id'   => 'atollmatrix_registry_qrcode',
+                'name' => __('QR Code for URL', 'staylodgic'),
+                'id'   => 'staylodgic_registry_qrcode',
                 'type' => 'generate-qrcode',
-                'desc' => __('QR Code', 'atollmatrix'),
+                'desc' => __('QR Code', 'staylodgic'),
                 'std'  => '',
             ),
         ),
     );
-    return $atollmatrix_registry_box;
+    return $staylodgic_registry_box;
 }
-function atollmatrix_registry_changelog()
+function staylodgic_registry_changelog()
 {
 
-    $atollmatrix_registry_changelog = array(
+    $staylodgic_registry_changelog = array(
         'id'       => 'registrymeta-box-changelog',
         'title'    => 'Registry Changelog',
         'page'     => 'page',
@@ -50,25 +50,25 @@ function atollmatrix_registry_changelog()
         'priority' => 'high',
         'fields'   => array(
             array(
-                'name'    => esc_html__('', 'atollmatrix'),
-                'id'           => 'atollmatrix_changelog',
+                'name'    => esc_html__('', 'staylodgic'),
+                'id'           => 'staylodgic_changelog',
                 'type'         => 'changelog',
                 'std'          => '',
             ),
         ),
     );
-    return $atollmatrix_registry_changelog;
+    return $staylodgic_registry_changelog;
 }
 /*
  * Meta options for Registry post type
  */
-function atollmatrix_registryitem_metaoptions()
+function staylodgic_registryitem_metaoptions()
 {
-    $atollmatrix_registry_box = atollmatrix_registry_metadata();
-    atollmatrix_generate_metaboxes($atollmatrix_registry_box, get_the_id());
+    $staylodgic_registry_box = staylodgic_registry_metadata();
+    staylodgic_generate_metaboxes($staylodgic_registry_box, get_the_id());
 }
-function atollmatrix_registryitem_changelog()
+function staylodgic_registryitem_changelog()
 {
-    $atollmatrix_registry_changelog = atollmatrix_registry_changelog();
-    atollmatrix_generate_metaboxes($atollmatrix_registry_changelog, get_the_id());
+    $staylodgic_registry_changelog = staylodgic_registry_changelog();
+    staylodgic_generate_metaboxes($staylodgic_registry_changelog, get_the_id());
 }

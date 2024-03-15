@@ -1,5 +1,5 @@
 <?php
-namespace AtollMatrix;
+namespace Staylodgic;
 
 class AvailablityCalendar extends AvailablityCalendarBase
 {
@@ -46,7 +46,7 @@ class AvailablityCalendar extends AvailablityCalendarBase
 
         if (isset($startDate) && isset($endDate)) {
 
-            $dates = \AtollMatrix\Common::getDates_Between($startDate, $endDate);
+            $dates = \Staylodgic\Common::getDates_Between($startDate, $endDate);
 
             $occupancy_data = array();
 
@@ -84,7 +84,7 @@ class AvailablityCalendar extends AvailablityCalendarBase
             'Availability',
             'Availability',
             'manage_options',
-            'atmx-availability',
+            'slgc-availability',
             array($this, 'room_Reservation_Plugin_Display_Availability_Calendar'),
             'dashicons-calendar-alt',
             21
@@ -101,9 +101,13 @@ class AvailablityCalendar extends AvailablityCalendarBase
         // Output the HTML for the Availability page
         ?>
 		<div class="wrap">
-			<h1><?php _e('Availability Calendar','atollmatrix'); ?></h1>
+			<h1><?php _e('Availability Calendar','staylodgic'); ?></h1>
 			<?php
-            echo \AtollMatrix\Modals::rateQtyToasts();
+            if ( ! \Staylodgic\Rooms::hasRooms() ) {
+                echo '<h1>' . __('No Rooms Found','staylodgic') . '</h1>';
+                return;
+            }
+            echo \Staylodgic\Modals::rateQtyToasts();
 // Add any custom HTML content here
         ?>
 		</div>
@@ -119,8 +123,8 @@ class AvailablityCalendar extends AvailablityCalendarBase
                     <li class="nav-item">
                         <input type="text" class="availabilitycalendar" id="availabilitycalendar" name="availabilitycalendar" value="" />
                         <?php
-                        $availabilitycalendar = wp_create_nonce('atollmatrix-availabilitycalendar-nonce');
-                        echo '<input type="hidden" name="atollmatrix_availabilitycalendar_nonce" value="' . esc_attr($availabilitycalendar) . '" />';
+                        $availabilitycalendar = wp_create_nonce('staylodgic-availabilitycalendar-nonce');
+                        echo '<input type="hidden" name="staylodgic_availabilitycalendar_nonce" value="' . esc_attr($availabilitycalendar) . '" />';
                         ?>
                     </li>
                     <li class="nav-item">
@@ -145,15 +149,15 @@ $calendar = $this->getAvailabilityCalendar();
 			</div>
 		</div>
 		<?php
-        \AtollMatrix\Modals::quanityModal();
-        \AtollMatrix\Modals::ratesModal();
+        \Staylodgic\Modals::quanityModal();
+        \Staylodgic\Modals::ratesModal();
     }
 
     public function get_Selected_Range_AvailabilityCalendar()
     {
 
         // Verify the nonce
-        if (!isset($_POST[ 'atollmatrix_availabilitycalendar_nonce' ]) || !check_admin_referer('atollmatrix-availabilitycalendar-nonce', 'atollmatrix_availabilitycalendar_nonce')) {
+        if (!isset($_POST[ 'staylodgic_availabilitycalendar_nonce' ]) || !check_admin_referer('staylodgic-availabilitycalendar-nonce', 'staylodgic_availabilitycalendar_nonce')) {
             // Nonce verification failed; handle the error or reject the request
             // For example, you can return an error response
             wp_send_json_error([ 'message' => 'Failed' ]);
@@ -212,7 +216,7 @@ $calendar = $this->getAvailabilityCalendar();
 
         $table_start = '<table id="calendarTable" data-calstart="' . esc_attr($startDateString) . '" data-calend="' . esc_attr($endDateString) . '">';
 
-        $this->roomlist = \AtollMatrix\Rooms::getRoomList();
+        $this->roomlist = \Staylodgic\Rooms::getRoomList();
         
 		$room_output    = '';
 		$all_room_output  = '';
@@ -221,12 +225,12 @@ $calendar = $this->getAvailabilityCalendar();
             error_log('cache date');
             error_log($roomId . ' ' . $startDateString . ' ' . $endDateString);
             
-            $cache_instance = new \AtollMatrix\Cache($roomId, $startDateString, $endDateString);
+            $cache_instance = new \Staylodgic\Cache($roomId, $startDateString, $endDateString);
             // $cache_instance->deleteCache();
             $transient_key   = $cache_instance->generateRoomCacheKey();
             $cached_calendar = $cache_instance->getCache($transient_key);
 
-            $room_reservations_instance = new \AtollMatrix\Reservations($dateString = false, $roomId);
+            $room_reservations_instance = new \Staylodgic\Reservations($dateString = false, $roomId);
             $room_reservations_instance->calculateAndUpdateRemainingRoomCountsForAllDates();
 			error_log($transient_key);
 			error_log('----------');
@@ -245,9 +249,9 @@ $calendar = $this->getAvailabilityCalendar();
 	
 					$dateString       = $date->format('Y-m-d');
 	
-					$reservation_instance = new \AtollMatrix\Reservations($dateString, $roomId);
+					$reservation_instance = new \Staylodgic\Reservations($dateString, $roomId);
 					$remaining_rooms = $reservation_instance->remainingRooms_For_Day();
-					$room_rate              = \AtollMatrix\Rates::getRoomRateByDate($roomId, $dateString);
+					$room_rate              = \Staylodgic\Rates::getRoomRateByDate($roomId, $dateString);
 	
 					if (0 == $remaining_rooms) {
 						$room_was_opened = $reservation_instance->wasRoom_Ever_Opened();
@@ -306,7 +310,7 @@ $calendar = $this->getAvailabilityCalendar();
                     $dateString       = $date->format('Y-m-d');
                     $reservation_data = array();
 
-                    $reservation_instance = new \AtollMatrix\Reservations($dateString, $roomId);
+                    $reservation_instance = new \Staylodgic\Reservations($dateString, $roomId);
                     $reservation_data     = $reservation_instance->isDate_Reserved();
                     // $remaining_room_count  = $reservation_instance->getDirectRemainingRoomCount();
                     $remaining_rooms = $reservation_instance->remainingRooms_For_Day();
@@ -318,9 +322,9 @@ $calendar = $this->getAvailabilityCalendar();
                         }
                     }
 
-                    // $max_room_count = \AtollMatrix\Rooms::getMaxQuantityForRoom( $roomId, $dateString );
+                    // $max_room_count = \Staylodgic\Rooms::getMaxQuantityForRoom( $roomId, $dateString );
 
-                    $room_rate              = \AtollMatrix\Rates::getRoomRateByDate($roomId, $dateString);
+                    $room_rate              = \Staylodgic\Rates::getRoomRateByDate($roomId, $dateString);
                     $occupancy_status_class = "";
                     if ($reservation_instance->isRoom_For_Day_Fullybooked()) {
                         $occupancy_status_class = "fully-booked";
@@ -345,7 +349,7 @@ $calendar = $this->getAvailabilityCalendar();
                     $room_output .= '<div class="reservation-tab-wrap" data-day="' . esc_attr($dateString) . '">';
                     if ($reservation_data) {
                         $reservation_module = array();
-                        //echo atollmatrix_generate_reserved_tab( $reservation_data, $checkout_list );
+                        //echo staylodgic_generate_reserved_tab( $reservation_data, $checkout_list );
                         $reservation_module = $this->ReservedTab($reservation_data, $checkout_list, $dateString, $startDateString);
                         $room_output .= $reservation_module[ 'tab' ];
                         $checkout_list = $reservation_module[ 'checkout' ];
@@ -412,7 +416,7 @@ $calendar = $this->getAvailabilityCalendar();
         $output .= '<span class="occupancy-total-stats">';
         $output .= esc_html( $occupancy_percent );
         $output .= '<span class="occupancy-percent-symbol">%</span>';
-        $output .= __('Occupancy', 'atollmatrix');
+        $output .= __('Occupancy', 'staylodgic');
         $output .= '</span>';
         $output .= '</div>';
         $output .= '</div>';
@@ -463,7 +467,7 @@ $calendar = $this->getAvailabilityCalendar();
             $output .= '<div class="occupancyStats-wrap">';
             $output .= '<div class="occupancyStats-inner">';
             $output .= '<div class="occupancy-adr">';
-            $output .= __('Rooms<br/>Open', 'atollmatrix');
+            $output .= __('Rooms<br/>Open', 'staylodgic');
             $output .= '</div>';
             $output .= '<div class="occupancy-percentage">';
             $output .= esc_html( $remaining_rooms );
@@ -528,7 +532,7 @@ $calendar = $this->getAvailabilityCalendar();
             $start_date_display    = '';
             $guest_name            = '';
             $reservatoin_id        = $reservation[ 'id' ];
-            $reservation_instance  = new \AtollMatrix\Reservations($date = false, $room_id = false, $reservation_id = $reservation[ 'id' ]);
+            $reservation_instance  = new \Staylodgic\Reservations($date = false, $room_id = false, $reservation_id = $reservation[ 'id' ]);
             $booking_number        = $reservation_instance->getBookingNumber();
             $guest_name            = $reservation_instance->getReservationGuestName();
             $reserved_days         = $reservation_instance->countReservationDays();
@@ -539,7 +543,7 @@ $calendar = $this->getAvailabilityCalendar();
             $booking_channel       = $reservation_instance->getReservationChannel();
             $row++;
 
-            if ( 'cancelled' == $reservation_status && ! atollmatrix_display_cancelled() ) {
+            if ( 'cancelled' == $reservation_status && ! staylodgic_display_cancelled() ) {
                 continue;
             }
 
@@ -637,7 +641,7 @@ $calendar = $this->getAvailabilityCalendar();
                     $check_in_date_past = new \DateTime();
                     $check_in_date_past->setTimestamp($reservation[ 'checkin' ]);
                     $check_in_date_past = $check_in_date_past->format('Y-m-d');
-                    $daysBetween        = \AtollMatrix\Common::countDays_BetweenDates($check_in_date_past, $current_day);
+                    $daysBetween        = \Staylodgic\Common::countDays_BetweenDates($check_in_date_past, $current_day);
                     $width              = (80 * ($reserved_days - $daysBetween)) - 3;
                     if ($check_in_date_past < $calendar_start && $calendar_start == $current_day) {
                         $tab[ $room ] = '<a class="reservation-tab-is-' . esc_attr($reservation_status) . ' ' . esc_attr($reservation_substatus) . ' reservation-tab-id-' . esc_attr($reservatoin_id) . ' reservation-edit-link" href="' . esc_attr($reservation_edit_link) . '"><div class="reserved-tab-wrap reserved-tab-with-info reserved-from-past reservation-' . esc_attr($reservation_status) . '" data-reservationstatus="' . esc_attr($reservation_status) . '" data-guest="' . esc_attr($guest_name) . '" data-room="' . esc_attr($room) . '" data-row="' . esc_attr($row) . '" data-bookingnumber="' . esc_attr($booking_number) . '" data-reservationid="' . esc_attr($reservation[ 'id' ]) . '" data-checkin="' . esc_attr($checkin) . '" data-checkout="' . esc_attr($checkout) . '"><div class="reserved-tab reserved-tab-days-' . esc_attr($reserved_days) . '"><div data-tabwidth="' . esc_attr($width) . '" class="reserved-tab-inner"><div class="ota-sign"></div><div class="guest-name">' . esc_html($display_info) . '<span>' . esc_html($booking_channel) . '</span></div></div></div></div></a>';
@@ -669,4 +673,4 @@ $calendar = $this->getAvailabilityCalendar();
 
 }
 
-$instance = new \AtollMatrix\AvailablityCalendar();
+$instance = new \Staylodgic\AvailablityCalendar();

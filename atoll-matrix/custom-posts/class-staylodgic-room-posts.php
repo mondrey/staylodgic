@@ -1,5 +1,5 @@
 <?php
-class atollmatrix_Room_Posts
+class staylodgic_Room_Posts
 {
 
     public function __construct()
@@ -8,31 +8,31 @@ class atollmatrix_Room_Posts
         add_action('admin_init', array($this, 'sort_admin_init'));
         add_filter("manage_edit-room_columns", array($this, 'room_edit_columns'));
         add_action("manage_posts_custom_column", array($this, 'room_custom_columns'));
-        add_action('admin_menu', array($this, 'atollmatrix_enable_room_sort'));
-        add_action('wp_ajax_room_sort', array($this, 'atollmatrix_save_room_order'));
+        add_action('admin_menu', array($this, 'staylodgic_enable_room_sort'));
+        add_action('wp_ajax_room_sort', array($this, 'staylodgic_save_room_order'));
 
         if (is_admin()) {
             if (isset($_GET["page"])) {
                 if ($_GET["page"] == "class-imaginem-room-posts.php") {
-                    add_filter('posts_orderby', array($this, 'atollmatrix_room_orderby'));
+                    add_filter('posts_orderby', array($this, 'staylodgic_room_orderby'));
                 }
             }
         }
     }
 
-    public function atollmatrix_enable_room_sort()
+    public function staylodgic_enable_room_sort()
     {
-        add_submenu_page('edit.php?post_type=atmx_room', 'Sort rooms', 'Sort Rooms', 'edit_posts', basename(__FILE__), array($this, 'atollmatrix_sort_room'));
+        add_submenu_page('edit.php?post_type=slgc_room', 'Sort rooms', 'Sort Rooms', 'edit_posts', basename(__FILE__), array($this, 'staylodgic_sort_room'));
     }
-    public function atollmatrix_room_orderby($orderby)
+    public function staylodgic_room_orderby($orderby)
     {
         global $wpdb;
         $orderby = "{$wpdb->posts}.menu_order, {$wpdb->posts}.post_date DESC";
         return ($orderby);
     }
-    public function atollmatrix_sort_room()
+    public function staylodgic_sort_room()
     {
-        $room = new WP_Query('post_type=atmx_room&posts_per_page=-1&orderby=menu_order&order=ASC');
+        $room = new WP_Query('post_type=slgc_room&posts_per_page=-1&orderby=menu_order&order=ASC');
         ?>
 		<div class="wrap">
 		<h2>Sort room<img src="<?php echo home_url(); ?>/wp-admin/images/loading.gif" id="loading-animation" /></h2>
@@ -46,15 +46,15 @@ class atollmatrix_Room_Posts
 				<?php
     $image_url = wp_get_attachment_thumb_url(get_post_thumbnail_id());
             $custom    = get_post_custom(get_the_ID());
-            $room_cats = get_the_terms(get_the_ID(), 'atmx_roomtype');
+            $room_cats = get_the_terms(get_the_ID(), 'slgc_roomtype');
 
             ?>
-				<?php if ($image_url) {echo '<img class="atollmatrix_admin_sort_image" src="' . $image_url . '" width="30px" height="30px" alt="" />';}?>
-				<span class="atollmatrix_admin_sort_title"><?php the_title();?></span>
+				<?php if ($image_url) {echo '<img class="staylodgic_admin_sort_image" src="' . $image_url . '" width="30px" height="30px" alt="" />';}?>
+				<span class="staylodgic_admin_sort_title"><?php the_title();?></span>
 				<?php
     if ($room_cats) {
                 ?>
-				<span class="atollmatrix_admin_sort_categories"><?php foreach ($room_cats as $taxonomy) {echo ' | ' . $taxonomy->name;}?></span>
+				<span class="staylodgic_admin_sort_categories"><?php foreach ($room_cats as $taxonomy) {echo ' | ' . $taxonomy->name;}?></span>
 				<?php
     }
             ?>
@@ -66,7 +66,7 @@ class atollmatrix_Room_Posts
 
 	<?php
 }
-    public function atollmatrix_save_room_order()
+    public function staylodgic_save_room_order()
     {
         global $wpdb; // WordPress database class
 
@@ -96,8 +96,8 @@ class atollmatrix_Room_Posts
         }
 
         if (!defined('MTHEME')) {
-            $atollmatrix_shortname = "atollmatrix_p2";
-            define('MTHEME', $atollmatrix_shortname);
+            $staylodgic_shortname = "staylodgic_p2";
+            define('MTHEME', $staylodgic_shortname);
         }
 
         switch ($column) {
@@ -107,13 +107,13 @@ class atollmatrix_Room_Posts
                 }
                 break;
             case "theme_description":
-                if (isset($custom['atollmatrix_thumbnail_desc'][0])) {echo $custom['atollmatrix_thumbnail_desc'][0];}
+                if (isset($custom['staylodgic_thumbnail_desc'][0])) {echo $custom['staylodgic_thumbnail_desc'][0];}
                 break;
             case "video":
-                if (isset($custom['atollmatrix_lightbox_video'][0])) {echo $custom['atollmatrix_lightbox_video'][0];}
+                if (isset($custom['staylodgic_lightbox_video'][0])) {echo $custom['staylodgic_lightbox_video'][0];}
                 break;
-            case 'atmx_roomtype':
-                echo get_the_term_list($post->ID, 'atmx_roomtype', '', ', ', '');
+            case 'slgc_roomtype':
+                echo get_the_term_list($post->ID, 'slgc_roomtype', '', ', ', '');
                 break;
         }
     }
@@ -122,11 +122,11 @@ class atollmatrix_Room_Posts
     {
         $columns = array(
             "cb"                    => "<input type=\"checkbox\" />",
-            "title"                 => __('Room Title', 'atollmatrix'),
-            "theme_description"     => __('Description', 'atollmatrix'),
-            "video"                 => __('Video', 'atollmatrix'),
-            "atollmatrix_roomtypes" => __('atmx_roomtype', 'atollmatrix'),
-            "room_image"            => __('Image', 'atollmatrix'),
+            "title"                 => __('Room Title', 'staylodgic'),
+            "theme_description"     => __('Description', 'staylodgic'),
+            "video"                 => __('Video', 'staylodgic'),
+            "staylodgic_roomtypes" => __('slgc_roomtype', 'staylodgic'),
+            "room_image"            => __('Image', 'staylodgic'),
         );
 
         return $columns;
@@ -142,28 +142,28 @@ class atollmatrix_Room_Posts
         /*
          * Register Featured Post Manager
          */
-        //add_action('init', 'atollmatrix_featured_register');
-        //add_action('init', 'room_register');//Always use a shortname like "atollmatrix_" not to see any 404 errors
+        //add_action('init', 'staylodgic_featured_register');
+        //add_action('init', 'room_register');//Always use a shortname like "staylodgic_" not to see any 404 errors
         /*
          * Register room Post Manager
          */
-        $atollmatrix_room_slug = "rooms";
-        if (function_exists('atollmatrix_get_option_data')) {
-            $atollmatrix_room_slug = atollmatrix_get_option_data('room_permalink_slug');
+        $staylodgic_room_slug = "rooms";
+        if (function_exists('staylodgic_get_option_data')) {
+            $staylodgic_room_slug = staylodgic_get_option_data('room_permalink_slug');
         }
-        if ($atollmatrix_room_slug == "" || !isset($atollmatrix_room_slug)) {
-            $atollmatrix_room_slug = "rooms";
+        if ($staylodgic_room_slug == "" || !isset($staylodgic_room_slug)) {
+            $staylodgic_room_slug = "rooms";
         }
-        $atollmatrix_room_singular_refer = "Rooms";
-        if (function_exists('atollmatrix_get_option_data')) {
-            $atollmatrix_room_singular_refer = atollmatrix_get_option_data('room_archive_title');
+        $staylodgic_room_singular_refer = "Rooms";
+        if (function_exists('staylodgic_get_option_data')) {
+            $staylodgic_room_singular_refer = staylodgic_get_option_data('room_archive_title');
         }
-        if ('' === $atollmatrix_room_singular_refer || empty($atollmatrix_room_singular_refer)) {
-            $atollmatrix_room_singular_refer = "Rooms";
+        if ('' === $staylodgic_room_singular_refer || empty($staylodgic_room_singular_refer)) {
+            $staylodgic_room_singular_refer = "Rooms";
         }
         $args = array(
-            'label'           => $atollmatrix_room_singular_refer,
-            'singular_label'  => __('Room', 'atollmatrix'),
+            'label'           => $staylodgic_room_singular_refer,
+            'singular_label'  => __('Room', 'staylodgic'),
             'public'          => true,
             'show_ui'         => true,
             'capability_type' => 'post',
@@ -171,15 +171,15 @@ class atollmatrix_Room_Posts
             'has_archive'     => true,
             'menu_position'   => 6,
             'menu_icon'       => plugin_dir_url(__FILE__) . 'images/portfolio.png',
-            'rewrite'         => array('slug' => $atollmatrix_room_slug), //Use a slug like "work" or "project" that shouldnt be same with your page name
+            'rewrite'         => array('slug' => $staylodgic_room_slug), //Use a slug like "work" or "project" that shouldnt be same with your page name
             'supports' => array('title', 'author', 'thumbnail'), //Boxes will be shown in the panel
         );
 
-        register_post_type('atmx_room', $args);
+        register_post_type('slgc_room', $args);
         /*
          * Add Taxonomy for room 'Type'
          */
-        register_taxonomy('atmx_roomtype', array("atollmatrix_room"), array("hierarchical" => true, "label" => "Room Category", "singular_label" => "atollmatrix_roomtypes", "rewrite" => true));
+        register_taxonomy('slgc_roomtype', array("staylodgic_room"), array("hierarchical" => true, "label" => "Room Category", "singular_label" => "staylodgic_roomtypes", "rewrite" => true));
 
         /*
      * Hooks for the room and Featured viewables
@@ -209,23 +209,23 @@ class atollmatrix_Room_Posts
     }
 
 }
-$atollmatrix_room_post_type = new atollmatrix_Room_Posts();
+$staylodgic_room_post_type = new staylodgic_Room_Posts();
 
-class atollmatrix_Roomcategory_add_image
+class staylodgic_Roomcategory_add_image
 {
 
     public function __construct()
     {
-        add_action('admin_head', array(&$this, 'atollmatrix_admin_head'));
-        add_action('edit_term', array(&$this, 'atollmatrix_save_tax_pic'));
-        add_action('create_term', array(&$this, 'atollmatrix_save_tax_pic'));
-        add_filter("manage_edit-atollmatrix_roomtypes_columns", array(&$this, 'atollmatrix_roomtype_columns'));
-        add_action("manage_atollmatrix_roomtypes_custom_column", array(&$this, 'atollmatrix_manage_workype_columns'), 10, 3);
+        add_action('admin_head', array(&$this, 'staylodgic_admin_head'));
+        add_action('edit_term', array(&$this, 'staylodgic_save_tax_pic'));
+        add_action('create_term', array(&$this, 'staylodgic_save_tax_pic'));
+        add_filter("manage_edit-staylodgic_roomtypes_columns", array(&$this, 'staylodgic_roomtype_columns'));
+        add_action("manage_staylodgic_roomtypes_custom_column", array(&$this, 'staylodgic_manage_workype_columns'), 10, 3);
     }
 
     // Add to admin_init function
 
-    public function atollmatrix_roomtype_columns($columns)
+    public function staylodgic_roomtype_columns($columns)
     {
         $columns['roomtype_image'] = 'Image';
         return $columns;
@@ -233,14 +233,14 @@ class atollmatrix_Roomcategory_add_image
 
     // Add to admin_init function
 
-    public function atollmatrix_manage_workype_columns($value, $columns, $term_id)
+    public function staylodgic_manage_workype_columns($value, $columns, $term_id)
     {
-        $atollmatrix_roomtype_image_id = get_option('atollmatrix_roomtype_image_id' . $term_id);
+        $staylodgic_roomtype_image_id = get_option('staylodgic_roomtype_image_id' . $term_id);
         switch ($columns) {
             case 'roomtype_image':
-                if ($atollmatrix_roomtype_image_id) {
-                    $atollmatrix_roomtype_image_url = wp_get_attachment_image_src($atollmatrix_roomtype_image_id, 'thumbnail', false);
-                    $value                          = '<img src="' . $atollmatrix_roomtype_image_url[0] . '" width="100px" height="auto" />';
+                if ($staylodgic_roomtype_image_id) {
+                    $staylodgic_roomtype_image_url = wp_get_attachment_image_src($staylodgic_roomtype_image_id, 'thumbnail', false);
+                    $value                          = '<img src="' . $staylodgic_roomtype_image_url[0] . '" width="100px" height="auto" />';
                 }
                 break;
 
@@ -250,20 +250,20 @@ class atollmatrix_Roomcategory_add_image
         return $value;
     }
 
-    public function atollmatrix_admin_head()
+    public function staylodgic_admin_head()
     {
         $taxonomies = get_taxonomies();
-        $taxonomies = array('atmx_roomtype'); // uncomment and specify particular taxonomies you want to add image feature.
+        $taxonomies = array('slgc_roomtype'); // uncomment and specify particular taxonomies you want to add image feature.
         if (is_array($taxonomies)) {
             foreach ($taxonomies as $z_taxonomy) {
-                add_action($z_taxonomy . '_add_form_fields', array(&$this, 'atollmatrix_tax_field'));
-                add_action($z_taxonomy . '_edit_form_fields', array(&$this, 'atollmatrix_tax_field'));
+                add_action($z_taxonomy . '_add_form_fields', array(&$this, 'staylodgic_tax_field'));
+                add_action($z_taxonomy . '_edit_form_fields', array(&$this, 'staylodgic_tax_field'));
             }
         }
     }
 
     // add image field in add form
-    public function atollmatrix_tax_field($taxonomy)
+    public function staylodgic_tax_field($taxonomy)
     {
         wp_enqueue_style('thickbox');
         wp_enqueue_script('thickbox');
@@ -271,29 +271,29 @@ class atollmatrix_Roomcategory_add_image
 
         if (empty($taxonomy)) {
             echo '<div class="form-field">
-					<label for="atollmatrix_roomtype_input">Image</label>
-					<input size="40" type="text" name="atollmatrix_roomtype_input" id="atollmatrix_roomtype_input" value="" />
-					<input type="text" name="atollmatrix_roomtype_image_id" id="atollmatrix_roomtype_image_id" value="" />
+					<label for="staylodgic_roomtype_input">Image</label>
+					<input size="40" type="text" name="staylodgic_roomtype_input" id="staylodgic_roomtype_input" value="" />
+					<input type="text" name="staylodgic_roomtype_image_id" id="staylodgic_roomtype_image_id" value="" />
 				</div>';
         } else {
 
-            $atollmatrix_roomtype_input_url = '';
-            $atollmatrix_roomtype_image_id  = '';
+            $staylodgic_roomtype_input_url = '';
+            $staylodgic_roomtype_image_id  = '';
 
             if (isset($taxonomy->term_id)) {
-                //$atollmatrix_roomtype_input_url = get_option('atollmatrix_roomtype_input' . $taxonomy->term_id);
-                $atollmatrix_roomtype_image_id = get_option('atollmatrix_roomtype_image_id' . $taxonomy->term_id);
+                //$staylodgic_roomtype_input_url = get_option('staylodgic_roomtype_input' . $taxonomy->term_id);
+                $staylodgic_roomtype_image_id = get_option('staylodgic_roomtype_image_id' . $taxonomy->term_id);
             }
 
             echo '<tr class="form-field">
-			<th scope="row" valign="top"><label for="atollmatrix_roomtype_input">Image</label></th>
+			<th scope="row" valign="top"><label for="staylodgic_roomtype_input">Image</label></th>
 			<td>
-			<input type="hidden" name="atollmatrix_roomtype_image_id" id="atollmatrix_roomtype_image_id" value="' . $atollmatrix_roomtype_image_id . '" />
-			<a class="button" id="atollmatrix_upload_work_image">Set category image</a>
+			<input type="hidden" name="staylodgic_roomtype_image_id" id="staylodgic_roomtype_image_id" value="' . $staylodgic_roomtype_image_id . '" />
+			<a class="button" id="staylodgic_upload_work_image">Set category image</a>
 			<div class="inside" id="featured_roomtype_image_wrap">';
-            if (!empty($atollmatrix_roomtype_image_id)) {
-                $atollmatrix_roomtype_image_url = wp_get_attachment_image_src($atollmatrix_roomtype_image_id, 'thumbnail', false);
-                echo '<img id="featured_roomtype_image" src="' . $atollmatrix_roomtype_image_url[0] . '" style="max-width:200px;border: 1px solid #ccc;padding: 5px;box-shadow: 5px 5px 10px #ccc;margin-top: 10px;" >';
+            if (!empty($staylodgic_roomtype_image_id)) {
+                $staylodgic_roomtype_image_url = wp_get_attachment_image_src($staylodgic_roomtype_image_id, 'thumbnail', false);
+                echo '<img id="featured_roomtype_image" src="' . $staylodgic_roomtype_image_url[0] . '" style="max-width:200px;border: 1px solid #ccc;padding: 5px;box-shadow: 5px 5px 10px #ccc;margin-top: 10px;" >';
                 echo '<a style="display:block;" id="remove_roomtype_image" href="#">Remove category Image</a>';
             }
             echo '</div>';
@@ -303,9 +303,9 @@ class atollmatrix_Roomcategory_add_image
 	<script>
 	jQuery(document).ready(function($){
 		// Get input target field
-		var targetfield="atollmatrix_roomtype_input";
+		var targetfield="staylodgic_roomtype_input";
 
-		jQuery("#atollmatrix_upload_work_image").click( function( event ) {
+		jQuery("#staylodgic_upload_work_image").click( function( event ) {
 			var jQueryel = jQuery(this);
 			event.preventDefault();
 
@@ -347,7 +347,7 @@ class atollmatrix_Roomcategory_add_image
 
 					jQuery( '<a style="display:block;" id="remove_roomtype_image" href="#">Remove roomtype Image</a>' ).appendTo( "#featured_roomtype_image_wrap" );
 				}
-				jQuery("#atollmatrix_roomtype_image_id").val(attachment.id);
+				jQuery("#staylodgic_roomtype_image_id").val(attachment.id);
 			});
 
 			custom_file_frame.open();
@@ -355,7 +355,7 @@ class atollmatrix_Roomcategory_add_image
 
 		jQuery("#featured_roomtype_image_wrap").on("click", "#remove_roomtype_image", function(){
 			jQuery('#remove_roomtype_image,#featured_roomtype_image').remove();
-			jQuery('#atollmatrix_roomtype_image_id').val("");
+			jQuery('#staylodgic_roomtype_image_id').val("");
 			return false;
 		});
 	});
@@ -364,22 +364,22 @@ class atollmatrix_Roomcategory_add_image
 }
 
     // save our taxonomy image while edit or save term
-    public function atollmatrix_save_tax_pic($term_id)
+    public function staylodgic_save_tax_pic($term_id)
     {
-        if (isset($_POST['atollmatrix_roomtype_image_id'])) {
-            update_option('atollmatrix_roomtype_image_id' . $term_id, $_POST['atollmatrix_roomtype_image_id']);
+        if (isset($_POST['staylodgic_roomtype_image_id'])) {
+            update_option('staylodgic_roomtype_image_id' . $term_id, $_POST['staylodgic_roomtype_image_id']);
         }
     }
 
     // output taxonomy image url for the given term_id (NULL by default)
-    public function atollmatrix_roomtype_input_url($term_id = null)
+    public function staylodgic_roomtype_input_url($term_id = null)
     {
         if ($term_id) {
             $current_term = get_term_by('slug', get_query_var('term'), get_query_var('taxonomy'));
-            return get_option('atollmatrix_roomtype_input' . $current_term->term_id);
+            return get_option('staylodgic_roomtype_input' . $current_term->term_id);
         }
     }
 
 }
-$atollmatrix_Roomcategory_add_image = new atollmatrix_Roomcategory_add_image();
+$staylodgic_Roomcategory_add_image = new staylodgic_Roomcategory_add_image();
 ?>

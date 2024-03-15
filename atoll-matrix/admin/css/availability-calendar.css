@@ -1,10 +1,3 @@
-#wpwrap {
-	background: #444;
-}
-#wpwrap h1 {
-	color: #fff;
-}
-
 #container {
 	display: flex;
 	overflow-x: auto;
@@ -498,7 +491,7 @@ ul.existing-customer li {
 }
 
 /* Invoice Form */
-.admin-atollmatrix-content {
+.admin-staylodgic-content {
 	max-width: 645px;
 	margin: 0 auto;
 }
@@ -546,7 +539,7 @@ ul.existing-customer li {
 	letter-spacing: 0.4px;
 	font-weight: 400;
 }
-.atollmatrix-content .form-floating > .form-control {
+.staylodgic-content .form-floating > .form-control {
 	transition: none;
 }
 
@@ -594,7 +587,7 @@ ul.existing-customer li {
 	/* Center align items vertically */
 }
 
-.atollmatrix-content .form-floating > .form-control {
+.staylodgic-content .form-floating > .form-control {
 	transition: none;
 }
 .front-booking-number-container,
@@ -656,7 +649,7 @@ ul.existing-customer li {
 	border-radius: 6px;
 	width: 30px;
 	height: 30px;
-	line-height: 29px;
+	line-height: 30px;
 	font-size: 13px;
 	text-align: center;
 	background: #3437ff;

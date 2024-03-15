@@ -1,5 +1,5 @@
 <?php
-namespace AtollMatrix;
+namespace Staylodgic;
 
 class Customers
 {
@@ -9,7 +9,7 @@ class Customers
         $html = "<ul class='existing-customer'>";
         foreach ($array as $key => $value) {
             if ('Country' == $key) {
-                $value = \AtollMatrix\Common::countryCodeToEmoji($value) . ' ' . atollmatrix_country_list('display', $value);
+                $value = \Staylodgic\Common::countryCodeToEmoji($value) . ' ' . staylodgic_country_list('display', $value);
             }
             $html .= "<li><strong>{$key}:</strong> {$value}</li>";
         }
@@ -20,11 +20,11 @@ class Customers
     public function get_room_names_by_customer($customer_id)
     {
         $args = array(
-            'post_type'   => 'atmx_reservations',
+            'post_type'   => 'slgc_reservations',
             'post_status' => 'publish',
             'meta_query'  => array(
                 array(
-                    'key'   => 'atollmatrix_customer_id',
+                    'key'   => 'staylodgic_customer_id',
                     'value' => $customer_id,
                 ),
             ),
@@ -34,7 +34,7 @@ class Customers
         $room_names = array();
 
         foreach ($posts as $post) {
-            $room_id = get_post_meta($post->ID, 'atollmatrix_room_id', true);
+            $room_id = get_post_meta($post->ID, 'staylodgic_room_id', true);
             if (!empty($room_id)) {
                 // Fetch the room post by its ID.
                 $room_post = get_post($room_id);
@@ -54,11 +54,11 @@ class Customers
     public function get_rooms_by_customer($customer_id)
     {
         $args = array(
-            'post_type'   => 'atmx_reservations',
+            'post_type'   => 'slgc_reservations',
             'post_status' => 'publish',
             'meta_query'  => array(
                 array(
-                    'key'   => 'atollmatrix_customer_id',
+                    'key'   => 'staylodgic_customer_id',
                     'value' => $customer_id,
                 ),
             ),
@@ -68,7 +68,7 @@ class Customers
         $room_ids = array();
 
         foreach ($posts as $post) {
-            $room_id = get_post_meta($post->ID, 'atollmatrix_room_id', true);
+            $room_id = get_post_meta($post->ID, 'staylodgic_room_id', true);
             if (!empty($room_id)) {
                 $room_ids[] = $room_id;
             }
@@ -84,11 +84,11 @@ class Customers
         $booking_numbers = array();
 
         $args = array(
-            'post_type'   => 'atmx_reservations',
+            'post_type'   => 'slgc_reservations',
             'post_status' => 'publish',
             'meta_query'  => array(
                 array(
-                    'key'   => 'atollmatrix_customer_id',
+                    'key'   => 'staylodgic_customer_id',
                     'value' => $customer_id,
                 ),
             ),
@@ -97,18 +97,18 @@ class Customers
         $posts           = get_posts($args);
 
         foreach ($posts as $post) {
-            $booking_number = get_post_meta($post->ID, 'atollmatrix_booking_number', true);
+            $booking_number = get_post_meta($post->ID, 'staylodgic_booking_number', true);
             if (!empty($booking_number)) {
                 $booking_numbers[] = $booking_number;
             }
         }
 
         $args = array(
-            'post_type'   => 'atmx_activityres',
+            'post_type'   => 'slgc_activityres',
             'post_status' => 'publish',
             'meta_query'  => array(
                 array(
-                    'key'   => 'atollmatrix_customer_id',
+                    'key'   => 'staylodgic_customer_id',
                     'value' => $customer_id,
                 ),
             ),
@@ -117,7 +117,7 @@ class Customers
         $posts           = get_posts($args);
 
         foreach ($posts as $post) {
-            $booking_number = get_post_meta($post->ID, 'atollmatrix_booking_number', true);
+            $booking_number = get_post_meta($post->ID, 'staylodgic_booking_number', true);
             if (!empty($booking_number)) {
                 $booking_numbers[] = $booking_number;
             }

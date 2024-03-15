@@ -1,6 +1,6 @@
 <?php
 
-namespace AtollMatrix;
+namespace Staylodgic;
 
 class Analytics
 {
@@ -22,16 +22,16 @@ class Analytics
         $this->guests   = $guests;
         $this->bookings = $bookings;
 
-        add_action('admin_menu', array($this, 'atollmatrix_dashboard'));
+        add_action('admin_menu', array($this, 'staylodgic_dashboard'));
     }
 
-    public function atollmatrix_dashboard()
+    public function staylodgic_dashboard()
     {
         add_menu_page(
-            'Atollmatrix Dashboard',
-            'Atollmatrix Dashboard',
+            'Staylodgic Dashboard',
+            'Staylodgic Dashboard',
             'manage_options',
-            'atmx-dashboard',
+            'slgc-dashboard',
             array($this, 'display_dashboard'),
             '',
             22// Position parameter
@@ -41,13 +41,18 @@ class Analytics
     public function display_dashboard()
     {
 
-        echo '<div class="atollmatrix_analytics_wrap">';
+        echo '<div class="staylodgic_analytics_wrap">';
 
         // Add the logo image below the heading
-        echo '<div class="atollmatrix-main-logo"></div>';
+        echo '<div class="staylodgic-main-logo"></div>';
+
+        if ( ! \Staylodgic\Rooms::hasRooms() ) {
+            echo '<h1>' . __('No Rooms Found','staylodgic') . '</h1>';
+            return;
+        }
 
         // Create an instance of the ChartGenerator class
-        $analytics = new \AtollMatrix\Analytics($id = false);
+        $analytics = new \Staylodgic\Analytics($id = false);
         echo $analytics->display_stats();
 
         echo '</div>';
@@ -194,28 +199,28 @@ class Analytics
         $stayingCount  = 0;
 
         $query = new \WP_Query([
-            'post_type'      => 'atmx_reservations',
+            'post_type'      => 'slgc_reservations',
             'posts_per_page' => -1,
             'meta_query'     => [
                 'relation' => 'OR',
                 [
-                    'key'     => 'atollmatrix_checkin_date',
+                    'key'     => 'staylodgic_checkin_date',
                     'value'   => $dayafter,
                     'compare' => '=',
                  ],
                 [
-                    'key'     => 'atollmatrix_checkout_date',
+                    'key'     => 'staylodgic_checkout_date',
                     'value'   => $dayafter,
                     'compare' => '=',
                  ],
                 [
-                    'key'     => 'atollmatrix_checkin_date',
+                    'key'     => 'staylodgic_checkin_date',
                     'value'   => $dayafter,
                     'compare' => '<=',
                     'type'    => 'DATE',
                  ],
                 [
-                    'key'     => 'atollmatrix_checkout_date',
+                    'key'     => 'staylodgic_checkout_date',
                     'value'   => $dayafter,
                     'compare' => '>=',
                     'type'    => 'DATE',
@@ -226,10 +231,10 @@ class Analytics
         if ($query->have_posts()) {
             while ($query->have_posts()) {
                 $query->the_post();
-                $booking_number = get_post_meta(get_the_ID(), 'atollmatrix_booking_number', true);
-                $status         = get_post_meta(get_the_ID(), 'atollmatrix_reservation_status', true);
-                $checkin        = get_post_meta(get_the_ID(), 'atollmatrix_checkin_date', true);
-                $checkout       = get_post_meta(get_the_ID(), 'atollmatrix_checkout_date', true);
+                $booking_number = get_post_meta(get_the_ID(), 'staylodgic_booking_number', true);
+                $status         = get_post_meta(get_the_ID(), 'staylodgic_reservation_status', true);
+                $checkin        = get_post_meta(get_the_ID(), 'staylodgic_checkin_date', true);
+                $checkout       = get_post_meta(get_the_ID(), 'staylodgic_checkout_date', true);
 
                 if ($status == 'confirmed') {
                     if ($checkin == $dayafter) {
@@ -264,10 +269,10 @@ class Analytics
     {
         if ($booking_number) {
             // Fetch guest details
-            $reservation_instance = new \AtollMatrix\Reservations();
+            $reservation_instance = new \Staylodgic\Reservations();
             $guestID              = $reservation_instance->getGuest_id_forReservation($booking_number);
             if ($guestID) {
-                $name                                                          = esc_html(get_post_meta($guestID, 'atollmatrix_full_name', true));
+                $name                                                          = esc_html(get_post_meta($guestID, 'staylodgic_full_name', true));
                 $this->guests[ $day ][ $type ][ $guestID ][ 'booking_number' ] = $booking_number;
                 $this->guests[ $day ][ $type ][ $guestID ][ 'name' ]           = $name;
                 $this->guests[ $day ][ $type ][ $guestID ][ 'checkin' ]        = $checkin;
@@ -284,28 +289,28 @@ class Analytics
         $stayingCount  = 0;
 
         $query = new \WP_Query([
-            'post_type'      => 'atmx_reservations',
+            'post_type'      => 'slgc_reservations',
             'posts_per_page' => -1,
             'meta_query'     => [
                 'relation' => 'OR',
                 [
-                    'key'     => 'atollmatrix_checkin_date',
+                    'key'     => 'staylodgic_checkin_date',
                     'value'   => $tomorrow,
                     'compare' => '=',
                  ],
                 [
-                    'key'     => 'atollmatrix_checkout_date',
+                    'key'     => 'staylodgic_checkout_date',
                     'value'   => $tomorrow,
                     'compare' => '=',
                  ],
                 [
-                    'key'     => 'atollmatrix_checkin_date',
+                    'key'     => 'staylodgic_checkin_date',
                     'value'   => $tomorrow,
                     'compare' => '<=',
                     'type'    => 'DATE',
                  ],
                 [
-                    'key'     => 'atollmatrix_checkout_date',
+                    'key'     => 'staylodgic_checkout_date',
                     'value'   => $tomorrow,
                     'compare' => '>=',
                     'type'    => 'DATE',
@@ -316,10 +321,10 @@ class Analytics
         if ($query->have_posts()) {
             while ($query->have_posts()) {
                 $query->the_post();
-                $booking_number = get_post_meta(get_the_ID(), 'atollmatrix_booking_number', true);
-                $status         = get_post_meta(get_the_ID(), 'atollmatrix_reservation_status', true);
-                $checkin        = get_post_meta(get_the_ID(), 'atollmatrix_checkin_date', true);
-                $checkout       = get_post_meta(get_the_ID(), 'atollmatrix_checkout_date', true);
+                $booking_number = get_post_meta(get_the_ID(), 'staylodgic_booking_number', true);
+                $status         = get_post_meta(get_the_ID(), 'staylodgic_reservation_status', true);
+                $checkin        = get_post_meta(get_the_ID(), 'staylodgic_checkin_date', true);
+                $checkout       = get_post_meta(get_the_ID(), 'staylodgic_checkout_date', true);
 
                 if ($status == 'confirmed') {
                     if ($checkin == $tomorrow) {
@@ -358,28 +363,28 @@ class Analytics
         $stayingCount  = 0;
 
         $query = new \WP_Query([
-            'post_type'      => 'atmx_reservations',
+            'post_type'      => 'slgc_reservations',
             'posts_per_page' => -1,
             'meta_query'     => [
                 'relation' => 'OR',
                 [
-                    'key'     => 'atollmatrix_checkin_date',
+                    'key'     => 'staylodgic_checkin_date',
                     'value'   => $today,
                     'compare' => '=',
                  ],
                 [
-                    'key'     => 'atollmatrix_checkout_date',
+                    'key'     => 'staylodgic_checkout_date',
                     'value'   => $today,
                     'compare' => '=',
                  ],
                 [
-                    'key'     => 'atollmatrix_checkin_date',
+                    'key'     => 'staylodgic_checkin_date',
                     'value'   => $today,
                     'compare' => '<=',
                     'type'    => 'DATE',
                  ],
                 [
-                    'key'     => 'atollmatrix_checkout_date',
+                    'key'     => 'staylodgic_checkout_date',
                     'value'   => $today,
                     'compare' => '>=',
                     'type'    => 'DATE',
@@ -390,10 +395,10 @@ class Analytics
         if ($query->have_posts()) {
             while ($query->have_posts()) {
                 $query->the_post();
-                $booking_number = get_post_meta(get_the_ID(), 'atollmatrix_booking_number', true);
-                $status         = get_post_meta(get_the_ID(), 'atollmatrix_reservation_status', true);
-                $checkin        = get_post_meta(get_the_ID(), 'atollmatrix_checkin_date', true);
-                $checkout       = get_post_meta(get_the_ID(), 'atollmatrix_checkout_date', true);
+                $booking_number = get_post_meta(get_the_ID(), 'staylodgic_booking_number', true);
+                $status         = get_post_meta(get_the_ID(), 'staylodgic_reservation_status', true);
+                $checkin        = get_post_meta(get_the_ID(), 'staylodgic_checkin_date', true);
+                $checkout       = get_post_meta(get_the_ID(), 'staylodgic_checkout_date', true);
 
                 if ($status == 'confirmed') {
                     if ($checkin == $today) {
@@ -430,7 +435,7 @@ class Analytics
         $adrData      = [  ];
         $currentMonth = date('Y-m');
 
-        $cache = new \AtollMatrix\Cache();
+        $cache = new \Staylodgic\Cache();
 
         for ($i = 12; $i >= 0; $i--) {
             $month      = date('Y-m', strtotime("$currentMonth -$i month"));
@@ -449,17 +454,17 @@ class Analytics
 
                 // Query for revenue and nights
                 $revenueQuery = new \WP_Query([
-                    'post_type'      => 'atmx_reservations',
+                    'post_type'      => 'slgc_reservations',
                     'posts_per_page' => -1,
                     'meta_query'     => [
                         'relation' => 'AND',
                         [
-                            'key'     => 'atollmatrix_checkin_date',
+                            'key'     => 'staylodgic_checkin_date',
                             'value'   => $month,
                             'compare' => 'LIKE',
                          ],
                         [
-                            'key'     => 'atollmatrix_reservation_status',
+                            'key'     => 'staylodgic_reservation_status',
                             'value'   => 'confirmed',
                             'compare' => '=',
                          ],
@@ -471,10 +476,10 @@ class Analytics
                 if ($revenueQuery->have_posts()) {
                     while ($revenueQuery->have_posts()) {
                         $revenueQuery->the_post();
-                        $totalRevenue += (float) get_post_meta(get_the_ID(), 'atollmatrix_reservation_total_room_cost', true);
+                        $totalRevenue += (float) get_post_meta(get_the_ID(), 'staylodgic_reservation_total_room_cost', true);
 
-                        $checkin  = get_post_meta(get_the_ID(), 'atollmatrix_checkin_date', true);
-                        $checkout = get_post_meta(get_the_ID(), 'atollmatrix_checkout_date', true);
+                        $checkin  = get_post_meta(get_the_ID(), 'staylodgic_checkin_date', true);
+                        $checkout = get_post_meta(get_the_ID(), 'staylodgic_checkout_date', true);
                         if ($checkin && $checkout) {
                             $checkinDate  = new \DateTime($checkin);
                             $checkoutDate = new \DateTime($checkout);
@@ -500,7 +505,7 @@ class Analytics
             'labels'   => $labels,
             'datasets' => [
                 [
-                    'label'         => 'Average Daily Rate (ADR)',
+                    'label'         => __('Average Daily Rate (ADR)','staylodgic'),
                     'data'          => $adrData,
                     'useGradient'   => true,
                     'gradientStart' => 'rgba(255,0,0,1)',
@@ -519,7 +524,7 @@ class Analytics
         $currentMonth  = date('Y-m');
         $revenue_count = 0;
 
-        $cache = new \AtollMatrix\Cache();
+        $cache = new \Staylodgic\Cache();
 
         for ($i = 12; $i >= 0; $i--) {
             $month      = date('Y-m', strtotime("$currentMonth -$i month"));
@@ -537,17 +542,17 @@ class Analytics
                 error_log('Not using Cache revenue data:' . $month);
                 // Query for revenue
                 $revenueQuery = new \WP_Query([
-                    'post_type'      => 'atmx_reservations',
+                    'post_type'      => 'slgc_reservations',
                     'posts_per_page' => -1,
                     'meta_query'     => [
                         'relation' => 'AND',
                         [
-                            'key'     => 'atollmatrix_checkin_date',
+                            'key'     => 'staylodgic_checkin_date',
                             'value'   => $month,
                             'compare' => 'LIKE',
                          ],
                         [
-                            'key'     => 'atollmatrix_reservation_status',
+                            'key'     => 'staylodgic_reservation_status',
                             'value'   => 'confirmed',
                             'compare' => '=',
                          ],
@@ -558,7 +563,7 @@ class Analytics
                 if ($revenueQuery->have_posts()) {
                     while ($revenueQuery->have_posts()) {
                         $revenueQuery->the_post();
-                        $totalRevenue += (float) get_post_meta(get_the_ID(), 'atollmatrix_reservation_total_room_cost', true);
+                        $totalRevenue += (float) get_post_meta(get_the_ID(), 'staylodgic_reservation_total_room_cost', true);
                     }
                 }
                 wp_reset_postdata();
@@ -570,7 +575,7 @@ class Analytics
             }
 
             $revenueData[  ] = $totalRevenue;
-            $revenue_count += $totalRevenue;
+            $revenue_count += intval( $totalRevenue );
         }
 
         $this->bookings[ 'revenue' ] = $revenue_count;
@@ -579,7 +584,7 @@ class Analytics
             'labels'   => $labels,
             'datasets' => [
                 [
-                    'label'         => 'Monthly Revenue',
+                    'label'         => __('Monthly Revenue','staylodgic'),
                     'data'          => $revenueData,
                     'useGradient'   => true,
                     'gradientStart' => 'rgba(177, 14, 236,1)',
@@ -601,7 +606,7 @@ class Analytics
         $confirmed_count = 0;
         $cancelled_count = 0;
 
-        $cache = new \AtollMatrix\Cache();
+        $cache = new \Staylodgic\Cache();
 
         for ($i = 12; $i >= 0; $i--) {
             $month      = date('Y-m', strtotime("$currentMonth -$i month"));
@@ -621,17 +626,17 @@ class Analytics
                 error_log('Not using Cache bookings data:' . $month);
                 // Query for confirmed bookings
                 $confirmedQuery = new \WP_Query([
-                    'post_type'      => 'atmx_reservations',
+                    'post_type'      => 'slgc_reservations',
                     'posts_per_page' => -1,
                     'meta_query'     => [
                         'relation' => 'AND',
                         [
-                            'key'     => 'atollmatrix_checkin_date',
+                            'key'     => 'staylodgic_checkin_date',
                             'value'   => $month,
                             'compare' => 'LIKE',
                          ],
                         [
-                            'key'     => 'atollmatrix_reservation_status',
+                            'key'     => 'staylodgic_reservation_status',
                             'value'   => 'confirmed',
                             'compare' => '=',
                          ],
@@ -641,17 +646,17 @@ class Analytics
 
                 // Query for cancelled bookings
                 $cancelledQuery = new \WP_Query([
-                    'post_type'      => 'atmx_reservations',
+                    'post_type'      => 'slgc_reservations',
                     'posts_per_page' => -1,
                     'meta_query'     => [
                         'relation' => 'AND',
                         [
-                            'key'     => 'atollmatrix_checkin_date',
+                            'key'     => 'staylodgic_checkin_date',
                             'value'   => $month,
                             'compare' => 'LIKE',
                          ],
                         [
-                            'key'     => 'atollmatrix_reservation_status',
+                            'key'     => 'staylodgic_reservation_status',
                             'value'   => 'cancelled',
                             'compare' => '=',
                          ],
@@ -683,14 +688,14 @@ class Analytics
             'labels'   => $labels,
             'datasets' => [
                 [
-                    'label'           => 'Confirmed Bookings',
+                    'label'           => __('Confirmed Bookings','staylodgic'),
                     'data'            => $confirmedData,
                     'backgroundColor' => 'rgba(54, 162, 235, 0.2)',
                     'borderColor'     => 'rgba(79,0,255,1)',
                     'fill'            => false,
                  ],
                 [
-                    'label'           => 'Cancelled Bookings',
+                    'label'           => __('Cancelled Bookings','staylodgic'),
                     'data'            => $cancelledData,
                     'backgroundColor' => 'rgba(255, 99, 132, 0.2)',
                     'borderColor'     => 'rgba(255,99,132,1)',
@@ -714,8 +719,8 @@ class Analytics
 
         $chart_output = '';
 
-        $chart_output .= '<div class="atollmatrix_analytics_chart atollmatrix_analytics_chart_' . $config[ 'type' ] . ' ">';
-        $chart_output .= '<h2 class="atollmatrix_analytics_subheading">';
+        $chart_output .= '<div class="staylodgic_analytics_chart staylodgic_analytics_chart_' . $config[ 'type' ] . ' ">';
+        $chart_output .= '<h2 class="staylodgic_analytics_subheading">';
         $chart_output .= $config[ 'heading' ];
         $chart_output .= '</h2>';
         $chart_output .= $rendered_chart;
@@ -732,16 +737,16 @@ class Analytics
         // Iterate over each day in the guests array
         foreach ($this->guests as $day => $statuses) {
 
-            $guestListHtml .= '<div class="atollmatrix_analytics_table_wrap">';
+            $guestListHtml .= '<div class="staylodgic_analytics_table_wrap">';
             // Add a heading for the day
             if ('today' == $day) {
-                $guestListHtml .= '<h2 class="atollmatrix_analytics_subheading atollmatrix_dayis_' . $day . '">Today</h2>';
+                $guestListHtml .= '<h2 class="staylodgic_analytics_subheading staylodgic_dayis_' . $day . '">' . __('Today','staylodgic') . '</h2>';
             } elseif ('tomorrow' == $day) {
-                $guestListHtml .= '<h2 class="atollmatrix_analytics_subheading atollmatrix_dayis_' . $day . '">Tomorrow</h2>';
+                $guestListHtml .= '<h2 class="staylodgic_analytics_subheading staylodgic_dayis_' . $day . '">' . __('Tomorrow','staylodgic') . '</h2>';
             } elseif ('dayafter' == $day) {
-                $guestListHtml .= '<h2 class="atollmatrix_analytics_subheading atollmatrix_dayis_' . $day . '">Day After</h2>';
+                $guestListHtml .= '<h2 class="staylodgic_analytics_subheading staylodgic_dayis_' . $day . '">' . __('Day After','staylodgic') . '</h2>';
             } else {
-                $guestListHtml .= '<h2 class="atollmatrix_analytics_subheading atollmatrix_dayis_' . $day . '">' . ucfirst($day) . '</h2>';
+                $guestListHtml .= '<h2 class="staylodgic_analytics_subheading staylodgic_dayis_' . $day . '">' . ucfirst($day) . '</h2>';
             }
 
             // Sort the statuses array
@@ -765,10 +770,10 @@ class Analytics
                     $font_icon = '<i class="fa-solid fa-bed"></i>';
                 }
 
-                $guestListHtml .= '<div class="atollmatrix_table_outer">';
+                $guestListHtml .= '<div class="staylodgic_table_outer">';
                 $guestListHtml .= "<h3>" . $font_icon . ucfirst($status) . "</h3>";
 
-                $guestListHtml .= '<table class="atollmatrix_analytics_table table table-hover">';
+                $guestListHtml .= '<table class="staylodgic_analytics_table table table-hover">';
                 $guestListHtml .= '<thead class="table-light">';
                 $guestListHtml .= '<tr>';
                 $guestListHtml .= '<th class="table-cell-heading table-cell-heading-number number-column" scope="col"><i class="fas fa-hashtag"></i></th>';
@@ -785,7 +790,7 @@ class Analytics
                 foreach ($guests as $guestId => $guestInfo) {
                     $count++;
 
-                    $reservations_instance = new \AtollMatrix\Reservations();
+                    $reservations_instance = new \Staylodgic\Reservations();
                     $reservation_id        = $reservations_instance->getReservationIDforBooking($guestInfo[ 'booking_number' ]);
 
                     $checkinDate  = new \DateTime($guestInfo[ 'checkin' ]);
@@ -801,14 +806,14 @@ class Analytics
                     $guestListHtml .= '</td>';
                     $guestListHtml .= '<td scope="row">';
 
-                    $registry_instance = new \AtollMatrix\GuestRegistry();
+                    $registry_instance = new \Staylodgic\GuestRegistry();
                     $resRegIDs         = $registry_instance->fetchResRegIDsByBookingNumber($guestInfo[ 'booking_number' ]);
                     if (isset($resRegIDs) && is_array($resRegIDs)) {
                         $guestListHtml .= $registry_instance->outputRegistrationAndOccupancy($resRegIDs[ 'reservationID' ], $resRegIDs[ 'guestRegisterID' ], 'icons');
                     }
                     $guestListHtml .= '</td>';
 
-                    $notes             = get_post_meta($reservation_id, 'atollmatrix_reservation_notes', true);
+                    $notes             = get_post_meta($reservation_id, 'staylodgic_reservation_notes', true);
                     $notes_with_breaks = nl2br($notes);
 
                     $guestListHtml .= '<td scope="row">' . $notes_with_breaks . '</td>';
@@ -840,10 +845,10 @@ class Analytics
 
         $row_one = '';
 
-        $row_one .= '<div class="atollmatrix_anaytlics_row_one">';
-        $row_one .= '<div class="atollmatrix_anaytlics_module atollmatrix_chart_bookings_today">' . $bookings_today . '</div>';
-        $row_one .= '<div class="atollmatrix_anaytlics_module atollmatrix_chart_bookings_tomorrow">' . $bookings_tomorrow . '</div>';
-        $row_one .= '<div class="atollmatrix_anaytlics_module atollmatrix_chart_bookings_dayafter">' . $bookings_dayafter . '</div>';
+        $row_one .= '<div class="staylodgic_anaytlics_row_one">';
+        $row_one .= '<div class="staylodgic_anaytlics_module staylodgic_chart_bookings_today">' . $bookings_today . '</div>';
+        $row_one .= '<div class="staylodgic_anaytlics_module staylodgic_chart_bookings_tomorrow">' . $bookings_tomorrow . '</div>';
+        $row_one .= '<div class="staylodgic_anaytlics_module staylodgic_chart_bookings_dayafter">' . $bookings_dayafter . '</div>';
         $row_one .= '</div>';
 
         $dashboard = $row_one . $guestListHtml . $past_twelve_months_bookings . $past_twelve_months_revenue . $past_twelve_months_adr;
@@ -860,11 +865,11 @@ class Analytics
         $guestListHtml = '';
 
         return <<<HTML
-    <canvas id="{$this->id}" class="atollmatrix-chart" data-type="{$this->type}" data-data="{$data}" data-options="{$options}"></canvas>
+    <canvas id="{$this->id}" class="staylodgic-chart" data-type="{$this->type}" data-data="{$data}" data-options="{$options}"></canvas>
     $guestListHtml
     HTML;
     }
 
 }
 
-$analytics = new \AtollMatrix\Analytics($id = false);
+$analytics = new \Staylodgic\Analytics($id = false);

@@ -1,5 +1,5 @@
 <?php
-namespace AtollMatrix;
+namespace Staylodgic;
 
 use Error;
 
@@ -26,7 +26,7 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
         $this->schedule_cron_event();
 
         // Hook the function to the cron event
-        add_action('atollmatrix_ical_availability_processor_event', array($this, 'ical_availability_processor'));
+        add_action('staylodgic_ical_availability_processor_event', array($this, 'ical_availability_processor'));
 
         // Add custom interval
         add_filter('cron_schedules', array($this, 'add_cron_interval'));
@@ -41,14 +41,14 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
     }
 
     public function add_ics_rewrite_rule() {
-        add_rewrite_rule('^ics-export/room/([0-9]+)/?', 'index.php?atollmatrix_ics_room=$matches[1]', 'top');
+        add_rewrite_rule('^ics-export/room/([0-9]+)/?', 'index.php?staylodgic_ics_room=$matches[1]', 'top');
     }
     public function register_query_vars($vars) {
-        $vars[] = 'atollmatrix_ics_room';
+        $vars[] = 'staylodgic_ics_room';
         return $vars;
     }
     public function handle_ics_export() {
-        $roomId = get_query_var('atollmatrix_ics_room');
+        $roomId = get_query_var('staylodgic_ics_room');
         if ($roomId) {
             $this->handle_export_request($roomId);
             exit;
@@ -58,7 +58,7 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
     public function schedule_cron_event() {
 
         $qtysync_interval = null; // or set a default value
-        $settings = get_option('atollmatrix_settings');
+        $settings = get_option('staylodgic_settings');
 
         if (is_array($settings) && isset($settings['qtysync_interval'])) {
             $qtysync_interval = $settings['qtysync_interval'];
@@ -66,28 +66,28 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
             // Define the cron schedule based on the validated interval
             switch ($qtysync_interval) {
                 case '5':
-                    $schedule = 'atollmatrix_5_minutes';
+                    $schedule = 'staylodgic_5_minutes';
                     break;
                 case '10':
-                    $schedule = 'atollmatrix_10_minutes';
+                    $schedule = 'staylodgic_10_minutes';
                     break;
                 case '15':
-                    $schedule = 'atollmatrix_15_minutes';
+                    $schedule = 'staylodgic_15_minutes';
                     break;
                 case '30':
-                    $schedule = 'atollmatrix_30_minutes';
+                    $schedule = 'staylodgic_30_minutes';
                     break;
                 case '60':
-                    $schedule = 'atollmatrix_60_minutes';
+                    $schedule = 'staylodgic_60_minutes';
                     break;
                 default:
-                    $schedule = 'atollmatrix_5_minutes'; // Default case
+                    $schedule = 'staylodgic_5_minutes'; // Default case
                     break;
             }
         
             // Schedule the cron event if it's not already scheduled
-            if (!wp_next_scheduled('atollmatrix_ical_availability_processor_event')) {
-                wp_schedule_event(time(), $schedule, 'atollmatrix_ical_availability_processor_event');
+            if (!wp_next_scheduled('staylodgic_ical_availability_processor_event')) {
+                wp_schedule_event(time(), $schedule, 'staylodgic_ical_availability_processor_event');
             }
 
         }
@@ -95,10 +95,10 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
 
     // Custom intervals for cron job
     public function add_cron_interval($schedules) {
-        $sync_intervals = atollmatrix_sync_intervals(); // Get intervals from your function
+        $sync_intervals = staylodgic_sync_intervals(); // Get intervals from your function
 
         foreach ($sync_intervals as $interval => $display) {
-            $schedules["atollmatrix_{$interval}_minutes"] = array(
+            $schedules["staylodgic_{$interval}_minutes"] = array(
                 'interval' => intval($interval) * 60,
                 'display' => $display
             );
@@ -224,7 +224,7 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
 
     public function ical_availability_processor($process_all = false) {
         $rooms = Rooms::queryRooms();
-        $processed_rooms = get_option('atollmatrix_processed_rooms', []);
+        $processed_rooms = get_option('staylodgic_processed_rooms', []);
 
         // Increment batch count only if not processing all
         if (!$process_all) {
@@ -264,7 +264,7 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
             }
 
             $processed_rooms[] = $room->ID;
-            update_option('atollmatrix_processed_rooms', $processed_rooms); // Update the list of processed rooms
+            update_option('staylodgic_processed_rooms', $processed_rooms); // Update the list of processed rooms
 
             $count++;
 
@@ -302,7 +302,7 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
 
         if ($count < $this->batchSize) {
             // All rooms processed, reset the list
-            update_option('atollmatrix_processed_rooms', []);
+            update_option('staylodgic_processed_rooms', []);
             // Optionally trigger a notification that processing is complete
         }
 
@@ -360,7 +360,7 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
     public function add_availability_admin_menu()
     {
         add_submenu_page(
-            'atoll-matrix',
+            'staylodgic',
             // This is the slug of the parent menu
             'Import iCal Availabilitiy',
             'Import iCal Availabilitiy',
@@ -408,9 +408,9 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
 
                                 $syncDate = $room_channel_availability['stats'][$key]['syncdate'];
                                 $syncTime = $room_channel_availability['stats'][$key]['synctime'];
-                                $timezone = atollmatrix_get_option('timezone');
+                                $timezone = staylodgic_get_option('timezone');
                                 
-                                $adjustedValues = atollmatrix_applyTimezoneToDateAndTime($syncDate, $syncTime, $timezone);
+                                $adjustedValues = staylodgic_applyTimezoneToDateAndTime($syncDate, $syncTime, $timezone);
 
                                 echo '<p class="availability-sync-stats">';
                                 echo '<span>Last sync: '.$adjustedValues['adjustedDate'].'</span>';
@@ -441,7 +441,7 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
 
     public function add_export_availability_admin_menu() {
         add_submenu_page(
-            'atoll-matrix', // Replace with the slug of the parent menu item
+            'staylodgic', // Replace with the slug of the parent menu item
             'Export iCal Availability',
             'Export iCal Availability',
             'manage_options',
@@ -488,7 +488,7 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
     public function handle_export_request($roomId) {
     
         // Retrieve the 'quantity_array' and 'channel_quantity_array'
-        $room_reservations_instance = new \AtollMatrix\Reservations( $dateString = false, $roomId );
+        $room_reservations_instance = new \Staylodgic\Reservations( $dateString = false, $roomId );
         $room_reservations_instance->calculateAndUpdateRemainingRoomCountsForAllDates();
         $remainingQuantityArray = $room_reservations_instance->getRemainingRoomCountArray();
         $channelArray = get_post_meta($roomId, 'channel_quantity_array', true);
@@ -538,7 +538,7 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
                 
                 // Create an event for the unavailable date
                 $icsContent .= "BEGIN:VEVENT\r\n";
-                $icsContent .= "UID:" . uniqid() . "@atollmatrix\r\n";
+                $icsContent .= "UID:" . uniqid() . "@staylodgic\r\n";
                 $icsContent .= "DTSTAMP:" . gmdate('Ymd') . 'T' . gmdate('His') . "Z\r\n";
                 $icsContent .= "DTSTART;VALUE=DATE:" . $icsDateStr . "\r\n";
                 $icsContent .= "DTEND;VALUE=DATE:" . $icsEndDateStr . "\r\n";

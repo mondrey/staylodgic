@@ -1,5 +1,5 @@
 <?php
-namespace AtollMatrix;
+namespace Staylodgic;
 
 class Modals
 {
@@ -94,30 +94,30 @@ class Modals
 			<div class="modal-dialog modal-dialog-centered">
 			<div class="modal-content">
 				<div class="modal-header">
-						<h5 class="modal-title" id="quantity-modal-label"><?php _e('Quantity', 'atollmatrix');?></h5>
+						<h5 class="modal-title" id="quantity-modal-label"><?php _e('Quantity', 'staylodgic');?></h5>
 						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 					</div>
 					<div class="modal-body">
 						<div class="form-group">
-							<label for="quantity-modal-input"><i class="fa-solid fa-hashtag"></i> <?php _e('Quantity', 'atollmatrix');?></label>
+							<label for="quantity-modal-input"><i class="fa-solid fa-hashtag"></i> <?php _e('Quantity', 'staylodgic');?></label>
 							<input type="number" class="form-control" name="quantity" placeholder="Quantity" value="0" min="0">
 						</div>
 						<div class="form-group">
-							<label for="modaldatepicker"><i class="fa-solid fa-calendar"></i> <?php _e('Date:', 'atollmatrix');?></label>
+							<label for="modaldatepicker"><i class="fa-solid fa-calendar"></i> <?php _e('Date:', 'staylodgic');?></label>
 							<input type="text" class="form-control modaldatepicker" name="modaldatepicker" placeholder="Select date">
 						</div>
 						<div class="form-group">
-							<label for="room"><i class="fa-solid fa-bed"></i> <?php _e('Room:', 'atollmatrix');?></label>
+							<label for="room"><i class="fa-solid fa-bed"></i> <?php _e('Room:', 'staylodgic');?></label>
 							<select class="form-select" name="room">
 								<?php
-$featured_pages         = get_posts('post_type=atmx_room&orderby=title&numberposts=-1&order=ASC');
+$featured_pages         = get_posts('post_type=slgc_room&orderby=title&numberposts=-1&order=ASC');
         $list_options[ 'none' ] = "Not Selected";
         if ($featured_pages) {
             foreach ($featured_pages as $key => $list) {
                 $list_options[ $list->ID ] = $list->post_title;
             }
         } else {
-            $list_options[ 0 ] = __('Rooms not found.','atollmatrix');
+            $list_options[ 0 ] = __('Rooms not found.','staylodgic');
         }
         foreach ($list_options as $key => $option) {
             echo '<option value="' . esc_attr($key) . '">', esc_attr($option), '</option>';
@@ -127,9 +127,9 @@ $featured_pages         = get_posts('post_type=atmx_room&orderby=title&numberpos
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?php _e('Close', 'atollmatrix');?></button>
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?php _e('Close', 'staylodgic');?></button>
 						<button type="button" class="btn btn-primary save-changes">
-						<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> <?php _e('Save changes', 'atollmatrix');?></button>
+						<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> <?php _e('Save changes', 'staylodgic');?></button>
 					</div>
 				</div>
 			</div>
@@ -145,30 +145,30 @@ $featured_pages         = get_posts('post_type=atmx_room&orderby=title&numberpos
 			<div class="modal-dialog modal-dialog-centered">
 			<div class="modal-content">
 				<div class="modal-header">
-						<h5 class="modal-title" id="rates-modal-label"><?php _e('Set Rate', 'atollmatrix');?></h5>
+						<h5 class="modal-title" id="rates-modal-label"><?php _e('Set Rate', 'staylodgic');?></h5>
 						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 					</div>
 					<div class="modal-body">
 						<div class="form-group">
-							<label for="rates-modal-input"><i class="fas fa-dollar-sign"></i> <?php _e('Rate:', 'atollmatrix');?></label>
+							<label for="rates-modal-input"><i class="fas fa-dollar-sign"></i> <?php _e('Rate:', 'staylodgic');?></label>
 							<input type="number" class="form-control" name="rate" placeholder="Rate" value="0" min="0">
 						</div>
 						<div class="form-group">
-							<label for="modaldatepicker"><i class="fa-solid fa-calendar"></i> <?php _e('Date:', 'atollmatrix');?></label>
+							<label for="modaldatepicker"><i class="fa-solid fa-calendar"></i> <?php _e('Date:', 'staylodgic');?></label>
 							<input type="text" class="form-control modaldatepicker" name="modaldatepicker" placeholder="Select date">
 						</div>
 						<div class="form-group">
-							<label for="room"><i class="fa-solid fa-bed"></i> <?php _e('Room:', 'atollmatrix');?></label>
+							<label for="room"><i class="fa-solid fa-bed"></i> <?php _e('Room:', 'staylodgic');?></label>
 							<select class="form-select" name="room">
 								<?php
-$featured_pages         = get_posts('post_type=atmx_room&orderby=title&numberposts=-1&order=ASC');
+$featured_pages         = get_posts('post_type=slgc_room&orderby=title&numberposts=-1&order=ASC');
         $list_options[ 'none' ] = "Not Selected";
         if ($featured_pages) {
             foreach ($featured_pages as $key => $list) {
                 $list_options[ $list->ID ] = $list->post_title;
             }
         } else {
-            $list_options[ 0 ] = __('Rooms not found.','atollmatrix');
+            $list_options[ 0 ] = __('Rooms not found.','staylodgic');
         }
         foreach ($list_options as $key => $option) {
             echo '<option value="' . esc_attr($key) . '">', esc_attr($option), '</option>';
@@ -178,9 +178,9 @@ $featured_pages         = get_posts('post_type=atmx_room&orderby=title&numberpos
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?php _e('Close', 'atollmatrix');?></button>
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?php _e('Close', 'staylodgic');?></button>
 						<button type="button" class="btn btn-primary save-changes">
-							<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> <?php _e('Save changes', 'atollmatrix');?></button>
+							<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> <?php _e('Save changes', 'staylodgic');?></button>
 					</div>
 				</div>
 			</div>

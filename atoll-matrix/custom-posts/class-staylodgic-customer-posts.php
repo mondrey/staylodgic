@@ -1,28 +1,28 @@
 <?php
-class AtollMatrix_Customer_Posts
+class Staylodgic_Customer_Posts
 {
 
     public function __construct()
     {
         add_action('init', array($this, 'init'));
 
-        add_filter("manage_edit-atmx_customers_columns", array($this, 'atmx_customers_edit_columns'));
-        add_filter('manage_posts_custom_column', array($this, 'atmx_customers_custom_columns'));
+        add_filter("manage_edit-slgc_customers_columns", array($this, 'slgc_customers_edit_columns'));
+        add_filter('manage_posts_custom_column', array($this, 'slgc_customers_custom_columns'));
     }
 
     // Kbase lister
-    public function atmx_customers_edit_columns($columns)
+    public function slgc_customers_edit_columns($columns)
     {
         $new_columns = array(
-            "customer_booking"      => __('Booking', 'atollmatrix'),
-            "customer_reservations" => __('Reservations', 'atollmatrix'),
-            "customer_rooms"        => __('Rooms', 'atollmatrix'),
-            "mcustomer_section"     => __('Section', 'atollmatrix'),
+            "customer_booking"      => __('Booking', 'staylodgic'),
+            "customer_reservations" => __('Reservations', 'staylodgic'),
+            "customer_rooms"        => __('Rooms', 'staylodgic'),
+            "mcustomer_section"     => __('Section', 'staylodgic'),
         );
 
         return array_merge($columns, $new_columns);
     }
-    public function atmx_customers_custom_columns($columns)
+    public function slgc_customers_custom_columns($columns)
     {
         global $post;
 
@@ -36,7 +36,7 @@ class AtollMatrix_Customer_Posts
             $full_image_url = $full_image_url[0];
         }
 
-        $customer_instance = new \AtollMatrix\Customers();
+        $customer_instance = new \Staylodgic\Customers();
 
         switch ($columns) {
             case "customer_booking":
@@ -46,15 +46,15 @@ class AtollMatrix_Customer_Posts
 
                 $post_type = get_post_type( get_the_ID() );
 
-                $reservation_instance = new \AtollMatrix\Activity();
-                $reservation_array = \AtollMatrix\Activity::getActivityIDsForCustomer($customer_post_id);
+                $reservation_instance = new \Staylodgic\Activity();
+                $reservation_array = \Staylodgic\Activity::getActivityIDsForCustomer($customer_post_id);
                 if ( is_array( $reservation_array ) && !empty( $reservation_array ) ) {
                     echo '<i class="fas fa-umbrella-beach"></i>';
                     echo $reservation_instance->getEditLinksForActivity($reservation_array);
                 }
 
-                $reservation_instance = new \AtollMatrix\Reservations();
-                $reservation_array = \AtollMatrix\Reservations::getReservationIDsForCustomer($customer_post_id);
+                $reservation_instance = new \Staylodgic\Reservations();
+                $reservation_array = \Staylodgic\Reservations::getReservationIDsForCustomer($customer_post_id);
                 if ( is_array( $reservation_array ) && !empty( $reservation_array ) ) {
                     echo '<i class="fas fa-bed"></i>';
                     echo $reservation_instance->getEditLinksForReservations($reservation_array);
@@ -65,7 +65,7 @@ class AtollMatrix_Customer_Posts
                 echo $customer_instance->generateCustomerRooms($customer_post_id);
                 break;
             case "mcustomer_section":
-                echo get_the_term_list(get_the_id(), 'atmx_customercat', '', ', ', '');
+                echo get_the_term_list(get_the_id(), 'slgc_customercat', '', ', ', '');
                 break;
         }
     }
@@ -83,18 +83,18 @@ class AtollMatrix_Customer_Posts
         /*
          * Register Featured Post Manager
          */
-        //add_action('init', 'atollmatrix_featured_register');
-        //add_action('init', 'atollmatrix_kbase_register');//Always use a shortname like "atollmatrix_" not to see any 404 errors
+        //add_action('init', 'staylodgic_featured_register');
+        //add_action('init', 'staylodgic_kbase_register');//Always use a shortname like "staylodgic_" not to see any 404 errors
         /*
          * Register kbase Post Manager
          */
 
-        $atollmatrix_customers_slug = "customers";
-        if (function_exists('atollmatrix_get_option_data')) {
-            $atollmatrix_customers_slug = atollmatrix_get_option_data('customers_permalink_slug');
+        $staylodgic_customers_slug = "customers";
+        if (function_exists('staylodgic_get_option_data')) {
+            $staylodgic_customers_slug = staylodgic_get_option_data('customers_permalink_slug');
         }
-        if ($atollmatrix_customers_slug == "" || !isset($atollmatrix_customers_slug)) {
-            $atollmatrix_customers_slug = "customers";
+        if ($staylodgic_customers_slug == "" || !isset($staylodgic_customers_slug)) {
+            $staylodgic_customers_slug = "customers";
         }
         $args = array(
             'labels'             => array(
@@ -103,7 +103,7 @@ class AtollMatrix_Customer_Posts
                 'singular_name' => 'Customer',
                 'all_items'     => 'All Customers',
             ),
-            'singular_label'     => __('Customer', 'atollmatrix'),
+            'singular_label'     => __('Customer', 'staylodgic'),
             'public'             => true,
             'publicly_queryable' => true,
             'show_ui'            => true,
@@ -114,15 +114,15 @@ class AtollMatrix_Customer_Posts
             'has_archive'        => true,
             'menu_position'      => 6,
             'menu_icon'          => plugin_dir_url(__FILE__) . 'images/portfolio.png',
-            'rewrite'            => array('slug' => $atollmatrix_customers_slug), //Use a slug like "work" or "project" that shouldnt be same with your page name
+            'rewrite'            => array('slug' => $staylodgic_customers_slug), //Use a slug like "work" or "project" that shouldnt be same with your page name
             'supports' => array('title', 'author', 'thumbnail'), //Boxes will be shown in the panel
         );
 
-        register_post_type('atmx_customers', $args);
+        register_post_type('slgc_customers', $args);
         /*
          * Add Taxonomy for kbase 'Type'
          */
-        register_taxonomy('atmx_customercat', array('atmx_customers'),
+        register_taxonomy('slgc_customercat', array('slgc_customers'),
             array(
                 'labels'       => array(
                     'name'          => 'Sections',
@@ -140,4 +140,4 @@ class AtollMatrix_Customer_Posts
     }
 
 }
-$atollmatrix_kbase_post_type = new AtollMatrix_Customer_Posts();
+$staylodgic_kbase_post_type = new Staylodgic_Customer_Posts();

@@ -1,5 +1,5 @@
 <?php
-function atollmatrix_applyTimezoneToDateAndTime($date, $time, $timezone) {
+function staylodgic_applyTimezoneToDateAndTime($date, $time, $timezone) {
     try {
         // Parse the timezone offset
         $offsetPattern = '/GMT([+-])(\d{1,2}):(\d{2})/';
@@ -29,21 +29,21 @@ function atollmatrix_applyTimezoneToDateAndTime($date, $time, $timezone) {
     }
 }
 
-function atollmatrix_get_GmtTimezoneChoices() {
+function staylodgic_get_GmtTimezoneChoices() {
     $timezones = [];
 
     // Start from GMT-12:00 to GMT+14:00
     for ($i = -12; $i <= 14; $i++) {
         $timezone = $i < 0 ? "GMT$i:00" : ($i > 0 ? "GMT+$i:00" : "GMT+00:00");
-        $timezones[$timezone] = esc_html__($timezone, 'atollmatrix');
+        $timezones[$timezone] = esc_html__($timezone, 'staylodgic');
     }
 
     // Add half-hour and 45-minute offsets if needed
-    // Example: $timezones['gmt+5:30'] = esc_html__('GMT+5:30', 'atollmatrix');
+    // Example: $timezones['gmt+5:30'] = esc_html__('GMT+5:30', 'staylodgic');
 
     return $timezones;
 }
-function atollmatrix_get_pages_for_select() {
+function staylodgic_get_pages_for_select() {
     // Get an array of all pages
     $pages = get_pages(); 
     $page_list = array();
@@ -58,26 +58,26 @@ function atollmatrix_get_pages_for_select() {
     return $page_list;
 }
 
-function atollmatrix_is_valid_sync_interval($qtysync_interval) {
+function staylodgic_is_valid_sync_interval($qtysync_interval) {
     // Retrieve the array of sync intervals
-    $sync_intervals = atollmatrix_sync_intervals();
+    $sync_intervals = staylodgic_sync_intervals();
 
     // Check if the provided interval is a key in the sync intervals array
     return array_key_exists($qtysync_interval, $sync_intervals);
 }
 
-function atollmatrix_sync_intervals() {
+function staylodgic_sync_intervals() {
 	$sync_intervals = array(
-		'5' => esc_attr__('Five Minutes', 'atollmatrix'),
-		'10' => esc_attr__('Ten Minutes', 'atollmatrix'),
-		'15' => esc_attr__('Fifteen Minutes', 'atollmatrix'),
-		'30' => esc_attr__('Thirty Minutes', 'atollmatrix'),
-		'60' => esc_attr__('Sixty Minutes', 'atollmatrix')
+		'5' => esc_attr__('Five Minutes', 'staylodgic'),
+		'10' => esc_attr__('Ten Minutes', 'staylodgic'),
+		'15' => esc_attr__('Fifteen Minutes', 'staylodgic'),
+		'30' => esc_attr__('Thirty Minutes', 'staylodgic'),
+		'60' => esc_attr__('Sixty Minutes', 'staylodgic')
 	);
 
 	return $sync_intervals;
 }
-function atollmatrix_formatDate($dateString, $formatChoice = 'monthshort_first')
+function staylodgic_formatDate($dateString, $formatChoice = 'monthshort_first')
 {
 	$formattedDate = '';
 	$dateTime = new DateTime($dateString);
@@ -106,42 +106,42 @@ function atollmatrix_formatDate($dateString, $formatChoice = 'monthshort_first')
 
 	return $formattedDate;
 }
-function atollmatrix_get_booking_substatuses()
+function staylodgic_get_booking_substatuses()
 {
     $bookingSubStatuses = array(
-        'completed'      => esc_attr__('Completed', 'atollmatrix'),
-        'checkedin'      => esc_attr__('Checked-In', 'atollmatrix'),
-        'checkedout'     => esc_attr__('Checked-Out', 'atollmatrix'),
-        'noshow'         => esc_attr__('No Show', 'atollmatrix'),
-        'onhold'         => esc_attr__('On Hold', 'atollmatrix'),
-        'pendingpayment' => esc_attr__('Pending Payment', 'atollmatrix'),
-        'refunded'       => esc_attr__('Refunded', 'atollmatrix'),
-        'inprogress'     => esc_attr__('In Progress', 'atollmatrix'),
-        'expired'        => esc_attr__('Expired', 'atollmatrix'),
+        'completed'      => esc_attr__('Completed', 'staylodgic'),
+        'checkedin'      => esc_attr__('Checked-In', 'staylodgic'),
+        'checkedout'     => esc_attr__('Checked-Out', 'staylodgic'),
+        'noshow'         => esc_attr__('No Show', 'staylodgic'),
+        'onhold'         => esc_attr__('On Hold', 'staylodgic'),
+        'pendingpayment' => esc_attr__('Pending Payment', 'staylodgic'),
+        'refunded'       => esc_attr__('Refunded', 'staylodgic'),
+        'inprogress'     => esc_attr__('In Progress', 'staylodgic'),
+        'expired'        => esc_attr__('Expired', 'staylodgic'),
     );
 
     return $bookingSubStatuses;
 }
-function atollmatrix_get_booking_statuses()
+function staylodgic_get_booking_statuses()
 {
     $bookingStatuses = array(
-        'confirmed' => esc_attr__('Confirmed', 'atollmatrix'),
-        'cancelled' => esc_attr__('Cancelled', 'atollmatrix'),
-        'pending'   => esc_attr__('Pending', 'atollmatrix'),
+        'confirmed' => esc_attr__('Confirmed', 'staylodgic'),
+        'cancelled' => esc_attr__('Cancelled', 'staylodgic'),
+        'pending'   => esc_attr__('Pending', 'staylodgic'),
     );
 
     return $bookingStatuses;
 }
-function atollmatrix_get_new_booking_statuses()
+function staylodgic_get_new_booking_statuses()
 {
     $bookingStatuses = array(
-        'confirmed' => esc_attr__('Confirmed', 'atollmatrix'),
-        'pending'   => esc_attr__('Pending', 'atollmatrix'),
+        'confirmed' => esc_attr__('Confirmed', 'staylodgic'),
+        'pending'   => esc_attr__('Pending', 'staylodgic'),
     );
 
     return $bookingStatuses;
 }
-function atollmatrix_get_BedLayout($bedName, $bedFieldID = null)
+function staylodgic_get_BedLayout($bedName, $bedFieldID = null)
 {
 
     switch ($bedName) {
@@ -168,13 +168,13 @@ function atollmatrix_get_BedLayout($bedName, $bedFieldID = null)
     return $html;
 }
 // Function to recursively format arrays as strings
-function atollmatrix_format_value($value)
+function staylodgic_format_value($value)
 {
     $formatted_elements = '';
     if (is_array($value)) {
         $formatted_start = '<ul>';
         foreach ($value as $key => $item) {
-            $formatted_elements .= '<li><strong>' . $key . ':</strong> ' . atollmatrix_format_value($item) . '</li>';
+            $formatted_elements .= '<li><strong>' . $key . ':</strong> ' . staylodgic_format_value($item) . '</li>';
         }
         $formatted_end = '</ul>';
         if ('' == $formatted_elements) {
@@ -187,15 +187,15 @@ function atollmatrix_format_value($value)
         return $value;
     }
 }
-function atollmatrix_readable_date($originalDate)
+function staylodgic_readable_date($originalDate)
 {
     $formattedDate = date("F jS, Y", strtotime($originalDate));
 
     return $formattedDate;
 }
 
-function atollmatrix_get_option($option, $default = '') {
-    $settings = get_option('atollmatrix_settings');
+function staylodgic_get_option($option, $default = '') {
+    $settings = get_option('staylodgic_settings');
 
     if (is_array($settings) && isset($settings[$option])) {
 		//error_log( print_r($settings, true) );
@@ -205,13 +205,13 @@ function atollmatrix_get_option($option, $default = '') {
     return $default;
 }
 
-function atollmatrix_price($originalPrice)
+function staylodgic_price($originalPrice)
 {
-    $currency           = atollmatrix_get_option('currency', 'USD');
-    $currency_position  = atollmatrix_get_option('currency_position', 'left');
-    $thousand_seperator = atollmatrix_get_option('thousand_seperator', ',');
-    $decimal_seperator  = atollmatrix_get_option('decimal_seperator', '.');
-    $number_of_decimals = atollmatrix_get_option('number_of_decimals', '2');
+    $currency           = staylodgic_get_option('currency', 'USD');
+    $currency_position  = staylodgic_get_option('currency_position', 'left');
+    $thousand_seperator = staylodgic_get_option('thousand_seperator', ',');
+    $decimal_seperator  = staylodgic_get_option('decimal_seperator', '.');
+    $number_of_decimals = staylodgic_get_option('number_of_decimals', '2');
 
 	error_log( '---------------------- NUMBER FORMAT-------------------------');
 	error_log( $originalPrice );
@@ -241,11 +241,11 @@ function atollmatrix_price($originalPrice)
 // $total = 53.00;
 // $percentages = [10.00, 16.00];
 
-// $initialValue = atollmatrix_reverse_percentage($total, $percentages);
+// $initialValue = staylodgic_reverse_percentage($total, $percentages);
 
 // echo "The initial value is: $" . number_format($initialValue, 2);
 // The initial value is: $37.30
-function atollmatrix_reverse_percentage($total, $percentages)
+function staylodgic_reverse_percentage($total, $percentages)
 {
     $initial_value = $total;
     foreach ($percentages as $percentage) {
@@ -254,61 +254,61 @@ function atollmatrix_reverse_percentage($total, $percentages)
     return $initial_value;
 }
 
-function atollmatrix_has_tax()
+function staylodgic_has_tax()
 {
 
-    $taxFlag = atollmatrix_get_option('enable_taxes');
+    $taxFlag = staylodgic_get_option('enable_taxes');
     return $taxFlag;
 
 }
-function atollmatrix_has_activity_tax()
+function staylodgic_has_activity_tax()
 {
 
-    $taxFlag = atollmatrix_get_option('enable_activitytaxes');
+    $taxFlag = staylodgic_get_option('enable_activitytaxes');
     return $taxFlag;
 
 }
 
-function atollmatrix_display_cancelled()
+function staylodgic_display_cancelled()
 {
 
-    $display_cancelled = atollmatrix_get_option('display_cancelled');
+    $display_cancelled = staylodgic_get_option('display_cancelled');
     return $display_cancelled;
 
 }
 
-function atollmatrix_get_mealplan_labels($mealtype)
+function staylodgic_get_mealplan_labels($mealtype)
 {
     switch ($mealtype) {
         case 'BB':
-            return __('Breakfast', 'atollmatrix');
+            return __('Breakfast', 'staylodgic');
         case 'HB':
-            return __('Halfboard', 'atollmatrix');
+            return __('Halfboard', 'staylodgic');
         case 'FB':
-            return __('Fullboard', 'atollmatrix');
+            return __('Fullboard', 'staylodgic');
         case 'AN':
-            return __('All inclusive', 'atollmatrix');
+            return __('All inclusive', 'staylodgic');
         default:
             return '';
     }
 }
 
-function atollmatrix_delete_booking_transient($bookingNumber)
+function staylodgic_delete_booking_transient($bookingNumber)
 {
     delete_transient($bookingNumber);
 }
-function atollmatrix_set_booking_transient($data, $bookingNumber)
+function staylodgic_set_booking_transient($data, $bookingNumber)
 {
     error_log('----- Saving Transisent -----');
     error_log($bookingNumber);
     error_log(print_r($data, true));
     set_transient($bookingNumber, $data, 20 * MINUTE_IN_SECONDS);
 }
-function atollmatrix_get_booking_transient($bookingNumber = null)
+function staylodgic_get_booking_transient($bookingNumber = null)
 {
     return get_transient($bookingNumber);
 }
-function atollmatrix_get_allowed_tags() {
+function staylodgic_get_allowed_tags() {
 	$structure_allowed_tags = array(
         'caption'  => array(),
 		'col'      => array(

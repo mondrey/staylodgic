@@ -1,6 +1,6 @@
 <?php
-if ( !function_exists('atollmatrix_google_fonts') ) {
-function atollmatrix_google_fonts() {
+if ( !function_exists('staylodgic_google_fonts') ) {
+function staylodgic_google_fonts() {
 $google_api_output='
 {
  "kind": "webfonts#webfontList",

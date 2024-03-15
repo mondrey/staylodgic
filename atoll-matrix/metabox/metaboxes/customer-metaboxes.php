@@ -1,9 +1,9 @@
 <?php
-function atollmatrix_customers_metadata()
+function staylodgic_customers_metadata()
 {
-    $atollmatrix_imagepath = plugin_dir_url(__FILE__) . 'assets/images/';
+    $staylodgic_imagepath = plugin_dir_url(__FILE__) . 'assets/images/';
 
-    $atollmatrix_sidebar_options = atollmatrix_generate_sidebarlist('customers');
+    $staylodgic_sidebar_options = staylodgic_generate_sidebarlist('customers');
 
     // Pull all the Featured into an array
     $bg_slideshow_pages = get_posts('post_type=fullscreen&orderby=title&numberposts=-1&order=ASC');
@@ -25,7 +25,7 @@ function atollmatrix_customers_metadata()
         $options_bgslideshow[0] = "Featured pages not found.";
     }
 
-    $room_names = get_posts('post_type=atmx_room&orderby=title&numberposts=-1&order=ASC');
+    $room_names = get_posts('post_type=slgc_room&orderby=title&numberposts=-1&order=ASC');
 
     if ($room_names) {
         $options_room_names['none'] = "Not Selected";
@@ -41,21 +41,21 @@ function atollmatrix_customers_metadata()
 
     $customers_box = array(
         'id'       => 'customersmeta-box',
-        'title'    => esc_html__('Customers Metabox', 'atollmatrix'),
+        'title'    => esc_html__('Customers Metabox', 'staylodgic'),
         'page'     => 'page',
         'context'  => 'normal',
         'priority' => 'core',
         'fields'   => array(
             array(
-                'name'         => esc_html__('Customer Settings', 'atollmatrix'),
-                'id'           => 'atollmatrix_customers_section_id',
+                'name'         => esc_html__('Customer Settings', 'staylodgic'),
+                'id'           => 'staylodgic_customers_section_id',
                 'type'         => 'break',
-                'sectiontitle' => esc_html__('Customers Settings', 'atollmatrix'),
+                'sectiontitle' => esc_html__('Customers Settings', 'staylodgic'),
                 'std'          => '',
             ),
             array(
-                'name'    => esc_html__('Customer', 'atollmatrix'),
-                'id'      => 'atollmatrix_customer_checkin',
+                'name'    => esc_html__('Customer', 'staylodgic'),
+                'id'      => 'staylodgic_customer_checkin',
                 'type'    => 'customer',
                 'class'   => 'textsmall',
                 'heading' => 'subhead',
@@ -63,8 +63,8 @@ function atollmatrix_customers_metadata()
                 'std'     => '',
             ),
             array(
-                'name'    => esc_html__('Full Name', 'atollmatrix'),
-                'id'      => 'atollmatrix_full_name',
+                'name'    => esc_html__('Full Name', 'staylodgic'),
+                'id'      => 'staylodgic_full_name',
                 'type'    => 'text',
                 'class'   => 'textsmall',
                 'heading' => 'subhead',
@@ -72,8 +72,8 @@ function atollmatrix_customers_metadata()
                 'std'     => '',
             ),
             array(
-                'name'    => esc_html__('Email Address', 'atollmatrix'),
-                'id'      => 'atollmatrix_email_address',
+                'name'    => esc_html__('Email Address', 'staylodgic'),
+                'id'      => 'staylodgic_email_address',
                 'type'    => 'text',
                 'class'   => 'textsmall',
                 'heading' => 'subhead',
@@ -81,8 +81,8 @@ function atollmatrix_customers_metadata()
                 'std'     => '',
             ),
             array(
-                'name'    => esc_html__('Phone Number', 'atollmatrix'),
-                'id'      => 'atollmatrix_phone_number',
+                'name'    => esc_html__('Phone Number', 'staylodgic'),
+                'id'      => 'staylodgic_phone_number',
                 'type'    => 'text',
                 'class'   => 'textsmall',
                 'heading' => 'subhead',
@@ -90,8 +90,8 @@ function atollmatrix_customers_metadata()
                 'std'     => '',
             ),
             array(
-                'name'    => esc_html__('Street Address', 'atollmatrix'),
-                'id'      => 'atollmatrix_street_address',
+                'name'    => esc_html__('Street Address', 'staylodgic'),
+                'id'      => 'staylodgic_street_address',
                 'type'    => 'text',
                 'class'   => 'textsmall',
                 'heading' => 'subhead',
@@ -99,8 +99,8 @@ function atollmatrix_customers_metadata()
                 'std'     => '',
             ),
             array(
-                'name'    => esc_html__('City', 'atollmatrix'),
-                'id'      => 'atollmatrix_city',
+                'name'    => esc_html__('City', 'staylodgic'),
+                'id'      => 'staylodgic_city',
                 'type'    => 'text',
                 'class'   => 'textsmall',
                 'heading' => 'subhead',
@@ -108,8 +108,8 @@ function atollmatrix_customers_metadata()
                 'std'     => '',
             ),
             array(
-                'name'    => esc_html__('State', 'atollmatrix'),
-                'id'      => 'atollmatrix_state',
+                'name'    => esc_html__('State', 'staylodgic'),
+                'id'      => 'staylodgic_state',
                 'type'    => 'text',
                 'class'   => 'textsmall',
                 'heading' => 'subhead',
@@ -117,8 +117,8 @@ function atollmatrix_customers_metadata()
                 'std'     => '',
             ),
             array(
-                'name'    => esc_html__('Zip Code', 'atollmatrix'),
-                'id'      => 'atollmatrix_zip_code',
+                'name'    => esc_html__('Zip Code', 'staylodgic'),
+                'id'      => 'staylodgic_zip_code',
                 'type'    => 'text',
                 'class'   => 'textsmall',
                 'heading' => 'subhead',
@@ -126,8 +126,8 @@ function atollmatrix_customers_metadata()
                 'std'     => '',
             ),
             array(
-                'name'    => esc_html__('Country', 'atollmatrix'),
-                'id'      => 'atollmatrix_country',
+                'name'    => esc_html__('Country', 'staylodgic'),
+                'id'      => 'staylodgic_country',
                 'type'    => 'country',
                 'class'   => 'textsmall',
                 'heading' => 'subhead',
@@ -135,15 +135,15 @@ function atollmatrix_customers_metadata()
                 'std'     => '',
             ),
             array(
-                'name'         => esc_html__('Page Settings', 'atollmatrix'),
-                'id'           => 'atollmatrix_page_section_id',
+                'name'         => esc_html__('Page Settings', 'staylodgic'),
+                'id'           => 'staylodgic_page_section_id',
                 'type'         => 'break',
-                'sectiontitle' => esc_html__('Page Settings', 'atollmatrix'),
+                'sectiontitle' => esc_html__('Page Settings', 'staylodgic'),
                 'std'          => '',
             ),
             array(
-                'name'        => esc_html__('Reservations', 'atollmatrix'),
-                'id'          => 'atollmatrix_reservation_list',
+                'name'        => esc_html__('Reservations', 'staylodgic'),
+                'id'          => 'staylodgic_reservation_list',
                 'type'        => 'reservation_for_customer',
                 'class'       => 'textsmall',
                 'heading'     => 'subhead',
@@ -158,8 +158,8 @@ function atollmatrix_customers_metadata()
 /*
  * Meta options for Customers post type
  */
-function atollmatrix_customersitem_metaoptions()
+function staylodgic_customersitem_metaoptions()
 {
-    $customers_box = atollmatrix_customers_metadata();
-    atollmatrix_generate_metaboxes($customers_box, get_the_id());
+    $customers_box = staylodgic_customers_metadata();
+    staylodgic_generate_metaboxes($customers_box, get_the_id());
 }

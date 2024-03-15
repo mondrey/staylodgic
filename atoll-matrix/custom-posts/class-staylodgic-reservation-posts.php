@@ -1,21 +1,21 @@
 <?php
-class atollmatrix_Reservation_Posts
+class staylodgic_Reservation_Posts
 {
 
     public function __construct()
     {
         add_action('init', array($this, 'init'));
 
-        add_filter("manage_edit-atmx_reservations_columns", array($this, 'atmx_reservations_edit_columns'));
-        add_filter('manage_posts_custom_column', array($this, 'atmx_reservations_custom_columns'));
+        add_filter("manage_edit-slgc_reservations_columns", array($this, 'slgc_reservations_edit_columns'));
+        add_filter('manage_posts_custom_column', array($this, 'slgc_reservations_custom_columns'));
 
-        add_filter('manage_edit-atmx_reservations_sortable_columns', array($this, 'atmx_reservations_sortable_columns'));
+        add_filter('manage_edit-slgc_reservations_sortable_columns', array($this, 'slgc_reservations_sortable_columns'));
 
-        add_action('pre_get_posts', array($this, 'atmx_reservations_orderby'));
+        add_action('pre_get_posts', array($this, 'slgc_reservations_orderby'));
 
     }
 
-    public function atmx_reservations_orderby($query)
+    public function slgc_reservations_orderby($query)
     {
         if (!is_admin() || !$query->is_main_query()) {
             return;
@@ -24,13 +24,13 @@ class atollmatrix_Reservation_Posts
         $orderby = $query->get('orderby');
     
         if ('reservation_checkinout' == $orderby) {
-            $query->set('meta_key', 'atollmatrix_checkin_date'); // Assuming 'reservation_checkin_date' is the meta key for check-in date
+            $query->set('meta_key', 'staylodgic_checkin_date'); // Assuming 'reservation_checkin_date' is the meta key for check-in date
             $query->set('orderby', 'meta_value');
         }
     }
     
     
-    public function atmx_reservations_sortable_columns($columns)
+    public function slgc_reservations_sortable_columns($columns)
     {
         $columns['reservation_checkinout'] = 'reservation_checkinout';
         return $columns;
@@ -38,25 +38,25 @@ class atollmatrix_Reservation_Posts
     
 
     // Kbase lister
-    public function atmx_reservations_edit_columns($columns)
+    public function slgc_reservations_edit_columns($columns)
     {
         unset($columns[ 'author' ]);
         unset($columns[ 'date' ]);
         $new_columns = array(
-            //"mreservation_section" => __('Section', 'atollmatrix'),
-            "reservation_customer"   => __('Customer', 'atollmatrix'),
-            "reservation_bookingnr"  => __('Booking Number', 'atollmatrix'),
-            "reservation_checkinout" => __('Checkin / Checkout', 'atollmatrix'),
-            "reservation_registered" => __('Registered', 'atollmatrix'),
-            "reservation_nights"     => __('Nights', 'atollmatrix'),
-            "reservation_status"     => __('Status', 'atollmatrix'),
-            "reservation_substatus"  => __('Sub Status', 'atollmatrix'),
-            "reservation_room"       => __('Room', 'atollmatrix'),
+            //"mreservation_section" => __('Section', 'staylodgic'),
+            "reservation_customer"   => __('Customer', 'staylodgic'),
+            "reservation_bookingnr"  => __('Booking Number', 'staylodgic'),
+            "reservation_checkinout" => __('Checkin / Checkout', 'staylodgic'),
+            "reservation_registered" => __('Registered', 'staylodgic'),
+            "reservation_nights"     => __('Nights', 'staylodgic'),
+            "reservation_status"     => __('Status', 'staylodgic'),
+            "reservation_substatus"  => __('Sub Status', 'staylodgic'),
+            "reservation_room"       => __('Room', 'staylodgic'),
         );
 
         return array_merge($columns, $new_columns);
     }
-    public function atmx_reservations_custom_columns($columns)
+    public function slgc_reservations_custom_columns($columns)
     {
         global $post;
         $custom    = get_post_custom();
@@ -68,7 +68,7 @@ class atollmatrix_Reservation_Posts
             $full_image_url = $full_image_url[ 0 ];
         }
 
-        $reservation_instance = new \AtollMatrix\Reservations($date = false, $room_id = false, $reservation_id = $post->ID);
+        $reservation_instance = new \Staylodgic\Reservations($date = false, $room_id = false, $reservation_id = $post->ID);
         $bookingnumber = $reservation_instance->getBookingNumber();
 
         switch ($columns) {
@@ -87,19 +87,19 @@ class atollmatrix_Reservation_Posts
                 $reservation_todaycheckout = $reservation_instance->isGuestCheckingOutToday();
                 if ($reservation_staying) {
                     if ($reservation_todaycheckin) {
-                        echo '<p class="post-status-reservation post-status-reservation-checkin">' . __('Check-in', 'atollmatrix') . '</p>';
+                        echo '<p class="post-status-reservation post-status-reservation-checkin">' . __('Check-in', 'staylodgic') . '</p>';
                     } elseif ($reservation_todaycheckout) {
-                        echo '<p class="post-status-reservation post-status-reservation-checkout">' . __('Check-out', 'atollmatrix') . '</p>';
+                        echo '<p class="post-status-reservation post-status-reservation-checkout">' . __('Check-out', 'staylodgic') . '</p>';
                     } else {
-                        echo '<p class="post-status-reservation post-status-reservation-staying">' . __('Staying', 'atollmatrix') . '</p>';
+                        echo '<p class="post-status-reservation post-status-reservation-staying">' . __('Staying', 'staylodgic') . '</p>';
                     }
                 }
-                echo '<p class="post-status-reservation-date post-status-reservation-date-checkin"><i class="fa-solid fa-arrow-right"></i> ' . atollmatrix_formatDate($reservation_checkin) . '</p>';
-                echo '<p class="post-status-reservation-date post-status-reservation-date-checkout"><i class="fa-solid fa-arrow-left"></i> ' . atollmatrix_formatDate($reservation_checkout) . '</p>';
+                echo '<p class="post-status-reservation-date post-status-reservation-date-checkin"><i class="fa-solid fa-arrow-right"></i> ' . staylodgic_formatDate($reservation_checkin) . '</p>';
+                echo '<p class="post-status-reservation-date post-status-reservation-date-checkout"><i class="fa-solid fa-arrow-left"></i> ' . staylodgic_formatDate($reservation_checkout) . '</p>';
 
                 break;
             case "reservation_registered":
-                $registry_instance = new \AtollMatrix\GuestRegistry();
+                $registry_instance = new \Staylodgic\GuestRegistry();
                 $resRegIDs =  $registry_instance->fetchResRegIDsByBookingNumber( $bookingnumber );
                 if ( $resRegIDs ) {
                     echo $registry_instance->outputRegistrationAndOccupancy($resRegIDs['reservationID'], $resRegIDs['guestRegisterID'], 'icons');
@@ -122,7 +122,7 @@ class atollmatrix_Reservation_Posts
                 echo $room_title;
                 break;
             case "mreservation_section":
-                echo get_the_term_list(get_the_id(), 'atmx_rescat', '', ', ', '');
+                echo get_the_term_list(get_the_id(), 'slgc_rescat', '', ', ', '');
                 break;
         }
     }
@@ -140,18 +140,18 @@ class atollmatrix_Reservation_Posts
         /*
          * Register Featured Post Manager
          */
-        //add_action('init', 'atollmatrix_featured_register');
-        //add_action('init', 'atollmatrix_kbase_register');//Always use a shortname like "atollmatrix_" not to see any 404 errors
+        //add_action('init', 'staylodgic_featured_register');
+        //add_action('init', 'staylodgic_kbase_register');//Always use a shortname like "staylodgic_" not to see any 404 errors
         /*
          * Register kbase Post Manager
          */
 
-        $atollmatrix_reservations_slug = "reservations";
-        if (function_exists('atollmatrix_get_option_data')) {
-            $atollmatrix_reservations_slug = atollmatrix_get_option_data('reservations_permalink_slug');
+        $staylodgic_reservations_slug = "reservations";
+        if (function_exists('staylodgic_get_option_data')) {
+            $staylodgic_reservations_slug = staylodgic_get_option_data('reservations_permalink_slug');
         }
-        if ($atollmatrix_reservations_slug == "" || !isset($atollmatrix_reservations_slug)) {
-            $atollmatrix_reservations_slug = "reservations";
+        if ($staylodgic_reservations_slug == "" || !isset($staylodgic_reservations_slug)) {
+            $staylodgic_reservations_slug = "reservations";
         }
         $args = array(
             'labels'             => array(
@@ -160,7 +160,7 @@ class atollmatrix_Reservation_Posts
                 'singular_name' => 'Reservation',
                 'all_items'     => 'All Reservations',
             ),
-            'singular_label'     => __('Reservation', 'atollmatrix'),
+            'singular_label'     => __('Reservation', 'staylodgic'),
             'public'             => true,
             'publicly_queryable' => false,
             'show_ui'            => true,
@@ -171,15 +171,15 @@ class atollmatrix_Reservation_Posts
             'has_archive'        => true,
             'menu_position'      => 6,
             'menu_icon'          => plugin_dir_url(__FILE__) . 'images/portfolio.png',
-            'rewrite'            => array('slug' => $atollmatrix_reservations_slug), //Use a slug like "work" or "project" that shouldnt be same with your page name
+            'rewrite'            => array('slug' => $staylodgic_reservations_slug), //Use a slug like "work" or "project" that shouldnt be same with your page name
             'supports' => array('title', 'author', 'thumbnail'), //Boxes will be shown in the panel
         );
 
-        register_post_type('atmx_reservations', $args);
+        register_post_type('slgc_reservations', $args);
         /*
          * Add Taxonomy for kbase 'Type'
          */
-        register_taxonomy('atmx_rescat', array('atmx_reservations'),
+        register_taxonomy('slgc_rescat', array('slgc_reservations'),
             array(
                 'labels'       => array(
                     'name'          => 'Sections',
@@ -197,4 +197,4 @@ class atollmatrix_Reservation_Posts
     }
 
 }
-$atollmatrix_kbase_post_type = new atollmatrix_Reservation_Posts();
+$staylodgic_kbase_post_type = new staylodgic_Reservation_Posts();

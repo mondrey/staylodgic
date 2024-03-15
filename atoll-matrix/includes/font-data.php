@@ -1,5 +1,5 @@
 <?php
-function atollmatrix_elementor_icons()
+function staylodgic_elementor_icons()
 {
     $ion_icons = [
         'ion-alert'                          => 'alert',

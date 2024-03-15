@@ -164,7 +164,7 @@
 			save_button.find('.spinner-border').css('opacity', '1');
 			save_button.prop('disabled', true);
 
-			var atollmatrix_availabilitycalendar_nonce = $('input[name="atollmatrix_availabilitycalendar_nonce"]').val();
+			var staylodgic_availabilitycalendar_nonce = $('input[name="staylodgic_availabilitycalendar_nonce"]').val();
 
 			console.log(ajaxurl, dateRange, rate, postID);
 
@@ -177,7 +177,7 @@
 					postID: postID,
 					dateRange: dateRange,
 					rate: rate,
-					atollmatrix_availabilitycalendar_nonce: atollmatrix_availabilitycalendar_nonce
+					staylodgic_availabilitycalendar_nonce: staylodgic_availabilitycalendar_nonce
 				},
 				success: function (response) {
 					// Handle the AJAX response here
@@ -275,7 +275,7 @@
 			save_button.find('.spinner-border').css('opacity', '1');
 			save_button.prop('disabled', true);
 
-			var atollmatrix_availabilitycalendar_nonce = $('input[name="atollmatrix_availabilitycalendar_nonce"]').val();
+			var staylodgic_availabilitycalendar_nonce = $('input[name="staylodgic_availabilitycalendar_nonce"]').val();
 
 			console.log(ajaxurl, dateRange, quantity, postID);
 
@@ -288,7 +288,7 @@
 					postID: postID,
 					dateRange: dateRange,
 					quantity: quantity,
-					atollmatrix_availabilitycalendar_nonce: atollmatrix_availabilitycalendar_nonce
+					staylodgic_availabilitycalendar_nonce: staylodgic_availabilitycalendar_nonce
 				},
 				success: function (response) {
 					// Handle the AJAX response here
@@ -331,7 +331,7 @@
 
 			function initialize_reservation_guest_amount() {
 
-				$('#atollmatrix_room_id').change(function () {
+				$('#staylodgic_room_id').change(function () {
 
 
 					$('.notify-number-over-max').hide();
@@ -374,9 +374,9 @@
 					// Check if the selected room ID exists in the occupants object
 					if (occupantsObject.hasOwnProperty(selectedValue)) {
 
-						var $adultInput = $('#atollmatrix_reservation_room_adults');
+						var $adultInput = $('#staylodgic_reservation_room_adults');
 
-						var adult_number = $('#atollmatrix_reservation_room_adults').val();
+						var adult_number = $('#staylodgic_reservation_room_adults').val();
 
 						// Get the max guests for the selected room
 						var maxGuests = occupantsObject[selectedValue]["max_guests"];
@@ -425,7 +425,7 @@
 
 
 
-						var $childInput = $('#atollmatrix_reservation_room_children');
+						var $childInput = $('#staylodgic_reservation_room_children');
 
 						var children_number = $childInput.val();
 
@@ -473,8 +473,8 @@
 			initialize_reservation_guest_amount();
 
 			function getExistingDates() {
-				let checkinValue = document.getElementById('atollmatrix_checkin_date') ? document.getElementById('atollmatrix_checkin_date').value : null;
-				let checkoutValue = document.getElementById('atollmatrix_checkout_date') ? document.getElementById('atollmatrix_checkout_date').value : null;
+				let checkinValue = document.getElementById('staylodgic_checkin_date') ? document.getElementById('staylodgic_checkin_date').value : null;
+				let checkoutValue = document.getElementById('staylodgic_checkout_date') ? document.getElementById('staylodgic_checkout_date').value : null;
 
 				// Only set the default dates if checkinValue and checkoutValue exist
 				let defaultDates = [];
@@ -488,13 +488,13 @@
 				const checkin = selectedDates[0];
 				let checkout;
 
-				let selectElement = $('#atollmatrix_room_id');
+				let selectElement = $('#staylodgic_room_id');
 				selectElement.prop('disabled', true);
 
 				if (selectedDates.length > 1) {
 					checkout = selectedDates[1];
 				}
-				let reservationID = atollmatrix_admin_vars.post_id;
+				let reservationID = staylodgic_admin_vars.post_id;
 				console.log(reservationID);
 				const roomNights = checkout ? Math.ceil((checkout - checkin) / (1000 * 60 * 60 * 24)) : 0;
 
@@ -512,8 +512,8 @@
 					const checkinOffset = checkin.getTimezoneOffset() * 60000; // Time zone offset in milliseconds
 					const checkoutOffset = checkout.getTimezoneOffset() * 60000; // Time zone offset in milliseconds
 
-					document.getElementById("atollmatrix_checkin_date").value = new Date(checkin - checkinOffset).toISOString().split('T')[0];
-					document.getElementById("atollmatrix_checkout_date").value = new Date(checkout - checkoutOffset).toISOString().split('T')[0];
+					document.getElementById("staylodgic_checkin_date").value = new Date(checkin - checkinOffset).toISOString().split('T')[0];
+					document.getElementById("staylodgic_checkout_date").value = new Date(checkout - checkoutOffset).toISOString().split('T')[0];
 				}
 
 				// Availability checking to see if the chosen range has rooms available for the dates
@@ -587,8 +587,8 @@
 						const checkinOffset = checkin.getTimezoneOffset() * 60000; // Time zone offset in milliseconds
 						const checkoutOffset = checkout.getTimezoneOffset() * 60000; // Time zone offset in milliseconds
 
-						document.getElementById("atollmatrix_checkin_date").value = new Date(checkin - checkinOffset).toISOString().split('T')[0];
-						document.getElementById("atollmatrix_checkout_date").value = new Date(checkout - checkoutOffset).toISOString().split('T')[0];
+						document.getElementById("staylodgic_checkin_date").value = new Date(checkin - checkinOffset).toISOString().split('T')[0];
+						document.getElementById("staylodgic_checkout_date").value = new Date(checkout - checkoutOffset).toISOString().split('T')[0];
 
 					}
 
@@ -684,7 +684,7 @@
 				$('.calendar-nav-buttons').addClass('disabled');
 				$('.availabilitycalendar').addClass('disabled');
 
-				var atollmatrix_availabilitycalendar_nonce = $('input[name="atollmatrix_availabilitycalendar_nonce"]').val();
+				var staylodgic_availabilitycalendar_nonce = $('input[name="staylodgic_availabilitycalendar_nonce"]').val();
 
 				$.ajax({
 					type: 'POST',
@@ -693,7 +693,7 @@
 						'action': 'get_Selected_Range_AvailabilityCalendar',
 						'start_date': start_date,
 						'end_date': end_date,
-						atollmatrix_availabilitycalendar_nonce: atollmatrix_availabilitycalendar_nonce
+						staylodgic_availabilitycalendar_nonce: staylodgic_availabilitycalendar_nonce
 					},
 					success: function (data) {
 						$('#calendar').html(data);

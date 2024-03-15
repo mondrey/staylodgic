@@ -1,13 +1,13 @@
 <?php
-function atollmatrix_room_metadata()
+function staylodgic_room_metadata()
 {
 
-    $atollmatrix_imagepath     = get_template_directory_uri() . '/framework/options/images/metaboxes/';
-    $atollmatrix_imagepath_alt = get_template_directory_uri() . '/framework/options/images/';
+    $staylodgic_imagepath     = get_template_directory_uri() . '/framework/options/images/metaboxes/';
+    $staylodgic_imagepath_alt = get_template_directory_uri() . '/framework/options/images/';
 
-    $atollmatrix_imagepath = get_template_directory_uri() . '/framework/options/images/';
+    $staylodgic_imagepath = get_template_directory_uri() . '/framework/options/images/';
 
-    $atollmatrix_room_box = array(
+    $staylodgic_room_box = array(
         'id'       => 'roommeta-box',
         'title'    => 'Room Metabox',
         'page'     => 'page',
@@ -15,172 +15,172 @@ function atollmatrix_room_metadata()
         'priority' => 'high',
         'fields'   => array(
             array(
-                'name'         => __('Fullscreen Settings', 'atollmatrix'),
-                'id'           => 'atollmatrix_page_section_id',
+                'name'         => __('Fullscreen Settings', 'staylodgic'),
+                'id'           => 'staylodgic_page_section_id',
                 'type'         => 'break',
-                'sectiontitle' => __('Page Settings', 'atollmatrix'),
+                'sectiontitle' => __('Page Settings', 'staylodgic'),
                 'std'          => '',
             ),
             array(
-                'name' => __('Add Images', 'atollmatrix'),
-                'id'   => 'atollmatrix_image_attachments',
+                'name' => __('Add Images', 'staylodgic'),
+                'id'   => 'staylodgic_image_attachments',
                 'std'  => 'Upload Images',
                 'type' => 'image_gallery',
-                'desc' => __('Add images for slideshow.', 'atollmatrix'),
+                'desc' => __('Add images for slideshow.', 'staylodgic'),
             ),
             array(
-                'name' => __('Title', 'atollmatrix'),
-                'id'   => 'atollmatrix_title',
+                'name' => __('Title', 'staylodgic'),
+                'id'   => 'staylodgic_title',
                 'type' => 'text',
-                'desc' => __('Title.', 'atollmatrix'),
+                'desc' => __('Title.', 'staylodgic'),
                 'std'  => '',
             ),
             array(
-                'name' => __('Rooms of this type', 'atollmatrix'),
-                'id'   => 'atollmatrix_max_rooms_of_type',
+                'name' => __('Rooms of this type', 'staylodgic'),
+                'id'   => 'staylodgic_max_rooms_of_type',
                 'type' => 'text',
-                'desc' => __('Rooms of this type. This will be the maximum number avialbable for the room type.', 'atollmatrix'),
+                'desc' => __('Rooms of this type. This will be the maximum number avialbable for the room type.', 'staylodgic'),
                 'std'  => '',
             ),
             array(
-                'name' => __('Base Rate', 'atollmatrix'),
-                'id'   => 'atollmatrix_base_rate',
+                'name' => __('Base Rate', 'staylodgic'),
+                'id'   => 'staylodgic_base_rate',
                 'type' => 'text',
-                'desc' => __('Base rate for this room type.', 'atollmatrix'),
+                'desc' => __('Base rate for this room type.', 'staylodgic'),
                 'std'  => '',
             ),
             array(
-                'name' => __('Max Guests', 'atollmatrix'),
-                'id'   => 'atollmatrix_max_guests',
+                'name' => __('Max Guests', 'staylodgic'),
+                'id'   => 'staylodgic_max_guests',
                 'type' => 'range',
                 'min'  => '1',
                 'max'  => '9',
                 'step' => '1',
                 'unit' => 'guests',
-                'desc' => __('Max guests allowed.', 'atollmatrix'),
+                'desc' => __('Max guests allowed.', 'staylodgic'),
                 'std'  => '',
             ),
             array(
-                'name' => __('Set Max Adult Limit on/off', 'atollmatrix'),
-                'id'   => 'atollmatrix_max_adult_limit_status',
+                'name' => __('Set Max Adult Limit on/off', 'staylodgic'),
+                'id'   => 'staylodgic_max_adult_limit_status',
                 'type' => 'switch',
-                'desc' => __('', 'atollmatrix'),
+                'desc' => __('', 'staylodgic'),
                 'std'  => '',
             ),
             array(
-                'name' => __('Max Adults:', 'atollmatrix'),
-                'id'   => 'atollmatrix_max_adults',
+                'name' => __('Max Adults:', 'staylodgic'),
+                'id'   => 'staylodgic_max_adults',
                 'type' => 'range',
                 'min'  => '1',
                 'max'  => '9',
                 'step' => '1',
                 'unit' => 'adults',
-                'desc' => __('Max adults allowed:', 'atollmatrix'),
+                'desc' => __('Max adults allowed:', 'staylodgic'),
                 'std'  => '',
             ),
             array(
-                'name' => __('Set Max Children Limit on/off', 'atollmatrix'),
-                'id'   => 'atollmatrix_max_children_limit_status',
+                'name' => __('Set Max Children Limit on/off', 'staylodgic'),
+                'id'   => 'staylodgic_max_children_limit_status',
                 'type' => 'switch',
-                'desc' => __('', 'atollmatrix'),
+                'desc' => __('', 'staylodgic'),
                 'std'  => '',
             ),
             array(
-                'name' => __('Max Children:', 'atollmatrix'),
-                'id'   => 'atollmatrix_max_children',
+                'name' => __('Max Children:', 'staylodgic'),
+                'id'   => 'staylodgic_max_children',
                 'type' => 'range',
                 'min'  => '0',
                 'max'  => '9',
                 'step' => '1',
                 'unit' => 'children',
-                'desc' => __('Max children allowed:', 'atollmatrix'),
+                'desc' => __('Max children allowed:', 'staylodgic'),
                 'std'  => '',
             ),
             array(
-                'name' => __('Beds:', 'atollmatrix'),
-                'id'   => 'atollmatrix_beds',
+                'name' => __('Beds:', 'staylodgic'),
+                'id'   => 'staylodgic_beds',
                 'type' => 'range',
                 'min'  => '1',
                 'max'  => '9',
                 'step' => '1',
                 'unit' => 'bed(s)',
-                'desc' => __('Beds', 'atollmatrix'),
+                'desc' => __('Beds', 'staylodgic'),
                 'std'  => '',
             ),
             array(
-                'name' => __('Bathrooms:', 'atollmatrix'),
-                'id'   => 'atollmatrix_bathrooms',
+                'name' => __('Bathrooms:', 'staylodgic'),
+                'id'   => 'staylodgic_bathrooms',
                 'type' => 'range',
                 'min'  => '1',
                 'max'  => '9',
                 'step' => '1',
                 'unit' => 'bathroom(s)',
-                'desc' => __('Bathrooms', 'atollmatrix'),
+                'desc' => __('Bathrooms', 'staylodgic'),
                 'std'  => '',
             ),
             array(
-                'name' => __('Accomodation Size:', 'atollmatrix'),
-                'id'   => 'atollmatrix_room_size',
+                'name' => __('Accomodation Size:', 'staylodgic'),
+                'id'   => 'staylodgic_room_size',
                 'type' => 'range',
                 'min'  => '1',
                 'max'  => '9999',
                 'step' => '1',
                 'unit' => 'sqf',
-                'desc' => __('Size:', 'atollmatrix'),
+                'desc' => __('Size:', 'staylodgic'),
                 'std'  => '',
             ),
             array(
-                'name'    => __('Room view', 'atollmatrix'),
-                'id'      => 'atollmatrix_roomview',
+                'name'    => __('Room view', 'staylodgic'),
+                'id'      => 'staylodgic_roomview',
                 'type'    => 'select',
-                'desc'    => __('Choose room view', 'atollmatrix'),
-                'options' => atollmatrix_get_room_views(),
+                'desc'    => __('Choose room view', 'staylodgic'),
+                'options' => staylodgic_get_room_views(),
             ),
             array(
-                'name' => __('Room facilities ( comma seperated )', 'atollmatrix'),
-                'id'   => 'atollmatrix_room_facilities',
+                'name' => __('Room facilities ( comma seperated )', 'staylodgic'),
+                'id'   => 'staylodgic_room_facilities',
                 'type' => 'textarea',
-                'desc' => __('Room facilities', 'atollmatrix'),
+                'desc' => __('Room facilities', 'staylodgic'),
                 'std'  => '',
             ),
             array(
-                'name' => __('Description', 'atollmatrix'),
-                'id'   => 'atollmatrix_room_desc',
+                'name' => __('Description', 'staylodgic'),
+                'id'   => 'staylodgic_room_desc',
                 'type' => 'textarea',
-                'desc' => __('Description', 'atollmatrix'),
+                'desc' => __('Description', 'staylodgic'),
                 'std'  => '',
             ),
             array(
-                'name'         => esc_html__('Page Settings', 'atollmatrix'),
-                'id'           => 'atollmatrix_page_section_id',
+                'name'         => esc_html__('Page Settings', 'staylodgic'),
+                'id'           => 'staylodgic_page_section_id',
                 'type'         => 'break',
-                'sectiontitle' => esc_html__('Page Settings', 'atollmatrix'),
+                'sectiontitle' => esc_html__('Page Settings', 'staylodgic'),
                 'std'          => '',
             ),
             array(
-                'name'    => esc_html__('Bed Setup Set', 'atollmatrix'),
-                'id'      => 'atollmatrix_alt_bedsetup',
+                'name'    => esc_html__('Bed Setup Set', 'staylodgic'),
+                'id'      => 'staylodgic_alt_bedsetup',
                 'target'  => 'bedsetup',
                 'type'    => 'bedsetup_set',
                 'heading' => 'subhead',
-                'desc'    => esc_html__('Bed Setup', 'atollmatrix'),
+                'desc'    => esc_html__('Bed Setup', 'staylodgic'),
                 'std'     => '',
             ),
             array(
-                'name'    => __('Switch Menu', 'atollmatrix'),
-                'id'      => 'atollmatrix_menu_choice',
+                'name'    => __('Switch Menu', 'staylodgic'),
+                'id'      => 'staylodgic_menu_choice',
                 'type'    => 'select',
-                'desc'    => __('Select a different menu for this page', 'atollmatrix'),
-                'options' => atollmatrix_generate_menulist(),
+                'desc'    => __('Select a different menu for this page', 'staylodgic'),
+                'options' => staylodgic_generate_menulist(),
             ),
         ),
     );
-    return $atollmatrix_room_box;
+    return $staylodgic_room_box;
 }
-function atollmatrix_room_changelog()
+function staylodgic_room_changelog()
 {
 
-    $atollmatrix_room_changelog = array(
+    $staylodgic_room_changelog = array(
         'id'       => 'roommeta-box-changelog',
         'title'    => 'Room Changelog',
         'page'     => 'page',
@@ -188,25 +188,25 @@ function atollmatrix_room_changelog()
         'priority' => 'high',
         'fields'   => array(
             array(
-                'name'    => esc_html__('', 'atollmatrix'),
-                'id'           => 'atollmatrix_changelog',
+                'name'    => esc_html__('', 'staylodgic'),
+                'id'           => 'staylodgic_changelog',
                 'type'         => 'changelog',
                 'std'          => '',
             ),
         ),
     );
-    return $atollmatrix_room_changelog;
+    return $staylodgic_room_changelog;
 }
 /*
  * Meta options for Room post type
  */
-function atollmatrix_roomitem_metaoptions()
+function staylodgic_roomitem_metaoptions()
 {
-    $atollmatrix_room_box = atollmatrix_room_metadata();
-    atollmatrix_generate_metaboxes($atollmatrix_room_box, get_the_id());
+    $staylodgic_room_box = staylodgic_room_metadata();
+    staylodgic_generate_metaboxes($staylodgic_room_box, get_the_id());
 }
-function atollmatrix_roomitem_changelog()
+function staylodgic_roomitem_changelog()
 {
-    $atollmatrix_room_changelog = atollmatrix_room_changelog();
-    atollmatrix_generate_metaboxes($atollmatrix_room_changelog, get_the_id());
+    $staylodgic_room_changelog = staylodgic_room_changelog();
+    staylodgic_generate_metaboxes($staylodgic_room_changelog, get_the_id());
 }

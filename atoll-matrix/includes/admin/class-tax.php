@@ -1,5 +1,5 @@
 <?php
-namespace AtollMatrix;
+namespace Staylodgic;
 
 class Tax
 {
@@ -30,10 +30,10 @@ class Tax
             wp_send_json_error([ 'message' => 'Failed' ]);
             return;
         }
-        update_post_meta($the_post_id, 'atollmatrix_tax', 'excluded');
-        delete_post_meta($the_post_id, 'atollmatrix_tax_html_data');
-        delete_post_meta($the_post_id, 'atollmatrix_tax_data');
-        update_post_meta($the_post_id, 'atollmatrix_reservation_total_room_cost', $subtotal);
+        update_post_meta($the_post_id, 'staylodgic_tax', 'excluded');
+        delete_post_meta($the_post_id, 'staylodgic_tax_html_data');
+        delete_post_meta($the_post_id, 'staylodgic_tax_data');
+        update_post_meta($the_post_id, 'staylodgic_reservation_total_room_cost', $subtotal);
 
         // Send the JSON response
         wp_send_json('Tax Exluded');
@@ -66,9 +66,9 @@ class Tax
 
             // Calculate the total price
             if ( 'activities' == $tax_type ) {
-                $tax_instance = new \AtollMatrix\Tax('activities');
+                $tax_instance = new \Staylodgic\Tax('activities');
             } else {
-                $tax_instance = new \AtollMatrix\Tax('room');
+                $tax_instance = new \Staylodgic\Tax('room');
             }
             $tax_data     = $tax_instance->apply_tax($subtotal, $staynights, $totalGuests, $output = 'data');
             $tax          = $tax_instance->apply_tax($subtotal, $staynights, $totalGuests, $output = 'html');
@@ -81,10 +81,10 @@ class Tax
                 $response[ 'total' ] = $tax[ 'total' ];
 
                 // Add the response data as post meta
-                update_post_meta($the_post_id, 'atollmatrix_tax', 'enabled');
-                update_post_meta($the_post_id, 'atollmatrix_tax_html_data', $html);
-                update_post_meta($the_post_id, 'atollmatrix_tax_data', $tax_data);
-                update_post_meta($the_post_id, 'atollmatrix_reservation_total_room_cost', $tax[ 'total' ]);
+                update_post_meta($the_post_id, 'staylodgic_tax', 'enabled');
+                update_post_meta($the_post_id, 'staylodgic_tax_html_data', $html);
+                update_post_meta($the_post_id, 'staylodgic_tax_data', $tax_data);
+                update_post_meta($the_post_id, 'staylodgic_reservation_total_room_cost', $tax[ 'total' ]);
 
             } else {
                 $response[ 'error' ] = 'Calculation error';
@@ -116,14 +116,14 @@ class Tax
 
         $tax_has_status = false;
         if ('room' == $this->tax_type) {
-            $taxPricing = atollmatrix_get_option('taxes');
+            $taxPricing = staylodgic_get_option('taxes');
 
-            $tax_has_status = atollmatrix_has_tax();
+            $tax_has_status = staylodgic_has_tax();
         }
         if ('activities' == $this->tax_type) {
-            $taxPricing = atollmatrix_get_option('activity_taxes');
+            $taxPricing = staylodgic_get_option('activity_taxes');
 
-            $tax_has_status = atollmatrix_has_activity_tax();
+            $tax_has_status = staylodgic_has_activity_tax();
         }
 
         $subtotal = $roomrate;
@@ -171,7 +171,7 @@ class Tax
                     }
                 }
                 if ('html' == $output) {
-                    $price[ 'details' ][ $count ] = '<span class="tax-value">' . atollmatrix_price($total) . '</span> - <span class="tax-label" data-number="' . $tax[ 'number' ] . '" data-type="' . $tax[ 'type' ] . '" data-duration="' . $tax[ 'duration' ] . '">' . ltrim($percentage . ' ' . $tax[ 'label' ]) . '</span>';
+                    $price[ 'details' ][ $count ] = '<span class="tax-value">' . staylodgic_price($total) . '</span> - <span class="tax-label" data-number="' . $tax[ 'number' ] . '" data-type="' . $tax[ 'type' ] . '" data-duration="' . $tax[ 'duration' ] . '">' . ltrim($percentage . ' ' . $tax[ 'label' ]) . '</span>';
                 } else {
                     $price[ 'details' ][ $count ][ 'label' ] = ltrim($percentage . ' ' . $tax[ 'label' ]);
                     $price[ 'details' ][ $count ][ 'total' ] = $total;
@@ -192,4 +192,4 @@ class Tax
 
 }
 
-$instance = new \AtollMatrix\Tax();
+$instance = new \Staylodgic\Tax();

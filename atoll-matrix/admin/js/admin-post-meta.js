@@ -8,7 +8,7 @@ jQuery(document).ready(function($) {
 		});
 		$(document).on('click', '.day-schedule .add-time-input', function () {
 			var daySchedule = $(this).closest('.day-schedule');
-			var newTimeInput = $('<input type="time" name="atollmatrix_activity_schedule[' + daySchedule.attr('id').replace('day_schedule_', '') + '][]" value="">');
+			var newTimeInput = $('<input type="time" name="staylodgic_activity_schedule[' + daySchedule.attr('id').replace('day_schedule_', '') + '][]" value="">');
 			daySchedule.find('.time-inputs').append(newTimeInput);
 		});
 	}
@@ -60,8 +60,8 @@ jQuery(document).ready(function($) {
 					type: 'POST',
 					data: {
 						'action': 'delete_registration',
-						'post_id': atollmatrix_admin_vars.post_id,
-						'nonce': atollmatrix_admin_vars.nonce,
+						'post_id': staylodgic_admin_vars.post_id,
+						'nonce': staylodgic_admin_vars.nonce,
 						'guest_id': guestIdToDelete,
 					},
 					success: function(response) {
@@ -88,8 +88,8 @@ jQuery(document).ready(function($) {
 				type: 'POST',
 				data: {
 					'action': 'get_guest_post_permalink',
-					'post_id': atollmatrix_admin_vars.post_id,
-					'nonce': atollmatrix_admin_vars.nonce
+					'post_id': staylodgic_admin_vars.post_id,
+					'nonce': staylodgic_admin_vars.nonce
 				},
 				success: function(response) {
 					if (response.success) {
@@ -168,17 +168,17 @@ jQuery(document).ready(function($) {
 
 	document.addEventListener( 'click', ( event ) => {
 		const target = event.target;
-		if ( ! target.closest( '.atollmatrix-tabs a' ) ) {
+		if ( ! target.closest( '.staylodgic-tabs a' ) ) {
 			return;
 		}
 		event.preventDefault();
-		document.querySelectorAll( '.atollmatrix-tabs a' ).forEach( ( tablink ) => {
+		document.querySelectorAll( '.staylodgic-tabs a' ).forEach( ( tablink ) => {
 			tablink.classList.remove( 'nav-tab-active' );
 		} );
 		target.classList.add( 'nav-tab-active' );
 		targetTab = target.getAttribute( 'data-tab' );
-		document.querySelectorAll( '.atollmatrix-options-form .atollmatrix-tab-item' ).forEach( ( item ) => {
-			if ( item.classList.contains( `atollmatrix-tab-item--${targetTab}` ) ) {
+		document.querySelectorAll( '.staylodgic-options-form .staylodgic-tab-item' ).forEach( ( item ) => {
+			if ( item.classList.contains( `staylodgic-tab-item--${targetTab}` ) ) {
 				item.style.display = 'block';
 			} else {
 				item.style.display = 'none';
@@ -186,7 +186,7 @@ jQuery(document).ready(function($) {
 		} );
 	} );
 	document.addEventListener( 'DOMContentLoaded', function () {
-		document.querySelector( '.atollmatrix-tabs .nav-tab' ).click();
+		document.querySelector( '.staylodgic-tabs .nav-tab' ).click();
 	}, false );
 
 
@@ -194,8 +194,8 @@ jQuery(document).ready(function($) {
 		// Get the selected booking number
 		var subtotal_for_tax = $('[data-priceof="roomsubtotal"]').val();
 		var totalStayNights = $('.reservation-post-numberof-nights').data('numberofnights');
-		var adults = $('#atollmatrix_reservation_room_adults').val();
-		var children = $('#atollmatrix_reservation_room_children').val();
+		var adults = $('#staylodgic_reservation_room_adults').val();
+		var children = $('#staylodgic_reservation_room_children').val();
 
 		if ( '' == children ) {
 			children = 0;
@@ -212,7 +212,7 @@ jQuery(document).ready(function($) {
 		  data: {
 			action: 'generateTax', // Custom Ajax action
 			post_id: postID,
-			nonce: atollmatrix_admin_vars.nonce,
+			nonce: staylodgic_admin_vars.nonce,
 			subtotal: subtotal_for_tax,
 			staynights: totalStayNights,
 			total_guests: totalGuests
@@ -222,7 +222,7 @@ jQuery(document).ready(function($) {
 			// Handle the Ajax response
 			// Display the room names in the desired element
 			$('#input-tax-summary').html(response.html);
-			$('#atollmatrix_reservation_total_room_cost').val( response.total.toFixed(2) );
+			$('#staylodgic_reservation_total_room_cost').val( response.total.toFixed(2) );
 		  },
 		  error: function(xhr, status, error) {
 			// Handle any errors that occur during the Ajax request
@@ -244,13 +244,13 @@ jQuery(document).ready(function($) {
 			action: 'excludeTax', // Custom Ajax action
 			post_id: postID,
 			subtotal: subtotal_for_tax,
-			nonce: atollmatrix_admin_vars.nonce
+			nonce: staylodgic_admin_vars.nonce
 		  },
 		  success: function(response) {
 			console.log( response );
 			// Handle the Ajax response
 			// Display the room names in the desired element
-			$('#atollmatrix_reservation_total_room_cost').val(subtotal_for_tax);
+			$('#staylodgic_reservation_total_room_cost').val(subtotal_for_tax);
 			$('.input-tax-summary-wrap-inner').remove();
 			$('#input-tax-summary').html('<div class="input-tax-summary-wrap-inner">' + response + '</div>');
 		  },
@@ -261,7 +261,7 @@ jQuery(document).ready(function($) {
 		});
 	});
 
-	$('#atollmatrix_payment_booking_id').on('select2:select', function(e) {
+	$('#staylodgic_payment_booking_id').on('select2:select', function(e) {
 		// Get the selected booking number
 		var bookingNumber = $(this).val();
 	
@@ -299,7 +299,7 @@ jQuery(document).ready(function($) {
 		}
 	});
 
-	$('#atollmatrix_customer_choice').on('change', function() {
+	$('#staylodgic_customer_choice').on('change', function() {
 		var selectedValue = $(this).val();
 		if(selectedValue == 'existing') {
 			$('.metabox_existing_customers').show();
@@ -307,7 +307,7 @@ jQuery(document).ready(function($) {
 			$('.metabox_existing_customers').hide();
 		}
 	});
-	$('#atollmatrix_customer_choice').trigger('change');
+	$('#staylodgic_customer_choice').trigger('change');
 
 	// Attach click event listener to each switch-toggle
 	$('.switch-toggle').on('click', function() {
@@ -410,10 +410,10 @@ $(document).on('click', '.bedlayout-wrap .add-bedlayout-box', function () {
 	newSection.find('select,input').prop('disabled', false);
 
     // Update the name attribute for select input (bedtype) with the generated uniqueID
-    newSection.find('select').attr('name', 'atollmatrix_alt_bedsetup[' + uniqueID + '][bedtype][]');
+    newSection.find('select').attr('name', 'staylodgic_alt_bedsetup[' + uniqueID + '][bedtype][]');
 
     // Update the name attribute for input (bednumber) with the generated uniqueID
-    newSection.find('input').attr('name', 'atollmatrix_alt_bedsetup[' + uniqueID + '][bednumber][]');
+    newSection.find('input').attr('name', 'staylodgic_alt_bedsetup[' + uniqueID + '][bednumber][]');
 
 
     // Add a remove button to the cloned section
@@ -458,9 +458,9 @@ $('.taxlayout-wrap .add-taxlayout-box').click(function() {
 
     clonedSections.each(function(index) {
         var section = $(this);
-        var taxlabelInput = section.find('input[name^="atollmatrix_bedsetup_repeat[taxlabel]"]');
-        var taxtypeSelect = section.find('select[name^="atollmatrix_bedsetup_repeat[taxtype]"]');
-        var taxnumberInput = section.find('input[name^="atollmatrix_bedsetup_repeat[taxnumber]"]');
+        var taxlabelInput = section.find('input[name^="staylodgic_bedsetup_repeat[taxlabel]"]');
+        var taxtypeSelect = section.find('select[name^="staylodgic_bedsetup_repeat[taxtype]"]');
+        var taxnumberInput = section.find('input[name^="staylodgic_bedsetup_repeat[taxnumber]"]');
 
         var newTaxlabelId = 'tax_label' + index;
         var newTaxnumberId = 'tax_number' + index;
@@ -469,7 +469,7 @@ $('.taxlayout-wrap .add-taxlayout-box').click(function() {
         taxnumberInput.attr('id', newTaxnumberId);
 
         if (taxtypeSelect.length > 0 && taxtypeSelect.hasClass('chosen-select-metabox')) {
-            var newTaxtypeSelectId = 'tax_type_atollmatrix_bedsetup_repeat_' + index;
+            var newTaxtypeSelectId = 'tax_type_staylodgic_bedsetup_repeat_' + index;
             taxtypeSelect.attr('id', newTaxtypeSelectId);
         }
     });
@@ -724,14 +724,14 @@ $('body').on('click', '.remove-taxlayout', function() {
     
     // ******* Multi Upload Function
 	var frame,
-	    images = atollmatrix_admin_vars.post_gallery,
-	    proofingimages = atollmatrix_admin_vars.proofing_gallery,
+	    images = staylodgic_admin_vars.post_gallery,
+	    proofingimages = staylodgic_admin_vars.proofing_gallery,
 	    proofingSelection = proofingLoadImages(proofingimages),
 	    selection = loadImages(images);
 
 	$('body').addClass('mtheme-admin-core-on');
 
-	$('#atollmatrix_images_upload').on('click', function(e) {
+	$('#staylodgic_images_upload').on('click', function(e) {
 		e.preventDefault();
 
 		// Set options for 1st frame render
@@ -774,7 +774,7 @@ $('body').on('click', '.remove-taxlayout', function() {
 		    var models = frame.state().get('library');
 			if(models.length == 0){
 			    selection = false;
-				$.post(ajaxurl, { ids: '', action: 'atollmatrix_save_images', post_id: atollmatrix_admin_vars.post_id, nonce: atollmatrix_admin_vars.nonce });
+				$.post(ajaxurl, { ids: '', action: 'staylodgic_save_images', post_id: staylodgic_admin_vars.post_id, nonce: staylodgic_admin_vars.nonce });
 			}
 		});
 		
@@ -800,13 +800,13 @@ $('body').on('click', '.remove-taxlayout', function() {
 							url: ajaxurl,
 							data: { 
 								ids: ids, 
-								action: 'atollmatrix_save_images', 
-								post_id: atollmatrix_admin_vars.post_id, 
-								nonce: atollmatrix_admin_vars.nonce 
+								action: 'staylodgic_save_images', 
+								post_id: staylodgic_admin_vars.post_id, 
+								nonce: staylodgic_admin_vars.nonce 
 							},
 							success: function(){
 								selection = loadImages(ids);
-								$('#atollmatrix_image_ids').val( ids );
+								$('#staylodgic_image_ids').val( ids );
 								frame.close();
 							},
 							dataType: 'html'
@@ -819,7 +819,7 @@ $('body').on('click', '.remove-taxlayout', function() {
 		}
 	});
 
-	$('#atollmatrix_proofing_images_upload').on('click', function(e) {
+	$('#staylodgic_proofing_images_upload').on('click', function(e) {
 		e.preventDefault();
 
 		// Set options for 1st frame render
@@ -864,7 +864,7 @@ $('body').on('click', '.remove-taxlayout', function() {
 		    var models = frame.state().get('library');
 			if(models.length == 0){
 			    proofingSelection = false;
-				$.post(ajaxurl, { ids: '', action: 'themecore_save_proofing_images', post_id: atollmatrix_admin_vars.post_id, nonce: atollmatrix_admin_vars.nonce });
+				$.post(ajaxurl, { ids: '', action: 'themecore_save_proofing_images', post_id: staylodgic_admin_vars.post_id, nonce: staylodgic_admin_vars.nonce });
 			}
 		});
 		
@@ -891,8 +891,8 @@ $('body').on('click', '.remove-taxlayout', function() {
 							data: { 
 								ids: ids, 
 								action: 'themecore_save_proofing_images', 
-								post_id: atollmatrix_admin_vars.post_id, 
-								nonce: atollmatrix_admin_vars.nonce 
+								post_id: staylodgic_admin_vars.post_id, 
+								nonce: staylodgic_admin_vars.nonce 
 							},
 							success: function(){
 								proofingSelection = proofingLoadImages(ids);
@@ -1058,7 +1058,7 @@ $('body').on('click', '.remove-taxlayout', function() {
 		    var models = frame.state().get('library');
 			if(models.length == 0){
 			    selection = false;
-				$.post(ajaxurl, { ids: '', action: 'multo_gallery_save_images', gallerysetid: galleryid, post_id: atollmatrix_admin_vars.post_id, nonce: atollmatrix_admin_vars.nonce });
+				$.post(ajaxurl, { ids: '', action: 'multo_gallery_save_images', gallerysetid: galleryid, post_id: staylodgic_admin_vars.post_id, nonce: staylodgic_admin_vars.nonce });
 			}
 		});
 		
@@ -1086,8 +1086,8 @@ $('body').on('click', '.remove-taxlayout', function() {
 								ids: ids, 
 								gallerysetid: galleryid,
 								action: 'multo_gallery_save_images', 
-								post_id: atollmatrix_admin_vars.post_id, 
-								nonce: atollmatrix_admin_vars.nonce 
+								post_id: staylodgic_admin_vars.post_id, 
+								nonce: staylodgic_admin_vars.nonce 
 							},
 							success: function(){
 								selection = multi_loadImages(ids);

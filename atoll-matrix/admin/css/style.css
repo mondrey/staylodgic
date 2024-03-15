@@ -24,7 +24,7 @@
 	display: none;
 }
 
-.atollmatrix_admin_sort_title {
+.staylodgic_admin_sort_title {
 	margin-left: 10px;
 	position: relative;
 	top: -10px;
@@ -32,13 +32,13 @@
 	text-shadow: -1px 1px #fff;
 }
 
-.atollmatrix_admin_sort_image {
+.staylodgic_admin_sort_image {
 	border: 1px double #444;
 	-moz-border-radius: 10px;
 	-webkit-border-radius: 10px;
 }
 
-.atollmatrix_admin_sort_categories {
+.staylodgic_admin_sort_categories {
 	font-size: 10px;
 	margin-left: 43px;
 	font-weight: normal;
@@ -120,12 +120,12 @@
 	display: none;
 }
 
-.atollmatrix_metabox_fieldname {
+.staylodgic_metabox_fieldname {
 	font-family: "Open Sans", Arial, Tahoma, Verdana, Sans;
 	font-weight: bold;
 }
 
-.atollmatrix_metabox_description {
+.staylodgic_metabox_description {
 	font-style: italic;
 }
 
@@ -380,7 +380,7 @@
 }
 
 .metabox-wrapper .button-shortcodegen-uploader,
-.metabox-wrapper #atollmatrix_images_upload {
+.metabox-wrapper #staylodgic_images_upload {
 	border: 1px solid #0073aa;
 	background: #0073aa;
 	width: 120px;
@@ -396,7 +396,7 @@
 }
 
 .metabox-wrapper .button-shortcodegen-uploader:hover,
-.metabox-wrapper #atollmatrix_images_upload:hover {
+.metabox-wrapper #staylodgic_images_upload:hover {
 	border: 1px solid #000;
 	background: #000;
 	color: #fff;
@@ -1094,7 +1094,7 @@
 }
 
 
-.atollmatrix-modal {
+.staylodgic-modal {
 	position: fixed;
 	z-index: 999;
 	padding-top: 100px;
@@ -1106,7 +1106,7 @@
 	background-color: rgba(0, 0, 0, 0.4);
 }
 
-.atollmatrix-modal-content {
+.staylodgic-modal-content {
 	background-color: #fefefe;
 	margin: auto;
 	padding: 20px;
@@ -1114,15 +1114,15 @@
 	max-width: 320px;
 }
 
-.atollmatrix-close-button {
+.staylodgic-close-button {
 	color: #aaa;
 	float: right;
 	font-size: 28px;
 	font-weight: bold;
 }
 
-.atollmatrix-close-button:hover,
-.atollmatrix-close-button:focus {
+.staylodgic-close-button:hover,
+.staylodgic-close-button:focus {
 	color: black;
 	text-decoration: none;
 	cursor: pointer;
@@ -1216,7 +1216,7 @@
 
 
 /* TICKET */
-.atollmatrix-ticket-wrap {
+.staylodgic-ticket-wrap {
     display: flex;
     border: 2px solid #000;
     border-radius: 10px;
@@ -1228,8 +1228,8 @@
     position: relative;
 }
 
-.atollmatrix-ticket-first-half,
-.atollmatrix-ticket-second-half {
+.staylodgic-ticket-first-half,
+.staylodgic-ticket-second-half {
     flex: 1;
     padding: 20px;
     display: flex;
@@ -1237,37 +1237,37 @@
     justify-content: space-between;
 }
 
-.atollmatrix-ticket-first-half {
+.staylodgic-ticket-first-half {
     border-right: 2px dashed #000;
     background-color: #fff;
 	background-image: radial-gradient( circle 489px at 49.3% 46.6%,  rgba(255,214,126,1) 0%, rgba(253,200,0,1) 100.2% );
 }
 
-.atollmatrix-ticket-second-half {
+.staylodgic-ticket-second-half {
     background-image: linear-gradient( 174.2deg,  rgba(255,244,228,1) 7.1%, rgba(240,246,238,1) 67.4% );
 }
 
-.atollmatrix-ticket-event {
+.staylodgic-ticket-event {
     font-size: 22px;
     font-weight: 500;
     color: #333;
 }
 
-.atollmatrix-ticket-total {
+.staylodgic-ticket-total {
     font-size: 16px;
     margin-top: 10px;
     color: #666;
 }
 
-.atollmatrix-ticket-second-half {
+.staylodgic-ticket-second-half {
     font-size: 24px;
     font-weight: 600;
     color: #333;
 }
 
 /* Adding a notch to the ticket */
-.atollmatrix-ticket-wrap:before,
-.atollmatrix-ticket-wrap:after {
+.staylodgic-ticket-wrap:before,
+.staylodgic-ticket-wrap:after {
     content: '';
     position: absolute;
     top: 50%;
@@ -1279,7 +1279,7 @@
     z-index: 1;
 }
 
-.atollmatrix-ticket-wrap:before {
+.staylodgic-ticket-wrap:before {
     left: -10px;
     border: 2px solid #2854d7;
     border-right: 0;
@@ -1287,7 +1287,7 @@
     border-bottom-right-radius: 0;
 }
 
-.atollmatrix-ticket-wrap:after {
+.staylodgic-ticket-wrap:after {
     right: -10px;
     border: 2px solid #2854d7;
     border-left: 0;
@@ -1295,11 +1295,11 @@
     border-bottom-left-radius: 0;
 }
 
-.atollmatrix-ticket-date {
+.staylodgic-ticket-date {
 	font-size: 14px;
 	font-weight: 300;
 }
-.atollmatrix-ticket-price {
+.staylodgic-ticket-price {
 	font-weight: 100;
 }
 

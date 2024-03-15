@@ -1,5 +1,5 @@
 <?php
-namespace AtollMatrix;
+namespace Staylodgic;
 
 class AvailablityCalendarBase
 {
@@ -112,23 +112,23 @@ class AvailablityCalendarBase
         $totalRoomRevenue  = 0;
         $numberOfRoomsSold = 0;
 
-        $confirmed_reservations = \AtollMatrix\Reservations::getConfirmedReservations();
+        $confirmed_reservations = \Staylodgic\Reservations::getConfirmedReservations();
 
         if ($confirmed_reservations->have_posts()) {
             while ($confirmed_reservations->have_posts()) {
                 $confirmed_reservations->the_post();
 
-                $reservationStartDate = get_post_meta(get_the_ID(), 'atollmatrix_checkin_date', true);
-                $reservationEndDate   = get_post_meta(get_the_ID(), 'atollmatrix_checkout_date', true);
+                $reservationStartDate = get_post_meta(get_the_ID(), 'staylodgic_checkin_date', true);
+                $reservationEndDate   = get_post_meta(get_the_ID(), 'staylodgic_checkout_date', true);
                 $reservationStartDate = new \DateTime($reservationStartDate);
                 $reservationEndDate   = new \DateTime($reservationEndDate);
 
                   // Check if the current date falls within the reservation period
                 if ($currentDate >= $reservationStartDate && $currentDate < $reservationEndDate) {
-                    $roomID = get_post_meta(get_the_ID(), 'atollmatrix_room_id', true);
+                    $roomID = get_post_meta(get_the_ID(), 'staylodgic_room_id', true);
 
                       // Get the room rate for the current date
-                    $roomRate = \AtollMatrix\Rates::getRoomRateByDate($roomID, $currentDate->format('Y-m-d'));
+                    $roomRate = \Staylodgic\Rates::getRoomRateByDate($roomID, $currentDate->format('Y-m-d'));
 
                     $totalRoomRevenue += $roomRate;
                     $numberOfRoomsSold++;
@@ -151,15 +151,15 @@ class AvailablityCalendarBase
     {
         $totalOccupiedRooms  = 0;
         $totalAvailableRooms = 0;
-        $this->rooms         = \AtollMatrix\Rooms::queryRooms();
+        $this->rooms         = \Staylodgic\Rooms::queryRooms();
 
         foreach ($this->rooms as $room) {
               // Increment the total number of occupied rooms
 
-            $reservation_instance  = new \AtollMatrix\Reservations($currentdateString, $room->ID);
+            $reservation_instance  = new \Staylodgic\Reservations($currentdateString, $room->ID);
             $totalOccupiedRooms   += $reservation_instance->getDirectRemainingRoomCount();
               // Increment the total number of available rooms
-            $totalAvailableRooms += \AtollMatrix\Rooms::getTotalOperatingRoomQtyForDate($room->ID, $currentdateString);
+            $totalAvailableRooms += \Staylodgic\Rooms::getTotalOperatingRoomQtyForDate($room->ID, $currentdateString);
 
               //echo '<br>'.$currentdateString.'<br>'. $room->ID . '||' . $totalOccupiedRooms. '||' . $totalAvailableRooms . '<br>';
               //echo '<br>'. $room->ID . '||' . $totalOccupiedRooms. '||' . $totalAvailableRooms . '<br>';
@@ -180,12 +180,12 @@ class AvailablityCalendarBase
     public function calculateRemainingRoomsForDate($currentdateString)
     {
         $totalRemainingRooms  = 0;
-        $this->rooms         = \AtollMatrix\Rooms::queryRooms();
+        $this->rooms         = \Staylodgic\Rooms::queryRooms();
 
         foreach ($this->rooms as $room) {
               // Increment the total number of occupied rooms
 
-            $reservation_instance  = new \AtollMatrix\Reservations($currentdateString, $room->ID);
+            $reservation_instance  = new \Staylodgic\Reservations($currentdateString, $room->ID);
             $totalRemainingRooms   += $reservation_instance->getDirectRemainingRoomCount();
 
               //echo '<br>'.$currentdateString.'<br>'. $room->ID . '||' . $totalOccupiedRooms. '||' . $totalAvailableRooms . '<br>';

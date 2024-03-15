@@ -4,7 +4,7 @@
 		$('#invoiceActivityDetails').on('click', function(e) {
 			e.preventDefault();
 			var bookingNumber = $('#booking_number').val();
-			var atollmatrix_bookingdetails_nonce = $('input[name="atollmatrix_bookingdetails_nonce"]').val();
+			var staylodgic_bookingdetails_nonce = $('input[name="staylodgic_bookingdetails_nonce"]').val();
 
 			if (!bookingNumber) {
 				alert('Please enter a booking number.');
@@ -18,7 +18,7 @@
 				data: {
 					action: 'getInvoiceActivityDetails',
 					booking_number: bookingNumber,
-					atollmatrix_bookingdetails_nonce: atollmatrix_bookingdetails_nonce
+					staylodgic_bookingdetails_nonce: staylodgic_bookingdetails_nonce
 				},
 				success: function(response) {
 					// Directly use the HTML response
@@ -37,7 +37,7 @@
 			e.preventDefault();
 	
 			var bookingNumber = $('#booking_number').val();
-			var atollmatrix_bookingdetails_nonce = $('input[name="atollmatrix_bookingdetails_nonce"]').val();
+			var staylodgic_bookingdetails_nonce = $('input[name="staylodgic_bookingdetails_nonce"]').val();
 
 			if (!bookingNumber) {
 				alert('Please enter a booking number.');
@@ -51,7 +51,7 @@
 				data: {
 					action: 'getInvoiceBookingDetails',
 					booking_number: bookingNumber,
-					atollmatrix_bookingdetails_nonce: atollmatrix_bookingdetails_nonce
+					staylodgic_bookingdetails_nonce: staylodgic_bookingdetails_nonce
 				},
 				success: function(response) {
 					// Directly use the HTML response
@@ -146,7 +146,7 @@
 			frameDoc.document.write('<html><head><title>' + bookingTitle + '</title>');
 			
 			// Include the external CSS file
-			frameDoc.document.write('<link rel="stylesheet" type="text/css" href="' + atollmatrixData.pluginUrl + 'admin/css/invoice.css">');
+			frameDoc.document.write('<link rel="stylesheet" type="text/css" href="' + staylodgicData.pluginUrl + 'admin/css/invoice.css">');
 			
 			frameDoc.document.write('</head><body>');
 			frameDoc.document.write(invoiceContent);

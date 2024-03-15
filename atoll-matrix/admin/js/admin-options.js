@@ -3,7 +3,7 @@ jQuery(document).ready(function ($) {
 
 	var modal = document.getElementById("import-settings-modal");
 	var btn = document.getElementById("import-settings-button");
-	var span = document.getElementsByClassName("atollmatrix-close")[0];
+	var span = document.getElementsByClassName("staylodgic-close")[0];
 
 	btn.onclick = function() {
 		modal.style.display = "block";
@@ -39,7 +39,7 @@ jQuery(document).ready(function ($) {
 		$(this).hide().prev().val('').prev().addClass('button').html('Upload image');
 	});
 
-	// $('.atollmatrix-options-form select').each(function () {
+	// $('.staylodgic-options-form select').each(function () {
 	// 	// Fetch the data-width attribute value
 	// 	var widthAttribute = $(this).data('width');
 	// 	$(this).select2({
@@ -48,7 +48,7 @@ jQuery(document).ready(function ($) {
 	// });
 
 	// function select_input_process() {
-	// 	$('.atollmatrix-options-form select').not('.select2-hidden-accessible').each(function () {
+	// 	$('.staylodgic-options-form select').not('.select2-hidden-accessible').each(function () {
 	// 		var widthAttribute = $(this).data('width') || 'style'; // 'style' uses the select's style attribute for width
 	// 		$(this).select2({
 	// 			width: widthAttribute
@@ -59,15 +59,15 @@ jQuery(document).ready(function ($) {
 
 	$(document).on('click', function (event) {
 		const target = event.target;
-		if (!$(target).closest('.atollmatrix-tabs a').length) {
+		if (!$(target).closest('.staylodgic-tabs a').length) {
 			return;
 		}
 		event.preventDefault();
-		$('.atollmatrix-tabs a').removeClass('nav-tab-active');
+		$('.staylodgic-tabs a').removeClass('nav-tab-active');
 		$(target).addClass('nav-tab-active');
 		const targetTab = $(target).attr('data-tab');
-		$('.atollmatrix-options-form .atollmatrix-tab-item').each(function () {
-			if ($(this).hasClass(`atollmatrix-tab-item--${targetTab}`)) {
+		$('.staylodgic-options-form .staylodgic-tab-item').each(function () {
+			if ($(this).hasClass(`staylodgic-tab-item--${targetTab}`)) {
 				$(this).css('display', 'block');
 			} else {
 				$(this).css('display', 'none');
@@ -76,7 +76,7 @@ jQuery(document).ready(function ($) {
 	});
 
 	$(document).ready(function () {
-		$('.atollmatrix-tabs .nav-tab:first').click();
+		$('.staylodgic-tabs .nav-tab:first').click();
 	});
 
 
@@ -127,7 +127,7 @@ jQuery(document).ready(function ($) {
 		var new_count = getNextUniqueId();
 		var new_id = generateUniqueId();
 		var idMappings = {
-			'name': 'atollmatrix_settings[taxes][' + new_id + ']',
+			'name': 'staylodgic_settings[taxes][' + new_id + ']',
 			'taxes_label': 'option_' + new_count + '_label',
 			'taxes_number': 'option_' + new_count + '_number',
 			'taxes_type': 'option_' + new_count + '_type',
@@ -143,7 +143,7 @@ jQuery(document).ready(function ($) {
 		var new_count = getNextUniqueId();
 		var new_id = generateUniqueId();
 		var idMappings = {
-			'name': 'atollmatrix_settings[activity_taxes][' + new_id + ']',
+			'name': 'staylodgic_settings[activity_taxes][' + new_id + ']',
 			'taxes_label': 'option_' + new_count + '_label',
 			'taxes_number': 'option_' + new_count + '_number',
 			'taxes_type': 'option_' + new_count + '_type',
@@ -158,7 +158,7 @@ jQuery(document).ready(function ($) {
 		var new_count = getNextUniqueId();
 		var new_id = generateUniqueId();
 		var idMappings = {
-			'name': 'atollmatrix_settings[perpersonpricing][' + new_id + ']',
+			'name': 'staylodgic_settings[perpersonpricing][' + new_id + ']',
 			'perpersonpricing_people': 'perpersonpricing_' + new_count + '_people',
 			'perpersonpricing_number': 'perpersonpricing_' + new_count + '_number',
 			'perpersonpricing_type': 'perpersonpricing_' + new_count + '_type',
@@ -173,7 +173,7 @@ jQuery(document).ready(function ($) {
 		var new_count = getNextUniqueId();
 		var new_id = generateUniqueId();
 		var idMappings = {
-			'name': 'atollmatrix_settings[mealplan][' + new_id + ']',
+			'name': 'staylodgic_settings[mealplan][' + new_id + ']',
 			'mealplan_mealtype': 'mealplan_' + new_count + '_mealtype',
 			'mealplan_choice': 'mealplan_' + new_count + '_choice',
 			'mealplan_price': 'mealplan_' + new_count + '_price',

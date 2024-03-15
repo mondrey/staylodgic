@@ -1,5 +1,5 @@
 <?php
-function atollmatrix_get_room_views()
+function staylodgic_get_room_views()
 {
     $roomViews = array(
         'CityView'      => 'City View',
@@ -37,7 +37,7 @@ function atollmatrix_get_room_views()
     return $roomViews;
 }
 
-function atollmatrix_get_room_Facitilies()
+function staylodgic_get_room_Facitilies()
 {
     $roomFacilities = array(
         'AC'          => 'Air Conditioning',
@@ -61,7 +61,7 @@ function atollmatrix_get_room_Facitilies()
     );
     return $roomFacilities;
 }
-function atollmatrix_get_hotel_Amenities()
+function staylodgic_get_hotel_Amenities()
 {
     $amenities = array(
         '1'   => '24-hour front desk',
@@ -135,7 +135,7 @@ function atollmatrix_get_hotel_Amenities()
     return $amenities;
 }
 
-function atollmatrix_get_hotel_extended_Amenities()
+function staylodgic_get_hotel_extended_Amenities()
 {
     $amenities = array(
         '5000' => 'Breakfast in the room',

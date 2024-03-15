@@ -1,5 +1,5 @@
 <?php
-namespace AtollMatrix;
+namespace Staylodgic;
 
 class Common
 {
@@ -109,7 +109,7 @@ class Common
 	 */
 	public static function isReservation_valid_post($post_id, $post)
 	{
-		return !wp_is_post_autosave($post_id) && !wp_is_post_revision($post_id) && $post->post_type === 'atmx_reservations' && get_post_status($post_id) !== 'draft';
+		return !wp_is_post_autosave($post_id) && !wp_is_post_revision($post_id) && $post->post_type === 'slgc_reservations' && get_post_status($post_id) !== 'draft';
 	}
 
 	/**
@@ -117,7 +117,7 @@ class Common
 	 */
 	public static function isActivities_valid_post($post_id, $post)
 	{
-		return !wp_is_post_autosave($post_id) && !wp_is_post_revision($post_id) && $post->post_type === 'atmx_activityres' && get_post_status($post_id) !== 'draft';
+		return !wp_is_post_autosave($post_id) && !wp_is_post_revision($post_id) && $post->post_type === 'slgc_activityres' && get_post_status($post_id) !== 'draft';
 	}
 
 	/**
@@ -126,10 +126,10 @@ class Common
 	public static function isCustomer_valid_post($post_id)
 	{
 		$post = get_post($post_id);
-		return $post !== null && !wp_is_post_autosave($post_id) && !wp_is_post_revision($post_id) && $post->post_type === 'atmx_customers' && get_post_status($post_id) !== 'draft';
+		return $post !== null && !wp_is_post_autosave($post_id) && !wp_is_post_revision($post_id) && $post->post_type === 'slgc_customers' && get_post_status($post_id) !== 'draft';
 	}
 
-	public static function get_atollmatrix_currencies()
+	public static function get_staylodgic_currencies()
 	{
 		$currencies = array(
 			'AED' => __('United Arab Emirates dirham', 'woocommerce'),
@@ -300,7 +300,7 @@ class Common
 		return $currencies;
 	}
 
-	public static function get_atollmatrix_currency_symbols()
+	public static function get_staylodgic_currency_symbols()
 	{
 
 		$symbols = array(
@@ -475,8 +475,8 @@ class Common
 
 	public static function get_symbol_for_currency($currency = '')
 	{
-		$currency = self::get_atollmatrix_currencies();
-		$symbols  = self::get_atollmatrix_currency_symbols();
+		$currency = self::get_staylodgic_currencies();
+		$symbols  = self::get_staylodgic_currency_symbols();
 
 		$currency_symbol = $symbols[$currency];
 

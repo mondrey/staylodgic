@@ -90,9 +90,9 @@
 				console.log( totalPeople );
 				var totalRate = totalPeople * activityPerPerson;
 				
-				if ($('#atollmatrix_reservation_checkin').length > 0) {
+				if ($('#staylodgic_reservation_checkin').length > 0) {
 
-					var dateStr = $('#atollmatrix_reservation_checkin').val();
+					var dateStr = $('#staylodgic_reservation_checkin').val();
 					var isValidDate = moment(dateStr, 'YYYY-MM-DD', true).isValid(); // Using moment.js for date validation
 				
 					$('[data-priceof="activitysubtotal"]').val( totalRate.toFixed(2) );
@@ -106,7 +106,7 @@
 							data: {
 								action: 'get_activity_schedules',
 								selected_date: dateStr,
-								the_post_id: atollmatrix_admin_vars.post_id,
+								the_post_id: staylodgic_admin_vars.post_id,
 								totalpeople: totalPeople
 							},
 							beforeSend: function( xhr ) {

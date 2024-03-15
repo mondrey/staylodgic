@@ -1,5 +1,5 @@
 <?php
-class atollmatrix_Activity_Posts
+class staylodgic_Activity_Posts
 {
 
     public function __construct()
@@ -8,31 +8,31 @@ class atollmatrix_Activity_Posts
         add_action('admin_init', array($this, 'sort_admin_init'));
         add_filter("manage_edit-activity_columns", array($this, 'activity_edit_columns'));
         add_action("manage_posts_custom_column", array($this, 'activity_custom_columns'));
-        add_action('admin_menu', array($this, 'atollmatrix_enable_activity_sort'));
-        add_action('wp_ajax_activity_sort', array($this, 'atollmatrix_save_activity_order'));
+        add_action('admin_menu', array($this, 'staylodgic_enable_activity_sort'));
+        add_action('wp_ajax_activity_sort', array($this, 'staylodgic_save_activity_order'));
 
         if (is_admin()) {
             if (isset($_GET["page"])) {
                 if ($_GET["page"] == "class-imaginem-activity-posts.php") {
-                    add_filter('posts_orderby', array($this, 'atollmatrix_activity_orderby'));
+                    add_filter('posts_orderby', array($this, 'staylodgic_activity_orderby'));
                 }
             }
         }
     }
 
-    public function atollmatrix_enable_activity_sort()
+    public function staylodgic_enable_activity_sort()
     {
-        add_submenu_page('edit.php?post_type=atmx_activity', 'Sort activities', 'Sort Activities', 'edit_posts', basename(__FILE__), array($this, 'atollmatrix_sort_activity'));
+        add_submenu_page('edit.php?post_type=slgc_activity', 'Sort activities', 'Sort Activities', 'edit_posts', basename(__FILE__), array($this, 'staylodgic_sort_activity'));
     }
-    public function atollmatrix_activity_orderby($orderby)
+    public function staylodgic_activity_orderby($orderby)
     {
         global $wpdb;
         $orderby = "{$wpdb->posts}.menu_order, {$wpdb->posts}.post_date DESC";
         return ($orderby);
     }
-    public function atollmatrix_sort_activity()
+    public function staylodgic_sort_activity()
     {
-        $activity = new WP_Query('post_type=atmx_activity&posts_per_page=-1&orderby=menu_order&order=ASC');
+        $activity = new WP_Query('post_type=slgc_activity&posts_per_page=-1&orderby=menu_order&order=ASC');
         ?>
 		<div class="wrap">
 		<h2>Sort activity<img src="<?php echo home_url(); ?>/wp-admin/images/loading.gif" id="loading-animation" /></h2>
@@ -46,15 +46,15 @@ class atollmatrix_Activity_Posts
 				<?php
     $image_url = wp_get_attachment_thumb_url(get_post_thumbnail_id());
             $custom    = get_post_custom(get_the_ID());
-            $activity_cats = get_the_terms(get_the_ID(), 'atmx_activitytype');
+            $activity_cats = get_the_terms(get_the_ID(), 'slgc_activitytype');
 
             ?>
-				<?php if ($image_url) {echo '<img class="atollmatrix_admin_sort_image" src="' . $image_url . '" width="30px" height="30px" alt="" />';}?>
-				<span class="atollmatrix_admin_sort_title"><?php the_title();?></span>
+				<?php if ($image_url) {echo '<img class="staylodgic_admin_sort_image" src="' . $image_url . '" width="30px" height="30px" alt="" />';}?>
+				<span class="staylodgic_admin_sort_title"><?php the_title();?></span>
 				<?php
     if ($activity_cats) {
                 ?>
-				<span class="atollmatrix_admin_sort_categories"><?php foreach ($activity_cats as $taxonomy) {echo ' | ' . $taxonomy->name;}?></span>
+				<span class="staylodgic_admin_sort_categories"><?php foreach ($activity_cats as $taxonomy) {echo ' | ' . $taxonomy->name;}?></span>
 				<?php
     }
             ?>
@@ -66,7 +66,7 @@ class atollmatrix_Activity_Posts
 
 	<?php
 }
-    public function atollmatrix_save_activity_order()
+    public function staylodgic_save_activity_order()
     {
         global $wpdb; // WordPress database class
 
@@ -96,8 +96,8 @@ class atollmatrix_Activity_Posts
         }
 
         if (!defined('MTHEME')) {
-            $atollmatrix_shortname = "atollmatrix_p2";
-            define('MTHEME', $atollmatrix_shortname);
+            $staylodgic_shortname = "staylodgic_p2";
+            define('MTHEME', $staylodgic_shortname);
         }
 
         switch ($column) {
@@ -107,13 +107,13 @@ class atollmatrix_Activity_Posts
                 }
                 break;
             case "theme_description":
-                if (isset($custom['atollmatrix_thumbnail_desc'][0])) {echo $custom['atollmatrix_thumbnail_desc'][0];}
+                if (isset($custom['staylodgic_thumbnail_desc'][0])) {echo $custom['staylodgic_thumbnail_desc'][0];}
                 break;
             case "video":
-                if (isset($custom['atollmatrix_lightbox_video'][0])) {echo $custom['atollmatrix_lightbox_video'][0];}
+                if (isset($custom['staylodgic_lightbox_video'][0])) {echo $custom['staylodgic_lightbox_video'][0];}
                 break;
-            case 'atmx_activitytype':
-                echo get_the_term_list($post->ID, 'atmx_activitytype', '', ', ', '');
+            case 'slgc_activitytype':
+                echo get_the_term_list($post->ID, 'slgc_activitytype', '', ', ', '');
                 break;
         }
     }
@@ -122,11 +122,11 @@ class atollmatrix_Activity_Posts
     {
         $columns = array(
             "cb"                    => "<input type=\"checkbox\" />",
-            "title"                 => __('Activity Title', 'atollmatrix'),
-            "theme_description"     => __('Description', 'atollmatrix'),
-            "video"                 => __('Video', 'atollmatrix'),
-            "atollmatrix_activitytypes" => __('atmx_activitytype', 'atollmatrix'),
-            "activity_image"            => __('Image', 'atollmatrix'),
+            "title"                 => __('Activity Title', 'staylodgic'),
+            "theme_description"     => __('Description', 'staylodgic'),
+            "video"                 => __('Video', 'staylodgic'),
+            "staylodgic_activitytypes" => __('slgc_activitytype', 'staylodgic'),
+            "activity_image"            => __('Image', 'staylodgic'),
         );
 
         return $columns;
@@ -142,33 +142,33 @@ class atollmatrix_Activity_Posts
         /*
          * Register Featured Post Manager
          */
-        //add_action('init', 'atollmatrix_featured_register');
-        //add_action('init', 'activity_register');//Always use a shortname like "atollmatrix_" not to see any 404 errors
+        //add_action('init', 'staylodgic_featured_register');
+        //add_action('init', 'activity_register');//Always use a shortname like "staylodgic_" not to see any 404 errors
         /*
          * Register activity Post Manager
          */
-        $atollmatrix_activity_slug = "activities";
-        if (function_exists('atollmatrix_get_option_data')) {
-            $atollmatrix_activity_slug = atollmatrix_get_option_data('activity_permalink_slug');
+        $staylodgic_activity_slug = "activities";
+        if (function_exists('staylodgic_get_option_data')) {
+            $staylodgic_activity_slug = staylodgic_get_option_data('activity_permalink_slug');
         }
-        if ($atollmatrix_activity_slug == "" || !isset($atollmatrix_activity_slug)) {
-            $atollmatrix_activity_slug = "activities";
+        if ($staylodgic_activity_slug == "" || !isset($staylodgic_activity_slug)) {
+            $staylodgic_activity_slug = "activities";
         }
         $labels = array(
-            'name'               => _x('Activities', 'post type general name', 'atollmatrix'),
-            'singular_name'      => _x('Activity', 'post type singular name', 'atollmatrix'),
-            'menu_name'          => _x('Activities', 'admin menu', 'atollmatrix'),
-            'name_admin_bar'     => _x('Activity', 'add new on admin bar', 'atollmatrix'),
-            'add_new'            => _x('Add New', 'activity', 'atollmatrix'),
-            'add_new_item'       => __('Add New Activity', 'atollmatrix'),
-            'new_item'           => __('New Activity', 'atollmatrix'),
-            'edit_item'          => __('Edit Activity', 'atollmatrix'),
-            'view_item'          => __('View Activity', 'atollmatrix'),
-            'all_items'          => __('All Activities', 'atollmatrix'),
-            'search_items'       => __('Search Activities', 'atollmatrix'),
-            'parent_item_colon'  => __('Parent Activities:', 'atollmatrix'),
-            'not_found'          => __('No activities found.', 'atollmatrix'),
-            'not_found_in_trash' => __('No activities found in Trash.', 'atollmatrix')
+            'name'               => _x('Activities', 'post type general name', 'staylodgic'),
+            'singular_name'      => _x('Activity', 'post type singular name', 'staylodgic'),
+            'menu_name'          => _x('Activities', 'admin menu', 'staylodgic'),
+            'name_admin_bar'     => _x('Activity', 'add new on admin bar', 'staylodgic'),
+            'add_new'            => _x('Add New', 'activity', 'staylodgic'),
+            'add_new_item'       => __('Add New Activity', 'staylodgic'),
+            'new_item'           => __('New Activity', 'staylodgic'),
+            'edit_item'          => __('Edit Activity', 'staylodgic'),
+            'view_item'          => __('View Activity', 'staylodgic'),
+            'all_items'          => __('All Activities', 'staylodgic'),
+            'search_items'       => __('Search Activities', 'staylodgic'),
+            'parent_item_colon'  => __('Parent Activities:', 'staylodgic'),
+            'not_found'          => __('No activities found.', 'staylodgic'),
+            'not_found_in_trash' => __('No activities found in Trash.', 'staylodgic')
         );
         
         $args = array(
@@ -180,15 +180,15 @@ class atollmatrix_Activity_Posts
             'has_archive'     => true,
             'menu_position'   => 6,
             'menu_icon'       => plugin_dir_url(__FILE__) . 'images/portfolio.png',
-            'rewrite'         => array('slug' => $atollmatrix_activity_slug), //Use a slug like "work" or "project" that shouldnt be same with your page name
+            'rewrite'         => array('slug' => $staylodgic_activity_slug), //Use a slug like "work" or "project" that shouldnt be same with your page name
             'supports' => array('title', 'author', 'thumbnail'), //Boxes will be shown in the panel
         );
 
-        register_post_type('atmx_activity', $args);
+        register_post_type('slgc_activity', $args);
         /*
          * Add Taxonomy for activity 'Type'
          */
-        register_taxonomy('atmx_activitytype', array("atollmatrix_activity"), array("hierarchical" => true, "label" => "Activity Category", "singular_label" => "atollmatrix_activitytypes", "rewrite" => true));
+        register_taxonomy('slgc_activitytype', array("staylodgic_activity"), array("hierarchical" => true, "label" => "Activity Category", "singular_label" => "staylodgic_activitytypes", "rewrite" => true));
 
         /*
      * Hooks for the activity and Featured viewables
@@ -218,23 +218,23 @@ class atollmatrix_Activity_Posts
     }
 
 }
-$atollmatrix_activity_post_type = new atollmatrix_Activity_Posts();
+$staylodgic_activity_post_type = new staylodgic_Activity_Posts();
 
-class atollmatrix_Activitycategory_add_image
+class staylodgic_Activitycategory_add_image
 {
 
     public function __construct()
     {
-        add_action('admin_head', array(&$this, 'atollmatrix_admin_head'));
-        add_action('edit_term', array(&$this, 'atollmatrix_save_tax_pic'));
-        add_action('create_term', array(&$this, 'atollmatrix_save_tax_pic'));
-        add_filter("manage_edit-atollmatrix_activitytypes_columns", array(&$this, 'atollmatrix_activitytype_columns'));
-        add_action("manage_atollmatrix_activitytypes_custom_column", array(&$this, 'atollmatrix_manage_workype_columns'), 10, 3);
+        add_action('admin_head', array(&$this, 'staylodgic_admin_head'));
+        add_action('edit_term', array(&$this, 'staylodgic_save_tax_pic'));
+        add_action('create_term', array(&$this, 'staylodgic_save_tax_pic'));
+        add_filter("manage_edit-staylodgic_activitytypes_columns", array(&$this, 'staylodgic_activitytype_columns'));
+        add_action("manage_staylodgic_activitytypes_custom_column", array(&$this, 'staylodgic_manage_workype_columns'), 10, 3);
     }
 
     // Add to admin_init function
 
-    public function atollmatrix_activitytype_columns($columns)
+    public function staylodgic_activitytype_columns($columns)
     {
         $columns['activitytype_image'] = 'Image';
         return $columns;
@@ -242,14 +242,14 @@ class atollmatrix_Activitycategory_add_image
 
     // Add to admin_init function
 
-    public function atollmatrix_manage_workype_columns($value, $columns, $term_id)
+    public function staylodgic_manage_workype_columns($value, $columns, $term_id)
     {
-        $atollmatrix_activitytype_image_id = get_option('atollmatrix_activitytype_image_id' . $term_id);
+        $staylodgic_activitytype_image_id = get_option('staylodgic_activitytype_image_id' . $term_id);
         switch ($columns) {
             case 'activitytype_image':
-                if ($atollmatrix_activitytype_image_id) {
-                    $atollmatrix_activitytype_image_url = wp_get_attachment_image_src($atollmatrix_activitytype_image_id, 'thumbnail', false);
-                    $value                          = '<img src="' . $atollmatrix_activitytype_image_url[0] . '" width="100px" height="auto" />';
+                if ($staylodgic_activitytype_image_id) {
+                    $staylodgic_activitytype_image_url = wp_get_attachment_image_src($staylodgic_activitytype_image_id, 'thumbnail', false);
+                    $value                          = '<img src="' . $staylodgic_activitytype_image_url[0] . '" width="100px" height="auto" />';
                 }
                 break;
 
@@ -259,20 +259,20 @@ class atollmatrix_Activitycategory_add_image
         return $value;
     }
 
-    public function atollmatrix_admin_head()
+    public function staylodgic_admin_head()
     {
         $taxonomies = get_taxonomies();
-        $taxonomies = array('atmx_activitytype'); // uncomment and specify particular taxonomies you want to add image feature.
+        $taxonomies = array('slgc_activitytype'); // uncomment and specify particular taxonomies you want to add image feature.
         if (is_array($taxonomies)) {
             foreach ($taxonomies as $z_taxonomy) {
-                add_action($z_taxonomy . '_add_form_fields', array(&$this, 'atollmatrix_tax_field'));
-                add_action($z_taxonomy . '_edit_form_fields', array(&$this, 'atollmatrix_tax_field'));
+                add_action($z_taxonomy . '_add_form_fields', array(&$this, 'staylodgic_tax_field'));
+                add_action($z_taxonomy . '_edit_form_fields', array(&$this, 'staylodgic_tax_field'));
             }
         }
     }
 
     // add image field in add form
-    public function atollmatrix_tax_field($taxonomy)
+    public function staylodgic_tax_field($taxonomy)
     {
         wp_enqueue_style('thickbox');
         wp_enqueue_script('thickbox');
@@ -280,29 +280,29 @@ class atollmatrix_Activitycategory_add_image
 
         if (empty($taxonomy)) {
             echo '<div class="form-field">
-					<label for="atollmatrix_activitytype_input">Image</label>
-					<input size="40" type="text" name="atollmatrix_activitytype_input" id="atollmatrix_activitytype_input" value="" />
-					<input type="text" name="atollmatrix_activitytype_image_id" id="atollmatrix_activitytype_image_id" value="" />
+					<label for="staylodgic_activitytype_input">Image</label>
+					<input size="40" type="text" name="staylodgic_activitytype_input" id="staylodgic_activitytype_input" value="" />
+					<input type="text" name="staylodgic_activitytype_image_id" id="staylodgic_activitytype_image_id" value="" />
 				</div>';
         } else {
 
-            $atollmatrix_activitytype_input_url = '';
-            $atollmatrix_activitytype_image_id  = '';
+            $staylodgic_activitytype_input_url = '';
+            $staylodgic_activitytype_image_id  = '';
 
             if (isset($taxonomy->term_id)) {
-                //$atollmatrix_activitytype_input_url = get_option('atollmatrix_activitytype_input' . $taxonomy->term_id);
-                $atollmatrix_activitytype_image_id = get_option('atollmatrix_activitytype_image_id' . $taxonomy->term_id);
+                //$staylodgic_activitytype_input_url = get_option('staylodgic_activitytype_input' . $taxonomy->term_id);
+                $staylodgic_activitytype_image_id = get_option('staylodgic_activitytype_image_id' . $taxonomy->term_id);
             }
 
             echo '<tr class="form-field">
-			<th scope="row" valign="top"><label for="atollmatrix_activitytype_input">Image</label></th>
+			<th scope="row" valign="top"><label for="staylodgic_activitytype_input">Image</label></th>
 			<td>
-			<input type="hidden" name="atollmatrix_activitytype_image_id" id="atollmatrix_activitytype_image_id" value="' . $atollmatrix_activitytype_image_id . '" />
-			<a class="button" id="atollmatrix_upload_work_image">Set category image</a>
+			<input type="hidden" name="staylodgic_activitytype_image_id" id="staylodgic_activitytype_image_id" value="' . $staylodgic_activitytype_image_id . '" />
+			<a class="button" id="staylodgic_upload_work_image">Set category image</a>
 			<div class="inside" id="featured_activitytype_image_wrap">';
-            if (!empty($atollmatrix_activitytype_image_id)) {
-                $atollmatrix_activitytype_image_url = wp_get_attachment_image_src($atollmatrix_activitytype_image_id, 'thumbnail', false);
-                echo '<img id="featured_activitytype_image" src="' . $atollmatrix_activitytype_image_url[0] . '" style="max-width:200px;border: 1px solid #ccc;padding: 5px;box-shadow: 5px 5px 10px #ccc;margin-top: 10px;" >';
+            if (!empty($staylodgic_activitytype_image_id)) {
+                $staylodgic_activitytype_image_url = wp_get_attachment_image_src($staylodgic_activitytype_image_id, 'thumbnail', false);
+                echo '<img id="featured_activitytype_image" src="' . $staylodgic_activitytype_image_url[0] . '" style="max-width:200px;border: 1px solid #ccc;padding: 5px;box-shadow: 5px 5px 10px #ccc;margin-top: 10px;" >';
                 echo '<a style="display:block;" id="remove_activitytype_image" href="#">Remove category Image</a>';
             }
             echo '</div>';
@@ -312,9 +312,9 @@ class atollmatrix_Activitycategory_add_image
 	<script>
 	jQuery(document).ready(function($){
 		// Get input target field
-		var targetfield="atollmatrix_activitytype_input";
+		var targetfield="staylodgic_activitytype_input";
 
-		jQuery("#atollmatrix_upload_work_image").click( function( event ) {
+		jQuery("#staylodgic_upload_work_image").click( function( event ) {
 			var jQueryel = jQuery(this);
 			event.preventDefault();
 
@@ -356,7 +356,7 @@ class atollmatrix_Activitycategory_add_image
 
 					jQuery( '<a style="display:block;" id="remove_activitytype_image" href="#">Remove activitytype Image</a>' ).appendTo( "#featured_activitytype_image_wrap" );
 				}
-				jQuery("#atollmatrix_activitytype_image_id").val(attachment.id);
+				jQuery("#staylodgic_activitytype_image_id").val(attachment.id);
 			});
 
 			custom_file_frame.open();
@@ -364,7 +364,7 @@ class atollmatrix_Activitycategory_add_image
 
 		jQuery("#featured_activitytype_image_wrap").on("click", "#remove_activitytype_image", function(){
 			jQuery('#remove_activitytype_image,#featured_activitytype_image').remove();
-			jQuery('#atollmatrix_activitytype_image_id').val("");
+			jQuery('#staylodgic_activitytype_image_id').val("");
 			return false;
 		});
 	});
@@ -373,22 +373,22 @@ class atollmatrix_Activitycategory_add_image
 }
 
     // save our taxonomy image while edit or save term
-    public function atollmatrix_save_tax_pic($term_id)
+    public function staylodgic_save_tax_pic($term_id)
     {
-        if (isset($_POST['atollmatrix_activitytype_image_id'])) {
-            update_option('atollmatrix_activitytype_image_id' . $term_id, $_POST['atollmatrix_activitytype_image_id']);
+        if (isset($_POST['staylodgic_activitytype_image_id'])) {
+            update_option('staylodgic_activitytype_image_id' . $term_id, $_POST['staylodgic_activitytype_image_id']);
         }
     }
 
     // output taxonomy image url for the given term_id (NULL by default)
-    public function atollmatrix_activitytype_input_url($term_id = null)
+    public function staylodgic_activitytype_input_url($term_id = null)
     {
         if ($term_id) {
             $current_term = get_term_by('slug', get_query_var('term'), get_query_var('taxonomy'));
-            return get_option('atollmatrix_activitytype_input' . $current_term->term_id);
+            return get_option('staylodgic_activitytype_input' . $current_term->term_id);
         }
     }
 
 }
-$atollmatrix_Activitycategory_add_image = new atollmatrix_Activitycategory_add_image();
+$staylodgic_Activitycategory_add_image = new staylodgic_Activitycategory_add_image();
 ?>

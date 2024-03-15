@@ -9,8 +9,8 @@
 			$(this).addClass('time-choice');
 			
 			// Set the JSON string to the input field
-			$('input[name="atollmatrix_activity_id"]').val(activityId);			
-			$('input[name="atollmatrix_activity_time"]').val(time);
+			$('input[name="staylodgic_activity_id"]').val(activityId);			
+			$('input[name="staylodgic_activity_time"]').val(time);
 			
 		});
 
@@ -27,7 +27,7 @@
 						data: {
 							action: 'get_activity_schedules',
 							selected_date: dateStr,
-							the_post_id: atollmatrix_admin_vars.post_id,
+							the_post_id: staylodgic_admin_vars.post_id,
 							totalpeople: getActivityGuestNumbers()
 						},
 						beforeSend: function( xhr ) {
@@ -50,8 +50,8 @@
 
 		function getActivityGuestNumbers() {
 			var totalPeople;
-			var activityAdults = $('#atollmatrix_reservation_activity_adults').val();
-			var activityChildren = $('#atollmatrix_reservation_activity_children').val();
+			var activityAdults = $('#staylodgic_reservation_activity_adults').val();
+			var activityChildren = $('#staylodgic_reservation_activity_children').val();
 			
 			totalPeople = parseInt(activityAdults) + parseInt(activityChildren);
 			return totalPeople;
@@ -87,8 +87,8 @@
 			// Get the selected booking number
 			var subtotal_for_tax = $('[data-priceof="activitysubtotal"]').val();
 			var totalStayNights = 1;
-			var adults = $('#atollmatrix_reservation_activity_adults').val();
-			var children = $('#atollmatrix_reservation_activity_children').val();
+			var adults = $('#staylodgic_reservation_activity_adults').val();
+			var children = $('#staylodgic_reservation_activity_children').val();
 	
 			if ( '' == children ) {
 				children = 0;
@@ -105,7 +105,7 @@
 			  data: {
 				action: 'generateTax', // Custom Ajax action
 				post_id: postID,
-				nonce: atollmatrix_admin_vars.nonce,
+				nonce: staylodgic_admin_vars.nonce,
 				subtotal: subtotal_for_tax,
 				staynights: totalStayNights,
 				total_guests: totalGuests,
@@ -116,7 +116,7 @@
 				// Handle the Ajax response
 				// Display the room names in the desired element
 				$('#input-tax-summary').html(response.html);
-				$('#atollmatrix_reservation_total_room_cost').val( response.total.toFixed(2) );
+				$('#staylodgic_reservation_total_room_cost').val( response.total.toFixed(2) );
 			  },
 			  error: function(xhr, status, error) {
 				// Handle any errors that occur during the Ajax request
@@ -138,13 +138,13 @@
 				action: 'excludeTax', // Custom Ajax action
 				post_id: postID,
 				subtotal: subtotal_for_tax,
-				nonce: atollmatrix_admin_vars.nonce
+				nonce: staylodgic_admin_vars.nonce
 			  },
 			  success: function(response) {
 				console.log( response );
 				// Handle the Ajax response
 				// Display the room names in the desired element
-				$('#atollmatrix_reservation_total_room_cost').val(subtotal_for_tax);
+				$('#staylodgic_reservation_total_room_cost').val(subtotal_for_tax);
 				$('.input-tax-summary-wrap-inner').remove();
 				$('#input-tax-summary').html('<div class="input-tax-summary-wrap-inner">' + response + '</div>');
 			  },

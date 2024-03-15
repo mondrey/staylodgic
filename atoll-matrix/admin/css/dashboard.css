@@ -1,7 +1,7 @@
-.atollmatrix-main-logo {
+.staylodgic-main-logo {
 	width: 406px;
 	height: 117px;
-	background-image: url('../../assets/images/atollmatrix-logo.png');
+	background-image: url('../../assets/images/staylodgic-logo.png');
 	display: inline-block;
 	background-repeat: no-repeat;
 	position: relative;
@@ -12,7 +12,7 @@ body.wp-admin {
 	background: #f0f0f1;
 }
 
-.atollmatrix_anaytlics_row_one .atollmatrix_anaytlics_module {
+.staylodgic_anaytlics_row_one .staylodgic_anaytlics_module {
 	width: 33.2%;
 	display: inline-block;
 	text-align: center;
@@ -20,70 +20,70 @@ body.wp-admin {
 	box-sizing: border-box;
 }
 
-.atollmatrix_analytics_wrap {
+.staylodgic_analytics_wrap {
 	background: #fff;
 	margin: 10px 20px 0 2px;
 	padding: 40px;
 }
 
-.atollmatrix_analytics_table {
+.staylodgic_analytics_table {
 	margin: 14px 0 50px;
 	font-size: 14px;
 }
 
-.atollmatrix_dashboard_subheading {
+.staylodgic_dashboard_subheading {
 	font-size: 18px;
 	letter-spacing: 2px;
 }
 
-.atollmatrix_anaytlics_row_one {
+.staylodgic_anaytlics_row_one {
 	padding: 40px 0;
 }
 
-.atollmatrix_analytics_wrap h3 {
+.staylodgic_analytics_wrap h3 {
 	font-size: 20px;
 	font-weight: 200;
 }
 
-.atollmatrix_analytics_wrap h2 {
+.staylodgic_analytics_wrap h2 {
 	font-size: 32px;
 	font-weight: 500;
 	margin-bottom: 20px;
 }
 
-.atollmatrix_analytics_table_wrap {
+.staylodgic_analytics_table_wrap {
 	margin-bottom: 50px;
 }
 
-.atollmatrix_table_outer {
+.staylodgic_table_outer {
 	margin-top: 24px;
 }
 
-.atollmatrix_analytics_chart,
-.atollmatrix_analytics_table_wrap {
+.staylodgic_analytics_chart,
+.staylodgic_analytics_table_wrap {
 	margin-bottom: 50px;
 	border-radius: 10px;
 	padding: 40px;
 }
 
-.atollmatrix_anaytlics_module {
+.staylodgic_anaytlics_module {
 	padding: 40px 20px 0;
 	border-radius: 20px;
 }
 
-.atollmatrix_anaytlics_module.atollmatrix_chart_bookings_today {
+.staylodgic_anaytlics_module.staylodgic_chart_bookings_today {
 	background: #eef7fb;
 }
 
-.atollmatrix_anaytlics_module.atollmatrix_chart_bookings_tomorrow {
+.staylodgic_anaytlics_module.staylodgic_chart_bookings_tomorrow {
 	background: #f2f3fb;
 }
 
-.atollmatrix_anaytlics_module.atollmatrix_chart_bookings_dayafter {
+.staylodgic_anaytlics_module.staylodgic_chart_bookings_dayafter {
 	background: #f7f4ed;
 }
 
-.atollmatrix_analytics_chart.atollmatrix_analytics_chart_polarArea {
+.staylodgic_analytics_chart.staylodgic_analytics_chart_polarArea {
 	border: 0;
 	padding: 0;
 	margin-bottom: 10px;
@@ -94,43 +94,43 @@ body.wp-admin {
 	width: 5%;
 }
 
-.atollmatrix_analytics_table th.number-column {
+.staylodgic_analytics_table th.number-column {
 	text-align: center;
 }
 
-.atollmatrix_analytics_table th:not(.number-column, .nights-column),
-.atollmatrix_analytics_table td:not(.number-column, .nights-column) {
+.staylodgic_analytics_table th:not(.number-column, .nights-column),
+.staylodgic_analytics_table td:not(.number-column, .nights-column) {
 	width: calc(95% / 6);
 }
 
 
-h2.atollmatrix_analytics_subheading {
+h2.staylodgic_analytics_subheading {
 	color: #000;
 }
 
-.atollmatrix_analytics_table th.number-column {
+.staylodgic_analytics_table th.number-column {
 	color: #aeaeae;
 }
 
-.atollmatrix_analytics_chart:not(.atollmatrix_analytics_chart_polarArea),
-.atollmatrix_analytics_table_wrap {
+.staylodgic_analytics_chart:not(.staylodgic_analytics_chart_polarArea),
+.staylodgic_analytics_table_wrap {
 	background: -moz-linear-gradient(top, #84b7bf1a, #5f958612);
 }
 
-table.atollmatrix_analytics_table thead tr th {
+table.staylodgic_analytics_table thead tr th {
 	background-image: linear-gradient(180deg, #9D9D9D21 0%, #B9ABAB21 100%);
 	padding: 20px 0;
 }
 
-table.atollmatrix_analytics_table thead tr th.number-column {
+table.staylodgic_analytics_table thead tr th.number-column {
 	border-top-left-radius: 10px;
 }
 
-table.atollmatrix_analytics_table thead tr th.nights-column {
+table.staylodgic_analytics_table thead tr th.nights-column {
 	border-top-right-radius: 10px;
 }
 
-.atollmatrix_analytics_wrap h3 i {
+.staylodgic_analytics_wrap h3 i {
 	padding-right: 7px;
 	color: #a4a4a4;
 }

@@ -1,5 +1,5 @@
 <?php
-function atollmatrix_generate_sidebarlist($sidebarlist_type)
+function staylodgic_generate_sidebarlist($sidebarlist_type)
 {
     $max_sidebars = 50;
     if ($sidebarlist_type == "events") {
@@ -8,8 +8,8 @@ function atollmatrix_generate_sidebarlist($sidebarlist_type)
         $sidebar_options['default_sidebar'] = 'Default Sidebar';
         for ($sidebar_count = 1; $sidebar_count <= $max_sidebars; $sidebar_count++) {
 
-            if (atollmatrix_get_option_data('mthemesidebar-' . $sidebar_count) != "") {
-                $active_sidebar                                     = atollmatrix_get_option_data('mthemesidebar-' . $sidebar_count);
+            if (staylodgic_get_option_data('mthemesidebar-' . $sidebar_count) != "") {
+                $active_sidebar                                     = staylodgic_get_option_data('mthemesidebar-' . $sidebar_count);
                 $sidebar_options['mthemesidebar-' . $sidebar_count] = $active_sidebar;
             }
         }
@@ -20,8 +20,8 @@ function atollmatrix_generate_sidebarlist($sidebarlist_type)
         $sidebar_options['default_sidebar']  = 'Default Sidebar';
         for ($sidebar_count = 1; $sidebar_count <= $max_sidebars; $sidebar_count++) {
 
-            if (atollmatrix_get_option_data('mthemesidebar-' . $sidebar_count) != "") {
-                $active_sidebar                                     = atollmatrix_get_option_data('mthemesidebar-' . $sidebar_count);
+            if (staylodgic_get_option_data('mthemesidebar-' . $sidebar_count) != "") {
+                $active_sidebar                                     = staylodgic_get_option_data('mthemesidebar-' . $sidebar_count);
                 $sidebar_options['mthemesidebar-' . $sidebar_count] = $active_sidebar;
             }
         }
@@ -32,8 +32,8 @@ function atollmatrix_generate_sidebarlist($sidebarlist_type)
         $sidebar_options['default_sidebar']   = 'Default Sidebar';
         for ($sidebar_count = 1; $sidebar_count <= $max_sidebars; $sidebar_count++) {
 
-            if (atollmatrix_get_option_data('mthemesidebar-' . $sidebar_count) != "") {
-                $active_sidebar                                     = atollmatrix_get_option_data('mthemesidebar-' . $sidebar_count);
+            if (staylodgic_get_option_data('mthemesidebar-' . $sidebar_count) != "") {
+                $active_sidebar                                     = staylodgic_get_option_data('mthemesidebar-' . $sidebar_count);
                 $sidebar_options['mthemesidebar-' . $sidebar_count] = $active_sidebar;
             }
         }
@@ -48,8 +48,8 @@ function atollmatrix_generate_sidebarlist($sidebarlist_type)
         }
         for ($sidebar_count = 1; $sidebar_count <= $max_sidebars; $sidebar_count++) {
 
-            if (atollmatrix_get_option_data('mthemesidebar-' . $sidebar_count) != "") {
-                $active_sidebar                                     = atollmatrix_get_option_data('mthemesidebar-' . $sidebar_count);
+            if (staylodgic_get_option_data('mthemesidebar-' . $sidebar_count) != "") {
+                $active_sidebar                                     = staylodgic_get_option_data('mthemesidebar-' . $sidebar_count);
                 $sidebar_options['mthemesidebar-' . $sidebar_count] = $active_sidebar;
             }
         }
@@ -60,12 +60,12 @@ function atollmatrix_generate_sidebarlist($sidebarlist_type)
         return false;
     }
 }
-function atollmatrix_generate_metaboxes($meta_data, $post_id)
+function staylodgic_generate_metaboxes($meta_data, $post_id)
 {
     // Use nonce for verification
 
-    $the_menu_style = atollmatrix_get_option_data('menu_type');
-    echo '<input type="hidden" name="atollmatrix_meta_box_nonce" value="', wp_create_nonce('metabox-nonce'), '" />';
+    $the_menu_style = staylodgic_get_option_data('menu_type');
+    echo '<input type="hidden" name="staylodgic_meta_box_nonce" value="', wp_create_nonce('metabox-nonce'), '" />';
 
     echo '<div class="metabox-wrapper theme-menu-style-' . $the_menu_style . ' clearfix">';
     $countcolumns = 0;
@@ -73,7 +73,7 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
         // get current post meta data
         $meta = get_post_meta($post_id, $field['id'], true);
 
-        if (atollmatrix_page_is_built_with_elementor($post_id)) {
+        if (staylodgic_page_is_built_with_elementor($post_id)) {
             $elementor_page_settings = get_post_meta($post_id, '_elementor_page_settings', true);
             if (isset($elementor_page_settings[$field['id']])) {
                 $meta = $elementor_page_settings[$field['id']];
@@ -160,7 +160,7 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
             switch ($field['type']) {
 
                 case 'selected_proofing_images':
-                    $filter_image_ids = atollmatrix_get_proofing_attachments($post_id);
+                    $filter_image_ids = staylodgic_get_proofing_attachments($post_id);
                     $found_selection  = false;
                     if ($filter_image_ids) {
 
@@ -180,7 +180,7 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                                 if ($proofing_status == "true") {
                                     $thumbnail_imagearray = wp_get_attachment_image_src($attachment_id, 'thumbnail', false);
                                     $thumbnail_imageURI   = $thumbnail_imagearray[0];
-                                    echo '<li class="images"><img src="' . esc_url($thumbnail_imageURI) . '" alt="' . esc_attr__('selected', 'atollmatrix') . '" /></li>';
+                                    echo '<li class="images"><img src="' . esc_url($thumbnail_imageURI) . '" alt="' . esc_attr__('selected', 'staylodgic') . '" /></li>';
                                     $found_selection = true;
                                 }
                             }
@@ -198,7 +198,7 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
 
                     if (!$found_selection) {
                         echo '<div class="proofing-none-selected">';
-                        _e('No selection found.', 'atollmatrix');
+                        _e('No selection found.', 'staylodgic');
                         echo '</div>';
                     }
 
@@ -207,12 +207,12 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                 case 'image_gallery':
                     // SPECIAL CASE:
                     // std controls button text; unique meta key for image uploads
-                    $meta          = get_post_meta($post_id, 'atollmatrix_image_ids', true);
+                    $meta          = get_post_meta($post_id, 'staylodgic_image_ids', true);
                     $thumbs_output = '';
-                    $button_text   = ($meta) ? esc_html__('Edit Gallery', 'atollmatrix') : $field['std'];
+                    $button_text   = ($meta) ? esc_html__('Edit Gallery', 'staylodgic') : $field['std'];
                     $renew_meta    = '';
                     if ($meta) {
-                        $field['std']  = esc_html__('Edit Gallery', 'atollmatrix');
+                        $field['std']  = esc_html__('Edit Gallery', 'staylodgic');
                         $thumbs        = explode(',', $meta);
                         $thumbs_output = '';
                         $imageidcount  = 0;
@@ -236,9 +236,9 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
 
                     echo
                     '<td>
-			    		<input type="button" class="button" name="' . esc_attr($field['id']) . '" id="atollmatrix_images_upload" value="' . esc_attr($button_text) . '" />
+			    		<input type="button" class="button" name="' . esc_attr($field['id']) . '" id="staylodgic_images_upload" value="' . esc_attr($button_text) . '" />
 
-			    		<input type="hidden" name="atollmatrix_meta[atollmatrix_image_ids]" id="atollmatrix_image_ids" value="' . esc_attr($renew_meta ? $renew_meta : 'false') . '" />
+			    		<input type="hidden" name="staylodgic_meta[staylodgic_image_ids]" id="staylodgic_image_ids" value="' . esc_attr($renew_meta ? $renew_meta : 'false') . '" />
 
 			    		<ul class="mtheme-gallery-thumbs">' . $thumbs_output . '</ul>
 			    	</td>';
@@ -248,12 +248,12 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                 case 'proofing_gallery':
                     // SPECIAL CASE:
                     // std controls button text; unique meta key for image uploads
-                    $meta          = get_post_meta($post_id, '_atollmatrix_proofing_image_ids', true);
+                    $meta          = get_post_meta($post_id, '_staylodgic_proofing_image_ids', true);
                     $thumbs_output = '';
-                    $button_text   = ($meta) ? esc_html__('Edit Proofing Gallery', 'atollmatrix') : $field['std'];
+                    $button_text   = ($meta) ? esc_html__('Edit Proofing Gallery', 'staylodgic') : $field['std'];
                     $renew_meta    = '';
                     if ($meta) {
-                        $field['std']  = esc_html__('Edit Proofing Gallery', 'atollmatrix');
+                        $field['std']  = esc_html__('Edit Proofing Gallery', 'staylodgic');
                         $thumbs        = explode(',', $meta);
                         $thumbs_output = '';
                         $imageidcount  = 0;
@@ -277,9 +277,9 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
 
                     echo
                     '<td>
-			    		<input type="button" class="button" name="' . esc_attr($field['id']) . '" id="atollmatrix_proofing_images_upload" value="' . esc_attr($button_text) . '" />
+			    		<input type="button" class="button" name="' . esc_attr($field['id']) . '" id="staylodgic_proofing_images_upload" value="' . esc_attr($button_text) . '" />
 
-			    		<input type="hidden" name="atollmatrix_meta[_atollmatrix_proofing_image_ids]" id="_atollmatrix_proofing_image_ids" value="' . esc_attr($renew_meta ? $renew_meta : 'false') . '" />
+			    		<input type="hidden" name="staylodgic_meta[_staylodgic_proofing_image_ids]" id="_staylodgic_proofing_image_ids" value="' . esc_attr($renew_meta ? $renew_meta : 'false') . '" />
 
 			    		<ul class="mtheme-proofing-gallery-thumbs">' . $thumbs_output . '</ul>
 			    	</td>';
@@ -291,9 +291,9 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                     // std controls button text; unique meta key for image uploads
                     $meta          = get_post_meta($post_id, esc_attr($field['id']), true);
                     $thumbs_output = '';
-                    $button_text   = ($meta) ? esc_html__('Edit Gallery', 'atollmatrix') : $field['std'];
+                    $button_text   = ($meta) ? esc_html__('Edit Gallery', 'staylodgic') : $field['std'];
                     if ($meta) {
-                        $field['std']  = esc_html__('Edit Gallery', 'atollmatrix');
+                        $field['std']  = esc_html__('Edit Gallery', 'staylodgic');
                         $thumbs        = explode(',', $meta);
                         $thumbs_output = '';
                         foreach ($thumbs as $thumb) {
@@ -329,10 +329,10 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                             $imageURI      = $imagearray[0];
                             $imageID       = get_post($attatchmentID);
                             $imageTitle    = $image->post_title;
-                            echo '<img src="' . esc_url($imageURI) . '" alt="' . esc_attr__('image', 'atollmatrix') . '" />';
+                            echo '<img src="' . esc_url($imageURI) . '" alt="' . esc_attr__('image', 'staylodgic') . '" />';
                         }
                     } else {
-                        echo esc_html__('No images found.', 'atollmatrix');
+                        echo esc_html__('No images found.', 'staylodgic');
                     }
                     break;
 
@@ -357,7 +357,7 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
 
                 case 'upload':
                     if ($meta != "") {
-                        $image_url_id         = atollmatrix_get_image_id_from_url($meta);
+                        $image_url_id         = staylodgic_get_image_id_from_url($meta);
                         $image_thumbnail_data = wp_get_attachment_image_src($image_url_id, "thumbnail", true);
                         $image_thumbnail_url  = $image_thumbnail_data[0];
                         if ($image_thumbnail_url) {
@@ -410,9 +410,9 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
 
                     break;
 
-                case 'atollmatrix_registration_data':
+                case 'staylodgic_registration_data':
 
-                    $registration_instance = new \AtollMatrix\GuestRegistry();
+                    $registration_instance = new \Staylodgic\GuestRegistry();
                     $registration_instance->display_registration();                          
 
                     break;
@@ -425,9 +425,9 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                 case 'taxgenerate':
 
                     $the_post_id = $field['page_id'];
-                    $taxStatus = get_post_meta($the_post_id, 'atollmatrix_tax', true);
-                    $taxHTML = get_post_meta($the_post_id, 'atollmatrix_tax_html_data', true);
-                    $taxData = get_post_meta($the_post_id, 'atollmatrix_tax_data', true);
+                    $taxStatus = get_post_meta($the_post_id, 'staylodgic_tax', true);
+                    $taxHTML = get_post_meta($the_post_id, 'staylodgic_tax_html_data', true);
+                    $taxData = get_post_meta($the_post_id, 'staylodgic_tax_data', true);
                 
                     echo '<div id="input-tax-summary">';
                     echo '<div class="input-tax-summary-wrap">';
@@ -452,7 +452,7 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                 case 'activity_list_generate':
 
                     $the_post_id = $field['page_id'];
-                    $activity = new AtollMatrix\Activity();
+                    $activity = new Staylodgic\Activity();
                     echo $activity->getActivities( $the_post_id );
 
                     break;
@@ -468,7 +468,7 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
 
                     error_log ( '------- off view display ------' );
                     
-                    $activity = new AtollMatrix\Activity();
+                    $activity = new Staylodgic\Activity();
                     $ticket = $activity->displayTicket( $field['page_id'], $text_value );
 
                     echo $ticket;
@@ -493,7 +493,7 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                     echo '<input type="text" class="' . $class . '" name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '" value="' . esc_attr($text_value) . '" size="30" />';
 
                     if ( $text_value ) {
-                        $registry_instance = new \AtollMatrix\GuestRegistry();
+                        $registry_instance = new \Staylodgic\GuestRegistry();
                         $resRegIDs =  $registry_instance->fetchResRegIDsByBookingNumber( $text_value );
                         echo $registry_instance->outputRegistrationAndOccupancy($resRegIDs['reservationID'], $resRegIDs['guestRegisterID'], 'text');
                         echo $registry_instance->outputRegistrationAndOccupancy($resRegIDs['reservationID'], $resRegIDs['guestRegisterID'], 'icons');
@@ -523,11 +523,11 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                     if (isset($field['inputis'])) {
                         $readonly = ' readonly';
                     }
-                    echo '<input type="number" ' . $priceof . $readonly . ' data-currencyformat="2" class="' . $class . ' currency-input" min="0" step="0.01" name="atollmatrix_reservation_room_paid[' . $dateTime . ']" id="', esc_attr($field['id']), '" value="" size="30" />';
+                    echo '<input type="number" ' . $priceof . $readonly . ' data-currencyformat="2" class="' . $class . ' currency-input" min="0" step="0.01" name="staylodgic_reservation_room_paid[' . $dateTime . ']" id="', esc_attr($field['id']), '" value="" size="30" />';
                     echo "<ul>";
                 
-                    $payments = get_post_meta(get_the_id(), 'atollmatrix_reservation_room_paid', true);
-                    $total_cost = get_post_meta(get_the_id(), 'atollmatrix_reservation_total_room_cost', true);
+                    $payments = get_post_meta(get_the_id(), 'staylodgic_reservation_room_paid', true);
+                    $total_cost = get_post_meta(get_the_id(), 'staylodgic_reservation_total_room_cost', true);
                     $total_payments = 0;
                     if (is_array($payments) && !empty($payments)) {
                         echo "<ul>";
@@ -536,9 +536,9 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                                 $payment_id = 'payment-' . sanitize_title($timestamp);
                                 echo '<li class="' . $payment_id . '">';
                                 echo '<div class="payment-date-lister">';
-                                echo atollmatrix_price( $value );
+                                echo staylodgic_price( $value );
                                 echo ' [<span class="remove-payment" data-timestamp="$timestamp" data-index="$index">remove</span>] ' .$timestamp;
-                                echo '<input type="hidden" name="atollmatrix_reservation_room_paid[' . $timestamp . ']" value="' . $value . '" size="30" />';
+                                echo '<input type="hidden" name="staylodgic_reservation_room_paid[' . $timestamp . ']" value="' . $value . '" size="30" />';
                                 echo '</div>';                                    
                                 echo "</li>";
 
@@ -546,9 +546,9 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                             }
                         }
                         echo "</ul>";
-                        echo '<p class="reservation-payment-balance">' . __( 'Balance' , 'atollmatrix' ) . '</p>';
+                        echo '<p class="reservation-payment-balance">' . __( 'Balance' , 'staylodgic' ) . '</p>';
                         $balance = intval( $total_cost ) - intval( $total_payments );
-                        echo atollmatrix_price( $balance );
+                        echo staylodgic_price( $balance );
                     }
                 
                         break;
@@ -566,12 +566,12 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                     // Set the HTML code for the new bed setup
                     $bed_container = '
                         <div id="bed_setup_container" class="bed-setup-container-template">
-                        <div class="metabox_label"><label for="atollmatrix_alt_bedsetup_${uniqueID}"></label></div>
-                        <div id="atollmatrix_alt_bedsetup_${uniqueID}-section-title" class="sectiontitle clearfix">Alternate Bed Setup ( optional )</div>
-                        <div class="bedlayout-wrap" data-repeat="atollmatrix_alt_bedsetup_${uniqueID}">
+                        <div class="metabox_label"><label for="staylodgic_alt_bedsetup_${uniqueID}"></label></div>
+                        <div id="staylodgic_alt_bedsetup_${uniqueID}-section-title" class="sectiontitle clearfix">Alternate Bed Setup ( optional )</div>
+                        <div class="bedlayout-wrap" data-repeat="staylodgic_alt_bedsetup_${uniqueID}">
                         <div class="bedlayout">
                             <div class="bedlayout-box" id="bedlayout-box">
-                                <select disabled class="bedtype-select" name="atollmatrix_alt_bedsetup[${uniqueID}][bedtype][]" id="bed_type_atollmatrix_alt_bedsetup_${uniqueID}_0">
+                                <select disabled class="bedtype-select" name="staylodgic_alt_bedsetup[${uniqueID}][bedtype][]" id="bed_type_staylodgic_alt_bedsetup_${uniqueID}_0">
                                 <option value="twinbed">Twin bed</option>
                                 <option value="fullbed">Full bed</option>
                                 <option value="queenbed">Queen bed</option>
@@ -579,7 +579,7 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                                 <option value="bunkbed">Bunk bed</option>
                                 <option value="sofabed">Sofa bed</option>
                                 </select> X
-                                <input disabled placeholder="0" type="text" name="atollmatrix_alt_bedsetup[${uniqueID}][bednumber][]" value="" id="bed_number${uniqueID}_0">
+                                <input disabled placeholder="0" type="text" name="staylodgic_alt_bedsetup[${uniqueID}][bednumber][]" value="" id="bed_number${uniqueID}_0">
                             </div>
                         </div>
                         <span class="add-bedlayout-box">Add layout</span>
@@ -597,7 +597,7 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                     $data = $meta;
 
                     if (isset($field['target'])) {
-                        $field['options'] = atollmatrix_get_select_target_options($field['target']);
+                        $field['options'] = staylodgic_get_select_target_options($field['target']);
                     }
 
                     if (isset($data) && is_array($data)) {
@@ -605,7 +605,7 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                         foreach ($data as $uniqueID => $values) {
                             echo '<div class="bed-setup-dynamic-container" data-unique-id="'.$uniqueID.'">';
                             echo '<h3>Bed Layout</h3>';
-                            echo '<div class="bedlayout-wrap" data-repeat="atollmatrix_alt_bedsetup_${uniqueID}">';
+                            echo '<div class="bedlayout-wrap" data-repeat="staylodgic_alt_bedsetup_${uniqueID}">';
                             echo '<div class="bedlayout">';
                             if (isset($values['bedtype']) && isset($values['bednumber'])) {
                                 foreach ($values['bedtype'] as $index => $bedtype) {
@@ -619,17 +619,17 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                     
                                         // Assuming $field['options'] contains your options
                                         echo '<div class="bedlayout-box" id="bedlayout-box-'.$uniqueID.'">';
-                                        echo '<div class="selectbox-type-selector"><select class="bedtype-select" name="atollmatrix_alt_bedsetup['.$uniqueID.'][bedtype][]" id="bed_type_' . $field_id . '_' . $repeat_count . '">';
+                                        echo '<div class="selectbox-type-selector"><select class="bedtype-select" name="staylodgic_alt_bedsetup['.$uniqueID.'][bedtype][]" id="bed_type_' . $field_id . '_' . $repeat_count . '">';
                     
                                         foreach ($field['options'] as $key => $option) {
                                             if ($key == '0') {
-                                                $key = __('All the items', 'atollmatrix');
+                                                $key = __('All the items', 'staylodgic');
                                             }
                                             echo '<option value="' . esc_attr($key) . '"', $bedtype == $key ? ' selected' : '', '>', esc_attr($option), '</option>';
                                         }
                     
                                         echo '</select>';
-                                        echo ' X <input placeholder="0" type="text" name="atollmatrix_alt_bedsetup['.$uniqueID.'][bednumber][]" value="' . esc_attr($bednumber) . '" id="bed_number' . $repeat_count . '" />';
+                                        echo ' X <input placeholder="0" type="text" name="staylodgic_alt_bedsetup['.$uniqueID.'][bednumber][]" value="' . esc_attr($bednumber) . '" id="bed_number' . $repeat_count . '" />';
                                         
                                         echo '<div class="remove-bedlayout">Remove</div>';
                                         echo '</div>';
@@ -673,13 +673,13 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                                 }
                                 $class = '';
                                 if (isset($field['target'])) {
-                                    $field['options'] = atollmatrix_get_select_target_options($field['target']);
+                                    $field['options'] = staylodgic_get_select_target_options($field['target']);
                                 }
                                 echo '<div class="bedlayout-box" id="bedlayout-box">';
                                 echo '<div class="selectbox-type-selector"><select class="chosen-select-metabox bedtype-select" name="', esc_attr($field['id']) . '[bedtype][]" id="bed_type_' . $field['id'] . '_' . $repeat_count . '">';
                                 foreach ($field['options'] as $key => $option) {
                                     if ($key == '0') {
-                                        $key = __('All the items', 'atollmatrix');
+                                        $key = __('All the items', 'staylodgic');
                                     }
                                     echo '<option value="' . esc_attr($key) . '"', $bedtype == $key ? ' selected' : '', '>', esc_attr($option), '</option>';
                                 }
@@ -695,13 +695,13 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                     }
                     if (!$found_data) {
                         if (isset($field['target'])) {
-                            $field['options'] = atollmatrix_get_select_target_options($field['target']);
+                            $field['options'] = staylodgic_get_select_target_options($field['target']);
                         }
                         echo '<div class="bedlayout-box" id="bedlayout-box">';
                         echo '<div class="selectbox-type-selector"><select class="chosen-select-metabox" name="', esc_attr($field['id']) . '[bedtype][]" id="bed_type_' . $field['id'] . '_0">';
                         foreach ($field['options'] as $key => $option) {
                             if ($key == '0') {
-                                $key = __('All the items', 'atollmatrix');
+                                $key = __('All the items', 'staylodgic');
                             }
                             echo '<option value="' . esc_attr($key) . '"', $meta == $key ? ' selected' : '', '>', esc_attr($option), '</option>';
                         }
@@ -710,8 +710,8 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                         echo '</div>';
                     }
                     echo '</div>';
-                    echo '<span class="add-bedlayout-box">' . esc_html__('Add layout', 'atollmatrix') . '</span>';
-                    echo '<span class="add-bedlayout-box-notice">' . esc_html__('Max Reached!', 'atollmatrix') . '</span>';
+                    echo '<span class="add-bedlayout-box">' . esc_html__('Add layout', 'staylodgic') . '</span>';
+                    echo '<span class="add-bedlayout-box-notice">' . esc_html__('Max Reached!', 'staylodgic') . '</span>';
                     echo '</div>';
                     break;
 
@@ -749,7 +749,7 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                                         echo '<select class="chosen-select-metabox taxtype-select" name="', esc_attr($field['id']) . '[taxtype][]" id="tax_type_' . $field['id'] . '_' . $repeat_count . '">';
                                         foreach ($field['options'] as $key => $option) {
                                             if ($key == '0') {
-                                                $key = __('All the items', 'atollmatrix');
+                                                $key = __('All the items', 'staylodgic');
                                             }
                                             echo '<option value="' . esc_attr($key) . '"', $taxtype == $key ? ' selected' : '', '>', esc_attr($option), '</option>';
                                         }
@@ -781,8 +781,8 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                         echo '</div>';
                     }
                     echo '</div>';
-                    echo '<span class="add-taxlayout-box">' . esc_html__('Add layout', 'atollmatrix') . '</span>';
-                    echo '<span class="add-taxlayout-box-notice">' . esc_html__('Max Reached!', 'atollmatrix') . '</span>';
+                    echo '<span class="add-taxlayout-box">' . esc_html__('Add layout', 'staylodgic') . '</span>';
+                    echo '<span class="add-taxlayout-box-notice">' . esc_html__('Max Reached!', 'staylodgic') . '</span>';
                     echo '</div>';
                     break;
 
@@ -802,9 +802,9 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                                     $age = $meta['age'][$repeat_count];
                                 }
                                 echo '<div class="text-box" id="text-box">';
-                                echo '<input placeholder="' . esc_attr__('Age', 'atollmatrix') . '" type="text" name="' . esc_attr($field['id']) . '[age][]" value="' . esc_attr($age) . '" id="box_size' . $repeat_count . '" />';
+                                echo '<input placeholder="' . esc_attr__('Age', 'staylodgic') . '" type="text" name="' . esc_attr($field['id']) . '[age][]" value="' . esc_attr($age) . '" id="box_size' . $repeat_count . '" />';
                                 if ($repeat_count > 0) {
-                                    echo '<span class="remove-box">' . esc_html__('Remove', 'atollmatrix') . '</span>';
+                                    echo '<span class="remove-box">' . esc_html__('Remove', 'staylodgic') . '</span>';
                                 }
                                 echo '</div>';
                             }
@@ -816,8 +816,8 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                         echo '</div>';
                     }
                     echo '</div>';
-                    echo '<span class="add-box">' . esc_html__('Add Child', 'atollmatrix') . '</span>';
-                    echo '<span class="add-box-notice">' . esc_html__('Max Reached!', 'atollmatrix') . '</span>';
+                    echo '<span class="add-box">' . esc_html__('Add Child', 'staylodgic') . '</span>';
+                    echo '<span class="add-box-notice">' . esc_html__('Max Reached!', 'staylodgic') . '</span>';
                     echo '</div>';
                     break;
 
@@ -830,8 +830,8 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                     // Set the HTML code for the event schedule
                     $schedule_container = '
                         <div id="event_schedule_container" class="event-schedule-container-template">
-                            <div class="metabox_label"><label for="atollmatrix_activity_schedule_${day}"></label></div>
-                            <div class="schedule-wrap" data-repeat="atollmatrix_activity_schedule_${day}">';
+                            <div class="metabox_label"><label for="staylodgic_activity_schedule_${day}"></label></div>
+                            <div class="schedule-wrap" data-repeat="staylodgic_activity_schedule_${day}">';
                 
                     // Loop through each day of the week
                     $days_of_week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
@@ -847,7 +847,7 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                                 foreach ($text_value[$day_lower] as $time) {
                                     $schedule_container .= '
                                         <div class="time-input-wrapper">
-                                            <input type="time" name="atollmatrix_activity_schedule[' . $day_lower . '][]" value="' . esc_attr($time) . '">
+                                            <input type="time" name="staylodgic_activity_schedule[' . $day_lower . '][]" value="' . esc_attr($time) . '">
                                             <span class="remove-time-input">Remove</span>
                                         </div>';
                                 }
@@ -855,7 +855,7 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                                 // If no saved times, add an empty input field with a remove button
                                 $schedule_container .= '
                                     <div class="time-input-wrapper">
-                                        <input type="time" name="atollmatrix_activity_schedule[' . $day_lower . '][]" value="">
+                                        <input type="time" name="staylodgic_activity_schedule[' . $day_lower . '][]" value="">
                                         <span class="remove-time-input">Remove</span>
                                     </div>';
                             }
@@ -895,7 +895,7 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                         }
 
                         $display_user_time = $display;
-                        $event_time_format = atollmatrix_get_option_data('events_time_format');
+                        $event_time_format = staylodgic_get_option_data('events_time_format');
                         if ($event_time_format == "24hr") {
                             $display_user_time = date('H:i', $tod);
                         }
@@ -908,7 +908,7 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                 case 'country':
                     $text_value = $meta ? $meta : $field['std'];
                     echo '<select class="chosen-select-metabox" name="' . esc_attr($field['id']) . '" id="' . esc_attr($field['id']) . '">';
-                    echo atollmatrix_country_list('select', $meta);
+                    echo staylodgic_country_list('select', $meta);
                     echo '</select>';
 
                     break;
@@ -937,7 +937,7 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                 case 'fontselector':
                     $class = '';
                     if (isset($field['target'])) {
-                        $field['options'] = atollmatrix_get_select_target_options($field['target']);
+                        $field['options'] = staylodgic_get_select_target_options($field['target']);
                     }
 
                     echo '<div class="selectbox-type-selector"><select class="chosen-select-metabox metabox_google_font_select" name="', $field['id'], '" id="', $field['id'], '">';
@@ -946,7 +946,7 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                     }
                     echo '</select></div>';
 
-                    $googlefont_text = __('abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789', 'atollmatrix');
+                    $googlefont_text = __('abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789', 'staylodgic');
 
                     $hide = " hide";
                     if ($key != "none" && $key != "") {
@@ -959,12 +959,12 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                 case 'select':
                     $class = '';
                     if (isset($field['target'])) {
-                        $field['options'] = atollmatrix_get_select_target_options($field['target']);
+                        $field['options'] = staylodgic_get_select_target_options($field['target']);
                     }
                     echo '<div class="selectbox-type-selector"><select class="chosen-select-metabox choice-', esc_attr($field['id']), '" name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '">';
                     foreach ($field['options'] as $key => $option) {
                         if ($key == '0') {
-                            $key = __('All the items', 'atollmatrix');
+                            $key = __('All the items', 'staylodgic');
                         }
                         echo '<option value="' . esc_attr($key) . '"', $meta == $key ? ' selected' : '', '>', esc_attr($option), '</option>';
                     }
@@ -976,7 +976,7 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                         $post_id = get_the_id();
                     
                         // Retrieve the change log for the post
-                        $change_log = get_post_meta($post_id, 'atollmatrix_change_log', true);
+                        $change_log = get_post_meta($post_id, 'staylodgic_change_log', true);
 
                         // echo '<pre>';
                         // print_r($change_log);
@@ -993,8 +993,8 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                                     echo '<li>';
                                     echo '<strong>'. $change['field_id'].'</strong> changed by '.$change['user'].' on ' . $change['timestamp'] . '<br>';
                                     // Format old and new values using the format_value function
-                                    echo '<strong>Old Value:</strong> ' . atollmatrix_format_value($change['old_value']) . '<hr/>';
-                                    echo '<strong>New Value:</strong> ' . atollmatrix_format_value($change['new_value']) . '<hr/>';
+                                    echo '<strong>Old Value:</strong> ' . staylodgic_format_value($change['old_value']) . '<hr/>';
+                                    echo '<strong>New Value:</strong> ' . staylodgic_format_value($change['new_value']) . '<hr/>';
                                     echo '</li>';
                                 }
                                 echo '</ol>';
@@ -1009,7 +1009,7 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
 
                 case 'mealplan_included':
 
-                    $mealPlans = atollmatrix_get_option('mealplan');
+                    $mealPlans = staylodgic_get_option('mealplan');
             
                     if (is_array($mealPlans) && count($mealPlans) > 0) {
                         $includedMealPlans = array();
@@ -1030,7 +1030,7 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                         if (is_array($includedMealPlans) && count($includedMealPlans) > 0) {
                             foreach ($includedMealPlans as $id => $plan) {
                                 if ( isset( $plan[ 'mealtype' ] ) ) {
-                                    $html_input .= atollmatrix_get_mealplan_labels($plan[ 'mealtype' ]) . __(' included. ', 'atollmatrix');
+                                    $html_input .= staylodgic_get_mealplan_labels($plan[ 'mealtype' ]) . __(' included. ', 'staylodgic');
                                 }
                             }
                         }
@@ -1047,9 +1047,9 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                 case 'bedlayout' :
 
                     $the_post_id = get_the_ID(); // Replace this with the actual post ID
-                    $room_id = get_post_meta($the_post_id, 'atollmatrix_room_id', true);
+                    $room_id = get_post_meta($the_post_id, 'staylodgic_room_id', true);
 
-                    $booking_instance = new \AtollMatrix\Booking();
+                    $booking_instance = new \Staylodgic\Booking();
                     $bedlayoutInputs     = $booking_instance->generate_BedMetabox($room_id, $field['id'], $meta);
 
                     echo '<div id="metabox-bedlayout" data-field="'.esc_attr($field['id']).'" data-metavalue="'.esc_attr($meta).'">';
@@ -1060,7 +1060,7 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                     
                 case 'mealplan':
                 
-                    $mealPlans = atollmatrix_get_option('mealplan');
+                    $mealPlans = staylodgic_get_option('mealplan');
             
                     if (is_array($mealPlans) && count($mealPlans) > 0) {
                         $includedMealPlans = array();
@@ -1078,7 +1078,7 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                         echo '<div class="selectbox-type-selector"><select class="chosen-select-metabox" name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '">';
                         echo '<option value="none"', $meta == 'none' ? ' selected' : '', '>None</option>';
                         foreach ($optionalMealPlans as $key => $option) {
-                            echo '<option value="' . esc_attr($option[ 'mealtype' ]) . '"', $meta == $option[ 'mealtype' ] ? ' selected' : '', '>' . atollmatrix_get_mealplan_labels($option[ 'mealtype' ]) . '</option>';
+                            echo '<option value="' . esc_attr($option[ 'mealtype' ]) . '"', $meta == $option[ 'mealtype' ] ? ' selected' : '', '>' . staylodgic_get_mealplan_labels($option[ 'mealtype' ]) . '</option>';
                         }
                         echo '</select></div>';
 
@@ -1090,12 +1090,12 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                 case 'payments':
                     $class = '';
                     if (isset($field['target'])) {
-                        $field['options'] = atollmatrix_get_select_target_options($field['target']);
+                        $field['options'] = staylodgic_get_select_target_options($field['target']);
                     }
                     echo '<div class="selectbox-type-selector"><select class="chosen-select-metabox" name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '">';
                     foreach ($field['options'] as $key => $option) {
                         if ($key == '0') {
-                            $key = __('All the items', 'atollmatrix');
+                            $key = __('All the items', 'staylodgic');
                         }
                         echo '<option value="' . esc_attr($key) . '"', $meta == $key ? ' selected' : '', '>', esc_attr($option), '</option>';
                     }
@@ -1116,24 +1116,24 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
 
                     if (isset($field['datafrom'])) {
                         if ('roomtype' == $field['datafrom']) {
-                            $room = get_posts('post_type=atmx_room&numberposts=-1&order=ASC');
+                            $room = get_posts('post_type=slgc_room&numberposts=-1&order=ASC');
                             if ($room) {
                                 foreach ($room as $key => $list) {
                                     $custom = get_post_custom($list->ID);
-                                    if (isset($custom["atollmatrix_max_adult_limit_status"][0])) {
-                                        $adult_limit_status = $custom["atollmatrix_max_adult_limit_status"][0];
+                                    if (isset($custom["staylodgic_max_adult_limit_status"][0])) {
+                                        $adult_limit_status = $custom["staylodgic_max_adult_limit_status"][0];
                                         if ('1' == $adult_limit_status) {
-                                            $max_adults = $custom["atollmatrix_max_adults"][0];
+                                            $max_adults = $custom["staylodgic_max_adults"][0];
                                         }
                                     }
-                                    if (isset($custom["atollmatrix_max_children_limit_status"][0])) {
-                                        $children_limit_status = $custom["atollmatrix_max_children_limit_status"][0];
+                                    if (isset($custom["staylodgic_max_children_limit_status"][0])) {
+                                        $children_limit_status = $custom["staylodgic_max_children_limit_status"][0];
                                         if ('1' == $children_limit_status) {
-                                            $max_children = $custom["atollmatrix_max_children"][0];
+                                            $max_children = $custom["staylodgic_max_children"][0];
                                         }
                                     }
-                                    if (isset($custom["atollmatrix_max_guests"][0])) {
-                                        $max_guests = $custom["atollmatrix_max_guests"][0];
+                                    if (isset($custom["staylodgic_max_guests"][0])) {
+                                        $max_guests = $custom["staylodgic_max_guests"][0];
                                     }
                                     $roomOccupantData[$list->ID]['max_adults']   = $max_adults;
                                     $roomOccupantData[$list->ID]['max_children'] = $max_children;
@@ -1177,37 +1177,37 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                     break;
 
                 case 'reservation_for_customer':
-                    $reservation_instance = new \AtollMatrix\Reservations();
-                    $reservation_array = \AtollMatrix\Reservations::getReservationIDsForCustomer($field['customer_id']);
+                    $reservation_instance = new \Staylodgic\Reservations();
+                    $reservation_array = \Staylodgic\Reservations::getReservationIDsForCustomer($field['customer_id']);
                     echo $reservation_instance->getEditLinksForReservations($reservation_array);
                     break;
 
                 case 'get_customer_data':
 
-                    $customer_array       = atollmatrix_get_customer_array();
+                    $customer_array       = staylodgic_get_customer_array();
                     
                     $post_type = get_post_type( $field['id'] );
 
-                    if ( 'atmx_activityres' == $post_type ) {
-                        $reservation_instance = new \AtollMatrix\Activity();
+                    if ( 'slgc_activityres' == $post_type ) {
+                        $reservation_instance = new \Staylodgic\Activity();
                     } else {
-                        $reservation_instance = new \AtollMatrix\Reservations();
+                        $reservation_instance = new \Staylodgic\Reservations();
                     }
                     $customer_post_id     = $reservation_instance->getReservation_Customer_ID($field['id']);
                     $customer_post_edit   = get_edit_post_link($customer_post_id);
                     echo '<a class="button button-primary button-large" href="' . $customer_post_edit . '">Edit Customer</a>';
-                    $customer_data = \AtollMatrix\Data::getCustomer_MetaData($customer_array, $customer_post_id);
+                    $customer_data = \Staylodgic\Data::getCustomer_MetaData($customer_array, $customer_post_id);
                     
-                    echo \AtollMatrix\Customers::generateCustomerHtmlList($customer_data);
+                    echo \Staylodgic\Customers::generateCustomerHtmlList($customer_data);
 
                     break;
                 case 'reservation_registration':
 
-                    $reservation_instance = new \AtollMatrix\Reservations($date = false, $room_id = false, $reservation_id = get_the_id() );
+                    $reservation_instance = new \Staylodgic\Reservations($date = false, $room_id = false, $reservation_id = get_the_id() );
                     $bookingnumber = $reservation_instance->getBookingNumber();
 
                     if ( $bookingnumber ) {
-                        $registry_instance = new \AtollMatrix\GuestRegistry();
+                        $registry_instance = new \Staylodgic\GuestRegistry();
                         $resRegIDs =  $registry_instance->fetchResRegIDsByBookingNumber( $bookingnumber );
                         if ( isset( $resRegIDs['guestRegisterID'] ) ) {
                             echo $registry_instance->outputRegistrationAndOccupancy($resRegIDs['reservationID'], $resRegIDs['guestRegisterID'], 'text');
@@ -1228,27 +1228,27 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
                     if (isset($field['datafrom'])) {
                         if ('roomtype' == $field['datafrom']) {
 
-                            $room = get_posts('post_type=atmx_room&numberposts=-1&order=ASC');
+                            $room = get_posts('post_type=slgc_room&numberposts=-1&order=ASC');
                             if ($room) {
                                 foreach ($room as $key => $list) {
                                     $max_adults   = 'disabled';
                                     $max_children = 'disabled';
                                     $max_guests   = '0';
                                     $custom       = get_post_custom($list->ID);
-                                    if (isset($custom["atollmatrix_max_adult_limit_status"][0])) {
-                                        $adult_limit_status = $custom["atollmatrix_max_adult_limit_status"][0];
+                                    if (isset($custom["staylodgic_max_adult_limit_status"][0])) {
+                                        $adult_limit_status = $custom["staylodgic_max_adult_limit_status"][0];
                                         if ('1' == $adult_limit_status) {
-                                            $max_adults = $custom["atollmatrix_max_adults"][0];
+                                            $max_adults = $custom["staylodgic_max_adults"][0];
                                         }
                                     }
-                                    if (isset($custom["atollmatrix_max_children_limit_status"][0])) {
-                                        $children_limit_status = $custom["atollmatrix_max_children_limit_status"][0];
+                                    if (isset($custom["staylodgic_max_children_limit_status"][0])) {
+                                        $children_limit_status = $custom["staylodgic_max_children_limit_status"][0];
                                         if ('1' == $children_limit_status) {
-                                            $max_children = $custom["atollmatrix_max_children"][0];
+                                            $max_children = $custom["staylodgic_max_children"][0];
                                         }
                                     }
-                                    if (isset($custom["atollmatrix_max_guests"][0])) {
-                                        $max_guests = $custom["atollmatrix_max_guests"][0];
+                                    if (isset($custom["staylodgic_max_guests"][0])) {
+                                        $max_guests = $custom["staylodgic_max_guests"][0];
                                     }
                                     $roomOccupantData[$list->ID]['max_adults']   = $max_adults;
                                     $roomOccupantData[$list->ID]['max_children'] = $max_children;
@@ -1403,14 +1403,14 @@ function atollmatrix_generate_metaboxes($meta_data, $post_id)
 /**
  * Save image ids
  */
-function atollmatrix_save_proofing_images()
+function staylodgic_save_proofing_images()
 {
 
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
         return;
     }
 
-    if (!isset($_POST['ids']) || !isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'atollmatrix-nonce-metagallery')) {
+    if (!isset($_POST['ids']) || !isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'staylodgic-nonce-metagallery')) {
         return;
     }
 
@@ -1419,7 +1419,7 @@ function atollmatrix_save_proofing_images()
     }
 
     $ids = strip_tags(rtrim($_POST['ids'], ','));
-    update_post_meta($_POST['post_id'], '_atollmatrix_proofing_image_ids', $ids);
+    update_post_meta($_POST['post_id'], '_staylodgic_proofing_image_ids', $ids);
 
     // update thumbs
     $thumbs        = explode(',', $ids);
@@ -1430,19 +1430,19 @@ function atollmatrix_save_proofing_images()
 
     die();
 }
-add_action('wp_ajax_atollmatrix_save_proofing_images', 'atollmatrix_save_proofing_images');
+add_action('wp_ajax_staylodgic_save_proofing_images', 'staylodgic_save_proofing_images');
 
 /**
  * Save image ids
  */
-function atollmatrix_save_images()
+function staylodgic_save_images()
 {
 
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
         return;
     }
 
-    if (!isset($_POST['ids']) || !isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'atollmatrix-nonce-metagallery')) {
+    if (!isset($_POST['ids']) || !isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'staylodgic-nonce-metagallery')) {
         return;
     }
 
@@ -1451,7 +1451,7 @@ function atollmatrix_save_images()
     }
 
     $ids = strip_tags(rtrim($_POST['ids'], ','));
-    update_post_meta($_POST['post_id'], 'atollmatrix_image_ids', $ids);
+    update_post_meta($_POST['post_id'], 'staylodgic_image_ids', $ids);
 
     // update thumbs
     $thumbs        = explode(',', $ids);
@@ -1462,18 +1462,18 @@ function atollmatrix_save_images()
 
     die();
 }
-add_action('wp_ajax_atollmatrix_save_images', 'atollmatrix_save_images');
+add_action('wp_ajax_staylodgic_save_images', 'staylodgic_save_images');
 /**
  * Save image ids
  */
-function atollmatrix_multo_gallery_save_images()
+function staylodgic_multo_gallery_save_images()
 {
 
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
         return;
     }
 
-    if (!isset($_POST['ids']) || !isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'atollmatrix-nonce-metagallery')) {
+    if (!isset($_POST['ids']) || !isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'staylodgic-nonce-metagallery')) {
         return;
     }
 
@@ -1496,57 +1496,57 @@ function atollmatrix_multo_gallery_save_images()
 
     die();
 }
-add_action('wp_ajax_atollmatrix_multo_gallery_save_images', 'atollmatrix_multo_gallery_save_images');
+add_action('wp_ajax_staylodgic_multo_gallery_save_images', 'staylodgic_multo_gallery_save_images');
 // Save data from meta box
-add_action( 'save_post', 'atollmatrix_preProcess', 5, 3 );
-add_action('save_post', 'atollmatrix_checkdata');
-add_action( 'save_post', 'atollmatrix_postProcess', 15, 3 );
+add_action( 'save_post', 'staylodgic_preProcess', 5, 3 );
+add_action('save_post', 'staylodgic_checkdata');
+add_action( 'save_post', 'staylodgic_postProcess', 15, 3 );
 
-function atollmatrix_preProcess( $post_id, $post, $update ) {
+function staylodgic_preProcess( $post_id, $post, $update ) {
     // Check if this is a revision or auto-save.
     if ( wp_is_post_revision( $post_id ) || ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) ) {
         return;
     }
 
-    // Ensure the action is only run for the 'atmx_reservations' custom post type.
-    if ( $post->post_type != 'atmx_reservations' ) {
+    // Ensure the action is only run for the 'slgc_reservations' custom post type.
+    if ( $post->post_type != 'slgc_reservations' ) {
         return;
     }
 
     // Now you can safely run your custom code here.
     // For example, use post meta data
-    $checkin = get_post_meta( $post_id, 'atollmatrix_checkin_date', true );
-    $checkout = get_post_meta( $post_id, 'atollmatrix_checkout_date', true );
-    $room_id = get_post_meta( $post_id, 'atollmatrix_room_id', true );
+    $checkin = get_post_meta( $post_id, 'staylodgic_checkin_date', true );
+    $checkout = get_post_meta( $post_id, 'staylodgic_checkout_date', true );
+    $room_id = get_post_meta( $post_id, 'staylodgic_room_id', true );
 
-    error_log('-------- removeCache atollmatrix_preProcess ---------');
+    error_log('-------- removeCache staylodgic_preProcess ---------');
     error_log($checkin . ' ++++ ' . $checkout);
-    \AtollMatrix\Cache::invalidateCachesByRoomAndDate($room_id, $checkin, $checkout);
+    \Staylodgic\Cache::invalidateCachesByRoomAndDate($room_id, $checkin, $checkout);
 
     // Perform actions or operations based on the meta value.
     // For example:
     // update_post_meta($post_id, 'another_meta_key', $new_meta_value);
 }
-function atollmatrix_postProcess( $post_id, $post, $update ) {
+function staylodgic_postProcess( $post_id, $post, $update ) {
     // Check if this is a revision or auto-save.
     if ( wp_is_post_revision( $post_id ) || ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) ) {
         return;
     }
 
-    // Ensure the action is only run for the 'atmx_reservations' custom post type.
-    if ( $post->post_type != 'atmx_reservations' ) {
+    // Ensure the action is only run for the 'slgc_reservations' custom post type.
+    if ( $post->post_type != 'slgc_reservations' ) {
         return;
     }
 
     // Now you can safely run your custom code here.
     // For example, use post meta data
-    $checkin = get_post_meta( $post_id, 'atollmatrix_checkin_date', true );
-    $checkout = get_post_meta( $post_id, 'atollmatrix_checkout_date', true );
-    $room_id = get_post_meta( $post_id, 'atollmatrix_room_id', true );
+    $checkin = get_post_meta( $post_id, 'staylodgic_checkin_date', true );
+    $checkout = get_post_meta( $post_id, 'staylodgic_checkout_date', true );
+    $room_id = get_post_meta( $post_id, 'staylodgic_room_id', true );
 
-    error_log('-------- removeCache atollmatrix_postProcess ---------');
+    error_log('-------- removeCache staylodgic_postProcess ---------');
     error_log($checkin . ' ++++ ' . $checkout);
-    \AtollMatrix\Cache::invalidateCachesByRoomAndDate($room_id, $checkin, $checkout);
+    \Staylodgic\Cache::invalidateCachesByRoomAndDate($room_id, $checkin, $checkout);
 
     // Perform actions or operations based on the meta value.
     // For example:
@@ -1554,12 +1554,12 @@ function atollmatrix_postProcess( $post_id, $post, $update ) {
 }
 
 // Hook the function to 'save_post' action.
-function atollmatrix_checkdata($post_id)
+function staylodgic_checkdata($post_id)
 {
 
     // verify nonce
-    if (isset($_POST['atollmatrix_meta_box_nonce'])) {
-        if (!wp_verify_nonce($_POST['atollmatrix_meta_box_nonce'], 'metabox-nonce')) {
+    if (isset($_POST['staylodgic_meta_box_nonce'])) {
+        if (!wp_verify_nonce($_POST['staylodgic_meta_box_nonce'], 'metabox-nonce')) {
             return $post_id;
         }
     }
@@ -1579,37 +1579,37 @@ function atollmatrix_checkdata($post_id)
         }
     }
 
-    if (isset($_POST['atollmatrix_meta_box_nonce'])) {
-        $atollmatrix_post_type_got = get_post_type($post_id);
+    if (isset($_POST['staylodgic_meta_box_nonce'])) {
+        $staylodgic_post_type_got = get_post_type($post_id);
 
-        switch ($atollmatrix_post_type_got) {
+        switch ($staylodgic_post_type_got) {
             // case 'page':
-            //     $atollmatrix_common_page_box = atollmatrix_page_metadata();
-            //     atollmatrix_savedata($atollmatrix_common_page_box, $post_id);
+            //     $staylodgic_common_page_box = staylodgic_page_metadata();
+            //     staylodgic_savedata($staylodgic_common_page_box, $post_id);
             //     break;
-            case 'atmx_room':
-                $atollmatrix_room_box = atollmatrix_room_metadata();
-                atollmatrix_savedata($atollmatrix_room_box, $post_id);
+            case 'slgc_room':
+                $staylodgic_room_box = staylodgic_room_metadata();
+                staylodgic_savedata($staylodgic_room_box, $post_id);
                 break;
-            case 'atmx_activity':
-                $atollmatrix_activity_box = atollmatrix_activity_metadata();
-                atollmatrix_savedata($atollmatrix_activity_box, $post_id);
+            case 'slgc_activity':
+                $staylodgic_activity_box = staylodgic_activity_metadata();
+                staylodgic_savedata($staylodgic_activity_box, $post_id);
                 break;
-            case 'atmx_activityres':
-                $atollmatrix_activityres_box = atollmatrix_activityres_metadata();
-                atollmatrix_savedata($atollmatrix_activityres_box, $post_id);
+            case 'slgc_activityres':
+                $staylodgic_activityres_box = staylodgic_activityres_metadata();
+                staylodgic_savedata($staylodgic_activityres_box, $post_id);
                 break;
-            case 'atmx_guestregistry':
-                $registry_box = atollmatrix_registry_metadata();
-                atollmatrix_savedata($registry_box, $post_id);
+            case 'slgc_guestregistry':
+                $registry_box = staylodgic_registry_metadata();
+                staylodgic_savedata($registry_box, $post_id);
                 break;
-            case 'atmx_reservations':
-                $reservations_box = atollmatrix_reservations_metadata();
-                atollmatrix_savedata($reservations_box, $post_id);
+            case 'slgc_reservations':
+                $reservations_box = staylodgic_reservations_metadata();
+                staylodgic_savedata($reservations_box, $post_id);
                 break;
-            case 'atmx_customers':
-                $customers_box = atollmatrix_customers_metadata();
-                atollmatrix_savedata($customers_box, $post_id);
+            case 'slgc_customers':
+                $customers_box = staylodgic_customers_metadata();
+                staylodgic_savedata($customers_box, $post_id);
                 break;
 
             default:
@@ -1620,19 +1620,19 @@ function atollmatrix_checkdata($post_id)
 
 }
 
-function atollmatrix_savedata($atollmatrix_metaboxdata, $post_id)
+function staylodgic_savedata($staylodgic_metaboxdata, $post_id)
 {
     
     //error_log('------ Reservation Metabox-------');
     // error_log( print_r( $_POST, 1) );
-    // delete_post_meta($post_id, 'atollmatrix_change_log');
-    if (is_array($atollmatrix_metaboxdata['fields'])) {
-        foreach ($atollmatrix_metaboxdata['fields'] as $field) {
+    // delete_post_meta($post_id, 'staylodgic_change_log');
+    if (is_array($staylodgic_metaboxdata['fields'])) {
+        foreach ($staylodgic_metaboxdata['fields'] as $field) {
             $field_id = $field['id'];
             $old = get_post_meta($post_id, $field_id, true);
             $new = isset($_POST[$field_id]) ? $_POST[$field_id] : '';
 
-            if ( 'atollmatrix_reservation_room_paid' == $field_id ) {
+            if ( 'staylodgic_reservation_room_paid' == $field_id ) {
                 // Get the first element of the array
                 $firstElement = reset($new);
                 // Check if the first element is empty
@@ -1659,7 +1659,7 @@ function atollmatrix_savedata($atollmatrix_metaboxdata, $post_id)
             }
             if ($new !== $old) {
                 // Create or retrieve the log array
-                $change_log = get_post_meta($post_id, 'atollmatrix_change_log', true);
+                $change_log = get_post_meta($post_id, 'staylodgic_change_log', true);
                 if (!is_array($change_log)) {
                     $change_log = array();
                 }
@@ -1690,7 +1690,7 @@ function atollmatrix_savedata($atollmatrix_metaboxdata, $post_id)
                 update_post_meta($post_id, $field_id, $new);
 
                 // Update the change log in the post meta
-                update_post_meta($post_id, 'atollmatrix_change_log', $change_log);
+                update_post_meta($post_id, 'staylodgic_change_log', $change_log);
             }
         }
     }

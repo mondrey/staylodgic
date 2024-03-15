@@ -1,5 +1,5 @@
 <?php
-namespace AtollMatrix;
+namespace Staylodgic;
 
 class BookingBatchProcessor extends BatchProcessorBase
 {
@@ -74,16 +74,16 @@ class BookingBatchProcessor extends BatchProcessorBase
 
         // Run a query for reservation posts
         $args = array(
-            'post_type'  => 'atmx_reservations',
+            'post_type'  => 'slgc_reservations',
             'posts_per_page' => -1,
             'meta_query' => array(
                 'relation' => 'AND',
                 array(
-                    'key'   => 'atollmatrix_ics_signature',
+                    'key'   => 'staylodgic_ics_signature',
                     'value' => $signature,
                 ),
                 array(
-                    'key'     => 'atollmatrix_checkin_date',
+                    'key'     => 'staylodgic_checkin_date',
                     'value'   => $daystart,
                     'compare' => '>=',
                     // check-in date is today or in the future
@@ -103,25 +103,25 @@ class BookingBatchProcessor extends BatchProcessorBase
                 $query->the_post();
 
 				$reservation_id = get_the_ID();
-                $reservation_status = get_post_meta($reservation_id, 'atollmatrix_reservation_status', true);
+                $reservation_status = get_post_meta($reservation_id, 'staylodgic_reservation_status', true);
                 // Get the post meta
-                $booking_number = get_post_meta( $reservation_id, 'atollmatrix_booking_number', true);
+                $booking_number = get_post_meta( $reservation_id, 'staylodgic_booking_number', true);
 				error_log( '--------------- duplicate checking booking_number -----------' );
 				error_log( $booking_number );
                 // If the booking number doesn't exist in processed UIDs, it's potentially cancelled
                 if (!in_array($booking_number, $processedUIDs)) {
                     $potentiallyCancelled[  ] = $booking_number;
                     
-                    $import_missing = atollmatrix_get_option('import_missing');
+                    $import_missing = staylodgic_get_option('import_missing');
                     error_log( '--------------- Import Action Status -----------' );
                     error_log( $import_missing );
                     if ( 'cancel' == $import_missing ) {
                         if ( 'cancelled' !== $reservation_status ) {
-                            update_post_meta($reservation_id, 'atollmatrix_reservation_status', 'cancelled');
+                            update_post_meta($reservation_id, 'staylodgic_reservation_status', 'cancelled');
                         }
                     }
                     if ( 'delete' == $import_missing ) {
-                        $reservation_instance = new \AtollMatrix\Reservations($date = false, $room_id = false, $reservation_id);
+                        $reservation_instance = new \Staylodgic\Reservations($date = false, $room_id = false, $reservation_id);
                         $customer_post_id = $reservation_instance->getGuest_id_forReservation( $booking_number );
                         // Delete Customer for Reservation
                         wp_delete_post($customer_post_id, true);
@@ -190,10 +190,10 @@ class BookingBatchProcessor extends BatchProcessorBase
 
             $existing_post = get_posts(
                 array(
-                    'post_type'  => 'atmx_reservations',
+                    'post_type'  => 'slgc_reservations',
                     'meta_query' => array(
                         array(
-                            'key'   => 'atollmatrix_booking_number',
+                            'key'   => 'staylodgic_booking_number',
                             'value' => $booking_number,
                         ),
                     ),
@@ -202,14 +202,14 @@ class BookingBatchProcessor extends BatchProcessorBase
 
 			if ($existing_post) {
 				$existing_post_id = $existing_post[0]->ID;
-				$existing_checkin = get_post_meta($existing_post_id, 'atollmatrix_checkin_date', true);
-				$existing_checkout = get_post_meta($existing_post_id, 'atollmatrix_checkout_date', true);
+				$existing_checkin = get_post_meta($existing_post_id, 'staylodgic_checkin_date', true);
+				$existing_checkout = get_post_meta($existing_post_id, 'staylodgic_checkout_date', true);
 			
 				// Compare existing check-in and check-out dates with the new ones
 				if ($existing_checkin !== $checkin || $existing_checkout !== $checkout) {
 					// Update the existing post with new check-in and check-out dates
-					update_post_meta($existing_post_id, 'atollmatrix_checkin_date', $checkin);
-					update_post_meta($existing_post_id, 'atollmatrix_checkout_date', $checkout);
+					update_post_meta($existing_post_id, 'staylodgic_checkin_date', $checkin);
+					update_post_meta($existing_post_id, 'staylodgic_checkout_date', $checkout);
 				}
 
 
@@ -220,28 +220,28 @@ class BookingBatchProcessor extends BatchProcessorBase
             $booking_channel = "External";
 
 			$post_data = array(
-				'post_type'   => 'atmx_reservations',
+				'post_type'   => 'slgc_reservations',
 				// Your custom post type
 				'post_title'  => $booking_number,
 				// Set the booking number as post title
 				'post_status' => 'publish',
 				// The status you want to give new posts
 				'meta_input'  => array(
-					'atollmatrix_room_id'            => $room_id,
-					'atollmatrix_reservation_status' => 'confirmed',
-					'atollmatrix_checkin_date'       => $checkin,
-					'atollmatrix_checkout_date'      => $checkout,
-					'atollmatrix_booking_number'     => $booking_number,
-					'atollmatrix_booking_uid'        => $booking_uid,
+					'staylodgic_room_id'            => $room_id,
+					'staylodgic_reservation_status' => 'confirmed',
+					'staylodgic_checkin_date'       => $checkin,
+					'staylodgic_checkout_date'      => $checkout,
+					'staylodgic_booking_number'     => $booking_number,
+					'staylodgic_booking_uid'        => $booking_uid,
 					// Set the booking number as post meta
-					'atollmatrix_full_name'          => $name,
+					'staylodgic_full_name'          => $name,
 					// Customer name
-					'atollmatrix_reservation_notes'  => $description,
+					'staylodgic_reservation_notes'  => $description,
 					// Description
-					'atollmatrix_ics_signature'      => $signature,
+					'staylodgic_ics_signature'      => $signature,
 					// ICS File hash
-					'atollmatrix_customer_choice'    => 'new',
-                    'atollmatrix_booking_channel'    => $booking_channel,
+					'staylodgic_customer_choice'    => 'new',
+                    'staylodgic_booking_channel'    => $booking_channel,
 					// ICS File hash
 					// add other meta data you need
 				),
@@ -275,7 +275,7 @@ class BookingBatchProcessor extends BatchProcessorBase
     {
 
         add_submenu_page(
-            'atoll-matrix',
+            'staylodgic',
             // This is the slug of the parent menu
             'Import iCal Bookings',
             'Import iCal Bookings',
@@ -315,7 +315,7 @@ class BookingBatchProcessor extends BatchProcessorBase
                     echo '<input readonly type="text" name="room_ical_links_comment[]" value="' . esc_attr($ical_link[ 'ical_comment' ]) . '">';
                     echo '<button type="button" class="unlock_button"><i class="fas fa-lock"></i></button>'; // Unlock button
 
-                    $button_save_mode = __('Sync', 'atollmatrix');
+                    $button_save_mode = __('Sync', 'staylodgic');
 
                     echo '<button data-type="sync-booking" type="button" class="sync_button" data-ics-id="' . esc_attr($ical_id) . '" data-ics-url="' . esc_attr($ical_link[ 'ical_url' ]) . '" data-room-id="' . esc_attr($room->ID) . '">' . $button_save_mode . '</button>'; // Sync button
                     echo '</div>';
@@ -334,7 +334,7 @@ class BookingBatchProcessor extends BatchProcessorBase
         echo "</form>";
         echo "</div>";
         echo "</div>";
-        echo \AtollMatrix\Modals::syncBookingModal();
+        echo \Staylodgic\Modals::syncBookingModal();
     }
 
     public function save_ical_booking_meta()

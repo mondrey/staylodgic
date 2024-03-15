@@ -1,5 +1,5 @@
 <?php
-namespace AtollMatrix;
+namespace Staylodgic;
 
 class GuestRegistry
 {
@@ -24,16 +24,16 @@ class GuestRegistry
         $hotelFooter = null,
         $hotelLogo = null
     ) {
-        $this->bookingNumber = get_post_meta(get_the_id(), 'atollmatrix_registry_bookingnumber', true);
+        $this->bookingNumber = get_post_meta(get_the_id(), 'staylodgic_registry_bookingnumber', true);
 
         add_shortcode('guest_registration', array($this, 'guestRegistration'));
 
-        // add_shortcode('atollmatrix_cf7_digitalsignature', array($this, 'atollmatrix_cf7_digital_signature_shortcode'));
+        // add_shortcode('staylodgic_cf7_digitalsignature', array($this, 'staylodgic_cf7_digital_signature_shortcode'));
 
         add_action('wp_ajax_requestRegistrationDetails', array($this, 'requestRegistrationDetails'));
         add_action('wp_ajax_nopriv_requestRegistrationDetails', array($this, 'requestRegistrationDetails'));
 
-        // Add a filter to modify the content of atmx_guestregistry posts
+        // Add a filter to modify the content of slgc_guestregistry posts
         add_filter('the_content', array($this, 'append_shortcode_to_content'));
 
         add_action('wp_ajax_save_guestregistration_data', array($this, 'save_guestregistration_data'));
@@ -60,9 +60,9 @@ class GuestRegistry
             'post_title'   => wp_strip_all_tags('Registration for ' . $bookingNumber),
             'post_content' => '',
             'post_status'  => 'publish',
-            'post_type'    => 'atmx_guestregistry', // Ensure this is the correct post type
+            'post_type'    => 'slgc_guestregistry', // Ensure this is the correct post type
             'meta_input' => array(
-                'atollmatrix_registry_bookingnumber' => $bookingNumber,
+                'staylodgic_registry_bookingnumber' => $bookingNumber,
             ),
         ));
 
@@ -86,12 +86,12 @@ class GuestRegistry
     public function checkGuestRegistrationByBookingNumber($bookingNumber)
     {
         $guestRegisterArgs = array(
-            'post_type'   => 'atmx_guestregistry', // Adjust to your guest register post type
+            'post_type'   => 'slgc_guestregistry', // Adjust to your guest register post type
             'posts_per_page' => 1,
             'post_status' => 'publish',
             'meta_query'  => array(
                 array(
-                    'key' => 'atollmatrix_registry_bookingnumber', // Ensure this matches your actual meta key
+                    'key' => 'staylodgic_registry_bookingnumber', // Ensure this matches your actual meta key
                     'value' => $bookingNumber,
                 ),
             ),
@@ -119,24 +119,24 @@ class GuestRegistry
     public function fetchResRegIDsByBookingNumber($bookingNumber)
     {
         $reservationArgs = array(
-            'post_type'   => 'atmx_reservations', // Adjust to your reservation post type
+            'post_type'   => 'slgc_reservations', // Adjust to your reservation post type
             'posts_per_page' => 1,
             'post_status' => 'publish',
             'meta_query'  => array(
                 array(
-                    'key'   => 'atollmatrix_booking_number',
+                    'key'   => 'staylodgic_booking_number',
                     'value' => $bookingNumber,
                 ),
             ),
         );
 
         $guestRegisterArgs = array(
-            'post_type'   => 'atmx_guestregistry', // Adjust to your guest register post type
+            'post_type'   => 'slgc_guestregistry', // Adjust to your guest register post type
             'posts_per_page' => 1,
             'post_status' => 'publish',
             'meta_query'  => array(
                 array(
-                    'key' => 'atollmatrix_registry_bookingnumber', // Adjust if the meta key is different
+                    'key' => 'staylodgic_registry_bookingnumber', // Adjust if the meta key is different
                     'value' => $bookingNumber,
                 ),
             ),
@@ -166,7 +166,7 @@ class GuestRegistry
      */
     public function outputRegistrationAndOccupancy($reservationID, $registerID, $outputFormat = 'text')
     {
-        $reservation_instance = new \AtollMatrix\Reservations();
+        $reservation_instance = new \Staylodgic\Reservations();
 
         // Get total occupants for the reservation
         $reservation_occupants = $reservation_instance->getTotalOccupantsForReservation($reservationID);
@@ -226,12 +226,12 @@ class GuestRegistry
     {
 
         // Hotel Information
-        $property_logo_id = atollmatrix_get_option('property_logo');
-        $property_name    = atollmatrix_get_option('property_name');
-        $property_phone   = atollmatrix_get_option('property_phone');
-        $property_address = atollmatrix_get_option('property_address');
-        $property_header  = atollmatrix_get_option('property_header');
-        $property_footer  = atollmatrix_get_option('property_footer');
+        $property_logo_id = staylodgic_get_option('property_logo');
+        $property_name    = staylodgic_get_option('property_name');
+        $property_phone   = staylodgic_get_option('property_phone');
+        $property_address = staylodgic_get_option('property_address');
+        $property_header  = staylodgic_get_option('property_header');
+        $property_footer  = staylodgic_get_option('property_footer');
 
         $this->hotelName    = $property_name;
         $this->hotelPhone   = $property_phone;
@@ -339,9 +339,9 @@ class GuestRegistry
 }
 
             // After the loop, add the modal HTML
-            echo '<div id="deleteConfirmationModal" class="atollmatrox-modal" style="display: none;">';
-            echo '<div class="atollmatrox-modal-content">';
-            echo '<span class="atollmatrox-close-button">×</span>';
+            echo '<div id="deleteConfirmationModal" class="staylodgic-modal" style="display: none;">';
+            echo '<div class="staylodgic-modal-content">';
+            echo '<span class="staylodgic-close-button">×</span>';
             echo '<h4>Confirm Deletion</h4>';
             echo '<p>Are you sure you want to delete this registration?</p>';
             echo '<button id="confirmDelete">Delete</button>';
@@ -359,7 +359,7 @@ class GuestRegistry
         error_log(print_r($_POST, true)); // Log the POST data
 
         // Verify nonce
-        if (!isset($_POST[ 'nonce' ]) || !wp_verify_nonce($_POST[ 'nonce' ], 'atollmatrix-nonce-search')) {
+        if (!isset($_POST[ 'nonce' ]) || !wp_verify_nonce($_POST[ 'nonce' ], 'staylodgic-nonce-search')) {
             wp_die('Security check failed');
         }
 
@@ -476,14 +476,14 @@ class GuestRegistry
     }
 
     /**
-     * Appends the saved shortcode to the content of atmx_guestregistry posts.
+     * Appends the saved shortcode to the content of slgc_guestregistry posts.
      */
     public function append_shortcode_to_content($content)
     {
-        // Check if we are viewing a single post of type 'atmx_guestregistry'
-        if (is_single() && get_post_type() == 'atmx_guestregistry') {
+        // Check if we are viewing a single post of type 'slgc_guestregistry'
+        if (is_single() && get_post_type() == 'slgc_guestregistry') {
             // Retrieve saved shortcode content
-            $saved_shortcode = get_option('atollmatrix_guestregistry_shortcode', '');
+            $saved_shortcode = get_option('staylodgic_guestregistry_shortcode', '');
             $saved_shortcode = stripslashes($saved_shortcode);
 
             $form_start  = '[form_start id="guestregistration" class="guest-registration" action="submission_url" method="post"]';
@@ -502,7 +502,7 @@ class GuestRegistry
     public function registrationSuccessful()
     {
 
-        $reservation_instance = new \AtollMatrix\Reservations();
+        $reservation_instance = new \Staylodgic\Reservations();
         $booking_page_link    = $reservation_instance->getBookingDetailsPageLinkForGuest();
 
         $booking_details_link = '<a href="' . esc_attr(esc_url(get_page_link($booking_page_link))) . '">Booking Details</a>';
@@ -553,11 +553,11 @@ HTML;
         $booking_number = $_POST[ 'booking_number' ];
 
         // Fetch reservation details
-        $reservation_instance = new \AtollMatrix\Reservations();
+        $reservation_instance = new \Staylodgic\Reservations();
         $reservationQuery     = $reservation_instance->getReservationforBooking($booking_number);
 
         // Verify the nonce
-        if (!isset($_POST[ 'atollmatrix_bookingdetails_nonce' ]) || !check_admin_referer('atollmatrix-bookingdetails-nonce', 'atollmatrix_bookingdetails_nonce')) {
+        if (!isset($_POST[ 'staylodgic_bookingdetails_nonce' ]) || !check_admin_referer('staylodgic-bookingdetails-nonce', 'staylodgic_bookingdetails_nonce')) {
             // Nonce verification failed; handle the error or reject the request
             // For example, you can return an error response
             wp_send_json_error([ 'message' => 'Failed' ]);
@@ -575,8 +575,8 @@ HTML;
 
                 // Display reservation details
                 echo "<h3>Reservation ID: " . esc_html($reservationID) . "</h3>";
-                echo "<p>Check-in Date: " . esc_html(get_post_meta($reservationID, 'atollmatrix_checkin_date', true)) . "</p>";
-                echo "<p>Check-out Date: " . esc_html(get_post_meta($reservationID, 'atollmatrix_checkout_date', true)) . "</p>";
+                echo "<p>Check-in Date: " . esc_html(get_post_meta($reservationID, 'staylodgic_checkin_date', true)) . "</p>";
+                echo "<p>Check-out Date: " . esc_html(get_post_meta($reservationID, 'staylodgic_checkout_date', true)) . "</p>";
                 // Add other reservation details as needed
             }
             echo "</div>";
@@ -590,8 +590,8 @@ HTML;
             echo "<div class='guest-details'>";
             echo "<h3>Guest Information:</h3>";
             echo "<p>Guest ID: " . esc_html($guestID) . "</p>";
-            echo "<p>Full Name: " . esc_html(get_post_meta($guestID, 'atollmatrix_full_name', true)) . "</p>";
-            echo "<p>Email Address: " . esc_html(get_post_meta($guestID, 'atollmatrix_email_address', true)) . "</p>";
+            echo "<p>Full Name: " . esc_html(get_post_meta($guestID, 'staylodgic_full_name', true)) . "</p>";
+            echo "<p>Email Address: " . esc_html(get_post_meta($guestID, 'staylodgic_email_address', true)) . "</p>";
             // Add other guest details as needed
             echo "</div>";
         } else {
@@ -607,9 +607,9 @@ HTML;
     public function guestRegistration()
     {
         ob_start();
-        $atollmatrix_bookingdetails_nonce = wp_create_nonce('atollmatrix-bookingdetails-nonce');
+        $staylodgic_bookingdetails_nonce = wp_create_nonce('staylodgic-bookingdetails-nonce');
         ?>
-		<div class="atollmatrix-content">
+		<div class="staylodgic-content">
             <div class="calendar-insights-wrap">
                 <div id="check-in-display"><strong>Stay:</strong> <span>-</span></div>
                 <div id="nights-display"><strong>Nights:</strong> <span>-</span></div>
@@ -619,7 +619,7 @@ HTML;
                     <div class="front-booking-number-wrap">
                         <div class="front-booking-number-container">
                             <div class="form-group form-floating form-floating-booking-number form-bookingnumber-request">
-                                <input type="hidden" name="atollmatrix_bookingdetails_nonce" value="<?php echo esc_attr($atollmatrix_bookingdetails_nonce); ?>" />
+                                <input type="hidden" name="staylodgic_bookingdetails_nonce" value="<?php echo esc_attr($staylodgic_bookingdetails_nonce); ?>" />
                                 <input placeholder="Booking No." type="text" class="form-control" id="booking_number" name="booking_number" required>
                                 <label for="booking_number" class="control-label">Booking No.</label>
                             </div>
@@ -639,4 +639,4 @@ return ob_get_clean();
 
 }
 
-$instance = new \AtollMatrix\GuestRegistry();
+$instance = new \Staylodgic\GuestRegistry();

@@ -1,5 +1,5 @@
 <?php
-namespace AtollMatrix;
+namespace Staylodgic;
 
 class Reservations
 {
@@ -40,14 +40,14 @@ class Reservations
         $reservationQuery = self::getReservationforBooking($booking_number);
 
         if ( ! $reservationQuery->have_posts() ) {
-            $reservation_instance = new \AtollMatrix\Activity();
+            $reservation_instance = new \Staylodgic\Activity();
             $reservationQuery     = $reservation_instance->getReservationforActivity($booking_number);
 
             $activityFound = true;
         }
 
         // Verify the nonce
-        if (!isset($_POST[ 'atollmatrix_bookingdetails_nonce' ]) || !check_admin_referer('atollmatrix-bookingdetails-nonce', 'atollmatrix_bookingdetails_nonce')) {
+        if (!isset($_POST[ 'staylodgic_bookingdetails_nonce' ]) || !check_admin_referer('staylodgic-bookingdetails-nonce', 'staylodgic_bookingdetails_nonce')) {
             // Nonce verification failed; handle the error or reject the request
             // For example, you can return an error response
             wp_send_json_error([ 'message' => 'Failed' ]);
@@ -62,17 +62,17 @@ class Reservations
                 $reservationQuery->the_post();
                 $reservationID = get_the_ID();
     
-                $reservation_details_status = get_post_meta($reservationID, 'atollmatrix_reservation_status', true);
+                $reservation_details_status = get_post_meta($reservationID, 'staylodgic_reservation_status', true);
                 // Display reservation details
                 echo "<h3>Reservation ID: " . esc_html($booking_number) . "</h3>";
                 if ( $activityFound ) {
-                    echo "<p>Activity Date: " . esc_html(get_post_meta($reservationID, 'atollmatrix_checkin_date', true)) . "</p>";
+                    echo "<p>Activity Date: " . esc_html(get_post_meta($reservationID, 'staylodgic_checkin_date', true)) . "</p>";
 
                     $guestID = self::getGuest_id_forActivity($booking_number);
                     
                 } else {
-                    echo "<p>Check-in Date: " . esc_html(get_post_meta($reservationID, 'atollmatrix_checkin_date', true)) . "</p>";
-                    echo "<p>Check-out Date: " . esc_html(get_post_meta($reservationID, 'atollmatrix_checkout_date', true)) . "</p>";
+                    echo "<p>Check-in Date: " . esc_html(get_post_meta($reservationID, 'staylodgic_checkin_date', true)) . "</p>";
+                    echo "<p>Check-out Date: " . esc_html(get_post_meta($reservationID, 'staylodgic_checkout_date', true)) . "</p>";
                     echo "<p class='reservation-details-status-outer ".esc_attr( $reservation_details_status )."'>Status: <span class='reservation-details-status'>" . esc_html( $reservation_details_status ) . "</span></p>";
 
                     $guestID = self::getGuest_id_forReservation($booking_number);
@@ -91,8 +91,8 @@ class Reservations
             echo "<div class='guest-details'>";
             echo "<h3>Guest Information:</h3>";
             echo "<p>Guest ID: " . esc_html($guestID) . "</p>";
-            echo "<p>Full Name: " . esc_html(get_post_meta($guestID, 'atollmatrix_full_name', true)) . "</p>";
-            echo "<p>Email Address: " . esc_html(get_post_meta($guestID, 'atollmatrix_email_address', true)) . "</p>";
+            echo "<p>Full Name: " . esc_html(get_post_meta($guestID, 'staylodgic_full_name', true)) . "</p>";
+            echo "<p>Email Address: " . esc_html(get_post_meta($guestID, 'staylodgic_email_address', true)) . "</p>";
             // Add other guest details as needed
             echo "</div>";
         } else {
@@ -108,12 +108,12 @@ class Reservations
     public static function getConfirmedReservations()
     {
         $args = array(
-            'post_type'      => 'atmx_reservations',
+            'post_type'      => 'slgc_reservations',
             'posts_per_page' => -1,
             'post_status'    => 'publish',
             'meta_query'     => array(
                 array(
-                    'key'     => 'atollmatrix_reservation_status',
+                    'key'     => 'staylodgic_reservation_status',
                     'value'   => 'confirmed',
                     'compare' => '=',
                 ),
@@ -125,12 +125,12 @@ class Reservations
     public static function getReservationforBooking($booking_number)
     {
         $args = array(
-            'post_type'      => 'atmx_reservations',
+            'post_type'      => 'slgc_reservations',
             'posts_per_page' => -1,
             'post_status'    => 'publish',
             'meta_query'     => array(
                 array(
-                    'key'   => 'atollmatrix_booking_number',
+                    'key'   => 'staylodgic_booking_number',
                     'value' => $booking_number,
                 ),
             ),
@@ -140,12 +140,12 @@ class Reservations
     public static function getReservationIDforBooking($booking_number)
     {
         $args = array(
-            'post_type'      => 'atmx_reservations',
+            'post_type'      => 'slgc_reservations',
             'posts_per_page' => -1,
             'post_status'    => 'publish',
             'meta_query'     => array(
                 array(
-                    'key'   => 'atollmatrix_booking_number',
+                    'key'   => 'staylodgic_booking_number',
                     'value' => $booking_number,
                 ),
             ),
@@ -163,12 +163,12 @@ class Reservations
     public function getGuest_id_forActivity($booking_number)
     {
         $args = array(
-            'post_type'      => 'atmx_activityres',
+            'post_type'      => 'slgc_activityres',
             'posts_per_page' => -1,
             'post_status'    => 'publish',
             'meta_query'     => array(
                 array(
-                    'key'   => 'atollmatrix_booking_number',
+                    'key'   => 'staylodgic_booking_number',
                     'value' => $booking_number,
                 ),
             ),
@@ -177,7 +177,7 @@ class Reservations
 
         if ($reservation_query->have_posts()) {
             $reservation = $reservation_query->posts[ 0 ];
-            $customer_id = get_post_meta($reservation->ID, 'atollmatrix_customer_id', true);
+            $customer_id = get_post_meta($reservation->ID, 'staylodgic_customer_id', true);
             return $customer_id;
         }
 
@@ -187,12 +187,12 @@ class Reservations
     public function getGuest_id_forReservation($booking_number)
     {
         $args = array(
-            'post_type'      => 'atmx_reservations',
+            'post_type'      => 'slgc_reservations',
             'posts_per_page' => -1,
             'post_status'    => 'publish',
             'meta_query'     => array(
                 array(
-                    'key'   => 'atollmatrix_booking_number',
+                    'key'   => 'staylodgic_booking_number',
                     'value' => $booking_number,
                 ),
             ),
@@ -201,7 +201,7 @@ class Reservations
 
         if ($reservation_query->have_posts()) {
             $reservation = $reservation_query->posts[ 0 ];
-            $customer_id = get_post_meta($reservation->ID, 'atollmatrix_customer_id', true);
+            $customer_id = get_post_meta($reservation->ID, 'staylodgic_customer_id', true);
             return $customer_id;
         }
 
@@ -211,12 +211,12 @@ class Reservations
     public function getGuestforReservation($booking_number)
     {
         $args = array(
-            'post_type'      => 'atmx_reservations',
+            'post_type'      => 'slgc_reservations',
             'posts_per_page' => -1,
             'post_status'    => 'publish',
             'meta_query'     => array(
                 array(
-                    'key'   => 'atollmatrix_booking_number',
+                    'key'   => 'staylodgic_booking_number',
                     'value' => $booking_number,
                 ),
             ),
@@ -225,11 +225,11 @@ class Reservations
 
         if ($reservation_query->have_posts()) {
             $reservation = $reservation_query->posts[ 0 ];
-            $customer_id = get_post_meta($reservation->ID, 'atollmatrix_customer_id', true);
+            $customer_id = get_post_meta($reservation->ID, 'staylodgic_customer_id', true);
 
             if (!empty($customer_id)) {
                 $customer_args = array(
-                    'post_type'   => 'atmx_customers',
+                    'post_type'   => 'slgc_customers',
                     'p'           => $customer_id,
                     'post_status' => 'publish',
                 );
@@ -250,7 +250,7 @@ class Reservations
         $meta_query = array(
             'relation' => 'AND',
             array(
-                'key'     => 'atollmatrix_room_id',
+                'key'     => 'staylodgic_room_id',
                 'value'   => $room_id,
                 'compare' => '=',
             ),
@@ -259,7 +259,7 @@ class Reservations
         // Add reservation status to the meta query if provided
         if ($reservation_status !== false) {
             $meta_query[] = array(
-                'key'     => 'atollmatrix_reservation_status',
+                'key'     => 'staylodgic_reservation_status',
                 'value'   => $reservation_status,
                 'compare' => '=',
             );
@@ -268,7 +268,7 @@ class Reservations
         // Add reservation substatus to the meta query if provided
         if ($reservation_substatus !== false) {
             $meta_query[] = array(
-                'key'     => 'atollmatrix_reservation_substatus',
+                'key'     => 'staylodgic_reservation_substatus',
                 'value'   => $reservation_substatus,
                 'compare' => '=',
             );
@@ -277,7 +277,7 @@ class Reservations
         // Add check-in date to the meta query if provided
         if ($checkin_date !== false) {
             $meta_query[] = array(
-                'key'     => 'atollmatrix_checkin_date',
+                'key'     => 'staylodgic_checkin_date',
                 'value'   => $checkin_date,
                 'compare' => '>=',
                 'type'    => 'DATE'
@@ -287,7 +287,7 @@ class Reservations
         // Add check-out date to the meta query if provided
         if ($checkout_date !== false) {
             $meta_query[] = array(
-                'key'     => 'atollmatrix_checkout_date',
+                'key'     => 'staylodgic_checkout_date',
                 'value'   => $checkout_date,
                 'compare' => '<=',
                 'type'    => 'DATE'
@@ -295,7 +295,7 @@ class Reservations
         }
     
         $args = array(
-            'post_type'      => 'atmx_reservations',
+            'post_type'      => 'slgc_reservations',
             'posts_per_page' => -1,
             'post_status'    => 'publish',
             'meta_query'     => $meta_query,
@@ -318,11 +318,11 @@ class Reservations
                 $reservation_id = get_the_ID();
                 $custom         = get_post_custom($reservation_id);
 
-                $reservation_status = get_post_meta($reservation_id, 'atollmatrix_reservation_status', true);
+                $reservation_status = get_post_meta($reservation_id, 'staylodgic_reservation_status', true);
                 if ('confirmed' == $reservation_status) {
-                    if (isset($custom[ 'atollmatrix_checkin_date' ][ 0 ]) && isset($custom[ 'atollmatrix_checkout_date' ][ 0 ])) {
-                        $checkin       = strtotime($custom[ 'atollmatrix_checkin_date' ][ 0 ]);
-                        $checkout      = strtotime($custom[ 'atollmatrix_checkout_date' ][ 0 ]);
+                    if (isset($custom[ 'staylodgic_checkin_date' ][ 0 ]) && isset($custom[ 'staylodgic_checkout_date' ][ 0 ])) {
+                        $checkin       = strtotime($custom[ 'staylodgic_checkin_date' ][ 0 ]);
+                        $checkout      = strtotime($custom[ 'staylodgic_checkout_date' ][ 0 ]);
                         $selected_date = strtotime($this->date);
 
                         if ($selected_date >= $checkin && $selected_date < $checkout) {
@@ -469,7 +469,7 @@ class Reservations
             $date = $this->date;
         }
 
-        if ( \AtollMatrix\Rooms::isChannelRoomBooked($room_id, $date) ) {
+        if ( \Staylodgic\Rooms::isChannelRoomBooked($room_id, $date) ) {
             return '0';
         }
 
@@ -509,7 +509,7 @@ class Reservations
             // Add the remaining count for the specific date to the total
             if (isset($remainingRoomsArray[$date])) {
 
-                if ( \AtollMatrix\Rooms::isChannelRoomBooked($room->ID, $date) ) {
+                if ( \Staylodgic\Rooms::isChannelRoomBooked($room->ID, $date) ) {
                     $remainingRoomsArray[$date] = 0;
                 }
 
@@ -591,7 +591,7 @@ class Reservations
                 }
                 return $occupied_count;
             } elseif (!empty($reservation_ids)) {
-                $max_room_count = \AtollMatrix\Rooms::getMaxQuantityForRoom($room_id, $day);
+                $max_room_count = \Staylodgic\Rooms::getMaxQuantityForRoom($room_id, $day);
                 return $max_room_count;
             }
         }
@@ -606,7 +606,7 @@ class Reservations
             $this->reservation_id = $reservation_id;
         }
 
-        $number_of_adults = get_post_meta($this->reservation_id, 'atollmatrix_reservation_room_adults', true);
+        $number_of_adults = get_post_meta($this->reservation_id, 'staylodgic_reservation_room_adults', true);
 
         if ( isset($number_of_adults) && $number_of_adults ) {
             return $number_of_adults;
@@ -621,7 +621,7 @@ class Reservations
             $this->reservation_id = $reservation_id;
         }
 
-        $number_of_children = get_post_meta($this->reservation_id, 'atollmatrix_reservation_room_children', true);
+        $number_of_children = get_post_meta($this->reservation_id, 'staylodgic_reservation_room_children', true);
         if ( isset($number_of_children['number']) && $number_of_children ) {
             return $number_of_children['number'];
         }
@@ -644,7 +644,7 @@ class Reservations
     public function getBookingDetailsPageLinkForGuest()
     {
         // Get the booking number from the reservation post meta
-        $booking_page_link = atollmatrix_get_option('page_bookingdetails');
+        $booking_page_link = staylodgic_get_option('page_bookingdetails');
 
         return $booking_page_link;
     }
@@ -652,7 +652,7 @@ class Reservations
     public function getBookingNumber()
     {
         // Get the booking number from the reservation post meta
-        $booking_number = get_post_meta($this->reservation_id, 'atollmatrix_booking_number', true);
+        $booking_number = get_post_meta($this->reservation_id, 'staylodgic_booking_number', true);
 
         if (!$booking_number) {
             // Handle error if booking number not found
@@ -680,7 +680,7 @@ class Reservations
         if ($customer_query->have_posts()) {
             $customer_post = $customer_query->posts[ 0 ];
             // Retrieve the guest's full name from the customer post meta
-            $guest_full_name = get_post_meta($customer_post->ID, 'atollmatrix_full_name', true);
+            $guest_full_name = get_post_meta($customer_post->ID, 'staylodgic_full_name', true);
 
             // Restore the original post data
             wp_reset_postdata();
@@ -698,8 +698,8 @@ class Reservations
         $today_date          = date('Y-m-d'); // Get today's date
 
         // Get the check-in and check-out dates for the reservation
-        $checkin_date  = get_post_meta($reservation_post_id, 'atollmatrix_checkin_date', true);
-        $checkout_date = get_post_meta($reservation_post_id, 'atollmatrix_checkout_date', true);
+        $checkin_date  = get_post_meta($reservation_post_id, 'staylodgic_checkin_date', true);
+        $checkout_date = get_post_meta($reservation_post_id, 'staylodgic_checkout_date', true);
 
         // Check if today's date is within the reservation period
         if ($today_date >= $checkin_date && $today_date <= $checkout_date) {
@@ -715,7 +715,7 @@ class Reservations
         $today_date          = date('Y-m-d'); // Get today's date
 
         // Get the check-in date for the reservation
-        $checkin_date = get_post_meta($reservation_post_id, 'atollmatrix_checkin_date', true);
+        $checkin_date = get_post_meta($reservation_post_id, 'staylodgic_checkin_date', true);
 
         // Check if today's date is the check-in date
         return $today_date === $checkin_date;
@@ -727,7 +727,7 @@ class Reservations
         $today_date          = date('Y-m-d'); // Get today's date
 
         // Get the check-out date for the reservation
-        $checkout_date = get_post_meta($reservation_post_id, 'atollmatrix_checkout_date', true);
+        $checkout_date = get_post_meta($reservation_post_id, 'staylodgic_checkout_date', true);
 
         // Check if today's date is the check-out date
         return $today_date === $checkout_date;
@@ -738,8 +738,8 @@ class Reservations
 
         $reservation_post_id = $this->reservation_id;
         // Get the check-in and check-out dates for the reservation
-        $checkin_date  = get_post_meta($reservation_post_id, 'atollmatrix_checkin_date', true);
-        $checkout_date = get_post_meta($reservation_post_id, 'atollmatrix_checkout_date', true);
+        $checkin_date  = get_post_meta($reservation_post_id, 'staylodgic_checkin_date', true);
+        $checkout_date = get_post_meta($reservation_post_id, 'staylodgic_checkout_date', true);
 
         // Calculate the number of days
         $datetime1 = new \DateTime($checkin_date);
@@ -757,7 +757,7 @@ class Reservations
             $reservation_id = $this->reservation_id;
         }
         // Get the check-in and check-out dates for the reservation
-        $booking_channel = get_post_meta($reservation_id, 'atollmatrix_booking_channel', true);
+        $booking_channel = get_post_meta($reservation_id, 'staylodgic_booking_channel', true);
 
         return $booking_channel;
     }
@@ -769,7 +769,7 @@ class Reservations
             $reservation_id = $this->reservation_id;
         }
         // Get the check-in and check-out dates for the reservation
-        $checkin_date = get_post_meta($reservation_id, 'atollmatrix_checkin_date', true);
+        $checkin_date = get_post_meta($reservation_id, 'staylodgic_checkin_date', true);
 
         return $checkin_date;
     }
@@ -781,7 +781,7 @@ class Reservations
             $reservation_id = $this->reservation_id;
         }
         // Get the check-in and check-out dates for the reservation
-        $checkout_date = get_post_meta($reservation_id, 'atollmatrix_checkout_date', true);
+        $checkout_date = get_post_meta($reservation_id, 'staylodgic_checkout_date', true);
 
         return $checkout_date;
     }
@@ -793,7 +793,7 @@ class Reservations
             $reservation_id = $this->reservation_id;
         }
         // Get the reservation status for the reservation
-        $reservation_status = get_post_meta($reservation_id, 'atollmatrix_reservation_status', true);
+        $reservation_status = get_post_meta($reservation_id, 'staylodgic_reservation_status', true);
 
         return $reservation_status;
     }
@@ -804,7 +804,7 @@ class Reservations
             $reservation_id = $this->reservation_id;
         }
         // Get the reservation sub status for the reservation
-        $reservation_substatus = get_post_meta($reservation_id, 'atollmatrix_reservation_substatus', true);
+        $reservation_substatus = get_post_meta($reservation_id, 'staylodgic_reservation_substatus', true);
 
         return $reservation_substatus;
     }
@@ -820,7 +820,7 @@ class Reservations
                 $rooms_query->the_post();
 
                 // Use the post property of the WP_Query object
-                $room_id = get_post_meta($rooms_query->post->ID, 'atollmatrix_room_id', true);
+                $room_id = get_post_meta($rooms_query->post->ID, 'staylodgic_room_id', true);
 
                 // Use the room ID to get the room's post title
                 $room_post = get_post($room_id);
@@ -841,7 +841,7 @@ class Reservations
             $reservation_id = $this->reservation_id;
         }
         // Get the room post ID from the reservation's meta data
-        $room_post_id = get_post_meta($reservation_id, 'atollmatrix_room_id', true);
+        $room_post_id = get_post_meta($reservation_id, 'staylodgic_room_id', true);
 
         if ($room_post_id) {
             // Retrieve the room post using the ID
@@ -865,10 +865,10 @@ class Reservations
     public static function getReservationIDsForCustomer($customer_id)
     {
         $args = array(
-            'post_type'  => 'atmx_reservations',
+            'post_type'  => 'slgc_reservations',
             'meta_query' => array(
                 array(
-                    'key'     => 'atollmatrix_customer_id',
+                    'key'     => 'staylodgic_customer_id',
                     'value'   => $customer_id,
                     'compare' => '=',
                 ),
@@ -901,7 +901,7 @@ class Reservations
             $reservation_id = $this->reservation_id;
         }
         // Get the customer post ID from the reservation's meta data
-        $customer_post_id = get_post_meta($reservation_id, 'atollmatrix_customer_id', true);
+        $customer_post_id = get_post_meta($reservation_id, 'staylodgic_customer_id', true);
 
         if ($customer_post_id) {
             // Check if the customer post exists
@@ -915,7 +915,7 @@ class Reservations
             // If customer post doesn't exist, retrieve customer name from reservation post
             $reservation_post = get_post($reservation_id);
             if ($reservation_post) {
-                $customer_name = get_post_meta($reservation_id, 'atollmatrix_full_name', true);
+                $customer_name = get_post_meta($reservation_id, 'staylodgic_full_name', true);
                 if (!empty($customer_name)) {
                     return $customer_name;
                 }
@@ -930,7 +930,7 @@ class Reservations
     {
 
         // Get room id from post meta
-        $room_id = get_post_meta($reservation_id, 'atollmatrix_room_id', true);
+        $room_id = get_post_meta($reservation_id, 'staylodgic_room_id', true);
 
         // If room id exists, get the room's post title
         if ($room_id) {
@@ -958,7 +958,7 @@ class Reservations
 
         $reserved_room_count = $this->countReservationsForDay($room_id = $roomId, $day = $dateString, $excluded_reservation_id);
 
-        $max_count        = \AtollMatrix\Rooms::getMaxQuantityForRoom($roomId, $dateString);
+        $max_count        = \Staylodgic\Rooms::getMaxQuantityForRoom($roomId, $dateString);
         $avaiblable_count = $max_count - $reserved_room_count;
         if (empty($avaiblable_count) || !isset($avaiblable_count)) {
             $avaiblable_count = 0;
@@ -1009,7 +1009,7 @@ class Reservations
         $dailyRoomAvailability = array();
     
         // Query all rooms
-        $room_list = \AtollMatrix\Rooms::queryRooms();
+        $room_list = \Staylodgic\Rooms::queryRooms();
     
         // Initialize the array for each date in the range
         foreach ($daterange as $date) {
@@ -1027,8 +1027,8 @@ class Reservations
                 $adjusted_date->modify('-1 day');
                 $adjusted_date_string = $adjusted_date->format("Y-m-d");
 
-                //$max_room_count = \AtollMatrix\Rooms::getMaxQuantityForRoom($room->ID, $date_string);
-                $reservation_instance = new \AtollMatrix\Reservations( $date_string, $room->ID );
+                //$max_room_count = \Staylodgic\Rooms::getMaxQuantityForRoom($room->ID, $date_string);
+                $reservation_instance = new \Staylodgic\Reservations( $date_string, $room->ID );
                 $remaining_rooms      = $reservation_instance->remainingRooms_For_Day();
                 error_log( '-------------------- Fully booked percent check');
                 error_log( $room->ID );
@@ -1060,7 +1060,7 @@ class Reservations
     
         $room_availablity = array();
     
-        $room_list = \AtollMatrix\Rooms::queryRooms();
+        $room_list = \Staylodgic\Rooms::queryRooms();
     
         $count = 0;
     
@@ -1120,7 +1120,7 @@ class Reservations
             $reservation_id = $this->reservation_id;
         }
         // Get the reservation status for the reservation
-        $reservation_status = get_post_meta($reservation_id, 'atollmatrix_reservation_status', true);
+        $reservation_status = get_post_meta($reservation_id, 'staylodgic_reservation_status', true);
 
         if ('confirmed' == $reservation_status) {
             return true;
@@ -1141,7 +1141,7 @@ class Reservations
             $dateString = $this->date;
         }
 
-        $max_count = \AtollMatrix\Rooms::getMaxQuantityForRoom($room_id, $dateString);
+        $max_count = \Staylodgic\Rooms::getMaxQuantityForRoom($room_id, $dateString);
         return $max_count;
     }
 
@@ -1160,7 +1160,7 @@ class Reservations
 
         $reserved_room_count = $this->countReservationsForDay($room_id, $dateString, $excluded_reservation_id);
 
-        $max_count        = \AtollMatrix\Rooms::getMaxQuantityForRoom($room_id, $dateString);
+        $max_count        = \Staylodgic\Rooms::getMaxQuantityForRoom($room_id, $dateString);
         $avaiblable_count = $max_count - $reserved_room_count;
         if (empty($avaiblable_count) || !isset($avaiblable_count)) {
             $avaiblable_count = 0;
@@ -1198,11 +1198,11 @@ class Reservations
                 $reservedRooms[  ] = get_the_ID();
                 $reservation_id    = get_the_ID();
                 $custom            = get_post_custom(get_the_ID());
-                if (isset($custom[ 'atollmatrix_reservation_checkin' ][ 0 ])) {
-                    $dateRangeValue = $custom[ 'atollmatrix_reservation_checkin' ][ 0 ];
+                if (isset($custom[ 'staylodgic_reservation_checkin' ][ 0 ])) {
+                    $dateRangeValue = $custom[ 'staylodgic_reservation_checkin' ][ 0 ];
                 }
-                if (isset($custom[ 'atollmatrix_room_id' ][ 0 ])) {
-                    $post_room_id = $custom[ 'atollmatrix_room_id' ][ 0 ];
+                if (isset($custom[ 'staylodgic_room_id' ][ 0 ])) {
+                    $post_room_id = $custom[ 'staylodgic_room_id' ][ 0 ];
                 }
 
                 // Date will be like so $dateRangeValue = "2023-05-21 to 2023-05-24";
@@ -1210,11 +1210,11 @@ class Reservations
 
                 $checkin  = '';
                 $checkout = '';
-                if (isset($custom[ 'atollmatrix_checkin_date' ][ 0 ])) {
-                    $checkin = $custom[ 'atollmatrix_checkin_date' ][ 0 ];
+                if (isset($custom[ 'staylodgic_checkin_date' ][ 0 ])) {
+                    $checkin = $custom[ 'staylodgic_checkin_date' ][ 0 ];
                 }
-                if (isset($custom[ 'atollmatrix_checkout_date' ][ 0 ])) {
-                    $checkout = $custom[ 'atollmatrix_checkout_date' ][ 0 ];
+                if (isset($custom[ 'staylodgic_checkout_date' ][ 0 ])) {
+                    $checkout = $custom[ 'staylodgic_checkout_date' ][ 0 ];
                 }
                 //echo '----->'.$checkin.'<-----';
                 // if (count($dateRangeParts) >= 2) {
@@ -1276,7 +1276,7 @@ class Reservations
             $reservation_id = $this->reservation_id;
         }
         // Get the booking number from the reservation post meta
-        $booking_number = get_post_meta($reservation_id, 'atollmatrix_booking_number', true);
+        $booking_number = get_post_meta($reservation_id, 'staylodgic_booking_number', true);
 
         if (!$booking_number) {
             // Handle error if booking number not found
@@ -1296,7 +1296,7 @@ class Reservations
             $reservation_id = $this->reservation_id;
         }
         // Get the booking number from the reservation post meta
-        $booking_number = get_post_meta($reservation_id, 'atollmatrix_booking_number', true);
+        $booking_number = get_post_meta($reservation_id, 'staylodgic_booking_number', true);
 
         if (!$booking_number) {
             // Handle error if booking number not found
@@ -1352,7 +1352,7 @@ class Reservations
         $reservationid   = $_POST[ 'reservationid' ];
         $available_rooms = array();
 
-        $room_list = \AtollMatrix\Rooms::queryRooms();
+        $room_list = \Staylodgic\Rooms::queryRooms();
 
         foreach ($room_list as $room) {
             $is_fullybooked = $this->isRoom_Fullybooked_For_DateRange($room->ID, $checkin_date, $checkout_date, $reservation_id = $reservationid);
@@ -1369,4 +1369,4 @@ class Reservations
 
 }
 
-$instance = new \AtollMatrix\Reservations();
+$instance = new \Staylodgic\Reservations();

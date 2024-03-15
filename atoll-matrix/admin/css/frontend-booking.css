@@ -1,4 +1,8 @@
-.atollmatrix-content {
+.flatpickr-calendar .flatpickr-month {
+	height: 32px;
+}
+
+.staylodgic-content {
 	max-width: 645px;
 	margin: 0 auto;
 }
@@ -163,7 +167,7 @@
 }
 
 .room-occupied-group.room-selected {
-	box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12), 0 3px 5px -1px rgba(0, 0, 0, 0.2);
+	box-shadow: 0 6px 10px 0 rgba(188, 246, 255, 0.14), 0 1px 18px 0 rgba(160, 255, 255, 0.12), 0 3px 5px -1px rgba(1, 160, 255, 0.2)
 }
 
 #booking-summary-wrap {
@@ -673,7 +677,7 @@
 	font-weight: 400;
 }
 
-#atollmatrix_reservation_room_adults_wrap {
+#staylodgic_reservation_room_adults_wrap {
 	margin-bottom: 10px;
 }
 
@@ -759,7 +763,7 @@
 	/* Center align items vertically */
 }
 
-.atollmatrix-content .form-floating > .form-control {
+.staylodgic-content .form-floating > .form-control {
 	transition: none;
 }
 .front-booking-number-container,
@@ -788,12 +792,12 @@
 	/* Change the color as needed */
 }
 
-#atollmatrix_reservation_room_children_wrap,
-#atollmatrix_reservation_room_adults_wrap {
+#staylodgic_reservation_room_children_wrap,
+#staylodgic_reservation_room_adults_wrap {
 	user-select: none;
 }
 
-.atollmatrix_reservation_room_guests_wrap {
+.staylodgic_reservation_room_guests_wrap {
 	display: flex;
 	flex-direction: column;
 	gap: 15px;
@@ -810,11 +814,11 @@
 	z-index: 1;
 }
 
-.atollmatrix_reservation_room_guests_wrap.hidden {
+.staylodgic_reservation_room_guests_wrap.hidden {
 	display: none;
 }
 
-#atollmatrix_reservation_room_children_wrap {
+#staylodgic_reservation_room_children_wrap {
 	margin-bottom: 14px;
 }
 
@@ -858,7 +862,7 @@
 	position: relative;
 }
 
-.atollmatrix_reservation_room_guests_wrap #guest-age input {
+.staylodgic_reservation_room_guests_wrap #guest-age input {
 	border: 2px solid #000;
 	transition: 0.3s border-color;
 	border-radius: 4px;
@@ -896,7 +900,7 @@
 	opacity: 0;
 	z-index: -1;
 }
-.atollmatrix-activity-booking .atollmatrix_reservation_room_guests_wrap {
+.staylodgic-activity-booking .staylodgic_reservation_room_guests_wrap {
 	top: 65px;
 }
 .consent-notice {

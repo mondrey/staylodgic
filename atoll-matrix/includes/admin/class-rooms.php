@@ -1,6 +1,6 @@
 <?php
 
-namespace AtollMatrix;
+namespace Staylodgic;
 
 class Rooms
 {
@@ -16,11 +16,20 @@ class Rooms
         add_action('wp_ajax_nopriv_update_RoomRate', array($this, 'update_RoomRate'));
     }
 
+    public static function hasRooms() {
+        $roomlist = [];
+        $rooms = self::queryRooms(); // Call queryRooms() method here
+        if ( $rooms ) {
+            return true;
+        }
+        return false;
+    }
+
     public static function queryRooms()
     {
         $rooms = get_posts(
             array(
-                'post_type' => 'atmx_room',
+                'post_type' => 'slgc_room',
                 'orderby' => 'title',
                 'numberposts' => -1,
                 'order' => 'ASC',
@@ -68,7 +77,7 @@ class Rooms
 
         $quantityArray = get_post_meta($room_id, 'quantity_array', true);
 
-        // $reservation_instance = new \AtollMatrix\Reservations($dateString, $room_id);
+        // $reservation_instance = new \Staylodgic\Reservations($dateString, $room_id);
         // $remaining = $reservation_instance->getDirectRemainingRoomCount( $dateString, $room_id );
 
         // Check if the quantity_array exists and the date is available
@@ -190,7 +199,7 @@ class Rooms
         $daterange = new \DatePeriod($start, $interval, $end);
 
         $rates_daterange = array();
-        $roomrate_instance = new \AtollMatrix\Rates();
+        $roomrate_instance = new \Staylodgic\Rates();
 
         $total_rate = 0;
 
@@ -219,24 +228,24 @@ class Rooms
 
 
         $room_data = get_post_custom($room_id);
-        if (isset($room_data["atollmatrix_max_adult_limit_status"][0])) {
-            $adult_limit_status = $room_data["atollmatrix_max_adult_limit_status"][0];
+        if (isset($room_data["staylodgic_max_adult_limit_status"][0])) {
+            $adult_limit_status = $room_data["staylodgic_max_adult_limit_status"][0];
             if ('1' == $adult_limit_status) {
-                $max_adults = $room_data["atollmatrix_max_adults"][0];
+                $max_adults = $room_data["staylodgic_max_adults"][0];
             } else {
                 $max_adults = '999';
             }
         }
-        if (isset($room_data["atollmatrix_max_children_limit_status"][0])) {
-            $children_limit_status = $room_data["atollmatrix_max_children_limit_status"][0];
+        if (isset($room_data["staylodgic_max_children_limit_status"][0])) {
+            $children_limit_status = $room_data["staylodgic_max_children_limit_status"][0];
             if ('1' == $children_limit_status) {
-                $max_children = $room_data["atollmatrix_max_children"][0];
+                $max_children = $room_data["staylodgic_max_children"][0];
             } else {
                 $max_children = '999';
             }
         }
-        if (isset($room_data["atollmatrix_max_guests"][0])) {
-            $max_guests = $room_data["atollmatrix_max_guests"][0];
+        if (isset($room_data["staylodgic_max_guests"][0])) {
+            $max_guests = $room_data["staylodgic_max_guests"][0];
         }
 
         $can_occomodate['adults']   = $max_adults;
@@ -281,10 +290,10 @@ class Rooms
     public function getMaxRoom_QTY_ForDay($roomId, $dateString, $excluded_reservation_id = null)
     {
 
-        $reservation_instance = new \AtollMatrix\Reservations($dateString, $roomId, $reservation_id = false, $excluded_reservation_id);
+        $reservation_instance = new \Staylodgic\Reservations($dateString, $roomId, $reservation_id = false, $excluded_reservation_id);
         $reserved_room_count = $reservation_instance->countReservationsForDay();
 
-        $max_count = \AtollMatrix\Rooms::getMaxQuantityForRoom($roomId, $dateString);
+        $max_count = \Staylodgic\Rooms::getMaxQuantityForRoom($roomId, $dateString);
         $avaiblable_count = $max_count - $reserved_room_count;
         if (empty($avaiblable_count) || !isset($avaiblable_count)) {
             $avaiblable_count = 0;
@@ -296,7 +305,7 @@ class Rooms
     {
 
         // Verify the nonce
-        if (!isset($_POST[ 'atollmatrix_availabilitycalendar_nonce' ]) || !check_admin_referer('atollmatrix-availabilitycalendar-nonce', 'atollmatrix_availabilitycalendar_nonce')) {
+        if (!isset($_POST[ 'staylodgic_availabilitycalendar_nonce' ]) || !check_admin_referer('staylodgic-availabilitycalendar-nonce', 'staylodgic_availabilitycalendar_nonce')) {
             // Nonce verification failed; handle the error or reject the request
             // For example, you can return an error response
             wp_send_json_error([ 'message' => 'Failed' ]);
@@ -380,19 +389,19 @@ class Rooms
         }
 
         // Generate an array of dates between the start and end dates
-        $dateRange = \AtollMatrix\Common::create_inBetween_DateRange_Array($startDate, $endDate);
+        $dateRange = \Staylodgic\Common::create_inBetween_DateRange_Array($startDate, $endDate);
 
         // Update the quantity values for the specified date range
         foreach ($dateRange as $date) {
 
-            $reservation_instance = new \AtollMatrix\Reservations($date, $postID);
+            $reservation_instance = new \Staylodgic\Reservations($date, $postID);
             $reserved_rooms = $reservation_instance->calculateReservedRooms();
 
             $final_quantity = $quantity + $reserved_rooms;
             $quantityArray[$date] = $final_quantity;
         }
 
-        // Update the metadata for the 'atmx_reservations' post
+        // Update the metadata for the 'slgc_reservations' post
         if (!empty($postID) && is_numeric($postID)) {
             // Update the post meta with the modified quantity array
             update_post_meta($postID, 'quantity_array', $quantityArray);
@@ -422,7 +431,7 @@ class Rooms
     {
 
         // Verify the nonce
-        if (!isset($_POST[ 'atollmatrix_availabilitycalendar_nonce' ]) || !check_admin_referer('atollmatrix-availabilitycalendar-nonce', 'atollmatrix_availabilitycalendar_nonce')) {
+        if (!isset($_POST[ 'staylodgic_availabilitycalendar_nonce' ]) || !check_admin_referer('staylodgic-availabilitycalendar-nonce', 'staylodgic_availabilitycalendar_nonce')) {
             // Nonce verification failed; handle the error or reject the request
             // For example, you can return an error response
             wp_send_json_error([ 'message' => 'Failed' ]);
@@ -506,14 +515,14 @@ class Rooms
         }
 
         // Generate an array of dates between the start and end dates
-        $dateRange = \AtollMatrix\Common::create_inBetween_DateRange_Array($startDate, $endDate);
+        $dateRange = \Staylodgic\Common::create_inBetween_DateRange_Array($startDate, $endDate);
 
         // Update the quantity values for the specified date range
         foreach ($dateRange as $date) {
             $roomrateArray[$date] = $rate;
         }
 
-        // Update the metadata for the 'atmx_reservations' post
+        // Update the metadata for the 'slgc_reservations' post
         if (!empty($postID) && is_numeric($postID)) {
             // Update the post meta with the modified quantity array
             update_post_meta($postID, 'roomrate_array', $roomrateArray);
@@ -540,4 +549,4 @@ class Rooms
     }
 }
 
-$instance = new \AtollMatrix\Rooms();
+$instance = new \Staylodgic\Rooms();

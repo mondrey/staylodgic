@@ -1,5 +1,5 @@
 <?php
-namespace AtollMatrix;
+namespace Staylodgic;
 
 class FormGenerator
 {
@@ -107,11 +107,11 @@ class FormGenerator
             case 'select':
                 // [form_input type="select" id="mySelect" name="mySelect" class="form-control" value="option1" options="option1:Option 1,option2:Option 2,option3:Option 3"]
                 if ('countries' == $inputObject->target) {
-                    $options = atollmatrix_country_list('select', '');
+                    $options = staylodgic_country_list('select', '');
                 } else {
                     $options = $this->parseSelectOptions($inputObject->options ?? '');
                 }
-                $countries = atollmatrix_country_list('select-alt', '');
+                $countries = staylodgic_country_list('select-alt', '');
                 $options   = $this->parseSelectOptions($countries);
                 error_log(print_r($options, true));
                 echo "<select data-label='$label' data-id='$id' id='$id' name='$name' class='form-select' aria-label='Default select example'>";

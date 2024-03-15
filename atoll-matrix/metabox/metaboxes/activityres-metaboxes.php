@@ -1,9 +1,9 @@
 <?php
-function atollmatrix_activityres_metadata()
+function staylodgic_activityres_metadata()
 {
-    $atollmatrix_imagepath = plugin_dir_url(__FILE__) . 'assets/images/';
+    $staylodgic_imagepath = plugin_dir_url(__FILE__) . 'assets/images/';
 
-    $atollmatrix_sidebar_options = atollmatrix_generate_sidebarlist('activityres');
+    $staylodgic_sidebar_options = staylodgic_generate_sidebarlist('activityres');
 
     // Pull all the Featured into an array
     $bg_slideshow_pages = get_posts('post_type=fullscreen&orderby=title&numberposts=-1&order=ASC');
@@ -25,7 +25,7 @@ function atollmatrix_activityres_metadata()
         $options_bgslideshow[ 0 ] = "Featured pages not found.";
     }
 
-    $room_names = get_posts('post_type=atmx_room&orderby=title&numberposts=-1&order=ASC');
+    $room_names = get_posts('post_type=slgc_room&orderby=title&numberposts=-1&order=ASC');
 
     if ($room_names) {
         $options_room_names[ 'none' ] = "Not Selected";
@@ -44,26 +44,26 @@ function atollmatrix_activityres_metadata()
 
     $activityres_box = array(
         'id'       => 'activityresmeta-box',
-        'title'    => esc_html__('activityres Metabox', 'atollmatrix'),
+        'title'    => esc_html__('activityres Metabox', 'staylodgic'),
         'page'     => 'page',
         'context'  => 'normal',
         'priority' => 'core',
         'fields'   => array(
             array(
-                'name'         => esc_html__('Reservation Settings', 'atollmatrix'),
-                'id'           => 'atollmatrix_activityres_section_id',
+                'name'         => esc_html__('Reservation Settings', 'staylodgic'),
+                'id'           => 'staylodgic_activityres_section_id',
                 'type'         => 'break',
-                'sectiontitle' => esc_html__('activityres Settings', 'atollmatrix'),
+                'sectiontitle' => esc_html__('activityres Settings', 'staylodgic'),
                 'std'          => '',
             ),
             array(
-                'name' => esc_html__('Reservation', 'atollmatrix'),
-                'id'   => 'atollmatrix_sep_page_options',
+                'name' => esc_html__('Reservation', 'staylodgic'),
+                'id'   => 'staylodgic_sep_page_options',
                 'type' => 'seperator',
             ),
             array(
                 'name'    => 'Booking Number',
-                'id'      => 'atollmatrix_booking_number',
+                'id'      => 'staylodgic_booking_number',
                 'type'    => 'readonly',
                 'class'   => 'reservation_number_box',
                 'heading' => 'subhead',
@@ -71,8 +71,8 @@ function atollmatrix_activityres_metadata()
                 'std'     => $booking_number,
             ),
             array(
-                'name'    => esc_html__('Reservation', 'atollmatrix'),
-                'id'      => 'atollmatrix_reservation_checkin',
+                'name'    => esc_html__('Reservation', 'staylodgic'),
+                'id'      => 'staylodgic_reservation_checkin',
                 'type'    => 'activity_reservation',
                 'class'   => 'activity_reservation_date',
                 'heading' => 'subhead',
@@ -81,16 +81,16 @@ function atollmatrix_activityres_metadata()
             ),
             array(
                 'name'    => '',
-                'id'      => 'atollmatrix_booking_channel',
+                'id'      => 'staylodgic_booking_channel',
                 'type'    => 'offview',
                 'class'   => 'textsmall',
                 'heading' => 'subhead',
                 'desc'    => '',
-                'std'     => 'Admin: Atollmatrix',
+                'std'     => 'Admin: Staylodgic',
             ),
             array(
                 'name'    => '',
-                'id'      => 'atollmatrix_checkin_date',
+                'id'      => 'staylodgic_checkin_date',
                 'type'    => 'offview',
                 'class'   => 'textsmall',
                 'heading' => 'subhead',
@@ -99,7 +99,7 @@ function atollmatrix_activityres_metadata()
             ),
             array(
                 'name'    => '',
-                'id'      => 'atollmatrix_activity_id',
+                'id'      => 'staylodgic_activity_id',
                 'type'    => 'offview_display_ticket_result',
                 'page_id'      => $reservation_id,
                 'display_by_id' => 'activity_names',
@@ -110,7 +110,7 @@ function atollmatrix_activityres_metadata()
             ),
             array(
                 'name'    => '',
-                'id'      => 'atollmatrix_activity_list',
+                'id'      => 'staylodgic_activity_list',
                 'type'    => 'activity_list_generate',
                 'page_id'      => $reservation_id,
                 'class'   => 'textsmall',
@@ -120,7 +120,7 @@ function atollmatrix_activityres_metadata()
             ),
             array(
                 'name'    => '',
-                'id'      => 'atollmatrix_activity_time',
+                'id'      => 'staylodgic_activity_time',
                 'type'    => 'offview',
                 'class'   => 'textsmall',
                 'heading' => 'subhead',
@@ -128,45 +128,45 @@ function atollmatrix_activityres_metadata()
                 'std'     => '',
             ),
             array(
-                'name'    => esc_html__('Reservation Status', 'atollmatrix'),
-                'id'      => 'atollmatrix_reservation_status',
+                'name'    => esc_html__('Reservation Status', 'staylodgic'),
+                'id'      => 'staylodgic_reservation_status',
                 'class'   => 'reservation_status',
                 'type'    => 'select',
-                'desc'    => esc_html__('Reservation Status', 'atollmatrix'),
-                'options' => atollmatrix_get_booking_statuses(),
+                'desc'    => esc_html__('Reservation Status', 'staylodgic'),
+                'options' => staylodgic_get_booking_statuses(),
             ),
             array(
-                'name'    => esc_html__('Reservation Sub Status', 'atollmatrix'),
-                'id'      => 'atollmatrix_reservation_substatus',
+                'name'    => esc_html__('Reservation Sub Status', 'staylodgic'),
+                'id'      => 'staylodgic_reservation_substatus',
                 'class'   => 'reservation_status',
                 'type'    => 'select',
-                'desc'    => esc_html__('Reservation Sub Status', 'atollmatrix'),
-                'options' => atollmatrix_get_booking_substatuses(),
+                'desc'    => esc_html__('Reservation Sub Status', 'staylodgic'),
+                'options' => staylodgic_get_booking_substatuses(),
             ),
             array(
                 'name'     => 'Per Person Rate',
-                'id'       => 'atollmatrix_reservation_rate_per_person',
+                'id'       => 'staylodgic_reservation_rate_per_person',
                 'type'     => 'currency',
                 'class'    => 'textsmall',
                 'group'    => 'group',
                 'datatype' => 'activityperperson',
-                'desc'     => esc_html__('Per night price', 'atollmatrix'),
+                'desc'     => esc_html__('Per night price', 'staylodgic'),
                 'std'      => '',
             ),
             array(
                 'name'     => '',
-                'id'       => 'atollmatrix_reservation_subtotal_activity_cost',
+                'id'       => 'staylodgic_reservation_subtotal_activity_cost',
                 'type'     => 'currency',
                 'class'    => 'textsmall',
                 'heading'  => 'subhead',
                 'group'    => 'group',
                 'datatype' => 'activitysubtotal',
-                'desc'     => esc_html__('Subtotal', 'atollmatrix'),
+                'desc'     => esc_html__('Subtotal', 'staylodgic'),
                 'std'      => '',
             ),
             array(
                 'name'    => '',
-                'id'      => 'atollmatrix_activity_tax',
+                'id'      => 'staylodgic_activity_tax',
                 'page_id'      => $reservation_id,
                 'type'    => 'taxgenerate',
                 'class'   => 'textsmall',
@@ -176,19 +176,19 @@ function atollmatrix_activityres_metadata()
             ),
             array(
                 'name'     => '',
-                'id'       => 'atollmatrix_reservation_total_room_cost',
+                'id'       => 'staylodgic_reservation_total_room_cost',
                 'type'     => 'currency',
                 'inputis'  => 'readonly',
                 'class'    => 'reservation_total',
                 'heading'  => 'subhead',
                 'group'    => 'group',
                 'datatype' => 'activitytotal',
-                'desc'     => esc_html__('Total', 'atollmatrix'),
+                'desc'     => esc_html__('Total', 'staylodgic'),
                 'std'      => '',
             ),
             array(
                 'name'     => 'Payments',
-                'id'       => 'atollmatrix_reservation_room_paid',
+                'id'       => 'staylodgic_reservation_room_paid',
                 'type'     => 'currencyarray',
                 'class'    => 'reservation_meals',
                 'heading'  => 'subhead',
@@ -198,31 +198,31 @@ function atollmatrix_activityres_metadata()
                 'std'      => '',
             ),
             array(
-                'name' => __('Notes', 'atollmatrix'),
-                'id'   => 'atollmatrix_reservation_notes',
+                'name' => __('Notes', 'staylodgic'),
+                'id'   => 'staylodgic_reservation_notes',
                 'type' => 'textarea',
-                'desc' => __('Notes.', 'atollmatrix'),
+                'desc' => __('Notes.', 'staylodgic'),
                 'std'  => '',
             ),
             array(
-                'name'         => esc_html__('Page Settings', 'atollmatrix'),
-                'id'           => 'atollmatrix_page_section_id',
+                'name'         => esc_html__('Page Settings', 'staylodgic'),
+                'id'           => 'staylodgic_page_section_id',
                 'type'         => 'break',
-                'sectiontitle' => esc_html__('Page Settings', 'atollmatrix'),
+                'sectiontitle' => esc_html__('Page Settings', 'staylodgic'),
                 'std'          => '',
             ),
             array(
-                'name' => esc_html__('Guest Information', 'atollmatrix'),
-                'id'   => 'atollmatrix_sep_page_options',
+                'name' => esc_html__('Guest Information', 'staylodgic'),
+                'id'   => 'staylodgic_sep_page_options',
                 'type' => 'seperator',
             ),
             array(
                 'name'     => 'Adults',
-                'id'       => 'atollmatrix_reservation_activity_adults',
+                'id'       => 'staylodgic_reservation_activity_adults',
                 'type'     => 'guests',
                 'occupant' => 'adult',
                 'datafrom' => 'roomtype',
-                'maxcap'   => 'atollmatrix_max_adults',
+                'maxcap'   => 'staylodgic_max_adults',
                 'min'      => '1',
                 'max'      => '9',
                 'step'     => '1',
@@ -234,7 +234,7 @@ function atollmatrix_activityres_metadata()
             ),
             array(
                 'name'     => 'Children',
-                'id'       => 'atollmatrix_reservation_activity_children',
+                'id'       => 'staylodgic_reservation_activity_children',
                 'type'     => 'guests',
                 'occupant' => 'child',
                 'datafrom' => 'roomtype',
@@ -242,41 +242,41 @@ function atollmatrix_activityres_metadata()
                 'max'      => '9',
                 'step'     => '1',
                 'unit'     => 'children',
-                'maxcap'   => 'atollmatrix_max_children',
+                'maxcap'   => 'staylodgic_max_children',
                 'class'    => 'reservation_guest',
                 'heading'  => 'subhead',
                 'desc'     => '',
                 'std'      => '0',
             ),
             array(
-                'name' => esc_html__('Registration', 'atollmatrix'),
-                'id'   => 'atollmatrix_sep_page_options',
+                'name' => esc_html__('Registration', 'staylodgic'),
+                'id'   => 'staylodgic_sep_page_options',
                 'type' => 'seperator',
             ),
             array(
-                'name'    => esc_html__('Customer', 'atollmatrix'),
-                'id'      => 'atollmatrix_customer_choice',
+                'name'    => esc_html__('Customer', 'staylodgic'),
+                'id'      => 'staylodgic_customer_choice',
                 'class'   => 'customer_choice',
                 'type'    => 'select',
-                'desc'    => esc_html__('Customer choice', 'atollmatrix'),
+                'desc'    => esc_html__('Customer choice', 'staylodgic'),
                 'options' => array(
-                    'new'      => esc_attr__('Create new from this post', 'atollmatrix'),
-                    'existing' => esc_attr__('Choose existing', 'atollmatrix'),
+                    'new'      => esc_attr__('Create new from this post', 'staylodgic'),
+                    'existing' => esc_attr__('Choose existing', 'staylodgic'),
                 ),
             ),
             array(
-                'name'    => esc_html__('Choose an existing customer', 'atollmatrix'),
-                'id'      => 'atollmatrix_existing_customer',
+                'name'    => esc_html__('Choose an existing customer', 'staylodgic'),
+                'id'      => 'staylodgic_existing_customer',
                 'class'   => 'metabox_existing_customers',
                 'type'    => 'select',
                 'target'  => 'existing_customers',
-                'desc'    => esc_html__('Choose an existing customer.', 'atollmatrix'),
+                'desc'    => esc_html__('Choose an existing customer.', 'staylodgic'),
                 'options' => '',
             ),
         ),
     );
 
-    $customer = atollmatrix_get_customer_array();
+    $customer = staylodgic_get_customer_array();
 
     $customer_datafetch = array(
         array(
@@ -290,7 +290,7 @@ function atollmatrix_activityres_metadata()
         ),
     );
 
-    $reservation_instance = new \AtollMatrix\Activity();
+    $reservation_instance = new \Staylodgic\Activity();
     if (!$reservation_instance->haveCustomer($reservation_id)) {
         $activityres_box[ 'fields' ] = array_merge($activityres_box[ 'fields' ], $customer);
     } else {
@@ -298,10 +298,10 @@ function atollmatrix_activityres_metadata()
     }
     return $activityres_box;
 }
-function atollmatrix_activityres_changelog()
+function staylodgic_activityres_changelog()
 {
 
-    $atollmatrix_activityres_changelog = array(
+    $staylodgic_activityres_changelog = array(
         'id'       => 'reservation-box-changelog',
         'title'    => 'Reservation Changelog',
         'page'     => 'page',
@@ -309,26 +309,26 @@ function atollmatrix_activityres_changelog()
         'priority' => 'high',
         'fields'   => array(
             array(
-                'name'    => esc_html__('', 'atollmatrix'),
-                'id'           => 'atollmatrix_changelog',
+                'name'    => esc_html__('', 'staylodgic'),
+                'id'           => 'staylodgic_changelog',
                 'type'         => 'changelog',
                 'std'          => '',
             ),
         ),
     );
-    return $atollmatrix_activityres_changelog;
+    return $staylodgic_activityres_changelog;
 }
 /*
  * Meta options for activityres post type
  */
-function atollmatrix_activityresitem_metaoptions()
+function staylodgic_activityresitem_metaoptions()
 {
-    $activityres_box = atollmatrix_activityres_metadata();
-    atollmatrix_generate_metaboxes($activityres_box, get_the_id());
+    $activityres_box = staylodgic_activityres_metadata();
+    staylodgic_generate_metaboxes($activityres_box, get_the_id());
 }
-function atollmatrix_activityresitem_changelog()
+function staylodgic_activityresitem_changelog()
 {
-    $atollmatrix_activityres_changelog = atollmatrix_activityres_changelog();
-    atollmatrix_generate_metaboxes($atollmatrix_activityres_changelog, get_the_id());
+    $staylodgic_activityres_changelog = staylodgic_activityres_changelog();
+    staylodgic_generate_metaboxes($staylodgic_activityres_changelog, get_the_id());
 }
 

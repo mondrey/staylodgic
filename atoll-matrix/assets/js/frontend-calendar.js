@@ -8,7 +8,7 @@
 	
 			// Retrieve the booking number
 			var bookingNumber = $('#booking_number').val();
-			var atollmatrix_bookingdetails_nonce = $('input[name="atollmatrix_bookingdetails_nonce"]').val();
+			var staylodgic_bookingdetails_nonce = $('input[name="staylodgic_bookingdetails_nonce"]').val();
 
 			var requestType = $(this).data('request');
 
@@ -29,7 +29,7 @@
 					data: {
 						action: 'requestRegistrationDetails', // Replace with your actual action hook
 						booking_number: bookingNumber,
-						atollmatrix_bookingdetails_nonce: atollmatrix_bookingdetails_nonce
+						staylodgic_bookingdetails_nonce: staylodgic_bookingdetails_nonce
 					},
 					success: function(response) {
 						// Display the booking details
@@ -53,7 +53,7 @@
 					data: {
 						action: 'getBookingDetails', // Replace with your actual action hook
 						booking_number: bookingNumber,
-						atollmatrix_bookingdetails_nonce: atollmatrix_bookingdetails_nonce
+						staylodgic_bookingdetails_nonce: staylodgic_bookingdetails_nonce
 					},
 					success: function(response) {
 						// Display the booking details
@@ -81,7 +81,7 @@
 			var mealPlanInput = $("input[name='room[" + roomId + "][meal_plan][optional]']:checked");
 			var mealPlan = mealPlanInput.val();
 			var mealPlanPrice = mealPlanInput.data('mealprice');
-			var atollmatrix_searchbox_nonce = $('input[name="atollmatrix_searchbox_nonce"]').val();
+			var staylodgic_searchbox_nonce = $('input[name="staylodgic_searchbox_nonce"]').val();
 			console.log('Got:' + bookingnumber);
 
 			var dataToSend = {
@@ -92,7 +92,7 @@
 				bed_layout: bedLayout,
 				meal_plan: mealPlan,
 				meal_plan_price: mealPlanPrice,
-				atollmatrix_searchbox_nonce: atollmatrix_searchbox_nonce
+				staylodgic_searchbox_nonce: staylodgic_searchbox_nonce
 			};
 
 			$.ajax({
@@ -147,7 +147,7 @@
 			$('.room-occupied-group').removeClass('room-selected');
 			roomOccupiedGroup.addClass('room-selected');
 
-			var atollmatrix_roomlistingbox_nonce = $('input[name="atollmatrix_roomlistingbox_nonce"]').val();
+			var staylodgic_roomlistingbox_nonce = $('input[name="staylodgic_roomlistingbox_nonce"]').val();
 			var bookingnumber = $('#reservation-data').data('bookingnumber');
 			var roomId = roomOccupiedGroup.data('room-id');
 			var roomPriceTotal = roomOccupiedGroup.find('.room-price-total').data('roomprice');
@@ -165,7 +165,7 @@
 				bed_layout: bedLayout,
 				meal_plan: mealPlan,
 				meal_plan_price: mealPlanPrice,
-				atollmatrix_roomlistingbox_nonce: atollmatrix_roomlistingbox_nonce
+				staylodgic_roomlistingbox_nonce: staylodgic_roomlistingbox_nonce
 			};
 
 			$.ajax({
@@ -330,7 +330,7 @@
 
 		function setupGuestsContainer() {
 			var guestsContainer = $('.front-booking-guests-container');
-			var guestsWrap = $('.atollmatrix_reservation_room_guests_wrap');
+			var guestsWrap = $('.staylodgic_reservation_room_guests_wrap');
 
 			// Hide guestsWrap initially
 			guestsWrap.addClass('hidden');
@@ -358,7 +358,7 @@
 
 			// Hide guestsWrap when clicking outside of it
 			$(document).on('click', function (event) {
-				if (!$(event.target).closest('.atollmatrix_reservation_room_guests_wrap').length) {
+				if (!$(event.target).closest('.staylodgic_reservation_room_guests_wrap').length) {
 					// If the click was outside the guestsWrap, fade it out
 					fadeOutGuestsWrap();
 				}
@@ -559,7 +559,7 @@
 					var bookingNumber = $('#booking-number').val();
 					var numberOfAdults = $('#number-of-adults').val();
 					var numberOfChildren = $('#number-of-children').val();
-					var atollmatrix_searchbox_nonce = $('input[name="atollmatrix_searchbox_nonce"]').val();
+					var staylodgic_searchbox_nonce = $('input[name="staylodgic_searchbox_nonce"]').val();
 
 					var childrenAge = [];
 
@@ -578,7 +578,7 @@
 							number_of_adults: numberOfAdults,
 							number_of_children: numberOfChildren,
 							children_age: childrenAge,
-							atollmatrix_searchbox_nonce: atollmatrix_searchbox_nonce
+							staylodgic_searchbox_nonce: staylodgic_searchbox_nonce
 						},
 						success: function (response) {
 
@@ -631,7 +631,7 @@
 				return; // Do not proceed to AJAX if validation fails
 			}
 
-			var atollmatrix_roomlistingbox_nonce = $('input[name="atollmatrix_roomlistingbox_nonce"]').val();
+			var staylodgic_roomlistingbox_nonce = $('input[name="staylodgic_roomlistingbox_nonce"]').val();
 			let data_booking_number = $('#reservation-data').data('bookingnumber');
 			console.log('booking-number:' + data_booking_number);
 
@@ -669,7 +669,7 @@
 					country: data_country,
 					guest_comment: data_guest_comment,
 					guest_consent: data_guest_consent,
-					atollmatrix_roomlistingbox_nonce: atollmatrix_roomlistingbox_nonce
+					staylodgic_roomlistingbox_nonce: staylodgic_roomlistingbox_nonce
 				},
 				success: function (response) {
 					// handle success
@@ -709,14 +709,14 @@
 		// Process Room Data
 		function processActivityData(activityChoice) {
 
-			var atollmatrix_roomlistingbox_nonce = $('input[name="atollmatrix_roomlistingbox_nonce"]').val();
+			var staylodgic_roomlistingbox_nonce = $('input[name="staylodgic_roomlistingbox_nonce"]').val();
 			var bookingnumber = $('#activity-data').data('bookingnumber');
 			var activityId = activityChoice.find('.time-choice').data('activity');
 			var activityDate = $('#activity-data').data('checkin');
 			var activityTime = activityChoice.find('.time-choice').data('time');
 			var activityPriceTotal = activityChoice.find('.activity-rate').data('activityprice');
 
-			console.log( atollmatrix_roomlistingbox_nonce, bookingnumber, activityId, activityDate, activityTime, activityPriceTotal );
+			console.log( staylodgic_roomlistingbox_nonce, bookingnumber, activityId, activityDate, activityTime, activityPriceTotal );
 
 			var dataToSend = {
 				action: 'process_SelectedActivity',
@@ -725,7 +725,7 @@
 				activity_date: activityDate,
 				activity_time: activityTime,
 				activity_price: activityPriceTotal,
-				atollmatrix_roomlistingbox_nonce: atollmatrix_roomlistingbox_nonce
+				staylodgic_roomlistingbox_nonce: staylodgic_roomlistingbox_nonce
 			};
 
 			$.ajax({
@@ -763,7 +763,7 @@
 			var bookingNumber = $('#booking-number').val();
 			var numberOfAdults = $('#number-of-adults').val();
 			var numberOfChildren = $('#number-of-children').val();
-			var atollmatrix_searchbox_nonce = $('input[name="atollmatrix_searchbox_nonce"]').val();
+			var staylodgic_searchbox_nonce = $('input[name="staylodgic_searchbox_nonce"]').val();
 
 			var childrenAge = [];
 
@@ -781,7 +781,7 @@
 					number_of_adults: numberOfAdults,
 					number_of_children: numberOfChildren,
 					children_age: childrenAge,
-					atollmatrix_searchbox_nonce: atollmatrix_searchbox_nonce
+					staylodgic_searchbox_nonce: staylodgic_searchbox_nonce
 				},
 				success: function (response) {
 
@@ -811,7 +811,7 @@
 				return; // Do not proceed to AJAX if validation fails
 			}
 
-			var atollmatrix_roomlistingbox_nonce = $('input[name="atollmatrix_roomlistingbox_nonce"]').val();
+			var staylodgic_roomlistingbox_nonce = $('input[name="staylodgic_roomlistingbox_nonce"]').val();
 			let data_booking_number = $('#activity-data').data('bookingnumber');
 			console.log('booking-number:' + data_booking_number);
 
@@ -849,7 +849,7 @@
 					country: data_country,
 					guest_comment: data_guest_comment,
 					guest_consent: data_guest_consent,
-					atollmatrix_roomlistingbox_nonce: atollmatrix_roomlistingbox_nonce
+					staylodgic_roomlistingbox_nonce: staylodgic_roomlistingbox_nonce
 				},
 				success: function (response) {
 					// handle success

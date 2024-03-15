@@ -1,5 +1,5 @@
 <?php
-namespace AtollMatrix;
+namespace Staylodgic;
 
 class IcalExportProcessor
 {
@@ -25,7 +25,7 @@ class IcalExportProcessor
     public function add_booking_admin_menu()
     {
         add_submenu_page(
-            'atoll-matrix',
+            'staylodgic',
             // This is the slug of the parent menu
             'Export iCal Bookings',
             'Export iCal Bookings',
@@ -37,7 +37,7 @@ class IcalExportProcessor
 
     public function ical_export()
     {
-        // The HTML content of the 'Atoll Matrix' page goes here
+        // The HTML content of the 'Staylodgic' page goes here
         echo "<h1>Export ICS Calendar</h1>";
 
         echo "<form id='room_ical_form' method='post'>";
@@ -60,10 +60,10 @@ class IcalExportProcessor
         $ical = "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Your Company//Your Calendar//EN\r\n";
     
         foreach ($reservations as $reservation) {
-            $checkin_date = get_post_meta($reservation->ID, 'atollmatrix_checkin_date', true);
-            $checkout_date = get_post_meta($reservation->ID, 'atollmatrix_checkout_date', true);
-            $booking_number = get_post_meta($reservation->ID, 'atollmatrix_booking_number', true);
-            $reservation_status = get_post_meta($reservation->ID, 'atollmatrix_reservation_status', true);
+            $checkin_date = get_post_meta($reservation->ID, 'staylodgic_checkin_date', true);
+            $checkout_date = get_post_meta($reservation->ID, 'staylodgic_checkout_date', true);
+            $booking_number = get_post_meta($reservation->ID, 'staylodgic_booking_number', true);
+            $reservation_status = get_post_meta($reservation->ID, 'staylodgic_reservation_status', true);
     
             // Format dates for iCal
             $checkin_date_ical = $this->format_date_for_ical($checkin_date);
@@ -91,7 +91,7 @@ class IcalExportProcessor
     }
     
     public function download_reservations_ical($room_id) {
-        $reservation_instance = new \AtollMatrix\Reservations( $dateString = '', $room_id );
+        $reservation_instance = new \Staylodgic\Reservations( $dateString = '', $room_id );
         $reservations_query = $reservation_instance->getReservationsForRoom(false, false, false, false, $room_id);
         
         // Extract post objects from WP_Query

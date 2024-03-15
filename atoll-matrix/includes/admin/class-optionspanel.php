@@ -1,6 +1,6 @@
 <?php
 
-namespace AtollMatrix;
+namespace Staylodgic;
 
 class OptionsPanel
 {
@@ -52,8 +52,8 @@ class OptionsPanel
     {
         $this->args              = $args;
         $this->settings          = $settings;
-        $this->parent_page       = $this->args[ 'parent_page' ] ?? esc_html__('atoll-matrix', 'atollmatrix');
-        $this->title             = $this->args[ 'title' ] ?? esc_html__('Settings', 'atollmatrix');
+        $this->parent_page       = $this->args[ 'parent_page' ] ?? esc_html__('staylodgic', 'staylodgic');
+        $this->title             = $this->args[ 'title' ] ?? esc_html__('Settings', 'staylodgic');
         $this->slug              = $this->args[ 'slug' ] ?? sanitize_key($this->title);
         $this->option_name       = $this->args[ 'option_name' ] ?? sanitize_key($this->title);
         $this->option_group_name = $this->option_name . '_group';
@@ -63,13 +63,13 @@ class OptionsPanel
         add_action('admin_menu', [ $this, 'register_menu_page' ]);
         add_action('admin_init', [ $this, 'register_settings' ]);
         // Hook into admin_init to catch the form submission
-        add_action('admin_init', [ $this, 'atollmatrix_import_settings' ]);
+        add_action('admin_init', [ $this, 'staylodgic_import_settings' ]);
 
         add_action('admin_enqueue_scripts', [ $this, 'enqueue_media_uploader' ]);
 
     }
 
-    public function atollmatrix_import_settings() {
+    public function staylodgic_import_settings() {
         // Check if our nonce is set and verify it.
         if (
             isset($_POST['import_settings_nonce_field']) &&
@@ -118,13 +118,13 @@ class OptionsPanel
                     error_log( print_r( $sanitized_data, true ));
 
                     // Update the settings in the database
-                    update_option('atollmatrix_settings', $sanitized_data);
+                    update_option('staylodgic_settings', $sanitized_data);
 
                     // Optionally, add a message to show success or redirect back to the settings page
-                    add_settings_error('atollmatrix_settings', 'settings_updated', 'Settings imported successfully.', 'updated');
+                    add_settings_error('staylodgic_settings', 'settings_updated', 'Settings imported successfully.', 'updated');
                 } else {
                     // Handle error in case JSON is invalid
-                    add_settings_error('atollmatrix_settings', 'settings_error', 'Invalid JSON data provided.', 'error');
+                    add_settings_error('staylodgic_settings', 'settings_error', 'Invalid JSON data provided.', 'error');
                 }
             }
         }
@@ -160,7 +160,7 @@ class OptionsPanel
             // Security check, for example, check user permissions and nonces
     
             // Fetch all settings
-            $option_name = 'atollmatrix_settings'; // Replace with your actual option name
+            $option_name = 'staylodgic_settings'; // Replace with your actual option name
             $settings = get_option($option_name);
     
             // Encode settings to JSON
@@ -201,7 +201,7 @@ class OptionsPanel
             if (method_exists($this, $callback)) {
                 $tr_class = '';
                 if (array_key_exists('tab', $args)) {
-                    $tr_class .= 'atollmatrix-tab-item atollmatrix-tab-item--' . sanitize_html_class($args[ 'tab' ]);
+                    $tr_class .= 'staylodgic-tab-item staylodgic-tab-item--' . sanitize_html_class($args[ 'tab' ]);
                 }
                 add_settings_field(
                     $key,
@@ -351,11 +351,11 @@ class OptionsPanel
             add_settings_error(
                 $this->option_name . '_mesages',
                 $this->option_name . '_message',
-                esc_html__('Settings Saved', 'atollmatrix'),
+                esc_html__('Settings Saved', 'staylodgic'),
                 'updated'
             );
 
-            \AtollMatrix\Cache::clearAllCache();
+            \Staylodgic\Cache::clearAllCache();
         }
 
         settings_errors($this->option_name . '_mesages');
@@ -364,10 +364,10 @@ class OptionsPanel
         <div class="wrap">
             <h1><?php echo esc_html(get_admin_page_title()); ?></h1>
 
-            <div class="atollmatrix-tabform-wrapper">
+            <div class="staylodgic-tabform-wrapper">
             <?php $this->render_tabs();?>
-            <div class="atollmatrix-tab-content active" id="tab-property">
-            <form action="options.php" method="post" class="atollmatrix-options-form">
+            <div class="staylodgic-tab-content active" id="tab-property">
+            <form action="options.php" method="post" class="staylodgic-options-form">
                 <?php
 settings_fields($this->option_group_name);
         do_settings_sections($this->option_name);
@@ -388,9 +388,9 @@ settings_fields($this->option_group_name);
 echo '<button type="button" id="import-settings-button" class="button-secondary">Import Settings</button>';
 
 // Modal structure
-echo '<div id="import-settings-modal" class="atollmatrix-modal" style="display:none;">
-        <div class="atollmatrix-modal-content">
-            <span class="atollmatrix-close">&times;</span>
+echo '<div id="import-settings-modal" class="staylodgic-modal" style="display:none;">
+        <div class="staylodgic-modal-content">
+            <span class="staylodgic-close">&times;</span>
             <form id="import-settings-form" method="post">
                 ' . wp_nonce_field('import_settings_nonce', 'import_settings_nonce_field', true, false) . '
                 <textarea name="import_settings_data" rows="10" cols="50" placeholder="Paste JSON data here"></textarea>
@@ -412,16 +412,16 @@ protected function render_tabs()
 
     $tabs = $this->args['tabs'];
     ?>
-    <div class="nav-tab-wrapper atollmatrix-tabs">
-        <div class="atollmatrix-tabs-container">
+    <div class="nav-tab-wrapper staylodgic-tabs">
+        <div class="staylodgic-tabs-container">
             <?php
             $first_tab = true;
             // Example heading for a group of tabs
-            echo '<h3 class="atollmatrix-tab-heading">General Settings</h3>';
+            echo '<h3 class="staylodgic-tab-heading">General Settings</h3>';
             foreach ($tabs as $id => $label) {
                 // Example condition to add a heading before a specific tab
                 if ($id === 'general') {
-                    echo '<h3 class="atollmatrix-tab-heading">Hotel Settings</h3>';
+                    echo '<h3 class="staylodgic-tab-heading">Hotel Settings</h3>';
                 }
                 ?>
                 <a href="#" data-tab="<?php echo esc_attr($id); ?>" class="nav-tab<?php echo ($first_tab) ? ' nav-tab-active' : ''; ?>"><?php echo ucfirst($label); ?></a>
@@ -498,14 +498,14 @@ protected function render_tabs()
             id="<?php echo esc_attr($args[ 'label_for' ]); ?>_people"
             name="people"
             >
-            <option value="1"><?php _e('1', 'atollmatrix');?></option>
-            <option value="3"><?php _e('3', 'atollmatrix');?></option>
-            <option value="4"><?php _e('4', 'atollmatrix');?></option>
-            <option value="5"><?php _e('5', 'atollmatrix');?></option>
-            <option value="6"><?php _e('6', 'atollmatrix');?></option>
-            <option value="7"><?php _e('7', 'atollmatrix');?></option>
-            <option value="8"><?php _e('8', 'atollmatrix');?></option>
-            <option value="9"><?php _e('9', 'atollmatrix');?></option>
+            <option value="1"><?php _e('1', 'staylodgic');?></option>
+            <option value="3"><?php _e('3', 'staylodgic');?></option>
+            <option value="4"><?php _e('4', 'staylodgic');?></option>
+            <option value="5"><?php _e('5', 'staylodgic');?></option>
+            <option value="6"><?php _e('6', 'staylodgic');?></option>
+            <option value="7"><?php _e('7', 'staylodgic');?></option>
+            <option value="8"><?php _e('8', 'staylodgic');?></option>
+            <option value="9"><?php _e('9', 'staylodgic');?></option>
             </select>
             <input disabled
                 type="text"
@@ -516,15 +516,15 @@ protected function render_tabs()
             id="<?php echo esc_attr($args[ 'label_for' ]); ?>_type"
             name="type"
             >
-            <option value="fixed"><?php _e('Fixed', 'atollmatrix');?></option>
-            <option value="percentage"><?php _e('Percentage', 'atollmatrix');?></option>
+            <option value="fixed"><?php _e('Fixed', 'staylodgic');?></option>
+            <option value="percentage"><?php _e('Percentage', 'staylodgic');?></option>
             </select>
             <select disabled
             id="<?php echo esc_attr($args[ 'label_for' ]); ?>_total"
             name="total"
             >
-            <option value="increase"><?php _e('Increase', 'atollmatrix');?></option>
-            <option value="decrease"><?php _e('Decrease', 'atollmatrix');?></option>
+            <option value="increase"><?php _e('Increase', 'staylodgic');?></option>
+            <option value="decrease"><?php _e('Decrease', 'staylodgic');?></option>
             </select>
             <span class="remove-set-button"><i class="dashicons dashicons-remove"></i></span>
             <br/>
@@ -545,14 +545,14 @@ protected function render_tabs()
             id="<?php echo esc_attr($args[ 'label_for' ]); ?>_people_<?php echo $count; ?>"
             name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args[ 'label_for' ]); ?>][<?php echo $key; ?>][people]"
             >
-            <option value="1" <?php selected('1', $value[ 'people' ], true);?>><?php _e('1', 'atollmatrix');?></option>
-            <option value="3" <?php selected('3', $value[ 'people' ], true);?>><?php _e('3', 'atollmatrix');?></option>
-            <option value="4" <?php selected('4', $value[ 'people' ], true);?>><?php _e('4', 'atollmatrix');?></option>
-            <option value="5" <?php selected('5', $value[ 'people' ], true);?>><?php _e('5', 'atollmatrix');?></option>
-            <option value="6" <?php selected('6', $value[ 'people' ], true);?>><?php _e('6', 'atollmatrix');?></option>
-            <option value="7" <?php selected('7', $value[ 'people' ], true);?>><?php _e('7', 'atollmatrix');?></option>
-            <option value="8" <?php selected('8', $value[ 'people' ], true);?>><?php _e('8', 'atollmatrix');?></option>
-            <option value="9" <?php selected('9', $value[ 'people' ], true);?>><?php _e('9', 'atollmatrix');?></option>
+            <option value="1" <?php selected('1', $value[ 'people' ], true);?>><?php _e('1', 'staylodgic');?></option>
+            <option value="3" <?php selected('3', $value[ 'people' ], true);?>><?php _e('3', 'staylodgic');?></option>
+            <option value="4" <?php selected('4', $value[ 'people' ], true);?>><?php _e('4', 'staylodgic');?></option>
+            <option value="5" <?php selected('5', $value[ 'people' ], true);?>><?php _e('5', 'staylodgic');?></option>
+            <option value="6" <?php selected('6', $value[ 'people' ], true);?>><?php _e('6', 'staylodgic');?></option>
+            <option value="7" <?php selected('7', $value[ 'people' ], true);?>><?php _e('7', 'staylodgic');?></option>
+            <option value="8" <?php selected('8', $value[ 'people' ], true);?>><?php _e('8', 'staylodgic');?></option>
+            <option value="9" <?php selected('9', $value[ 'people' ], true);?>><?php _e('9', 'staylodgic');?></option>
             </select>
             <input
                 type="text"
@@ -565,16 +565,16 @@ protected function render_tabs()
             id="<?php echo esc_attr($args[ 'label_for' ]); ?>_type_<?php echo $count; ?>"
             name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args[ 'label_for' ]); ?>][<?php echo $key; ?>][type]"
             >
-            <option value="fixed" <?php selected('fixed', $value[ 'type' ], true);?>><?php _e('Fixed', 'atollmatrix');?></option>
-            <option value="percentage" <?php selected('percentage', $value[ 'type' ], true);?>><?php _e('Percentage', 'atollmatrix');?></option>
+            <option value="fixed" <?php selected('fixed', $value[ 'type' ], true);?>><?php _e('Fixed', 'staylodgic');?></option>
+            <option value="percentage" <?php selected('percentage', $value[ 'type' ], true);?>><?php _e('Percentage', 'staylodgic');?></option>
             </select>
             <select
             data-width="150"
             id="<?php echo esc_attr($args[ 'label_for' ]); ?>_total_<?php echo $count; ?>"
             name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args[ 'label_for' ]); ?>][<?php echo $key; ?>][total]"
             >
-            <option value="increase" <?php selected('increase', $value[ 'total' ], true);?>><?php _e('Increase', 'atollmatrix');?></option>
-            <option value="decrease" <?php selected('decrease', $value[ 'total' ], true);?>><?php _e('Decrease', 'atollmatrix');?></option>
+            <option value="increase" <?php selected('increase', $value[ 'total' ], true);?>><?php _e('Increase', 'staylodgic');?></option>
+            <option value="decrease" <?php selected('decrease', $value[ 'total' ], true);?>><?php _e('Decrease', 'staylodgic');?></option>
             </select>
             <span class="remove-set-button"><i class="dashicons dashicons-remove"></i></span>
             <br/>
@@ -585,7 +585,7 @@ protected function render_tabs()
         }
         ?>
         </div>
-        <button id="addperperson-repeatable"><?php _e('Add New Section', 'atollmatrix');?></button>
+        <button id="addperperson-repeatable"><?php _e('Add New Section', 'staylodgic');?></button>
             <?php
 if ($description) {
             ?>
@@ -619,18 +619,18 @@ if ($description) {
         id="<?php echo esc_attr($args[ 'label_for' ]); ?>_mealtype"
         name="mealtype"
         >
-        <option value="RO"><?php _e('Room Only', 'atollmatrix');?></option>
-        <option value="BB"><?php _e('Bed and Breakfast', 'atollmatrix');?></option>
-        <option value="HB"><?php _e('Half Board', 'atollmatrix');?></option>
-        <option value="FB"><?php _e('Full Board', 'atollmatrix');?></option>
-        <option value="AN"><?php _e('All-Inclusive', 'atollmatrix');?></option>
+        <option value="RO"><?php _e('Room Only', 'staylodgic');?></option>
+        <option value="BB"><?php _e('Bed and Breakfast', 'staylodgic');?></option>
+        <option value="HB"><?php _e('Half Board', 'staylodgic');?></option>
+        <option value="FB"><?php _e('Full Board', 'staylodgic');?></option>
+        <option value="AN"><?php _e('All-Inclusive', 'staylodgic');?></option>
         </select>
         <select disabled
         id="<?php echo esc_attr($args[ 'label_for' ]); ?>_choice"
         name="choice"
         >
-        <option value="included"><?php _e('Included in rate', 'atollmatrix');?></option>
-        <option value="optional"><?php _e('Optional', 'atollmatrix');?></option>
+        <option value="included"><?php _e('Included in rate', 'staylodgic');?></option>
+        <option value="optional"><?php _e('Optional', 'staylodgic');?></option>
         </select>
         <input disabled
             type="text"
@@ -655,19 +655,19 @@ $count = 0;
                 id="<?php echo esc_attr($args[ 'label_for' ]); ?>_mealtype_<?php echo $count; ?>"
                 name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args[ 'label_for' ]); ?>][<?php echo $key; ?>][mealtype]"
                 >
-                <option value="RO" <?php selected('RO', $value[ 'mealtype' ], true);?>><?php _e('Room Only', 'atollmatrix');?></option>
-                <option value="BB" <?php selected('BB', $value[ 'mealtype' ], true);?>><?php _e('Bed and Breakfast', 'atollmatrix');?></option>
-                <option value="HB" <?php selected('HB', $value[ 'mealtype' ], true);?>><?php _e('Half Board', 'atollmatrix');?></option>
-                <option value="FB" <?php selected('FB', $value[ 'mealtype' ], true);?>><?php _e('Full Board', 'atollmatrix');?></option>
-                <option value="AN" <?php selected('AN', $value[ 'mealtype' ], true);?>><?php _e('All-Inclusive', 'atollmatrix');?></option>
+                <option value="RO" <?php selected('RO', $value[ 'mealtype' ], true);?>><?php _e('Room Only', 'staylodgic');?></option>
+                <option value="BB" <?php selected('BB', $value[ 'mealtype' ], true);?>><?php _e('Bed and Breakfast', 'staylodgic');?></option>
+                <option value="HB" <?php selected('HB', $value[ 'mealtype' ], true);?>><?php _e('Half Board', 'staylodgic');?></option>
+                <option value="FB" <?php selected('FB', $value[ 'mealtype' ], true);?>><?php _e('Full Board', 'staylodgic');?></option>
+                <option value="AN" <?php selected('AN', $value[ 'mealtype' ], true);?>><?php _e('All-Inclusive', 'staylodgic');?></option>
                 </select>
             <select
             data-width="150"
             id="<?php echo esc_attr($args[ 'label_for' ]); ?>_choice_<?php echo $count; ?>"
             name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args[ 'label_for' ]); ?>][<?php echo $key; ?>][choice]"
             >
-            <option value="included" <?php selected('included', $value[ 'choice' ], true);?>><?php _e('Included in rate', 'atollmatrix');?></option>
-            <option value="optional" <?php selected('optional', $value[ 'choice' ], true);?>><?php _e('Optional', 'atollmatrix');?></option>
+            <option value="included" <?php selected('included', $value[ 'choice' ], true);?>><?php _e('Included in rate', 'staylodgic');?></option>
+            <option value="optional" <?php selected('optional', $value[ 'choice' ], true);?>><?php _e('Optional', 'staylodgic');?></option>
             </select>
             <input
                 type="text"
@@ -685,7 +685,7 @@ $count = 0;
         }
         ?>
     </div>
-    <button id="addmealplan-repeatable"><?php _e('Add New Section', 'atollmatrix');?></button>
+    <button id="addmealplan-repeatable"><?php _e('Add New Section', 'staylodgic');?></button>
         <?php
 if ($description) {
             ?>
@@ -737,10 +737,10 @@ if ($description) {
             id="<?php echo esc_attr($args[ 'label_for' ]); ?>_duration"
             name="duration"
             >
-            <option value="inrate"><?php _e('Add to rate', 'atollmatrix');?></option>
-            <option value="perperson"><?php _e('Per person', 'atollmatrix');?></option>
-            <option value="perday"><?php _e('Per day', 'atollmatrix');?></option>
-            <option value="perpersonperday"><?php _e('Per person per day', 'atollmatrix');?></option>
+            <option value="inrate"><?php _e('Add to rate', 'staylodgic');?></option>
+            <option value="perperson"><?php _e('Per person', 'staylodgic');?></option>
+            <option value="perday"><?php _e('Per day', 'staylodgic');?></option>
+            <option value="perpersonperday"><?php _e('Per person per day', 'staylodgic');?></option>
             </select>
             <span class="remove-set-button"><i class="dashicons dashicons-remove"></i></span>
             <br/>
@@ -773,17 +773,17 @@ if ($description) {
             id="<?php echo esc_attr($args[ 'label_for' ]); ?>_type_<?php echo $count; ?>"
             name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args[ 'label_for' ]); ?>][<?php echo $key; ?>][type]"
             >
-            <option value="fixed" <?php selected('fixed', $value[ 'type' ], true);?>><?php _e('Fixed', 'atollmatrix');?></option>
-            <option value="percentage" <?php selected('percentage', $value[ 'type' ], true);?>><?php _e('Percentage', 'atollmatrix');?></option>
+            <option value="fixed" <?php selected('fixed', $value[ 'type' ], true);?>><?php _e('Fixed', 'staylodgic');?></option>
+            <option value="percentage" <?php selected('percentage', $value[ 'type' ], true);?>><?php _e('Percentage', 'staylodgic');?></option>
             </select>
             <select
             id="<?php echo esc_attr($args[ 'label_for' ]); ?>_duration_<?php echo $count; ?>"
             name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args[ 'label_for' ]); ?>][<?php echo $key; ?>][duration]"
             >
-            <option value="inrate" <?php selected('inrate', $value[ 'duration' ], true);?>><?php _e('Add to rate', 'atollmatrix');?></option>
-            <option value="perperson" <?php selected('perperson', $value[ 'duration' ], true);?>><?php _e('Per person', 'atollmatrix');?></option>
-            <option value="perday" <?php selected('perday', $value[ 'duration' ], true);?>><?php _e('Per Day', 'atollmatrix');?></option>
-            <option value="perpersonperday" <?php selected('perpersonperday', $value[ 'duration' ], true);?>><?php _e('Per person per day', 'atollmatrix');?></option>
+            <option value="inrate" <?php selected('inrate', $value[ 'duration' ], true);?>><?php _e('Add to rate', 'staylodgic');?></option>
+            <option value="perperson" <?php selected('perperson', $value[ 'duration' ], true);?>><?php _e('Per person', 'staylodgic');?></option>
+            <option value="perday" <?php selected('perday', $value[ 'duration' ], true);?>><?php _e('Per Day', 'staylodgic');?></option>
+            <option value="perpersonperday" <?php selected('perpersonperday', $value[ 'duration' ], true);?>><?php _e('Per person per day', 'staylodgic');?></option>
             </select>
             <span class="remove-set-button"><i class="dashicons dashicons-remove"></i></span>
             <br/>
@@ -794,7 +794,7 @@ if ($description) {
         }
         ?>
         </div>
-        <button id="addtax-repeatable"><?php _e('Add New Section', 'atollmatrix');?></button>
+        <button id="addtax-repeatable"><?php _e('Add New Section', 'staylodgic');?></button>
             <?php
 if ($description) {
             ?>
@@ -846,8 +846,8 @@ if ($description) {
             id="<?php echo esc_attr($args[ 'label_for' ]); ?>_duration"
             name="duration"
             >
-            <option value="inrate"><?php _e('Add to rate', 'atollmatrix');?></option>
-            <option value="perperson"><?php _e('Per person', 'atollmatrix');?></option>
+            <option value="inrate"><?php _e('Add to rate', 'staylodgic');?></option>
+            <option value="perperson"><?php _e('Per person', 'staylodgic');?></option>
             </select>
             <span class="remove-set-button"><i class="dashicons dashicons-remove"></i></span>
             <br/>
@@ -880,15 +880,15 @@ if ($description) {
             id="<?php echo esc_attr($args[ 'label_for' ]); ?>_type_<?php echo $count; ?>"
             name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args[ 'label_for' ]); ?>][<?php echo $key; ?>][type]"
             >
-            <option value="fixed" <?php selected('fixed', $value[ 'type' ], true);?>><?php _e('Fixed', 'atollmatrix');?></option>
-            <option value="percentage" <?php selected('percentage', $value[ 'type' ], true);?>><?php _e('Percentage', 'atollmatrix');?></option>
+            <option value="fixed" <?php selected('fixed', $value[ 'type' ], true);?>><?php _e('Fixed', 'staylodgic');?></option>
+            <option value="percentage" <?php selected('percentage', $value[ 'type' ], true);?>><?php _e('Percentage', 'staylodgic');?></option>
             </select>
             <select
             id="<?php echo esc_attr($args[ 'label_for' ]); ?>_duration_<?php echo $count; ?>"
             name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args[ 'label_for' ]); ?>][<?php echo $key; ?>][duration]"
             >
-            <option value="inrate" <?php selected('inrate', $value[ 'duration' ], true);?>><?php _e('Add to rate', 'atollmatrix');?></option>
-            <option value="perperson" <?php selected('perperson', $value[ 'duration' ], true);?>><?php _e('Per person', 'atollmatrix');?></option>
+            <option value="inrate" <?php selected('inrate', $value[ 'duration' ], true);?>><?php _e('Add to rate', 'staylodgic');?></option>
+            <option value="perperson" <?php selected('perperson', $value[ 'duration' ], true);?>><?php _e('Per person', 'staylodgic');?></option>
             </select>
             <span class="remove-set-button"><i class="dashicons dashicons-remove"></i></span>
             <br/>
@@ -899,7 +899,7 @@ if ($description) {
         }
         ?>
         </div>
-        <button id="addtax-activity-repeatable"><?php _e('Add New Section', 'atollmatrix');?></button>
+        <button id="addtax-activity-repeatable"><?php _e('Add New Section', 'staylodgic');?></button>
             <?php
 if ($description) {
             ?>
@@ -1007,7 +1007,7 @@ if ($description) {
         $value       = $this->get_option_value($option_name);
         $description = $this->settings[ $option_name ][ 'description' ] ?? '';
         ?>
-        <label class="atollmatrix-checkbox-container">
+        <label class="staylodgic-checkbox-container">
             <input
                 type="checkbox"
                 id="<?php echo esc_attr($args[ 'label_for' ]); ?>"
@@ -1061,28 +1061,28 @@ if ($description) {
 
 // Register new Options panel.
 $panel_args = [
-    'parent_page'     => 'atoll-matrix',
+    'parent_page'     => 'staylodgic',
     'title'           => 'Settings',
-    'option_name'     => 'atollmatrix_settings',
-    'slug'            => 'atollmatrix-settings-panel',
+    'option_name'     => 'staylodgic_settings',
+    'slug'            => 'staylodgic-settings-panel',
     'user_capability' => 'manage_options',
     'tabs'            => [
-        'property'       => esc_html__('Property', 'atollmatrix'),
-        'activity-property'       => esc_html__('Activity Property', 'atollmatrix'),
-        'currency'      => esc_html__('Currency', 'atollmatrix'),
-        'general'       => esc_html__('General', 'atollmatrix'),
-        'pages'         => esc_html__('Pages', 'atollmatrix'),
-        'discounts' => esc_html__('Discounts', 'atollmatrix'),
-        'mealplan'      => esc_html__('Meal Plan', 'atollmatrix'),
-        'perperson'     => esc_html__('Per person price', 'atollmatrix'),
-        'tax'           => esc_html__('Room Tax', 'atollmatrix'),
-        'activity-tax'           => esc_html__('Activity Tax', 'atollmatrix'),
-        'import-export' => esc_html__('Import/Export', 'atollmatrix'),
+        'property'       => esc_html__('Property', 'staylodgic'),
+        'activity-property'       => esc_html__('Activity Property', 'staylodgic'),
+        'currency'      => esc_html__('Currency', 'staylodgic'),
+        'general'       => esc_html__('General', 'staylodgic'),
+        'pages'         => esc_html__('Pages', 'staylodgic'),
+        'discounts' => esc_html__('Discounts', 'staylodgic'),
+        'mealplan'      => esc_html__('Meal Plan', 'staylodgic'),
+        'perperson'     => esc_html__('Per person price', 'staylodgic'),
+        'tax'           => esc_html__('Room Tax', 'staylodgic'),
+        'activity-tax'           => esc_html__('Activity Tax', 'staylodgic'),
+        'import-export' => esc_html__('Import/Export', 'staylodgic'),
      ],
  ];
 
-$currencies       = \AtollMatrix\Common::get_atollmatrix_currencies();
-$currency_symbols = \AtollMatrix\Common::get_atollmatrix_currency_symbols();
+$currencies       = \Staylodgic\Common::get_staylodgic_currencies();
+$currency_symbols = \Staylodgic\Common::get_staylodgic_currency_symbols();
 $curr_choices     = array();
 
 // Generate the select list
@@ -1093,247 +1093,247 @@ foreach ($currencies as $currencyCode => $currencyName) {
 
 $panel_settings = [
     'property_logo'         => [
-        'label'       => esc_html__('Upload Logo', 'atollmatrix'),
+        'label'       => esc_html__('Upload Logo', 'staylodgic'),
         'type'        => 'media_upload',
         'description' => 'Upload your logo here.',
         'tab'         => 'property', // You can change the tab as per your requirement
     ],
     'property_name'             => [
-        'label'       => esc_html__('Name', 'atollmatrix'),
+        'label'       => esc_html__('Name', 'staylodgic'),
         'type'        => 'text',
         'description' => 'My field 1 description.',
         'tab'         => 'property',
     ],
     'property_phone'             => [
-        'label'       => esc_html__('Phone', 'atollmatrix'),
+        'label'       => esc_html__('Phone', 'staylodgic'),
         'type'        => 'text',
         'description' => 'My field 1 description.',
         'tab'         => 'property',
     ],
     'property_address'   => [
-        'label'       => esc_html__('Address', 'atollmatrix'),
+        'label'       => esc_html__('Address', 'staylodgic'),
         'type'        => 'text',
         'description' => 'My field 1 description.',
         'tab'         => 'property',
     ],
     'property_header'   => [
-        'label'       => esc_html__('Invoice header', 'atollmatrix'),
+        'label'       => esc_html__('Invoice header', 'staylodgic'),
         'type'        => 'text',
         'description' => 'My field 1 description.',
         'tab'         => 'property',
     ],
     'property_footer'   => [
-        'label'       => esc_html__('Invoice footer', 'atollmatrix'),
+        'label'       => esc_html__('Invoice footer', 'staylodgic'),
         'type'        => 'text',
         'description' => 'My field 1 description.',
         'tab'         => 'property',
     ],
 
     'activity_property_logo'         => [
-        'label'       => esc_html__('Upload Logo', 'atollmatrix'),
+        'label'       => esc_html__('Upload Logo', 'staylodgic'),
         'type'        => 'media_upload',
         'description' => 'Upload your logo here.',
         'tab'         => 'activity-property', // You can change the tab as per your requirement
     ],
     'activity_property_name'             => [
-        'label'       => esc_html__('Name', 'atollmatrix'),
+        'label'       => esc_html__('Name', 'staylodgic'),
         'type'        => 'text',
         'description' => 'My field 1 description.',
         'tab'         => 'activity-property',
     ],
     'activity_property_phone'             => [
-        'label'       => esc_html__('Phone', 'atollmatrix'),
+        'label'       => esc_html__('Phone', 'staylodgic'),
         'type'        => 'text',
         'description' => 'My field 1 description.',
         'tab'         => 'activity-property',
     ],
     'activity_property_address'   => [
-        'label'       => esc_html__('Address', 'atollmatrix'),
+        'label'       => esc_html__('Address', 'staylodgic'),
         'type'        => 'text',
         'description' => 'My field 1 description.',
         'tab'         => 'activity-property',
     ],
     'activity_property_header'   => [
-        'label'       => esc_html__('Invoice header', 'atollmatrix'),
+        'label'       => esc_html__('Invoice header', 'staylodgic'),
         'type'        => 'text',
         'description' => 'My field 1 description.',
         'tab'         => 'activity-property',
     ],
     'activity_property_footer'   => [
-        'label'       => esc_html__('Invoice footer', 'atollmatrix'),
+        'label'       => esc_html__('Invoice footer', 'staylodgic'),
         'type'        => 'text',
         'description' => 'My field 1 description.',
         'tab'         => 'activity-property',
     ],
 
     'page_bookingsearch'   => [
-        'label'       => esc_html__('Booking search page', 'atollmatrix'),
+        'label'       => esc_html__('Booking search page', 'staylodgic'),
         'type'        => 'select',
         'inputwidth'  => '250',
         'description' => 'Booking search page.',
-        'choices'     => atollmatrix_get_pages_for_select(),
+        'choices'     => staylodgic_get_pages_for_select(),
         'tab'         => 'pages',
      ],
      'page_activitybookingsearch'   => [
-        'label'       => esc_html__('Activities search page', 'atollmatrix'),
+        'label'       => esc_html__('Activities search page', 'staylodgic'),
         'type'        => 'select',
         'inputwidth'  => '250',
         'description' => 'Activities search page.',
-        'choices'     => atollmatrix_get_pages_for_select(),
+        'choices'     => staylodgic_get_pages_for_select(),
         'tab'         => 'pages',
      ],
     'page_bookingdetails'  => [
-        'label'       => esc_html__('Booking details', 'atollmatrix'),
+        'label'       => esc_html__('Booking details', 'staylodgic'),
         'type'        => 'select',
         'inputwidth'  => '250',
         'description' => 'Booking details.',
-        'choices'     => atollmatrix_get_pages_for_select(),
+        'choices'     => staylodgic_get_pages_for_select(),
         'tab'         => 'pages',
      ],
     'import_missing'       => [
-        'label'       => esc_html__('Action for missing bookings', 'atollmatrix'),
+        'label'       => esc_html__('Action for missing bookings', 'staylodgic'),
         'type'        => 'select',
         'inputwidth'  => '250',
         'description' => 'Action for missing bookings on import.',
         'choices'     => [
-            'cancel' => esc_html__('Cancel', 'atollmatrix'),
-            'delete' => esc_html__('Delete', 'atollmatrix'),
+            'cancel' => esc_html__('Cancel', 'staylodgic'),
+            'delete' => esc_html__('Delete', 'staylodgic'),
          ],
         'tab'         => 'import-export',
      ],
     'qtysync_interval'     => [
-        'label'       => esc_html__('Availability Sync interval', 'atollmatrix'),
+        'label'       => esc_html__('Availability Sync interval', 'staylodgic'),
         'type'        => 'select',
         'inputwidth'  => '250',
         'description' => 'Availability Sync interval',
-        'choices'     => atollmatrix_sync_intervals(),
+        'choices'     => staylodgic_sync_intervals(),
         'tab'         => 'import-export',
      ],
     'discount_lastminute'             => [
-        'label'       => esc_html__('Last minute discount', 'atollmatrix'),
+        'label'       => esc_html__('Last minute discount', 'staylodgic'),
         'type'        => 'promotion_discount',
         'description' => 'Maximum days ahead for discount. More than the number of days from booking day the discount will not be applied.',
         'tab'         => 'discounts',
      ],
     'discount_earlybooking'             => [
-        'label'       => esc_html__('Early booking discount', 'atollmatrix'),
+        'label'       => esc_html__('Early booking discount', 'staylodgic'),
         'type'        => 'promotion_discount',
         'description' => 'How many days ahead to apply discount. Less than the number of days from booking day the discount will not be applied.',
         'tab'         => 'discounts',
      ],
     'discount_longstay'             => [
-        'label'       => esc_html__('Long stay discount', 'atollmatrix'),
+        'label'       => esc_html__('Long stay discount', 'staylodgic'),
         'type'        => 'promotion_discount',
         'description' => 'Lenght of days to stay to apply discount.',
         'tab'         => 'discounts',
      ],
     'enable_taxes'         => [
-        'label'       => esc_html__('Enable Room Taxes', 'atollmatrix'),
+        'label'       => esc_html__('Enable Room Taxes', 'staylodgic'),
         'type'        => 'checkbox',
         'description' => '',
         'tab'         => 'tax',
     ],
     'enable_activitytaxes'         => [
-        'label'       => esc_html__('Enable Activties Taxes', 'atollmatrix'),
+        'label'       => esc_html__('Enable Activties Taxes', 'staylodgic'),
         'type'        => 'checkbox',
         'description' => '',
         'tab'         => 'activity-tax',
     ],
     'display_cancelled' => [
-        'label'       => esc_html__('Display cancelled bookings in availability calendar', 'atollmatrix'),
+        'label'       => esc_html__('Display cancelled bookings in availability calendar', 'staylodgic'),
         'type'        => 'checkbox',
         'description' => '',
         'tab'         => 'general',
      ],
     'new_bookingstatus'    => [
-        'label'       => esc_html__('Choose status for new bookings', 'atollmatrix'),
+        'label'       => esc_html__('Choose status for new bookings', 'staylodgic'),
         'type'        => 'select',
         'inputwidth'  => '250',
         'description' => 'Choose status for new bookings.',
-        'choices'     => atollmatrix_get_new_booking_statuses(),
+        'choices'     => staylodgic_get_new_booking_statuses(),
         'tab'         => 'general',
      ],
     'new_bookingsubstatus' => [
-        'label'       => esc_html__('Choose sub status for new bookings', 'atollmatrix'),
+        'label'       => esc_html__('Choose sub status for new bookings', 'staylodgic'),
         'type'        => 'select',
         'inputwidth'  => '250',
         'description' => 'Choose sub status for new bookings.',
-        'choices'     => atollmatrix_get_booking_substatuses(),
+        'choices'     => staylodgic_get_booking_substatuses(),
         'tab'         => 'general',
      ],
     'timezone'             => [
-        'label'       => esc_html__('Select Time Zone', 'atollmatrix'),
+        'label'       => esc_html__('Select Time Zone', 'staylodgic'),
         'type'        => 'select',
         'description' => 'Select your time zone relative to GMT.',
-        'choices'     => atollmatrix_get_GmtTimezoneChoices(),
+        'choices'     => staylodgic_get_GmtTimezoneChoices(),
         'tab'         => 'general',
      ],
     // Tab 2
     'option_3'             => [
-        'label'       => esc_html__('Text Option', 'atollmatrix'),
+        'label'       => esc_html__('Text Option', 'staylodgic'),
         'type'        => 'text',
         'description' => 'My field 1 description.',
         'tab'         => 'tab-2',
      ],
     'option_4'             => [
-        'label'       => esc_html__('Textarea Option', 'atollmatrix'),
+        'label'       => esc_html__('Textarea Option', 'staylodgic'),
         'type'        => 'textarea',
         'description' => 'My textarea field description.',
         'tab'         => 'tab-2',
      ],
     'taxes'                => [
-        'label'       => esc_html__('Room taxes', 'atollmatrix'),
+        'label'       => esc_html__('Room taxes', 'staylodgic'),
         'type'        => 'repeatable_tax',
         'description' => 'My textarea field description.',
         'tab'         => 'tax',
      ],
     'activity_taxes'                => [
-        'label'       => esc_html__('Activity taxes', 'atollmatrix'),
+        'label'       => esc_html__('Activity taxes', 'staylodgic'),
         'type'        => 'activity_repeatable_tax',
         'description' => 'My textarea field description.',
         'tab'         => 'activity-tax',
      ],
      'childfreestay'        => [
-        'label'       => esc_html__('Children under the age can stay for free', 'atollmatrix'),
+        'label'       => esc_html__('Children under the age can stay for free', 'staylodgic'),
         'type'        => 'select',
         'inputwidth'  => '100',
         'description' => 'My select field description.',
         'choices'     => [
-            '0'  => esc_html__('0', 'atollmatrix'),
-            '1'  => esc_html__('1', 'atollmatrix'),
-            '2'  => esc_html__('2', 'atollmatrix'),
-            '3'  => esc_html__('3', 'atollmatrix'),
-            '4'  => esc_html__('4', 'atollmatrix'),
-            '5'  => esc_html__('5', 'atollmatrix'),
-            '6'  => esc_html__('6', 'atollmatrix'),
-            '7'  => esc_html__('7', 'atollmatrix'),
-            '8'  => esc_html__('8', 'atollmatrix'),
-            '9'  => esc_html__('9', 'atollmatrix'),
-            '10' => esc_html__('10', 'atollmatrix'),
-            '11' => esc_html__('11', 'atollmatrix'),
-            '12' => esc_html__('12', 'atollmatrix'),
-            '13' => esc_html__('13', 'atollmatrix'),
-            '14' => esc_html__('14', 'atollmatrix'),
-            '15' => esc_html__('15', 'atollmatrix'),
-            '16' => esc_html__('16', 'atollmatrix'),
-            '17' => esc_html__('17', 'atollmatrix'),
+            '0'  => esc_html__('0', 'staylodgic'),
+            '1'  => esc_html__('1', 'staylodgic'),
+            '2'  => esc_html__('2', 'staylodgic'),
+            '3'  => esc_html__('3', 'staylodgic'),
+            '4'  => esc_html__('4', 'staylodgic'),
+            '5'  => esc_html__('5', 'staylodgic'),
+            '6'  => esc_html__('6', 'staylodgic'),
+            '7'  => esc_html__('7', 'staylodgic'),
+            '8'  => esc_html__('8', 'staylodgic'),
+            '9'  => esc_html__('9', 'staylodgic'),
+            '10' => esc_html__('10', 'staylodgic'),
+            '11' => esc_html__('11', 'staylodgic'),
+            '12' => esc_html__('12', 'staylodgic'),
+            '13' => esc_html__('13', 'staylodgic'),
+            '14' => esc_html__('14', 'staylodgic'),
+            '15' => esc_html__('15', 'staylodgic'),
+            '16' => esc_html__('16', 'staylodgic'),
+            '17' => esc_html__('17', 'staylodgic'),
          ],
         'tab'         => 'perperson',
      ],
     'perpersonpricing'     => [
-        'label'       => esc_html__('Per person price', 'atollmatrix'),
+        'label'       => esc_html__('Per person price', 'staylodgic'),
         'type'        => 'repeatable_perperson',
         'description' => 'My textarea field description.',
         'tab'         => 'perperson',
      ],
     'mealplan'             => [
-        'label'       => esc_html__('Meal Plan', 'atollmatrix'),
+        'label'       => esc_html__('Meal Plan', 'staylodgic'),
         'type'        => 'repeatable_mealplan',
         'description' => 'My textarea field description.',
         'tab'         => 'mealplan',
      ],
     'currency'             => [
-        'label'       => esc_html__('Currency', 'atollmatrix'),
+        'label'       => esc_html__('Currency', 'staylodgic'),
         'type'        => 'select',
         'inputwidth'  => '250',
         'default'        => 'USD',
@@ -1342,42 +1342,42 @@ $panel_settings = [
         'tab'         => 'currency',
      ],
     'currency_position'    => [
-        'label'       => esc_html__('Currency position', 'atollmatrix'),
+        'label'       => esc_html__('Currency position', 'staylodgic'),
         'type'        => 'select',
         'inputwidth'  => '250',
         'default'        => 'left_space',
         'description' => 'My select field description.',
         'choices'     => [
-            'left_space'  => esc_html__('Left with space', 'atollmatrix'),
-            'right_space' => esc_html__('Right with space', 'atollmatrix'),
-            'left'        => esc_html__('Left', 'atollmatrix'),
-            'right'       => esc_html__('Right', 'atollmatrix'),
+            'left_space'  => esc_html__('Left with space', 'staylodgic'),
+            'right_space' => esc_html__('Right with space', 'staylodgic'),
+            'left'        => esc_html__('Left', 'staylodgic'),
+            'right'       => esc_html__('Right', 'staylodgic'),
          ],
         'tab'         => 'currency',
      ],
     'thousand_seperator'   => [
-        'label'       => esc_html__('Thousand seperator', 'atollmatrix'),
+        'label'       => esc_html__('Thousand seperator', 'staylodgic'),
         'type'        => 'text',
         'default'        => ',',
         'description' => 'My field 1 description.',
         'tab'         => 'currency',
      ],
     'decimal_seperator'    => [
-        'label'       => esc_html__('Decimal seperator', 'atollmatrix'),
+        'label'       => esc_html__('Decimal seperator', 'staylodgic'),
         'type'        => 'text',
         'default'        => '.',
         'description' => 'My field 1 description.',
         'tab'         => 'currency',
      ],
     'number_of_decimals'   => [
-        'label'       => esc_html__('Number of Decimals', 'atollmatrix'),
+        'label'       => esc_html__('Number of Decimals', 'staylodgic'),
         'type'        => 'text',
         'default'        => '2',
         'description' => 'My field 1 description.',
         'tab'         => 'currency',
      ],
      'import_settings_data'   => [
-        'label'       => esc_html__('Import Settings', 'atollmatrix'),
+        'label'       => esc_html__('Import Settings', 'staylodgic'),
         'type'        => 'textarea',
         'default'        => '2',
         'description' => 'My field 1 description.',
@@ -1385,4 +1385,4 @@ $panel_settings = [
      ],
  ];
 
-new \AtollMatrix\OptionsPanel($panel_args, $panel_settings);
+new \Staylodgic\OptionsPanel($panel_args, $panel_settings);

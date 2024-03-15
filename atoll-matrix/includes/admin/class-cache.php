@@ -1,5 +1,5 @@
 <?php
-namespace AtollMatrix;
+namespace Staylodgic;
 
 class Cache
 {
@@ -31,7 +31,7 @@ class Cache
      * Deletes all cache entries and the cache index.
      */
     public static function clearAllCache() {
-        $cacheIndexKey = 'atollmatrix_avail_calendar_index';
+        $cacheIndexKey = 'staylodgic_avail_calendar_index';
         $cacheIndex = get_transient($cacheIndexKey);
 
         if (is_array($cacheIndex)) {
@@ -51,7 +51,7 @@ class Cache
             $transient_key = $this->transient_key;
         }
 
-        $cacheIndexKey = 'atollmatrix_avail_calendar_index';
+        $cacheIndexKey = 'staylodgic_avail_calendar_index';
         $cacheIndex = get_transient($cacheIndexKey) ?: [];
 
         $cacheIndex[$transient_key] = [
@@ -66,7 +66,7 @@ class Cache
     public function generateAnalyticsCacheKey( $key )
     {
         
-        $transient_key = 'atollmatrix_analytics_' . md5($key);
+        $transient_key = 'staylodgic_analytics_' . md5($key);
 
         return $transient_key;
     }
@@ -74,7 +74,7 @@ class Cache
     public function generateRoomCacheKey()
     {
         
-        $transient_key = 'atollmatrix_avail_calendar_' . md5($this->room_id . '_' . $this->start_date . '_' . $this->end_date);
+        $transient_key = 'staylodgic_avail_calendar_' . md5($this->room_id . '_' . $this->start_date . '_' . $this->end_date);
 
         return $transient_key;
     }
@@ -93,7 +93,7 @@ class Cache
     }
 
     private function deleteCacheIndexEntry() {
-        $cacheIndexKey = 'atollmatrix_avail_calendar_index';
+        $cacheIndexKey = 'staylodgic_avail_calendar_index';
         $cacheIndex = get_transient($cacheIndexKey);
 
         if (isset($cacheIndex[$this->transient_key])) {
@@ -103,22 +103,24 @@ class Cache
     }
 
     public static function invalidateCachesByRoomAndDate($room_id, $affectedStartDate, $affectedEndDate) {
-        $cacheIndexKey = 'atollmatrix_avail_calendar_index';
+        $cacheIndexKey = 'staylodgic_avail_calendar_index';
         $cacheIndex = get_transient($cacheIndexKey);
 
-        error_log('-------- Removing Cache ---------');
-        error_log( $room_id );
-        error_log(print_r($cacheIndex,true));
-
-        foreach ($cacheIndex as $transientKey => $details) {
-            if ($details['room_id'] == $room_id && 
-                ($affectedStartDate <= $details['end_date'] && $affectedEndDate >= $details['start_date'])) {
-                delete_transient($transientKey);
-                unset($cacheIndex[$transientKey]);
+        if ( isset( $cacheIndex ) && is_array( $cacheIndex ) ) {
+            error_log('-------- Removing Cache ---------');
+            error_log( $room_id );
+            error_log(print_r($cacheIndex,true));
+    
+            foreach ($cacheIndex as $transientKey => $details) {
+                if ($details['room_id'] == $room_id && 
+                    ($affectedStartDate <= $details['end_date'] && $affectedEndDate >= $details['start_date'])) {
+                    delete_transient($transientKey);
+                    unset($cacheIndex[$transientKey]);
+                }
             }
+    
+            set_transient($cacheIndexKey, $cacheIndex, 0);
         }
-
-        set_transient($cacheIndexKey, $cacheIndex, 0);
     }
 
     public function setCache($transient_key = false, $contents = false)
@@ -165,4 +167,4 @@ class Cache
 
 }
 
-$instance = new \AtollMatrix\Cache();
+$instance = new \Staylodgic\Cache();

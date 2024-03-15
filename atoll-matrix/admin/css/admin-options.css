@@ -1,4 +1,4 @@
-.atollmatrix-tab-item {
+.staylodgic-tab-item {
 	display: none;
 }
 
@@ -32,23 +32,23 @@
 	right: -25px;
 }
 
-.atollmatrix-tabs-wrapper {
+.staylodgic-tabs-wrapper {
 	display: flex;
 	overflow: hidden;
 }
 
-.atollmatrix-tabs {
+.staylodgic-tabs {
 	display: flex;
 	border-bottom: 1px solid #ddd;
 	/* Horizontal line separating tabs and content */
 }
 
-.atollmatrix-options-form {
+.staylodgic-options-form {
 	background: #fff;
 	padding: 40px;
 }
 
-.atollmatrix-tabs .nav-tab {
+.staylodgic-tabs .nav-tab {
 	padding: 8px 20px;
 	text-align: center;
 	text-decoration: none;
@@ -60,12 +60,12 @@
 	margin: 0;
 }
 
-.atollmatrix-tabs .nav-tab:hover {
+.staylodgic-tabs .nav-tab:hover {
 	background-color: #e0e0e0;
 	border-bottom: 3px solid #3498db;
 }
 
-.atollmatrix-tabs .nav-tab-active {
+.staylodgic-tabs .nav-tab-active {
 	background-color: #fff;
 	border-bottom: 3px solid #3498db;
 	/* Highlight active tab with a color */
@@ -73,16 +73,16 @@
 	outline: 0;
 }
 
-.atollmatrix-tab-item {
+.staylodgic-tab-item {
 	display: none;
 	background-color: #fff;
 }
 
-.atollmatrix-tab-item.atollmatrix-tab-item--general {
+.staylodgic-tab-item.staylodgic-tab-item--general {
 	display: block;
 }
 
-.atollmatrix-tab-item .description {
+.staylodgic-tab-item .description {
 	font-style: italic;
 	font-size: 12px;
 	margin-top: 8px;
@@ -90,7 +90,7 @@
 }
 
 /* Customize the label (the container) */
-.atollmatrix-checkbox-container {
+.staylodgic-checkbox-container {
 	display: block;
 	position: relative;
 	padding-left: 35px;
@@ -104,7 +104,7 @@
 }
 
 /* Hide the browser's default checkbox */
-.atollmatrix-checkbox-container input {
+.staylodgic-checkbox-container input {
 	position: absolute;
 	opacity: 0;
 	cursor: pointer;
@@ -125,13 +125,13 @@
 }
 
 /* On mouse-over, add a grey background color */
-.atollmatrix-checkbox-container:hover input~.checkmark {
+.staylodgic-checkbox-container:hover input~.checkmark {
 	background-color: #dbf7ff;
 	border-color: #dbf7ff;
 }
 
 /* When the checkbox is checked, add a blue background */
-.atollmatrix-checkbox-container input:checked~.checkmark {
+.staylodgic-checkbox-container input:checked~.checkmark {
 	background-color: #2196F3;
 	border-color: #2196F3;
 }
@@ -144,12 +144,12 @@
 }
 
 /* Show the checkmark when checked */
-.atollmatrix-checkbox-container input:checked~.checkmark:after {
+.staylodgic-checkbox-container input:checked~.checkmark:after {
 	display: block;
 }
 
 /* Style the checkmark/indicator */
-.atollmatrix-checkbox-container .checkmark:after {
+.staylodgic-checkbox-container .checkmark:after {
 	left: 9px;
 	top: 5px;
 	width: 5px;
@@ -175,11 +175,11 @@
 .main-sync-form-wrap th {
 	font-size: 11px;
 }
-.atollmatrix-tabform-wrapper .nav-tab-wrapper.atollmatrix-tabs {
+.staylodgic-tabform-wrapper .nav-tab-wrapper.staylodgic-tabs {
 	padding-top:0;
 }
 
-.atollmatrix-modal {
+.staylodgic-modal {
     display: none;
     position: fixed;
     z-index: 1;
@@ -193,7 +193,7 @@
     padding-top: 60px;
 }
 
-.atollmatrix-modal-content {
+.staylodgic-modal-content {
 	background-color: #fefefe;
 	margin: 0 auto;
 	border: 1px solid #888;
@@ -202,20 +202,20 @@
 	padding: 40px;
 }
 
-.atollmatrix-close {
+.staylodgic-close {
     color: #aaaaaa;
     float: right;
     font-size: 28px;
     font-weight: bold;
 }
 
-.atollmatrix-close:hover,
-.atollmatrix-close:focus {
+.staylodgic-close:hover,
+.staylodgic-close:focus {
     color: #000;
     text-decoration: none;
     cursor: pointer;
 }
-.atollmatrix-modal-content textarea {
+.staylodgic-modal-content textarea {
 	width: 100%;
 	padding: 20px;
 	box-sizing: border-box;
@@ -227,29 +227,29 @@
 
 
 /* Container for the tabs and tab content */
-.atollmatrix-tabform-wrapper {
+.staylodgic-tabform-wrapper {
     display: flex;
 }
 
 /* Style for the tabs */
-.atollmatrix-tabs {
+.staylodgic-tabs {
     display: flex;
     flex-direction: column;
     margin-right: 20px;
 }
 
 /* Style for the tab content */
-.atollmatrix-tab-content {
+.staylodgic-tab-content {
     flex-grow: 1;
 }
 
 /* Hide all tab content by default */
-.atollmatrix-tab-content {
+.staylodgic-tab-content {
     display: none;
 }
 
 /* Show the active tab content */
-.atollmatrix-tab-content.active {
+.staylodgic-tab-content.active {
     display: block;
 }
 
@@ -260,12 +260,12 @@
     border-bottom-color: transparent;
 }
 
-.atollmatrix-tabs-container {
+.staylodgic-tabs-container {
     display: flex;
     flex-direction: column;
 }
 
-.atollmatrix-tab-heading {
+.staylodgic-tab-heading {
     margin-top: 20px; /* Add space above the heading */
     padding-left: 10px; /* Align with the tabs */
     font-size: 16px; /* Adjust the font size */
