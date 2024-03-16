@@ -1052,9 +1052,13 @@
 }
 
 .activity-column-one {
-	flex: 0;
+	flex: 0 1 280px;
 	text-align: left;
 	padding: 0 35px 20px 0;
+}
+
+.activity-summary-image {
+	border-radius: 16px;
 }
 
 .activity-desc {
@@ -1114,7 +1118,8 @@
 	background-color: #d00;
 }
 .day-schedule .time-slot.time-choice .activity-time-slot,
-.day-schedule .time-slot.time-choice .time-slots-remaining {
+.day-schedule .time-slot.time-choice .time-slots-remaining,
+.day-schedule .time-slot.time-choice .activity-rate {
 	color: #fff;
 }
 .activity-schedules-container-wrap.ajax-processing {
@@ -1193,6 +1198,7 @@
 	width: 30px;
 	margin-right: 4px;
 }
+.activity-schedule .supporting-image-gallery,
 .room-details-image .supporting-image-gallery {
 	margin-top: -23px;
 	width: calc( 100% - 35px );
@@ -1200,6 +1206,7 @@
 }
 .supporting-image-gallery .main-image {
 	width: 30px;
+	border-radius: 100%;
 	margin-right: 4px;
 	border: 2px solid #fff;
 	box-shadow: 1px 1px 8px 1px rgba(0,0,0,0.5);

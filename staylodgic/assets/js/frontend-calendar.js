@@ -699,6 +699,7 @@
 		// Process room choice and registration
 		$(document).on('click', '#activity-data .time-slot.time-active', function () {
 
+			$('.time-slot').removeClass('time-choice');
 			$(this).addClass('time-choice');
 			var chosenActivity = $(this).data('activity');
 			var activityChoice = $(this).closest('.activity-schedule');

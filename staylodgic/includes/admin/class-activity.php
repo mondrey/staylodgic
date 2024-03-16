@@ -207,7 +207,7 @@ class Activity
     
         // Call the method and capture the output
         ob_start();
-        $this->display_activity_frontend_schedules_with_availability(
+        echo $this->display_activity_frontend_schedules_with_availability(
             $selected_date,
             $the_post_id,
             $total_people,
@@ -269,16 +269,16 @@ class Activity
         );
         $activities = new \WP_Query($args);
     
-        echo '<form action="" method="post" id="hotel-acitivity-listing" class="needs-validation" novalidate>';
+        $html = '<form action="" method="post" id="hotel-acitivity-listing" class="needs-validation" novalidate>';
         $roomlistingbox = wp_create_nonce('staylodgic-roomlistingbox-nonce');
-        echo '<input type="hidden" name="staylodgic_roomlistingbox_nonce" value="' . esc_attr($roomlistingbox) . '" />';
+        $html .= '<input type="hidden" name="staylodgic_roomlistingbox_nonce" value="' . esc_attr($roomlistingbox) . '" />';
 
-        echo '<div id="activity-data" data-bookingnumber="' . $this->bookingNumber . '" data-children="' . $this->childrenGuests . '" data-adults="' . $this->adultGuests . '" data-guests="' . $this->totalGuests . '" data-checkin="' . $this->checkinDate . '">';
+        $html .= '<div id="activity-data" data-bookingnumber="' . $this->bookingNumber . '" data-children="' . $this->childrenGuests . '" data-adults="' . $this->adultGuests . '" data-guests="' . $this->totalGuests . '" data-checkin="' . $this->checkinDate . '">';
         // Start the container div
-        echo '<div class="activity-schedules-container">';
+        $html .= '<div class="activity-schedules-container">';
     
 
-        echo '<h3>' . ucfirst($day_of_week) . '</h3>';
+        $html .= '<h3>' . ucfirst($day_of_week) . '</h3>';
         // Loop through each activity post
         if ($activities->have_posts()) {
             while ($activities->have_posts()) {
@@ -293,7 +293,7 @@ class Activity
                 }
     
                 // Display the activity identifier (e.g., post title)
-                echo '<div class="activity-schedule room-occupied-group" id="activity-schedule-' . $post_id . '">';
+                $html .= '<div class="activity-schedule room-occupied-group" id="activity-schedule-' . $post_id . '">';
 
                 if (null !== get_post_meta($post_id, 'staylodgic_activity_desc', true)) {
                     $activity_desc = get_post_meta($post_id, 'staylodgic_activity_desc', true);
@@ -303,17 +303,26 @@ class Activity
                     $activity_image = staylodgic_featured_image_link($post_id);
                 }
 
-                echo '<div class="activity-column-one">';
-                echo '<div class="activity-image" style="background-image: url('.esc_url($activity_image).');"></div>';
-                echo '</div>';
-                echo '<div class="activity-column-two">';
-                echo '<h4 class="activity-title">' . get_the_title() . '</h4>';
-                echo '<div class="activity-desc">'.$activity_desc.'</div>';
+                $html .= '<div class="activity-column-one">';
+                $image_id  = get_post_thumbnail_id($post_id);
+                $fullimage_url = wp_get_attachment_image_url($image_id, 'staylodgic-full'); // Get the URL of the custom-sized image
+                $image_url = wp_get_attachment_image_url($image_id, 'staylodgic-large-square'); // Get the URL of the custom-sized image
+                $html .= '<a href="' . esc_url($fullimage_url) . '" data-toggle="lightbox" data-gallery="lightbox-gallery-'.esc_attr($post_id).'">';
+                $html .= '<img class="lightbox-trigger activity-summary-image" data-image="' . esc_url($image_url) . '" src="' . esc_url($image_url) . '" alt="Activity">';
+                $html .= '</a>';
+                $supported_gallery = staylodgic_output_custom_image_links($post_id);
+                if ( $supported_gallery ) {
+                    $html .= staylodgic_output_custom_image_links($post_id);
+                }
+                $html .= '</div>';
+                $html .= '<div class="activity-column-two">';
+                $html .= '<h4 class="activity-title">' . get_the_title() . '</h4>';
+                $html .= '<div class="activity-desc">'.$activity_desc.'</div>';
 
     
                 // Display the time slots for the day of the week that matches the selected date
                 if (!empty($activity_schedule) && isset($activity_schedule[$day_of_week])) {
-                    echo '<div class="day-schedule">';
+                    $html .= '<div class="day-schedule">';
                     foreach ($activity_schedule[$day_of_week] as $index => $time) {
                         // Calculate remaining spots for this time slot
                         
@@ -345,25 +354,25 @@ class Activity
                         if ( '' !== $time) {
                             $total_rate = intval( $activity_rate * $this->totalGuests );
                             $this->activitiesArray[$post_id][$time] = $total_rate;
-                            echo '<span class="time-slot '.$active_class.'" id="time-slot-' . $time_index . '" data-activity="'.$post_id.'" data-time="' . $time . '"><span class="activity-time-slot"><i class="fa-regular fa-clock"></i> ' . $time . '</span><span class="time-slots-remaining">( ' . $remaining_spots . ' of ' .$max_guests. ' remaining )</span><div class="activity-rate" data-activityprice="'.$total_rate.'">'. staylodgic_price( $total_rate ) . '</div></span> ';
+                            $html .= '<span class="time-slot '.$active_class.'" id="time-slot-' . $time_index . '" data-activity="'.$post_id.'" data-time="' . $time . '"><span class="activity-time-slot"><i class="fa-regular fa-clock"></i> ' . $time . '</span><span class="time-slots-remaining">( ' . $remaining_spots . ' of ' .$max_guests. ' remaining )</span><div class="activity-rate" data-activityprice="'.$total_rate.'">'. staylodgic_price( $total_rate ) . '</div></span> ';
                         } else {
-                            echo '<span class="time-slot-unavailable time-slot '.$active_class.'" id="time-slot-' . $time_index . '" data-activity="'.$post_id.'" data-time="' . $time . '"><span class="activity-time-slot">Unavailable</span></span> ';
+                            $html .= '<span class="time-slot-unavailable time-slot '.$active_class.'" id="time-slot-' . $time_index . '" data-activity="'.$post_id.'" data-time="' . $time . '"><span class="activity-time-slot">Unavailable</span></span> ';
                         }
                         
                     }
-                    echo '</div>';
+                    $html .= '</div>';
                 }
-                echo '</div>';
+                $html .= '</div>';
     
-                echo '</div>'; // Close the activity-schedule div
+                $html .= '</div>'; // Close the activity-schedule div
             }
         }
     
         // Close the container div
-        echo '</div>';
-        echo '</div>';
-        echo $this->register_Guest_Form();
-        echo '</form>';
+        $html .= '</div>';
+        $html .= '</div>';
+        $html .= $this->register_Guest_Form();
+        $html .= '</form>';
         error_log('Activities array');
         error_log(print_r( $this->activitiesArray, true ));
         staylodgic_set_booking_transient($this->activitiesArray, $this->bookingNumber);
@@ -372,6 +381,8 @@ class Activity
         error_log(print_r($activities_data, true ));
         // Reset post data
         wp_reset_postdata();
+
+        return $html;
     }
 
     public function process_SelectedActivity()
