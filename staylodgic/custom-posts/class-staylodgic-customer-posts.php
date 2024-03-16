@@ -112,7 +112,7 @@ class Staylodgic_Customer_Posts
             'capability_type'    => 'post',
             'hierarchical'       => false,
             'has_archive'        => true,
-            'menu_position'      => 6,
+            'menu_position'      => 37,
             'menu_icon'          => plugin_dir_url(__FILE__) . 'images/portfolio.png',
             'rewrite'            => array('slug' => $staylodgic_customers_slug), //Use a slug like "work" or "project" that shouldnt be same with your page name
             'supports' => array('title', 'author', 'thumbnail'), //Boxes will be shown in the panel

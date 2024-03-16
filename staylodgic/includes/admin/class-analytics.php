@@ -34,7 +34,7 @@ class Analytics
             'slgc-dashboard',
             array($this, 'display_dashboard'),
             '',
-            22// Position parameter
+            32// Position parameter
         );
     }
 

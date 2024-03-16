@@ -1122,6 +1122,9 @@
 .day-schedule .time-slot.time-choice .activity-rate {
 	color: #fff;
 }
+.time-slot-unavailable {
+	pointer-events: none;
+}
 .activity-schedules-container-wrap.ajax-processing {
 	opacity: 0.4;
 	pointer-events: none;
@@ -1156,8 +1159,8 @@
 .activity-column-two h4.activity-title {
 	margin: 0;
 	  margin-bottom: 0px;
-	font-size: 18px;
-	font-weight: 600;
+	font-size: 30px;
+	font-weight: 300;
 	color: #000;
 	letter-spacing: -0.2px;
 	margin-bottom: 9px;
@@ -1200,20 +1203,19 @@
 }
 .activity-schedule .supporting-image-gallery,
 .room-details-image .supporting-image-gallery {
-	margin-top: -23px;
 	width: calc( 100% - 35px );
 	margin-left: 18px;
 }
 .supporting-image-gallery .main-image {
 	width: 30px;
-	border-radius: 100%;
+	border-radius: 0;
 	margin-right: 4px;
-	border: 2px solid #fff;
-	box-shadow: 1px 1px 8px 1px rgba(0,0,0,0.5);
-	transition: box-shadow 0.4s;
+	border: 1px solid #fff;
+	box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.1);
+	transition: box-shadow 0.2s;
 }
 .supporting-image-gallery .main-image:hover {
-	box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.5);
+	box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.2);
 }
 /* HTML: <div class="loader"></div> */
 .preloader-element-outer {

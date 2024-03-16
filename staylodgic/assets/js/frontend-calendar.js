@@ -697,7 +697,7 @@
 		// ***********************
 
 		// Process room choice and registration
-		$(document).on('click', '#activity-data .time-slot.time-active', function () {
+		$(document).on('click', '#activity-data .time-slot.time-active:not(.time-slot-unavailable)', function () {
 
 			$('.time-slot').removeClass('time-choice');
 			$(this).addClass('time-choice');

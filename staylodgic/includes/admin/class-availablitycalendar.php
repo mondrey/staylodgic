@@ -87,7 +87,7 @@ class AvailablityCalendar extends AvailablityCalendarBase
             'slgc-availability',
             array($this, 'room_Reservation_Plugin_Display_Availability_Calendar'),
             'dashicons-calendar-alt',
-            21
+            33
         );
     }
     // Callback function to display the Availability page

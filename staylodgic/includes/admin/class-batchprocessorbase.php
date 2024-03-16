@@ -19,7 +19,7 @@ class BatchProcessorBase
             'staylodgic',
             array($this, 'display_main_page'),
             '',
-            23 // Position parameter
+            34 // Position parameter
         );
     }
 
