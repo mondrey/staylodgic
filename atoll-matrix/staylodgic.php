@@ -2,10 +2,10 @@
 /**
  * Plugin Name: Staylodgic
  * Description: Staylodgic Booking System
- * Plugin URI:  https://imaginemthemes.co/
+ * Plugin URI:  https://staylodgic.com/
  * Version:     1.0
- * Author:      iMaginem
- * Author URI:  https://imaginemthemes.co/
+ * Author:      Staylodgic
+ * Author URI:  https://staylodgic.com/
  * Text Domain: staylodgic
  */
 
