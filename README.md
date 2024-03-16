@@ -1,2 +1,2 @@
-# atoll-matrix
+# Staylodgic
 WordPress booking plugin
