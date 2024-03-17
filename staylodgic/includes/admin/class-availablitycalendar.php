@@ -12,7 +12,7 @@ class AvailablityCalendar extends AvailablityCalendarBase
         add_action('wp_ajax_get_Selected_Range_AvailabilityCalendar', array($this, 'get_Selected_Range_AvailabilityCalendar'));
         add_action('wp_ajax_nopriv_get_Selected_Range_AvailabilityCalendar', array($this, 'get_Selected_Range_AvailabilityCalendar'));
 
-        add_action('admin_menu', array($this, 'room_Reservation_Plugin_Add_Admin_Menu'));
+        add_action('admin_menu', array($this, 'AvailablityCalendarDisplay'));
 
         // Register the AJAX action
         add_action('wp_ajax_fetchOccupancy_Percentage_For_Calendar_Range', array($this, 'fetchOccupancy_Percentage_For_Calendar_Range'));
@@ -78,17 +78,36 @@ class AvailablityCalendar extends AvailablityCalendarBase
     }
 
     // Add the Availability menu item to the admin menu
-    public function room_Reservation_Plugin_Add_Admin_Menu()
+    public function AvailablityCalendarDisplay()
     {
+        // Add the parent menu item
         add_menu_page(
-            'Availability',
-            'Availability',
+            'View Availability',
+            'View Availability',
             'manage_options',
             'slgc-availability',
-            array($this, 'room_Reservation_Plugin_Display_Availability_Calendar'),
-            'dashicons-calendar-alt',
+            array($this, 'room_Reservation_Plugin_Display_Availability_Calendar'), // Callback for the parent page (can be empty if not needed)
+            'dashicons-visibility',
             33
         );
+
+    }
+
+    // Callback function to display the Availability page
+    public function room_Reservation_Plugin_Display_Availability_Calendar_Yearly()
+    {
+        // Output the HTML for the Availability page
+        ?>
+		<div class="wrap">
+			<h1><?php _e('Availability Calendar','staylodgic'); ?></h1>
+			<?php
+            if ( ! \Staylodgic\Rooms::hasRooms() ) {
+                echo '<h1>' . __('No Rooms Found','staylodgic') . '</h1>';
+                return;
+            }
+        ?>
+		</div>
+        <?php
     }
     // Callback function to display the Availability page
     public function room_Reservation_Plugin_Display_Availability_Calendar()

@@ -466,7 +466,8 @@ function staylodgic_generate_metaboxes($meta_data, $post_id)
                     $text_value = $meta ? $meta : $field['std'];
                     echo '<input type="hidden" class="' . $class . '" name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '" value="' . $text_value . '" size="30" />';
 
-                    error_log ( '------- off view display ------' );
+                    error_log ( '------- Display ticket off view display ------' );
+                    error_log ( $field['page_id'], $text_value );
                     
                     $activity = new Staylodgic\Activity();
                     $ticket = $activity->displayTicket( $field['page_id'], $text_value );

@@ -1,0 +1,73 @@
+#wpwrap h1 {
+	color: #fff;
+	text-align: center;
+	font-size: 32px;
+	padding-top: 30px;
+	font-weight: 100;
+	letter-spacing: 1px;
+}
+/* Container for all calendars */
+.calendars-container {
+    display: flex; /* Use flexbox layout */
+    flex-wrap: wrap; /* Allow calendars to wrap to the next line */
+    justify-content: center; /* Align calendars to the left */
+    gap: 20px; /* Space between calendars */
+	padding-top: 40px;
+}
+
+.calendar-container {
+	flex: 0 0 270px;
+}
+
+.calendars-container .fully-booked {
+	background: #ff0000;
+	color: #fff;
+}
+
+.calendars-container .day-cell {
+	background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(234,249,249,0.67) 0.1%, rgba(239,249,251,0.63) 90.1% );
+	color: #000;
+	height: 30px;
+	text-align: center;
+	font-size: 11px;
+	font-weight: 500;
+}
+.calendars-container .fully-booked {
+	background-image: radial-gradient( circle 860px at 11.8% 33.5%,  rgba(240,30,92,1) 0%, rgba(244,49,74,1) 30.5%, rgba(249,75,37,1) 56.1%, rgba(250,88,19,1) 75.6%, rgba(253,102,2,1) 100.2% );
+	color: #fff;
+}
+.availability-calendar .day-header {
+	color: #000;
+	padding: 7px;
+}
+
+.calendar-container h2 {
+	font-size: 18px;
+	font-weight: 300;
+}
+
+.availability-calendar {
+	width: 100%;
+}
+.calendar-container {
+	background: #fff;
+	text-align: center;
+	box-sizing: border-box;
+}
+
+.calendar-container h2 {
+	font-size: 14px;
+	font-weight: 600;
+	line-height: 46px;
+	margin: 0;
+	color: #000;
+	border-bottom: 1px solid #e6e6e6;
+	letter-spacing: 3px;
+}
+.calendar-container h3 {
+	font-size: 20px;
+	padding: 10px;
+	border-bottom: 1px solid #eee;
+	font-weight: 200;
+	letter-spacing: 1px;
+}

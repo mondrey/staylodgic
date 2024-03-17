@@ -47,6 +47,24 @@ class Staylodgic_Init
             add_filter('admin_footer_text', '__return_empty_string', 11);
             add_filter('update_footer', '__return_empty_string', 11);
         }
+        if (isset($_GET['page']) && $_GET['page'] == 'slgc-availability-yearly') {
+            remove_all_actions('admin_notices');
+            remove_all_actions('all_admin_notices');
+            add_filter('admin_footer_text', '__return_empty_string', 11);
+            add_filter('update_footer', '__return_empty_string', 11);
+        }
+        if (isset($_GET['page']) && $_GET['page'] == 'slgc-dashboard') {
+            remove_all_actions('admin_notices');
+            remove_all_actions('all_admin_notices');
+            add_filter('admin_footer_text', '__return_empty_string', 11);
+            add_filter('update_footer', '__return_empty_string', 11);
+        }
+        if (isset($_GET['page']) && $_GET['page'] == 'slgc-activity-dashboard') {
+            remove_all_actions('admin_notices');
+            remove_all_actions('all_admin_notices');
+            add_filter('admin_footer_text', '__return_empty_string', 11);
+            add_filter('update_footer', '__return_empty_string', 11);
+        }
     }
 
     public function staylodgic_custom_image_size()
@@ -82,6 +100,7 @@ class Staylodgic_Init
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-availabilitybatchprocessor.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-availablitycalendarbase.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-availablitycalendar.php';
+        require_once plugin_dir_path(__FILE__) . 'includes/admin/class-availablitycalendar-year.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-cache.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-rooms.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-rates.php';
@@ -98,6 +117,7 @@ class Staylodgic_Init
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-formgenerator.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-analytics.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-activity.php';
+        require_once plugin_dir_path(__FILE__) . 'includes/admin/class-activity-analytics.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-tax.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/utilities.php';
     }
@@ -155,6 +175,10 @@ class Staylodgic_Init
         wp_register_style('availability-admin-styles', plugin_dir_url(__FILE__) . 'admin/css/admin-core-applies.css', false, 'screen');
         wp_enqueue_style('availability-styles', plugin_dir_url(__FILE__) . 'admin/css/availability-calendar.css', false, 'screen');
         wp_enqueue_script('availability-scripts', plugin_dir_url(__FILE__) . 'admin/js/availability-calendar.js', array('jquery'), null, true);
+
+        wp_enqueue_style('availability-yearly-styles', plugin_dir_url(__FILE__) . 'admin/css/availability-yearly-calendar.css', false, 'screen');
+        wp_enqueue_script('availability-yearly-scripts', plugin_dir_url(__FILE__) . 'admin/js/availability-yearly-calendar.js', array('jquery'), null, true);
+
         wp_enqueue_script('activity-scripts', plugin_dir_url(__FILE__) . 'admin/js/activity-calendar.js', array('jquery'), null, true);
         
         wp_enqueue_script('staylodgic-moment', plugin_dir_url(__FILE__) . 'assets/js/moment.min.js', array('jquery'), null, true);
@@ -217,6 +241,19 @@ class Staylodgic_Init
                 wp_enqueue_style('staylodgic-invoice');
             }
             if ($current_admin_screen->base == 'toplevel_page_slgc-dashboard') {
+
+                wp_enqueue_style('staylodgic-dashboard');
+
+                wp_enqueue_script('staylodgic-bookingchart', plugin_dir_url(__FILE__) . 'admin/js/booking-charts.js', array('jquery'), null, true);
+
+                wp_enqueue_style('fontawesome-6');
+                wp_enqueue_style('fontawesome-6-brands');
+                wp_enqueue_style('fontawesome-6-solid');
+
+                wp_enqueue_style('bootstrap');
+                wp_enqueue_script('bootstrap');
+            }
+            if ($current_admin_screen->base == 'toplevel_page_slgc-activity-dashboard') {
 
                 wp_enqueue_style('staylodgic-dashboard');
 
@@ -364,9 +401,36 @@ class Staylodgic_Init
                 wp_enqueue_script('select2', plugin_dir_url(__FILE__) . 'assets/js/select2/js/select2.full.min.js', array('jquery'), null, true);
                 wp_enqueue_style('select2', plugin_dir_url(__FILE__) . 'assets/js/select2/css/select2.min.css', array(), false, 'screen');
             }
-            if ($current_admin_screen->base == 'toplevel_page_slgc-availability') {
+            
+            if ($current_admin_screen->base == 'view-availability_page_slgc-availability-yearly') {
 
                 
+
+                wp_enqueue_style('availability-admin-styles');
+                wp_enqueue_style('availability-yearly-styles');
+                wp_enqueue_script('availability-yearly-scripts');
+                
+                wp_enqueue_script('velocity', plugin_dir_url(__FILE__) . 'assets/js/velocity.min.js', array('jquery'), null, true);
+                wp_enqueue_script('velocity-ui', plugin_dir_url(__FILE__) . 'assets/js/velocity.ui.js', array('jquery'), null, true);
+
+                wp_register_script('bootstrap', plugin_dir_url(__FILE__) . 'assets/js/bootstrap/js/bootstrap.bundle.min.js', array('jquery'), null, true);
+                wp_register_style('bootstrap', plugin_dir_url(__FILE__) . 'assets/js/bootstrap/css/bootstrap.min.css', false, 'screen');
+                wp_enqueue_style('bootstrap');
+                wp_enqueue_script('bootstrap');
+
+                wp_enqueue_style('fontawesome-6');
+                wp_enqueue_style('fontawesome-6-brands');
+                wp_enqueue_style('fontawesome-6-solid');
+
+                wp_enqueue_media();
+
+                wp_enqueue_style('staylodgic-admin-styles');
+
+                wp_enqueue_script('admin-post-meta');
+
+            }
+
+            if ($current_admin_screen->base == 'toplevel_page_slgc-availability') {
 
                 wp_enqueue_style('availability-admin-styles');
                 wp_enqueue_style('availability-styles');
@@ -377,6 +441,7 @@ class Staylodgic_Init
 
                 wp_register_script('bootstrap', plugin_dir_url(__FILE__) . 'assets/js/bootstrap/js/bootstrap.bundle.min.js', array('jquery'), null, true);
                 wp_register_style('bootstrap', plugin_dir_url(__FILE__) . 'assets/js/bootstrap/css/bootstrap.min.css', false, 'screen');
+                
                 wp_enqueue_style('bootstrap');
                 wp_enqueue_script('bootstrap');
 

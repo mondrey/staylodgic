@@ -55,6 +55,30 @@ class Activity
 
     }
 
+    public static function hasActivities() {
+        $roomlist = [];
+        $rooms = self::queryActivities(); // Call queryRooms() method here
+        if ( $rooms ) {
+            return true;
+        }
+        return false;
+    }
+
+    public static function queryActivities()
+    {
+        $rooms = get_posts(
+            array(
+                'post_type' => 'slgc_activity',
+                'orderby' => 'title',
+                'numberposts' => -1,
+                'order' => 'ASC',
+                'post_status' => 'publish',
+            )
+        );
+        return $rooms;
+    }
+
+
     public static function getReservationforActivity($booking_number)
     {
         $args = array(
@@ -1046,28 +1070,32 @@ return ob_get_clean();
             if ( isset( $data_array[$activity_id] ) && isset($ticket_price) && 0 < $ticket_price ) {
 
                 $ticket = '<div class="ticket-container-outer">';
-                $ticket .= '<div data-file="'.$booking_number.'-'.$the_post_id.'" data-postid="'.$the_post_id.'" id="ticket-'.$booking_number.'" data-bookingnumber="'.$booking_number.'" class="ticket ticket-container">';
+                $ticket .= '<div data-file="'.esc_attr($booking_number).'-'.esc_attr($the_post_id).'" data-postid="'.esc_attr($the_post_id).'" id="ticket-'.esc_attr($booking_number).'" data-bookingnumber="'.esc_attr($booking_number).'" class="ticket ticket-container">';
                 $ticket .= '<div class="ticket-header">';
-                $ticket .= '<p class="ticket-company">'.$property_name.'</p>';
-                $ticket .= '<p class="ticket-phone">'.$property_phone.'</p>';
-                $ticket .= '<p class="ticket-address">'.$property_address.'</p>';
+                $ticket .= '<p class="ticket-company">'.esc_html($property_name).'</p>';
+                $ticket .= '<p class="ticket-phone">'.esc_html($property_phone).'</p>';
+                $ticket .= '<p class="ticket-address">'.esc_html($property_address).'</p>';
                 $ticket .= '<p class="ticket-break"></p>';
-                $ticket .= '<h1>'.$data_array[$activity_id].'</h1>';
+                $ticket .= '<h1>'.esc_html($data_array[$activity_id]).'</h1>';
                 $ticket .= '<p class="ticket-date">'.date("F jS Y", strtotime($activity_date)).'</p>';
                 $ticket .= '</div>';
                 $ticket .= '<div style="background: url('.esc_url($activity_image).'); background-size:cover" class="ticket-image">';
                 $ticket .= '</div>';
                 $ticket .= '<div class="ticket-info">';
-                $ticket .= '<p>'.$reservedTotal . ' x <i class="fa-solid fa-user"></i></p>';
-                $ticket .= '<p class="ticket-name">'.$full_name.'</p>';
-                $ticket .= '<p class="ticket-time"><i class="fa-regular fa-clock"></i> '.$time . '</p>';
+                $ticket .= '<p>'.esc_html($reservedTotal) . ' x <i class="fa-solid fa-user"></i></p>';
+                $ticket .= '<p class="ticket-name">'.esc_html($full_name).'</p>';
+                $ticket .= '<p class="ticket-time"><i class="fa-regular fa-clock"></i> '.esc_html($time) . '</p>';
                 $ticket .= '<p class="ticket-price">'.staylodgic_price($ticket_price).'</p>';
-                $ticket .= '<div id="ticketqrcode" data-qrcode="'.$booking_number.'" class="qrcode"></div>';
+                $ticket .= '<div id="ticketqrcode" data-qrcode="'.esc_html($booking_number).'" class="qrcode"></div>';
                 $ticket .= '</div>';
-                $ticket .= '<div class="ticket-button">'.$reservation_status.'</div>';
+                $ticket .= '<div class="ticket-button">'.esc_html($reservation_status).'</div>';
                 $ticket .= '</div>';
                 $ticket .= '</div>';
                 
+            } else {
+                if ( !isset($ticket_price) || 0 >= $ticket_price ) {
+                    $ticket .= __('Ticket price not found','staylodgic');
+                }
             }
         }
         

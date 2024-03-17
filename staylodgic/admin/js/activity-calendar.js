@@ -36,6 +36,7 @@
 						success: function(response) {
 							if (response.success) {
 								// Update the activity schedules container with the response data
+								$('.activity-schedules-container').remove();
 								$('.activity-schedules-container-wrap').html(response.data);
 							}
 						},
