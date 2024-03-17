@@ -1,21 +1,43 @@
 (function ($) {
-	$(document).ready(function () {
+    $(document).ready(function () {
 
-		// function updateCalendarCells() {
-		// 	// For each td.calendarCell element...
-		// 	$('td.calendarCell').each(function() {
-		// 		// Find the .quantity-link element within this td.
-		// 		var $quantityLink = $(this).find('.quantity-link');
+        function generateOpacityforRemainingRooms($calendar) {
+            // Find the minimum and maximum number of remaining rooms in the calendar
+            var minRemaining = Infinity;
+            var maxRemaining = 0;
+            $calendar.find('.day-cell').each(function() {
+                var remaining = parseInt($(this).data('remaining'));
+                if (remaining < minRemaining) {
+                    minRemaining = remaining;
+                }
+                if (remaining > maxRemaining) {
+                    maxRemaining = remaining;
+                }
+            });
 
-		// 		// If the data-remaining attribute is 0...
-		// 		if ($quantityLink.data('remaining') == 0) {
-		// 			// Add your specific class to the td.
-		// 			$(this).addClass('fully-booked');
-		// 		}
-		// 	});
-		// }
+            // Apply opacity based on the remaining rooms
+            $calendar.find('.day-cell').each(function() {
+                var remaining = parseInt($(this).data('remaining'));
+                var opacity = (remaining === minRemaining) ? 1 : 0.2 + (0.8 * (remaining - minRemaining) / (maxRemaining - minRemaining));
 
-		// updateCalendarCells();
+                // Animate the opacity change using Velocity.js
+                $(this).velocity({ opacity: opacity }, { duration: 1000 });
+            });
+        }
 
-	});
+        // Fade in each calendar using Velocity.js with a delay and then apply the opacity
+        var delay = 0; // Initialize delay
+        $('.calendar-container').each(function(index, element) {
+            var $calendar = $(element);
+            $calendar.velocity("fadeIn", {
+                duration: 700,
+                delay: delay, // Apply delay
+                complete: function() {
+                    generateOpacityforRemainingRooms($calendar);
+                }
+            });
+            delay += 30; // Increment delay for the next calendar
+        });
+
+    });
 })(jQuery);

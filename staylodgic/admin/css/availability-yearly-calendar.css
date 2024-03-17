@@ -1,3 +1,6 @@
+body #wpwrap {
+	background: #140031;
+}
 #wpwrap h1 {
 	color: #fff;
 	text-align: center;
@@ -17,23 +20,22 @@
 
 .calendar-container {
 	flex: 0 0 270px;
-}
-
-.calendars-container .fully-booked {
-	background: #ff0000;
-	color: #fff;
+	opacity: 0;
 }
 
 .calendars-container .day-cell {
-	background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(234,249,249,0.67) 0.1%, rgba(239,249,251,0.63) 90.1% );
+	background-color: #E0DFFF;
 	color: #000;
 	height: 30px;
 	text-align: center;
 	font-size: 11px;
 	font-weight: 500;
 }
+.calendars-container .day-cell:hover {
+	cursor: pointer;
+}
 .calendars-container .fully-booked {
-	background-image: radial-gradient( circle 860px at 11.8% 33.5%,  rgba(240,30,92,1) 0%, rgba(244,49,74,1) 30.5%, rgba(249,75,37,1) 56.1%, rgba(250,88,19,1) 75.6%, rgba(253,102,2,1) 100.2% );
+	background: #ff0505;
 	color: #fff;
 }
 .availability-calendar .day-header {
@@ -53,6 +55,8 @@
 	background: #fff;
 	text-align: center;
 	box-sizing: border-box;
+	border-radius: 10px;
+	overflow: hidden;
 }
 
 .calendar-container h2 {

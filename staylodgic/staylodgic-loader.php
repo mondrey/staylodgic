@@ -176,8 +176,8 @@ class Staylodgic_Init
         wp_enqueue_style('availability-styles', plugin_dir_url(__FILE__) . 'admin/css/availability-calendar.css', false, 'screen');
         wp_enqueue_script('availability-scripts', plugin_dir_url(__FILE__) . 'admin/js/availability-calendar.js', array('jquery'), null, true);
 
-        wp_enqueue_style('availability-yearly-styles', plugin_dir_url(__FILE__) . 'admin/css/availability-yearly-calendar.css', false, 'screen');
-        wp_enqueue_script('availability-yearly-scripts', plugin_dir_url(__FILE__) . 'admin/js/availability-yearly-calendar.js', array('jquery'), null, true);
+        wp_register_style('availability-yearly-styles', plugin_dir_url(__FILE__) . 'admin/css/availability-yearly-calendar.css', false, 'screen');
+        wp_register_script('availability-yearly-scripts', plugin_dir_url(__FILE__) . 'admin/js/availability-yearly-calendar.js', array('jquery'), null, true);
 
         wp_enqueue_script('activity-scripts', plugin_dir_url(__FILE__) . 'admin/js/activity-calendar.js', array('jquery'), null, true);
         
@@ -404,8 +404,6 @@ class Staylodgic_Init
             
             if ($current_admin_screen->base == 'view-availability_page_slgc-availability-yearly') {
 
-                
-
                 wp_enqueue_style('availability-admin-styles');
                 wp_enqueue_style('availability-yearly-styles');
                 wp_enqueue_script('availability-yearly-scripts');
@@ -433,6 +431,7 @@ class Staylodgic_Init
             if ($current_admin_screen->base == 'toplevel_page_slgc-availability') {
 
                 wp_enqueue_style('availability-admin-styles');
+                
                 wp_enqueue_style('availability-styles');
                 wp_enqueue_script('availability-scripts');
                 

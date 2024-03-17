@@ -101,7 +101,7 @@ class AvailablityCalendarYear extends AvailablityCalendarBase
             $class = $remainingRooms == 0 ? ' fully-booked' : '';
     
             // Display the day number with the class
-            echo "<td class='day-cell$class'>$day</td>";
+            echo "<td data-bs-toggle='tooltip' data-bs-placement='top' data-bs-title='$remainingRooms' data-remaining='$remainingRooms' class='day-cell$class'>$day</td>";
     
             $day_of_week++;
         }
