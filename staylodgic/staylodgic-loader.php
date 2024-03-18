@@ -253,7 +253,7 @@ class Staylodgic_Init
                 wp_enqueue_style('bootstrap');
                 wp_enqueue_script('bootstrap');
             }
-            if ($current_admin_screen->base == 'toplevel_page_slgc-activity-dashboard') {
+            if (isset($_GET['page']) && $_GET['page'] == 'slgc-activity-dashboard') {
 
                 wp_enqueue_style('staylodgic-dashboard');
 

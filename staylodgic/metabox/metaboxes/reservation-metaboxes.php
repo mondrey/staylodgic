@@ -261,36 +261,12 @@ function staylodgic_reservations_metadata()
                 'std'      => '0',
             ),
             array(
-                'name' => esc_html__('Registration', 'staylodgic'),
-                'id'   => 'staylodgic_sep_page_options',
-                'type' => 'seperator',
-            ),
-            array(
-                'name'    => esc_html__('Guest Registration', 'staylodgic'),
-                'id'      => 'staylodgic_reservation_registration',
-                'class'   => 'reservation_registration',
-                'type'    => 'reservation_registration',
-                'desc'    => esc_html__('Customer choice', 'staylodgic'),
-            ),
-            array(
                 'name'    => esc_html__('Customer', 'staylodgic'),
                 'id'      => 'staylodgic_customer_choice',
                 'class'   => 'customer_choice',
                 'type'    => 'select',
                 'desc'    => esc_html__('Customer choice', 'staylodgic'),
-                'options' => array(
-                    'new'      => esc_attr__('Create new from this post', 'staylodgic'),
-                    'existing' => esc_attr__('Choose existing', 'staylodgic'),
-                ),
-            ),
-            array(
-                'name'    => esc_html__('Choose an existing customer', 'staylodgic'),
-                'id'      => 'staylodgic_existing_customer',
-                'class'   => 'metabox_existing_customers',
-                'type'    => 'select',
-                'target'  => 'existing_customers',
-                'desc'    => esc_html__('Choose an existing customer.', 'staylodgic'),
-                'options' => '',
+                'options' => staylodgic_customer_select_choices( $reservation_id ),
             ),
         ),
     );
@@ -299,7 +275,39 @@ function staylodgic_reservations_metadata()
 
     $reservation_id = get_the_ID();
 
+    $customer_existing = array(
+        array(
+            'name'    => esc_html__('Choose an existing customer', 'staylodgic'),
+            'id'      => 'staylodgic_existing_customer',
+            'class'   => 'metabox_existing_customers',
+            'type'    => 'select',
+            'target'  => 'existing_customers',
+            'desc'    => esc_html__('Choose an existing customer.', 'staylodgic'),
+            'options' => '',
+        ),
+    );
     $customer_datafetch = array(
+        array(
+            'name' => esc_html__('Registration', 'staylodgic'),
+            'id'   => 'staylodgic_sep_page_options',
+            'type' => 'seperator',
+        ),
+        array(
+            'name'    => esc_html__('Guest Registration', 'staylodgic'),
+            'id'      => 'staylodgic_reservation_registration',
+            'class'   => 'reservation_registration',
+            'type'    => 'reservation_registration',
+            'desc'    => esc_html__('Customer choice', 'staylodgic'),
+        ),
+        array(
+            'name'    => esc_html__('Choose an existing customer', 'staylodgic'),
+            'id'      => 'staylodgic_existing_customer',
+            'class'   => 'metabox_existing_customers',
+            'type'    => 'select',
+            'target'  => 'existing_customers',
+            'desc'    => esc_html__('Choose an existing customer.', 'staylodgic'),
+            'options' => '',
+        ),
         array(
             'name'    => '',
             'id'      => $reservation_id,
@@ -313,11 +321,31 @@ function staylodgic_reservations_metadata()
 
     $reservation_instance = new \Staylodgic\Reservations();
     if (!$reservation_instance->haveCustomer($reservation_id)) {
+        $reservations_box[ 'fields' ] = array_merge($reservations_box[ 'fields' ], $customer_existing);
         $reservations_box[ 'fields' ] = array_merge($reservations_box[ 'fields' ], $customer);
     } else {
         $reservations_box[ 'fields' ] = array_merge($reservations_box[ 'fields' ], $customer_datafetch);
     }
     return $reservations_box;
+}
+
+function staylodgic_customer_select_choices( $reservation_id ) {
+
+    $reservation_instance = new \Staylodgic\Reservations();
+    if (!$reservation_instance->haveCustomer($reservation_id)) {
+        $choices = array(
+            'new'      => esc_attr__('Create new from this post', 'staylodgic'),
+            'existing' => esc_attr__('Choose existing', 'staylodgic'),
+        );
+    } else {
+        $choices = array(
+            'new'      => esc_attr__('Current selected', 'staylodgic'),
+            'existing' => esc_attr__('Choose existing', 'staylodgic'),
+        );
+    }
+
+    return $choices;
+
 }
 function staylodgic_reservations_changelog()
 {

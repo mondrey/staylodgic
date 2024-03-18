@@ -299,15 +299,30 @@ jQuery(document).ready(function($) {
 		}
 	});
 
-	$('#staylodgic_customer_choice').on('change', function() {
-		var selectedValue = $(this).val();
-		if(selectedValue == 'existing') {
-			$('.metabox_existing_customers').show();
+	// Listen for changes on #staylodgic_existing_customer
+	$('#staylodgic_existing_customer').on('change', function() {
+		// Check if the value is not 'none'
+		if ($(this).val() !== 'none') {
+			// Trigger change on #staylodgic_customer_choice
+			$('#staylodgic_customer_choice').val('existing').trigger('change');
 		} else {
-			$('.metabox_existing_customers').hide();
+			// Trigger change on #staylodgic_customer_choice
+			$('#staylodgic_customer_choice').val('new').trigger('change');			
 		}
 	});
-	$('#staylodgic_customer_choice').trigger('change');
+
+	// Listen for click on .choice-customer-existing
+	$('.choice-customer-existing').on('click', function() {
+
+		// Check if the value of #staylodgic_existing_customer is not 'none'
+		if ($('#staylodgic_existing_customer').val() !== 'none') {
+			$('#staylodgic_customer_choice').val('existing').trigger('change');
+		} else {
+			$('#staylodgic_customer_choice').val('new').trigger('change');
+		}
+		// Show the existing customers select input
+		$('.metabox_existing_customers').show();
+	});
 
 	// Attach click event listener to each switch-toggle
 	$('.switch-toggle').on('click', function() {

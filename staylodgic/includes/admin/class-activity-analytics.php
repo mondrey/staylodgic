@@ -57,18 +57,20 @@ class ActivityAnalytics
         }
 
     }
-
+    
+    // Add the Availability menu item to the admin menu
     public function staylodgic_dashboard()
     {
-        add_menu_page(
-            'Staylodgic Activity',
-            'Staylodgic Activity',
+        // Add the Availability submenu item under the parent menu
+        add_submenu_page(
+            'slgc-dashboard',
+            'Activity Dasboard',
+            'Activity Dasboard',
             'manage_options',
             'slgc-activity-dashboard',
-            array($this, 'activity_display_dashboard'),
-            '',
-            32.1// Position parameter
+            array($this, 'activity_display_dashboard')
         );
+
     }
 
     public function activity_display_dashboard()

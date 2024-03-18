@@ -1469,3 +1469,49 @@ p.ticket-break {
 	margin: 0 auto;
 	display: inline-block;
   }
+
+.metabox_existing_customers {
+	display: none;
+}
+.metaboxtype_select.customer_choice {
+	display: none;
+}
+.choice-customer-existing {
+	position: relative;
+	top: 6px;
+	color:#2271b1;
+	border-bottom: 2px solid #2271b1;
+	padding-bottom: 3px;
+}
+.choice-customer-existing:hover {
+	color:#082f4f;
+	border-bottom: 2px solid #082f4f;
+	cursor: pointer;
+}
+.customer-choice-inbetween {
+	margin-right: 10px;
+}
+.metabox_existing_customers {
+	padding: 40px;
+	background: #ffffe6;
+}
+.metabox-fields.registration-field input {
+	width: 100%;
+}
+.metabox-fields.registration-field {
+	display: inline-block;
+	width: calc( 50% - 60px);
+	padding-right: 0;
+}
+
+.reservation-details {
+	margin-bottom: 15px;
+}
+.reservation-details .registered-occupants {
+	padding-bottom: 10px;
+}
+.metaboxtype_reservation_registration .reservation-details {
+	width: 200px;
+	background: #f5f3f3;
+	padding: 10px 14px;
+}

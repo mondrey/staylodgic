@@ -12,6 +12,23 @@ class Data
         // Hook into the wp_trash_post action
         add_action('wp_trash_post', array($this, 'removeReservation_From_Array'));
         add_action('trashed_post', array($this, 'removeReservation_From_Array'));
+        add_action('save_post', array($this, 'check_post_status_and_remove_reservation'));
+    }
+
+    public function check_post_status_and_remove_reservation($post_id) {
+        // Check if this is an autosave or a revision.
+        if (wp_is_post_autosave($post_id) || wp_is_post_revision($post_id)) {
+            return;
+        }
+    
+        // Get the post object.
+        $post = get_post($post_id);
+    
+        // Check if the post status is 'draft'.
+        if ($post->post_status == 'draft') {
+            // Call your function to remove the reservation from the array.
+            $this->removeReservation_From_Array($post_id);
+        }
     }
 
     public static function getCustomer_MetaData($customer_array, $customer_post_id)
@@ -31,18 +48,7 @@ class Data
         return $output;
     }
 
-    /**
-     * Triggered when a post is saved. If the post type is 'slgc_reservations' and is not autosaved or revision, it updates the reservation details.
-     */
-    public function createActivitiesCustomer_On_Save($post_id, $post, $update)
-    {
-
-        error_log("It is here " . $post_id);
-
-        if (!\Staylodgic\Common::isActivities_valid_post($post_id, $post)) {
-            return;
-        }
-
+    public function initiateCustomerSave( $post_id, $post, $update ) {
         $customer_choice    = get_post_meta($post_id, 'staylodgic_customer_choice', true);
         $booking_number     = get_post_meta($post_id, 'staylodgic_booking_number', true);
         $existing_customer  = get_post_meta($post_id, 'staylodgic_existing_customer', true);
@@ -75,6 +81,22 @@ class Data
                 self::create_Customer_From_Reservation_Post($post_id);
             }
         }
+    }
+
+    /**
+     * Triggered when a post is saved. If the post type is 'slgc_reservations' and is not autosaved or revision, it updates the reservation details.
+     */
+    public function createActivitiesCustomer_On_Save($post_id, $post, $update)
+    {
+
+        error_log("It is here " . $post_id);
+
+        if (!\Staylodgic\Common::isActivities_valid_post($post_id, $post)) {
+            return;
+        }
+
+        $this->initiateCustomerSave($post_id, $post, $update);
+
     }
 
     public function create_Customer_From_Reservation_Post($reservation_post_id)
@@ -243,33 +265,13 @@ class Data
             self::updateReservationsArray_On_Change($room_type, $checkin_date, $checkout_date, $post_id);
         }
 
-        // Check if customer post exists
-        error_log("customer_choice: " . $customer_choice . '||' . $booking_number);
-        $customer_id = get_post_meta($post_id, 'staylodgic_customer_id', true);
-        error_log("checking customer post: " . $customer_id . '||' . $post_id . '||' . $full_name);
-
-        if (\Staylodgic\Common::isCustomer_valid_post($existing_customer)) {
-            if ('existing' == $customer_choice) {
-
-                error_log("Updating: " . $existing_customer . '||' . $booking_number);
-                update_post_meta($post_id, 'staylodgic_customer_id', $existing_customer);
-
-            }
-        }
+        $this->initiateCustomerSave($post_id, $post, $update);
 
         // Check if the post is being trashed
         if ($post->post_status === 'trash') {
             return; // Exit the function if the post is being trashed
         }
-
-        if (!\Staylodgic\Common::isCustomer_valid_post($customer_id)) {
-            if ('existing' !== $customer_choice) {
-                error_log("Customer does not exist: " . $customer_id . '||' . $full_name);
-                // Create new customer from the filled inputs in reservation
-                self::create_Customer_From_Reservation_Post($post_id);
-            }
-        }
-
+        
         // Assuming room_type is the ID of the room associated with the reservation
         if ($room_type) {
             $reservation_instance = new \Staylodgic\Reservations();

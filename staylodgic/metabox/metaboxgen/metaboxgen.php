@@ -339,6 +339,10 @@ function staylodgic_generate_metaboxes($meta_data, $post_id)
                 case "seperator":
                     echo '<hr/>';
 
+                    if ( isset($field['action']) && 'display_choices_for_customer' == $field['action'] ) {
+                        echo '<a class="choice-customer-existing">'. __('Or choose an existing customer','staylodgic') . '</a>';
+                    }
+
                     break;
 
                 // Color picker
@@ -1196,7 +1200,7 @@ function staylodgic_generate_metaboxes($meta_data, $post_id)
                     }
                     $customer_post_id     = $reservation_instance->getReservation_Customer_ID($field['id']);
                     $customer_post_edit   = get_edit_post_link($customer_post_id);
-                    echo '<a class="button button-primary button-large" href="' . $customer_post_edit . '">Edit Customer</a>';
+                    echo '<a class="button button-primary button-large customer-edit-button" href="' . esc_url($customer_post_edit) . '">'. __('Edit Customer','staylodgic') . '</a><span class="customer-choice-inbetween"></span><a class="choice-customer-existing">'. __('or choose an existing customer','staylodgic') . '</a>';
                     $customer_data = \Staylodgic\Data::getCustomer_MetaData($customer_array, $customer_post_id);
                     
                     echo \Staylodgic\Customers::generateCustomerHtmlList($customer_data);
