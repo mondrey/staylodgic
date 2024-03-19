@@ -484,13 +484,30 @@ class GuestRegistry
         if (is_single() && get_post_type() == 'slgc_guestregistry') {
             // Retrieve saved shortcode content
             $saved_shortcode = get_option('staylodgic_guestregistry_shortcode', '');
+
+            if ( '' == $saved_shortcode ) {
+                $formGenInstance = new \Staylodgic\FormGenerator();
+                $saved_shortcode = $formGenInstance->defaultShortcodes();
+            }
+            
             $saved_shortcode = stripslashes($saved_shortcode);
-
+            $form_start_tag = '<div class="registration_form_wrap">';
+            $form_start_tag .= '<div class="registration_form">';
+            $form_start_tag .= '<div class="registration-column registration-column-one registration_form_inputs">';
             $form_start  = '[form_start id="guestregistration" class="guest-registration" action="submission_url" method="post"]';
-            $form_submit = '[form_input type="submit" id="submitregistration" class="btn btn-primary" value="Save Registration"]';
+            $form_submit = '[form_input type="submit" id="submitregistration" class="book-button" value="Save Registration"]';
             $form_end    = '[form_end]';
+            $form_end_tag = '</div>';
+            $form_end_tag .= '<div class="registration-column registration-column-two">';
+            $form_end_tag .= '<div id="booking-summary-wrap">';
+            $form_end_tag .= '<div class="summary-section-title">Online Registration</div>';
+            $form_end_tag .= '<div class="summary-section-description"><p>Please fill the form for Online Registration.</p><p>You can fill according to the number of guests.</p><p>You can submit a registration if you think a mistake was made in a previous one.</p></div>';
+            $form_end_tag .= '</div>';
+            $form_end_tag .= '</div>';
+            $form_end_tag .= '</div>';
+            $form_end_tag .= '</div>';
 
-            $final_shortcode = $form_start . $saved_shortcode . $form_submit . $form_end;
+            $final_shortcode = $form_start_tag . $form_start . $saved_shortcode . $form_submit . $form_end . $form_end_tag;
 
             // Append the shortcode to the original content
             $content .= '<div class="guestregistry-shortcode-content">' . do_shortcode($final_shortcode) . '</div>';

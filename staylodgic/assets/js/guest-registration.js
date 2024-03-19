@@ -10,6 +10,22 @@
 
         $('#submitregistration').click(function(e){
             e.preventDefault();
+
+
+			const $form = $('#guestregistration');
+			
+            $('#submitregistration').addClass('booking-disabled');
+
+			// Check if form is valid
+			if ($form[0].checkValidity() === false) {
+				// $form.find(':input').each(function() {
+				// 	console.log(this.id + ' is valid: ' + this.checkValidity());
+				// });
+				e.stopPropagation(); // Stop further handling of the click event
+				$form.addClass('was-validated'); // Optional: for Bootstrap validation styling
+				$('#submitregistration').removeClass('booking-disabled');
+				return; // Do not proceed to AJAX if validation fails
+			}
     
             var formData = {};
             var guestId = $(this).data('guest'); // Fetch the guest ID from the button

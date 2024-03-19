@@ -180,6 +180,7 @@
 	top: 60px;
 }
 
+.summary-section-title,
 .summary-room-name {
 	display: block;
 	font-size: 28px;
@@ -301,6 +302,9 @@
 	display: none;
 }
 
+#submitregistration {
+	border: 0;
+}
 .book-button.booking-disabled {
 	background: #e4e4e4;
 	pointer-events:none;
@@ -508,6 +512,13 @@
 	margin-top: 30px;
 	padding-top: 12px;
 	text-transform: uppercase;
+	letter-spacing: 1px;
+	line-height: 1.9;
+}
+.summary-section-description {
+	font-size: 14px;
+	margin-top: 30px;
+	padding-top: 12px;
 	letter-spacing: 1px;
 	line-height: 1.9;
 }
@@ -1222,6 +1233,38 @@
 
 	display: inline-block;
 }
+
+.guestregistry-shortcode-content #signature-pad {
+	max-width: 100%;
+}
+
+.guestregistry-shortcode-content {
+	max-width: 740px;
+	margin: 0 auto;
+}
+
+.signature-container {
+	position: relative;
+}
+
+#clear-signature {
+	font-size: 12px;
+	font-weight: 500;
+	color: #fff;
+	background: #000;
+	display: inline-block;
+	padding: 2px 11px;
+	border-radius: 6px;
+	position: absolute;
+	top: 12px;
+	right: 10px;
+	transition: background 0.2s;
+}
+#clear-signature:hover {
+	background: #555;
+	cursor: pointer;
+}
+
 .preloader-element {
 	width: 15px;
 	aspect-ratio: 1;

@@ -151,6 +151,12 @@ class Staylodgic_GuestRegistration_Posts
 
         // Retrieve saved data
         $saved_shortcode = get_option('staylodgic_guestregistry_shortcode', '');
+
+        if ( '' == $saved_shortcode ) {
+            $formGenInstance = new \Staylodgic\FormGenerator();
+            $saved_shortcode = $formGenInstance->defaultShortcodes();
+        }
+
         $saved_shortcode = stripslashes($saved_shortcode);
 
         // HTML for the submenu page

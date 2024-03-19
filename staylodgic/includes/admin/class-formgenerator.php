@@ -163,7 +163,7 @@ class FormGenerator
         $class  = esc_attr($attributes[ 'class' ]);
         $id     = esc_attr($attributes[ 'id' ]);
 
-        return "<form id='{$id}' action='{$action}' method='{$method}' class='{$class}'>";
+        return "<form id='{$id}' action='{$action}' method='{$method}' class='{$class}' novalidate>";
     }
 
 // Shortcode for form end
@@ -202,22 +202,23 @@ class FormGenerator
         add_shortcode('form_input', [ $this, 'shortcodeInput' ]);
     }
 
-    private function defaultShortcodes() {
-
+    public function defaultShortcodes() {
         $shortcodes = '';
-
-        $shortcodes .= '[form_input type="text" id="bookingnumber" label="Booking number"]';
-        $shortcodes .= '[form_input type="text" id="fullname" label="Fullname"]';
-        $shortcodes .= '[form_input type="text" id="passport" label="Passport number"]';
-        $shortcodes .= '[form_input type="email" id="email" label="e-Mail"]';
-        $shortcodes .= '[form_input type="tel" id="phone" label="Phone number"]';
-        $shortcodes .= '[form_input type="date" id="checkin-date" label="Check-In Date"]';
-        $shortcodes .= '[form_input type="date" id="checkout-date" label="Check-Out Date"]';
-        $shortcodes .= '[form_input type="select" id="countries" name="countries" class="form-control" value="" target="countries" label="Countries"]';
-        $shortcodes .= '[form_input type="checkbox" id="checkbox1" label="Agree to Terms" name="termsCheckbox"]';
-        $shortcodes .= '[form_input type="signature" id="signature" label="Signature" name="signature"]';
-        
+    
+        $shortcodes .= "[form_input type=\"text\" id=\"bookingnumber\" label=\"Booking number\" required=\"true\"]\n";
+        $shortcodes .= "[form_input type=\"text\" id=\"fullname\" label=\"Fullname\" required=\"true\"]\n";
+        $shortcodes .= "[form_input type=\"text\" id=\"passport\" label=\"Passport number\" required=\"true\"]\n";
+        $shortcodes .= "[form_input type=\"email\" id=\"email\" label=\"e-Mail\"]\n";
+        $shortcodes .= "[form_input type=\"tel\" id=\"phone\" label=\"Phone number\"]\n";
+        $shortcodes .= "[form_input type=\"date\" id=\"checkin-date\" label=\"Check-In Date\"]\n";
+        $shortcodes .= "[form_input type=\"date\" id=\"checkout-date\" label=\"Check-Out Date\"]\n";
+        $shortcodes .= "[form_input type=\"select\" id=\"countries\" name=\"countries\" class=\"form-control\" value=\"\" target=\"countries\" label=\"Countries\" required=\"true\"]\n";
+        $shortcodes .= "[form_input type=\"checkbox\" id=\"checkbox1\" label=\"Agree to Terms\" name=\"termsCheckbox\" required=\"true\"]\n";
+        $shortcodes .= "[form_input type=\"signature\" id=\"signature\" label=\"Signature\" name=\"signature\"]\n";
+    
+        return $shortcodes;
     }
+    
 }
 
 // Instantiate the class
