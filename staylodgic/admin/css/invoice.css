@@ -66,6 +66,25 @@
 .print-invoice-button:hover {
     background-color: #45a049;
 }
+
+.invoice-buttons-container {
+	margin: 0 auto;
+	text-align: center;
+	padding-bottom: 22px;
+	padding-top: 30px;
+	border-top: 1px solid #ccc;
+	margin-top: 50px;
+}
+
+.metabox-wrapper .reservation-details {
+	padding-top: 15px;
+	font-weight: 500;
+}
+#staylodgic_registration_data-section-title {
+	font-size: 32px;
+	font-weight: 100;
+	text-align: center;
+}
 .invoice-logo {
 	max-width: 100px;
 }

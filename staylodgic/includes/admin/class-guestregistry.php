@@ -157,6 +157,60 @@ class GuestRegistry
         }
     }
 
+    public function allowGuestRegistration($registration_post_id)
+    {
+        $allow = true;
+        $reason = '';
+        
+        $bookingNumber = get_post_meta( $registration_post_id, 'staylodgic_registry_bookingnumber', true);
+    
+        $resRegIDs = $this->fetchResRegIDsByBookingNumber($bookingNumber);
+        
+        $reservationID = $resRegIDs['reservationID'];
+        $registerID = $resRegIDs['guestRegisterID'];
+    
+        $reservation_instance = new \Staylodgic\Reservations();
+    
+        $checkinDate = $reservation_instance->getCheckinDate($reservationID);
+        // Convert check-in date to DateTime object
+        $checkinDateObj = new \DateTime($checkinDate);
+    
+        // Get today's date
+        $today = new \DateTime();
+    
+        // Check if check-in date has already passed
+        if ($today > $checkinDateObj) {
+            $allow = false;
+            $reason = 'Check-in date has already passed';
+        } else {
+            // Calculate the difference in days
+            $dateDiff = $today->diff($checkinDateObj)->days;
+    
+            // If the difference is more than 3 days, set $allow to false
+            if ($dateDiff > 2) {
+                $allow = false;
+                $reason = 'Registration open 2 days before check-in';
+            }
+        }
+    
+        // Get total occupants for the reservation
+        $reservation_occupants = $reservation_instance->getTotalOccupantsForReservation($reservationID);
+    
+        // Get registered guest count
+        $registeredGuestCount = $this->getRegisteredGuestCount($registerID);
+
+        if (( intval( $reservation_occupants ) + 2) < $registeredGuestCount) {
+            $allow = false;
+            $reason = 'Exceeds total registrations allowed for this booking';
+        }
+
+        if ( $reason ) {
+            $reason = '<div class="error-registration-reason">'. $reason . '</div>';
+        }
+    
+        return ['allow' => $allow, 'reason' => $reason];
+    }    
+    
     /**
      * Outputs the final registered and occupancy numbers for a given reservation in either text, fraction, or icons format.
      *
@@ -278,15 +332,16 @@ class GuestRegistry
                 $edit_url = add_query_arg('guest', $guest_id, $post_url);
 
                 // Add Edit and Delete buttons
+                echo '<div class="invoice-buttons-container">';
                 echo '<a href="' . esc_url($edit_url) . '" target="_blank" class="registration-button edit-registration" data-guest-id="' . esc_attr($guest_id) . '">Edit</a>';
                 // Inside your PHP loop where you're echoing out the delete buttons
-                echo '<button class="registration-button delete-registration" data-guest-id="' . esc_attr($guest_id) . '">Delete</button>';
+                echo '<button class="paper-document-button registration-button delete-registration" data-guest-id="' . esc_attr($guest_id) . '">Delete</button>';
 
                 ob_start();
                 ?>
-        <button data-title="Guest Registration <?php echo $guest_data[ 'registration_id' ]; ?>" data-id="<?php echo $guest_data[ 'registration_id' ]; ?>" id="print-invoice-button" class="print-invoice-button">Print Invoice</button>
-        <button data-file="registration-<?php echo $guest_data[ 'registration_id' ]; ?>" data-id="<?php echo $guest_data[ 'registration_id' ]; ?>" id="save-pdf-invoice-button" class="save-pdf-invoice-button">Save PDF</button>
-
+        <button data-title="Guest Registration <?php echo $guest_data[ 'registration_id' ]; ?>" data-id="<?php echo $guest_data[ 'registration_id' ]; ?>" id="print-invoice-button" class="paper-document-button print-invoice-button">Print Invoice</button>
+        <button data-file="registration-<?php echo $guest_data[ 'registration_id' ]; ?>" data-id="<?php echo $guest_data[ 'registration_id' ]; ?>" id="save-pdf-invoice-button" class="paper-document-button save-pdf-invoice-button">Save PDF</button>
+        </div>
         <div class="invoice-container" data-bookingnumber="<?php echo $guest_data[ 'registration_id' ]; ?>">
         <div class="invoice-container-inner">
         <div id="invoice-hotel-header">
@@ -420,7 +475,7 @@ class GuestRegistry
             error_log('Invalid signature data format.');
         }
 
-        echo 'Data Saved';
+        echo $this->registrationSuccessful( $post_id );
         wp_die();
     }
 
@@ -482,65 +537,71 @@ class GuestRegistry
     {
         // Check if we are viewing a single post of type 'slgc_guestregistry'
         if (is_single() && get_post_type() == 'slgc_guestregistry') {
-            // Retrieve saved shortcode content
-            $saved_shortcode = get_option('staylodgic_guestregistry_shortcode', '');
 
-            if ( '' == $saved_shortcode ) {
-                $formGenInstance = new \Staylodgic\FormGenerator();
-                $saved_shortcode = $formGenInstance->defaultShortcodes();
+            $registrationAllowedData = $this->allowGuestRegistration( get_the_id() );
+
+            $registrationAllowed = $registrationAllowedData['allow'];
+
+            if ( ! $registrationAllowed ) {
+                $content .= '<div class="guestregistry-shortcode-content">' . $registrationAllowedData['reason'] . '</div>';
+            } else {
+                // Retrieve saved shortcode content
+                $saved_shortcode = get_option('staylodgic_guestregistry_shortcode', '');
+
+                if ( '' == $saved_shortcode ) {
+                    $formGenInstance = new \Staylodgic\FormGenerator();
+                    $saved_shortcode = $formGenInstance->defaultShortcodes();
+                }
+                
+                $saved_shortcode = stripslashes($saved_shortcode);
+                $form_start_tag = '<div class="registration_form_wrap">';
+                $form_start_tag .= '<div class="registration_form">';
+                $form_start_tag .= '<div class="registration-column registration-column-one registration_form_inputs">';
+                $form_start  = '[form_start id="guestregistration" class="guest-registration" action="submission_url" method="post"]';
+                $form_submit = '[form_input type="submit" id="submitregistration" class="book-button" value="Save Registration"]';
+                $form_end    = '[form_end]';
+                $form_end_tag = '</div>';
+                $form_end_tag .= '<div class="registration-column registration-column-two">';
+                $form_end_tag .= '<div id="booking-summary-wrap">';
+                $form_end_tag .= '<div class="summary-section-title">Online Registration</div>';
+                $form_end_tag .= '<div class="summary-section-description"><p>Please fill the form for Online Registration.</p><p>You can fill according to the number of guests.</p><p>You can submit a registration if you think a mistake was made in a previous one.</p></div>';
+                $form_end_tag .= '</div>';
+                $form_end_tag .= '</div>';
+                $form_end_tag .= '</div>';
+                $form_end_tag .= '</div>';
+
+                $final_shortcode = $form_start_tag . $form_start . $saved_shortcode . $form_submit . $form_end . $form_end_tag;
+
+                // Append the shortcode to the original content
+                $content .= '<div class="guestregistry-shortcode-content">' . do_shortcode($final_shortcode) . '</div>';
             }
-            
-            $saved_shortcode = stripslashes($saved_shortcode);
-            $form_start_tag = '<div class="registration_form_wrap">';
-            $form_start_tag .= '<div class="registration_form">';
-            $form_start_tag .= '<div class="registration-column registration-column-one registration_form_inputs">';
-            $form_start  = '[form_start id="guestregistration" class="guest-registration" action="submission_url" method="post"]';
-            $form_submit = '[form_input type="submit" id="submitregistration" class="book-button" value="Save Registration"]';
-            $form_end    = '[form_end]';
-            $form_end_tag = '</div>';
-            $form_end_tag .= '<div class="registration-column registration-column-two">';
-            $form_end_tag .= '<div id="booking-summary-wrap">';
-            $form_end_tag .= '<div class="summary-section-title">Online Registration</div>';
-            $form_end_tag .= '<div class="summary-section-description"><p>Please fill the form for Online Registration.</p><p>You can fill according to the number of guests.</p><p>You can submit a registration if you think a mistake was made in a previous one.</p></div>';
-            $form_end_tag .= '</div>';
-            $form_end_tag .= '</div>';
-            $form_end_tag .= '</div>';
-            $form_end_tag .= '</div>';
 
-            $final_shortcode = $form_start_tag . $form_start . $saved_shortcode . $form_submit . $form_end . $form_end_tag;
-
-            // Append the shortcode to the original content
-            $content .= '<div class="guestregistry-shortcode-content">' . do_shortcode($final_shortcode) . '</div>';
         }
 
         return $content;
     }
 
-    public function registrationSuccessful()
+    public function registrationSuccessful( $post_id )
     {
 
-        $reservation_instance = new \Staylodgic\Reservations();
-        $booking_page_link    = $reservation_instance->getBookingDetailsPageLinkForGuest();
-
-        $booking_details_link = '<a href="' . esc_attr(esc_url(get_page_link($booking_page_link))) . '">Booking Details</a>';
+        
+        $button = '<a href="'.esc_url( get_the_permalink( $post_id ) ).'" class="book-button button-inline">'.__('Register another','staylodgic').'</a>';
+        
 
         $success_html = <<<HTML
-		<div class="registration_form_outer registration_successful">
-			<div class="registration_form_wrap">
-				<div class="registration_form">
+		<div class="guest_registration_form_outer">
+			<div class="guest_registration_form_wrap">
+				<div class="guest_registration_form">
         <div class="registration-successful-inner">
-            <h3>Booking Successful</h3>
+            <h3>Registration Successful</h3>
             <p>
                 Hi,
             </p>
             <p>
-                Your booking number is: <span class="booking-number">$this->bookingNumber</span>
+                Your registration was successful.
             </p>
             <p>
-                Please contact us to cancel, modify or if there's any questions regarding the booking.
-            </p>
-            <p>
-                <div id="booking-details" class="book-button not-fullwidth">$booking_details_link</div>
+                $button
             </p>
         </div>
         </div>
@@ -607,8 +668,14 @@ HTML;
             echo "<div class='guest-details'>";
             echo "<h3>Guest Information:</h3>";
             echo "<p>Guest ID: " . esc_html($guestID) . "</p>";
-            echo "<p>Full Name: " . esc_html(get_post_meta($guestID, 'staylodgic_full_name', true)) . "</p>";
-            echo "<p>Email Address: " . esc_html(get_post_meta($guestID, 'staylodgic_email_address', true)) . "</p>";
+            // echo "<p>Full Name: " . esc_html(get_post_meta($guestID, 'staylodgic_full_name', true)) . "</p>";
+            // echo "<p>Email Address: " . esc_html(get_post_meta($guestID, 'staylodgic_email_address', true)) . "</p>";
+            $registry_instance = new \Staylodgic\GuestRegistry();
+            $resRegIDs =  $registry_instance->fetchResRegIDsByBookingNumber( $booking_number );
+            if ( $resRegIDs ) {
+                $guest_registration_url = get_permalink( $resRegIDs['guestRegisterID'] );
+                echo '<a href="'.esc_url($guest_registration_url).'" class="book-button button-inline">'.__('Proceed to register','staylodgic').'</a>';
+            }
             // Add other guest details as needed
             echo "</div>";
         } else {
@@ -627,10 +694,6 @@ HTML;
         $staylodgic_bookingdetails_nonce = wp_create_nonce('staylodgic-bookingdetails-nonce');
         ?>
 		<div class="staylodgic-content">
-            <div class="calendar-insights-wrap">
-                <div id="check-in-display"><strong>Stay:</strong> <span>-</span></div>
-                <div id="nights-display"><strong>Nights:</strong> <span>-</span></div>
-            </div>
             <div id="hotel-booking-form">
                 <div class="front-booking-search">
                     <div class="front-booking-number-wrap">

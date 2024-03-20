@@ -501,7 +501,7 @@ function staylodgic_generate_metaboxes($meta_data, $post_id)
                         $registry_instance = new \Staylodgic\GuestRegistry();
                         $resRegIDs =  $registry_instance->fetchResRegIDsByBookingNumber( $text_value );
                         echo $registry_instance->outputRegistrationAndOccupancy($resRegIDs['reservationID'], $resRegIDs['guestRegisterID'], 'text');
-                        echo $registry_instance->outputRegistrationAndOccupancy($resRegIDs['reservationID'], $resRegIDs['guestRegisterID'], 'icons');
+                        //echo $registry_instance->outputRegistrationAndOccupancy($resRegIDs['reservationID'], $resRegIDs['guestRegisterID'], 'icons');
                     }
 
                     break;

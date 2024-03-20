@@ -268,7 +268,8 @@
 }
 
 #woo-bookingpayment,
-.book-button {
+.book-button,
+a.book-button {
 	padding: 10px;
 	box-sizing: border-box;
 	background: #012aff;
@@ -281,13 +282,25 @@
 	cursor: pointer;
 	transition: 0.3s background-color;
 }
+.book-button.button-inline {
+	display: inline-block;
+}
+.guestregistry-shortcode-content a.book-button {
+	text-decoration: none;
+}
 #woo-bookingpayment:hover,
-.book-button:hover {
+.book-button:hover,
+a.book-button:hover,
+.entry-content a.book-button:hover {
 	background: #00abff;
+	color: #fff;
 }
 #woo-bookingpayment:hover:active,
-.book-button:hover:active {
+.book-button:hover:active,
+a.book-button:hover:active,
+.entry-content a.book-button:hover:active {
 	background: #015884;
+	color: #fff;
 }
 .book-button.not-fullwidth {
 	display: inline-block;
@@ -308,6 +321,19 @@
 .book-button.booking-disabled {
 	background: #e4e4e4;
 	pointer-events:none;
+}
+
+.error-registration-reason {
+	background: #0087ff;
+	padding: 60px;
+	text-align: center;
+	color: #fff;
+	font-size: 20px;
+}
+
+.metabox-wrapper .reservation-details {
+	padding-top: 15px;
+	font-weight: 500;
 }
 
 .summary-icon i {

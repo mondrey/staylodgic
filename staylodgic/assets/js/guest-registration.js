@@ -77,6 +77,8 @@
                 data: ajaxData,
                 success: function(response){
                     console.log('Data saved successfully:', response);
+                    
+                    $('.registration-column-one').html( response );
                 },
                 error: function(error){
                     console.log('Error saving data:', error);
