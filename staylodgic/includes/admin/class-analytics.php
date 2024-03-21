@@ -267,16 +267,24 @@ class Analytics
 
     private function add_guest($booking_number = false, $day = 'today', $type = 'checkin', $checkin = false, $checkout = false)
     {
+        // Get the current date and time in a specific format
+        $currentDateTime = date('YmdHis');
+
+        // Generate a random integer
+        $randomInteger = mt_rand(1000, 9999);
+
+        // Combine the date/time string with the random integer
+        $randomValue = $currentDateTime . $randomInteger;
         if ($booking_number) {
             // Fetch guest details
             $reservation_instance = new \Staylodgic\Reservations();
             $guestID              = $reservation_instance->getGuest_id_forReservation($booking_number);
             if ($guestID) {
                 $name                                                          = esc_html(get_post_meta($guestID, 'staylodgic_full_name', true));
-                $this->guests[ $day ][ $type ][ $guestID ][ 'booking_number' ] = $booking_number;
-                $this->guests[ $day ][ $type ][ $guestID ][ 'name' ]           = $name;
-                $this->guests[ $day ][ $type ][ $guestID ][ 'checkin' ]        = $checkin;
-                $this->guests[ $day ][ $type ][ $guestID ][ 'checkout' ]       = $checkout;
+                $this->guests[ $day ][ $type ][ $guestID ][$guestID . '-' . $randomValue][ 'booking_number' ] = $booking_number;
+                $this->guests[ $day ][ $type ][ $guestID ][$guestID . '-' . $randomValue][ 'name' ]           = $name;
+                $this->guests[ $day ][ $type ][ $guestID ][$guestID . '-' . $randomValue][ 'checkin' ]        = $checkin;
+                $this->guests[ $day ][ $type ][ $guestID ][$guestID . '-' . $randomValue][ 'checkout' ]       = $checkout;
             }
         }
     }
@@ -787,40 +795,45 @@ class Analytics
                 $guestListHtml .= '</thead>';
                 $guestListHtml .= '<tbody class="table-group-divider">';
                 // Iterate over each guest and add them to the table
-                foreach ($guests as $guestId => $guestInfo) {
-                    $count++;
+                foreach ($guests as $guestId => $bookings) {
+                    error_log( '-------bookings-------');
+                    error_log( print_r( $bookings,1 ));
+                    foreach ($bookings as $booking) { // Iterate over each booking for the guest
+                        $count++;
+                        error_log( '-------booking-------');
+                        error_log( print_r( $booking,1 ));
+                        $reservations_instance = new \Staylodgic\Reservations();
+                        $reservation_id        = $reservations_instance->getReservationIDforBooking($booking[ 'booking_number' ]);
 
-                    $reservations_instance = new \Staylodgic\Reservations();
-                    $reservation_id        = $reservations_instance->getReservationIDforBooking($guestInfo[ 'booking_number' ]);
+                        $checkinDate  = new \DateTime($booking[ 'checkin' ]);
+                        $checkoutDate = new \DateTime($booking[ 'checkout' ]);
+                        $nights       = $checkoutDate->diff($checkinDate)->days;
 
-                    $checkinDate  = new \DateTime($guestInfo[ 'checkin' ]);
-                    $checkoutDate = new \DateTime($guestInfo[ 'checkout' ]);
-                    $nights       = $checkoutDate->diff($checkinDate)->days;
+                        $guestListHtml .= '<tr>';
+                        $guestListHtml .= '<th class="number-column" scope="row">' . $count . '</th>';
+                        $guestListHtml .= '<td scope="row">';
+                        $guestListHtml .= '<a href="' . esc_url(get_edit_post_link($reservation_id)) . '">';
+                        $guestListHtml .= ucwords(strtolower($booking[ 'name' ]));
+                        $guestListHtml .= '</a>';
+                        $guestListHtml .= '</td>';
+                        $guestListHtml .= '<td scope="row">';
 
-                    $guestListHtml .= '<tr>';
-                    $guestListHtml .= '<th class="number-column" scope="row">' . $count . '</th>';
-                    $guestListHtml .= '<td scope="row">';
-                    $guestListHtml .= '<a href="' . esc_url(get_edit_post_link($reservation_id)) . '">';
-                    $guestListHtml .= ucwords(strtolower($guestInfo[ 'name' ]));
-                    $guestListHtml .= '</a>';
-                    $guestListHtml .= '</td>';
-                    $guestListHtml .= '<td scope="row">';
+                        $registry_instance = new \Staylodgic\GuestRegistry();
+                        $resRegIDs         = $registry_instance->fetchResRegIDsByBookingNumber($booking[ 'booking_number' ]);
+                        if (isset($resRegIDs) && is_array($resRegIDs)) {
+                            $guestListHtml .= $registry_instance->outputRegistrationAndOccupancy($resRegIDs[ 'reservationID' ], $resRegIDs[ 'guestRegisterID' ], 'icons');
+                        }
+                        $guestListHtml .= '</td>';
 
-                    $registry_instance = new \Staylodgic\GuestRegistry();
-                    $resRegIDs         = $registry_instance->fetchResRegIDsByBookingNumber($guestInfo[ 'booking_number' ]);
-                    if (isset($resRegIDs) && is_array($resRegIDs)) {
-                        $guestListHtml .= $registry_instance->outputRegistrationAndOccupancy($resRegIDs[ 'reservationID' ], $resRegIDs[ 'guestRegisterID' ], 'icons');
+                        $notes             = get_post_meta($reservation_id, 'staylodgic_reservation_notes', true);
+                        $notes_with_breaks = nl2br($notes);
+
+                        $guestListHtml .= '<td scope="row">' . $notes_with_breaks . '</td>';
+                        $guestListHtml .= '<td scope="row">' . $booking[ 'checkin' ] . '</td>';
+                        $guestListHtml .= '<td scope="row">' . $booking[ 'checkout' ] . '</td>';
+                        $guestListHtml .= '<td class="nights-column" scope="row">' . $nights . '</td>';
+                        $guestListHtml .= '</tr>';
                     }
-                    $guestListHtml .= '</td>';
-
-                    $notes             = get_post_meta($reservation_id, 'staylodgic_reservation_notes', true);
-                    $notes_with_breaks = nl2br($notes);
-
-                    $guestListHtml .= '<td scope="row">' . $notes_with_breaks . '</td>';
-                    $guestListHtml .= '<td scope="row">' . $guestInfo[ 'checkin' ] . '</td>';
-                    $guestListHtml .= '<td scope="row">' . $guestInfo[ 'checkout' ] . '</td>';
-                    $guestListHtml .= '<td class="nights-column" scope="row">' . $nights . '</td>';
-                    $guestListHtml .= '</tr>';
                 }
                 $guestListHtml .= '</tbody>';
                 $guestListHtml .= '</table>';
