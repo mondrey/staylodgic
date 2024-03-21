@@ -2,7 +2,7 @@
 
 namespace Staylodgic;
 
-class Analytics
+class ActivityAnalytics
 {
     private $id;
     private $info;
@@ -11,8 +11,10 @@ class Analytics
     private $options;
     private $guests;
     private $bookings;
+    private $activities;
+    private $activityLabels;
 
-    public function __construct($id, $info = 'today', $type = 'bar', $data = [  ], $options = [  ], $guests = array(), $bookings = array())
+    public function __construct($id, $info = 'today', $type = 'bar', $data = [  ], $options = [  ], $guests = array(), $bookings = array(), $activities = array(),$activityLabels = array())
     {
         $this->id       = $id;
         $this->info     = $info;
@@ -21,24 +23,57 @@ class Analytics
         $this->options  = $options;
         $this->guests   = $guests;
         $this->bookings = $bookings;
+        $this->activities = $activities;
+        $this->activityLabels = $activityLabels;
 
         add_action('admin_menu', array($this, 'staylodgic_dashboard'));
     }
 
-    public function staylodgic_dashboard()
+    public function loadActivities()
     {
-        add_menu_page(
-            'Staylodgic Dashboard',
-            'Staylodgic Dashboard',
-            'manage_options',
-            'slgc-dashboard',
-            array($this, 'display_dashboard'),
-            '',
-            32// Position parameter
-        );
+        if (! \Staylodgic\Activity::hasActivities()) {
+            return;
+        }
+
+        // Initialize the arrays
+        $this->activities = [];
+        $this->activityLabels = [];
+
+        $activityQuery = new \WP_Query([
+            'post_type'      => 'slgc_activity',
+            'posts_per_page' => -1,
+        ]);
+
+        if ($activityQuery->have_posts()) {
+            while ($activityQuery->have_posts()) {
+                $activityQuery->the_post();
+                $post_id = get_the_ID();
+                $activityTitle = get_the_title();
+                $this->activities[$post_id] = $activityTitle;
+                $this->activityLabels[$post_id]['label'] = $activityTitle;
+                $this->activityLabels[$post_id]['count'] = 0;
+            }
+            wp_reset_postdata();
+        }
+
     }
 
-    public function display_dashboard()
+    // Add the Availability menu item to the admin menu
+    public function staylodgic_dashboard()
+    {
+        // Add the Availability submenu item under the parent menu
+        add_submenu_page(
+            'slgc-dashboard',
+            'Activity Dasboard',
+            'Activity Dasboard',
+            'manage_options',
+            'slgc-activity-dashboard',
+            array($this, 'activity_display_dashboard')
+        );
+
+    }
+
+    public function activity_display_dashboard()
     {
 
         echo '<div class="staylodgic_analytics_wrap">';
@@ -46,17 +81,19 @@ class Analytics
         // Add the logo image below the heading
         echo '<div class="staylodgic-main-logo"></div>';
 
-        if ( ! \Staylodgic\Rooms::hasRooms() ) {
-            echo '<h1>' . __('No Rooms Found','staylodgic') . '</h1>';
+        if ( ! \Staylodgic\Activity::hasActivities() ) {
+            echo '<h1>' . __('No Activities Found','staylodgic') . '</h1>';
             return;
+        } else {
+    
+            // Create an instance of the ChartGenerator class
+            $analytics = new \Staylodgic\ActivityAnalytics($id = false);
+            echo $analytics->display_stats();
         }
-
-        // Create an instance of the ChartGenerator class
-        $analytics = new \Staylodgic\Analytics($id = false);
-        echo $analytics->display_stats();
 
         echo '</div>';
     }
+
 
     public function get_chart_config($id)
     {
@@ -110,7 +147,7 @@ class Analytics
                     'scales'     => [
                         'r' => [
                             'pointLabels' => [
-                                'display'           => true,
+                                'display'           => false,
                                 'centerPointLabels' => true,
                                 'font'              => [
                                     'size' => 18,
@@ -130,7 +167,7 @@ class Analytics
                     'scales'     => [
                         'r' => [
                             'pointLabels' => [
-                                'display'           => true,
+                                'display'           => false,
                                 'centerPointLabels' => true,
                                 'font'              => [
                                     'size' => 18,
@@ -150,7 +187,7 @@ class Analytics
                     'scales'     => [
                         'r' => [
                             'pointLabels' => [
-                                'display'           => true,
+                                'display'           => false,
                                 'centerPointLabels' => true,
                                 'font'              => [
                                     'size' => 18,
@@ -199,31 +236,14 @@ class Analytics
         $stayingCount  = 0;
 
         $query = new \WP_Query([
-            'post_type'      => 'slgc_reservations',
+            'post_type'      => 'slgc_activityres',
             'posts_per_page' => -1,
             'meta_query'     => [
                 'relation' => 'OR',
                 [
-                    'key'     => 'staylodgic_checkin_date',
+                    'key'     => 'staylodgic_reservation_checkin',
                     'value'   => $dayafter,
                     'compare' => '=',
-                 ],
-                [
-                    'key'     => 'staylodgic_checkout_date',
-                    'value'   => $dayafter,
-                    'compare' => '=',
-                 ],
-                [
-                    'key'     => 'staylodgic_checkin_date',
-                    'value'   => $dayafter,
-                    'compare' => '<=',
-                    'type'    => 'DATE',
-                 ],
-                [
-                    'key'     => 'staylodgic_checkout_date',
-                    'value'   => $dayafter,
-                    'compare' => '>=',
-                    'type'    => 'DATE',
                  ],
              ],
          ]);
@@ -232,22 +252,20 @@ class Analytics
             while ($query->have_posts()) {
                 $query->the_post();
                 $booking_number = get_post_meta(get_the_ID(), 'staylodgic_booking_number', true);
+                $activity_id = get_post_meta(get_the_ID(), 'staylodgic_activity_id', true);
                 $status         = get_post_meta(get_the_ID(), 'staylodgic_reservation_status', true);
-                $checkin        = get_post_meta(get_the_ID(), 'staylodgic_checkin_date', true);
+                $checkin        = get_post_meta(get_the_ID(), 'staylodgic_reservation_checkin', true);
                 $checkout       = get_post_meta(get_the_ID(), 'staylodgic_checkout_date', true);
 
                 if ($status == 'confirmed') {
                     if ($checkin == $dayafter) {
-                        $checkinCount++;
-                        $this->add_guest($booking_number, 'dayafter', 'checkin', $checkin, $checkout);
-                    }
-                    if ($checkout == $dayafter) {
-                        $checkoutCount++;
-                        $this->add_guest($booking_number, 'dayafter', 'checkout', $checkin, $checkout);
-                    }
-                    if ($checkin < $dayafter && $checkout > $dayafter) {
-                        $stayingCount++;
-                        $this->add_guest($booking_number, 'dayafter', 'staying', $checkin, $checkout);
+
+                        // Increment the count for the activity_id
+                        if (!isset($this->activityLabels[$activity_id])) {
+                            $this->activityLabels[$activity_id]['count'] = 0;
+                        }
+                        $this->activityLabels[$activity_id]['count']++;
+                        $this->add_guest($booking_number, 'dayafter', 'checkin', $checkin );
                     }
                 }
             }
@@ -255,10 +273,10 @@ class Analytics
         wp_reset_postdata();
 
         return [
-            'labels'   => [ 'Check-ins', 'Check-outs', 'Staying' ],
+            'labels'   => array_column($this->activityLabels, 'label'),
             'datasets' => [
                 [
-                    'data'            => [ $checkinCount, $checkoutCount, $stayingCount ],
+                    'data'            => array_column($this->activityLabels, 'count'),
                     'backgroundColor' => [ 'rgba(255,0,0,0.5)', 'rgba(83, 0, 255, 0.5)', 'rgba(255, 206, 86, 0.5)' ],
                  ],
              ],
@@ -267,24 +285,23 @@ class Analytics
 
     private function add_guest($booking_number = false, $day = 'today', $type = 'checkin', $checkin = false, $checkout = false)
     {
-        // Get the current date and time in a specific format
-        $currentDateTime = date('YmdHis');
-
-        // Generate a random integer
-        $randomInteger = mt_rand(1000, 9999);
-
-        // Combine the date/time string with the random integer
-        $randomValue = $currentDateTime . $randomInteger;
         if ($booking_number) {
             // Fetch guest details
-            $reservation_instance = new \Staylodgic\Reservations();
+            $reservation_instance = new \Staylodgic\Activity();
             $guestID              = $reservation_instance->getGuest_id_forReservation($booking_number);
             if ($guestID) {
-                $name                                                          = esc_html(get_post_meta($guestID, 'staylodgic_full_name', true));
-                $this->guests[ $day ][ $type ][ $guestID ][$guestID . '-' . $randomValue][ 'booking_number' ] = $booking_number;
-                $this->guests[ $day ][ $type ][ $guestID ][$guestID . '-' . $randomValue][ 'name' ]           = $name;
-                $this->guests[ $day ][ $type ][ $guestID ][$guestID . '-' . $randomValue][ 'checkin' ]        = $checkin;
-                $this->guests[ $day ][ $type ][ $guestID ][$guestID . '-' . $randomValue][ 'checkout' ]       = $checkout;
+                $name = esc_html(get_post_meta($guestID, 'staylodgic_full_name', true));
+    
+                // Generate a UUID using the static method from the Common class
+                $uuid = \Staylodgic\Common::generateUUID();
+    
+                // Use the combination of guestID and UUID as the key
+                $uniqueKey = $guestID . '-' . $uuid;
+    
+                $this->guests[$day][$type][$guestID][$uniqueKey]['booking_number'] = $booking_number;
+                $this->guests[$day][$type][$guestID][$uniqueKey]['name']           = $name;
+                $this->guests[$day][$type][$guestID][$uniqueKey]['checkin']        = $checkin;
+                $this->guests[$day][$type][$guestID][$uniqueKey]['checkout']       = $checkout;
             }
         }
     }
@@ -297,31 +314,14 @@ class Analytics
         $stayingCount  = 0;
 
         $query = new \WP_Query([
-            'post_type'      => 'slgc_reservations',
+            'post_type'      => 'slgc_activityres',
             'posts_per_page' => -1,
             'meta_query'     => [
                 'relation' => 'OR',
                 [
-                    'key'     => 'staylodgic_checkin_date',
+                    'key'     => 'staylodgic_reservation_checkin',
                     'value'   => $tomorrow,
                     'compare' => '=',
-                 ],
-                [
-                    'key'     => 'staylodgic_checkout_date',
-                    'value'   => $tomorrow,
-                    'compare' => '=',
-                 ],
-                [
-                    'key'     => 'staylodgic_checkin_date',
-                    'value'   => $tomorrow,
-                    'compare' => '<=',
-                    'type'    => 'DATE',
-                 ],
-                [
-                    'key'     => 'staylodgic_checkout_date',
-                    'value'   => $tomorrow,
-                    'compare' => '>=',
-                    'type'    => 'DATE',
                  ],
              ],
          ]);
@@ -330,22 +330,20 @@ class Analytics
             while ($query->have_posts()) {
                 $query->the_post();
                 $booking_number = get_post_meta(get_the_ID(), 'staylodgic_booking_number', true);
+                $activity_id = get_post_meta(get_the_ID(), 'staylodgic_activity_id', true);
                 $status         = get_post_meta(get_the_ID(), 'staylodgic_reservation_status', true);
-                $checkin        = get_post_meta(get_the_ID(), 'staylodgic_checkin_date', true);
+                $checkin        = get_post_meta(get_the_ID(), 'staylodgic_reservation_checkin', true);
                 $checkout       = get_post_meta(get_the_ID(), 'staylodgic_checkout_date', true);
 
                 if ($status == 'confirmed') {
                     if ($checkin == $tomorrow) {
-                        $checkinCount++;
-                        $this->add_guest($booking_number, 'tomorrow', 'checkin', $checkin, $checkout);
-                    }
-                    if ($checkout == $tomorrow) {
-                        $checkoutCount++;
-                        $this->add_guest($booking_number, 'tomorrow', 'checkout', $checkin, $checkout);
-                    }
-                    if ($checkin < $tomorrow && $checkout > $tomorrow) {
-                        $stayingCount++;
-                        $this->add_guest($booking_number, 'tomorrow', 'staying', $checkin, $checkout);
+
+                        // Increment the count for the activity_id
+                        if (!isset($this->activityLabels[$activity_id])) {
+                            $this->activityLabels[$activity_id]['count'] = 0;
+                        }
+                        $this->activityLabels[$activity_id]['count']++;
+                        $this->add_guest($booking_number, 'tomorrow', 'checkin', $checkin );
                     }
                 }
             }
@@ -353,10 +351,10 @@ class Analytics
         wp_reset_postdata();
 
         return [
-            'labels'   => [ 'Check-ins', 'Check-outs', 'Staying' ],
+            'labels'   => array_column($this->activityLabels, 'label'),
             'datasets' => [
                 [
-                    'data'            => [ $checkinCount, $checkoutCount, $stayingCount ],
+                    'data'            => array_column($this->activityLabels, 'count'),
                     'backgroundColor' => [ 'rgba(255,0,0,0.5)', 'rgba(83, 0, 255, 0.5)', 'rgba(255, 206, 86, 0.5)' ],
                  ],
              ],
@@ -371,31 +369,14 @@ class Analytics
         $stayingCount  = 0;
 
         $query = new \WP_Query([
-            'post_type'      => 'slgc_reservations',
+            'post_type'      => 'slgc_activityres',
             'posts_per_page' => -1,
             'meta_query'     => [
                 'relation' => 'OR',
                 [
-                    'key'     => 'staylodgic_checkin_date',
+                    'key'     => 'staylodgic_reservation_checkin',
                     'value'   => $today,
                     'compare' => '=',
-                 ],
-                [
-                    'key'     => 'staylodgic_checkout_date',
-                    'value'   => $today,
-                    'compare' => '=',
-                 ],
-                [
-                    'key'     => 'staylodgic_checkin_date',
-                    'value'   => $today,
-                    'compare' => '<=',
-                    'type'    => 'DATE',
-                 ],
-                [
-                    'key'     => 'staylodgic_checkout_date',
-                    'value'   => $today,
-                    'compare' => '>=',
-                    'type'    => 'DATE',
                  ],
              ],
          ]);
@@ -404,22 +385,20 @@ class Analytics
             while ($query->have_posts()) {
                 $query->the_post();
                 $booking_number = get_post_meta(get_the_ID(), 'staylodgic_booking_number', true);
+                $activity_id = get_post_meta(get_the_ID(), 'staylodgic_activity_id', true);
                 $status         = get_post_meta(get_the_ID(), 'staylodgic_reservation_status', true);
-                $checkin        = get_post_meta(get_the_ID(), 'staylodgic_checkin_date', true);
+                $checkin        = get_post_meta(get_the_ID(), 'staylodgic_reservation_checkin', true);
                 $checkout       = get_post_meta(get_the_ID(), 'staylodgic_checkout_date', true);
-
+                
                 if ($status == 'confirmed') {
                     if ($checkin == $today) {
-                        $checkinCount++;
-                        $this->add_guest($booking_number, 'today', 'checkin', $checkin, $checkout);
-                    }
-                    if ($checkout == $today) {
-                        $checkoutCount++;
-                        $this->add_guest($booking_number, 'today', 'checkout', $checkin, $checkout);
-                    }
-                    if ($checkin < $today && $checkout > $today) {
-                        $stayingCount++;
-                        $this->add_guest($booking_number, 'today', 'staying', $checkin, $checkout);
+
+                        // Increment the count for the activity_id
+                        if (!isset($this->activityLabels[$activity_id])) {
+                            $this->activityLabels[$activity_id]['count'] = 0;
+                        }
+                        $this->activityLabels[$activity_id]['count']++;
+                        $this->add_guest($booking_number, 'today', 'checkin', $checkin );
                     }
                 }
             }
@@ -427,10 +406,10 @@ class Analytics
         wp_reset_postdata();
 
         return [
-            'labels'   => [ 'Check-ins', 'Check-outs', 'Staying' ],
+            'labels'   => array_column($this->activityLabels, 'label'),
             'datasets' => [
                 [
-                    'data'            => [ $checkinCount, $checkoutCount, $stayingCount ],
+                    'data'            => array_column($this->activityLabels, 'count'),
                     'backgroundColor' => [ 'rgba(255,0,0,0.5)', 'rgba(83, 0, 255, 0.5)', 'rgba(255, 206, 86, 0.5)' ],
                  ],
              ],
@@ -462,12 +441,12 @@ class Analytics
 
                 // Query for revenue and nights
                 $revenueQuery = new \WP_Query([
-                    'post_type'      => 'slgc_reservations',
+                    'post_type'      => 'slgc_activityres',
                     'posts_per_page' => -1,
                     'meta_query'     => [
                         'relation' => 'AND',
                         [
-                            'key'     => 'staylodgic_checkin_date',
+                            'key'     => 'staylodgic_reservation_checkin',
                             'value'   => $month,
                             'compare' => 'LIKE',
                          ],
@@ -550,12 +529,12 @@ class Analytics
                 error_log('Not using Cache revenue data:' . $month);
                 // Query for revenue
                 $revenueQuery = new \WP_Query([
-                    'post_type'      => 'slgc_reservations',
+                    'post_type'      => 'slgc_activityres',
                     'posts_per_page' => -1,
                     'meta_query'     => [
                         'relation' => 'AND',
                         [
-                            'key'     => 'staylodgic_checkin_date',
+                            'key'     => 'staylodgic_reservation_checkin',
                             'value'   => $month,
                             'compare' => 'LIKE',
                          ],
@@ -634,12 +613,12 @@ class Analytics
                 error_log('Not using Cache bookings data:' . $month);
                 // Query for confirmed bookings
                 $confirmedQuery = new \WP_Query([
-                    'post_type'      => 'slgc_reservations',
+                    'post_type'      => 'slgc_activityres',
                     'posts_per_page' => -1,
                     'meta_query'     => [
                         'relation' => 'AND',
                         [
-                            'key'     => 'staylodgic_checkin_date',
+                            'key'     => 'staylodgic_reservation_checkin',
                             'value'   => $month,
                             'compare' => 'LIKE',
                          ],
@@ -654,12 +633,12 @@ class Analytics
 
                 // Query for cancelled bookings
                 $cancelledQuery = new \WP_Query([
-                    'post_type'      => 'slgc_reservations',
+                    'post_type'      => 'slgc_activityres',
                     'posts_per_page' => -1,
                     'meta_query'     => [
                         'relation' => 'AND',
                         [
-                            'key'     => 'staylodgic_checkin_date',
+                            'key'     => 'staylodgic_reservation_checkin',
                             'value'   => $month,
                             'compare' => 'LIKE',
                          ],
@@ -722,7 +701,7 @@ class Analytics
             return 'Chart not found.';
         }
 
-        $chart          = new Analytics($id, $config[ 'info' ], $config[ 'type' ], $config[ 'data' ], $config[ 'options' ], $this->guests);
+        $chart          = new \Staylodgic\ActivityAnalytics($id, $config[ 'info' ], $config[ 'type' ], $config[ 'data' ], $config[ 'options' ], $this->guests);
         $rendered_chart = $chart->render();
 
         $chart_output = '';
@@ -785,12 +764,12 @@ class Analytics
                 $guestListHtml .= '<thead class="table-light">';
                 $guestListHtml .= '<tr>';
                 $guestListHtml .= '<th class="table-cell-heading table-cell-heading-number number-column" scope="col"><i class="fas fa-hashtag"></i></th>';
+                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-booking-number" scope="col"><i class="fas fa-hashtag"></i> Booking</th>';
                 $guestListHtml .= '<th class="table-cell-heading table-cell-heading-name" scope="col"><i class="fas fa-user"></i> Guest Name</th>';
+                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-activity" scope="col"><i class="fas fa-bed"></i> Activity</th>';
                 $guestListHtml .= '<th class="table-cell-heading table-cell-heading-registration" scope="col"><i class="fas fa-clipboard-list"></i> Registration</th>';
                 $guestListHtml .= '<th class="table-cell-heading table-cell-heading-notes" scope="col"><i class="fas fa-sticky-note"></i> Notes</th>';
-                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-checkin" scope="col"><i class="fas fa-sign-in-alt"></i> Check-in Date</th>';
-                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-checkout" scope="col"><i class="fas fa-sign-out-alt"></i> Check-out Date</th>';
-                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-nights nights-column" scope="col"><i class="fas fa-moon"></i> Nights</th>';
+                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-checkin" scope="col"><i class="fas fa-sign-in-alt"></i> Activity Date</th>';
                 $guestListHtml .= '</tr>';
                 $guestListHtml .= '</thead>';
                 $guestListHtml .= '<tbody class="table-group-divider">';
@@ -802,8 +781,8 @@ class Analytics
                         $count++;
                         error_log( '-------booking-------');
                         error_log( print_r( $booking,1 ));
-                        $reservations_instance = new \Staylodgic\Reservations();
-                        $reservation_id        = $reservations_instance->getReservationIDforBooking($booking[ 'booking_number' ]);
+                        $reservations_instance = new \Staylodgic\Activity();
+                        $reservation_id        = $reservations_instance->getActivityIDforBooking($booking[ 'booking_number' ]);
 
                         $checkinDate  = new \DateTime($booking[ 'checkin' ]);
                         $checkoutDate = new \DateTime($booking[ 'checkout' ]);
@@ -812,9 +791,18 @@ class Analytics
                         $guestListHtml .= '<tr>';
                         $guestListHtml .= '<th class="number-column" scope="row">' . $count . '</th>';
                         $guestListHtml .= '<td scope="row">';
+                        $guestListHtml .= $booking[ 'booking_number' ];
+                        $guestListHtml .= '</td>';
+                        $guestListHtml .= '<td scope="row">';
                         $guestListHtml .= '<a href="' . esc_url(get_edit_post_link($reservation_id)) . '">';
                         $guestListHtml .= ucwords(strtolower($booking[ 'name' ]));
                         $guestListHtml .= '</a>';
+                        $guestListHtml .= '</td>';
+                        $guestListHtml .= '<td scope="row">';
+                        
+                        $room_name = $reservations_instance->getActivityNameForReservation($reservation_id);
+
+                        $guestListHtml .= $room_name;
                         $guestListHtml .= '</td>';
                         $guestListHtml .= '<td scope="row">';
 
@@ -830,8 +818,6 @@ class Analytics
 
                         $guestListHtml .= '<td scope="row">' . $notes_with_breaks . '</td>';
                         $guestListHtml .= '<td scope="row">' . $booking[ 'checkin' ] . '</td>';
-                        $guestListHtml .= '<td scope="row">' . $booking[ 'checkout' ] . '</td>';
-                        $guestListHtml .= '<td class="nights-column" scope="row">' . $nights . '</td>';
                         $guestListHtml .= '</tr>';
                     }
                 }
@@ -846,6 +832,8 @@ class Analytics
     }
     public function display_stats()
     {
+
+        $this->loadActivities();
 
         $past_twelve_months_bookings = $this->chart_generator('past_twelve_months_bookings');
         $past_twelve_months_revenue  = $this->chart_generator('past_twelve_months_revenue');
@@ -885,4 +873,4 @@ class Analytics
 
 }
 
-$analytics = new \Staylodgic\Analytics($id = false);
+$analytics = new \Staylodgic\ActivityAnalytics($id = false);

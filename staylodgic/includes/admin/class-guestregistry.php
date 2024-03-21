@@ -245,12 +245,12 @@ class GuestRegistry
         } elseif ($outputFormat === 'fraction' || $registeredGuestCount > $reservation_occupants) {
             // Fallback to fraction if registered guests exceed total occupancy or fraction is requested
             $registration_output .= '<div class="reservation-details">';
-            $registration_output .= '<div class="occupancy-details">Registered: ' . esc_html($registeredGuestCount) . '/' . esc_html($reservation_occupants) . '</div>';
+            $registration_output .= '<div class="occupancy-details"><span class="registration-label">Registered</span>: ' . esc_html($registeredGuestCount) . '/' . esc_html($reservation_occupants) . '</div>';
             $registration_output .= '</div>';
         } else { // Default to text format
             $registration_output .= '<div class="reservation-details">';
-            $registration_output .= '<div class="registered-occupants">Total guests: ' . esc_html($reservation_occupants) . '</div>';
-            $registration_output .= '<div class="registered-guests">Registered guests: ' . esc_html($registeredGuestCount) . '</div>';
+            $registration_output .= '<div class="registered-occupants"><span class="registration-label">Total guests</span>: ' . esc_html($reservation_occupants) . '</div>';
+            $registration_output .= '<div class="registered-guests"><span class="registration-label">Registered guests</span>: ' . esc_html($registeredGuestCount) . '</div>';
             $registration_output .= '</div>';
         }
 

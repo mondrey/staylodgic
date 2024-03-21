@@ -100,7 +100,7 @@ body.wp-admin {
 
 .staylodgic_analytics_table th:not(.number-column, .nights-column),
 .staylodgic_analytics_table td:not(.number-column, .nights-column) {
-	width: calc(95% / 6);
+	width: calc(95% / 7);
 }
 
 

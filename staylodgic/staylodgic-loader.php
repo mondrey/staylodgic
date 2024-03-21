@@ -115,9 +115,9 @@ class Staylodgic_Init
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-invoicing.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-guestregistry.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-formgenerator.php';
-        require_once plugin_dir_path(__FILE__) . 'includes/admin/class-analytics.php';
+        require_once plugin_dir_path(__FILE__) . 'includes/admin/class-analytics-bookings.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-activity.php';
-        require_once plugin_dir_path(__FILE__) . 'includes/admin/class-activity-analytics.php';
+        require_once plugin_dir_path(__FILE__) . 'includes/admin/class-analytics-activity.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-tax.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/utilities.php';
     }

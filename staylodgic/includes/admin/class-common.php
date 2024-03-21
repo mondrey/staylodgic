@@ -3,7 +3,7 @@ namespace Staylodgic;
 
 class Common
 {
-	public static function generateUuid() {
+	public static function generateUUID() {
 		// Generate a version 4 UUID
 		return sprintf('%04x%04x-%04x-4%03x-%04x-%04x%04x%04x',
 			// 32 bits for "time_low"

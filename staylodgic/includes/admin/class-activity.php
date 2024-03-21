@@ -1446,7 +1446,7 @@ return ob_get_clean();
             $new_bookingsubstatus = 'onhold';
         }
 
-        $reservation_booking_uid = \Staylodgic\Common::generateUuid();
+        $reservation_booking_uid = \Staylodgic\Common::generateUUID();
 
         $signature = md5('staylodgic_booking_system');
 
