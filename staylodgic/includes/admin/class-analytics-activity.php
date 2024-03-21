@@ -124,19 +124,6 @@ class ActivityAnalytics
                      ],
                  ],
              ],
-            'past_twelve_months_adr'      => [
-                'info'    => 'past_twelve_months_adr',
-                'heading' => 'ADR for past twelve months',
-                'cache'   => true,
-                'type'    => 'bar',
-                'options' => [
-                    'scales' => [
-                        'y' => [
-                            'beginAtZero' => true,
-                         ],
-                     ],
-                 ],
-             ],
             'bookings_today'              => [
                 'info'    => 'today',
                 'heading' => 'Today',
@@ -208,9 +195,6 @@ class ActivityAnalytics
                     break;
                 case 'past_twelve_months_revenue':
                     $configs[ $id ][ 'data' ] = $this->get_past_twelve_months_revenue_data();
-                    break;
-                case 'past_twelve_months_adr':
-                    $configs[ $id ][ 'data' ] = $this->get_past_twelve_months_adr_data();
                     break;
                 case 'bookings_today':
                     $configs[ $id ][ 'data' ] = $this->get_current_day_stats_data();
@@ -411,94 +395,6 @@ class ActivityAnalytics
                 [
                     'data'            => array_column($this->activityLabels, 'count'),
                     'backgroundColor' => [ 'rgba(255,0,0,0.5)', 'rgba(83, 0, 255, 0.5)', 'rgba(255, 206, 86, 0.5)' ],
-                 ],
-             ],
-         ];
-    }
-
-    private function get_past_twelve_months_adr_data()
-    {
-        $labels       = [  ];
-        $adrData      = [  ];
-        $currentMonth = date('Y-m');
-
-        $cache = new \Staylodgic\Cache();
-
-        for ($i = 12; $i >= 0; $i--) {
-            $month      = date('Y-m', strtotime("$currentMonth -$i month"));
-            $labels[  ] = date('F', strtotime($month));
-
-            // Check if the data is cached
-            $cacheKey = $cache->generateAnalyticsCacheKey('twelve_months_adr_' . $month);
-
-            if ($cache->hasCache($cacheKey)) {
-                // Use cached data
-                $cachedData = $cache->getCache($cacheKey);
-                $adr        = $cachedData;
-            } else {
-
-                error_log('Not using Cache adr data:' . $month);
-
-                // Query for revenue and nights
-                $revenueQuery = new \WP_Query([
-                    'post_type'      => 'slgc_activityres',
-                    'posts_per_page' => -1,
-                    'meta_query'     => [
-                        'relation' => 'AND',
-                        [
-                            'key'     => 'staylodgic_reservation_checkin',
-                            'value'   => $month,
-                            'compare' => 'LIKE',
-                         ],
-                        [
-                            'key'     => 'staylodgic_reservation_status',
-                            'value'   => 'confirmed',
-                            'compare' => '=',
-                         ],
-                     ],
-                 ]);
-
-                $totalRevenue = 0;
-                $totalNights  = 0;
-                if ($revenueQuery->have_posts()) {
-                    while ($revenueQuery->have_posts()) {
-                        $revenueQuery->the_post();
-                        $totalRevenue += (float) get_post_meta(get_the_ID(), 'staylodgic_reservation_total_room_cost', true);
-
-                        $checkin  = get_post_meta(get_the_ID(), 'staylodgic_checkin_date', true);
-                        $checkout = get_post_meta(get_the_ID(), 'staylodgic_checkout_date', true);
-                        if ($checkin && $checkout) {
-                            $checkinDate  = new \DateTime($checkin);
-                            $checkoutDate = new \DateTime($checkout);
-                            $nights       = $checkoutDate->diff($checkinDate)->days;
-                            $totalNights += $nights;
-                        }
-                    }
-                }
-                wp_reset_postdata();
-
-                $adr = $totalNights > 0 ? round($totalRevenue / $totalNights) : 0; // Round the ADR value
-
-                // Cache the data if it's not the current month
-                if ($month != $currentMonth) {
-                    $cache->setCache($cacheKey, $adr);
-                }
-            }
-
-            $adrData[  ] = $adr;
-        }
-
-        return [
-            'labels'   => $labels,
-            'datasets' => [
-                [
-                    'label'         => __('Average Daily Rate (ADR)','staylodgic'),
-                    'data'          => $adrData,
-                    'useGradient'   => true,
-                    'gradientStart' => 'rgba(255,0,0,1)',
-                    'gradientEnd'   => 'rgba(83, 0, 255, 1)',
-                    'borderColor'   => 'rgba(75, 192, 192, 1)',
-                    'fill'          => false,
                  ],
              ],
          ];
@@ -837,7 +733,6 @@ class ActivityAnalytics
 
         $past_twelve_months_bookings = $this->chart_generator('past_twelve_months_bookings');
         $past_twelve_months_revenue  = $this->chart_generator('past_twelve_months_revenue');
-        $past_twelve_months_adr      = $this->chart_generator('past_twelve_months_adr');
         $bookings_today              = $this->chart_generator('bookings_today');
         $bookings_tomorrow           = $this->chart_generator('bookings_tomorrow');
         $bookings_dayafter           = $this->chart_generator('bookings_dayafter');
@@ -852,7 +747,7 @@ class ActivityAnalytics
         $row_one .= '<div class="staylodgic_anaytlics_module staylodgic_chart_bookings_dayafter">' . $bookings_dayafter . '</div>';
         $row_one .= '</div>';
 
-        $dashboard = $row_one . $guestListHtml . $past_twelve_months_bookings . $past_twelve_months_revenue . $past_twelve_months_adr;
+        $dashboard = $row_one . $guestListHtml . $past_twelve_months_bookings . $past_twelve_months_revenue;
         return $dashboard;
 
     }
