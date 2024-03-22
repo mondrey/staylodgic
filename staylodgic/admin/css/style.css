@@ -1482,11 +1482,15 @@ p.ticket-break {
 	color:#2271b1;
 	border-bottom: 2px solid #2271b1;
 	padding-bottom: 3px;
+	text-decoration: none;
 }
 .choice-customer-existing:hover {
 	color:#082f4f;
 	border-bottom: 2px solid #082f4f;
 	cursor: pointer;
+}
+ul.existing-customer {
+	padding: 20px 0;
 }
 .customer-choice-inbetween {
 	margin-right: 10px;

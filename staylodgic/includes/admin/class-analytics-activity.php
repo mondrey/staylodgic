@@ -414,7 +414,7 @@ class ActivityAnalytics
             $labels[  ] = date('F', strtotime($month));
 
             // Check if the data is cached
-            $cacheKey = $cache->generateAnalyticsCacheKey('twelve_months_revenue_' . $month);
+            $cacheKey = $cache->generateAnalyticsCacheKey('analytics_activity_twelve_months_revenue_' . $month);
 
             if ($cache->hasCache($cacheKey)) {
                 // Use cached data
@@ -496,7 +496,7 @@ class ActivityAnalytics
             $labels[  ] = date('F', strtotime($month));
 
             // Check if the data is cached
-            $cacheKey = $cache->generateAnalyticsCacheKey('bookings_data_' . $month);
+            $cacheKey = $cache->generateAnalyticsCacheKey('analytics_activity_data_' . $month);
             // $cache->deleteCache($cacheKey);
             if ($cache->hasCache($cacheKey)) {
                 // Use cached data
@@ -663,7 +663,8 @@ class ActivityAnalytics
                 $guestListHtml .= '<th class="table-cell-heading table-cell-heading-booking-number" scope="col"><i class="fas fa-hashtag"></i> Booking</th>';
                 $guestListHtml .= '<th class="table-cell-heading table-cell-heading-name" scope="col"><i class="fas fa-user"></i> Guest Name</th>';
                 $guestListHtml .= '<th class="table-cell-heading table-cell-heading-activity" scope="col"><i class="fas fa-bed"></i> Activity</th>';
-                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-registration" scope="col"><i class="fas fa-clipboard-list"></i> Registration</th>';
+                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-time" scope="col"><i class="fas fa-clock"></i> Time</th>';
+                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-persons" scope="col"><i class="fas fa-clipboard-list"></i> Persons</th>';
                 $guestListHtml .= '<th class="table-cell-heading table-cell-heading-notes" scope="col"><i class="fas fa-sticky-note"></i> Notes</th>';
                 $guestListHtml .= '<th class="table-cell-heading table-cell-heading-checkin" scope="col"><i class="fas fa-sign-in-alt"></i> Activity Date</th>';
                 $guestListHtml .= '</tr>';
@@ -701,12 +702,17 @@ class ActivityAnalytics
                         $guestListHtml .= $room_name;
                         $guestListHtml .= '</td>';
                         $guestListHtml .= '<td scope="row">';
+                        
+                        $guestListHtml .= $reservations_instance->getActivityTime( $reservation_id );
 
-                        $registry_instance = new \Staylodgic\GuestRegistry();
-                        $resRegIDs         = $registry_instance->fetchResRegIDsByBookingNumber($booking[ 'booking_number' ]);
-                        if (isset($resRegIDs) && is_array($resRegIDs)) {
-                            $guestListHtml .= $registry_instance->outputRegistrationAndOccupancy($resRegIDs[ 'reservationID' ], $resRegIDs[ 'guestRegisterID' ], 'icons');
-                        }
+                        $guestListHtml .= '</td>';
+                        $guestListHtml .= '<td scope="row">';
+
+                        $adults = $reservations_instance->getNumberOfAdultsForReservation($reservation_id);
+                        $children = $reservations_instance->getNumberOfChildrenForReservation($reservation_id);
+
+                        $guestListHtml .= \Staylodgic\Common::generatePersonIcons( $adults, $children );
+
                         $guestListHtml .= '</td>';
 
                         $notes             = get_post_meta($reservation_id, 'staylodgic_reservation_notes', true);

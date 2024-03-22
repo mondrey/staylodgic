@@ -449,7 +449,7 @@ class AnalyticsBookings
             $labels[  ] = date('F', strtotime($month));
 
             // Check if the data is cached
-            $cacheKey = $cache->generateAnalyticsCacheKey('twelve_months_adr_' . $month);
+            $cacheKey = $cache->generateAnalyticsCacheKey('analytics_bookings_twelve_months_adr_' . $month);
 
             if ($cache->hasCache($cacheKey)) {
                 // Use cached data
@@ -538,7 +538,7 @@ class AnalyticsBookings
             $labels[  ] = date('F', strtotime($month));
 
             // Check if the data is cached
-            $cacheKey = $cache->generateAnalyticsCacheKey('twelve_months_revenue_' . $month);
+            $cacheKey = $cache->generateAnalyticsCacheKey('analytics_bookings_twelve_months_revenue_' . $month);
 
             if ($cache->hasCache($cacheKey)) {
                 // Use cached data
@@ -620,7 +620,7 @@ class AnalyticsBookings
             $labels[  ] = date('F', strtotime($month));
 
             // Check if the data is cached
-            $cacheKey = $cache->generateAnalyticsCacheKey('bookings_data_' . $month);
+            $cacheKey = $cache->generateAnalyticsCacheKey('analytics_bookings_data_' . $month);
             // $cache->deleteCache($cacheKey);
             if ($cache->hasCache($cacheKey)) {
                 // Use cached data
@@ -787,6 +787,7 @@ class AnalyticsBookings
                 $guestListHtml .= '<th class="table-cell-heading table-cell-heading-booking-number" scope="col"><i class="fas fa-hashtag"></i> Booking</th>';
                 $guestListHtml .= '<th class="table-cell-heading table-cell-heading-name" scope="col"><i class="fas fa-user"></i> Guest Name</th>';
                 $guestListHtml .= '<th class="table-cell-heading table-cell-heading-room" scope="col"><i class="fas fa-bed"></i> Room</th>';
+                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-registration" scope="col"><i class="fas fa-clipboard-list"></i> Persons</th>';
                 $guestListHtml .= '<th class="table-cell-heading table-cell-heading-registration" scope="col"><i class="fas fa-clipboard-list"></i> Registration</th>';
                 $guestListHtml .= '<th class="table-cell-heading table-cell-heading-notes" scope="col"><i class="fas fa-sticky-note"></i> Notes</th>';
                 $guestListHtml .= '<th class="table-cell-heading table-cell-heading-checkin" scope="col"><i class="fas fa-sign-in-alt"></i> Check-in Date</th>';
@@ -825,6 +826,14 @@ class AnalyticsBookings
                         $room_name = $reservations_instance->getRoomNameForReservation($reservation_id);
 
                         $guestListHtml .= $room_name;
+                        $guestListHtml .= '</td>';
+                        $guestListHtml .= '<td scope="row">';
+
+                        $adults = $reservations_instance->getNumberOfAdultsForReservation($reservation_id);
+                        $children = $reservations_instance->getNumberOfChildrenForReservation($reservation_id);
+
+                        $guestListHtml .= \Staylodgic\Common::generatePersonIcons( $adults, $children );
+
                         $guestListHtml .= '</td>';
                         $guestListHtml .= '<td scope="row">';
 

@@ -3,6 +3,25 @@ namespace Staylodgic;
 
 class Common
 {
+
+	public static function generatePersonIcons( $adults = 0, $children = 0 ) {
+
+		$html = '';
+
+        if ($adults > 0) {
+            for ($displayAdultCount = 0; $displayAdultCount < $adults; $displayAdultCount++) {
+                $html .= '<span class="guest-adult-svg"></span>';
+            }
+        }
+        if ($children > 0) {
+            for ($displayChildrenCount = 0; $displayChildrenCount < $children; $displayChildrenCount++) {
+                $html .= '<span class="guest-child-svg"></span>';
+            }
+        }
+
+		return $html;
+	}
+	
 	public static function generateUUID() {
 		// Generate a version 4 UUID
 		return sprintf('%04x%04x-%04x-4%03x-%04x-%04x%04x%04x',

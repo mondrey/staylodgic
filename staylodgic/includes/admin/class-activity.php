@@ -55,6 +55,60 @@ class Activity
 
     }
 
+    public function getActivityTime( $reservation_id = false ) {
+
+        if (false !== $reservation_id) {
+            $this->reservation_id = $reservation_id;
+        }
+
+        $time = get_post_meta($this->reservation_id, 'staylodgic_activity_time', true);
+
+        return $time;
+    }
+
+    public function getNumberOfAdultsForReservation( $reservation_id = false )
+    {
+
+        if (false !== $reservation_id) {
+            $this->reservation_id = $reservation_id;
+        }
+
+        $number_of_adults = get_post_meta($this->reservation_id, 'staylodgic_reservation_activity_adults', true);
+
+        if ( isset($number_of_adults) && $number_of_adults ) {
+            return $number_of_adults;
+        }
+
+        return false;
+    }
+    public function getNumberOfChildrenForReservation( $reservation_id = false )
+    {
+
+        if (false !== $reservation_id) {
+            $this->reservation_id = $reservation_id;
+        }
+
+        $number_of_children = get_post_meta($this->reservation_id, 'staylodgic_reservation_activity_children', true);
+        if ( isset($number_of_children['number']) && $number_of_children ) {
+            return $number_of_children['number'];
+        }
+
+        return false;
+    }
+
+    public function getTotalOccupantsForReservation( $reservation_id = false )
+    {
+
+        if (false !== $reservation_id) {
+            $this->reservation_id = $reservation_id;
+        }
+
+        $number_of_adults = $this->getNumberOfAdultsForReservation();
+        $number_of_children = $this->getNumberOfChildrenForReservation();
+
+        return intval( $number_of_adults ) + intval( $number_of_children );
+    }
+
     public static function hasActivities() {
         $roomlist = [];
         $rooms = self::queryActivities(); // Call queryRooms() method here
@@ -687,16 +741,9 @@ HTML;
         }
 
         $html .= '<div class="main-summary-wrap">';
-        if ($adults > 0) {
-            for ($displayAdultCount = 0; $displayAdultCount < $adults; $displayAdultCount++) {
-                $html .= '<span class="guest-adult-svg"></span>';
-            }
-        }
-        if ($children > 0) {
-            for ($displayChildrenCount = 0; $displayChildrenCount < $children; $displayChildrenCount++) {
-                $html .= '<span class="guest-child-svg"></span>';
-            }
-        }
+
+        $html .= \Staylodgic\Common::generatePersonIcons( $adults, $children );
+
         $html .= '</div>';
 
         $html .= '<div class="stay-summary-wrap">';
@@ -1062,7 +1109,7 @@ return ob_get_clean();
             $reservation_status = get_post_meta($the_post_id, 'staylodgic_reservation_status', true);            
 
             $data_array = staylodgic_get_select_target_options('activity_names');
-            $time = get_post_meta($the_post_id, 'staylodgic_activity_time', true);
+            $time = $this->getActivityTime( $the_post_id );
 
             $reservedForGuests = $this->getActivityReservationNumbers( $the_post_id );
             $reservedTotal = $reservedForGuests['total'];

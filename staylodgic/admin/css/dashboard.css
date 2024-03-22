@@ -134,3 +134,19 @@ table.staylodgic_analytics_table thead tr th.nights-column {
 	padding-right: 7px;
 	color: #a4a4a4;
 }
+
+.guest-adult-svg {
+	width: 22px;
+	height: 32px;
+	background-image: url('../../assets/svgs/person-adult.svg');
+	display: inline-block;
+	background-repeat: no-repeat;
+}
+
+.guest-child-svg {
+	width: 22px;
+	height: 22px;
+	background-image: url('../../assets/svgs/person-child.svg');
+	display: inline-block;
+	background-repeat: no-repeat;
+}

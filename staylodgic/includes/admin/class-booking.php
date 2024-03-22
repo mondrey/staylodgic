@@ -249,16 +249,9 @@ class Booking
         }
 
         $html .= '<div class="main-summary-wrap">';
-        if ($adults > 0) {
-            for ($displayAdultCount = 0; $displayAdultCount < $adults; $displayAdultCount++) {
-                $html .= '<span class="guest-adult-svg"></span>';
-            }
-        }
-        if ($children > 0) {
-            for ($displayChildrenCount = 0; $displayChildrenCount < $children; $displayChildrenCount++) {
-                $html .= '<span class="guest-child-svg"></span>';
-            }
-        }
+
+        $html .= \Staylodgic\Common::generatePersonIcons( $adults, $children );
+        
         if ('' !== $bedtype) {
             $html .= '<div class="bed-summary">' . self::get_AllBedLayouts($bedtype) . '</div>';
         }
@@ -856,16 +849,7 @@ return ob_get_clean();
                 $html .= '</div>';
                 $html .= '<div class="room-details-column">';
 
-                if ($this->adultGuests > 0) {
-                    for ($displayAdultCount = 0; $displayAdultCount < $this->adultGuests; $displayAdultCount++) {
-                        $html .= '<span class="guest-adult-svg"></span>';
-                    }
-                }
-                if ($this->childrenGuests > 0) {
-                    for ($displayChildrenCount = 0; $displayChildrenCount < $this->childrenGuests; $displayChildrenCount++) {
-                        $html .= '<span class="guest-child-svg"></span>';
-                    }
-                }
+                $html .= \Staylodgic\Common::generatePersonIcons( $this->adultGuests, $this->childrenGuests );
 
                 // // Append a select element for the quantity
                 // $html .= '<select data-room-id="' . $id . '" name="room_quantity">';
