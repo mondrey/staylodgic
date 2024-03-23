@@ -654,9 +654,9 @@ class ActivityAnalytics
                 }
 
                 $guestListHtml .= '<div class="staylodgic_table_outer">';
-                $guestListHtml .= "<h3>" . $font_icon . ucfirst($status) . "</h3>";
+                $guestListHtml .= "<h3>" . $font_icon . " Activities</h3>";
 
-                $guestListHtml .= '<table class="staylodgic_analytics_table table table-hover" data-export-title="Reservation - ' . $status.' ' . $day .'">';
+                $guestListHtml .= '<table class="staylodgic_analytics_table table table-hover" data-export-title="Activities for ' . $day .'">';
                 $guestListHtml .= '<thead class="table-light">';
                 $guestListHtml .= '<tr>';
                 $guestListHtml .= '<th class="table-cell-heading table-cell-heading-number number-column" scope="col"><i class="fas fa-hashtag"></i></th>';

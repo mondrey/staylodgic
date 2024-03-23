@@ -254,9 +254,15 @@ class Staylodgic_Init
             if ($current_admin_screen->base == 'toplevel_page_slgc-dashboard') {
 
                 wp_enqueue_style('staylodgic-dashboard');
-                wp_enqueue_style('dataTables-bootstrap5');
 
                 wp_enqueue_script('staylodgic-bookingchart');
+                wp_enqueue_style('dataTables-bootstrap5');
+                wp_enqueue_script('staylodgic-dataTables');
+                wp_enqueue_script('staylodgic-dataTables-bootstrap5');
+
+                wp_enqueue_script('staylodgic-dataTables-PDFmake');
+                wp_enqueue_script('staylodgic-dataTables-vsf-fonts');
+                wp_enqueue_script('staylodgic-chartjs');
 
                 wp_enqueue_style('fontawesome-6');
                 wp_enqueue_style('fontawesome-6-brands');
@@ -268,9 +274,14 @@ class Staylodgic_Init
             if (isset($_GET['page']) && $_GET['page'] == 'slgc-activity-dashboard') {
 
                 wp_enqueue_style('staylodgic-dashboard');
-                wp_enqueue_style('dataTables-bootstrap5');
 
                 wp_enqueue_script('staylodgic-bookingchart');
+                wp_enqueue_style('dataTables-bootstrap5');
+                wp_enqueue_script('staylodgic-dataTables');
+                wp_enqueue_script('staylodgic-dataTables-bootstrap5');
+                wp_enqueue_script('staylodgic-dataTables-PDFmake');
+                wp_enqueue_script('staylodgic-dataTables-vsf-fonts');
+                wp_enqueue_script('staylodgic-chartjs');
 
                 wp_enqueue_style('fontawesome-6');
                 wp_enqueue_style('fontawesome-6-brands');

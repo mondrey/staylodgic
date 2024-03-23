@@ -100,7 +100,7 @@ body.wp-admin {
 
 .staylodgic_analytics_table th:not(.number-column, .nights-column),
 .staylodgic_analytics_table td:not(.number-column, .nights-column) {
-	width: calc(95% / 7);
+	width: calc(95% / 10);
 }
 
 
@@ -149,4 +149,16 @@ table.staylodgic_analytics_table thead tr th.nights-column {
 	background-image: url('../../assets/svgs/person-child.svg');
 	display: inline-block;
 	background-repeat: no-repeat;
+}
+
+
+.staylodgic_table_outer .staylodgic_analytics_table td.dt-type-date,
+.staylodgic_table_outer table.dataTable td.dt-type-numeric,
+.staylodgic_table_outer .table.dataTable thead th {
+	text-align: left;
+}
+
+.staylodgic_table_outer .staylodgic_analytics_table th.number-column,
+.staylodgic_table_outer .table.dataTable thead th.number-column {
+	text-align: center;
 }
