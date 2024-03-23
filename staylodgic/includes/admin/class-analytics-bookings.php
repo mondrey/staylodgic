@@ -780,16 +780,16 @@ class AnalyticsBookings
                 $guestListHtml .= '<div class="staylodgic_table_outer">';
                 $guestListHtml .= "<h3>" . $font_icon . ucfirst($status) . "</h3>";
 
-                $guestListHtml .= '<table class="staylodgic_analytics_table table table-hover">';
+                $guestListHtml .= '<table class="staylodgic_analytics_table table table-hover" data-export-title="Reservation - ' . $status.' ' . $day .'">';
                 $guestListHtml .= '<thead class="table-light">';
                 $guestListHtml .= '<tr>';
                 $guestListHtml .= '<th class="table-cell-heading table-cell-heading-number number-column" scope="col"><i class="fas fa-hashtag"></i></th>';
                 $guestListHtml .= '<th class="table-cell-heading table-cell-heading-booking-number" scope="col"><i class="fas fa-hashtag"></i> Booking</th>';
                 $guestListHtml .= '<th class="table-cell-heading table-cell-heading-name" scope="col"><i class="fas fa-user"></i> Guest Name</th>';
                 $guestListHtml .= '<th class="table-cell-heading table-cell-heading-room" scope="col"><i class="fas fa-bed"></i> Room</th>';
-                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-registration" scope="col"><i class="fas fa-clipboard-list"></i> Persons</th>';
-                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-registration" scope="col"><i class="fas fa-clipboard-list"></i> Registration</th>';
-                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-notes" scope="col"><i class="fas fa-sticky-note"></i> Notes</th>';
+                $guestListHtml .= '<th data-orderable="false" class="table-cell-heading table-cell-heading-registration" scope="col"><i class="fas fa-clipboard-list"></i> Persons</th>';
+                $guestListHtml .= '<th data-orderable="false" class="table-cell-heading table-cell-heading-registration" scope="col"><i class="fas fa-clipboard-list"></i> Registration</th>';
+                $guestListHtml .= '<th data-orderable="false" class="table-cell-heading table-cell-heading-notes" scope="col"><i class="fas fa-sticky-note"></i> Notes</th>';
                 $guestListHtml .= '<th class="table-cell-heading table-cell-heading-checkin" scope="col"><i class="fas fa-sign-in-alt"></i> Check-in Date</th>';
                 $guestListHtml .= '<th class="table-cell-heading table-cell-heading-checkout" scope="col"><i class="fas fa-sign-out-alt"></i> Check-out Date</th>';
                 $guestListHtml .= '<th class="table-cell-heading table-cell-heading-nights nights-column" scope="col"><i class="fas fa-moon"></i> Nights</th>';
@@ -814,12 +814,12 @@ class AnalyticsBookings
                         $guestListHtml .= '<tr>';
                         $guestListHtml .= '<th class="number-column" scope="row">' . $count . '</th>';
                         $guestListHtml .= '<td scope="row">';
+                        $guestListHtml .= '<a href="' . esc_url(get_edit_post_link($reservation_id)) . '">';
                         $guestListHtml .= $booking[ 'booking_number' ];
+                        $guestListHtml .= '</a>';
                         $guestListHtml .= '</td>';
                         $guestListHtml .= '<td scope="row">';
-                        $guestListHtml .= '<a href="' . esc_url(get_edit_post_link($reservation_id)) . '">';
                         $guestListHtml .= ucwords(strtolower($booking[ 'name' ]));
-                        $guestListHtml .= '</a>';
                         $guestListHtml .= '</td>';
                         $guestListHtml .= '<td scope="row">';
                         

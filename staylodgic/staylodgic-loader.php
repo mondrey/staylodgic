@@ -190,9 +190,20 @@ class Staylodgic_Init
 
         wp_register_script('bootstrap', plugin_dir_url(__FILE__) . 'assets/js/bootstrap/js/bootstrap.bundle.min.js', array('jquery'), null, true);
         wp_register_style('bootstrap', plugin_dir_url(__FILE__) . 'assets/js/bootstrap/css/bootstrap.min.css', false, 'screen');
+        
+        // wp_register_style('dataTables-bootstrap5', plugin_dir_url(__FILE__) . 'admin/js/dataTables/dataTables.bootstrap5.min.css', false, 'screen');
 
+        // wp_register_script('staylodgic-dataTables-bootstrap5', plugin_dir_url(__FILE__) . 'admin/js/dataTables/dataTables.bootstrap5.min.js', array('jquery', 'staylodgic-dataTables'), null, true);
+        // wp_register_script('staylodgic-dataTables', plugin_dir_url(__FILE__) . 'admin/js/dataTables/dataTables.min.js', array('jquery'), null, true);
+
+        wp_register_style('dataTables-bootstrap5', plugin_dir_url(__FILE__) . 'admin/js/DataTables/datatables.min.css', false, 'screen');
+        wp_register_script('staylodgic-dataTables', plugin_dir_url(__FILE__) . 'admin/js/DataTables/datatables.min.js', array('jquery'), null, true);
+        wp_register_script('staylodgic-dataTables-bootstrap5', plugin_dir_url(__FILE__) . 'admin/js/DataTables/dataTables.bootstrap5.min.js', array('jquery', 'staylodgic-dataTables'), null, true);
+        wp_register_script('staylodgic-dataTables-vsf-fonts', plugin_dir_url(__FILE__) . 'admin/js/DataTables/vfs_fonts.js', array('jquery', 'staylodgic-dataTables'), null, true);
+        wp_register_script('staylodgic-dataTables-PDFmake', plugin_dir_url(__FILE__) . 'admin/js/DataTables/pdfmake.min.js', array('jquery', 'staylodgic-dataTables'), null, true);
+        
         wp_register_script('staylodgic-chartjs', plugin_dir_url(__FILE__) . 'admin/js/chart.js', array('jquery'), null, true);
-        wp_register_script('staylodgic-bookingchart', plugin_dir_url(__FILE__) . 'admin/js/booking-charts.js', array('staylodgic-chartjs'), null, true);
+        wp_register_script('staylodgic-bookingchart', plugin_dir_url(__FILE__) . 'admin/js/booking-charts.js', array('staylodgic-chartjs', 'staylodgic-dataTables', 'staylodgic-dataTables-bootstrap5'), null, true);        
 
         if (function_exists('get_current_screen')) {
             $current_admin_screen = get_current_screen();
@@ -243,8 +254,9 @@ class Staylodgic_Init
             if ($current_admin_screen->base == 'toplevel_page_slgc-dashboard') {
 
                 wp_enqueue_style('staylodgic-dashboard');
+                wp_enqueue_style('dataTables-bootstrap5');
 
-                wp_enqueue_script('staylodgic-bookingchart', plugin_dir_url(__FILE__) . 'admin/js/booking-charts.js', array('jquery'), null, true);
+                wp_enqueue_script('staylodgic-bookingchart');
 
                 wp_enqueue_style('fontawesome-6');
                 wp_enqueue_style('fontawesome-6-brands');
@@ -256,8 +268,9 @@ class Staylodgic_Init
             if (isset($_GET['page']) && $_GET['page'] == 'slgc-activity-dashboard') {
 
                 wp_enqueue_style('staylodgic-dashboard');
+                wp_enqueue_style('dataTables-bootstrap5');
 
-                wp_enqueue_script('staylodgic-bookingchart', plugin_dir_url(__FILE__) . 'admin/js/booking-charts.js', array('jquery'), null, true);
+                wp_enqueue_script('staylodgic-bookingchart');
 
                 wp_enqueue_style('fontawesome-6');
                 wp_enqueue_style('fontawesome-6-brands');

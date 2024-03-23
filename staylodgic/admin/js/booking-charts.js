@@ -50,6 +50,27 @@
                 options: options
             });
         });
+
+        $('.staylodgic_analytics_table').each(function() {
+            var exportTitle = $(this).data('export-title');
+            $(this).DataTable({
+                lengthChange: false,
+                paging: false,
+                info: false,
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'excel',
+                        title: exportTitle
+                    },
+                    {
+                        extend: 'pdf',
+                        title: exportTitle
+                    },
+                    'print'
+                ]
+            });
+        });      
         
     });
 })(jQuery);

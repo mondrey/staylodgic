@@ -656,7 +656,7 @@ class ActivityAnalytics
                 $guestListHtml .= '<div class="staylodgic_table_outer">';
                 $guestListHtml .= "<h3>" . $font_icon . ucfirst($status) . "</h3>";
 
-                $guestListHtml .= '<table class="staylodgic_analytics_table table table-hover">';
+                $guestListHtml .= '<table class="staylodgic_analytics_table table table-hover" data-export-title="Reservation - ' . $status.' ' . $day .'">';
                 $guestListHtml .= '<thead class="table-light">';
                 $guestListHtml .= '<tr>';
                 $guestListHtml .= '<th class="table-cell-heading table-cell-heading-number number-column" scope="col"><i class="fas fa-hashtag"></i></th>';
@@ -664,8 +664,8 @@ class ActivityAnalytics
                 $guestListHtml .= '<th class="table-cell-heading table-cell-heading-name" scope="col"><i class="fas fa-user"></i> Guest Name</th>';
                 $guestListHtml .= '<th class="table-cell-heading table-cell-heading-activity" scope="col"><i class="fas fa-bed"></i> Activity</th>';
                 $guestListHtml .= '<th class="table-cell-heading table-cell-heading-time" scope="col"><i class="fas fa-clock"></i> Time</th>';
-                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-persons" scope="col"><i class="fas fa-clipboard-list"></i> Persons</th>';
-                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-notes" scope="col"><i class="fas fa-sticky-note"></i> Notes</th>';
+                $guestListHtml .= '<th data-orderable="false" class="table-cell-heading table-cell-heading-persons" scope="col"><i class="fas fa-clipboard-list"></i> Persons</th>';
+                $guestListHtml .= '<th data-orderable="false" class="table-cell-heading table-cell-heading-notes" scope="col"><i class="fas fa-sticky-note"></i> Notes</th>';
                 $guestListHtml .= '<th class="table-cell-heading table-cell-heading-checkin" scope="col"><i class="fas fa-sign-in-alt"></i> Activity Date</th>';
                 $guestListHtml .= '</tr>';
                 $guestListHtml .= '</thead>';
