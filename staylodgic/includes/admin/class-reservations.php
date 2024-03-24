@@ -364,7 +364,7 @@ class Reservations
 
         if (is_array($reservations_array)) {
 
-            error_log(print_r($reservations_array, 1));
+            // error_log(print_r($reservations_array, 1));
         
             foreach ($reservations_array as $date => &$ids) { // Use a reference (&) to modify the array directly
                 foreach ($ids as $key => $id) {
@@ -373,11 +373,11 @@ class Reservations
                         if ('' == $booking_number) {
                             $booking_number = '--------------------------------------------------';
                         }
-                        error_log('================');
-                        error_log('Date:' . $date);
-                        error_log('POST ID:' . $id);
-                        error_log('Booking Number:' . $booking_number);
-                        error_log('================');
+                        // error_log('================');
+                        // error_log('Date:' . $date);
+                        // error_log('POST ID:' . $id);
+                        // error_log('Booking Number:' . $booking_number);
+                        // error_log('================');
                     } else {
                         echo $id . ' The post does not exist.';
                         unset($ids[$key]); // Remove the ID from the array
@@ -388,8 +388,8 @@ class Reservations
             // Clean up any empty arrays left after unsetting IDs
             $reservations_array = array_filter($reservations_array);
         
-            error_log('Modified reservations array:');
-            error_log(print_r($reservations_array, 1));
+            // error_log('Modified reservations array:');
+            // error_log(print_r($reservations_array, 1));
         }        
 
         // Initialize the remaining rooms count array
@@ -1060,11 +1060,11 @@ class Reservations
                 //$max_room_count = \Staylodgic\Rooms::getMaxQuantityForRoom($room->ID, $date_string);
                 $reservation_instance = new \Staylodgic\Reservations( $date_string, $room->ID );
                 $remaining_rooms      = $reservation_instance->remainingRooms_For_Day();
-                error_log( '-------------------- Fully booked percent check');
-                error_log( $room->ID );
-                error_log( $date_string );
-                error_log( $remaining_rooms );
-                error_log( '-------------------- booked percent check');
+                // error_log( '-------------------- Fully booked percent check');
+                // error_log( $room->ID );
+                // error_log( $date_string );
+                // error_log( $remaining_rooms );
+                // error_log( '-------------------- booked percent check');
                 $dailyRoomAvailability[$date_string] += $remaining_rooms;
             }
         }
@@ -1212,7 +1212,8 @@ class Reservations
 
         $currentDate = strtotime($dateString);
         $start       = false;
-
+        // error_log( 'print_r( $dateString,1 )');
+        // error_log( print_r( $dateString,1 ));
         $query = $this->getReservationsForRoom(false, false, false, false, $room_id);
 
         $reservation_checkin  = '';

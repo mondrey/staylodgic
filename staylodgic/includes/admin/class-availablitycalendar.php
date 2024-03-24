@@ -4,9 +4,9 @@ namespace Staylodgic;
 class AvailablityCalendar extends AvailablityCalendarBase
 {
 
-    public function __construct($startDate = null, $endDate = null)
+    public function __construct($startDate = null, $endDate = null, $calendarData = null, $checkout_list = null )
     {
-        parent::__construct($startDate, $endDate);
+        parent::__construct($startDate, $endDate, $calendarData, $checkout_list);
 
         // WordPress AJAX action hook
         add_action('wp_ajax_get_Selected_Range_AvailabilityCalendar', array($this, 'get_Selected_Range_AvailabilityCalendar'));
@@ -218,6 +218,8 @@ $calendar = $this->getAvailabilityCalendar();
             $endDate   = new \DateTime($endDate);
         }
 
+        $this->calendarData = array();
+
         $dates = $this->getDates($startDate, $endDate);
         $today = $this->today;
 
@@ -241,8 +243,8 @@ $calendar = $this->getAvailabilityCalendar();
 		$all_room_output  = '';
 
         foreach ($this->roomlist as $roomId => $roomName):
-            error_log('cache date');
-            error_log($roomId . ' ' . $startDateString . ' ' . $endDateString);
+            // error_log('cache date');
+            // error_log($roomId . ' ' . $startDateString . ' ' . $endDateString);
             
             $cache_instance = new \Staylodgic\Cache($roomId, $startDateString, $endDateString);
             // $cache_instance->deleteCache();
@@ -251,8 +253,8 @@ $calendar = $this->getAvailabilityCalendar();
 
             $room_reservations_instance = new \Staylodgic\Reservations($dateString = false, $roomId);
             $room_reservations_instance->calculateAndUpdateRemainingRoomCountsForAllDates();
-			error_log($transient_key);
-			error_log('----------');
+			// error_log($transient_key);
+			// error_log('----------');
 
 			$use_cache = true;
 
@@ -260,8 +262,8 @@ $calendar = $this->getAvailabilityCalendar();
 			if ( isset( $cached_calendar['qty_rates'] )) {
 				$cached_qty_rates = $cached_calendar['qty_rates'];
 
-				error_log('--------- Cache --------');
-				error_log('--------- Cache QTY RATES --------');
+				// error_log('--------- Cache --------');
+				// error_log('--------- Cache QTY RATES --------');
 				//error_log(print_r($cached_calendar['qty_rates'], true));
 	
 				foreach ($dates as $date) {
@@ -288,13 +290,13 @@ $calendar = $this->getAvailabilityCalendar();
 
 						if ( $remaining_rooms !== $cached_qty_rates[$dateString]['qty'] ) {
 	
-							error_log( $remaining_rooms . ' --#compare-qty#-- ' . $cached_qty_rates[$dateString]['qty'] );
+							// error_log( $remaining_rooms . ' --#compare-qty#-- ' . $cached_qty_rates[$dateString]['qty'] );
 							$use_cache = false;
 							$cache_instance->deleteCache($transient_key);
 							break; // Exit the loop
 						}
 						if ( $room_rate !== $cached_qty_rates[$dateString]['rate'] ) {
-							error_log( $room_rate . ' --#compare-rate#-- ' . $cached_qty_rates[$dateString]['rate'] );
+							// error_log( $room_rate . ' --#compare-rate#-- ' . $cached_qty_rates[$dateString]['rate'] );
 							$use_cache = false;
 							$cache_instance->deleteCache($transient_key);
 							break; // Exit the loop
@@ -306,8 +308,8 @@ $calendar = $this->getAvailabilityCalendar();
 
             if ($cache_instance->hasCache($transient_key) && true == $cache_instance->isCacheAllowed() && true == $use_cache ) {
 
-                error_log('--------- Using Cache --------');
-				error_log('--------- Cache QTY RATES --------');
+                // error_log('--------- Using Cache --------');
+				// error_log('--------- Cache QTY RATES --------');
 				// error_log(print_r($cached_calendar['qty_rates'], true));
 				if ( isset( $cached_calendar['calendar'])) {
 					$all_room_output .= $cached_calendar['calendar'];
@@ -317,7 +319,7 @@ $calendar = $this->getAvailabilityCalendar();
 
 				error_log('--------- Without using Cache ------------------------------------');
 
-                $checkout_list  = array();
+                $this->checkout_list  = array();
                 $cache_qty_rate = array();
                 $cache_output   = array();
 
@@ -331,6 +333,7 @@ $calendar = $this->getAvailabilityCalendar();
 
                     $reservation_instance = new \Staylodgic\Reservations($dateString, $roomId);
                     $reservation_data     = $reservation_instance->isDate_Reserved();
+                    // error_log( print_r($reservation_data,1));
                     // $remaining_room_count  = $reservation_instance->getDirectRemainingRoomCount();
                     $remaining_rooms = $reservation_instance->remainingRooms_For_Day();
                     // $reserved_rooms       = $reservation_instance->calculateReservedRooms();
@@ -369,10 +372,11 @@ $calendar = $this->getAvailabilityCalendar();
                     if ($reservation_data) {
                         $reservation_module = array();
                         //echo staylodgic_generate_reserved_tab( $reservation_data, $checkout_list );
-                        $reservation_module = $this->ReservedTab($reservation_data, $checkout_list, $dateString, $startDateString);
+                        $reservation_module = $this->ReservedTab($reservation_data, $dateString, $startDateString);
                         $room_output .= $reservation_module[ 'tab' ];
-                        $checkout_list = $reservation_module[ 'checkout' ];
+                        // $this->checkout_list = $reservation_module[ 'checkout' ];
                         //print_r( $checkout_list );
+                        
                     }
                     $room_output .= '</div>';
                     $room_output .= '</td>';
@@ -541,7 +545,84 @@ $calendar = $this->getAvailabilityCalendar();
         return $output;
     }
 
-    private function ReservedTab($reservation_data, $checkout_list, $current_day, $calendar_start)
+    private function createCheckoutList( $reservation_id, $checkin, $checkout ) {
+        if (!array_key_exists($reservation_id, $this->checkout_list)) {
+
+            $newCheckin  = $checkin; // Checkin date of the new value to be added
+            $hasConflict = false; // Flag to track if there is a conflict
+            // Iterate through the existing array
+            foreach ($this->checkout_list as $value) {
+                $checkoutDate = $value[ 'checkout' ];
+
+                // Compare the new checkin date with existing checkout dates
+                if ($newCheckin <= $checkoutDate) {
+                    $hasConflict = true;
+                    // echo 'has conflict : ' . $newCheckin . ' with ' . $checkoutDate;
+                    break; // Stop iterating if a conflict is found
+                }
+            }
+
+            $givenCheckinDate = $checkin;
+            // Filter the array based on the check-in date and reservations has not checkedout
+            $filteredArray = array_filter($this->checkout_list, function ($value) use ($givenCheckinDate) {
+                return $value[ 'checkout' ] > $givenCheckinDate;
+            });
+
+            // Extract the room numbers from the filtered array
+            $roomNumbers = array_column($filteredArray, 'room');
+
+            // Check for missing room numbers
+            $missingNumber = false;
+            sort($roomNumbers);
+
+            if (!empty($roomNumbers)) {
+                for ($i = 1; $i <= max($roomNumbers); $i++) {
+                    if (!in_array($i, $roomNumbers)) {
+                        $missingNumber = $i;
+                        break;
+                    }
+                }
+            }
+
+            // Output the result
+            if ($missingNumber) {
+                $room = $missingNumber;
+            } else {
+                $givenDate   = $checkin;
+                $recordCount = 0;
+
+                foreach ($this->checkout_list as $value) {
+                    $checkoutDate = $value[ 'checkout' ];
+
+                    if ($checkoutDate > $givenDate) {
+                        $recordCount++;
+                    }
+                }
+
+                if ($hasConflict) {
+                    //The new checkin date falls within existing checkout dates.";
+                    $room = $recordCount + 1;
+                } else {
+                    //The new checkin date is outside existing checkout dates.";
+                    $room = $recordCount - 1;
+                }
+            }
+
+            if (empty($this->checkout_list)) {
+                $room = 1;
+            }
+            if ($room < 0) {
+                $room = 1;
+            }
+
+            $this->checkout_list[ $reservation_id ][ 'room' ]     = $room;
+            $this->checkout_list[ $reservation_id ][ 'checkin' ]  = $checkin;
+            $this->checkout_list[ $reservation_id ][ 'checkout' ] = $checkout;
+        }
+
+    }
+
+    private function ReservedTab($reservation_data, $current_day, $calendar_start)
     {
         $display = false;
         $tab     = array();
@@ -550,7 +631,7 @@ $calendar = $this->getAvailabilityCalendar();
         foreach ($reservation_data as $reservation) {
             $start_date_display    = '';
             $guest_name            = '';
-            $reservatoin_id        = $reservation[ 'id' ];
+            $reservation_id        = $reservation[ 'id' ];
             $reservation_instance  = new \Staylodgic\Reservations($date = false, $room_id = false, $reservation_id = $reservation[ 'id' ]);
             $booking_number        = $reservation_instance->getBookingNumber();
             $guest_name            = $reservation_instance->getReservationGuestName();
@@ -566,82 +647,10 @@ $calendar = $this->getAvailabilityCalendar();
                 continue;
             }
 
-            if (!array_key_exists($reservatoin_id, $checkout_list)) {
+            $this->createCheckoutList( $reservation_id, $checkin, $checkout );
 
-                $newCheckin  = $checkin; // Checkin date of the new value to be added
-                $hasConflict = false; // Flag to track if there is a conflict
-                // Iterate through the existing array
-                foreach ($checkout_list as $value) {
-                    $checkoutDate = $value[ 'checkout' ];
-
-                    // Compare the new checkin date with existing checkout dates
-                    if ($newCheckin <= $checkoutDate) {
-                        $hasConflict = true;
-                        // echo 'has conflict : ' . $newCheckin . ' with ' . $checkoutDate;
-                        break; // Stop iterating if a conflict is found
-                    }
-                }
-
-                $givenCheckinDate = $checkin;
-                // Filter the array based on the check-in date and reservations has not checkedout
-                $filteredArray = array_filter($checkout_list, function ($value) use ($givenCheckinDate) {
-                    return $value[ 'checkout' ] > $givenCheckinDate;
-                });
-
-                // Extract the room numbers from the filtered array
-                $roomNumbers = array_column($filteredArray, 'room');
-
-                // Check for missing room numbers
-                $missingNumber = false;
-                sort($roomNumbers);
-
-                if (!empty($roomNumbers)) {
-                    for ($i = 1; $i <= max($roomNumbers); $i++) {
-                        if (!in_array($i, $roomNumbers)) {
-                            $missingNumber = $i;
-                            break;
-                        }
-                    }
-                }
-
-                // Output the result
-                if ($missingNumber) {
-                    $room = $missingNumber;
-                } else {
-                    $givenDate   = $checkin;
-                    $recordCount = 0;
-
-                    foreach ($checkout_list as $value) {
-                        $checkoutDate = $value[ 'checkout' ];
-
-                        if ($checkoutDate > $givenDate) {
-                            $recordCount++;
-                        }
-                    }
-
-                    if ($hasConflict) {
-                        //The new checkin date falls within existing checkout dates.";
-                        $room = $recordCount + 1;
-                    } else {
-                        //The new checkin date is outside existing checkout dates.";
-                        $room = $recordCount - 1;
-                    }
-                }
-
-                if (empty($checkout_list)) {
-                    $room = 1;
-                }
-                if ($room < 0) {
-                    $room = 1;
-                }
-
-                $checkout_list[ $reservatoin_id ][ 'room' ]     = $room;
-                $checkout_list[ $reservatoin_id ][ 'checkin' ]  = $checkin;
-                $checkout_list[ $reservatoin_id ][ 'checkout' ] = $checkout;
-            }
-
-            if (array_key_exists($reservatoin_id, $checkout_list)) {
-                $room = $checkout_list[ $reservatoin_id ][ 'room' ];
+            if (array_key_exists($reservation_id, $this->checkout_list)) {
+                $room = $this->checkout_list[ $reservation_id ][ 'room' ];
             }
 
             $reservation_edit_link = get_edit_post_link($reservation[ 'id' ]);
@@ -651,7 +660,7 @@ $calendar = $this->getAvailabilityCalendar();
                 $start_date->setTimestamp($reservation[ 'checkin' ]);
                 $start_date_display = $start_date->format('M j, Y');
                 $width              = (80 * ($reserved_days)) - 3;
-                $tab[ $room ]       = '<a class="reservation-tab-is-' . esc_attr($reservation_status) . ' ' . esc_attr($reservation_substatus) . ' reservation-tab-id-' . esc_attr($reservatoin_id) . ' reservation-edit-link" href="' . esc_attr($reservation_edit_link) . '"><div class="reserved-tab-wrap reserved-tab-with-info reservation-' . esc_attr($reservation_status) . ' reservation-substatus-' . esc_attr($reservation_substatus) . '" data-reservationstatus="' . esc_attr($reservation_status) . '" data-guest="' . esc_attr($guest_name) . '" data-room="' . esc_attr($room) . '" data-row="' . esc_attr($row) . '" data-bookingnumber="' . esc_attr($booking_number) . '" data-reservationid="' . $reservation[ 'id' ] . '" data-checkin="' . esc_attr($checkin) . '" data-checkout="' . esc_attr($checkout) . '"><div class="reserved-tab reserved-tab-days-' . esc_attr($reserved_days) . '"><div data-tabwidth="' . esc_attr($width) . '" class="reserved-tab-inner"><div class="ota-sign"></div><div class="guest-name">' . esc_html($display_info) . '<span>' . esc_html($booking_channel) . '</span></div></div></div></div></a>';
+                $tab[ $room ]       = '<a class="reservation-tab-is-' . esc_attr($reservation_status) . ' ' . esc_attr($reservation_substatus) . ' reservation-tab-id-' . esc_attr($reservation_id) . ' reservation-edit-link" href="' . esc_attr($reservation_edit_link) . '"><div class="reserved-tab-wrap reserved-tab-with-info reservation-' . esc_attr($reservation_status) . ' reservation-substatus-' . esc_attr($reservation_substatus) . '" data-reservationstatus="' . esc_attr($reservation_status) . '" data-guest="' . esc_attr($guest_name) . '" data-room="' . esc_attr($room) . '" data-row="' . esc_attr($row) . '" data-bookingnumber="' . esc_attr($booking_number) . '" data-reservationid="' . $reservation[ 'id' ] . '" data-checkin="' . esc_attr($checkin) . '" data-checkout="' . esc_attr($checkout) . '"><div class="reserved-tab reserved-tab-days-' . esc_attr($reserved_days) . '"><div data-tabwidth="' . esc_attr($width) . '" class="reserved-tab-inner"><div class="ota-sign"></div><div class="guest-name">' . esc_html($display_info) . '<span>' . esc_html($booking_channel) . '</span></div></div></div></div></a>';
                 $display            = true;
             } else {
                 if ($current_day != $checkout) {
@@ -663,9 +672,9 @@ $calendar = $this->getAvailabilityCalendar();
                     $daysBetween        = \Staylodgic\Common::countDays_BetweenDates($check_in_date_past, $current_day);
                     $width              = (80 * ($reserved_days - $daysBetween)) - 3;
                     if ($check_in_date_past < $calendar_start && $calendar_start == $current_day) {
-                        $tab[ $room ] = '<a class="reservation-tab-is-' . esc_attr($reservation_status) . ' ' . esc_attr($reservation_substatus) . ' reservation-tab-id-' . esc_attr($reservatoin_id) . ' reservation-edit-link" href="' . esc_attr($reservation_edit_link) . '"><div class="reserved-tab-wrap reserved-tab-with-info reserved-from-past reservation-' . esc_attr($reservation_status) . '" data-reservationstatus="' . esc_attr($reservation_status) . '" data-guest="' . esc_attr($guest_name) . '" data-room="' . esc_attr($room) . '" data-row="' . esc_attr($row) . '" data-bookingnumber="' . esc_attr($booking_number) . '" data-reservationid="' . esc_attr($reservation[ 'id' ]) . '" data-checkin="' . esc_attr($checkin) . '" data-checkout="' . esc_attr($checkout) . '"><div class="reserved-tab reserved-tab-days-' . esc_attr($reserved_days) . '"><div data-tabwidth="' . esc_attr($width) . '" class="reserved-tab-inner"><div class="ota-sign"></div><div class="guest-name">' . esc_html($display_info) . '<span>' . esc_html($booking_channel) . '</span></div></div></div></div></a>';
+                        $tab[ $room ] = '<a class="reservation-tab-is-' . esc_attr($reservation_status) . ' ' . esc_attr($reservation_substatus) . ' reservation-tab-id-' . esc_attr($reservation_id) . ' reservation-edit-link" href="' . esc_attr($reservation_edit_link) . '"><div class="reserved-tab-wrap reserved-tab-with-info reserved-from-past reservation-' . esc_attr($reservation_status) . '" data-reservationstatus="' . esc_attr($reservation_status) . '" data-guest="' . esc_attr($guest_name) . '" data-room="' . esc_attr($room) . '" data-row="' . esc_attr($row) . '" data-bookingnumber="' . esc_attr($booking_number) . '" data-reservationid="' . esc_attr($reservation[ 'id' ]) . '" data-checkin="' . esc_attr($checkin) . '" data-checkout="' . esc_attr($checkout) . '"><div class="reserved-tab reserved-tab-days-' . esc_attr($reserved_days) . '"><div data-tabwidth="' . esc_attr($width) . '" class="reserved-tab-inner"><div class="ota-sign"></div><div class="guest-name">' . esc_html($display_info) . '<span>' . esc_html($booking_channel) . '</span></div></div></div></div></a>';
                     } else {
-                        $tab[ $room ] = '<div class="reservation-tab-is-' . esc_attr($reservation_status) . ' ' . esc_attr($reservation_substatus) . ' reservation-tab-id-' . esc_attr($reservatoin_id) . ' reserved-tab-wrap reserved-extended reservation-' . esc_attr($reservation_status) . ' reservation-substatus-' . esc_attr($reservation_substatus) . '" data-reservationstatus="' . esc_attr($reservation_status) . '" data-room="' . esc_attr($room) . '" data-row="' . esc_attr($row) . '" data-reservationid="' . esc_attr($reservation[ 'id' ]) . '" data-checkin="' . esc_attr($checkin) . '" data-checkout="' . esc_attr($checkout) . '"><div class="reserved-tab"></div></div>';
+                        $tab[ $room ] = '<div class="reservation-tab-is-' . esc_attr($reservation_status) . ' ' . esc_attr($reservation_substatus) . ' reservation-tab-id-' . esc_attr($reservation_id) . ' reserved-tab-wrap reserved-extended reservation-' . esc_attr($reservation_status) . ' reservation-substatus-' . esc_attr($reservation_substatus) . '" data-reservationstatus="' . esc_attr($reservation_status) . '" data-room="' . esc_attr($room) . '" data-row="' . esc_attr($row) . '" data-reservationid="' . esc_attr($reservation[ 'id' ]) . '" data-checkin="' . esc_attr($checkin) . '" data-checkout="' . esc_attr($checkout) . '"><div class="reserved-tab"></div></div>';
                     }
                     $display = true;
                 }
@@ -685,7 +694,6 @@ $calendar = $this->getAvailabilityCalendar();
 
         }
         $tab_array[ 'tab' ]      = $htmltab;
-        $tab_array[ 'checkout' ] = $checkout_list;
 
         return $tab_array;
     }
