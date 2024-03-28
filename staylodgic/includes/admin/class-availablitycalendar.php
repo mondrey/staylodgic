@@ -4,7 +4,7 @@ namespace Staylodgic;
 class AvailablityCalendar extends AvailablityCalendarBase
 {
 
-    public function __construct($startDate = null, $endDate = null, $calendarData = null, $reservation_tabs = null )
+    public function __construct($startDate = null, $endDate = null, $cachedData = null, $calendarData = null, $reservation_tabs = null, $usingCache = false )
     {
         parent::__construct($startDate, $endDate, $calendarData, $reservation_tabs);
 
@@ -161,7 +161,7 @@ class AvailablityCalendar extends AvailablityCalendarBase
 		<div id="container">
 			<div id="calendar">
 				<?php
-$calendar = $this->getAvailabilityCalendar();
+        $calendar = $this->getAvailabilityCalendar();
         // error_log ( $calendar );
         echo $calendar;
         ?>
@@ -218,8 +218,6 @@ $calendar = $this->getAvailabilityCalendar();
             $endDate   = new \DateTime($endDate);
         }
 
-        $this->calendarData = array();
-
         $dates = $this->getDates($startDate, $endDate);
         $today = $this->today;
 
@@ -242,22 +240,25 @@ $calendar = $this->getAvailabilityCalendar();
 		$room_output    = '';
 		$all_room_output  = '';
 
-        foreach ($this->roomlist as $roomId => $roomName):
+        foreach ($this->roomlist as $roomID => $roomName):
             // error_log('cache date');
-            // error_log($roomId . ' ' . $startDateString . ' ' . $endDateString);
+            // error_log($roomID . ' ' . $startDateString . ' ' . $endDateString);
             
-            $cache_instance = new \Staylodgic\Cache($roomId, $startDateString, $endDateString);
+            $cache_instance = new \Staylodgic\Cache($roomID, $startDateString, $endDateString);
             // $cache_instance->deleteCache();
             $transient_key   = $cache_instance->generateRoomCacheKey();
             $cached_calendar = $cache_instance->getCache($transient_key);
 
-            $room_reservations_instance = new \Staylodgic\Reservations($dateString = false, $roomId);
-            // $room_reservations_instance->getReservations_Array_ForRoom_And_Cleanup($roomId);
+            $room_reservations_instance = new \Staylodgic\Reservations($dateString = false, $roomID);
+            // $room_reservations_instance->getReservations_Array_ForRoom_And_Cleanup($roomID);
             $room_reservations_instance->calculateAndUpdateRemainingRoomCountsForAllDates();
 			// error_log($transient_key);
 			// error_log('----------');
 
 			$use_cache = true;
+            $this->usingCache = false;
+            $this->cachedData = array();
+            $this->calendarData = array();
 
 
 			if ( isset( $cached_calendar['qty_rates'] )) {
@@ -271,9 +272,9 @@ $calendar = $this->getAvailabilityCalendar();
 	
 					$dateString       = $date->format('Y-m-d');
 	
-					$reservation_instance = new \Staylodgic\Reservations($dateString, $roomId);
+					$reservation_instance = new \Staylodgic\Reservations($dateString, $roomID);
 					$remaining_rooms = $reservation_instance->remainingRooms_For_Day();
-					$room_rate              = \Staylodgic\Rates::getRoomRateByDate($roomId, $dateString);
+					$room_rate              = \Staylodgic\Rates::getRoomRateByDate($roomID, $dateString);
 	
 					if (0 == $remaining_rooms) {
 						$room_was_opened = $reservation_instance->wasRoom_Ever_Opened();
@@ -312,31 +313,40 @@ $calendar = $this->getAvailabilityCalendar();
                 // error_log('--------- Using Cache --------');
 				// error_log('--------- Cache QTY RATES --------');
 				// error_log(print_r($cached_calendar['qty_rates'], true));
-				if ( isset( $cached_calendar['calendar'])) {
-					$all_room_output .= $cached_calendar['calendar'];
+				if ( isset( $cached_calendar )) {
+
+					$this->cachedData = $cached_calendar;
+
+                    $this->usingCache = true;
 				}
 
-            } else {
+            }
 
-				error_log('--------- Without using Cache ------------------------------------');
+            error_log('--------- Without using Cache ------------------------------------');
 
-                $this->reservation_tabs  = array();
-                $cache_qty_rate = array();
-                $cache_output   = array();
+            error_log('--------- Cache Data --------');
+            error_log(print_r($this->cachedData, true));
 
-                $room_output = '<tr class="calendarRow calendar-room-row" data-id="' . esc_attr($roomId) . '">';
-                $room_output .= '<td class="calendarCell rowHeader">';
-                $room_output .= esc_html($roomName);
-                $room_output .= '</td>';
+            $this->reservation_tabs  = array();
+            $cache_qty_rate = array();
+            $cache_output   = array();
 
-                $reservation_instance = new \Staylodgic\Reservations(false, $roomId);
-                $reservations = $reservation_instance->getReservationsForRoom($startDateString, $endDateString, false, false, $roomId);
+            $room_output = '<tr class="calendarRow calendar-room-row" data-id="' . esc_attr($roomID) . '">';
+            $room_output .= '<td class="calendarCell rowHeader">';
+            $room_output .= esc_html($roomName);
+            $room_output .= '</td>';
 
-                foreach ($dates as $date):
-                    $dateString       = $date->format('Y-m-d');
-                    $reservation_data = array();
+            if ( ! $this->usingCache ) {
+                $reservation_instance = new \Staylodgic\Reservations(false, $roomID);
+                $reservations = $reservation_instance->getReservationsForRoom($startDateString, $endDateString, false, false, $roomID);
+            }
 
-                    $reservation_instance = new \Staylodgic\Reservations($dateString, $roomId);
+            foreach ($dates as $date):
+                $dateString       = $date->format('Y-m-d');
+                $reservation_data = array();
+
+                if ( ! $this->usingCache ) {
+                    $reservation_instance = new \Staylodgic\Reservations($dateString, $roomID);
                     $reservation_data     = $reservation_instance->buildReservationsDataForRoomForDay( $reservations, false, false, false, false );
                     // error_log( print_r($reservation_data,1));
                     // $remaining_room_count  = $reservation_instance->getDirectRemainingRoomCount();
@@ -349,52 +359,74 @@ $calendar = $this->getAvailabilityCalendar();
                         }
                     }
 
-                    // $max_room_count = \Staylodgic\Rooms::getMaxQuantityForRoom( $roomId, $dateString );
+                    // $max_room_count = \Staylodgic\Rooms::getMaxQuantityForRoom( $roomID, $dateString );
 
-                    $room_rate              = \Staylodgic\Rates::getRoomRateByDate($roomId, $dateString);
+                    $room_rate              = \Staylodgic\Rates::getRoomRateByDate($roomID, $dateString);
                     $occupancy_status_class = "";
                     if ($reservation_instance->isRoom_For_Day_Fullybooked()) {
                         $occupancy_status_class = "fully-booked";
                     } else {
                         $occupancy_status_class = "room-available";
                     }
-                    $room_output .= '<td class="calendarCell ' . esc_attr($this->startOfMonthCSSTag($dateString)) . ' ' . esc_attr($occupancy_status_class) . '">';
 
-                    $room_output .= '<div class="calendar-info-wrap">';
-                    $room_output .= '<div class="calendar-info">';
-                    $room_output .= '<a data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Quantity" href="#" class="quantity-link" data-remaining="' . esc_attr($remaining_rooms) . '" data-date="' . esc_attr($dateString) . '" data-room="' . esc_attr($roomId) . '">' . esc_html($remaining_rooms) . '</a>';
+                    $this->calendarData['cellData'][$dateString]['reservation_data'] = $reservation_data;
+                    $this->calendarData['cellData'][$dateString]['remaining_rooms'] = $remaining_rooms;
+                    $this->calendarData['cellData'][$dateString]['room_rate'] = $room_rate;
+                    $this->calendarData['cellData'][$dateString]['occupancy_status_class'] = $occupancy_status_class;
 
-                    if (!empty($room_rate) && isset($room_rate) && $room_rate > 0) {
-                        $room_output .= '<a data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Rate" class="roomrate-link" href="#" data-rate="' . esc_attr($room_rate) . '" data-date="' . esc_attr($dateString) . '" data-room="' . esc_attr($roomId) . '">' . esc_html($room_rate) . '</a>';
-                    }
+                } else {
+                    $reservation_data = $this->cachedData['cellData'][$dateString]['reservation_data'];
+                    $remaining_rooms = $this->cachedData['cellData'][$dateString]['remaining_rooms'];
+                    $room_rate = $this->cachedData['cellData'][$dateString]['room_rate'];
+                    $occupancy_status_class = $this->cachedData['cellData'][$dateString]['occupancy_status_class'];
+                }
 
+                $room_output .= '<td class="calendarCell ' . esc_attr($this->startOfMonthCSSTag($dateString)) . ' ' . esc_attr($occupancy_status_class) . '">';
+
+                $room_output .= '<div class="calendar-info-wrap">';
+                $room_output .= '<div class="calendar-info">';
+                $room_output .= '<a data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Quantity" href="#" class="quantity-link" data-remaining="' . esc_attr($remaining_rooms) . '" data-date="' . esc_attr($dateString) . '" data-room="' . esc_attr($roomID) . '">' . esc_html($remaining_rooms) . '</a>';
+
+                if (!empty($room_rate) && isset($room_rate) && $room_rate > 0) {
+                    $room_output .= '<a data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Rate" class="roomrate-link" href="#" data-rate="' . esc_attr($room_rate) . '" data-date="' . esc_attr($dateString) . '" data-room="' . esc_attr($roomID) . '">' . esc_html($room_rate) . '</a>';
+                }
+
+                if ( ! $this->usingCache ) {
                     $cache_qty_rate[ $dateString ][ 'qty' ] = $remaining_rooms;
                     $cache_qty_rate[ $dateString ][ 'rate' ] = $room_rate;
+                }
 
-                    $room_output .= '</div>';
-                    $room_output .= '</div>';
-                    $room_output .= '<div class="reservation-tab-wrap" data-day="' . esc_attr($dateString) . '">';
-                    if ($reservation_data) {
-                        $reservation_module = array();
-                        //echo staylodgic_generate_reserved_tab( $reservation_data, $reservation_tabs );
-                        $reservation_module = $this->ReservedTab($reservation_data, $dateString, $startDateString);
-                        $room_output .= $reservation_module[ 'tab' ];
-                        // $this->reservation_tabs = $reservation_module[ 'checkout' ];
-                        //print_r( $reservation_tabs );
-                        
-                    }
-                    $room_output .= '</div>';
-                    $room_output .= '</td>';
-                endforeach;
-                $room_output .= '</tr>';
+                $room_output .= '</div>';
+                $room_output .= '</div>';
+                $room_output .= '<div class="reservation-tab-wrap" data-day="' . esc_attr($dateString) . '">';
+                if ($reservation_data) {
+                    $reservation_module = array();
+                    //echo staylodgic_generate_reserved_tab( $reservation_data, $reservation_tabs );
+                    $reservation_module = $this->ReservedTab($reservation_data, $dateString, $startDateString);
+                    $room_output .= $reservation_module[ 'tab' ];
+                    // $this->reservation_tabs = $reservation_module[ 'checkout' ];
+                    //print_r( $reservation_tabs );
+                    
+                }
+                $room_output .= '</div>';
+                $room_output .= '</td>';
+            endforeach;
+            $room_output .= '</tr>';
 
-                $cache_output[ 'calendar' ]  = $room_output;
-                $cache_output[ 'qty_rates' ] = $cache_qty_rate;
+            $this->calendarData[ 'qty_rates' ] = $cache_qty_rate;
 
-				$all_room_output .= $room_output;
+            $all_room_output .= $room_output;
 
-                $cache_instance->setCache($transient_key, $cache_output);
+            if ( ! $this->usingCache ) {
+
+                error_log('--------- Saving Cache Data --------');
+                error_log('--------- Room '.$roomName.' --------');
+                error_log(print_r($this->calendarData, true));
+
+                $cache_instance->setCache($transient_key, $this->calendarData);
+
             }
+            
         endforeach;
 
         $stats_row = '<tr class="calendarRow">';
@@ -637,20 +669,49 @@ $calendar = $this->getAvailabilityCalendar();
             $start_date_display    = '';
             $guest_name            = '';
             $reservation_id        = $reservation[ 'id' ];
-            $reservation_instance  = new \Staylodgic\Reservations($date = false, $room_id = false, $reservation_id = $reservation[ 'id' ]);
-            $booking_number        = $reservation_instance->getBookingNumber();
-            $guest_name            = $reservation_instance->getReservationGuestName();
-            $reserved_days         = $reservation_instance->countReservationDays();
-            $checkin               = $reservation_instance->getCheckinDate();
-            $checkout              = $reservation_instance->getCheckoutDate();
-            $reservation_status    = $reservation_instance->getReservationStatus();
-            $reservation_substatus = $reservation_instance->getReservationSubStatus();
-            $booking_channel       = $reservation_instance->getReservationChannel();
+
+            if ( ! $this->usingCache ) {
+                $reservation_instance  = new \Staylodgic\Reservations($date = false, $room_id = false, $reservation_id = $reservation[ 'id' ]);
+                $booking_number        = $reservation_instance->getBookingNumber();
+                $guest_name            = $reservation_instance->getReservationGuestName();
+                $reserved_days         = $reservation_instance->countReservationDays();
+                $checkin               = $reservation_instance->getCheckinDate();
+                $checkout              = $reservation_instance->getCheckoutDate();
+                $reservation_status    = $reservation_instance->getReservationStatus();
+                $reservation_substatus = $reservation_instance->getReservationSubStatus();
+                $booking_channel       = $reservation_instance->getReservationChannel();
+
+                $reservation_edit_link = get_edit_post_link($reservation[ 'id' ]);
+
+                $this->calendarData['tabsData'][$reservation_id][$current_day]['getBookingNumber'] = $booking_number;
+                $this->calendarData['tabsData'][$reservation_id][$current_day]['getReservationGuestName'] = $guest_name;
+                $this->calendarData['tabsData'][$reservation_id][$current_day]['countReservationDays'] = $reserved_days;
+                $this->calendarData['tabsData'][$reservation_id][$current_day]['getCheckinDate'] = $checkin;
+                $this->calendarData['tabsData'][$reservation_id][$current_day]['getCheckoutDate'] = $checkout;
+                $this->calendarData['tabsData'][$reservation_id][$current_day]['getReservationStatus'] = $reservation_status;
+                $this->calendarData['tabsData'][$reservation_id][$current_day]['getReservationSubStatus'] = $reservation_substatus;
+                $this->calendarData['tabsData'][$reservation_id][$current_day]['getReservationChannel'] = $booking_channel;
+                
+                $this->calendarData['tabsData'][$reservation_id]['reservation_edit_link'] = $reservation_edit_link;
+
+            } else {
+                $booking_number        = $this->cachedData['tabsData'][$reservation_id][$current_day]['getBookingNumber'];
+                $guest_name            = $this->cachedData['tabsData'][$reservation_id][$current_day]['getReservationGuestName'];
+                $reserved_days         = $this->cachedData['tabsData'][$reservation_id][$current_day]['countReservationDays'];
+                $checkin               = $this->cachedData['tabsData'][$reservation_id][$current_day]['getCheckinDate'];
+                $checkout              = $this->cachedData['tabsData'][$reservation_id][$current_day]['getCheckoutDate'];
+                $reservation_status    = $this->cachedData['tabsData'][$reservation_id][$current_day]['getReservationStatus'];
+                $reservation_substatus = $this->cachedData['tabsData'][$reservation_id][$current_day]['getReservationSubStatus'];
+                $booking_channel       = $this->cachedData['tabsData'][$reservation_id][$current_day]['getReservationChannel'];                
+
+                $reservation_edit_link = $this->cachedData['tabsData'][$reservation_id]['reservation_edit_link'];                
+            }
+
             $row++;
 
-            if ( 'cancelled' == $reservation_status && ! staylodgic_display_cancelled() ) {
-                continue;
-            }
+            // if ( 'cancelled' == $reservation_status && ! staylodgic_display_cancelled() ) {
+            //     continue;
+            // }
 
             $this->createMasonryTabs( $reservation_id, $checkin, $checkout );
 
@@ -658,7 +719,6 @@ $calendar = $this->getAvailabilityCalendar();
                 $room = $this->reservation_tabs[ $reservation_id ][ 'room' ];
             }
 
-            $reservation_edit_link = get_edit_post_link($reservation[ 'id' ]);
             $display_info          = $guest_name;
             if ($reservation[ 'start' ] != 'no') {
                 $start_date = new \DateTime();

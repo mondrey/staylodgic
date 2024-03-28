@@ -110,10 +110,10 @@ class Modals
 							<label for="room"><i class="fa-solid fa-bed"></i> <?php _e('Room:', 'staylodgic');?></label>
 							<select class="form-select" name="room">
 								<?php
-$featured_pages         = get_posts('post_type=slgc_room&orderby=title&numberposts=-1&order=ASC');
+		$rooms         = get_posts('post_type=slgc_room&orderby=title&numberposts=-1&order=ASC');
         $list_options[ 'none' ] = "Not Selected";
-        if ($featured_pages) {
-            foreach ($featured_pages as $key => $list) {
+        if ($rooms) {
+            foreach ($rooms as $key => $list) {
                 $list_options[ $list->ID ] = $list->post_title;
             }
         } else {

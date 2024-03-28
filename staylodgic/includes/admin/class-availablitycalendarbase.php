@@ -11,12 +11,15 @@ class AvailablityCalendarBase
     protected $startDate;
     protected $calendarData;
     protected $reservation_tabs;
+    protected $usingCache;
+    protected $cachedData;
 
     public function __construct($startDate = null, $endDate = null)
     {
         $this->setStartDate($startDate);
         $this->setEndDate($endDate);
         $this->getToday();
+        $this->usingCache = false;
     }
 
     public function getToday()

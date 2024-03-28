@@ -17,13 +17,17 @@ class Rooms
     }
 
     public static function hasRooms() {
-        $roomlist = [];
-        $rooms = self::queryRooms(); // Call queryRooms() method here
-        if ( $rooms ) {
-            return true;
-        }
-        return false;
-    }
+        $args = array(
+            'post_type'      => 'slgc_room',
+            'posts_per_page' => 1, // Only need to check if at least one room exists
+            'fields'         => 'ids', // Only retrieve the post IDs
+            'post_status'    => 'publish',
+        );
+    
+        $query = new \WP_Query($args);
+    
+        return $query->have_posts(); // Returns true if there is at least one room, false otherwise
+    }    
 
     public static function queryRooms()
     {
