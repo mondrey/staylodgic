@@ -1200,7 +1200,7 @@ class Reservations
     }
 
     // Function to check if a date falls within a reservation
-    public function isDate_Reserved( $reservation_status = false, $reservation_substatus = false, $dateString = false, $room_id = false)
+    public function buildReservationsDataForRoomForDay( $reservation_status = false, $reservation_substatus = false, $dateString = false, $room_id = false)
     {
 
         if (!$room_id) {

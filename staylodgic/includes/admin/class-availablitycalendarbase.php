@@ -10,7 +10,7 @@ class AvailablityCalendarBase
     protected $roomlist;
     protected $startDate;
     protected $calendarData;
-    protected $checkout_list;
+    protected $reservation_tabs;
 
     public function __construct($startDate = null, $endDate = null)
     {
