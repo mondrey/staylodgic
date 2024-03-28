@@ -328,12 +328,16 @@ $calendar = $this->getAvailabilityCalendar();
                 $room_output .= '<td class="calendarCell rowHeader">';
                 $room_output .= esc_html($roomName);
                 $room_output .= '</td>';
+
+                $reservation_instance = new \Staylodgic\Reservations(false, $roomId);
+                $reservations = $reservation_instance->getReservationsForRoom($startDateString, $endDateString, false, false, $roomId);
+
                 foreach ($dates as $date):
                     $dateString       = $date->format('Y-m-d');
                     $reservation_data = array();
 
                     $reservation_instance = new \Staylodgic\Reservations($dateString, $roomId);
-                    $reservation_data     = $reservation_instance->buildReservationsDataForRoomForDay();
+                    $reservation_data     = $reservation_instance->buildReservationsDataForRoomForDay( $reservations, false, false, false, false );
                     // error_log( print_r($reservation_data,1));
                     // $remaining_room_count  = $reservation_instance->getDirectRemainingRoomCount();
                     $remaining_rooms = $reservation_instance->remainingRooms_For_Day();

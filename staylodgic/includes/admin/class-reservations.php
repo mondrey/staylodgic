@@ -241,7 +241,7 @@ class Reservations
     }
 
     public function getReservationsForRoom( $checkin_date = false, $checkout_date = false, $reservation_status = false, $reservation_substatus = false, $room_id = false ) {
-    
+
         if (!$room_id) {
             $room_id = $this->room_id;
         }
@@ -274,23 +274,22 @@ class Reservations
             );
         }
     
-        // Add check-in date to the meta query if provided
-        if ($checkin_date !== false) {
+        // Modify the meta query for overlapping reservations
+        if ($checkin_date !== false || $checkout_date !== false) {
             $meta_query[] = array(
-                'key'     => 'staylodgic_checkin_date',
-                'value'   => $checkin_date,
-                'compare' => '>=',
-                'type'    => 'DATE'
-            );
-        }
-    
-        // Add check-out date to the meta query if provided
-        if ($checkout_date !== false) {
-            $meta_query[] = array(
-                'key'     => 'staylodgic_checkout_date',
-                'value'   => $checkout_date,
-                'compare' => '<=',
-                'type'    => 'DATE'
+                'relation' => 'AND',
+                array(
+                    'key'     => 'staylodgic_checkin_date',
+                    'value'   => $checkout_date,
+                    'compare' => '<=',
+                    'type'    => 'DATE'
+                ),
+                array(
+                    'key'     => 'staylodgic_checkout_date',
+                    'value'   => $checkin_date,
+                    'compare' => '>=',
+                    'type'    => 'DATE'
+                ),
             );
         }
     
@@ -303,6 +302,7 @@ class Reservations
     
         return new \WP_Query($args);
     }
+    
      
 
     public function calculateReservedRooms()
@@ -1200,7 +1200,7 @@ class Reservations
     }
 
     // Function to check if a date falls within a reservation
-    public function buildReservationsDataForRoomForDay( $reservation_status = false, $reservation_substatus = false, $dateString = false, $room_id = false)
+    public function buildReservationsDataForRoomForDay( $reservations, $reservation_status = false, $reservation_substatus = false, $dateString = false, $room_id = false)
     {
 
         if (!$room_id) {
@@ -1214,7 +1214,7 @@ class Reservations
         $start       = false;
         // error_log( 'print_r( $dateString,1 )');
         // error_log( print_r( $dateString,1 ));
-        $query = $this->getReservationsForRoom(false, false, false, false, $room_id);
+  
 
         $reservation_checkin  = '';
         $reservation_checkout = '';
@@ -1222,9 +1222,13 @@ class Reservations
         $reserved_data        = array();
         $found                = false;
 
-        if ($query->have_posts()) {
-            while ($query->have_posts()) {
-                $query->the_post();
+        if ($reservations->have_posts()) {
+
+                // Print the number of found posts
+    //echo 'Number of posts found: ' . $reservations->found_posts;
+
+            while ($reservations->have_posts()) {
+                $reservations->the_post();
 
                 $reservedRooms[  ] = get_the_ID();
                 $reservation_id    = get_the_ID();
