@@ -4,9 +4,9 @@ namespace Staylodgic;
 class AvailablityCalendar extends AvailablityCalendarBase
 {
 
-    public function __construct($startDate = null, $endDate = null, $cachedData = null, $calendarData = null, $reservation_tabs = null, $usingCache = false )
+    public function __construct($startDate = null, $endDate = null, $cachedData = null, $calendarData = null, $reservation_tabs = null, $usingCache = false, $availConfirmedOnly = false)
     {
-        parent::__construct($startDate, $endDate, $calendarData, $reservation_tabs);
+        parent::__construct($startDate, $endDate, $calendarData, $reservation_tabs, $availConfirmedOnly);
 
         // WordPress AJAX action hook
         add_action('wp_ajax_get_Selected_Range_AvailabilityCalendar', array($this, 'get_Selected_Range_AvailabilityCalendar'));
@@ -18,7 +18,42 @@ class AvailablityCalendar extends AvailablityCalendarBase
         add_action('wp_ajax_fetchOccupancy_Percentage_For_Calendar_Range', array($this, 'fetchOccupancy_Percentage_For_Calendar_Range'));
         add_action('wp_ajax_nopriv_fetchOccupancy_Percentage_For_Calendar_Range', array($this, 'fetchOccupancy_Percentage_For_Calendar_Range'));
 
+        // Add the AJAX action to both the front-end and the admin
+        add_action('wp_ajax_update_availDisplayConfirmedStatus', array($this, 'update_availDisplayConfirmedStatus'));
+        add_action('wp_ajax_nopriv_update_availDisplayConfirmedStatus', array($this, 'update_availDisplayConfirmedStatus'));
+
     }
+
+    public function update_availDisplayConfirmedStatus() {
+
+        // Verify the nonce
+        if (!isset($_POST[ 'staylodgic_availabilitycalendar_nonce' ]) || !check_admin_referer('staylodgic-availabilitycalendar-nonce', 'staylodgic_availabilitycalendar_nonce')) {
+            // Nonce verification failed; handle the error or reject the request
+            // For example, you can return an error response
+            wp_send_json_error([ 'message' => 'Failed' ]);
+            return;
+        }
+        // Check if the confirmed_only value is set
+        if (isset($_POST['confirmed_only'])) {
+
+            error_log(' Only confirmed bookings ');
+            error_log( $_POST['confirmed_only'] );
+
+            if ( 0 == $_POST['confirmed_only'] ) {
+                // Update the option based on the switch value
+                update_option('availsettings_confirmed_only', 0 );
+            } else {
+                // Update the option based on the switch value
+                update_option('availsettings_confirmed_only', 1 );
+            }
+    
+            // Return a success response
+            wp_send_json_success();
+        } else {
+            // Return an error response
+            wp_send_json_error('The confirmed_only value is not set.');
+        }
+    }    
 
     public function fetchOccupancy_Percentage_For_Calendar_Range($startDate = false, $endDate = false, $onlyFullOccupancy = false)
     {
@@ -109,6 +144,20 @@ class AvailablityCalendar extends AvailablityCalendarBase
 		</div>
         <?php
     }
+
+    public function getDisplayConfirmedStatus() {
+        $this->availConfirmedOnly = get_option('availsettings_confirmed_only');
+
+        // Check if the option is not found and set it to '1'
+        if ($this->availConfirmedOnly === false) {
+            update_option('availsettings_confirmed_only', true);
+            $this->availConfirmedOnly = true;
+        }
+
+        $confirmed_status = '';
+
+        return $this->availConfirmedOnly;
+    }
     // Callback function to display the Availability page
     public function room_Reservation_Plugin_Display_Availability_Calendar()
     {
@@ -127,6 +176,12 @@ class AvailablityCalendar extends AvailablityCalendarBase
                 return;
             }
             echo \Staylodgic\Modals::rateQtyToasts();
+
+            $confirmed_status = '';
+            if ( $this->getDisplayConfirmedStatus() ) {
+                $confirmed_status = 'checked';
+            }
+
 // Add any custom HTML content here
         ?>
 		</div>
@@ -154,6 +209,12 @@ class AvailablityCalendar extends AvailablityCalendarBase
                     </li>
                     <li class="nav-item">
                         <div class="calendar-nav-buttons calendar-text-button" id="rates-modal-link" data-bs-toggle="modal" data-bs-target="#rates-modal"><i class="fas fa-dollar-sign"></i>Rate</div>
+                    </li>
+                    <li class="nav-item nav-item-seperator">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch" id="calendar-booking-status" <?php echo esc_attr($confirmed_status); ?>>
+                            <label class="form-check-label" for="calendar-booking-status">Display Confirmed</label>
+                        </div>
                     </li>
                 </ul>
             </div>
@@ -197,6 +258,8 @@ class AvailablityCalendar extends AvailablityCalendarBase
         if (!strtotime($start_date) || !strtotime($end_date)) {
             wp_die('Invalid dates');
         }
+
+        $this->getDisplayConfirmedStatus();
 
         ob_start();
         echo $this->getAvailabilityCalendar($start_date, $end_date);
@@ -709,9 +772,12 @@ class AvailablityCalendar extends AvailablityCalendarBase
 
             $row++;
 
-            // if ( 'cancelled' == $reservation_status && ! staylodgic_display_cancelled() ) {
-            //     continue;
-            // }
+            if ( 'cancelled' == $reservation_status && $this->availConfirmedOnly ) {
+                continue;
+            }
+            if ( 'pending' == $reservation_status && $this->availConfirmedOnly ) {
+                continue;
+            }
 
             $this->createMasonryTabs( $reservation_id, $checkin, $checkout );
 

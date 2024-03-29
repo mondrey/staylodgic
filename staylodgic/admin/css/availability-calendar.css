@@ -766,9 +766,42 @@ ul.existing-customer li {
 	line-height: 18px;
 }
 
+.calendar-controls-wrap input[type="checkbox"]:checked::before {
+		content: '';
+}
+
+.calendar-controls-wrap .form-check-input {
+	--bs-form-check-bg: var(--bs-body-bg);
+	flex-shrink: 0;
+	width: 1em;
+	height: 1em;
+	margin-top: .25em;
+	vertical-align: top;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	background-color: var(--bs-form-check-bg);
+	background-image: var(--bs-form-check-bg-image);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: contain;
+	border: var(--bs-border-width) solid var(--bs-border-color);
+	-webkit-print-color-adjust: exact;
+	color-adjust: exact;
+	print-color-adjust: exact;
+}
+
+.calendar-controls-wrap .form-check-label {
+	font-size: 12px;
+	color: #fff;
+	padding-bottom: 3px;
+}
+.calendar-controls-wrap .form-check.form-switch {
+	position: relative;
+	top: 8px;
+}
 /* HTML: <div class="loader"></div> */
 .preloader-element-outer {
-
 	display: inline-block;
 }
 .preloader-element {

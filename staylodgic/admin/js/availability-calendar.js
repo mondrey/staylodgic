@@ -70,9 +70,6 @@
 		});
 	}
 	generateOpacityforRemainingRooms();
-	
-	
-	
 
 		function runCalendarAnimation() {
 			$('#calendarTable .calendarRow').each(function (rowIndex) {
@@ -153,6 +150,47 @@
 				}
 			);
 		}
+
+		$('#calendar-booking-status').change(function() {
+			// Get the switch value (true if checked, false otherwise)
+			var confirmedOnly = $(this).is(':checked') ? 1 : 0;
+
+			var staylodgic_availabilitycalendar_nonce = $('input[name="staylodgic_availabilitycalendar_nonce"]').val();
+	
+			// Send an AJAX request to update the option
+			$.ajax({
+				type: 'POST',
+				url: ajaxurl,
+				data: {
+					action: 'update_availDisplayConfirmedStatus',
+					confirmed_only: confirmedOnly,
+					staylodgic_availabilitycalendar_nonce: staylodgic_availabilitycalendar_nonce
+				},
+				dataType: 'json',
+				success: function(response) {
+					if (response.success) {
+						// Option updated successfully
+						console.log('Option updated');
+					} else {
+						// Handle failure
+						console.error('Failed to update option');
+					}
+
+					// Update the calendar without reloading the page
+					var currentDate = fp.selectedDates[0]; // Assuming fp is your flatpickr instance
+					var startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+					var endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 5);
+					debouncedCalendarUpdate([startDate, endDate]);
+
+					showToast('calendarToast');
+
+				},
+				error: function(xhr, status, error) {
+					// Handle AJAX errors
+					console.error('AJAX error: ' + error);
+				}
+			});
+		});
 
 		// Handle click event on the "Save changes" button
 		$('#rates-modal .save-changes').click(function () {
