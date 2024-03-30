@@ -800,6 +800,33 @@ ul.existing-customer li {
 	position: relative;
 	top: 8px;
 }
+
+.cal-create-reservation {
+	position: absolute;
+	top: 11px;
+	right: 11px;
+	width: 14px;
+	height: 14px;
+	background: #bd06ff;
+	border-radius: 10px;
+	line-height: 13px;
+	font-size: 10px;
+	text-align: center;
+	color: #fff;
+	opacity: 0;
+	transition: opacity 0.1s ease-in-out;
+}
+.calendarCell.room-available:hover .cal-create-reservation {
+	opacity: 0.5;
+}
+.calendarCell.room-available:hover .cal-create-reservation:hover {
+	opacity: 1;
+}
+.cal-create-reservation a {
+	color: #fff;
+	text-decoration: none;
+}
+
 /* HTML: <div class="loader"></div> */
 .preloader-element-outer {
 	display: inline-block;

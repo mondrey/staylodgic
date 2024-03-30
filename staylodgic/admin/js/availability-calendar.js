@@ -170,19 +170,15 @@
 				success: function(response) {
 					if (response.success) {
 						// Option updated successfully
-						console.log('Option updated');
+						// Update the calendar without reloading the page
+						var currentDate = fp.selectedDates[0]; // Assuming fp is your flatpickr instance
+						var startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+						var endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 5);
+						debouncedCalendarUpdate([startDate, endDate]);
 					} else {
 						// Handle failure
 						console.error('Failed to update option');
 					}
-
-					// Update the calendar without reloading the page
-					var currentDate = fp.selectedDates[0]; // Assuming fp is your flatpickr instance
-					var startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-					var endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 5);
-					debouncedCalendarUpdate([startDate, endDate]);
-
-					showToast('calendarToast');
 
 				},
 				error: function(xhr, status, error) {
@@ -361,9 +357,6 @@
 		if ($.fn.flatpickr) {
 
 			var room_related_input_fields = $('#reservation-details,.metabox-fields.room_choice,.metabox-fields.reservation_status,.metabox-fields.metaboxtype_bedlayout,.metabox-fields.metaboxtype_mealplan_included,.metabox-fields.reservation_meals,.metabox-fields.metaboxtype_currency,.metabox-fields.metaboxtype_taxgenerate,.metabox-fields.metaboxtype_currencyarray');
-			if ('' == $('.reservation').val()) {
-				room_related_input_fields.hide();
-			}
 
 			$('.datepicker').flatpickr();
 
@@ -751,6 +744,35 @@
 					}
 				});
 			}
+
+			function get_parameter_settings_on_new_reservation_post() {
+				var urlParams = new URLSearchParams(window.location.search);
+				var createFromDate = urlParams.get('createfromdate');
+				var createToDate = urlParams.get('createtodate');
+				var roomID = urlParams.get('roomID');
+			
+				if (createFromDate && createToDate) {
+					// Parse the dates
+					var startDate = flatpickr.parseDate(createFromDate, "Y-m-d");
+					var endDate = flatpickr.parseDate(createToDate, "Y-m-d");
+			
+					// Set the dates in the flatpickr instance
+					flatpickrInstance.setDate([startDate, endDate]);
+			
+					// Manually trigger the handleDateChange function
+					handleDateChange([startDate, endDate], flatpickrInstance);
+			
+					// Show the room-related input fields
+					room_related_input_fields.show();
+			
+					// Enable the select input and set the selected option
+					$('#staylodgic_room_id').prop('disabled', false).val(roomID).trigger('change.select2');
+				} else if ('' == $('.reservation').val()) {
+					room_related_input_fields.hide();
+				}
+			}
+			get_parameter_settings_on_new_reservation_post();
+			
 
 		}
 
