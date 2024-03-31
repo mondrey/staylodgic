@@ -409,7 +409,7 @@ class Staylodgic_Init
                 'staylodgic_admin_vars',
                 array(
                     'post_id' => get_the_ID(),
-                    'nonce'   => wp_create_nonce('staylodgic-nonce-metagallery'),
+                    'nonce'   => wp_create_nonce('staylodgic-nonce-admin'),
                 )
             );
 

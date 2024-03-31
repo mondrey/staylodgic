@@ -15,6 +15,12 @@ class IcalExportProcessor
     }
 
     public function ajax_download_reservations_ical() {
+
+        // Check for nonce security
+        if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'staylodgic-nonce-admin')) {
+            wp_die();
+        }
+        
         $room_id = isset($_POST['room_id']) ? intval($_POST['room_id']) : false;
         if ($room_id) {
             $this->download_reservations_ical($room_id);

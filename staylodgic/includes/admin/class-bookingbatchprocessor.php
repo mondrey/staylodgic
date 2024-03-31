@@ -9,7 +9,9 @@ class BookingBatchProcessor extends BatchProcessorBase
     {
         add_action('wp_ajax_process_event_batch', array($this, 'process_event_batch')); // wp_ajax_ hook for logged-in users
         add_action('wp_ajax_nopriv_process_event_batch', array($this, 'process_event_batch')); // wp_ajax_nopriv_ hook for non-logged-in users
-        add_action('admin_menu', array($this, 'add_booking_admin_menu')); // This now points to the add_admin_menu function
+        
+        //add_action('admin_menu', array($this, 'add_booking_admin_menu')); // This now points to the add_admin_menu function
+        
         add_action('wp_ajax_insert_events_batch', array($this, 'insert_events_batch'));
         add_action('wp_ajax_nopriv_insert_events_batch', array($this, 'insert_events_batch'));
 
@@ -180,8 +182,12 @@ class BookingBatchProcessor extends BatchProcessorBase
         foreach ($processedEvents as $event) {
             $booking_number = $event[ 'UID' ];
             $booking_uid    = $event[ 'UID' ];
-            $checkin        = $event[ 'DATA' ][ 'CHECKIN' ];
-            $checkout       = $event[ 'DATA' ][ 'CHECKOUT' ];
+            if ( isset( $event[ 'DATA' ][ 'CHECKIN' ] ) ) {
+                $checkin        = $event[ 'DATA' ][ 'CHECKIN' ];
+            }
+            if ( isset( $event[ 'DATA' ][ 'CHECKOUT' ] ) ) {
+                $checkout        = $event[ 'DATA' ][ 'CHECKOUT' ];
+            }
             $name           = $event[ 'SUMMARY' ];
             $description    = $event[ 'DESCRIPTION' ];
             $signature      = $event[ 'SIGNATURE' ];
@@ -200,22 +206,36 @@ class BookingBatchProcessor extends BatchProcessorBase
                 )
             );
 
-			if ($existing_post) {
-				$existing_post_id = $existing_post[0]->ID;
-				$existing_checkin = get_post_meta($existing_post_id, 'staylodgic_checkin_date', true);
-				$existing_checkout = get_post_meta($existing_post_id, 'staylodgic_checkout_date', true);
-			
-				// Compare existing check-in and check-out dates with the new ones
-				if ($existing_checkin !== $checkin || $existing_checkout !== $checkout) {
-					// Update the existing post with new check-in and check-out dates
-					update_post_meta($existing_post_id, 'staylodgic_checkin_date', $checkin);
-					update_post_meta($existing_post_id, 'staylodgic_checkout_date', $checkout);
-				}
-
-
-				$skippedCount++;
-				continue;
-			}
+            if ($existing_post) {
+                $existing_post_id = $existing_post[0]->ID;
+                $existing_checkin = get_post_meta($existing_post_id, 'staylodgic_checkin_date', true);
+                $existing_checkout = get_post_meta($existing_post_id, 'staylodgic_checkout_date', true);
+            
+                if (isset($checkin) && isset($checkout)) {
+                    // Validate check-in and check-out dates
+                    $checkinDate = DateTime::createFromFormat('Y-m-d', $checkin);
+                    $checkoutDate = DateTime::createFromFormat('Y-m-d', $checkout);
+            
+                    if ($checkinDate && $checkoutDate) {
+                        // Compare existing check-in and check-out dates with the new ones
+                        if ($existing_checkin !== $checkin || $existing_checkout !== $checkout) {
+                            // Update the existing post with new check-in and check-out dates
+                            update_post_meta($existing_post_id, 'staylodgic_checkin_date', $checkin);
+                            update_post_meta($existing_post_id, 'staylodgic_checkout_date', $checkout);
+                        }
+                    } else {
+                        // Handle invalid dates
+                        // For example, you can log an error or skip the update
+                        error_log("Invalid check-in or check-out date: Check-in: $checkin, Check-out: $checkout");
+                        $skippedCount++;
+                        continue;
+                    }
+                } else {
+                    // Handle cases where check-in or check-out dates are not set
+                    $skippedCount++;
+                    continue;
+                }
+            }            
 
             $booking_channel = "External";
 

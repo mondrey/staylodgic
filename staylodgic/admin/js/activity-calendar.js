@@ -28,7 +28,8 @@
 							action: 'get_activity_schedules',
 							selected_date: dateStr,
 							the_post_id: staylodgic_admin_vars.post_id,
-							totalpeople: getActivityGuestNumbers()
+							totalpeople: getActivityGuestNumbers(),
+							nonce: staylodgic_admin_vars.nonce
 						},
 						beforeSend: function( xhr ) {
 							$('.activity-schedules-container-wrap').addClass('ajax-processing');

@@ -61,6 +61,11 @@ class BatchProcessorBase
     )
     {
 
+        // Check for nonce security
+        if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'staylodgic-nonce-admin')) {
+            wp_die();
+        }
+
         // Create a new instance of the parser.
         $parser = new \ICal\ICal();
 
@@ -144,7 +149,7 @@ class BatchProcessorBase
 
             $eventData = [  ]; // Initialize the $eventData array
 
-            $descriptionLines = explode("\n", $description);
+            $descriptionLines = explode("\n", $description ?? '');
             foreach ($descriptionLines as $line) {
                 $parts = explode(':', $line, 2);
                 $key   = isset($parts[ 0 ]) ? trim($parts[ 0 ]) : '';

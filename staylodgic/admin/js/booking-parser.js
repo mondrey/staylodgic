@@ -47,7 +47,8 @@
 				type: 'POST',
 				data: {
 					action: 'download_ical',
-					room_id: roomId
+					room_id: roomId,
+					nonce: staylodgic_admin_vars.nonce
 				},
 				xhrFields: {
 					responseType: 'blob'
@@ -80,7 +81,8 @@
 				data: {
 					action: 'process_event_batch', // This should match the action hook in your functions.php file
 					room_id: roomID,
-					ics_url: icsURL
+					ics_url: icsURL,
+					nonce: staylodgic_admin_vars.nonce
 				},
 				success: function(response) {
 					if(response.success) {
@@ -151,7 +153,8 @@
 				data: {
 					action: 'process_event_batch', // This should match the action hook in your functions.php file
 					room_id: roomID,
-					ics_url: icsURL
+					ics_url: icsURL,
+					nonce: staylodgic_admin_vars.nonce
 				},
 				success: function(response) {
 					if(response.success) {
@@ -199,6 +202,9 @@
 						}
 						$('#result').html('<p class="notice-heading">' + errorMessage + '</p>');
 						$(".ical-close-button").prop("disabled", false);
+
+						$(".sync_button").prop("disabled", false);
+						$(".button-spinner-support").removeClass('spinner-border');
 					}
 				},
 				error: function(xhr, status, error) {
@@ -304,29 +310,35 @@
 
 
 					if (response.success) {
-					var cancelledReservations = response.data.cancelledReservations;
-					if (cancelledReservations.length > 0) {
-						// Display the list of future cancelled reservations
-						var resultList = $('<ol>');
-						$.each(cancelledReservations, function(index, bookingNumber) {
-						var listItem = $('<li>').text(bookingNumber);
-						resultList.append(listItem);
-						});
-						$('#result-missing-bookings').html('<p>Future Cancelled Reservations:</p>').append(resultList);
+						var cancelledReservations = response.data.cancelledReservations;
+						if (cancelledReservations.length > 0) {
+							// Display the list of future cancelled reservations
+							var resultList = $('<ol>');
+							$.each(cancelledReservations, function(index, bookingNumber) {
+							var listItem = $('<li>').text(bookingNumber);
+							resultList.append(listItem);
+							});
+							$('#result-missing-bookings').html('<p>Future Cancelled Reservations:</p>').append(resultList);
+						} else {
+							$('#result-missing-bookings').html('<p>No future cancelled reservations found.</p>');
+						}
+
 					} else {
-						$('#result-missing-bookings').html('<p>No future cancelled reservations found.</p>');
+						$('#result-notice').append('<p>Error occurred while retrieving future cancelled reservations.</p>');
 					}
 
 					$("button.sync_button[data-ics-id='" + response.data.icsID + "']").text('Sync');
 					$(".sync_button").prop("disabled", false);
-
-					} else {
-					$('#result-notice').append('<p>Error occurred while retrieving future cancelled reservations.</p>');
-					}
+					$(".button-spinner-support").removeClass('spinner-border');
 				},
 				error: function(xhr, status, error) {
 					// Handle error
 					$('#result-notice').append('<p>Error occurred while retrieving future cancelled reservations.</p>');
+
+					$("button.sync_button[data-ics-id='" + response.data.icsID + "']").text('Sync');
+					$(".sync_button").prop("disabled", false);
+					$(".button-spinner-support").removeClass('spinner-border');
+
 				}
 			});
 		}

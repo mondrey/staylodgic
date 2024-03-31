@@ -27,7 +27,8 @@
 				data: {
 					action: 'processReservationPayment',
 					total: total,
-					booking_number: booking_number
+					booking_number: booking_number,
+					nonce: staylodgic_admin_vars.nonce
 				},
 				success: function(response) {
 					// Handle the success response

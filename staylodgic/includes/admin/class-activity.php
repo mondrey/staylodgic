@@ -231,6 +231,12 @@ class Activity
     }
 
     public function get_activity_schedules_ajax_handler() {
+
+        // Check for nonce security
+        if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'staylodgic-nonce-admin')) {
+            wp_die();
+        }
+
         $selected_date = isset($_POST['selected_date']) ? sanitize_text_field($_POST['selected_date']) : null;
         $total_people = isset($_POST['totalpeople']) ? sanitize_text_field($_POST['totalpeople']) : null;
         $the_post_id = isset($_POST['the_post_id']) ? sanitize_text_field($_POST['the_post_id']) : null;

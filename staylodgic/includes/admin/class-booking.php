@@ -1204,6 +1204,12 @@ return ob_get_clean();
 
     public function generate_BedMetabox_callback()
     {
+
+        // Check for nonce security
+        if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'staylodgic-nonce-admin')) {
+            wp_die();
+        }
+        
         if (isset($_POST[ 'roomID' ])) {
             $room_id = $_POST[ 'roomID' ];
         }

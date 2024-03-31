@@ -26,6 +26,7 @@ jQuery(document).ready(function($) {
 			data: {
 				'action': 'create_guest_registration', // The action hook name
 				'bookingNumber': bookingNumber, // Pass the booking number to the back-end
+				'nonce': staylodgic_admin_vars.nonce
 			},
 			success: function(response) {
 				// On successful AJAX response, reload the page
@@ -271,7 +272,8 @@ jQuery(document).ready(function($) {
 		  type: 'POST',
 		  data: {
 			action: 'get_room_names', // Custom Ajax action
-			booking_number: bookingNumber // Pass the selected booking number as data
+			booking_number: bookingNumber, // Pass the selected booking number as data
+			nonce: staylodgic_admin_vars.nonce
 		  },
 		  success: function(response) {
 			// Handle the Ajax response

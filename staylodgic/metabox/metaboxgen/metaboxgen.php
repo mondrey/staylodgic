@@ -1415,7 +1415,7 @@ function staylodgic_save_proofing_images()
         return;
     }
 
-    if (!isset($_POST['ids']) || !isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'staylodgic-nonce-metagallery')) {
+    if (!isset($_POST['ids']) || !isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'staylodgic-nonce-admin')) {
         return;
     }
 
@@ -1447,7 +1447,7 @@ function staylodgic_save_images()
         return;
     }
 
-    if (!isset($_POST['ids']) || !isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'staylodgic-nonce-metagallery')) {
+    if (!isset($_POST['ids']) || !isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'staylodgic-nonce-admin')) {
         return;
     }
 
@@ -1478,7 +1478,7 @@ function staylodgic_multo_gallery_save_images()
         return;
     }
 
-    if (!isset($_POST['ids']) || !isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'staylodgic-nonce-metagallery')) {
+    if (!isset($_POST['ids']) || !isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'staylodgic-nonce-admin')) {
         return;
     }
 

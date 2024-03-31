@@ -383,7 +383,8 @@
 							action: 'generate_BedMetabox',
 							roomID: selectedValue,
 							fieldID: bedLayoutField,
-							metaValue: bedMetaValue
+							metaValue: bedMetaValue,
+							nonce: staylodgic_admin_vars.nonce
 						},
 						success: function (response) {
 							// Handle the AJAX response here
@@ -772,7 +773,19 @@
 				}
 			}
 			get_parameter_settings_on_new_reservation_post();
-			
+
+			// Check if it's a new post page for a specific post type
+			if ($('body').hasClass('post-new-php') && $('input[name="post_type"]').val() === 'slgc_reservations') {
+				// Listen for the publish button click event
+				$('#publish').click(function() {
+					// Check if the title is empty
+					if ($('#title').val().trim() === '') {
+						// Set the title dynamically
+						var dynamicTitle = $('#staylodgic_booking_number').val();
+						$('#title').val(dynamicTitle);
+					}
+				});
+			}
 
 		}
 

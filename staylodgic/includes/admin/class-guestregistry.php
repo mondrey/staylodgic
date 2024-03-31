@@ -51,6 +51,11 @@ class GuestRegistry
 
     public function create_guest_registration_ajax_handler()
     {
+
+        // Check for nonce security
+        if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'staylodgic-nonce-admin')) {
+            wp_die();
+        }
         // Check user capabilities or nonce here for security, e.g.,
         // if ( !current_user_can('edit_posts') ) wp_die();
         $bookingNumber = isset($_POST[ 'bookingNumber' ]) ? sanitize_text_field($_POST[ 'bookingNumber' ]) : '';
@@ -415,7 +420,7 @@ class GuestRegistry
         return ob_get_clean();
     }
 
-    function save_guestregistration_data()
+    public function save_guestregistration_data()
     {
         error_log('Registration post save'); // Log the POST data
         error_log(print_r($_POST, true)); // Log the POST data
@@ -486,7 +491,7 @@ class GuestRegistry
         wp_die();
     }
 
-    function delete_registration()
+    public function delete_registration()
     {
 
         $guest_id = isset($_POST[ 'guest_id' ]) ? $_POST[ 'guest_id' ] : 0;
@@ -519,7 +524,7 @@ class GuestRegistry
         wp_die(); // This is required to terminate immediately and return a proper response
     }
 
-    function get_guest_post_permalink()
+    public function get_guest_post_permalink()
     {
 
         // Verify the nonce

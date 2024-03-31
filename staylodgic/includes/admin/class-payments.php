@@ -82,6 +82,12 @@ class Payments
     // Ajax callback function to retrieve room names
     public function get_room_names_callback()
     {
+
+        // Check for nonce security
+        if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'staylodgic-nonce-admin')) {
+            wp_die();
+        }
+
         // Check if the booking number is provided in the Ajax request
         if (isset($_POST['booking_number'])) {
             $booking_number = $_POST['booking_number'];
@@ -187,6 +193,12 @@ class Payments
 
     public function processReservationPayment()
     {
+
+        // Check for nonce security
+        if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'staylodgic-nonce-admin')) {
+            wp_die();
+        }
+        
         if (isset($_POST['total'])) {
             $total          = sanitize_text_field($_POST['total']);
             $booking_number = sanitize_text_field($_POST['booking_number']);
