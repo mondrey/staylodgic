@@ -339,6 +339,42 @@ class Reservations
     }
 
     /**
+     * Retrieves, validates, and updates the reservations array for the given room type
+     */
+    public function cleanup_Reservations_Array($room_id)
+    {
+
+        $reservations_array = get_post_meta($room_id, 'reservations_array', true);
+
+        if (empty($reservations_array)) {
+            $reservations_array = [];
+        } else {
+            $reservations_array = is_array($reservations_array) ? $reservations_array : json_decode($reservations_array, true);
+
+            if (!is_array($reservations_array)) {
+                error_log('Failed to convert reservations array to array!');
+                return [];
+            }
+
+            // Filter out non-existing IDs
+            foreach ($reservations_array as $date => &$ids) {
+                foreach ($ids as $key => $id) {
+                    if (!get_post($id)) {
+                        unset($ids[$key]);
+                    }
+                }
+            }
+
+            // Clean up any empty arrays left after unsetting IDs
+            $reservations_array = array_filter($reservations_array);
+
+            // Update the reservations array metadata
+            update_post_meta($room_id, 'reservations_array', json_encode($reservations_array));
+        }
+
+        return $reservations_array;
+    }
+    /**
      * Calculates and updates the remaining room count for all dates of a given room ID.
      * 
      * @param int $room_id The ID of the room.
@@ -362,35 +398,37 @@ class Reservations
             $reservations_array = [];
         }
 
-        if (is_array($reservations_array)) {
+        // // Remove this from here
+        // if (is_array($reservations_array)) {
 
-            // error_log(print_r($reservations_array, 1));
+        //     // error_log(print_r($reservations_array, 1));
         
-            foreach ($reservations_array as $date => &$ids) { // Use a reference (&) to modify the array directly
-                foreach ($ids as $key => $id) {
-                    if (get_post($id)) {
-                        $booking_number = get_post_meta($id, 'staylodgic_booking_number', true);
-                        if ('' == $booking_number) {
-                            $booking_number = '--------------------------------------------------';
-                        }
-                        // error_log('================');
-                        // error_log('Date:' . $date);
-                        // error_log('POST ID:' . $id);
-                        // error_log('Booking Number:' . $booking_number);
-                        // error_log('================');
-                    } else {
-                        echo $id . ' The post does not exist.';
-                        unset($ids[$key]); // Remove the ID from the array
-                    }
-                }
-            }
+        //     foreach ($reservations_array as $date => &$ids) { // Use a reference (&) to modify the array directly
+        //         foreach ($ids as $key => $id) {
+        //             if (get_post($id)) {
+        //                 $booking_number = get_post_meta($id, 'staylodgic_booking_number', true);
+        //                 if ('' == $booking_number) {
+        //                     $booking_number = '--------------------------------------------------';
+        //                 }
+        //                 // error_log('================');
+        //                 // error_log('Date:' . $date);
+        //                 // error_log('POST ID:' . $id);
+        //                 // error_log('Booking Number:' . $booking_number);
+        //                 // error_log('================');
+        //             } else {
+        //                 echo $id . ' The post does not exist.';
+        //                 unset($ids[$key]); // Remove the ID from the array
+        //             }
+        //         }
+        //     }
         
-            // Clean up any empty arrays left after unsetting IDs
-            $reservations_array = array_filter($reservations_array);
+        //     // Clean up any empty arrays left after unsetting IDs
+        //     $reservations_array = array_filter($reservations_array);
         
-            // error_log('Modified reservations array:');
-            // error_log(print_r($reservations_array, 1));
-        }        
+        //     // error_log('Modified reservations array:');
+        //     // error_log(print_r($reservations_array, 1));
+        // }
+        // // remove this up to here      
 
         // Initialize the remaining rooms count array
         $remaining_rooms_count = self::getRemainingRoomCountArray( $room_id );
@@ -1353,47 +1391,6 @@ class Reservations
         // No matching customer found, return false
         return false;
     }
-
-    /**
-     * Retrieves, validates, and updates the reservations array for the given room type
-     */
-    public function getReservations_Array_ForRoom_And_Cleanup($room_id)
-    {
-        if (!$room_id) {
-            $room_id = $this->room_id;
-        }
-
-        $reservations_array = get_post_meta($room_id, 'reservations_array', true);
-
-        if (empty($reservations_array)) {
-            $reservations_array = [];
-        } else {
-            $reservations_array = is_array($reservations_array) ? $reservations_array : json_decode($reservations_array, true);
-
-            if (!is_array($reservations_array)) {
-                error_log('Failed to convert reservations array to array!');
-                return [];
-            }
-
-            // Filter out non-existing IDs
-            foreach ($reservations_array as $date => &$ids) {
-                foreach ($ids as $key => $id) {
-                    if (!get_post($id)) {
-                        unset($ids[$key]);
-                    }
-                }
-            }
-
-            // Clean up any empty arrays left after unsetting IDs
-            $reservations_array = array_filter($reservations_array);
-
-            // Update the reservations array metadata
-            update_post_meta($room_id, 'reservations_array', json_encode($reservations_array));
-        }
-
-        return $reservations_array;
-    }
-
     /**
      * Retrieves and validates the reservations array for the given room type
      */

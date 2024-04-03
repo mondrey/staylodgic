@@ -40,6 +40,19 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
         $this->add_cron_hook();
     }
 
+    public function add_availability_admin_menu()
+    {
+        add_submenu_page(
+            'staylodgic',
+            // This is the slug of the parent menu
+            'Import iCal Availabilitiy',
+            'Import iCal Availabilitiy',
+            'manage_options',
+            'import-availability-ical',
+            array($this, 'ical_availability_import')
+        );
+    }
+
     public function add_ics_rewrite_rule() {
         add_rewrite_rule('^ics-export/room/([0-9]+)/?', 'index.php?staylodgic_ics_room=$matches[1]', 'top');
     }
@@ -355,19 +368,6 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
     
         // Return the array of blocked dates
         return $blocked_dates;
-    }    
-
-    public function add_availability_admin_menu()
-    {
-        add_submenu_page(
-            'staylodgic',
-            // This is the slug of the parent menu
-            'Import iCal Availabilitiy',
-            'Import iCal Availabilitiy',
-            'manage_options',
-            'import-availability-ical',
-            array($this, 'ical_availability_import')
-        );
     }
 
     public function ical_availability_import()
@@ -484,18 +484,19 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
         echo "</div>";
     }
 
-
     public function handle_export_request($roomId) {
     
         // Retrieve the 'quantity_array' and 'channel_quantity_array'
         $room_reservations_instance = new \Staylodgic\Reservations( $dateString = false, $roomId );
         $room_reservations_instance->calculateAndUpdateRemainingRoomCountsForAllDates();
         $remainingQuantityArray = $room_reservations_instance->getRemainingRoomCountArray();
+        
         $channelArray = get_post_meta($roomId, 'channel_quantity_array', true);
         $channelQuantityArray = isset($channelArray['quantity']) ? $channelArray['quantity'] : [];
 
+        $new_remainingQuantityArray = $this->filterFutureDates($remainingQuantityArray);
         // Merge the arrays - channelQuantityArray values will overwrite remainingQuantityArray values for any matching keys
-        $mergedArray = array_merge($remainingQuantityArray, $channelQuantityArray);
+        $mergedArray = array_merge($new_remainingQuantityArray, $channelQuantityArray);
 
         // Determine if the request is coming from a browser or a server
         $mode = $this->detect_request_mode();
@@ -504,6 +505,19 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
         $this->generate_ics_file($roomId, $mergedArray, $mode);
 
         exit;
+    }
+
+    public function filterFutureDates($remainingQuantityArray) {
+        $filteredArray = [];
+        $currentDate = date('Y-m-d');
+    
+        foreach ($remainingQuantityArray as $date => $quantity) {
+            if ($date >= $currentDate) {
+                $filteredArray[$date] = $quantity;
+            }
+        }
+    
+        return $filteredArray;
     }
     
     private function detect_request_mode() {
@@ -568,4 +582,4 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
 }
 
 // Instantiate the class
-$AvailabilityBatchProcessor = new AvailabilityBatchProcessor();
+$AvailabilityBatchProcessor = new \Staylodgic\AvailabilityBatchProcessor();

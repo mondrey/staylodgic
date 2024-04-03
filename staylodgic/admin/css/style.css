@@ -1183,19 +1183,25 @@
 .day-schedule .time-slot.time-choice .time-slots-remaining {
 	color: #fff;
 }
-.activity-schedules-container-wrap.ajax-processing {
+
+.activity-schedules-container .activity-schedule {
+	padding-bottom: 25px;
+	border-top: 1px solid rgba(0, 0, 0, 0.14);
+	padding-top: 20px;
+}
+.activity-schedules-container.ajax-processing {
 	opacity: 0.4;
 	pointer-events: none;
 }
-.activity-schedules-container-wrap.ajax-processing .spinner {
+.activity-schedules-container.ajax-processing .spinner {
 	visibility: visible;
 }
-.activity-schedules-container-wrap .spinner {
+.activity-schedules-container .spinner {
 	position: absolute;
 	top: 20px;
 	left: 50%;
 }
-.activity-schedules-container-wrap {
+.activity-schedules-container {
 	position: relative;
 }
 
@@ -1204,14 +1210,17 @@
 	padding-bottom: 30px;
 }
 
-.activity-schedules-container-wrap h3 {
-	font-size: 22px;
+.activity-schedules-container h3 {
+	font-size: 32px;
 	font-weight: 200;
+	padding-top: 20px;
+	padding-bottom: 20px;
 }
 
-.activity-schedules-container-wrap h4 {
+.activity-schedules-container h4 {
 	font-size: 14px;
 	font-weight: 600;
+	padding-bottom: 10px;
 }
 
 
@@ -1465,7 +1474,7 @@ p.ticket-break {
   }
 
   .ticket-container-outer {
-	padding: 20px;
+	padding: 20px 20px 20px 0;
 	margin: 0 auto;
 	display: inline-block;
   }
@@ -1518,4 +1527,16 @@ ul.existing-customer {
 	width: 200px;
 	background: #f5f3f3;
 	padding: 10px 14px;
+}
+.settings-change-log ol,
+.settings-change-log ul {
+	margin: 0;
+	padding: 0;
+}
+.settings-change-log ul {
+	padding-top: 10px;
+}
+.settings-change-log {
+	column-count: 3;
+	column-gap: 50px;
 }

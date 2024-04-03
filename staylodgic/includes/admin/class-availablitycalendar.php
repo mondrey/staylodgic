@@ -313,7 +313,8 @@ class AvailablityCalendar extends AvailablityCalendarBase
             $cached_calendar = $cache_instance->getCache($transient_key);
 
             $room_reservations_instance = new \Staylodgic\Reservations($dateString = false, $roomID);
-            // $room_reservations_instance->getReservations_Array_ForRoom_And_Cleanup($roomID);
+
+            // $room_reservations_instance->cleanup_Reservations_Array( $roomID );
             $room_reservations_instance->calculateAndUpdateRemainingRoomCountsForAllDates();
 			// error_log($transient_key);
 			// error_log('----------');

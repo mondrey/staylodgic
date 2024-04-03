@@ -180,7 +180,7 @@ class Staylodgic_Init
         wp_register_script('availability-yearly-scripts', plugin_dir_url(__FILE__) . 'admin/js/availability-yearly-calendar.js', array('jquery'), null, true);
 
         wp_enqueue_script('activity-scripts', plugin_dir_url(__FILE__) . 'admin/js/activity-calendar.js', array('jquery'), null, true);
-        
+         
         wp_enqueue_script('staylodgic-moment', plugin_dir_url(__FILE__) . 'assets/js/moment.min.js', array('jquery'), null, true);
         wp_enqueue_script('common-scripts', plugin_dir_url(__FILE__) . 'admin/js/common.js', array('jquery'), null, true);
 
@@ -307,6 +307,12 @@ class Staylodgic_Init
                 wp_enqueue_style('fontawesome-6');
                 wp_enqueue_style('fontawesome-6-brands');
                 wp_enqueue_style('fontawesome-6-solid');
+
+                wp_enqueue_style('flatpickr');
+                wp_enqueue_script('flatpickr');
+                wp_enqueue_script('flatpickr-monthselect');
+                wp_enqueue_style('flatpickr-monthselect');
+                wp_enqueue_style('flatpickr-extra');
 
                  wp_enqueue_style('bootstrap');
                 wp_enqueue_script('bootstrap');

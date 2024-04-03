@@ -212,4 +212,4 @@ class BatchProcessorBase
 }
 
 // Instantiate the class
-$BatchProcessorBase = new BatchProcessorBase();
+$BatchProcessorBase = new \Staylodgic\BatchProcessorBase();

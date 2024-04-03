@@ -40,14 +40,37 @@
 			icsID = $(this).data('ics-id');
 		});
 
+		function exporterFlatpickr(newStartDate) {
+			if (typeof monthSelectPlugin !== 'undefined') {
+				var initialDate = newStartDate ? newStartDate : "today"; // Use newStartDate if provided, otherwise default to "today"
+				fp = flatpickr(".exporter_calendar", {
+					mode: "single", // Change to single mode for month selection
+					defaultDate: initialDate, // Set the initial date
+					plugins: [
+						new monthSelectPlugin({
+							shorthand: true,
+							dateFormat: "Y-m",
+							altFormat: "F Y",
+							theme: "light"
+						})
+					]
+				});
+			}
+		}
+		
+		// Call exporterFlatpickr with the current month as the initial date
+		exporterFlatpickr("today");
+
 		$('.download_export_ical').on('click', function() {
 			var roomId = $(this).data('room-id');
+			var selectedMonth = $(".exporter_calendar").val(); // Get the selected month from the input field
 			$.ajax({
 				url: ajaxurl,
 				type: 'POST',
 				data: {
 					action: 'download_ical',
 					room_id: roomId,
+					month: selectedMonth, // Pass the selected month to the AJAX function
 					nonce: staylodgic_admin_vars.nonce
 				},
 				xhrFields: {
@@ -65,6 +88,7 @@
 				}
 			});
 		});
+		
 		
 		$('#sync-booking-popup').on('click', '.process-ical-availability-sync', function(e) {
 			e.preventDefault();

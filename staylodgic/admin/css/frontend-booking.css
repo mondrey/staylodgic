@@ -1162,19 +1162,19 @@ a.book-button:hover:active,
 .time-slot-unavailable {
 	pointer-events: none;
 }
-.activity-schedules-container-wrap.ajax-processing {
+.activity-schedules-container.ajax-processing {
 	opacity: 0.4;
 	pointer-events: none;
 }
-.activity-schedules-container-wrap.ajax-processing .spinner {
+.activity-schedules-container.ajax-processing .spinner {
 	visibility: visible;
 }
-.activity-schedules-container-wrap .spinner {
+.activity-schedules-container .spinner {
 	position: absolute;
 	top: 20px;
 	left: 50%;
 }
-.activity-schedules-container-wrap {
+.activity-schedules-container {
 	position: relative;
 }
 
@@ -1183,12 +1183,12 @@ a.book-button:hover:active,
 	padding-bottom: 30px;
 }
 
-.activity-schedules-container-wrap h3 {
+.activity-schedules-container h3 {
 	font-size: 22px;
 	font-weight: 200;
 }
 
-.activity-schedules-container-wrap h4 {
+.activity-schedules-container h4 {
 	font-size: 14px;
 	font-weight: 600;
 }

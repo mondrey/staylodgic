@@ -222,4 +222,4 @@ class FormGenerator
 }
 
 // Instantiate the class
-new FormGenerator();
+new \Staylodgic\FormGenerator();

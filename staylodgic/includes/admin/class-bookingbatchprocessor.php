@@ -417,4 +417,4 @@ class BookingBatchProcessor extends BatchProcessorBase
 }
 
 // Instantiate the class
-$BookingBatchProcessor = new BookingBatchProcessor();
+$BookingBatchProcessor = new \Staylodgic\BookingBatchProcessor();
