@@ -66,6 +66,8 @@ jQuery(document).ready(function ($) {
 		$('.staylodgic-tabs a').removeClass('nav-tab-active');
 		$(target).addClass('nav-tab-active');
 		const targetTab = $(target).attr('data-tab');
+		const heading = $(target).attr('data-heading');
+		$('.section_heading').html(heading);
 		$('.staylodgic-options-form .staylodgic-tab-item').each(function () {
 			if ($(this).hasClass(`staylodgic-tab-item--${targetTab}`)) {
 				$(this).css('display', 'block');

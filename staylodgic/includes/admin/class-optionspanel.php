@@ -177,7 +177,9 @@ class OptionsPanel
             exit;
         }
     }
-
+    public function section_heading_callback() {
+        echo '<h2 class="section_heading">' . esc_html($this->option_name) . '</h2>';
+    }
     /**
      * Register the settings.
      */
@@ -188,10 +190,10 @@ class OptionsPanel
             'default'           => $this->get_defaults(),
          ]);
 
-        add_settings_section(
+         add_settings_section(
             $this->option_name . '_sections',
-            false,
-            false,
+            '', // Set the title to an empty string because we'll add it in the callback
+            [ $this, 'section_heading_callback' ], // Use the custom callback
             $this->option_name
         );
 
@@ -363,7 +365,16 @@ class OptionsPanel
         ?>
         <div class="wrap">
             <h1><?php echo esc_html(get_admin_page_title()); ?></h1>
-
+            <?php
+    // Add an export button
+    echo '<form class="export-import-form" method="post">';
+    echo '<div class="import-export-section">';
+    echo '<input type="hidden" name="action" value="export_settings" />';
+    echo '<input type="submit" name="submit" id="submit" class="button button-primary" value="Export Settings">';
+    echo '<button type="button" id="import-settings-button" class="button-secondary">Import Settings</button>';
+    echo '</div>';
+    echo '</form>';
+?>
             <div class="staylodgic-tabform-wrapper">
             <?php $this->render_tabs();?>
             <div class="staylodgic-tab-content active" id="tab-property">
@@ -376,17 +387,7 @@ settings_fields($this->option_group_name);
             </form>
             </div>
             </div>
-            <?php
-    // Add an export button
-    echo '<form method="post">';
-    echo '<input type="hidden" name="action" value="export_settings" />';
-    submit_button('Export Settings');
-    echo '</form>';
-?>
 <?php
-// Button to open the import modal
-echo '<button type="button" id="import-settings-button" class="button-secondary">Import Settings</button>';
-
 // Modal structure
 echo '<div id="import-settings-modal" class="staylodgic-modal" style="display:none;">
         <div class="staylodgic-modal-content">
@@ -424,7 +425,7 @@ protected function render_tabs()
                     echo '<h3 class="staylodgic-tab-heading">Hotel Settings</h3>';
                 }
                 ?>
-                <a href="#" data-tab="<?php echo esc_attr($id); ?>" class="nav-tab<?php echo ($first_tab) ? ' nav-tab-active' : ''; ?>"><?php echo ucfirst($label); ?></a>
+                <a href="#" data-heading="<?php echo esc_attr($label); ?>" data-tab="<?php echo esc_attr($id); ?>" class="nav-tab<?php echo ($first_tab) ? ' nav-tab-active' : ''; ?>"><?php echo ucfirst($label); ?></a>
                 <?php
                 $first_tab = false;
             }
@@ -508,7 +509,8 @@ protected function render_tabs()
             <option value="9"><?php _e('9', 'staylodgic');?></option>
             </select>
             <input disabled
-                type="text"
+                type="number"
+                placeholder="Value"
                 id="<?php echo esc_attr($args[ 'label_for' ]); ?>_number"
                 name="number"
                 value="">
@@ -527,7 +529,6 @@ protected function render_tabs()
             <option value="decrease"><?php _e('Decrease', 'staylodgic');?></option>
             </select>
             <span class="remove-set-button"><i class="dashicons dashicons-remove"></i></span>
-            <br/>
             </div>
 </div>
 <div id="repeatable-perperson-container">
@@ -540,6 +541,7 @@ protected function render_tabs()
                 if (isset($value[ 'people' ])) {
                     ?>
             <div class="repeatable">
+            <span class="input-label-outer"><span class="input-label-inner">People</span>
             <select
             data-width="80"
             id="<?php echo esc_attr($args[ 'label_for' ]); ?>_people_<?php echo $count; ?>"
@@ -554,12 +556,16 @@ protected function render_tabs()
             <option value="8" <?php selected('8', $value[ 'people' ], true);?>><?php _e('8', 'staylodgic');?></option>
             <option value="9" <?php selected('9', $value[ 'people' ], true);?>><?php _e('9', 'staylodgic');?></option>
             </select>
+            </span>
+            <span class="input-label-outer"><span class="input-label-inner">Value</span>
             <input
-                type="text"
+                type="number"
                 class="perpersonpricing_number_setter"
                 id="<?php echo esc_attr($args[ 'label_for' ]); ?>_number_<?php echo $count; ?>"
                 name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args[ 'label_for' ]); ?>][<?php echo $key; ?>][number]"
                 value="<?php echo esc_attr($value[ 'number' ]); ?>">
+            </span>
+            <span class="input-label-outer"><span class="input-label-inner">Type</span>
             <select
             data-width="150"
             id="<?php echo esc_attr($args[ 'label_for' ]); ?>_type_<?php echo $count; ?>"
@@ -568,6 +574,8 @@ protected function render_tabs()
             <option value="fixed" <?php selected('fixed', $value[ 'type' ], true);?>><?php _e('Fixed', 'staylodgic');?></option>
             <option value="percentage" <?php selected('percentage', $value[ 'type' ], true);?>><?php _e('Percentage', 'staylodgic');?></option>
             </select>
+            </span>
+            <span class="input-label-outer"><span class="input-label-inner">Difference</span>
             <select
             data-width="150"
             id="<?php echo esc_attr($args[ 'label_for' ]); ?>_total_<?php echo $count; ?>"
@@ -576,8 +584,8 @@ protected function render_tabs()
             <option value="increase" <?php selected('increase', $value[ 'total' ], true);?>><?php _e('Increase', 'staylodgic');?></option>
             <option value="decrease" <?php selected('decrease', $value[ 'total' ], true);?>><?php _e('Decrease', 'staylodgic');?></option>
             </select>
+            </span>
             <span class="remove-set-button"><i class="dashicons dashicons-remove"></i></span>
-            <br/>
             </div>
         <?php
 }
@@ -633,12 +641,11 @@ if ($description) {
         <option value="optional"><?php _e('Optional', 'staylodgic');?></option>
         </select>
         <input disabled
-            type="text"
+            type="number"
             id="<?php echo esc_attr($args[ 'label_for' ]); ?>_price"
             name="price"
             value="">
             <span class="remove-set-button"><i class="dashicons dashicons-remove"></i></span>
-        <br/>
         </div>
 </div>
 <div id="repeatable-mealplan-container">
@@ -650,6 +657,7 @@ $count = 0;
                 if (isset($value[ 'mealtype' ])) {
                     ?>
             <div class="repeatable">
+            <span class="input-label-outer"><span class="input-label-inner">Meal</span>
                 <select
                 data-width="170"
                 id="<?php echo esc_attr($args[ 'label_for' ]); ?>_mealtype_<?php echo $count; ?>"
@@ -661,6 +669,8 @@ $count = 0;
                 <option value="FB" <?php selected('FB', $value[ 'mealtype' ], true);?>><?php _e('Full Board', 'staylodgic');?></option>
                 <option value="AN" <?php selected('AN', $value[ 'mealtype' ], true);?>><?php _e('All-Inclusive', 'staylodgic');?></option>
                 </select>
+                </span>
+                <span class="input-label-outer"><span class="input-label-inner">Type</span>
             <select
             data-width="150"
             id="<?php echo esc_attr($args[ 'label_for' ]); ?>_choice_<?php echo $count; ?>"
@@ -669,15 +679,16 @@ $count = 0;
             <option value="included" <?php selected('included', $value[ 'choice' ], true);?>><?php _e('Included in rate', 'staylodgic');?></option>
             <option value="optional" <?php selected('optional', $value[ 'choice' ], true);?>><?php _e('Optional', 'staylodgic');?></option>
             </select>
+                </span>
+                <span class="input-label-outer"><span class="input-label-inner">Price</span>
             <input
-                type="text"
+                type="number"
                 class="mealplan-style-setter"
                 id="<?php echo esc_attr($args[ 'label_for' ]); ?>_price_<?php echo $count; ?>"
                 name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args[ 'label_for' ]); ?>][<?php echo $key; ?>][price]"
                 value="<?php echo esc_attr($value[ 'price' ]); ?>">
-
+            </span>
             <span class="remove-set-button"><i class="dashicons dashicons-remove"></i></span>
-            <br/>
             </div>
         <?php
 }
@@ -721,7 +732,7 @@ if ($description) {
                 name="label"
                 value="">
             <input disabled
-                type="text" placeholder = "Value"
+                type="number" placeholder = "Value"
                 id="<?php echo esc_attr($args[ 'label_for' ]); ?>_number"
                 name="number"
                 value="">
@@ -743,9 +754,9 @@ if ($description) {
             <option value="perpersonperday"><?php _e('Per person per day', 'staylodgic');?></option>
             </select>
             <span class="remove-set-button"><i class="dashicons dashicons-remove"></i></span>
-            <br/>
             </div>
 </div>
+<div class="repeatable-tax-container-wrap">
 <div id="repeatable-tax-container">
 <?php
 
@@ -757,18 +768,21 @@ if ($description) {
                     ?>
             <div class="repeatable">
             <span class="dashicons dashicons-sort drag-handle"></span>
+            <span class="input-label-outer"><span class="input-label-inner">Name</span>
             <input
                 type="text"
                 id="<?php echo esc_attr($args[ 'label_for' ]); ?>_label_<?php echo $count; ?>"
                 name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args[ 'label_for' ]); ?>][<?php echo $key; ?>][label]"
                 value="<?php echo esc_attr($value[ 'label' ]); ?>">
-
+            </span>
+            <span class="input-label-outer"><span class="input-label-inner">Value</span>
             <input
-                type="text"
+                type="number"
                 id="<?php echo esc_attr($args[ 'label_for' ]); ?>_number_<?php echo $count; ?>"
                 name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args[ 'label_for' ]); ?>][<?php echo $key; ?>][number]"
                 value="<?php echo esc_attr($value[ 'number' ]); ?>">
-
+            </span>
+            <span class="input-label-outer"><span class="input-label-inner">Type</span>
             <select
             id="<?php echo esc_attr($args[ 'label_for' ]); ?>_type_<?php echo $count; ?>"
             name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args[ 'label_for' ]); ?>][<?php echo $key; ?>][type]"
@@ -776,6 +790,8 @@ if ($description) {
             <option value="fixed" <?php selected('fixed', $value[ 'type' ], true);?>><?php _e('Fixed', 'staylodgic');?></option>
             <option value="percentage" <?php selected('percentage', $value[ 'type' ], true);?>><?php _e('Percentage', 'staylodgic');?></option>
             </select>
+            </span>
+            <span class="input-label-outer"><span class="input-label-inner">Frequency</span>
             <select
             id="<?php echo esc_attr($args[ 'label_for' ]); ?>_duration_<?php echo $count; ?>"
             name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args[ 'label_for' ]); ?>][<?php echo $key; ?>][duration]"
@@ -785,8 +801,8 @@ if ($description) {
             <option value="perday" <?php selected('perday', $value[ 'duration' ], true);?>><?php _e('Per Day', 'staylodgic');?></option>
             <option value="perpersonperday" <?php selected('perpersonperday', $value[ 'duration' ], true);?>><?php _e('Per person per day', 'staylodgic');?></option>
             </select>
+            </span>
             <span class="remove-set-button"><i class="dashicons dashicons-remove"></i></span>
-            <br/>
             </div>
         <?php
 }
@@ -795,6 +811,7 @@ if ($description) {
         ?>
         </div>
         <button id="addtax-repeatable"><?php _e('Add New Section', 'staylodgic');?></button>
+    </div>
             <?php
 if ($description) {
             ?>
@@ -850,7 +867,6 @@ if ($description) {
             <option value="perperson"><?php _e('Per person', 'staylodgic');?></option>
             </select>
             <span class="remove-set-button"><i class="dashicons dashicons-remove"></i></span>
-            <br/>
             </div>
 </div>
 <div id="repeatable-activitytax-container">
@@ -891,7 +907,6 @@ if ($description) {
             <option value="perperson" <?php selected('perperson', $value[ 'duration' ], true);?>><?php _e('Per person', 'staylodgic');?></option>
             </select>
             <span class="remove-set-button"><i class="dashicons dashicons-remove"></i></span>
-            <br/>
             </div>
         <?php
 }
@@ -929,12 +944,12 @@ public function render_promotion_discount_field($args)
             name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][label]"
             value="<?php echo esc_attr($values['label']); ?>" placeholder="Label for discount">
         <input
-            type="text"
+            type="number"
             id="<?php echo esc_attr($args['label_for']); ?>_days"
             name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][days]"
             value="<?php echo esc_attr($values['days']); ?>" placeholder="Number of days">
         <input
-            type="text"
+            type="number"
             id="<?php echo esc_attr($args['label_for']); ?>_percent"
             name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args['label_for']); ?>][percent]"
             value="<?php echo esc_attr($values['percent']); ?>" placeholder="Discount percent">
@@ -1067,17 +1082,17 @@ $panel_args = [
     'slug'            => 'staylodgic-settings-panel',
     'user_capability' => 'manage_options',
     'tabs'            => [
-        'property'       => esc_html__('Property', 'staylodgic'),
-        'activity-property'       => esc_html__('Activity Property', 'staylodgic'),
-        'currency'      => esc_html__('Currency', 'staylodgic'),
-        'general'       => esc_html__('General', 'staylodgic'),
-        'pages'         => esc_html__('Pages', 'staylodgic'),
-        'discounts' => esc_html__('Discounts', 'staylodgic'),
-        'mealplan'      => esc_html__('Meal Plan', 'staylodgic'),
-        'perperson'     => esc_html__('Per person price', 'staylodgic'),
-        'tax'           => esc_html__('Room Tax', 'staylodgic'),
-        'activity-tax'           => esc_html__('Activity Tax', 'staylodgic'),
-        'import-export' => esc_html__('Import/Export', 'staylodgic'),
+        'property'       => '<i class="fa fa-building"></i> ' . esc_html__('Property', 'staylodgic'),
+        'activity-property' => '<i class="fa fa-suitcase"></i> ' . esc_html__('Activity Property', 'staylodgic'),
+        'currency'      => '<i class="fa fa-dollar"></i> ' . esc_html__('Currency', 'staylodgic'),
+        'general'       => '<i class="fa fa-cogs"></i> ' . esc_html__('General', 'staylodgic'),
+        'pages'         => '<i class="fa fa-file-text"></i> ' . esc_html__('Pages', 'staylodgic'),
+        'discounts'     => '<i class="fa fa-percent"></i> ' . esc_html__('Discounts', 'staylodgic'),
+        'mealplan'      => '<i class="fa fa-cutlery"></i> ' . esc_html__('Meal Plan', 'staylodgic'),
+        'perperson'     => '<i class="fa fa-user"></i> ' . esc_html__('Per person price', 'staylodgic'),
+        'tax'           => '<i class="fa fa-calculator"></i> ' . esc_html__('Room Tax', 'staylodgic'),
+        'activity-tax'  => '<i class="fa fa-calculator"></i> ' . esc_html__('Activity Tax', 'staylodgic'),
+        'import-export' => '<i class="fa fa-exchange"></i> ' . esc_html__('Import/Export', 'staylodgic'),        
      ],
  ];
 

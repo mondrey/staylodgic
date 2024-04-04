@@ -41,25 +41,25 @@ class Staylodgic_Init
         add_action('admin_menu', array($this, 'remove_admin_notices_on_specific_page'));
     }
     public function remove_admin_notices_on_specific_page() {
+
+        $remove = false;
         if (isset($_GET['page']) && $_GET['page'] == 'slgc-availability') {
-            remove_all_actions('admin_notices');
-            remove_all_actions('all_admin_notices');
-            add_filter('admin_footer_text', '__return_empty_string', 11);
-            add_filter('update_footer', '__return_empty_string', 11);
+            $remove = true;
         }
         if (isset($_GET['page']) && $_GET['page'] == 'slgc-availability-yearly') {
-            remove_all_actions('admin_notices');
-            remove_all_actions('all_admin_notices');
-            add_filter('admin_footer_text', '__return_empty_string', 11);
-            add_filter('update_footer', '__return_empty_string', 11);
+            $remove = true;
         }
         if (isset($_GET['page']) && $_GET['page'] == 'slgc-dashboard') {
-            remove_all_actions('admin_notices');
-            remove_all_actions('all_admin_notices');
-            add_filter('admin_footer_text', '__return_empty_string', 11);
-            add_filter('update_footer', '__return_empty_string', 11);
+            $remove = true;
         }
         if (isset($_GET['page']) && $_GET['page'] == 'slgc-activity-dashboard') {
+            $remove = true;
+        }
+        if (isset($_GET['page']) && $_GET['page'] == 'staylodgic-settings-panel') {
+            $remove = true;
+        }
+
+        if ( $remove ) {
             remove_all_actions('admin_notices');
             remove_all_actions('all_admin_notices');
             add_filter('admin_footer_text', '__return_empty_string', 11);
@@ -420,6 +420,11 @@ class Staylodgic_Init
             );
 
             if ($current_admin_screen->base == 'staylodgic_page_staylodgic-settings-panel') {
+
+                wp_enqueue_style('fontawesome-6');
+                wp_enqueue_style('fontawesome-6-brands');
+                wp_enqueue_style('fontawesome-6-solid');
+                
                 wp_enqueue_script('admin_options', plugin_dir_url(__FILE__) . 'admin/js/admin-options.js', array('jquery'), null, true);
                 wp_enqueue_style('admin_options', plugin_dir_url(__FILE__) . 'admin/css/admin-options.css', false, 'screen');
                 // Enqueue jQuery UI Sortable
