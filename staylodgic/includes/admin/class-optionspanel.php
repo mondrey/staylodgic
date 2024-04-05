@@ -274,6 +274,9 @@ class OptionsPanel
             case 'select':
                 return [ $this, 'sanitize_select_field' ];
                 break;
+            case 'number':
+                return 'sanitize_text_field';
+                break;
             case 'textarea':
                 return 'wp_kses_post';
                 break;
@@ -365,16 +368,6 @@ class OptionsPanel
         ?>
         <div class="wrap">
             <h1><?php echo esc_html(get_admin_page_title()); ?></h1>
-            <?php
-    // Add an export button
-    echo '<form class="export-import-form" method="post">';
-    echo '<div class="import-export-section">';
-    echo '<input type="hidden" name="action" value="export_settings" />';
-    echo '<input type="submit" name="submit" id="submit" class="button button-primary" value="Export Settings">';
-    echo '<button type="button" id="import-settings-button" class="button-secondary">Import Settings</button>';
-    echo '</div>';
-    echo '</form>';
-?>
             <div class="staylodgic-tabform-wrapper">
             <?php $this->render_tabs();?>
             <div class="staylodgic-tab-content active" id="tab-property">
@@ -387,6 +380,16 @@ settings_fields($this->option_group_name);
             </form>
             </div>
             </div>
+            <?php
+    // Add an export button
+    echo '<form class="export-import-form" method="post">';
+    echo '<div class="import-export-section">';
+    echo '<input type="hidden" name="action" value="export_settings" />';
+    echo '<input type="submit" name="submit" id="submit" class="button button-primary" value="Export Settings">';
+    echo '<button type="button" id="import-settings-button" class="button-secondary">Import Settings</button>';
+    echo '</div>';
+    echo '</form>';
+?>
 <?php
 // Modal structure
 echo '<div id="import-settings-modal" class="staylodgic-modal" style="display:none;">
@@ -469,10 +472,10 @@ protected function render_tabs()
         }
     
         echo '
-        <div>
+        <div class="options-image-display">
             <a href="#" class="upload_image_button' . $image . '</a>
             <input type="hidden" name="' . $this->option_name . '[' . esc_attr($args['label_for']) . ']" id="' . esc_attr($args['label_for']) . '" value="' . esc_attr($value) . '" />
-            <a href="#" class="remove_image_button" style="display:' . esc_attr($display) . '">Remove image</a>
+            <a href="#" class="remove_image_button" style="display:' . esc_attr($display) . '"><i class="dashicons dashicons-remove"></i></a>
         </div>';
     }
     
@@ -887,7 +890,7 @@ if ($description) {
                 value="<?php echo esc_attr($value[ 'label' ]); ?>">
 
             <input
-                type="text"
+                type="number"
                 id="<?php echo esc_attr($args[ 'label_for' ]); ?>_number_<?php echo $count; ?>"
                 name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args[ 'label_for' ]); ?>][<?php echo $key; ?>][number]"
                 value="<?php echo esc_attr($value[ 'number' ]); ?>">
@@ -989,6 +992,30 @@ if ($description) {
 }
 
     /**
+     * Renders a text field.
+     */
+    public function render_number_field($args)
+    {
+        $option_name = $args[ 'label_for' ];
+        $value       = $this->get_option_value($option_name);
+        $description = $this->settings[ $option_name ][ 'description' ] ?? '';
+        ?>
+            <input
+                type="number"
+                id="<?php echo esc_attr($args[ 'label_for' ]); ?>"
+                name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args[ 'label_for' ]); ?>]"
+                value="<?php echo esc_attr($value); ?>">
+            <?php
+if ($description) {
+            ?>
+                <p class="description"><?php echo esc_html($description); ?></p>
+            <?php
+}
+        ?>
+        <?php
+}
+
+    /**
      * Renders a textarea field.
      */
     public function render_textarea_field($args)
@@ -1051,6 +1078,7 @@ if ($description) {
         $inputwidth  = $this->settings[ $option_name ][ 'inputwidth' ] ?? '';
         ?>
             <select
+                class="single-options-select"
                 data-width="<?php echo esc_attr($inputwidth); ?>"
                 id="<?php echo esc_attr($args[ 'label_for' ]); ?>"
                 name="<?php echo $this->option_name; ?>[<?php echo esc_attr($args[ 'label_for' ]); ?>]"
@@ -1205,17 +1233,6 @@ $panel_settings = [
         'choices'     => staylodgic_get_pages_for_select(),
         'tab'         => 'pages',
      ],
-    'import_missing'       => [
-        'label'       => esc_html__('Action for missing bookings', 'staylodgic'),
-        'type'        => 'select',
-        'inputwidth'  => '250',
-        'description' => 'Action for missing bookings on import.',
-        'choices'     => [
-            'cancel' => esc_html__('Cancel', 'staylodgic'),
-            'delete' => esc_html__('Delete', 'staylodgic'),
-         ],
-        'tab'         => 'import-export',
-     ],
     'qtysync_interval'     => [
         'label'       => esc_html__('Availability Sync interval', 'staylodgic'),
         'type'        => 'select',
@@ -1254,12 +1271,6 @@ $panel_settings = [
         'description' => '',
         'tab'         => 'activity-tax',
     ],
-    'display_cancelled' => [
-        'label'       => esc_html__('Display cancelled bookings in availability calendar', 'staylodgic'),
-        'type'        => 'checkbox',
-        'description' => '',
-        'tab'         => 'general',
-     ],
     'new_bookingstatus'    => [
         'label'       => esc_html__('Choose status for new bookings', 'staylodgic'),
         'type'        => 'select',
@@ -1279,6 +1290,7 @@ $panel_settings = [
     'timezone'             => [
         'label'       => esc_html__('Select Time Zone', 'staylodgic'),
         'type'        => 'select',
+        'inputwidth'  => '250',
         'description' => 'Select your time zone relative to GMT.',
         'choices'     => staylodgic_get_GmtTimezoneChoices(),
         'tab'         => 'general',
@@ -1386,7 +1398,7 @@ $panel_settings = [
      ],
     'number_of_decimals'   => [
         'label'       => esc_html__('Number of Decimals', 'staylodgic'),
-        'type'        => 'text',
+        'type'        => 'number',
         'default'        => '2',
         'description' => 'My field 1 description.',
         'tab'         => 'currency',

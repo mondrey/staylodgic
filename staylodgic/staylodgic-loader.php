@@ -95,7 +95,6 @@ class Staylodgic_Init
         require_once plugin_dir_path(__FILE__) . 'vendors/ics-parser/src/ICal/ICal.php';
         require_once plugin_dir_path(__FILE__) . 'vendors/ics-parser/src/ICal/Event.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-batchprocessorbase.php';
-        require_once plugin_dir_path(__FILE__) . 'includes/admin/class-bookingbatchprocessor.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-icalexportprocessor.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-availabilitybatchprocessor.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-availablitycalendarbase.php';

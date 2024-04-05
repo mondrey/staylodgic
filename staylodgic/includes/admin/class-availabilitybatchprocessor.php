@@ -78,6 +78,9 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
 
             // Define the cron schedule based on the validated interval
             switch ($qtysync_interval) {
+                case '1':
+                    $schedule = 'staylodgic_1_minute';
+                    break;
                 case '5':
                     $schedule = 'staylodgic_5_minutes';
                     break;

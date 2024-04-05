@@ -39,13 +39,13 @@ jQuery(document).ready(function ($) {
 		$(this).hide().prev().val('').prev().addClass('button').html('Upload image');
 	});
 
-	// $('.staylodgic-options-form select').each(function () {
-	// 	// Fetch the data-width attribute value
-	// 	var widthAttribute = $(this).data('width');
-	// 	$(this).select2({
-	// 		width: widthAttribute || '300px' // Use the fetched value or set a default width
-	// 	});
-	// });
+	$('.staylodgic-options-form select.single-options-select').each(function () {
+		// Fetch the data-width attribute value
+		var widthAttribute = $(this).data('width');
+		$(this).select2({
+			width: widthAttribute || '300px' // Use the fetched value or set a default width
+		});
+	});
 
 	// function select_input_process() {
 	// 	$('.staylodgic-options-form select').not('.select2-hidden-accessible').each(function () {
@@ -57,24 +57,26 @@ jQuery(document).ready(function ($) {
 	// }
 	
 
-	$(document).on('click', function (event) {
+	$('.staylodgic-tabs a.nav-tab').on('click', function (event) {
 		const target = event.target;
-		if (!$(target).closest('.staylodgic-tabs a').length) {
+		if (!$(target).closest('.staylodgic-tabs a.nav-tab').length) {
 			return;
 		}
 		event.preventDefault();
-		$('.staylodgic-tabs a').removeClass('nav-tab-active');
+		$('.staylodgic-tabs a.nav-tab').removeClass('nav-tab-active');
 		$(target).addClass('nav-tab-active');
 		const targetTab = $(target).attr('data-tab');
-		const heading = $(target).attr('data-heading');
-		$('.section_heading').html(heading);
-		$('.staylodgic-options-form .staylodgic-tab-item').each(function () {
-			if ($(this).hasClass(`staylodgic-tab-item--${targetTab}`)) {
-				$(this).css('display', 'block');
-			} else {
-				$(this).css('display', 'none');
-			}
-		});
+		if (typeof targetTab !== "undefined") {
+			const heading = $(target).attr('data-heading');
+			$('.section_heading').html(heading);
+			$('.staylodgic-options-form .staylodgic-tab-item').each(function () {
+				if ($(this).hasClass(`staylodgic-tab-item--${targetTab}`)) {
+					$(this).css('display', 'block');
+				} else {
+					$(this).css('display', 'none');
+				}
+			});
+		}
 	});
 
 	$(document).ready(function () {

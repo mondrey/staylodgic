@@ -53,7 +53,7 @@
 	margin: 0;
 	background: none;
 	border: 0;
-	border-bottom: 1px solid rgba(255,255,255,0.6);
+	border-bottom: 1px solid rgba(255,255,255,0.3);
 	font-size: 14px;
 	font-weight: 400;
 	letter-spacing: 0.3px;
@@ -67,6 +67,7 @@
 	color: #fff;
 	border: 0;
 	border-bottom: 1px solid #fff;
+	background: none;
 }
 
 .section_heading {
@@ -86,6 +87,14 @@
 	/* Highlight active tab with a color */
 	box-shadow: none;
 	outline: 0;
+}
+.staylodgic-tabs .nav-tab i,
+.staylodgic-tabs .nav-tab:focus i {
+	text-decoration: none;
+	border: 0;
+}
+.staylodgic-tabs .nav-tab i {
+	width: 18px;
 }
 
 .staylodgic-tab-item {
@@ -132,8 +141,8 @@
 	position: absolute;
 	top: 0;
 	left: 0;
-	height: 25px;
-	width: 25px;
+	height: 20px;
+	width: 20px;
 	border: 1px solid #999;
 	border-radius: 5px;
 	transition: 0.3s border-color, 0.3s background-color;
@@ -165,10 +174,10 @@
 
 /* Style the checkmark/indicator */
 .staylodgic-checkbox-container .checkmark:after {
-	left: 9px;
-	top: 5px;
-	width: 5px;
-	height: 10px;
+	left: 7px;
+	top: 4px;
+	width: 3px;
+	height: 7px;
 	border: solid white;
 	border-width: 0 3px 3px 0;
 	-webkit-transform: rotate(45deg);
@@ -244,6 +253,7 @@
 .staylodgic-tabform-wrapper {
     display: flex;
 	background:#fff;
+	margin-top: 10px;
 }
 
 /* Style for the tabs */
@@ -330,4 +340,69 @@
 .staylodgic-tab-item input[type="number"],
 .input-label-outer input[type="number"] {
 	width: 95px;
+}
+
+.staylodgic-tab-item input[type="date"],
+.staylodgic-tab-item input[type="datetime-local"],
+.staylodgic-tab-item input[type="datetime"],
+.staylodgic-tab-item input[type="email"],
+.staylodgic-tab-item input[type="month"],
+.staylodgic-tab-item input[type="number"],
+.staylodgic-tab-item input[type="password"],
+.staylodgic-tab-item input[type="search"],
+.staylodgic-tab-item input[type="tel"],
+.staylodgic-tab-item input[type="text"],
+.staylodgic-tab-item input[type="time"],
+.staylodgic-tab-item input[type="url"],
+.staylodgic-tab-item input[type="week"] {
+	padding: 0 8px;
+	line-height: 2;
+	min-height: 30px;
+	border: 2px solid #d9d9d9;
+	border-radius: 6px;
+	transition: 0.3s border-color, 0.3s background-color;
+}
+.staylodgic-tab-item input[type="checkbox"]:focus,
+.staylodgic-tab-item input[type="color"]:focus,
+.staylodgic-tab-item input[type="date"]:focus,
+.staylodgic-tab-item input[type="datetime-local"]:focus,
+.staylodgic-tab-item input[type="datetime"]:focus,
+.staylodgic-tab-item input[type="email"]:focus,
+.staylodgic-tab-item input[type="month"]:focus,
+.staylodgic-tab-item input[type="number"]:focus,
+.staylodgic-tab-item input[type="password"]:focus,
+.staylodgic-tab-item input[type="radio"]:focus,
+.staylodgic-tab-item input[type="search"]:focus,
+.staylodgic-tab-item input[type="tel"]:focus,
+.staylodgic-tab-item input[type="text"]:focus,
+.staylodgic-tab-item input[type="time"]:focus,
+.staylodgic-tab-item input[type="url"]:focus,
+.staylodgic-tab-item input[type="week"]:focus,
+.staylodgic-tab-item select:focus,
+.staylodgic-tab-item textarea:focus {
+	border-color: #2271b1;
+	outline: 2px solid transparent;
+}
+
+.staylodgic-tab-item select {
+	vertical-align: baseline;
+}
+
+.remove_image_button {
+	text-decoration: none;
+	color: #ff0000;
+}
+
+.options-image-display {
+	text-align: right;
+}
+
+.import-export-section {
+	padding: 20px;
+	background: #bdbdbd;
+	text-align: right;
+}
+
+#import-settings-button {
+	margin-left: 10px;
 }

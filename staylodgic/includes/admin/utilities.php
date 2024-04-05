@@ -68,6 +68,7 @@ function staylodgic_is_valid_sync_interval($qtysync_interval) {
 
 function staylodgic_sync_intervals() {
 	$sync_intervals = array(
+		'1' => esc_attr__('One Minute', 'staylodgic'),
 		'5' => esc_attr__('Five Minutes', 'staylodgic'),
 		'10' => esc_attr__('Ten Minutes', 'staylodgic'),
 		'15' => esc_attr__('Fifteen Minutes', 'staylodgic'),
@@ -266,14 +267,6 @@ function staylodgic_has_activity_tax()
 
     $taxFlag = staylodgic_get_option('enable_activitytaxes');
     return $taxFlag;
-
-}
-
-function staylodgic_display_cancelled()
-{
-
-    $display_cancelled = staylodgic_get_option('display_cancelled');
-    return $display_cancelled;
 
 }
 
