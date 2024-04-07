@@ -367,7 +367,7 @@ class OptionsPanel
 
         ?>
         <div class="wrap">
-            <h1><?php echo esc_html(get_admin_page_title()); ?></h1>
+            <h1 class="options-heading">Staylodgic <span>Settings</span></h1>
             <div class="staylodgic-tabform-wrapper">
             <?php $this->render_tabs();?>
             <div class="staylodgic-tab-content active" id="tab-property">
@@ -459,21 +459,21 @@ protected function render_tabs()
     public function render_media_upload_field($args) {
         $option_name = $args['label_for'];
         $value = $this->get_option_value($option_name);
-        $image = ' button">Upload image';
+        $image = 'Upload image';
         $image_size = 'full'; // it should be thumbnail, medium or large
         $display = 'none'; // display state of the "Remove image" button
     
         if ($value) {
             $image_attributes = wp_get_attachment_image_src($value, $image_size);
             if ($image_attributes) {
-                $image = '"><img src="' . esc_url($image_attributes[0]) . '" style="max-height:100px;display:block;" />';
+                $image = '<img src="' . esc_url($image_attributes[0]) . '" style="max-height:100px;display:block;" />';
                 $display = 'inline-block';
             }
         }
     
         echo '
         <div class="options-image-display">
-            <a href="#" class="upload_image_button' . $image . '</a>
+            <a href="#" class="upload_image_button button">' . $image . '</a>
             <input type="hidden" name="' . $this->option_name . '[' . esc_attr($args['label_for']) . ']" id="' . esc_attr($args['label_for']) . '" value="' . esc_attr($value) . '" />
             <a href="#" class="remove_image_button" style="display:' . esc_attr($display) . '"><i class="dashicons dashicons-remove"></i></a>
         </div>';
@@ -596,7 +596,7 @@ protected function render_tabs()
         }
         ?>
         </div>
-        <button id="addperperson-repeatable"><?php _e('Add New Section', 'staylodgic');?></button>
+        <button id="addperperson-repeatable" class="button button-secondary"><?php _e('Add new', 'staylodgic');?></button>
             <?php
 if ($description) {
             ?>
@@ -699,7 +699,7 @@ $count = 0;
         }
         ?>
     </div>
-    <button id="addmealplan-repeatable"><?php _e('Add New Section', 'staylodgic');?></button>
+    <button id="addmealplan-repeatable" class="button button-secondary"><?php _e('Add new', 'staylodgic');?></button>
         <?php
 if ($description) {
             ?>
@@ -728,7 +728,7 @@ if ($description) {
         ?>
 <div class="repeatable-tax-template" style="display: none;">
 <div class="repeatable">
-<span class="dashicons dashicons-sort drag-handle"></span>
+<span class="fa-solid fa-sort"></span>
             <input disabled
                 type="text" placeholder = "Label"
                 id="<?php echo esc_attr($args[ 'label_for' ]); ?>_label"
@@ -770,7 +770,7 @@ if ($description) {
                 if (isset($value[ 'label' ])) {
                     ?>
             <div class="repeatable">
-            <span class="dashicons dashicons-sort drag-handle"></span>
+            <span class="fa-solid fa-sort"></span>
             <span class="input-label-outer"><span class="input-label-inner">Name</span>
             <input
                 type="text"
@@ -813,7 +813,7 @@ if ($description) {
         }
         ?>
         </div>
-        <button id="addtax-repeatable"><?php _e('Add New Section', 'staylodgic');?></button>
+        <button id="addtax-repeatable" class="button button-secondary"><?php _e('Add new', 'staylodgic');?></button>
     </div>
             <?php
 if ($description) {
@@ -843,14 +843,14 @@ if ($description) {
         ?>
 <div class="repeatable-activitytax-template" style="display: none;">
 <div class="repeatable">
-<span class="dashicons dashicons-sort drag-handle"></span>
+<span class="fa-solid fa-sort"></span>
             <input disabled
                 type="text" placeholder = "Label"
                 id="<?php echo esc_attr($args[ 'label_for' ]); ?>_label"
                 name="label"
                 value="">
             <input disabled
-                type="text" placeholder = "Value"
+                type="number" placeholder = "Value"
                 id="<?php echo esc_attr($args[ 'label_for' ]); ?>_number"
                 name="number"
                 value="">
@@ -882,7 +882,7 @@ if ($description) {
                 if (isset($value[ 'label' ])) {
                     ?>
             <div class="repeatable">
-            <span class="dashicons dashicons-sort drag-handle"></span>
+            <span class="fa-solid fa-sort"></span>
             <input
                 type="text"
                 id="<?php echo esc_attr($args[ 'label_for' ]); ?>_label_<?php echo $count; ?>"
@@ -917,7 +917,7 @@ if ($description) {
         }
         ?>
         </div>
-        <button id="addtax-activity-repeatable"><?php _e('Add New Section', 'staylodgic');?></button>
+        <button id="addtax-activity-repeatable" class="button button-secondary"><?php _e('Add new', 'staylodgic');?></button>
             <?php
 if ($description) {
             ?>
@@ -1120,7 +1120,7 @@ $panel_args = [
         'perperson'     => '<i class="fa fa-user"></i> ' . esc_html__('Per person price', 'staylodgic'),
         'tax'           => '<i class="fa fa-calculator"></i> ' . esc_html__('Room Tax', 'staylodgic'),
         'activity-tax'  => '<i class="fa fa-calculator"></i> ' . esc_html__('Activity Tax', 'staylodgic'),
-        'import-export' => '<i class="fa fa-exchange"></i> ' . esc_html__('Import/Export', 'staylodgic'),        
+        'sync' => '<i class="fa fa-exchange"></i> ' . esc_html__('Sync', 'staylodgic'),        
      ],
  ];
 
@@ -1239,7 +1239,7 @@ $panel_settings = [
         'inputwidth'  => '250',
         'description' => 'Availability Sync interval',
         'choices'     => staylodgic_sync_intervals(),
-        'tab'         => 'import-export',
+        'tab'         => 'sync',
      ],
     'discount_lastminute'             => [
         'label'       => esc_html__('Last minute discount', 'staylodgic'),

@@ -71,7 +71,7 @@
 }
 
 .section_heading {
-	font-size: 33px;
+	font-size: 24px;
 	margin: 0;
 	border-bottom: 1px solid #ddd;
 	line-height: 1.4;
@@ -330,7 +330,7 @@
 	right: -26px;
 	top: calc( 50% - 8px );
 }
-.dashicons.dashicons-sort.drag-handle:hover {
+.staylodgic-tab-item .fa-solid.fa-sort:hover {
 	cursor: grab;
 }
 .staylodgic-options-form .remove-set-button {
@@ -400,9 +400,17 @@
 .import-export-section {
 	padding: 20px;
 	background: #bdbdbd;
-	text-align: right;
+	text-align: left;
 }
 
 #import-settings-button {
 	margin-left: 10px;
+}
+
+h1.options-heading {
+	font-size: 30px;
+	font-weight: 600;
+}
+h1.options-heading span {
+	font-weight: 300;
 }
