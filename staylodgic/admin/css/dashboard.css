@@ -145,3 +145,10 @@ table.staylodgic_analytics_table thead tr th.nights-column {
 .staylodgic_table_outer .table.dataTable thead th.number-column {
 	text-align: center;
 }
+
+.staylodgic_analytics_subheading .display-stat-date {
+	font-size: 17px;
+}
+.staylodgic_table.sub-heading {
+	margin-top: 40px;
+}

@@ -11,6 +11,9 @@ class AnalyticsBookings
     private $options;
     private $guests;
     private $bookings;
+    private $display_today;
+    private $display_tomorrow;
+    private $display_dayafter;
 
     public function __construct($id, $info = 'today', $type = 'bar', $data = [  ], $options = [  ], $guests = array(), $bookings = array())
     {
@@ -21,6 +24,10 @@ class AnalyticsBookings
         $this->options  = $options;
         $this->guests   = $guests;
         $this->bookings = $bookings;
+
+        $this->display_today    = '<span class="display-stat-date">' . date('M jS') . '</span>';
+        $this->display_tomorrow = '<span class="display-stat-date">' . date('M jS', strtotime('+1 day')) . '</span>';
+        $this->display_dayafter = '<span class="display-stat-date">' . date('M jS', strtotime('+2 day')) . '</span>';
 
         add_action('admin_menu', array($this, 'staylodgic_dashboard'));
     }
@@ -60,6 +67,7 @@ class AnalyticsBookings
 
     public function get_chart_config($id)
     {
+
         $configs = [
             'past_twelve_months_bookings' => [
                 'info'    => 'past_twelve_months_bookings',
@@ -102,7 +110,7 @@ class AnalyticsBookings
              ],
             'bookings_today'              => [
                 'info'    => 'today',
-                'heading' => __('Today','staylodgic'),
+                'heading' => __('Today','staylodgic') . ' ' . $this->display_today,
                 'cache'   => false,
                 'type'    => 'polarArea',
                 'options' => [
@@ -122,7 +130,7 @@ class AnalyticsBookings
              ],
             'bookings_tomorrow'           => [
                 'info'    => 'tomorrow',
-                'heading' => 'Tomorrow',
+                'heading' => 'Tomorrow' . ' ' . $this->display_tomorrow,
                 'cache'   => false,
                 'type'    => 'polarArea',
                 'options' => [
@@ -142,7 +150,7 @@ class AnalyticsBookings
              ],
             'bookings_dayafter'           => [
                 'info'    => 'dayafter',
-                'heading' => 'Day After',
+                'heading' => 'Day After' . ' ' . $this->display_dayafter,
                 'cache'   => false,
                 'type'    => 'polarArea',
                 'options' => [
@@ -747,11 +755,11 @@ class AnalyticsBookings
             $guestListHtml .= '<div class="staylodgic_analytics_table_wrap">';
             // Add a heading for the day
             if ('today' == $day) {
-                $guestListHtml .= '<h2 class="staylodgic_analytics_subheading staylodgic_dayis_' . $day . '">' . __('Today','staylodgic') . '</h2>';
+                $guestListHtml .= '<h2 class="staylodgic_analytics_subheading staylodgic_dayis_' . $day . '">' . __('Today','staylodgic') . ' ' . $this->display_today . '</h2>';
             } elseif ('tomorrow' == $day) {
-                $guestListHtml .= '<h2 class="staylodgic_analytics_subheading staylodgic_dayis_' . $day . '">' . __('Tomorrow','staylodgic') . '</h2>';
+                $guestListHtml .= '<h2 class="staylodgic_analytics_subheading staylodgic_dayis_' . $day . '">' . __('Tomorrow','staylodgic') . ' ' . $this->display_tomorrow . '</h2>';
             } elseif ('dayafter' == $day) {
-                $guestListHtml .= '<h2 class="staylodgic_analytics_subheading staylodgic_dayis_' . $day . '">' . __('Day After','staylodgic') . '</h2>';
+                $guestListHtml .= '<h2 class="staylodgic_analytics_subheading staylodgic_dayis_' . $day . '">' . __('Day After','staylodgic') . ' ' . $this->display_dayafter . '</h2>';
             } else {
                 $guestListHtml .= '<h2 class="staylodgic_analytics_subheading staylodgic_dayis_' . $day . '">' . ucfirst($day) . '</h2>';
             }
@@ -778,7 +786,7 @@ class AnalyticsBookings
                 }
 
                 $guestListHtml .= '<div class="staylodgic_table_outer">';
-                $guestListHtml .= "<h3>" . $font_icon . ucfirst($status) . "</h3>";
+                $guestListHtml .= '<div class="staylodgic_table sub-heading"><h3>' . $font_icon . ucfirst($status) . '</h3></div>';
 
                 $guestListHtml .= '<table class="staylodgic_analytics_table table table-hover" data-export-title="Reservation - ' . $status.' ' . $day .'">';
                 $guestListHtml .= '<thead class="table-light">';
