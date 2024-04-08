@@ -485,7 +485,7 @@ function staylodgic_generate_metaboxes($meta_data, $post_id)
                     break;
 
                 case 'generate-qrcode':
-                    echo '<button id="generate-qr-code">Generate QR Code</button>';
+                    echo '<button class="button button-secondary" id="generate-qr-code">Generate QR Code</button>';
                     echo '<div id="qrcode"></div>'; // Container for the QR code
                     break;
 

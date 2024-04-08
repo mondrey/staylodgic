@@ -184,6 +184,23 @@ h2#invoice-subheading,
 	padding: 0 10px;
 }
 
+.wp-core-ui .invoice-buttons-container button {
+	margin-right: 5px;
+}
+.wp-core-ui .invoice-buttons-container a {
+	margin-right: 8px;
+}
+.registration-delete-container {
+	text-align: center;
+	margin-top: 30px;
+}
+.wp-core-ui .staylodgic-modal button {
+	margin-right: 5px;
+}
+#qrcode {
+	margin-top: 10px;
+}
+
 
 @media print {
     body {

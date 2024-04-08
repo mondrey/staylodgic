@@ -206,7 +206,7 @@ class GuestRegistry
 
         if (( intval( $reservation_occupants ) + 2) < $registeredGuestCount) {
             $allow = false;
-            $reason = 'Exceeds total registrations allowed for this booking';
+            $reason = __('Exceeds total registrations allowed for this booking','staylodgic');
         }
 
         if ( $reason ) {
@@ -261,8 +261,8 @@ class GuestRegistry
             $registration_output .= '</div>';
         } else { // Default to text format
             $registration_output .= '<div class="reservation-details">';
-            $registration_output .= '<div class="registered-occupants"><span class="registration-label">Total guests</span>: ' . esc_html($reservation_occupants) . '</div>';
-            $registration_output .= '<div class="registered-guests"><span class="registration-label">Registered guests</span>: ' . esc_html($registeredGuestCount) . '</div>';
+            $registration_output .= '<div class="registered-occupants"><span class="registration-label">' . __('Total guests','staylodgic') . '</span>: ' . esc_html($reservation_occupants) . '</div>';
+            $registration_output .= '<div class="registered-guests"><span class="registration-label">' . __('Registered guests','staylodgic') . '</span>: ' . esc_html($registeredGuestCount) . '</div>';
             $registration_output .= '</div>';
         }
 
@@ -345,35 +345,33 @@ class GuestRegistry
 
                 // Add Edit and Delete buttons
                 echo '<div class="invoice-buttons-container">';
-                echo '<a href="' . esc_url($edit_url) . '" target="_blank" class="registration-button edit-registration" data-guest-id="' . esc_attr($guest_id) . '">Edit</a>';
+                echo '<a href="' . esc_url($edit_url) . '" target="_blank" class="button button-secondary registration-button edit-registration" data-guest-id="' . esc_attr($guest_id) . '">' . __('Edit','staylodgic') . '</a>';
                 // Inside your PHP loop where you're echoing out the delete buttons
-                echo '<button class="paper-document-button registration-button delete-registration" data-guest-id="' . esc_attr($guest_id) . '">Delete</button>';
-
                 ob_start();
                 ?>
-        <button data-title="Guest Registration <?php echo $guest_data[ 'registration_id' ]; ?>" data-id="<?php echo $guest_data[ 'registration_id' ]; ?>" id="print-invoice-button" class="paper-document-button print-invoice-button">Print Invoice</button>
-        <button data-file="registration-<?php echo $guest_data[ 'registration_id' ]; ?>" data-id="<?php echo $guest_data[ 'registration_id' ]; ?>" id="save-pdf-invoice-button" class="paper-document-button save-pdf-invoice-button">Save PDF</button>
+        <button data-title="Guest Registration <?php echo $guest_data[ 'registration_id' ]; ?>" data-id="<?php echo $guest_data[ 'registration_id' ]; ?>" id="print-invoice-button" class="button button-secondary paper-document-button print-invoice-button"><?php _e('Print','staylodgic'); ?></button>
+        <button data-file="registration-<?php echo $guest_data[ 'registration_id' ]; ?>" data-id="<?php echo $guest_data[ 'registration_id' ]; ?>" id="save-pdf-invoice-button" class="button button-secondary paper-document-button save-pdf-invoice-button"><?php _e('Save PDF','staylodgic'); ?></button>
         </div>
         <div class="invoice-container" data-bookingnumber="<?php echo $guest_data[ 'registration_id' ]; ?>">
         <div class="invoice-container-inner">
         <div id="invoice-hotel-header">
             <section id="invoice-hotel-logo">
-                <img class="invoice-logo" src="<?php echo $hotelLogo; ?>" />
+                <img class="invoice-logo" src="<?php echo esc_url($hotelLogo); ?>" />
             </section>
             <section id="invoice-info">
-                <p><?php echo $hotelHeader; ?></p>
-                <p>Booking Reference: <?php echo $bookingNumber; ?></p>
-                <p>Date: <?php echo $currentDate; ?></p>
-                <p class="invoice-booking-status">Guest registration</p>
+                <p><?php echo esc_html($hotelHeader); ?></p>
+                <p><?php _e('Booking Reference:','staylodgic'); ?> <?php echo esc_html($bookingNumber); ?></p>
+                <p><?php _e('Date:','staylodgic'); ?> <?php echo esc_html($currentDate); ?></p>
+                <p class="invoice-booking-status"><?php _e('Guest registration','staylodgic'); ?></p>
             </section>
         </div>
         <section id="invoice-hotel-info">
-                <p><strong><?php echo $hotelName; ?></strong></p>
-                <p><?php echo $hotelAddress; ?></p>
-                <p><?php echo $hotelPhone; ?></p>
+                <p><strong><?php echo esc_html($hotelName); ?></strong></p>
+                <p><?php echo esc_html($hotelAddress); ?></p>
+                <p><?php echo esc_html($hotelPhone); ?></p>
         </section>
         <section id="invoice-customer-info">
-            <h2 id="invoice-subheading">Registration:</h2>
+            <h2 id="invoice-subheading"><?php _e('Registration:','staylodgic'); ?></h2>
             <div class="invoice-customer-registration">
             <?php
 // Display guest information
@@ -388,7 +386,7 @@ class GuestRegistry
                 if (isset($guest_data[ 'registration_id' ])) {
                     $registration_id = $guest_data[ 'registration_id' ];
                     $upload_dir      = wp_upload_dir();
-                    $signature_url   = $upload_dir[ 'baseurl' ] . '/signatures/' . $registration_id . '.png';
+                    $signature_url   = esc_url($upload_dir[ 'baseurl' ] . '/signatures/' . $registration_id . '.png');
 
                     echo '<img class="registration-signature" src="' . esc_url($signature_url) . '" alt="Signature">';
                 }
@@ -403,16 +401,18 @@ class GuestRegistry
         </footer>
         </div>
         <?php
+        echo '<div class="registration-delete-container"><button class="button button-primary paper-document-button registration-button delete-registration" data-guest-id="' . esc_attr($guest_id) . '">' . __('Delete this registration','staylodgic') . '</button></div>';
+        ?>
+        <?php
 }
 
             // After the loop, add the modal HTML
             echo '<div id="deleteConfirmationModal" class="staylodgic-modal" style="display: none;">';
             echo '<div class="staylodgic-modal-content">';
-            echo '<span class="staylodgic-close-button">×</span>';
             echo '<h4>Confirm Deletion</h4>';
             echo '<p>Are you sure you want to delete this registration?</p>';
-            echo '<button id="confirmDelete">Delete</button>';
-            echo '<button id="cancelDelete">Cancel</button>';
+            echo '<button class="button button-primary" id="confirmDelete">Delete</button>';
+            echo '<button class="button button-secondary" id="cancelDelete">Cancel</button>';
             echo '</div>';
             echo '</div>';
 

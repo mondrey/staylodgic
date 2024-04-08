@@ -63,7 +63,7 @@ class AnalyticsBookings
         $configs = [
             'past_twelve_months_bookings' => [
                 'info'    => 'past_twelve_months_bookings',
-                'heading' => 'Bookings for past twelve months',
+                'heading' => __('Bookings for past twelve months','staylodgic'),
                 'cache'   => true,
                 'type'    => 'line',
                 'options' => [
@@ -76,7 +76,7 @@ class AnalyticsBookings
              ],
             'past_twelve_months_revenue'  => [
                 'info'    => 'past_twelve_months_revenue',
-                'heading' => 'Revenue for past twelve months',
+                'heading' => __('Revenue for past twelve months','staylodgic'),
                 'cache'   => true,
                 'type'    => 'bar',
                 'options' => [
@@ -89,7 +89,7 @@ class AnalyticsBookings
              ],
             'past_twelve_months_adr'      => [
                 'info'    => 'past_twelve_months_adr',
-                'heading' => 'ADR for past twelve months',
+                'heading' => __('ADR for past twelve months','staylodgic'),
                 'cache'   => true,
                 'type'    => 'bar',
                 'options' => [
@@ -102,7 +102,7 @@ class AnalyticsBookings
              ],
             'bookings_today'              => [
                 'info'    => 'today',
-                'heading' => 'Today',
+                'heading' => __('Today','staylodgic'),
                 'cache'   => false,
                 'type'    => 'polarArea',
                 'options' => [
@@ -784,26 +784,26 @@ class AnalyticsBookings
                 $guestListHtml .= '<thead class="table-light">';
                 $guestListHtml .= '<tr>';
                 $guestListHtml .= '<th class="table-cell-heading table-cell-heading-number number-column" scope="col"><i class="fas fa-hashtag"></i></th>';
-                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-booking-number" scope="col"><i class="fas fa-hashtag"></i> Booking</th>';
-                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-name" scope="col"><i class="fas fa-user"></i> Guest Name</th>';
-                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-room" scope="col"><i class="fas fa-bed"></i> Room</th>';
-                $guestListHtml .= '<th data-orderable="false" class="table-cell-heading table-cell-heading-registration" scope="col"><i class="fas fa-clipboard-list"></i> Persons</th>';
-                $guestListHtml .= '<th data-orderable="false" class="table-cell-heading table-cell-heading-registration" scope="col"><i class="fas fa-clipboard-list"></i> Registration</th>';
-                $guestListHtml .= '<th data-orderable="false" class="table-cell-heading table-cell-heading-notes" scope="col"><i class="fas fa-sticky-note"></i> Notes</th>';
-                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-checkin" scope="col"><i class="fas fa-sign-in-alt"></i> Check-in Date</th>';
-                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-checkout" scope="col"><i class="fas fa-sign-out-alt"></i> Check-out Date</th>';
-                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-nights nights-column" scope="col"><i class="fas fa-moon"></i> Nights</th>';
+                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-booking-number" scope="col"><i class="fas fa-hashtag"></i> ' . __('Booking','staylodgic') . '</th>';
+                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-name" scope="col"><i class="fas fa-user"></i> ' . __('Guest Name','staylodgic') . '</th>';
+                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-room" scope="col"><i class="fas fa-bed"></i> ' . __('Room','staylodgic') . '</th>';
+                $guestListHtml .= '<th data-orderable="false" class="table-cell-heading table-cell-heading-registration" scope="col"><i class="fas fa-clipboard-list"></i> ' . __('Persons','staylodgic') . '</th>';
+                $guestListHtml .= '<th data-orderable="false" class="table-cell-heading table-cell-heading-registration" scope="col"><i class="fas fa-clipboard-list"></i> ' . __('Registration','staylodgic') . '</th>';
+                $guestListHtml .= '<th data-orderable="false" class="table-cell-heading table-cell-heading-notes" scope="col"><i class="fas fa-sticky-note"></i> ' . __('Notes','staylodgic') . '</th>';
+                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-checkin" scope="col"><i class="fas fa-sign-in-alt"></i> ' . __('Check-in Date','staylodgic') . '</th>';
+                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-checkout" scope="col"><i class="fas fa-sign-out-alt"></i> ' . __('Check-out Date','staylodgic') . '</th>';
+                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-nights nights-column" scope="col"><i class="fas fa-moon"></i> ' . __('Nights','staylodgic') . '</th>';
                 $guestListHtml .= '</tr>';
                 $guestListHtml .= '</thead>';
                 $guestListHtml .= '<tbody class="table-group-divider">';
                 // Iterate over each guest and add them to the table
                 foreach ($guests as $guestId => $bookings) {
-                    error_log( '-------bookings-------');
-                    error_log( print_r( $bookings,1 ));
+                    // error_log( '-------bookings-------');
+                    // error_log( print_r( $bookings,1 ));
                     foreach ($bookings as $booking) { // Iterate over each booking for the guest
                         $count++;
-                        error_log( '-------booking-------');
-                        error_log( print_r( $booking,1 ));
+                        // error_log( '-------booking-------');
+                        // error_log( print_r( $booking,1 ));
                         $reservations_instance = new \Staylodgic\Reservations();
                         $reservation_id        = $reservations_instance->getReservationIDforBooking($booking[ 'booking_number' ]);
 
@@ -844,8 +844,8 @@ class AnalyticsBookings
                         if (isset($resRegIDs) && is_array($resRegIDs)) {
                             $guestListHtml .= $registry_instance->outputRegistrationAndOccupancy($resRegIDs[ 'reservationID' ], $resRegIDs[ 'guestRegisterID' ], 'icons');
                             $guestListHtml .= '<div class="booking-dashboard registration">';
-                            $guestListHtml .= '<a href="'.get_permalink($resRegIDs['guestRegisterID']).'"><i class="fa-regular fa-id-card"></i></a>';
-                            $guestListHtml .= '<a href="'.get_edit_post_link($resRegIDs['guestRegisterID']).'"><i class="fa-solid fa-file-signature"></i></a>';
+                            $guestListHtml .= '<a href="'.get_permalink($resRegIDs['guestRegisterID']).'"><i class="fa-solid fa-file-signature"></i></a>';
+                            $guestListHtml .= '<a href="'.get_edit_post_link($resRegIDs['guestRegisterID']).'"><i class="fa-regular fa-id-card"></i></a>';
                             $guestListHtml .= '</div>';
                         }
                         $guestListHtml .= '</td>';
