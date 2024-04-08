@@ -253,7 +253,7 @@ class Booking
         $html .= \Staylodgic\Common::generatePersonIcons( $adults, $children );
         
         if ('' !== $bedtype) {
-            $html .= '<div class="bed-summary">' . self::get_AllBedLayouts($bedtype) . '</div>';
+            $html .= '<div class="bed-summary">' . staylodgic_get_AllBedLayouts($bedtype) . '</div>';
         }
         $html .= '</div>';
 
@@ -467,12 +467,12 @@ return ob_get_clean();
                 );
             }
             $can_accomodate = $room_instance->getMax_room_occupants($roomId);
-            error_log( '------------ can maxOccpuants ' );
-            error_log( print_r( $maxOccpuants,1 ));
-            error_log( '------------ can accomodate ' );
-            error_log( print_r( $can_accomodate,1) );
-            error_log( '------------ can guests ' );
-            error_log( $can_accomodate['guests'] );
+            // error_log( '------------ can maxOccpuants ' );
+            // error_log( print_r( $maxOccpuants,1 ));
+            // error_log( '------------ can accomodate ' );
+            // error_log( print_r( $can_accomodate,1) );
+            // error_log( '------------ can guests ' );
+            // error_log( $can_accomodate['guests'] );
             if ( $can_accomodate['guests'] >= $maxOccpuants ) {
                 // Add the new sub-array to the new room availability array
                 $new_room_availability_array[ $roomId ] = $newSubArray;
@@ -1350,17 +1350,6 @@ return ob_get_clean();
                 $html .= '</span>';
                 $html .= '</label>';
             }
-        }
-
-        return $html;
-    }
-
-    public function get_AllBedLayouts($bedNames)
-    {
-        $html           = '';
-        $bedNames_array = explode(' ', $bedNames);
-        foreach ($bedNames_array as $key => $bedName) {
-            $html .= staylodgic_get_BedLayout($bedName, $key);
         }
 
         return $html;

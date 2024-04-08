@@ -1027,28 +1027,6 @@
 	margin-bottom: 0.375em;
 }
 
-.guest-bed-kingbed {
-	width: 36px;
-	height: 37px;
-	background-image: url('../../assets/svgs/bed-king.svg');
-	display: inline-block;
-	background-repeat: no-repeat;
-	position: relative;
-}
-
-.guest-bed-twinbed {
-	width: 36px;
-	height: 37px;
-	background-image: url('../../assets/svgs/bed-single.svg');
-	display: inline-block;
-	background-repeat: no-repeat;
-	position: relative;
-}
-
-.type-twinbed-twinbed-two.guest-bed-twinbed {
-	left: -10px;
-}
-
 .metaboxtype_get_customer_data,
 .reservation_guest {
 	background: #ebf6f76b;

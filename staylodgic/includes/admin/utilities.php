@@ -142,6 +142,16 @@ function staylodgic_get_new_booking_statuses()
 
     return $bookingStatuses;
 }
+function staylodgic_get_AllBedLayouts($bedNames)
+{
+	$html           = '';
+	$bedNames_array = explode(' ', $bedNames);
+	foreach ($bedNames_array as $key => $bedName) {
+		$html .= staylodgic_get_BedLayout($bedName, $key);
+	}
+
+	return $html;
+}
 function staylodgic_get_BedLayout($bedName, $bedFieldID = null)
 {
 

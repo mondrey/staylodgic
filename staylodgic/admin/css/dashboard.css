@@ -135,23 +135,6 @@ table.staylodgic_analytics_table thead tr th.nights-column {
 	color: #a4a4a4;
 }
 
-.guest-adult-svg {
-	width: 22px;
-	height: 32px;
-	background-image: url('../../assets/svgs/person-adult.svg');
-	display: inline-block;
-	background-repeat: no-repeat;
-}
-
-.guest-child-svg {
-	width: 22px;
-	height: 22px;
-	background-image: url('../../assets/svgs/person-child.svg');
-	display: inline-block;
-	background-repeat: no-repeat;
-}
-
-
 .staylodgic_table_outer .staylodgic_analytics_table td.dt-type-date,
 .staylodgic_table_outer table.dataTable td.dt-type-numeric,
 .staylodgic_table_outer .table.dataTable thead th {

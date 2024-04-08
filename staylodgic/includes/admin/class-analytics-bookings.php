@@ -824,8 +824,10 @@ class AnalyticsBookings
                         $guestListHtml .= '<td scope="row">';
                         
                         $room_name = $reservations_instance->getRoomNameForReservation($reservation_id);
+                        $bedlayout             = get_post_meta($reservation_id, 'staylodgic_reservation_room_bedlayout', true);
 
                         $guestListHtml .= $room_name;
+                        $guestListHtml .= '<div class="booking-dashboard bed-layout">' . staylodgic_get_AllBedLayouts($bedlayout) . '</div>';
                         $guestListHtml .= '</td>';
                         $guestListHtml .= '<td scope="row">';
 
@@ -841,6 +843,10 @@ class AnalyticsBookings
                         $resRegIDs         = $registry_instance->fetchResRegIDsByBookingNumber($booking[ 'booking_number' ]);
                         if (isset($resRegIDs) && is_array($resRegIDs)) {
                             $guestListHtml .= $registry_instance->outputRegistrationAndOccupancy($resRegIDs[ 'reservationID' ], $resRegIDs[ 'guestRegisterID' ], 'icons');
+                            $guestListHtml .= '<div class="booking-dashboard registration">';
+                            $guestListHtml .= '<a href="'.get_permalink($resRegIDs['guestRegisterID']).'"><i class="fa-regular fa-id-card"></i></a>';
+                            $guestListHtml .= '<a href="'.get_edit_post_link($resRegIDs['guestRegisterID']).'"><i class="fa-solid fa-file-signature"></i></a>';
+                            $guestListHtml .= '</div>';
                         }
                         $guestListHtml .= '</td>';
 
