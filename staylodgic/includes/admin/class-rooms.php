@@ -332,6 +332,31 @@ class Rooms
 
         if (isset($_POST['quantity'])) {
             $quantity = $_POST['quantity'];
+
+            if ( '' == $quantity ) {
+                $quantity = 0;
+                // Return an error response if quantity is not set
+                $response = array(
+                    'success' => false,
+                    'data' => array(
+                        'message' => 'Missing quantity parameter.',
+                    ),
+                );
+                wp_send_json_error($response);
+                return;
+            }
+            if ( 0 > $quantity ) {
+                $quantity = 0;
+                // Return an error response if quantity is not set
+                $response = array(
+                    'success' => false,
+                    'data' => array(
+                        'message' => 'Missing quantity parameter.',
+                    ),
+                );
+                wp_send_json_error($response);
+                return;
+            }
         } else {
             // Return an error response if quantity is not set
             $response = array(
@@ -458,6 +483,28 @@ class Rooms
 
         if (isset($_POST['rate'])) {
             $rate = $_POST['rate'];
+            error_log( '$rate' );
+            error_log( $rate );
+            if ( '' == $rate ) {
+                $response = array(
+                    'success' => false,
+                    'data' => array(
+                        'message' => 'Invalid rate',
+                    ),
+                );
+                wp_send_json_error($response);
+                return;                
+            }
+            if ( 0 >= $rate ) {
+                $response = array(
+                    'success' => false,
+                    'data' => array(
+                        'message' => 'Invalid rate',
+                    ),
+                );
+                wp_send_json_error($response);
+                return;                
+            }
         } else {
             // Return an error response if quantity is not set
             $response = array(

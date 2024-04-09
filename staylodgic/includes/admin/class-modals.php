@@ -19,6 +19,18 @@ class Modals
 		$toast .= 'Rate updated successfully.';
 		$toast .= '</div>';
 		$toast .= '</div>';
+
+		$toast .= '<div id="rateToastFail" class="toast" role="alert" aria-live="assertive" aria-atomic="true">';
+		$toast .= '<div class="toast-header">';
+		$toast .= '<div class="toast-square"></div>';
+		$toast .= '<strong class="me-auto">Rate Failed</strong>';
+		$toast .= '<small class="text-muted toast-time">just now</small>';
+		$toast .= '<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>';
+		$toast .= '</div>';
+		$toast .= '<div class="toast-body">';
+		$toast .= 'Rate update failed.';
+		$toast .= '</div>';
+		$toast .= '</div>';
 	
 		$toast .= '<div id="quantityToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">';
 		$toast .= '<div class="toast-header">';
@@ -29,6 +41,18 @@ class Modals
 		$toast .= '</div>';
 		$toast .= '<div class="toast-body">';
 		$toast .= 'Quantity updated successfully.';
+		$toast .= '</div>';
+		$toast .= '</div>';
+
+		$toast .= '<div id="quantityToastFail" class="toast" role="alert" aria-live="assertive" aria-atomic="true">';
+		$toast .= '<div class="toast-header">';
+		$toast .= '<div class="toast-square"></div>';
+		$toast .= '<strong class="me-auto">Quantity Update</strong>';
+		$toast .= '<small class="text-muted toast-time">just now</small>';
+		$toast .= '<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>';
+		$toast .= '</div>';
+		$toast .= '<div class="toast-body">';
+		$toast .= 'Quantity update failed.';
 		$toast .= '</div>';
 		$toast .= '</div>';
 

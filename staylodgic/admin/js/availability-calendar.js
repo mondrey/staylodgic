@@ -233,8 +233,13 @@
 						showToast('rateToast');
 
 					} else {
-						// Error storing metadata
-						console.error(response.data.message);
+						
+						$('#rates-modal').modal('hide');
+						
+						save_button.find('.spinner-border').css('opacity', '0');
+						save_button.prop('disabled', false);
+
+						showToast('rateToastFail');
 					}
 				},
 				error: function (xhr, status, error) {
@@ -328,24 +333,29 @@
 					// Handle the AJAX response here
 					if (response.success) {
 						// Metadata stored successfully
-						console.log(response.data.message);
+					// Close the modal
+						$('#quantity-modal').modal('hide');
+
+						save_button.find('.spinner-border').css('opacity', '0');
+						save_button.prop('disabled', false);
+						// Update the calendar without reloading the page
+						var currentDate = fp.selectedDates[0]; // Assuming fp is your flatpickr instance
+						var startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+						var endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 5);
+						debouncedCalendarUpdate([startDate, endDate]);
+
+						showToast('quantityToast');
 					} else {
 						// Error storing metadata
-						console.error(response.data.message);
+						// Close the modal
+						$('#quantity-modal').modal('hide');
+
+						save_button.find('.spinner-border').css('opacity', '0');
+						save_button.prop('disabled', false);
+
+						showToast('quantityToastFail');
 					}
 
-					// Close the modal
-					$('#quantity-modal').modal('hide');
-
-					save_button.find('.spinner-border').css('opacity', '0');
-					save_button.prop('disabled', false);
-					// Update the calendar without reloading the page
-					var currentDate = fp.selectedDates[0]; // Assuming fp is your flatpickr instance
-					var startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-					var endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 5);
-					debouncedCalendarUpdate([startDate, endDate]);
-
-					showToast('quantityToast');
 				},
 				error: function (xhr, status, error) {
 					// Handle AJAX error here
