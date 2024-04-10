@@ -355,7 +355,7 @@ function staylodgic_generate_metaboxes($meta_data, $post_id)
 
                     }
                     $color_value = $meta ? $meta : $field['std'];
-                    echo '<input data-alpha-enabled="true" name="' . esc_attr($field['id']) . '" id="' . esc_attr($field['id']) . '" class="colorSwatch of-color"  type="text" value="' . esc_attr($color_value) . '" />';
+                    echo '<input data-alpha-enabled="true" name="' . esc_attr($field['id']) . '" id="' . esc_attr($field['id']) . '" class="colorswatch of-color"  type="text" value="' . esc_attr($color_value) . '" />';
 
                     break;
 

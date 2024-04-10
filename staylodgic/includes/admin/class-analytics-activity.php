@@ -11,10 +11,12 @@ class ActivityAnalytics
     private $options;
     private $guests;
     private $bookings;
+    private $display_today;
     private $activities;
     private $activityLabels;
+    private $activityColors;
 
-    public function __construct($id, $info = 'today', $type = 'bar', $data = [  ], $options = [  ], $guests = array(), $bookings = array(), $activities = array(),$activityLabels = array())
+    public function __construct($id, $info = 'today', $type = 'bar', $data = [  ], $options = [  ], $guests = array(), $bookings = array(), $activities = array(),$activityLabels = array(),$activityColors = array())
     {
         $this->id       = $id;
         $this->info     = $info;
@@ -25,6 +27,11 @@ class ActivityAnalytics
         $this->bookings = $bookings;
         $this->activities = $activities;
         $this->activityLabels = $activityLabels;
+        $this->activityColors = $activityColors;
+
+        $this->display_today    = '<span class="display-stat-date">' . date('M jS') . '</span>';
+        $this->display_tomorrow = '<span class="display-stat-date">' . date('M jS', strtotime('+1 day')) . '</span>';
+        $this->display_dayafter = '<span class="display-stat-date">' . date('M jS', strtotime('+2 day')) . '</span>';
 
         add_action('admin_menu', array($this, 'staylodgic_dashboard'));
     }
@@ -38,6 +45,7 @@ class ActivityAnalytics
         // Initialize the arrays
         $this->activities = [];
         $this->activityLabels = [];
+        $this->activityColors = [];
 
         $activityQuery = new \WP_Query([
             'post_type'      => 'slgc_activity',
@@ -49,6 +57,11 @@ class ActivityAnalytics
                 $activityQuery->the_post();
                 $post_id = get_the_ID();
                 $activityTitle = get_the_title();
+                $hex_color       = get_post_meta(get_the_ID(), 'staylodgic_dashboard_color', true);
+
+                $rgb_values = staylodgic_hex_to_rgb($hex_color);
+                $this->activityColors[] = 'rgba(' . $rgb_values['r'] . ',' . $rgb_values['g'] . ',' . $rgb_values['b'] . ',' . '0.5' . ')';
+
                 $this->activities[$post_id] = $activityTitle;
                 $this->activityLabels[$post_id]['label'] = $activityTitle;
                 $this->activityLabels[$post_id]['count'] = 0;
@@ -126,7 +139,7 @@ class ActivityAnalytics
              ],
             'bookings_today'              => [
                 'info'    => 'today',
-                'heading' => 'Today',
+                'heading' => __('Today','staylodgic') . ' ' . $this->display_today,
                 'cache'   => false,
                 'type'    => 'polarArea',
                 'options' => [
@@ -146,7 +159,7 @@ class ActivityAnalytics
              ],
             'bookings_tomorrow'           => [
                 'info'    => 'tomorrow',
-                'heading' => 'Tomorrow',
+                'heading' => 'Tomorrow' . ' ' . $this->display_tomorrow,
                 'cache'   => false,
                 'type'    => 'polarArea',
                 'options' => [
@@ -166,7 +179,7 @@ class ActivityAnalytics
              ],
             'bookings_dayafter'           => [
                 'info'    => 'dayafter',
-                'heading' => 'Day After',
+                'heading' => 'Day After' . ' ' . $this->display_dayafter,
                 'cache'   => false,
                 'type'    => 'polarArea',
                 'options' => [
@@ -218,6 +231,7 @@ class ActivityAnalytics
         $checkinCount  = 0;
         $checkoutCount = 0;
         $stayingCount  = 0;
+        $rgb_color = array();
 
         $query = new \WP_Query([
             'post_type'      => 'slgc_activityres',
@@ -239,16 +253,19 @@ class ActivityAnalytics
                 $activity_id = get_post_meta(get_the_ID(), 'staylodgic_activity_id', true);
                 $status         = get_post_meta(get_the_ID(), 'staylodgic_reservation_status', true);
                 $checkin        = get_post_meta(get_the_ID(), 'staylodgic_reservation_checkin', true);
-                $checkout       = get_post_meta(get_the_ID(), 'staylodgic_checkout_date', true);
+                $hex_color       = get_post_meta(get_the_ID(), 'staylodgic_dashboard_color', true);
+
+                $rgb_values = staylodgic_hex_to_rgb($hex_color);
+                $rgb_color[] = $rgb_values['r'] . ',' . $rgb_values['g'] . ',' . $rgb_values['b'];
 
                 if ($status == 'confirmed') {
                     if ($checkin == $dayafter) {
 
                         // Increment the count for the activity_id
                         if (!isset($this->activityLabels[$activity_id])) {
-                            $this->activityLabels[$activity_id]['count'] = 0;
+                            $this->activityLabels[$activity_id][$dayafter]['count'] = 0;
                         }
-                        $this->activityLabels[$activity_id]['count']++;
+                        $this->activityLabels[$activity_id][$dayafter]['count']++;
                         $this->add_guest($booking_number, 'dayafter', 'checkin', $checkin );
                     }
                 }
@@ -256,12 +273,21 @@ class ActivityAnalytics
         }
         wp_reset_postdata();
 
+        $data = [];
+        foreach ($this->activityLabels as $activity_id => $labels) {
+            if (isset($labels[$dayafter]['count'])) {
+                $data[] = $labels[$dayafter]['count'];
+            } else {
+                $data[] = 0; // Set count to 0 if not found
+            }
+        }
+
         return [
             'labels'   => array_column($this->activityLabels, 'label'),
             'datasets' => [
                 [
-                    'data'            => array_column($this->activityLabels, 'count'),
-                    'backgroundColor' => [ 'rgba(255,0,0,0.5)', 'rgba(83, 0, 255, 0.5)', 'rgba(255, 206, 86, 0.5)' ],
+                    'data'            => $data,
+                    'backgroundColor' => $this->activityColors,
                  ],
              ],
          ];
@@ -324,9 +350,9 @@ class ActivityAnalytics
 
                         // Increment the count for the activity_id
                         if (!isset($this->activityLabels[$activity_id])) {
-                            $this->activityLabels[$activity_id]['count'] = 0;
+                            $this->activityLabels[$activity_id][$tomorrow]['count'] = 0;
                         }
-                        $this->activityLabels[$activity_id]['count']++;
+                        $this->activityLabels[$activity_id][$tomorrow]['count']++;
                         $this->add_guest($booking_number, 'tomorrow', 'checkin', $checkin );
                     }
                 }
@@ -334,12 +360,21 @@ class ActivityAnalytics
         }
         wp_reset_postdata();
 
+        $data = [];
+        foreach ($this->activityLabels as $activity_id => $labels) {
+            if (isset($labels[$tomorrow]['count'])) {
+                $data[] = $labels[$tomorrow]['count'];
+            } else {
+                $data[] = 0; // Set count to 0 if not found
+            }
+        }
+
         return [
             'labels'   => array_column($this->activityLabels, 'label'),
             'datasets' => [
                 [
-                    'data'            => array_column($this->activityLabels, 'count'),
-                    'backgroundColor' => [ 'rgba(255,0,0,0.5)', 'rgba(83, 0, 255, 0.5)', 'rgba(255, 206, 86, 0.5)' ],
+                    'data'            => $data,
+                    'backgroundColor' => $this->activityColors,
                  ],
              ],
          ];
@@ -379,9 +414,9 @@ class ActivityAnalytics
 
                         // Increment the count for the activity_id
                         if (!isset($this->activityLabels[$activity_id])) {
-                            $this->activityLabels[$activity_id]['count'] = 0;
+                            $this->activityLabels[$activity_id][$today]['count'] = 0;
                         }
-                        $this->activityLabels[$activity_id]['count']++;
+                        $this->activityLabels[$activity_id][$today]['count']++;
                         $this->add_guest($booking_number, 'today', 'checkin', $checkin );
                     }
                 }
@@ -389,12 +424,21 @@ class ActivityAnalytics
         }
         wp_reset_postdata();
 
+        $data = [];
+        foreach ($this->activityLabels as $activity_id => $labels) {
+            if (isset($labels[$today]['count'])) {
+                $data[] = $labels[$today]['count'];
+            } else {
+                $data[] = 0; // Set count to 0 if not found
+            }
+        }
+
         return [
             'labels'   => array_column($this->activityLabels, 'label'),
             'datasets' => [
                 [
-                    'data'            => array_column($this->activityLabels, 'count'),
-                    'backgroundColor' => [ 'rgba(255,0,0,0.5)', 'rgba(83, 0, 255, 0.5)', 'rgba(255, 206, 86, 0.5)' ],
+                    'data'            => $data,
+                    'backgroundColor' => $this->activityColors,
                  ],
              ],
          ];
@@ -623,15 +667,14 @@ class ActivityAnalytics
             $guestListHtml .= '<div class="staylodgic_analytics_table_wrap">';
             // Add a heading for the day
             if ('today' == $day) {
-                $guestListHtml .= '<h2 class="staylodgic_analytics_subheading staylodgic_dayis_' . $day . '">' . __('Today','staylodgic') . '</h2>';
+                $guestListHtml .= '<h2 class="staylodgic_analytics_subheading staylodgic_dayis_' . $day . '">' . __('Today','staylodgic') . ' ' . $this->display_today . '</h2>';
             } elseif ('tomorrow' == $day) {
-                $guestListHtml .= '<h2 class="staylodgic_analytics_subheading staylodgic_dayis_' . $day . '">' . __('Tomorrow','staylodgic') . '</h2>';
+                $guestListHtml .= '<h2 class="staylodgic_analytics_subheading staylodgic_dayis_' . $day . '">' . __('Tomorrow','staylodgic') . ' ' . $this->display_tomorrow . '</h2>';
             } elseif ('dayafter' == $day) {
-                $guestListHtml .= '<h2 class="staylodgic_analytics_subheading staylodgic_dayis_' . $day . '">' . __('Day After','staylodgic') . '</h2>';
+                $guestListHtml .= '<h2 class="staylodgic_analytics_subheading staylodgic_dayis_' . $day . '">' . __('Day After','staylodgic') . ' ' . $this->display_dayafter . '</h2>';
             } else {
                 $guestListHtml .= '<h2 class="staylodgic_analytics_subheading staylodgic_dayis_' . $day . '">' . ucfirst($day) . '</h2>';
             }
-
             // Sort the statuses array
             uksort($statuses, function ($a, $b) {
                 $order = [ 'checkin', 'staying', 'checkout' ]; // Define your custom order
@@ -688,12 +731,12 @@ class ActivityAnalytics
                         $guestListHtml .= '<tr>';
                         $guestListHtml .= '<th class="number-column" scope="row">' . $count . '</th>';
                         $guestListHtml .= '<td scope="row">';
+                        $guestListHtml .= '<a href="' . esc_url(get_edit_post_link($reservation_id)) . '">';
                         $guestListHtml .= $booking[ 'booking_number' ];
+                        $guestListHtml .= '</a>';
                         $guestListHtml .= '</td>';
                         $guestListHtml .= '<td scope="row">';
-                        $guestListHtml .= '<a href="' . esc_url(get_edit_post_link($reservation_id)) . '">';
                         $guestListHtml .= ucwords(strtolower($booking[ 'name' ]));
-                        $guestListHtml .= '</a>';
                         $guestListHtml .= '</td>';
                         $guestListHtml .= '<td scope="row">';
                         
@@ -742,6 +785,14 @@ class ActivityAnalytics
         $bookings_today              = $this->chart_generator('bookings_today');
         $bookings_tomorrow           = $this->chart_generator('bookings_tomorrow');
         $bookings_dayafter           = $this->chart_generator('bookings_dayafter');
+
+
+        error_log( '$this->activityColors' );
+        error_log( $bookings_dayafter );
+        error_log( print_r( $this->activityColors,1) );
+
+        error_log( 'Other' );
+        error_log( $bookings_tomorrow );
 
         $guestListHtml = $this->guest_list();
 

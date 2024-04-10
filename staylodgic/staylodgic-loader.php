@@ -228,6 +228,8 @@ class Staylodgic_Init
                 wp_enqueue_script('flatpickr');
                 wp_enqueue_style('flatpickr-extra');
                 wp_enqueue_script('admin-post-meta');
+                wp_enqueue_style('wp-color-picker');
+                wp_enqueue_script('wp-color-picker');
                 wp_enqueue_script('qrcodejs');
 
                 wp_enqueue_script('jquery-ui-slider');

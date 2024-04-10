@@ -1,6 +1,7 @@
 jQuery(document).ready(function($) {
 	"use strict";
 
+	$('.colorswatch').wpColorPicker();
 
 	function acitivity_schedule() {
 		$(document).on('click', '.remove-time-input', function() {

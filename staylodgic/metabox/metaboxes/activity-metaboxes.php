@@ -29,6 +29,13 @@ function staylodgic_activity_metadata()
                 'desc' => __('Add images for slideshow.', 'staylodgic'),
             ),
             array(
+                'name' => __('Dashboard color', 'staylodgic'),
+                'id'   => 'staylodgic_dashboard_color',
+                'std'  => staylodgic_random_color_hex(),
+                'type' => 'color',
+                'desc' => __('Color which represents in dashboard.', 'staylodgic'),
+            ),
+            array(
                 'name' => __('Title', 'staylodgic'),
                 'id'   => 'staylodgic_title',
                 'type' => 'text',

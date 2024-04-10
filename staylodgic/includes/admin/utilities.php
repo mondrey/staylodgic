@@ -1,4 +1,35 @@
 <?php
+function staylodgic_random_color_hex() {
+    // Generate a random RGB color
+    $red = mt_rand(0, 255);
+    $green = mt_rand(0, 255);
+    $blue = mt_rand(0, 255);
+
+    // Convert RGB to hex
+    $hex = sprintf("#%02x%02x%02x", $red, $green, $blue);
+
+    return $hex;
+}
+
+function staylodgic_hex_to_rgb($hex) {
+    // Remove '#' if present
+    $hex = str_replace('#', '', $hex);
+
+    // Check if the input is a valid hex color
+    if (!preg_match('/^[a-f0-9]{6}$/i', $hex)) {
+        // If not valid, generate a random hex color
+        $hex = staylodgic_random_color_hex();
+    }
+
+    // Split into R, G, B substrings
+    $r = hexdec(substr($hex, 0, 2));
+    $g = hexdec(substr($hex, 2, 2));
+    $b = hexdec(substr($hex, 4, 2));
+
+    // Return RGB values as an array
+    return array('r' => $r, 'g' => $g, 'b' => $b);
+}
+
 function staylodgic_applyTimezoneToDateAndTime($date, $time, $timezone) {
     try {
         // Parse the timezone offset
