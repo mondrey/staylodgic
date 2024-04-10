@@ -12,6 +12,8 @@ class ActivityAnalytics
     private $guests;
     private $bookings;
     private $display_today;
+    private $display_tomorrow;
+    private $display_dayafter;
     private $activities;
     private $activityLabels;
     private $activityColors;
@@ -253,16 +255,12 @@ class ActivityAnalytics
                 $activity_id = get_post_meta(get_the_ID(), 'staylodgic_activity_id', true);
                 $status         = get_post_meta(get_the_ID(), 'staylodgic_reservation_status', true);
                 $checkin        = get_post_meta(get_the_ID(), 'staylodgic_reservation_checkin', true);
-                $hex_color       = get_post_meta(get_the_ID(), 'staylodgic_dashboard_color', true);
-
-                $rgb_values = staylodgic_hex_to_rgb($hex_color);
-                $rgb_color[] = $rgb_values['r'] . ',' . $rgb_values['g'] . ',' . $rgb_values['b'];
 
                 if ($status == 'confirmed') {
                     if ($checkin == $dayafter) {
 
                         // Increment the count for the activity_id
-                        if (!isset($this->activityLabels[$activity_id])) {
+                        if (!isset($this->activityLabels[$activity_id][$dayafter])) {
                             $this->activityLabels[$activity_id][$dayafter]['count'] = 0;
                         }
                         $this->activityLabels[$activity_id][$dayafter]['count']++;
@@ -349,7 +347,7 @@ class ActivityAnalytics
                     if ($checkin == $tomorrow) {
 
                         // Increment the count for the activity_id
-                        if (!isset($this->activityLabels[$activity_id])) {
+                        if (!isset($this->activityLabels[$activity_id][$tomorrow])) {
                             $this->activityLabels[$activity_id][$tomorrow]['count'] = 0;
                         }
                         $this->activityLabels[$activity_id][$tomorrow]['count']++;
@@ -413,7 +411,7 @@ class ActivityAnalytics
                     if ($checkin == $today) {
 
                         // Increment the count for the activity_id
-                        if (!isset($this->activityLabels[$activity_id])) {
+                        if (!isset($this->activityLabels[$activity_id][$today])) {
                             $this->activityLabels[$activity_id][$today]['count'] = 0;
                         }
                         $this->activityLabels[$activity_id][$today]['count']++;
