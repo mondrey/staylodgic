@@ -1518,3 +1518,10 @@ ul.existing-customer {
 	column-count: 3;
 	column-gap: 50px;
 }
+
+.ticket-price-not-found {
+	display: inline-block;
+	padding: 6px 17px;
+	background: #ffe6f3;
+	margin-bottom: 10px;
+}

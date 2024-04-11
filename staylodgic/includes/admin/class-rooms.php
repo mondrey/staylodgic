@@ -409,6 +409,20 @@ class Rooms
             $endDate = $startDate;
         }
 
+        $numberOfDaysInSelection = \Staylodgic\Common::countDays_BetweenDates( $startDate, $endDate );
+
+        if ( $numberOfDaysInSelection > 32 ) {
+            // Return an error response if dateRange is invalid
+            $response = array(
+                'success' => false,
+                'data' => array(
+                    'message' => 'Too many days to process.',
+                ),
+            );
+            wp_send_json_error($response);
+            return;            
+        }
+
         // Retrieve the existing quantity_array meta value
         $quantityArray = get_post_meta($postID, 'quantity_array', true);
 
@@ -420,18 +434,29 @@ class Rooms
         // Generate an array of dates between the start and end dates
         $dateRange = \Staylodgic\Common::create_inBetween_DateRange_Array($startDate, $endDate);
 
+        $reservation_instance = new \Staylodgic\Reservations();
+        $reserved_array = $reservation_instance->getRoomReservationsForDateRange( $startDate, $endDate, $postID );
+
         // Update the quantity values for the specified date range
         foreach ($dateRange as $date) {
 
             $reservation_instance = new \Staylodgic\Reservations($date, $postID);
-            $reserved_rooms = $reservation_instance->calculateReservedRooms();
-
+            //$reserved_rooms = $reservation_instance->calculateReservedRooms();
+            $reserved_rooms = $reserved_array[$date];
             $final_quantity = $quantity + $reserved_rooms;
+
             $quantityArray[$date] = $final_quantity;
         }
 
+        // error_log('-------- New Method Quantity ----------');
+        // error_log( print_r($reserved_array,1 ) );
+        // error_log('-------- Quantity ----------');
+        // error_log( print_r($quantityArray,1 ) );
+        // error_log('-------- Final Quantity ----------');
+        
+
         // Update the metadata for the 'slgc_reservations' post
-        if (!empty($postID) && is_numeric($postID)) {
+        if (!empty($postID) && is_numeric($postID) && is_array($quantityArray)) {
             // Update the post meta with the modified quantity array
             update_post_meta($postID, 'quantity_array', $quantityArray);
             // Return a success response

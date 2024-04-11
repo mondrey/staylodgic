@@ -4,6 +4,17 @@ namespace Staylodgic;
 class Common
 {
 
+	public static function reduceDate($dateString, $days, $returnAsString = true) {
+		$date = new \DateTime($dateString);
+		$date->modify("-$days days");
+		
+		if ($returnAsString) {
+			return $date->format('Y-m-d');
+		} else {
+			return $date;
+		}
+	}
+	
 	public static function generatePersonIcons( $adults = 0, $children = 0 ) {
 
 		$html = '';

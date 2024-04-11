@@ -386,10 +386,10 @@ class AvailablityCalendar extends AvailablityCalendarBase
 
             }
 
-            error_log('--------- Without using Cache ------------------------------------');
+            // error_log('--------- Without using Cache ------------------------------------');
 
-            error_log('--------- Cache Data --------');
-            error_log(print_r($this->cachedData, true));
+            // error_log('--------- Cache Data --------');
+            // error_log(print_r($this->cachedData, true));
 
             $this->reservation_tabs  = array();
             $cache_qty_rate = array();

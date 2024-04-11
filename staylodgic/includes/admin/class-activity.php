@@ -1147,7 +1147,7 @@ return ob_get_clean();
                 
             } else {
                 if ( !isset($ticket_price) || 0 >= $ticket_price ) {
-                    $ticket .= __('Ticket price not found','staylodgic');
+                    $ticket .= '<div class="ticket-price-not-found">' . __('Ticket price not found','staylodgic') . '</div>';
                 }
             }
         }

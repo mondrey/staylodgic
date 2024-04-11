@@ -98,7 +98,6 @@
 					$('[data-priceof="activitysubtotal"]').val( totalRate.toFixed(2) );
 					$('[data-priceof="activitytotal"]').val('');
 					$('.input-tax-summary-wrap-inner').remove();
-
 					if (isValidDate) {
 						$.ajax({
 							url: ajaxurl, // 'ajaxurl' is a global variable defined by WordPress
@@ -107,7 +106,8 @@
 								action: 'get_activity_schedules',
 								selected_date: dateStr,
 								the_post_id: staylodgic_admin_vars.post_id,
-								totalpeople: totalPeople
+								totalpeople: totalPeople,
+								nonce: staylodgic_admin_vars.nonce
 							},
 							beforeSend: function( xhr ) {
 								$('.activity-schedules-container-wrap').addClass('ajax-processing');

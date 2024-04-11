@@ -302,8 +302,52 @@ class Reservations
     
         return new \WP_Query($args);
     }
-    
-     
+
+    public function getRoomReservationsForDateRange( $startDate, $endDate, $roomID )
+    {
+
+        $query          = $this->getReservationsForRoom( $startDate, $endDate, $reservation_status = 'confirmed', $reservation_substatus = false, $roomID );
+        $reserved_rooms = 0;
+
+        $reserved_array = array();
+
+        $dateRange = \Staylodgic\Common::create_inBetween_DateRange_Array($startDate, $endDate);
+        
+        // Set all as zero
+        foreach ($dateRange as $date) {
+            $reserved_array[$date] = 0;
+        }
+
+        if ($query->have_posts()) {
+            while ($query->have_posts()) {
+                $query->the_post();
+
+                $reservation_id = get_the_ID();
+                $custom         = get_post_custom($reservation_id);
+
+                if (isset($custom[ 'staylodgic_checkin_date' ][ 0 ]) && isset($custom[ 'staylodgic_checkout_date' ][ 0 ])) {
+                    $checkin       = $custom[ 'staylodgic_checkin_date' ][ 0 ];
+                    $checkout      = $custom[ 'staylodgic_checkout_date' ][ 0 ];
+
+                    foreach ($dateRange as $date) {
+                        $reserved_rooms = 0;
+                        if ( isset( $reserved_array[$date] )) {
+                            $reserved_rooms = $reserved_array[$date];
+                        }
+                        if ($date >= $checkin && $date < $checkout) {
+                            $reserved_rooms++;
+                        }
+                        $reserved_array[$date] = $reserved_rooms;
+                    }
+                }
+                
+            }
+        }
+
+        wp_reset_postdata();
+
+        return $reserved_array;
+    }
 
     public function calculateReservedRooms()
     {
