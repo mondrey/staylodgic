@@ -116,10 +116,12 @@
 		// Initially initialize tooltips
 		initializeTooltips();
 
+		var quantityModalDatepicker; // Declare a variable to hold the instance
+		var ratesModalDatepicker; // Declare a variable to hold the instance
 
 		if ($.fn.flatpickr) {
 			// Initialize Flatpickr
-			$('#quantity-modal .modaldatepicker').flatpickr(
+			quantityModalDatepicker = $('#quantity-modal .modaldatepicker').flatpickr(
 				{
 					mode: "range",
 					showMonths: 2,
@@ -135,7 +137,7 @@
 			);
 
 			// Initialize Flatpickr
-			$('#rates-modal .modaldatepicker').flatpickr(
+			ratesModalDatepicker = $('#rates-modal .modaldatepicker').flatpickr(
 				{
 					mode: "range",
 					showMonths: 2,
@@ -266,7 +268,12 @@
 			$('#rates-modal input[name="modaldatepicker"]').val(date);
 			$('#rates-modal input[name="rate"]').val(rate);
 			$('#rates-modal select[name="room"]').val(room);
-
+			
+			// Use the stored Flatpickr instance to set the date
+			if (date && ratesModalDatepicker) {
+				ratesModalDatepicker.setDate(date, true); // The 'true' ensures the calendar and input display the date
+			}
+			
 			// Open the modal
 			$('#rates-modal').modal('show');
 		}
@@ -289,6 +296,11 @@
 			$('#quantity-modal input[name="quantity"]').val(remaining);
 			$('#quantity-modal select[name="room"]').val(room);
 
+			// Use the stored Flatpickr instance to set the date
+			if (date && quantityModalDatepicker) {
+				quantityModalDatepicker.setDate(date, true); // The 'true' ensures the calendar and input display the date
+			}
+			
 			// Open the modal
 			$('#quantity-modal').modal('show');
 		}
