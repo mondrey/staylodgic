@@ -7,6 +7,30 @@ function staylodgic_room_metadata()
 
     $staylodgic_imagepath = get_template_directory_uri() . '/framework/options/images/';
 
+    $remaining_rooms = staylodgic_calculate_remaining_rooms( get_the_id() );
+    $max_total_rooms = (int) get_blog_option(get_current_blog_id(), 'site_max_rooms');
+
+
+    // array(
+    //     'name' => __('Rooms of this type', 'staylodgic'),
+    //     'id'   => 'staylodgic_max_rooms_of_type',
+    //     'type' => 'text',
+    //     'desc' => __('Rooms of this type. This will be the maximum number avialbable for the room type.', 'staylodgic'),
+    //     'std'  => '',
+    // ),
+
+    // array(
+    //     'name' => __('Rooms of this type', 'staylodgic'),
+    //     'id'   => 'staylodgic_max_rooms_of_type',
+    //     'type' => 'range',
+    //     'min'  => '1',
+    //     'max'  => strval($remaining_rooms), // Dynamically set the maximum value
+    //     'step' => '1',
+    //     'unit' => 'guests',
+    //     'desc' => __('Rooms of this type. This will be the maximum number avialbable for the room type.', 'staylodgic'),
+    //     'std'  => '0',
+    // ),
+
     $staylodgic_room_box = array(
         'id'       => 'roommeta-box',
         'title'    => 'Room Metabox',
@@ -29,23 +53,20 @@ function staylodgic_room_metadata()
                 'desc' => __('Add images for slideshow.', 'staylodgic'),
             ),
             array(
-                'name' => __('Title', 'staylodgic'),
-                'id'   => 'staylodgic_title',
-                'type' => 'text',
-                'desc' => __('Title.', 'staylodgic'),
-                'std'  => '',
-            ),
-            array(
-                'name' => __('Rooms of this type', 'staylodgic'),
+                'name' => __('Rooms of this type', 'staylodgic') . ' ( ' . __('Property max: ', 'staylodgic') . $max_total_rooms . ' )',
                 'id'   => 'staylodgic_max_rooms_of_type',
-                'type' => 'text',
-                'desc' => __('Rooms of this type. This will be the maximum number avialbable for the room type.', 'staylodgic'),
-                'std'  => '',
+                'type' => 'range',
+                'min'  => '0',
+                'max'  => strval($remaining_rooms), // Dynamically set the maximum value
+                'step' => '1',
+                'unit' => 'rooms',
+                'desc' => __('Rooms of this type.', 'staylodgic'),
+                'std'  => '0',
             ),
             array(
                 'name' => __('Base Rate', 'staylodgic'),
                 'id'   => 'staylodgic_base_rate',
-                'type' => 'text',
+                'type' => 'number',
                 'desc' => __('Base rate for this room type.', 'staylodgic'),
                 'std'  => '',
             ),

@@ -36,13 +36,6 @@ function staylodgic_activity_metadata()
                 'desc' => __('Color which represents in dashboard.', 'staylodgic'),
             ),
             array(
-                'name' => __('Title', 'staylodgic'),
-                'id'   => 'staylodgic_title',
-                'type' => 'text',
-                'desc' => __('Title.', 'staylodgic'),
-                'std'  => '',
-            ),
-            array(
                 'name' => __('Description', 'staylodgic'),
                 'id'   => 'staylodgic_activity_desc',
                 'type' => 'textarea',

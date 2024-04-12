@@ -1,4 +1,27 @@
 <?php
+function staylodgic_calculate_remaining_rooms($exclude_post_id) {
+    $args = array(
+        'post_type' => 'slgc_room',
+        'posts_per_page' => -1,
+        'fields' => 'ids',
+    );
+    $rooms = new WP_Query($args);
+    $total_rooms = 0;
+
+    foreach ($rooms->posts as $room_id) {
+        if ($room_id != $exclude_post_id) {
+            $total_rooms += (int) get_post_meta($room_id, 'staylodgic_max_rooms_of_type', true);
+        }
+    }
+
+    // Subtract this total from the maximum allowable rooms
+    $max_total_rooms = (int) get_blog_option(get_current_blog_id(), 'site_max_rooms');
+    $remaining_rooms = max(0, $max_total_rooms - $total_rooms); // Ensure it doesn't go negative
+    error_log('Max Rooms set in Site');
+    error_log( $max_total_rooms );
+    
+    return $remaining_rooms;
+}
 function staylodgic_generate_sidebarlist($sidebarlist_type)
 {
     $max_sidebars = 50;
@@ -494,6 +517,11 @@ function staylodgic_generate_metaboxes($meta_data, $post_id)
                     echo '<input type="text" class="' . $class . '" name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '" value="' . esc_attr($text_value) . '" size="30" />';
                     break;
 
+                case 'number':
+                    $text_value = $meta ? $meta : $field['std'];
+                    echo '<input type="number" class="' . $class . '" name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '" value="' . esc_attr($text_value) . '" size="5" />';
+                    break;
+
                 case 'registration':
                     $text_value = $meta ? $meta : $field['std'];
                     echo '<input type="text" class="' . $class . '" name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '" value="' . esc_attr($text_value) . '" size="30" />';
@@ -585,7 +613,7 @@ function staylodgic_generate_metaboxes($meta_data, $post_id)
                                 <option value="bunkbed">Bunk bed</option>
                                 <option value="sofabed">Sofa bed</option>
                                 </select> X
-                                <input disabled placeholder="0" type="text" name="staylodgic_alt_bedsetup[${uniqueID}][bednumber][]" value="" id="bed_number${uniqueID}_0">
+                                <input disabled placeholder="0" type="number" min="0" name="staylodgic_alt_bedsetup[${uniqueID}][bednumber][]" value="" id="bed_number${uniqueID}_0">
                             </div>
                         </div>
                         <span class="add-bedlayout-box">Add layout</span>
@@ -635,7 +663,7 @@ function staylodgic_generate_metaboxes($meta_data, $post_id)
                                         }
                     
                                         echo '</select>';
-                                        echo ' X <input placeholder="0" type="text" name="staylodgic_alt_bedsetup['.$uniqueID.'][bednumber][]" value="' . esc_attr($bednumber) . '" id="bed_number' . $repeat_count . '" />';
+                                        echo ' X <input placeholder="0" min="0" type="number" name="staylodgic_alt_bedsetup['.$uniqueID.'][bednumber][]" value="' . esc_attr($bednumber) . '" id="bed_number' . $repeat_count . '" />';
                                         
                                         echo '<div class="remove-bedlayout">Remove</div>';
                                         echo '</div>';
@@ -690,7 +718,7 @@ function staylodgic_generate_metaboxes($meta_data, $post_id)
                                     echo '<option value="' . esc_attr($key) . '"', $bedtype == $key ? ' selected' : '', '>', esc_attr($option), '</option>';
                                 }
                                 echo '</select>';
-                                echo ' X <input placeholder="0" type="text" name="' . esc_attr($field['id']) . '[bednumber][]" value="' . esc_attr($bednumber) . '" id="bed_number' . $repeat_count . '" /></div>';
+                                echo ' X <input placeholder="0" min="0" type="number" name="' . esc_attr($field['id']) . '[bednumber][]" value="' . esc_attr($bednumber) . '" id="bed_number' . $repeat_count . '" /></div>';
                                 if ($repeat_count > 0) {
                                     echo '<div class="remove-bedlayout">Remove</div>';
                                 }
@@ -712,7 +740,7 @@ function staylodgic_generate_metaboxes($meta_data, $post_id)
                             echo '<option value="' . esc_attr($key) . '"', $meta == $key ? ' selected' : '', '>', esc_attr($option), '</option>';
                         }
                         echo '</select>';
-                        echo ' X <input placeholder="How many" type="text" name="' . esc_attr($field['id']) . '[bednumber][]" value="" id="bed_number0" /></div>';
+                        echo ' X <input placeholder="How many" min="0" type="number" name="' . esc_attr($field['id']) . '[bednumber][]" value="" id="bed_number0" /></div>';
                         echo '</div>';
                     }
                     echo '</div>';
@@ -1637,6 +1665,36 @@ function staylodgic_savedata($staylodgic_metaboxdata, $post_id)
             $field_id = $field['id'];
             $old = get_post_meta($post_id, $field_id, true);
             $new = isset($_POST[$field_id]) ? $_POST[$field_id] : '';
+
+
+
+            $max_exceeded = false;
+
+            // Check if this is the 'slgc_room' post type and calculate room counts
+            if ('slgc_room' === get_post_type($post_id)) {
+                if ( 'staylodgic_max_rooms_of_type' == $field_id ) {
+
+                    error_log('Capturing');
+                    $current_total_rooms = staylodgic_calculate_remaining_rooms($post_id);
+                    $new_rooms = isset($_POST['staylodgic_max_rooms_of_type']) ? (int) $_POST['staylodgic_max_rooms_of_type'] : 0;
+                    $max_total_rooms = (int) get_blog_option(get_current_blog_id(), 'site_max_rooms');
+            
+                    // error_log('Aggregate rooms without this room :' . $current_total_rooms );
+                    // error_log('Max rooms allowed:' . $max_total_rooms );
+                    // error_log('Saving request :' . $new_rooms );
+                    // error_log('If saved eventual outcome :' . $current_total_rooms + $new_rooms );
+
+                    // Check if the total rooms would exceed the maximum allowed
+                    if ($current_total_rooms + $new_rooms > $max_total_rooms) {
+                        $max_exceeded = true;
+                        $_POST['staylodgic_max_rooms_of_type'] = 0; // Set to 0 when max is exceeded
+                        $new = 0; // Set to 0 when max is exceeded
+
+                        // error_log('Exceeded is true and saving this :' . $_POST['staylodgic_max_rooms_of_type'] );
+                        // error_log('Exceeded is true and saving this :' . $new );
+                    }
+                }
+            }
 
             if ( 'staylodgic_reservation_room_paid' == $field_id ) {
                 // Get the first element of the array
