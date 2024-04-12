@@ -437,6 +437,13 @@ class Rooms
         $reservation_instance = new \Staylodgic\Reservations();
         $reserved_array = $reservation_instance->getRoomReservationsForDateRange( $startDate, $endDate, $postID );
 
+
+        $room_data = get_post_custom($postID);
+        $max_rooms = 0;
+        if (isset($room_data['staylodgic_max_rooms_of_type'][0])) {
+            $max_rooms = $room_data['staylodgic_max_rooms_of_type'][0];
+        }
+
         // Update the quantity values for the specified date range
         foreach ($dateRange as $date) {
 
@@ -444,6 +451,17 @@ class Rooms
             //$reserved_rooms = $reservation_instance->calculateReservedRooms();
             $reserved_rooms = $reserved_array[$date];
             $final_quantity = $quantity + $reserved_rooms;
+
+            if ( $max_rooms < $final_quantity ) {
+                $response = array(
+                    'success' => false,
+                    'data' => array(
+                        'message' => 'Exceeds maximum quanity for room',
+                    ),
+                );
+                wp_send_json_error($response);
+                return;
+            }
 
             $quantityArray[$date] = $final_quantity;
         }
