@@ -4,7 +4,7 @@ class Rates {
 
 	public static function getRoomRateByDate( $roomID, $date ) {
 		// Get the room rate array from the post meta data.
-		$roomRateArray = get_post_meta($roomID, 'roomrate_array', true);
+		$roomRateArray = get_post_meta($roomID, 'staylodgic_roomrate_array', true);
 
 		// If the room rate array is set and the date exists in the array, return the rate.
 		if ( is_array( $roomRateArray ) && isset( $roomRateArray[$date] )) {

@@ -5,6 +5,7 @@ jQuery(document).ready(function($) {
 		update: function(event, ui) {
 			jQuery('#loading-animation').show(); // Show the animate loading gif while waiting
 			console.log('Is here');
+			console.log(  portfolioList.sortable('toArray').toString() );
 			opts = {
 				url: ajaxurl, // ajaxurl is defined by WordPress and points to /wp-admin/admin-ajax.php
 				type: 'POST',
@@ -12,7 +13,8 @@ jQuery(document).ready(function($) {
 				cache: false,
 				dataType: 'json',
 				data:{
-					action: 'portfolio_sort', // Tell WordPress how to handle this ajax request
+					action: 'room_sort', // Tell WordPress how to handle this ajax request
+					'nonce': staylodgic_admin_vars.nonce,
 					order: portfolioList.sortable('toArray').toString() // Passes ID's of list items in	1,3,2 format
 				},
 				success: function(response) {

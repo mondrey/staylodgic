@@ -281,7 +281,7 @@ class GuestRegistry
         // Use the supplied ID or fallback to the current post ID
         $idToUse = $registrationID ? $registrationID : get_the_id();
 
-        $registration_data = get_post_meta($idToUse, 'registration_data', true);
+        $registration_data = get_post_meta($idToUse, 'staylodgic_registration_data', true);
         if (is_array($registration_data)) {
             return count($registration_data);
         }
@@ -315,7 +315,16 @@ class GuestRegistry
             $this->hotelFooter,
             $this->hotelLogo
         );
-        echo $registrationSheet;
+
+        if ( isset( $registrationSheet )) {
+            echo $registrationSheet;
+        } else {
+            echo '<div class="registrations-not-found-notice-wrap">';
+            echo '<div class="registrations-not-found-notice">';
+            echo __('Registrations not found','staylodgic');
+            echo '</div>';
+            echo '</div>';
+        }
     }
 
     public function registrationTemplate(
@@ -329,9 +338,9 @@ class GuestRegistry
     ) {
         $currentDate = date('F jS, Y'); // Outputs: January 1st, 2024
 
-        $registration_data = get_post_meta(get_the_id(), 'registration_data', true);
+        $registration_data = get_post_meta(get_the_id(), 'staylodgic_registration_data', true);
 
-        error_log('registration_data');
+        error_log('staylodgic_registration_data');
         error_log(print_r($registration_data, true));
 
         if (is_array($registration_data)) {
@@ -416,8 +425,12 @@ class GuestRegistry
             echo '</div>';
             echo '</div>';
 
+            return ob_get_clean();
+
+        } else {
+            return null;
         }
-        return ob_get_clean();
+        
     }
 
     public function save_guestregistration_data()
@@ -473,14 +486,14 @@ class GuestRegistry
                     if (isset($booking_data[ 'Sign' ])) {
                         unset($booking_data[ 'Sign' ]);
                     }
-                    if (is_array(get_post_meta($post_id, 'registration_data', true))) {
-                        $registration_data = get_post_meta($post_id, 'registration_data', true);
+                    if (is_array(get_post_meta($post_id, 'staylodgic_registration_data', true))) {
+                        $registration_data = get_post_meta($post_id, 'staylodgic_registration_data', true);
                     }
                     if (isset($booking_data[ 'registration_id' ]) && $guest_id) {
                         $registration_id = $guest_id;
                     }
                     $registration_data[ $registration_id ] = $booking_data;
-                    update_post_meta($post_id, 'registration_data', $registration_data);
+                    update_post_meta($post_id, 'staylodgic_registration_data', $registration_data);
                 }
             }
         } else {
@@ -494,11 +507,16 @@ class GuestRegistry
     public function delete_registration()
     {
 
+        // Check for nonce security
+        if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'staylodgic-nonce-admin')) {
+            wp_die();
+        }
+
         $guest_id = isset($_POST[ 'guest_id' ]) ? $_POST[ 'guest_id' ] : 0;
         $post_id  = isset($_POST[ 'post_id' ]) ? $_POST[ 'post_id' ] : 0;
 
         // Remove registration data and signature
-        $registration_data = get_post_meta($post_id, 'registration_data', true);
+        $registration_data = get_post_meta($post_id, 'staylodgic_registration_data', true);
 
         error_log('Delete guest data');
         error_log($post_id);
@@ -507,7 +525,7 @@ class GuestRegistry
         if (isset($registration_data[ $guest_id ])) {
             $registration_id = $registration_data[ $guest_id ][ 'registration_id' ];
             unset($registration_data[ $guest_id ]);
-            update_post_meta($post_id, 'registration_data', $registration_data);
+            update_post_meta($post_id, 'staylodgic_registration_data', $registration_data);
 
             // Delete signature file
             $upload_dir     = wp_upload_dir();

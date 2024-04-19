@@ -62,6 +62,12 @@
 				// Scale opacity from 0.4 (for 1 room remaining) to 1 (for maxRooms remaining)
 				opacity = 0.3 * (roomsRemaining - 1) / (maxRooms - 1) + 0.7;
 			}
+			if ( maxRooms == 1 ) {
+				opacity = 1;
+			}
+			if ( maxRooms == 0 ) {
+				opacity = 1;
+			}
 			// Generate a random duration between 500 and 1500 milliseconds
 			var randomDuration = Math.floor(Math.random() * (1500 - 500 + 1)) + 500;
 			

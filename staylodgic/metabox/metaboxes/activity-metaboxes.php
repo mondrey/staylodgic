@@ -29,13 +29,6 @@ function staylodgic_activity_metadata()
                 'desc' => __('Add images for slideshow.', 'staylodgic'),
             ),
             array(
-                'name' => __('Dashboard color', 'staylodgic'),
-                'id'   => 'staylodgic_dashboard_color',
-                'std'  => staylodgic_random_color_hex(),
-                'type' => 'color',
-                'desc' => __('Color which represents in dashboard.', 'staylodgic'),
-            ),
-            array(
                 'name' => __('Description', 'staylodgic'),
                 'id'   => 'staylodgic_activity_desc',
                 'type' => 'textarea',
@@ -56,9 +49,16 @@ function staylodgic_activity_metadata()
             array(
                 'name' => __('Rate', 'staylodgic'),
                 'id'   => 'staylodgic_activity_rate',
-                'type' => 'text',
+                'type' => 'number',
                 'desc' => __('Rate for this activity.', 'staylodgic'),
                 'std'  => '',
+            ),
+            array(
+                'name' => __('Graph color', 'staylodgic'),
+                'id'   => 'staylodgic_dashboard_color',
+                'std'  => staylodgic_random_color_hex(),
+                'type' => 'color',
+                'desc' => __('Color which represents in dashboard.', 'staylodgic'),
             ),
             array(
                 'name'         => esc_html__('Page Settings', 'staylodgic'),

@@ -74,7 +74,7 @@ class Staylodgic_Init
 
     public function staylodgic_load_textdomain()
     {
-        load_plugin_textdomain('imaginem-blocks-ii', false, basename(dirname(__FILE__)) . '/languages');
+        load_plugin_textdomain('staylodgic', false, basename(dirname(__FILE__)) . '/languages');
     }
 
     public function staylodgic_load_custom_posts()
@@ -521,6 +521,7 @@ class Staylodgic_Init
         wp_register_script('flatpickr', plugin_dir_url(__FILE__) . 'assets/js/flatpickr/flatpickr.js', array('jquery'), '1.0', true);
         wp_register_script('frontend-calendar', plugins_url('assets/js/frontend-calendar.js', __FILE__), array('jquery'), '1.0', true);
         wp_register_script('payment-helper', plugins_url('assets/js/payment-helper.js', __FILE__), array('jquery'), '1.0', true);
+        wp_register_style('staylodgic-indicator-icons', plugin_dir_url(__FILE__) . 'admin/css/indicator-icons.css', false, 'screen');
         wp_localize_script('frontend-calendar', 'frontendAjax',
             array(
                 'ajaxurl' => admin_url('admin-ajax.php'),
@@ -575,37 +576,37 @@ class Staylodgic_Init
     // Registry Metabox
     public function staylodgic_registryitemmetabox_init()
     {
-        add_meta_box('registryInfo-meta', esc_html__('Registry Options', 'imaginem-blocks-ii'), 'staylodgic_registryitem_metaoptions', 'slgc_guestregistry', 'normal', 'low');
-        add_meta_box('registryInfo-changelog', esc_html__('Registry Changelog', 'imaginem-blocks-ii'), 'staylodgic_registryitem_changelog', 'slgc_guestregistry', 'normal', 'low');
+        add_meta_box('registryInfo-meta', esc_html__('Registry Options', 'staylodgic'), 'staylodgic_registryitem_metaoptions', 'slgc_guestregistry', 'normal', 'low');
+        add_meta_box('registryInfo-changelog', esc_html__('Registry Changelog', 'staylodgic'), 'staylodgic_registryitem_changelog', 'slgc_guestregistry', 'normal', 'low');
     }
     // Reservations Metabox
     public function staylodgic_reservationsitemmetabox_init()
     {
-        add_meta_box('activityresInfo-meta', esc_html__('Activity Reservations Options', 'imaginem-blocks-ii'), 'staylodgic_activityresitem_metaoptions', 'slgc_activityres', 'normal', 'low');
-        add_meta_box('activityresInfo-changelog', esc_html__('Activity Reservations Changelog', 'imaginem-blocks-ii'), 'staylodgic_activityresitem_changelog', 'slgc_activityres', 'normal', 'low');
+        add_meta_box('activityresInfo-meta', esc_html__('Activity Reservations Options', 'staylodgic'), 'staylodgic_activityresitem_metaoptions', 'slgc_activityres', 'normal', 'low');
+        add_meta_box('activityresInfo-changelog', esc_html__('Activity Reservations Changelog', 'staylodgic'), 'staylodgic_activityresitem_changelog', 'slgc_activityres', 'normal', 'low');
     }
     // ActivityRes Metabox
     public function staylodgic_activityresitemmetabox_init()
     {
-        add_meta_box('reservationsInfo-meta', esc_html__('Reservation Options', 'imaginem-blocks-ii'), 'staylodgic_reservationsitem_metaoptions', 'slgc_reservations', 'normal', 'low');
-        add_meta_box('reservationsInfo-changelog', esc_html__('Reservation Changelog', 'imaginem-blocks-ii'), 'staylodgic_reservationsitem_changelog', 'slgc_reservations', 'normal', 'low');
+        add_meta_box('reservationsInfo-meta', esc_html__('Reservation Options', 'staylodgic'), 'staylodgic_reservationsitem_metaoptions', 'slgc_reservations', 'normal', 'low');
+        add_meta_box('reservationsInfo-changelog', esc_html__('Reservation Changelog', 'staylodgic'), 'staylodgic_reservationsitem_changelog', 'slgc_reservations', 'normal', 'low');
     }
     // Customer Metabox
     public function staylodgic_customersitemmetabox_init()
     {
-        add_meta_box('customersInfo-meta', esc_html__('Customer Options', 'imaginem-blocks-ii'), 'staylodgic_customersitem_metaoptions', 'slgc_customers', 'normal', 'low');
+        add_meta_box('customersInfo-meta', esc_html__('Customer Options', 'staylodgic'), 'staylodgic_customersitem_metaoptions', 'slgc_customers', 'normal', 'low');
     }
     // Room Metabox
     public function staylodgic_roomitemmetabox_init()
     {
-        add_meta_box("room-meta", esc_html__("Room Options", "imaginem-blocks"), "staylodgic_roomitem_metaoptions", "slgc_room", "normal", "low");
-        add_meta_box("room-changelog", esc_html__("Room Changelog", "imaginem-blocks"), "staylodgic_roomitem_changelog", "slgc_room", "normal", "low");
+        add_meta_box("room-meta", esc_html__("Room Options", "staylodgic"), "staylodgic_roomitem_metaoptions", "slgc_room", "normal", "low");
+        add_meta_box("room-changelog", esc_html__("Room Changelog", "staylodgic"), "staylodgic_roomitem_changelog", "slgc_room", "normal", "low");
     }
     // Room Metabox
     public function staylodgic_activityitemmetabox_init()
     {
-        add_meta_box("activity-meta", esc_html__("Activity Options", "imaginem-blocks"), "staylodgic_activityitem_metaoptions", "slgc_activity", "normal", "low");
-        add_meta_box("activity-changelog", esc_html__("Activity Changelog", "imaginem-blocks"), "staylodgic_activityitem_changelog", "slgc_activity", "normal", "low");
+        add_meta_box("activity-meta", esc_html__("Activity Options", "staylodgic"), "staylodgic_activityitem_metaoptions", "slgc_activity", "normal", "low");
+        add_meta_box("activity-changelog", esc_html__("Activity Changelog", "staylodgic"), "staylodgic_activityitem_changelog", "slgc_activity", "normal", "low");
     }
 }
 

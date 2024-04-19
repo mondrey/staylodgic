@@ -34,7 +34,7 @@ class FormGenerator
         if (current_user_can('manage_options') && isset($_GET['guest']) && !empty($_GET['guest'])) {
             $guest             = sanitize_text_field($_GET[ 'guest' ]); // Sanitize the input
             $post_id           = get_the_ID(); // Get current post ID
-            $registration_data = get_post_meta($post_id, 'registration_data', true); // Retrieve all registration data
+            $registration_data = get_post_meta($post_id, 'staylodgic_registration_data', true); // Retrieve all registration data
 
             // Check if there's specific registration data for the provided guest ID
             if (isset($registration_data[ $guest ])) {

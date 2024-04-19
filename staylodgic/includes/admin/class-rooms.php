@@ -36,6 +36,7 @@ class Rooms
                 'post_type' => 'slgc_room',
                 'orderby' => 'title',
                 'numberposts' => -1,
+                'orderby' => 'menu_order',
                 'order' => 'ASC',
                 'post_status' => 'publish',
             )
@@ -59,7 +60,7 @@ class Rooms
 
     public static function isChannelRoomBooked($room_id, $dateString)
     {
-        $channelArray = get_post_meta($room_id, 'channel_quantity_array', true);
+        $channelArray = get_post_meta($room_id, 'staylodgic_channel_quantity_array', true);
 
         // Check if the channel_quantity_array exists and the quanitity field is available
         if (!empty($channelArray) && isset($channelArray['quantity'])) {
@@ -79,7 +80,7 @@ class Rooms
     public static function getTotalOperatingRoomQtyForDate($room_id, $dateString)
     {
 
-        $quantityArray = get_post_meta($room_id, 'quantity_array', true);
+        $quantityArray = get_post_meta($room_id, 'staylodgic_quantity_array', true);
 
         // $reservation_instance = new \Staylodgic\Reservations($dateString, $room_id);
         // $remaining = $reservation_instance->getDirectRemainingRoomCount( $dateString, $room_id );
@@ -98,7 +99,7 @@ class Rooms
         if ( self::isChannelRoomBooked($room_id, $dateString) ) {
             return '0';
         }
-        $quantityArray = get_post_meta($room_id, 'quantity_array', true);
+        $quantityArray = get_post_meta($room_id, 'staylodgic_quantity_array', true);
 
         // Check if the quantity_array exists and the date is available
         if (!empty($quantityArray) && isset($quantityArray[$dateString])) {
@@ -411,7 +412,7 @@ class Rooms
 
         $numberOfDaysInSelection = \Staylodgic\Common::countDays_BetweenDates( $startDate, $endDate );
 
-        if ( $numberOfDaysInSelection > 32 ) {
+        if ( $numberOfDaysInSelection > 64 ) {
             // Return an error response if dateRange is invalid
             $response = array(
                 'success' => false,
@@ -424,7 +425,7 @@ class Rooms
         }
 
         // Retrieve the existing quantity_array meta value
-        $quantityArray = get_post_meta($postID, 'quantity_array', true);
+        $quantityArray = get_post_meta($postID, 'staylodgic_quantity_array', true);
 
         // If the quantity_array is not an array, initialize it as an empty array
         if (!is_array($quantityArray)) {
@@ -476,7 +477,7 @@ class Rooms
         // Update the metadata for the 'slgc_reservations' post
         if (!empty($postID) && is_numeric($postID) && is_array($quantityArray)) {
             // Update the post meta with the modified quantity array
-            update_post_meta($postID, 'quantity_array', $quantityArray);
+            update_post_meta($postID, 'staylodgic_quantity_array', $quantityArray);
             // Return a success response
             $response = array(
                 'success' => true,
@@ -600,8 +601,22 @@ class Rooms
             $endDate = $startDate;
         }
 
+        $numberOfDaysInSelection = \Staylodgic\Common::countDays_BetweenDates( $startDate, $endDate );
+
+        if ( $numberOfDaysInSelection > 64 ) {
+            // Return an error response if dateRange is invalid
+            $response = array(
+                'success' => false,
+                'data' => array(
+                    'message' => 'Too many days to process.',
+                ),
+            );
+            wp_send_json_error($response);
+            return;            
+        }
+
         // Retrieve the existing roomrate_array meta value
-        $roomrateArray = get_post_meta($postID, 'roomrate_array', true);
+        $roomrateArray = get_post_meta($postID, 'staylodgic_roomrate_array', true);
 
         // If the quantity_array is not an array, initialize it as an empty array
         if (!is_array($roomrateArray)) {
@@ -619,7 +634,7 @@ class Rooms
         // Update the metadata for the 'slgc_reservations' post
         if (!empty($postID) && is_numeric($postID)) {
             // Update the post meta with the modified quantity array
-            update_post_meta($postID, 'roomrate_array', $roomrateArray);
+            update_post_meta($postID, 'staylodgic_roomrate_array', $roomrateArray);
             // Return a success response
             $response = array(
                 'success' => true,

@@ -602,7 +602,7 @@ function staylodgic_get_image_id_from_url($image_url)
 function staylodgic_get_proofing_attachments($page_id)
 {
     $filter_image_ids = false;
-    $the_image_ids    = get_post_meta($page_id, '_staylodgic_proofing_image_ids');
+    $the_image_ids    = get_post_meta($page_id, 'staylodgic_proofing_image_ids');
     if ($the_image_ids) {
         $filter_image_ids = explode(',', $the_image_ids[0]);
         return $filter_image_ids;

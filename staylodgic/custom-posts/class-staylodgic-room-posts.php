@@ -13,7 +13,7 @@ class staylodgic_Room_Posts
 
         if (is_admin()) {
             if (isset($_GET["page"])) {
-                if ($_GET["page"] == "class-imaginem-room-posts.php") {
+                if ($_GET["page"] == "class-staylodgic-room-posts.php") {
                     add_filter('posts_orderby', array($this, 'staylodgic_room_orderby'));
                 }
             }
@@ -68,6 +68,12 @@ class staylodgic_Room_Posts
 }
     public function staylodgic_save_room_order()
     {
+
+        // Check for nonce security
+        if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'staylodgic-nonce-admin')) {
+            wp_die();
+        }
+        
         global $wpdb; // WordPress database class
 
         $order   = explode(',', $_POST['order']);
@@ -200,7 +206,7 @@ class staylodgic_Room_Posts
                 wp_enqueue_style('thickbox');
                 wp_enqueue_style('mtheme-room-sorter-CSS', plugin_dir_url(__FILE__) . 'css/style.css', false, '1.0', 'all');
                 if (isset($_GET["page"])) {
-                    if ($_GET["page"] == "class-imaginem-room-posts.php") {
+                    if ($_GET["page"] == "class-staylodgic-room-posts.php") {
                         wp_enqueue_script("post-sorter-JS", plugin_dir_url(__FILE__) . "js/post-sorter.js", array('jquery'), "1.1");
                     }
                 }

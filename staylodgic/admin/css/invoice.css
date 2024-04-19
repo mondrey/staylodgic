@@ -201,6 +201,19 @@ h2#invoice-subheading,
 	margin-top: 10px;
 }
 
+.registrations-not-found-notice-wrap {
+	text-align: center;
+}
+.registrations-not-found-notice {
+	text-align: center;
+	margin-top: 20px;
+	margin-bottom: 30px;
+	padding: 10px 20px;
+	background: #ff0909;
+	display: inline-block;
+	color: #fff;
+}
+
 
 @media print {
     body {

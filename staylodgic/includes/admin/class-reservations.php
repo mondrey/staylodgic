@@ -388,7 +388,7 @@ class Reservations
     public function cleanup_Reservations_Array($room_id)
     {
 
-        $reservations_array = get_post_meta($room_id, 'reservations_array', true);
+        $reservations_array = get_post_meta($room_id, 'staylodgic_reservations_array', true);
 
         if (empty($reservations_array)) {
             $reservations_array = [];
@@ -413,7 +413,7 @@ class Reservations
             $reservations_array = array_filter($reservations_array);
 
             // Update the reservations array metadata
-            update_post_meta($room_id, 'reservations_array', json_encode($reservations_array));
+            update_post_meta($room_id, 'staylodgic_reservations_array', json_encode($reservations_array));
         }
 
         return $reservations_array;
@@ -430,7 +430,7 @@ class Reservations
         }
 
         // Retrieve the total rooms available for the room for all dates
-        $quantity_array = get_post_meta($room_id, 'quantity_array', true);
+        $quantity_array = get_post_meta($room_id, 'staylodgic_quantity_array', true);
 
         if (!is_array($quantity_array)) {
             $quantity_array = [];
@@ -493,7 +493,7 @@ class Reservations
         }
 
         // Update the remaining rooms count in the metadata
-        update_post_meta($room_id, 'remaining_rooms_count', json_encode($remaining_rooms_count));
+        update_post_meta($room_id, 'staylodgic_remaining_rooms_count', json_encode($remaining_rooms_count));
 
         return $remaining_rooms_count;
     }
@@ -516,7 +516,7 @@ class Reservations
             $date = $this->date;
         }
         // Retrieve the total rooms available for the room on the given date
-        $quantity_array = get_post_meta($room_id, 'quantity_array', true);
+        $quantity_array = get_post_meta($room_id, 'staylodgic_quantity_array', true);
         $total_rooms = isset($quantity_array[$date]) ? $quantity_array[$date] : 0;
 
         // Retrieve the reservations for the room on the given date
@@ -535,7 +535,7 @@ class Reservations
             $remaining_rooms_count = [];
         }
         $remaining_rooms_count[$date] = $remaining_rooms;
-        update_post_meta($room_id, 'remaining_rooms_count', json_encode($remaining_rooms_count));
+        update_post_meta($room_id, 'staylodgic_remaining_rooms_count', json_encode($remaining_rooms_count));
 
         return $remaining_rooms;
     }
@@ -551,7 +551,7 @@ class Reservations
             $room_id = $this->room_id;
         }
         // Fetch the JSON-encoded remaining rooms count from metadata
-        $remainingQuantityArray_json = get_post_meta($room_id, 'remaining_rooms_count', true);
+        $remainingQuantityArray_json = get_post_meta($room_id, 'staylodgic_remaining_rooms_count', true);
 
         // Decode the JSON string
         $remainingQuantityArray = json_decode($remainingQuantityArray_json, true);
@@ -566,7 +566,7 @@ class Reservations
 
 
     /**
-     * Gets the remaining room count from the 'remaining_rooms_count' meta field for a given date and room ID.
+     * Gets the remaining room count from the 'staylodgic_remaining_rooms_count' meta field for a given date and room ID.
      * 
      * @param string $date The date to check availability for.
      * @param int $room_id The ID of the room.
@@ -635,7 +635,7 @@ class Reservations
 
     public function updateRemainingRoomCount($room_id) {
         $reservations_array = $this->getReservations_Array($room_id);
-        $quantity_array = get_post_meta($room_id, 'quantity_array', true);
+        $quantity_array = get_post_meta($room_id, 'staylodgic_quantity_array', true);
         // error_log( 'print_r( $reservations_array,1 )' );
         // error_log( print_r( $reservations_array,1 ) );
         // Initialize remaining rooms count
@@ -648,7 +648,7 @@ class Reservations
         }
 
         // Update the remaining rooms count meta field
-        update_post_meta($room_id, 'remaining_rooms_count', json_encode($remainingRoomsCount));
+        update_post_meta($room_id, 'staylodgic_remaining_rooms_count', json_encode($remainingRoomsCount));
     }
 
     public function countReservationsForDay($room_id = false, $day = false, $excluded_reservation_id = false)
@@ -666,7 +666,7 @@ class Reservations
         }
 
         // Retrieve the reservations array for the room type
-        $reservations_array_json = get_post_meta($room_id, 'reservations_array', true);
+        $reservations_array_json = get_post_meta($room_id, 'staylodgic_reservations_array', true);
 
         //print_r($reservations_array_json );
         // If the reservations array is empty or not a JSON string, return 0
@@ -1445,7 +1445,7 @@ class Reservations
             $room_id = $this->room_id;
         }
 
-        $reservations_array = get_post_meta($room_id, 'reservations_array', true);
+        $reservations_array = get_post_meta($room_id, 'staylodgic_reservations_array', true);
 
         if (empty($reservations_array)) {
             $reservations_array = [  ];

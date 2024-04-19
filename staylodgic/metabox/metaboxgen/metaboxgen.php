@@ -271,7 +271,7 @@ function staylodgic_generate_metaboxes($meta_data, $post_id)
                 case 'proofing_gallery':
                     // SPECIAL CASE:
                     // std controls button text; unique meta key for image uploads
-                    $meta          = get_post_meta($post_id, '_staylodgic_proofing_image_ids', true);
+                    $meta          = get_post_meta($post_id, 'staylodgic_proofing_image_ids', true);
                     $thumbs_output = '';
                     $button_text   = ($meta) ? esc_html__('Edit Proofing Gallery', 'staylodgic') : $field['std'];
                     $renew_meta    = '';
@@ -302,7 +302,7 @@ function staylodgic_generate_metaboxes($meta_data, $post_id)
                     '<td>
 			    		<input type="button" class="button" name="' . esc_attr($field['id']) . '" id="staylodgic_proofing_images_upload" value="' . esc_attr($button_text) . '" />
 
-			    		<input type="hidden" name="staylodgic_meta[_staylodgic_proofing_image_ids]" id="_staylodgic_proofing_image_ids" value="' . esc_attr($renew_meta ? $renew_meta : 'false') . '" />
+			    		<input type="hidden" name="staylodgic_meta[staylodgic_proofing_image_ids]" id="staylodgic_proofing_image_ids" value="' . esc_attr($renew_meta ? $renew_meta : 'false') . '" />
 
 			    		<ul class="mtheme-proofing-gallery-thumbs">' . $thumbs_output . '</ul>
 			    	</td>';
@@ -882,7 +882,7 @@ function staylodgic_generate_metaboxes($meta_data, $post_id)
                                     $schedule_container .= '
                                         <div class="time-input-wrapper">
                                             <input type="time" name="staylodgic_activity_schedule[' . $day_lower . '][]" value="' . esc_attr($time) . '">
-                                            <span class="remove-time-input">Remove</span>
+                                            <span class="remove-time-input"><i class="dashicons dashicons-remove"></i></span>
                                         </div>';
                                 }
                             } else {
@@ -890,7 +890,7 @@ function staylodgic_generate_metaboxes($meta_data, $post_id)
                                 $schedule_container .= '
                                     <div class="time-input-wrapper">
                                         <input type="time" name="staylodgic_activity_schedule[' . $day_lower . '][]" value="">
-                                        <span class="remove-time-input">Remove</span>
+                                        <span class="remove-time-input"><i class="dashicons dashicons-remove"></i></span>
                                     </div>';
                             }
                 
@@ -1453,7 +1453,7 @@ function staylodgic_save_proofing_images()
     }
 
     $ids = strip_tags(rtrim($_POST['ids'], ','));
-    update_post_meta($_POST['post_id'], '_staylodgic_proofing_image_ids', $ids);
+    update_post_meta($_POST['post_id'], 'staylodgic_proofing_image_ids', $ids);
 
     // update thumbs
     $thumbs        = explode(',', $ids);

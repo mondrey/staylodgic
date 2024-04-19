@@ -41,10 +41,10 @@ class AvailablityCalendar extends AvailablityCalendarBase
 
             if ( 0 == $_POST['confirmed_only'] ) {
                 // Update the option based on the switch value
-                update_option('availsettings_confirmed_only', 0 );
+                update_option('staylodgic_availsettings_confirmed_only', 0 );
             } else {
                 // Update the option based on the switch value
-                update_option('availsettings_confirmed_only', 1 );
+                update_option('staylodgic_availsettings_confirmed_only', 1 );
             }
     
             // Return a success response
@@ -146,11 +146,11 @@ class AvailablityCalendar extends AvailablityCalendarBase
     }
 
     public function getDisplayConfirmedStatus() {
-        $this->availConfirmedOnly = get_option('availsettings_confirmed_only');
+        $this->availConfirmedOnly = get_option('staylodgic_availsettings_confirmed_only');
 
         // Check if the option is not found and set it to '1'
         if ($this->availConfirmedOnly === false) {
-            update_option('availsettings_confirmed_only', true);
+            update_option('staylodgic_availsettings_confirmed_only', true);
             $this->availConfirmedOnly = true;
         }
 

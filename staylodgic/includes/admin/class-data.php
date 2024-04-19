@@ -183,7 +183,7 @@ class Data
     public function removeReservation_ID($room_type, $reservation_post_id)
     {
         // Retrieve the reservations array for the room type
-        $reservations_array_json = get_post_meta($room_type, 'reservations_array', true);
+        $reservations_array_json = get_post_meta($room_type, 'staylodgic_reservations_array', true);
 
         // Check if the reservations array is empty or not a JSON string
         if (empty($reservations_array_json) || !is_string($reservations_array_json)) {
@@ -230,8 +230,8 @@ class Data
         $reservations_array_json = json_encode($reservations_array);
         // Update the reservations array meta field
 
-        update_post_meta($room_type, 'reservations_array', $reservations_array_json);
-        // $reservations_array_json = get_post_meta($room_type, 'reservations_array', true);
+        update_post_meta($room_type, 'staylodgic_reservations_array', $reservations_array_json);
+        // $reservations_array_json = get_post_meta($room_type, 'staylodgic_reservations_array', true);
         // print_r( $reservations_array_json );die();
     }
 
@@ -287,8 +287,8 @@ class Data
         $reservation_instance = new \Staylodgic\Reservations();
         $reservations_array   = $reservation_instance->getReservations_Array($room_id);
 
-        $previous_checkin_date  = get_post_meta($reservation_post_id, 'previous_checkin_date', true);
-        $previous_checkout_date = get_post_meta($reservation_post_id, 'previous_checkout_date', true);
+        $previous_checkin_date  = get_post_meta($reservation_post_id, 'staylodgic_previous_checkin_date', true);
+        $previous_checkout_date = get_post_meta($reservation_post_id, 'staylodgic_previous_checkout_date', true);
 
         // Adjust the checkout dates to be one day earlier
         $previous_checkout_date = date('Y-m-d', strtotime($previous_checkout_date . ' -1 day'));
@@ -300,9 +300,9 @@ class Data
         $reservations_array = self::removeDates_From_ReservationsArray($previous_dates, $reservation_post_id, $reservations_array);
         $reservations_array = self::addDates_To_ReservationsArray($updated_dates, $reservation_post_id, $reservations_array);
 
-        update_post_meta($room_id, 'reservations_array', json_encode($reservations_array));
-        update_post_meta($reservation_post_id, 'previous_checkin_date', $checkin_date);
-        update_post_meta($reservation_post_id, 'previous_checkout_date', $checkout_date); // Keeping original checkout date for records
+        update_post_meta($room_id, 'staylodgic_reservations_array', json_encode($reservations_array));
+        update_post_meta($reservation_post_id, 'staylodgic_previous_checkin_date', $checkin_date);
+        update_post_meta($reservation_post_id, 'staylodgic_previous_checkout_date', $checkout_date); // Keeping original checkout date for records
     }
 
 
@@ -383,7 +383,7 @@ class Data
                 //error_log("After removing ID {$reservation_post_id} from room {$room->ID}: " . print_r($reservations_array, true));
             }
 
-            update_post_meta($room->ID, 'reservations_array', json_encode($reservations_array));
+            update_post_meta($room->ID, 'staylodgic_reservations_array', json_encode($reservations_array));
         }
     }
 }

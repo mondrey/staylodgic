@@ -156,7 +156,7 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
                 $room_id    = $room_ids[ $i ];
                 $room_links = array();
                 
-                $old_room_data = get_post_meta($room_id, 'channel_quantity_array', true);
+                $old_room_data = get_post_meta($room_id, 'staylodgic_channel_quantity_array', true);
                 error_log( '----- Before Stored iCal Data' );
                 error_log( print_r( $old_room_data , true ) );
                 // Ensure that $room_links_url[$i] is an array before trying to count its elements
@@ -164,7 +164,7 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
                     for ($j = 0; $j < count($room_links_url[ $i ]); $j++) {
 
                         // Get the old room data
-                        $old_room_links = get_post_meta($room_id, 'availability_ical_data', true);
+                        $old_room_links = get_post_meta($room_id, 'staylodgic_availability_ical_data', true);
 
                         // Check if the URL is valid
                         if (filter_var($room_links_url[ $i ][ $j ], FILTER_VALIDATE_URL)) {
@@ -193,8 +193,8 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
                 }
 
                 // Update the meta field in the database.
-                update_post_meta($room_id, 'availability_ical_data', $room_links);
-                delete_post_meta($room_id, 'channel_quantity_array', null);
+                update_post_meta($room_id, 'staylodgic_availability_ical_data', $room_links);
+                delete_post_meta($room_id, 'staylodgic_channel_quantity_array', null);
             }
             
             // Sync on Save processing full batch ( process intensive )
@@ -213,7 +213,7 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
     public function areCalendarsConfigured() {
         $rooms = Rooms::queryRooms();
         foreach ($rooms as $room) {
-            $room_ical_data = get_post_meta($room->ID, 'availability_ical_data', true);
+            $room_ical_data = get_post_meta($room->ID, 'staylodgic_availability_ical_data', true);
             if (!empty($room_ical_data)) {
                 // Calendar URLs exist
                 return true;
@@ -260,7 +260,7 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
                 continue; // Skip already processed rooms
             }
 
-            $room_ical_data = get_post_meta($room->ID, 'availability_ical_data', true);
+            $room_ical_data = get_post_meta($room->ID, 'staylodgic_availability_ical_data', true);
 
             if (is_array($room_ical_data) && count($room_ical_data) > 0) {
                 foreach ($room_ical_data as $ical_link) {
@@ -297,7 +297,7 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
 
             if (isset($blocked_dates['ical'][$room->ID])) {
 
-                update_post_meta($room->ID, 'channel_quantity_array', $blocked_dates['ical'][$room->ID]);
+                update_post_meta($room->ID, 'staylodgic_channel_quantity_array', $blocked_dates['ical'][$room->ID]);
                 
             }
         }
@@ -387,8 +387,8 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
         $rooms = Rooms::queryRooms();
         foreach ($rooms as $room) {
             // Get meta
-            $room_ical_data = get_post_meta($room->ID, 'availability_ical_data', true);
-            $room_channel_availability = get_post_meta($room->ID, 'channel_quantity_array', true);
+            $room_ical_data = get_post_meta($room->ID, 'staylodgic_availability_ical_data', true);
+            $room_channel_availability = get_post_meta($room->ID, 'staylodgic_channel_quantity_array', true);
 
             echo '<div class="room_ical_links_wrapper" data-room-id="' . $room->ID . '">';
             echo "<h2>" . $room->post_title . "</h2>";
@@ -463,7 +463,7 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
         $rooms = Rooms::queryRooms();
         foreach ($rooms as $room) {
             // Get meta
-            $room_ical_data = get_post_meta($room->ID, 'availability_ical_data', true);
+            $room_ical_data = get_post_meta($room->ID, 'staylodgic_availability_ical_data', true);
 
             echo '<div class="room_ical_links_wrapper" data-room-id="' . $room->ID . '">';
             echo "<h2>" . $room->post_title . "</h2>";
@@ -489,12 +489,12 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
 
     public function handle_export_request($roomId) {
     
-        // Retrieve the 'quantity_array' and 'channel_quantity_array'
+        // Retrieve the 'staylodgic_quantity_array' and 'staylodgic_channel_quantity_array'
         $room_reservations_instance = new \Staylodgic\Reservations( $dateString = false, $roomId );
         $room_reservations_instance->calculateAndUpdateRemainingRoomCountsForAllDates();
         $remainingQuantityArray = $room_reservations_instance->getRemainingRoomCountArray();
         
-        $channelArray = get_post_meta($roomId, 'channel_quantity_array', true);
+        $channelArray = get_post_meta($roomId, 'staylodgic_channel_quantity_array', true);
         $channelQuantityArray = isset($channelArray['quantity']) ? $channelArray['quantity'] : [];
 
         $new_remainingQuantityArray = $this->filterFutureDates($remainingQuantityArray);
