@@ -90,12 +90,13 @@ class Staylodgic_Init
     public function staylodgic_load_availablity_calendar()
     {
 
-        require_once plugin_dir_path(__FILE__) . 'includes/admin/class-siteadmin.php';
-
         require_once plugin_dir_path(__FILE__) . 'includes/admin-property-data.php';
 
         require_once plugin_dir_path(__FILE__) . 'vendors/ics-parser/src/ICal/ICal.php';
         require_once plugin_dir_path(__FILE__) . 'vendors/ics-parser/src/ICal/Event.php';
+        require_once plugin_dir_path(__FILE__) . 'includes/admin/class-analytics-bookings.php';
+        require_once plugin_dir_path(__FILE__) . 'includes/admin/class-activity.php';
+        require_once plugin_dir_path(__FILE__) . 'includes/admin/class-analytics-activity.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-batchprocessorbase.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-icalexportprocessor.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-availabilitybatchprocessor.php';
@@ -116,9 +117,6 @@ class Staylodgic_Init
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-invoicing.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-guestregistry.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-formgenerator.php';
-        require_once plugin_dir_path(__FILE__) . 'includes/admin/class-analytics-bookings.php';
-        require_once plugin_dir_path(__FILE__) . 'includes/admin/class-activity.php';
-        require_once plugin_dir_path(__FILE__) . 'includes/admin/class-analytics-activity.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-tax.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/utilities.php';
     }
@@ -444,7 +442,7 @@ class Staylodgic_Init
                 wp_enqueue_style('select2', plugin_dir_url(__FILE__) . 'assets/js/select2/css/select2.min.css', array(), false, 'screen');
             }
             
-            if ($current_admin_screen->base == 'view-availability_page_slgc-availability-yearly') {
+            if (isset($_GET['page']) && $_GET['page'] == 'slgc-availability-yearly') {
 
                 wp_enqueue_style('availability-admin-styles');
                 wp_enqueue_style('staylodgic-indicator-icons');
@@ -471,8 +469,7 @@ class Staylodgic_Init
                 wp_enqueue_script('admin-post-meta');
 
             }
-
-            if ($current_admin_screen->base == 'toplevel_page_slgc-availability') {
+            if (isset($_GET['page']) && $_GET['page'] == 'slgc-availability') {
 
                 wp_enqueue_style('availability-admin-styles');
                 wp_enqueue_style('staylodgic-indicator-icons');

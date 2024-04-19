@@ -17,7 +17,7 @@ class AvailablityCalendarYear extends AvailablityCalendarBase
     {
         // Add the Availability submenu item under the parent menu
         add_submenu_page(
-            'slgc-availability',
+            'slgc-dashboard',
             'Availability Annum',
             'Availability Annum',
             'manage_options',

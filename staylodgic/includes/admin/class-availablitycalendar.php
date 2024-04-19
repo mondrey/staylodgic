@@ -116,14 +116,13 @@ class AvailablityCalendar extends AvailablityCalendarBase
     public function AvailablityCalendarDisplay()
     {
         // Add the parent menu item
-        add_menu_page(
+        add_submenu_page(
+            'slgc-dashboard',
             'View Availability',
             'View Availability',
             'manage_options',
             'slgc-availability',
             array($this, 'room_Reservation_Plugin_Display_Availability_Calendar'), // Callback for the parent page (can be empty if not needed)
-            'dashicons-visibility',
-            33
         );
 
     }

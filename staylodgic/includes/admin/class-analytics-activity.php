@@ -79,8 +79,8 @@ class ActivityAnalytics
         // Add the Availability submenu item under the parent menu
         add_submenu_page(
             'slgc-dashboard',
-            'Activity Dasboard',
-            'Activity Dasboard',
+            'Activity Dashboard',
+            'Activity Dashboard',
             'manage_options',
             'slgc-activity-dashboard',
             array($this, 'activity_display_dashboard')

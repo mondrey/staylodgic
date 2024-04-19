@@ -43,7 +43,7 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
     public function add_availability_admin_menu()
     {
         add_submenu_page(
-            'staylodgic',
+            'staylodgic-settings',
             // This is the slug of the parent menu
             'Import iCal Availabilitiy',
             'Import iCal Availabilitiy',
@@ -444,7 +444,7 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
 
     public function add_export_availability_admin_menu() {
         add_submenu_page(
-            'staylodgic', // Replace with the slug of the parent menu item
+            'staylodgic-settings', // Replace with the slug of the parent menu item
             'Export iCal Availability',
             'Export iCal Availability',
             'manage_options',

@@ -12,14 +12,25 @@ class BatchProcessorBase
 
     public function add_admin_menu()
     {
+        // Add the main menu page.
         add_menu_page(
-            'Staylodgic',
-            'Staylodgic',
-            'manage_options',
-            'staylodgic',
-            array($this, 'display_main_page'),
-            '',
-            34 // Position parameter
+            'Staylodgic Admin',             // Page title
+            'Staylodgic',                   // Menu title
+            'manage_options',               // Capability
+            'staylodgic-settings',          // Menu slug
+            array($this, 'display_main_page'), // Callback function
+            '',                             // Icon URL
+            34                              // Position
+        );
+
+        // Add the first submenu page. Often this duplicates the main menu page.
+        add_submenu_page(
+            'staylodgic-settings',          // Parent slug
+            'Welcome',                    // Page title
+            'Welcome',                    // Menu title
+            'manage_options',               // Capability
+            'staylodgic-settings',          // Menu slug
+            array($this, 'display_main_page') // Callback function
         );
     }
 

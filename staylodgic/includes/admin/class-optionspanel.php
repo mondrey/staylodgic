@@ -142,7 +142,7 @@ class OptionsPanel
     public function register_menu_page()
     {
         add_submenu_page(
-            $this->parent_page,
+            'staylodgic-settings',
             $this->title,
             $this->title,
             $this->user_capability,
@@ -1104,7 +1104,7 @@ if ($description) {
 
 // Register new Options panel.
 $panel_args = [
-    'parent_page'     => 'staylodgic',
+    'parent_page'     => 'staylodgic-settings',
     'title'           => 'Settings',
     'option_name'     => 'staylodgic_settings',
     'slug'            => 'staylodgic-settings-panel',

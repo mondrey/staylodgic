@@ -32,7 +32,7 @@ class IcalExportProcessor
     public function add_booking_admin_menu()
     {
         add_submenu_page(
-            'staylodgic',
+            'staylodgic-settings',
             // This is the slug of the parent menu
             'Export iCal Bookings',
             'Export iCal Bookings',

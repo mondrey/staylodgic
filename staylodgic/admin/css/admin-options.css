@@ -328,7 +328,7 @@
 .staylodgic-options-form .remove-set-button {
 	position: absolute;
 	right: -26px;
-	top: calc( 50% - 8px );
+	top: 50%;
 }
 .staylodgic-tab-item .fa-solid.fa-sort:hover {
 	cursor: grab;

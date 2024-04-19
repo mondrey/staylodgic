@@ -316,7 +316,7 @@ class GuestRegistry
             $this->hotelLogo
         );
 
-        if ( isset( $registrationSheet )) {
+        if ( isset( $registrationSheet ) ) {
             echo $registrationSheet;
         } else {
             echo '<div class="registrations-not-found-notice-wrap">';
@@ -343,7 +343,7 @@ class GuestRegistry
         error_log('staylodgic_registration_data');
         error_log(print_r($registration_data, true));
 
-        if (is_array($registration_data)) {
+        if (is_array($registration_data) && !empty( $registrationSheet )) {
             foreach ($registration_data as $guest_id => $guest_data) {
 
                 // Get the post URL

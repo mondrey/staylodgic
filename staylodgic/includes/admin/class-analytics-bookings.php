@@ -35,13 +35,23 @@ class AnalyticsBookings
     public function staylodgic_dashboard()
     {
         add_menu_page(
-            'Staylodgic Dashboard',
-            'Staylodgic Dashboard',
+            'Dashboard',
+            'Dashboard',
             'manage_options',
             'slgc-dashboard',
             array($this, 'display_dashboard'),
             '',
             32// Position parameter
+        );
+
+        // Add the first submenu page. Often this duplicates the main menu page.
+        add_submenu_page(
+            'slgc-dashboard',          // Parent slug
+            'Bookings Dashboard',                    // Page title
+            'Bookings Dashboard',                    // Menu title
+            'manage_options',               // Capability
+            'slgc-dashboard',          // Menu slug
+            array($this, 'display_dashboard') // Callback function
         );
     }
 
