@@ -296,6 +296,20 @@ h2#invoice-subheading,
 	margin-left: 16px;
 }
 
+.availability-sync-stats .file-error {
+	background: #ff0000;
+	color: #fff;
+	padding: 3px 7px;
+	font-weight: bold;
+}
+
+#save_all_ical_rooms .spinner-inactive {
+	display: none;
+}
+#save_all_ical_rooms .spinner-active {
+	display: inline-block;
+}
+
 
 @media print {
     body {

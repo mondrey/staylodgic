@@ -269,14 +269,27 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
                     $ics_id = $ical_link[ 'ical_id' ];
 
                     $startProcessTime = microtime(true); // Start time measurement
-                    $blocked_dates['ical'][$room->ID]['quantity'] = self::process_availability_link([], $room->ID, $ics_url);
+
+                    $file_ok = true;
+                    $file_contents = file_get_contents($ics_url);
+                    // Check if the feed is empty or incomplete
+                    if ($file_contents === false || empty($file_contents)) {
+                        $file_ok = false;
+                    }
+                    if (strpos($file_contents, 'BEGIN:VCALENDAR') === false || strpos($file_contents, 'END:VCALENDAR') === false) {
+                        $file_ok = false;
+                    }
+                    
+                    $blocked_dates['ical'][$room->ID]['quantity'] = self::process_availability_link([], $room->ID, $ics_url, $file_contents);
                     $endProcessTime = microtime(true); // End time measurement
                     $elapsedProcessTime = $endProcessTime - $startProcessTime; // Calculate elapsed time
                     // Process and save/update $blocked_dates as required
                     $blocked_dates['ical'][$room->ID]['stats'][$ics_id]['syncdate'] = date('Y-m-d');
                     $blocked_dates['ical'][$room->ID]['stats'][$ics_id]['synctime'] = date('H:i:s');
+                    $blocked_dates['ical'][$room->ID]['stats'][$ics_id]['file_ok'] = $file_ok; // Store elapsed time
                     $blocked_dates['ical'][$room->ID]['stats'][$ics_id]['syncprocessing_time'] = $elapsedProcessTime; // Store elapsed time
                     $blocked_dates['ical'][$room->ID]['stats'][$ics_id]['batch_count'] = $batch_count;
+
                 }
             }
 
@@ -337,23 +350,12 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
         $blocked_dates = array(),
         $room_id = false,
         $ics_url = false,
+        $file_contents = false
     )
     {
         // Create a new instance of the parser.
         $parser = new \ICal\ICal();
-        $file_contents = file_get_contents($ics_url);
-        error_log('File Contents: ' . substr($file_contents, 0, 500)); // Log first 500 characters        
-        // Check if the feed is empty or incomplete
-        if ($file_contents === false || empty($file_contents)) {
-            error_log( '----- AVAILABILITY FILE FALSE ' );
-            $this->error_urls[]=$ics_url;
-            return $blocked_dates;
-        }
-        if (strpos($file_contents, 'BEGIN:VCALENDAR') === false || strpos($file_contents, 'END:VCALENDAR') === false) {
-            error_log( '----- AVAILABILITY FILE INVALID ' );
-            $this->error_urls[]=$ics_url;
-            return $blocked_dates;
-        }
+
         error_log( '----- AVAILABILITY FILE VALID ' );
         // Parse the ICS file
         $parser->initString($file_contents);
@@ -418,7 +420,7 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
                     echo '<input readonly class="form-control" type="url" name="room_ical_links_url[]" value="' . esc_attr($ical_link[ 'ical_url' ]) . '">';
                     echo '<span class="input-group-text">Label</span>';
                     echo '<input readonly class="form-control" type="text" name="room_ical_links_comment[]" value="' . esc_attr($ical_link[ 'ical_comment' ]) . '">';
-                    echo '<button type="button" class="unlock_button btn btn-primary"><i class="fas fa-lock"></i></button>'; // Unlock button
+                    echo '<button type="button" class="unlock_button btn btn-warning"><i class="fas fa-lock"></i></button>'; // Unlock button
                     echo '</div>';
                     if (is_array($room_channel_availability) && isset($room_channel_availability['stats'])) {
                         foreach ($room_channel_availability['stats'] as $key => $value) {
@@ -430,12 +432,14 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
                                 $timezone = staylodgic_get_option('timezone');
                                 
                                 $adjustedValues = staylodgic_applyTimezoneToDateAndTime($syncDate, $syncTime, $timezone);
-                                error_log( '------ error urls -----------');
-                                error_log(print_r( $this->error_urls, 1 ));
+
                                 echo '<div class="availability-sync-stats">';
                                 echo '<span>Last sync: '.$adjustedValues['adjustedDate'].'</span>';
                                 echo '<span>Time: '.$adjustedValues['adjustedTime'].'</span>';
-                                echo '<span>Processed in: '.$room_channel_availability['stats'][$key]['syncprocessing_time'].' seconds</span>';
+                                echo '<span>Processed in ( seconds ): '.$room_channel_availability['stats'][$key]['syncprocessing_time'].'</span>';
+                                if ( ! $room_channel_availability['stats'][$key]['file_ok'] ) {
+                                    echo '<span class="file-error">File error</span>';
+                                }
                                 echo '</div>';
                                 break;
                             }
@@ -453,8 +457,11 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
             echo '<button type="button" class="add_more_ical button button-secondary button-small">Add more</button>';
             echo '</div>';
         }
-
-        echo '<input data-type="sync-availability" class="button button-primary button-large" type="submit" id="save_all_ical_rooms" value="Save All">';
+        echo '<button data-type="sync-availability" class="btn btn-primary" type="button" id="save_all_ical_rooms">';
+        echo '<span class="spinner-zone spinner-border-sm" aria-hidden="true"></span>';
+        echo '<span role="status"> Save All</span>';
+        echo '</button>';
+        //echo '<input data-type="sync-availability" class="button button-primary button-large" type="submit" id="save_all_ical_rooms" value="Save All">';
         echo "</form>";
         echo "</div>";
         echo "</div>";

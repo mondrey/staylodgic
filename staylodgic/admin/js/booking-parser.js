@@ -405,6 +405,9 @@
 			var room_links_id = [];
 			var room_links_url = [];
 			var room_links_comment = [];
+
+			$("#save_all_ical_rooms").find('.spinner-zone').addClass('spinner-border');
+			$("#save_all_ical_rooms").prop("disabled", true);
 		
 			// Get the nonce value from the form
 			var nonce = $('input[name="ical_form_nonce"]').val();
@@ -477,6 +480,8 @@
 					// If for some reason success was false (like if wp_send_json_error() was called), you can handle that here
 					alert("There was an error");
 				}
+				$("#save_all_ical_rooms").prop("disabled", false);
+				$("#save_all_ical_rooms").find('.spinner-zone').removeClass('spinner-border');
 			}).fail(function(jqXHR, textStatus, errorThrown){
 				console.log("Request failed: " + textStatus);
 				console.log("Error: " + errorThrown);
