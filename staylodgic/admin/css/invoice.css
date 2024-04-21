@@ -214,6 +214,88 @@ h2#invoice-subheading,
 	color: #fff;
 }
 
+.registration-notice.booking-number-not-found {
+	padding: 5px 10px;
+	background: #ffe4cb;
+	display: inline-block;
+	margin-left: 10px;
+}
+
+.invoice-container-buttons {
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+.slgc_reservations_page_staylodgic-invoicing h1 {
+	margin-top: 30px;
+	margin-bottom: 30px;
+	text-align: center;
+}
+
+.expor-import-calendar h1 {
+	font-size: 28px;
+	margin-top: 30px;
+	margin-bottom: 24px;
+}
+
+.import-export-heading {
+	margin-bottom: 7px;
+	font-weight: 600;
+}
+.import-export-wrap {
+	margin: 18px 0;
+}
+.room_ical_export_wrapper {
+	border-bottom: 1px solid #eee;
+	margin-bottom: 14px;
+	padding-bottom: 22px;
+}
+
+.availability-sync-stats {
+	font-size: 9px;
+	margin-top: 5px;
+	text-transform: uppercase;
+	color: #959595;
+}
+.availability-sync-stats span {
+	margin-right: 11px;
+}
+
+.room_ical_links_wrapper {
+	border-bottom: 1px solid #e8e8e8;
+	margin-bottom: 20px;
+	padding-bottom: 20px;
+}
+.add_more_ical.button.button-secondary {
+	margin-top: 14px;
+}
+.room_ical_link_group.input-group {
+	margin-top: 14px;
+}
+.how-to-admin h2 {
+	font-size: 16px;
+	margin-bottom: 18px;
+}
+.how-to-admin {
+	padding: 24px 30px 20px;
+	background: #fffce6;
+	margin-bottom: 20px;
+}
+
+.expor-import-calendar #export-import-form,
+.main-sync-form-wrap #sync-form {
+	max-width: 840px;
+	width: 100%;
+	float: none;
+}
+
+.how-to-admin ol {
+	padding-left: 0;
+	margin-top: 16px;
+	font-size: 13px;
+	margin-left: 16px;
+}
+
 
 @media print {
     body {

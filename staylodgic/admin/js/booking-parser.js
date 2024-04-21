@@ -64,6 +64,7 @@
 		$('.download_export_ical').on('click', function() {
 			var roomId = $(this).data('room-id');
 			var selectedMonth = $(".exporter_calendar").val(); // Get the selected month from the input field
+			console.log( selectedMonth );
 			$.ajax({
 				url: ajaxurl,
 				type: 'POST',
@@ -368,10 +369,12 @@
 		}
 
 		$('.room_ical_links_wrapper .add_more_ical').click(function(){
-			var group = '<div class="room_ical_link_group">';
-			group += '<input type="url" name="room_ical_links_url[]">';
-			group += '<input type="text" name="room_ical_links_comment[]">';
-			group += '<button type="button" class="remove_ical_group">Remove</button>';
+			var group = '<div class="room_ical_link_group input-group">';
+			group += '<span class="input-group-text">url</span>';
+			group += '<input aria-label="url" type="url" class="form-control" name="room_ical_links_url[]">';
+			group += '<span class="input-group-text">Label</span>';
+			group += '<input aria-label="label" type="text" class="form-control" name="room_ical_links_comment[]">';
+			group += '<button type="button" class="remove_ical_group btn btn-danger"><i class="fa-solid fa-xmark"></i></button>';
 			group += '</div>';
 		
 			$(this).before(group);

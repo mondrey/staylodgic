@@ -1107,7 +1107,7 @@ $panel_args = [
     'parent_page'     => 'staylodgic-settings',
     'title'           => 'Settings',
     'option_name'     => 'staylodgic_settings',
-    'slug'            => 'staylodgic-settings-panel',
+    'slug'            => 'slgc-settings-panel',
     'user_capability' => 'manage_options',
     'tabs'            => [
         'property'       => '<i class="fa fa-building"></i> ' . esc_html__('Property', 'staylodgic'),

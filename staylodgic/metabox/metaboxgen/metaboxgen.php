@@ -529,7 +529,13 @@ function staylodgic_generate_metaboxes($meta_data, $post_id)
                     if ( $text_value ) {
                         $registry_instance = new \Staylodgic\GuestRegistry();
                         $resRegIDs =  $registry_instance->fetchResRegIDsByBookingNumber( $text_value );
-                        echo $registry_instance->outputRegistrationAndOccupancy($resRegIDs['reservationID'], $resRegIDs['guestRegisterID'], 'text');
+                        if ( isset( $resRegIDs['reservationID'] ) && $resRegIDs['guestRegisterID'] ) {
+                            echo $registry_instance->outputRegistrationAndOccupancy($resRegIDs['reservationID'], $resRegIDs['guestRegisterID'], 'text');
+                        } else {
+                            echo '<div class="registration-notice booking-number-not-found">';
+                            echo __('Booking number not found.','staylodgic');
+                            echo '</div>';
+                        }
                         //echo $registry_instance->outputRegistrationAndOccupancy($resRegIDs['reservationID'], $resRegIDs['guestRegisterID'], 'icons');
                     }
 

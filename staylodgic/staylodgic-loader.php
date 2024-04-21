@@ -55,7 +55,13 @@ class Staylodgic_Init
         if (isset($_GET['page']) && $_GET['page'] == 'slgc-activity-dashboard') {
             $remove = true;
         }
-        if (isset($_GET['page']) && $_GET['page'] == 'staylodgic-settings-panel') {
+        if (isset($_GET['page']) && $_GET['page'] == 'slgc-settings-panel') {
+            $remove = true;
+        }
+        if (isset($_GET['page']) && $_GET['page'] == 'slgc-export-booking-ical') {
+            $remove = true;
+        }
+        if (isset($_GET['page']) && $_GET['page'] == 'slgc-import-availability-ical') {
             $remove = true;
         }
 
@@ -304,9 +310,10 @@ class Staylodgic_Init
                 wp_enqueue_script('bootstrap');
 
             }
-            if ($current_admin_screen->base == 'staylodgic_page_export-booking-ical') {
+            if ($current_admin_screen->base == 'staylodgic_page_slgc-export-booking-ical') {
 
                 wp_enqueue_script('staylodgic-parser');
+                wp_enqueue_style('staylodgic-invoice');
                 wp_enqueue_style('fontawesome-6');
                 wp_enqueue_style('fontawesome-6-brands');
                 wp_enqueue_style('fontawesome-6-solid');
@@ -321,9 +328,10 @@ class Staylodgic_Init
                 wp_enqueue_script('bootstrap');
 
             }
-            if ($current_admin_screen->base == 'staylodgic_page_import-availability-ical') {
+            if ($current_admin_screen->base == 'staylodgic_page_slgc-import-availability-ical') {
 
                 wp_enqueue_script('staylodgic-parser');
+                wp_enqueue_style('staylodgic-invoice');
                 wp_enqueue_style('fontawesome-6');
                 wp_enqueue_style('fontawesome-6-brands');
                 wp_enqueue_style('fontawesome-6-solid');
@@ -424,7 +432,7 @@ class Staylodgic_Init
                 )
             );
 
-            if ($current_admin_screen->base == 'staylodgic_page_staylodgic-settings-panel') {
+            if ($current_admin_screen->base == 'staylodgic_page_slgc-settings-panel') {
 
                 wp_enqueue_style('fontawesome-6');
                 wp_enqueue_style('fontawesome-6-brands');

@@ -22,7 +22,8 @@ class IcalExportProcessor
         }
         
         $room_id = isset($_POST['room_id']) ? intval($_POST['room_id']) : false;
-        $month = isset($_POST['month']) ? intval($_POST['month']) : false;
+        $month = isset($_POST['month']) ? $_POST['month'] : false;
+        error_log( 'init month is ' . $month );
         if ($room_id) {
             $this->download_reservations_csv($room_id, $month);
         }
@@ -34,10 +35,10 @@ class IcalExportProcessor
         add_submenu_page(
             'staylodgic-settings',
             // This is the slug of the parent menu
-            'Export iCal Bookings',
-            'Export iCal Bookings',
+            'Export CSV Bookings',
+            'Export CSV Bookings',
             'manage_options',
-            'export-booking-ical',
+            'slgc-export-booking-ical',
             array($this, 'csv_export')
         );
     }
@@ -45,24 +46,40 @@ class IcalExportProcessor
     public function csv_export()
     {
         // The HTML content of the 'Staylodgic' page goes here
-        echo "<h1>Export ICS Calendar</h1>";
+        echo '<div class="expor-import-calendar">';
+        echo '<div id="export-import-form">';
+        echo '<h1>Export Your Bookings</h1>';
+        echo '<p>Efficiently manage your records by exporting your room bookings. Select the room and month to generate a downloadable CSV file of the booking details.</p>';
+        echo '<div class="how-to-admin">';
+        echo '<h2>How to Export:</h2>';
+        echo '<ol>';
+        echo '<li>Choose the month for which you want to export bookings.</li>';
+        echo '<li>Click the "Donwload" button next to the choice of room to download your file.</li>';
+        echo '</ol>';
+        echo '</div>';
 
         echo "<form id='room_ical_form' method='post'>";
         echo '<input type="hidden" name="ical_form_nonce" value="' . wp_create_nonce('ical_form_nonce') . '">';
 
+        echo '<div class="import-export-heading">Choose calendar month for export</div>';
         echo '<input type="text" class="exporter_calendar" id="exporter_calendar" name="exporter_calendar" value="" />';
 
+        echo '<div class="import-export-wrap">';
         $rooms = Rooms::queryRooms();
         foreach ($rooms as $room) {
             // Get meta
             $room_ical_data = get_post_meta($room->ID, 'room_ical_data', true);
 
             echo '<div class="room_ical_export_wrapper" data-room-id="' . $room->ID . '">';
-            echo "<h2>" . $room->post_title . "</h2>";
-            echo '<button data-room-id="' . $room->ID . '" type="button" class="download_export_ical">Download</button>';
+            echo '<div class="import-export-heading">' . $room->post_title . '</div>';
+            echo '<button data-room-id="' . $room->ID . '" type="button" class="download_export_ical button button-primary button-large">Download</button>';
             echo '</div>';
         }
+
+        echo "</div>";
         echo "</form>";
+        echo "</div>";
+        echo "</div>";
     }
 
     public function generate_ical_from_reservations($reservations) {
@@ -117,7 +134,7 @@ class IcalExportProcessor
         exit;
     }
 
-    public function generate_csv_from_reservations($reservations) {
+    public function generate_csv_from_reservations($start_date,$end_date,$room_id) {
         
         $csv_data = "Booking Number,Room Name,Adults,Children,Checkin Date,Checkout Date,Reservation Status\r\n";
 
@@ -152,7 +169,7 @@ class IcalExportProcessor
         $csv_content = $this->generate_csv_from_reservations($start_date,$end_date,$room_id);
     
         $currentDateTime = date('Y-m-d_H-i-s'); // Formats the date and time as YYYY-MM-DD_HH-MM-SS
-        $filename = "reservations-{$room_id}-{$currentDateTime}.csv";
+        $filename = "reservations-{$room_id}-{$start_date}-{$end_date}-on-{$currentDateTime}.csv";
     
         header('Content-Type: text/csv; charset=utf-8');
         header("Content-Disposition: attachment; filename=\"$filename\"");

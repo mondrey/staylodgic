@@ -358,8 +358,10 @@ class GuestRegistry
                 // Inside your PHP loop where you're echoing out the delete buttons
                 ob_start();
                 ?>
+        <div class="invoice-container-buttons">
         <button data-title="Guest Registration <?php echo $guest_data[ 'registration_id' ]; ?>" data-id="<?php echo $guest_data[ 'registration_id' ]; ?>" id="print-invoice-button" class="button button-secondary paper-document-button print-invoice-button"><?php _e('Print','staylodgic'); ?></button>
         <button data-file="registration-<?php echo $guest_data[ 'registration_id' ]; ?>" data-id="<?php echo $guest_data[ 'registration_id' ]; ?>" id="save-pdf-invoice-button" class="button button-secondary paper-document-button save-pdf-invoice-button"><?php _e('Save PDF','staylodgic'); ?></button>
+        </div>
         </div>
         <div class="invoice-container" data-bookingnumber="<?php echo $guest_data[ 'registration_id' ]; ?>">
         <div class="invoice-container-inner">

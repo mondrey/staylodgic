@@ -26,8 +26,8 @@ class BatchProcessorBase
         // Add the first submenu page. Often this duplicates the main menu page.
         add_submenu_page(
             'staylodgic-settings',          // Parent slug
-            'Welcome',                    // Page title
-            'Welcome',                    // Menu title
+            'Main',                    // Page title
+            'Main',                    // Menu title
             'manage_options',               // Capability
             'staylodgic-settings',          // Menu slug
             array($this, 'display_main_page') // Callback function

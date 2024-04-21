@@ -6,6 +6,7 @@ use Error;
 class AvailabilityBatchProcessor extends BatchProcessorBase
 {
     private $batchSize = 50;
+    private $error_urls = array();
 
     public function __construct()
     {
@@ -48,7 +49,7 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
             'Import iCal Availabilitiy',
             'Import iCal Availabilitiy',
             'manage_options',
-            'import-availability-ical',
+            'slgc-import-availability-ical',
             array($this, 'ical_availability_import')
         );
     }
@@ -345,10 +346,12 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
         // Check if the feed is empty or incomplete
         if ($file_contents === false || empty($file_contents)) {
             error_log( '----- AVAILABILITY FILE FALSE ' );
+            $this->error_urls[]=$ics_url;
             return $blocked_dates;
         }
         if (strpos($file_contents, 'BEGIN:VCALENDAR') === false || strpos($file_contents, 'END:VCALENDAR') === false) {
             error_log( '----- AVAILABILITY FILE INVALID ' );
+            $this->error_urls[]=$ics_url;
             return $blocked_dates;
         }
         error_log( '----- AVAILABILITY FILE VALID ' );
@@ -377,9 +380,19 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
     {
 
         // The HTML content of your 'Import iCal' page goes here
-        echo "<div class='main-sync-form-wrap'>";
-        echo "<div id='sync-form'>";
-        echo "<h1>Import ICS Availability</h1>";
+        echo '<div class="expor-import-calendar">';
+        echo '<div class="main-sync-form-wrap">';
+        echo '<div id="sync-form">';
+        echo '<h1>Sync Your Calendar</h1>';
+        echo '<p>Keep your bookings up-to-date. Connect your iCalendar feeds to synchronize your booking availability with your StayLogic calendar. Simply enter the URLs for the calendars you wish to sync below.</p>';
+        echo '<div class="how-to-admin">';
+        echo '<h2>How to Sync:</h2>';
+        echo '<ol>';
+        echo '<li>Find your iCalendar URL from the external booking platform or calendar service.</li>';
+        echo '<li>Enter the iCalendar URL in the input field below.</li>';
+        echo '<li>Set a label for your reference.</li>';
+        echo '</ol>';
+        echo '</div>';
 
         echo "<form id='room_ical_form' method='post'>";
         echo '<input type="hidden" name="ical_form_nonce" value="' . wp_create_nonce('ical_form_nonce') . '">';
@@ -391,7 +404,7 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
             $room_channel_availability = get_post_meta($room->ID, 'staylodgic_channel_quantity_array', true);
 
             echo '<div class="room_ical_links_wrapper" data-room-id="' . $room->ID . '">';
-            echo "<h2>" . $room->post_title . "</h2>";
+            echo '<div class="import-export-heading">' . $room->post_title . '</div>';
             if (is_array($room_ical_data) && count($room_ical_data) > 0) {
                 foreach ($room_ical_data as $ical_id => $ical_link) {
 
@@ -399,11 +412,14 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
                         $ical_synced = $room_ical_data[ $ical_id ][ 'ical_synced' ];
                     }
 
-                    echo '<div class="room_ical_link_group">';
-                    echo '<input readonly type="text" name="room_ical_links_id[]" value="' . esc_attr($ical_link[ 'ical_id' ]) . '">';
-                    echo '<input readonly type="url" name="room_ical_links_url[]" value="' . esc_attr($ical_link[ 'ical_url' ]) . '">';
-                    echo '<input readonly type="text" name="room_ical_links_comment[]" value="' . esc_attr($ical_link[ 'ical_comment' ]) . '">';
-                    echo '<button type="button" class="unlock_button"><i class="fas fa-lock"></i></button>'; // Unlock button
+                    echo '<div class="room_ical_link_group input-group">';
+                    echo '<input readonly hidden type="text" name="room_ical_links_id[]" value="' . esc_attr($ical_link[ 'ical_id' ]) . '">';
+                    echo '<span class="input-group-text">url</span>';
+                    echo '<input readonly class="form-control" type="url" name="room_ical_links_url[]" value="' . esc_attr($ical_link[ 'ical_url' ]) . '">';
+                    echo '<span class="input-group-text">Label</span>';
+                    echo '<input readonly class="form-control" type="text" name="room_ical_links_comment[]" value="' . esc_attr($ical_link[ 'ical_comment' ]) . '">';
+                    echo '<button type="button" class="unlock_button btn btn-primary"><i class="fas fa-lock"></i></button>'; // Unlock button
+                    echo '</div>';
                     if (is_array($room_channel_availability) && isset($room_channel_availability['stats'])) {
                         foreach ($room_channel_availability['stats'] as $key => $value) {
                             // Check if the key matches the pattern or criteria you're looking for
@@ -414,30 +430,33 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
                                 $timezone = staylodgic_get_option('timezone');
                                 
                                 $adjustedValues = staylodgic_applyTimezoneToDateAndTime($syncDate, $syncTime, $timezone);
-
-                                echo '<p class="availability-sync-stats">';
+                                error_log( '------ error urls -----------');
+                                error_log(print_r( $this->error_urls, 1 ));
+                                echo '<div class="availability-sync-stats">';
                                 echo '<span>Last sync: '.$adjustedValues['adjustedDate'].'</span>';
                                 echo '<span>Time: '.$adjustedValues['adjustedTime'].'</span>';
-                                echo '<span>Processed in: '.$room_channel_availability['stats'][$key]['syncprocessing_time'].'</span>';
-                                echo '</p>';
+                                echo '<span>Processed in: '.$room_channel_availability['stats'][$key]['syncprocessing_time'].' seconds</span>';
+                                echo '</div>';
                                 break;
                             }
                         }
                     }
-                    echo '</div>';
                 }
             } else {
-                echo '<div class="room_ical_link_group">';
-                echo '<input type="url" name="room_ical_links_url[]">';
-                echo '<input type="text" name="room_ical_links_comment[]">';
+                echo '<div class="room_ical_link_group input-group">';
+                echo '<span class="input-group-text">url</span>';
+                echo '<input aria-label="url" class="form-control" type="url" name="room_ical_links_url[]">';
+                echo '<span class="input-group-text">Label</span>';
+                echo '<input aria-label="Label" class="form-control" type="text" name="room_ical_links_comment[]">';
                 echo '</div>';
             }
-            echo '<button type="button" class="add_more_ical">Add more</button>';
+            echo '<button type="button" class="add_more_ical button button-secondary button-small">Add more</button>';
             echo '</div>';
         }
 
-        echo '<input data-type="sync-availability" type="submit" id="save_all_ical_rooms" value="Save">';
+        echo '<input data-type="sync-availability" class="button button-primary button-large" type="submit" id="save_all_ical_rooms" value="Save All">';
         echo "</form>";
+        echo "</div>";
         echo "</div>";
         echo "</div>";
     }
@@ -448,7 +467,7 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
             'Export iCal Availability',
             'Export iCal Availability',
             'manage_options',
-            'export-availability-ical',
+            'slgc-export-availability-ical',
             array($this, 'export_availability_ical_page')
         );
     }
