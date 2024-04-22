@@ -482,17 +482,25 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
     public function export_availability_ical_page() {
 
         // The HTML content of your 'Import iCal' page goes here
-        echo "<div class='main-sync-form-wrap'>";
-        echo "<div id='sync-form'>";
-        echo "<h1>Export ICS Calendar</h1>";
-        echo "<p>Use the following URL to export the availability data as an iCal file:</p>";
+        echo '<div class="expor-import-calendar main-sync-form-wrap">';
+        echo '<div id="export-import-form">';
+        echo '<h1>iCal Feeds</h1>';
+        echo '<p>Synchronize availability for your rooms with other softwares using iCal feeds.</p>';
+        echo '<div class="how-to-admin">';
+        echo '<h2>How to:</h2>';
+        echo '<ol>';
+        echo '<li>Copy the url for the room.</li>';
+        echo '<li>Enter it to the software which is compatible with iCal feeds for availability.</li>';
+        echo '</ol>';
+        echo '</div>';
+
         $rooms = Rooms::queryRooms();
         foreach ($rooms as $room) {
             // Get meta
             $room_ical_data = get_post_meta($room->ID, 'staylodgic_availability_ical_data', true);
-
+          
             echo '<div class="room_ical_links_wrapper" data-room-id="' . $room->ID . '">';
-            echo "<h2>" . $room->post_title . "</h2>";
+            echo '<div class="import-export-heading">' . $room->post_title . '</div>';
 
             echo '<div class="room_ical_link_group">';
             // The URL to trigger the export functionality
@@ -501,8 +509,9 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
             $exportUrl .='&room='.$room->ID;
 
             // Page content
-            echo "<div class='export-ical-wrap'>";
-            echo "<input type='text' value='{$exportUrl}' readonly>";
+            echo "<div class='export-ical-wrap input-group'>";
+            echo "<input class='form-control urlField' type='text' value='{$exportUrl}' readonly>";
+            echo '<div class="btn btn-outline-secondary copy-url-button" data-bs-delay="0" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Copy to clipboard"><i class="fa-solid fa-copy"></i></div>';
             echo "</div>";
 
             echo '</div>';

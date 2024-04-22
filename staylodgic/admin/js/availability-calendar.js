@@ -113,14 +113,43 @@
 
 			var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
 			var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-				return new bootstrap.Tooltip(tooltipTriggerEl, {
-					animation: true,
-					delay: { "show": 1000, "hide": 100 }
-				});
+				return new bootstrap.Tooltip(tooltipTriggerEl);
 			});
 		}
+
+
+		function setupCopyButtonHandlers() {
+			$('.copy-url-button').click(function() {
+				var $button = $(this); // The copy button that was clicked
+				var $input = $button.closest('.export-ical-wrap').find('.urlField'); // Find the corresponding input
+		
+				// Copy text to clipboard
+				navigator.clipboard.writeText($input.val()).then(function() {
+					const tooltip = bootstrap.Tooltip.getInstance($button[0]); // Ensure to use DOM element when calling getInstance
+		
+					if (tooltip) {
+						// Update tooltip content
+						tooltip.setContent({ '.tooltip-inner': 'Copied!' });
+						tooltip.show(); // Make sure to show the tooltip if it's not already visible
+		
+						// Reset the tooltip title after 2 seconds
+						setTimeout(function() {
+							if (tooltip) {
+								tooltip.setContent({ '.tooltip-inner': 'Copy to clipboard' });
+								tooltip.hide(); // Optionally hide the tooltip
+							}
+						}, 2000);
+					}
+				}).catch(function(error) {
+					console.error('Error copying text: ', error);
+					// Optionally notify user that copy didn't work
+				});
+			});
+		}		
+
 		// Initially initialize tooltips
 		initializeTooltips();
+		setupCopyButtonHandlers();
 
 		var quantityModalDatepicker; // Declare a variable to hold the instance
 		var ratesModalDatepicker; // Declare a variable to hold the instance

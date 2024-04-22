@@ -474,7 +474,6 @@
 				if(response.success) {
 					// The success message from server is in response.data
 					// var successMessage = response.data;
-					// Display the success message in your form. Here I'm just alerting it.
 					location.reload();
 				} else {
 					// If for some reason success was false (like if wp_send_json_error() was called), you can handle that here

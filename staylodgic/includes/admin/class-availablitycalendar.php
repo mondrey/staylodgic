@@ -474,7 +474,7 @@ class AvailablityCalendar extends AvailablityCalendarBase
                     $createEndDate->modify('+1 day');
                     $createOneDayAhead = $createEndDate->format('Y-m-d');
                     $new_post_link = admin_url('post-new.php?post_type=slgc_reservations&createfromdate=' . esc_attr($dateString).'&createtodate='.esc_attr($createOneDayAhead).'&roomID='.esc_attr($roomID));
-                    $room_output .= '<div class="cal-create-reservation"><a href="' . esc_url($new_post_link) . '">+</a></div>';
+                    $room_output .= '<div class="cal-create-reservation"><a data-bs-delay="0" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="New Booking" href="' . esc_url($new_post_link) . '">+</a></div>';
                 }
 
                 $room_output .= '<div class="reservation-tab-wrap" data-day="' . esc_attr($dateString) . '">';

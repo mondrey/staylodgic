@@ -64,6 +64,9 @@ class Staylodgic_Init
         if (isset($_GET['page']) && $_GET['page'] == 'slgc-import-availability-ical') {
             $remove = true;
         }
+        if (isset($_GET['page']) && $_GET['page'] == 'slgc-export-availability-ical') {
+            $remove = true;
+        }
 
         if ( $remove ) {
             remove_all_actions('admin_notices');
@@ -332,6 +335,19 @@ class Staylodgic_Init
 
                 wp_enqueue_script('staylodgic-parser');
                 wp_enqueue_style('staylodgic-invoice');
+                wp_enqueue_style('fontawesome-6');
+                wp_enqueue_style('fontawesome-6-brands');
+                wp_enqueue_style('fontawesome-6-solid');
+
+                wp_enqueue_style('bootstrap');
+                wp_enqueue_script('bootstrap');
+
+            }
+            if ($current_admin_screen->base == 'staylodgic_page_slgc-export-availability-ical') {
+
+                wp_enqueue_script('staylodgic-parser');
+                wp_enqueue_style('staylodgic-invoice');
+                wp_enqueue_script('staylodgic-invoice');
                 wp_enqueue_style('fontawesome-6');
                 wp_enqueue_style('fontawesome-6-brands');
                 wp_enqueue_style('fontawesome-6-solid');
