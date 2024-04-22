@@ -607,7 +607,7 @@ function staylodgic_generate_metaboxes($meta_data, $post_id)
                     $bed_container = '
                         <div id="bed_setup_container" class="bed-setup-container-template">
                         <div class="metabox_label"><label for="staylodgic_alt_bedsetup_${uniqueID}"></label></div>
-                        <div id="staylodgic_alt_bedsetup_${uniqueID}-section-title" class="sectiontitle clearfix">Alternate Bed Setup ( optional )</div>
+                        <div id="staylodgic_alt_bedsetup_${uniqueID}-section-title" class="sectiontitle clearfix">Add a single or multiple beds</div>
                         <div class="bedlayout-wrap" data-repeat="staylodgic_alt_bedsetup_${uniqueID}">
                         <div class="bedlayout">
                             <div class="bedlayout-box" id="bedlayout-box">
@@ -622,10 +622,10 @@ function staylodgic_generate_metaboxes($meta_data, $post_id)
                                 <input disabled placeholder="0" type="number" min="0" name="staylodgic_alt_bedsetup[${uniqueID}][bednumber][]" value="" id="bed_number${uniqueID}_0">
                             </div>
                         </div>
-                        <span class="add-bedlayout-box">Add layout</span>
+                        <span class="add-bedlayout-box">Add beds</span>
                         <span class="add-bedlayout-box-notice">Max Reached!</span>
                         </div>
-                        <div class="metabox-description">Optional Setup</div>
+                        <div class="metabox-description">Add bed layouts to the room.</div>
                         </div>
                     ';
 
@@ -690,7 +690,7 @@ function staylodgic_generate_metaboxes($meta_data, $post_id)
                     echo $bed_container;
                     // add an input button
                     echo '<div id="bed-inputs-container"></div>';
-                    echo '<span id="add-bed-setup-button" class="add-bedlayout-box">Add Bed Setup</span>';
+                    echo '<span id="add-bed-setup-button" class="add-bedlayout-box">Add bed choices</span>';
 
                     break;
 
@@ -750,7 +750,7 @@ function staylodgic_generate_metaboxes($meta_data, $post_id)
                         echo '</div>';
                     }
                     echo '</div>';
-                    echo '<span class="add-bedlayout-box">' . esc_html__('Add layout', 'staylodgic') . '</span>';
+                    echo '<span class="add-bedlayout-box">' . esc_html__('Add bed type', 'staylodgic') . '</span>';
                     echo '<span class="add-bedlayout-box-notice">' . esc_html__('Max Reached!', 'staylodgic') . '</span>';
                     echo '</div>';
                     break;

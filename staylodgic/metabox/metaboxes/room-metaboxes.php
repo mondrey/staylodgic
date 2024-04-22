@@ -179,7 +179,7 @@ function staylodgic_room_metadata()
                 'std'          => '',
             ),
             array(
-                'name'    => esc_html__('Bed Setup Set', 'staylodgic'),
+                'name'    => esc_html__('Bed Setup', 'staylodgic'),
                 'id'      => 'staylodgic_alt_bedsetup',
                 'target'  => 'bedsetup',
                 'type'    => 'bedsetup_set',

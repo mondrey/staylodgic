@@ -413,7 +413,7 @@
 
 		if ($.fn.flatpickr) {
 
-			var room_related_input_fields = $('#reservation-details,.metabox-fields.room_choice,.metabox-fields.reservation_status,.metabox-fields.metaboxtype_bedlayout,.metabox-fields.metaboxtype_mealplan_included,.metabox-fields.reservation_meals,.metabox-fields.metaboxtype_currency,.metabox-fields.metaboxtype_taxgenerate,.metabox-fields.metaboxtype_currencyarray');
+			var room_related_input_fields = $('#reservation-details,.metabox-fields.room_choice,.metabox-fields.metaboxtype_bedlayout,.metabox-fields.metaboxtype_mealplan_included,.metabox-fields.reservation_meals,.metabox-fields.metaboxtype_currency,.metabox-fields.metaboxtype_taxgenerate,.metabox-fields.metaboxtype_currencyarray');
 
 			$('.datepicker').flatpickr();
 

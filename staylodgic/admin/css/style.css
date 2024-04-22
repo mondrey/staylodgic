@@ -918,7 +918,7 @@
 .switch-toggle {
 	width: 53px;
 	height: 24px;
-	box-shadow: inset 3px 1px 13px #00000042;
+	border: 2px solid #e1e1e1;
 	position: relative;
 	border-radius: 30px;
 	cursor: pointer;
@@ -940,7 +940,6 @@
 	border-radius: 38px;
 	top: 5px;
 	position: relative;
-	box-shadow: 0px 0px 1px #000;
 }
 
 .switch-toggle.switch-off .switch-inner {
@@ -1547,4 +1546,14 @@ ul.existing-customer {
 .time-inputs input {
 	width: 100px;
 	margin: 5px 5px 1px 0;
+}
+
+.bed-setup-dynamic-container {
+	border: 0;
+	padding: 20px;
+	margin-bottom: 5px;
+	background: #f1f0ff;
+}
+.bedlayout-box {
+	margin-bottom: 10px;
 }

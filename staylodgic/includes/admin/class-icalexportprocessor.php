@@ -72,7 +72,12 @@ class IcalExportProcessor
 
             echo '<div class="room_ical_export_wrapper" data-room-id="' . $room->ID . '">';
             echo '<div class="import-export-heading">' . $room->post_title . '</div>';
-            echo '<button data-room-id="' . $room->ID . '" type="button" class="download_export_ical button button-primary button-large">Download</button>';
+            
+            echo '<button data-room-id="' . $room->ID . '" type="button" class="download_export_ical btn btn-primary">';
+            echo '<span class="spinner-zone spinner-border-sm" aria-hidden="true"></span>';
+            echo '<span role="status"> Download</span>';
+            echo '</button>';
+            
             echo '</div>';
         }
 

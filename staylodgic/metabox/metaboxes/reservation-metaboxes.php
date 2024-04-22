@@ -242,7 +242,7 @@ function staylodgic_reservations_metadata()
                 'class'    => 'reservation_guest',
                 'heading'  => 'subhead',
                 'desc'     => '',
-                'std'      => '0',
+                'std'      => '1',
             ),
             array(
                 'name'     => 'Children',

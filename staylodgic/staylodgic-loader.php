@@ -10,7 +10,14 @@ class Staylodgic_Init
         add_filter('upload_mimes', array($this, 'allow_ics_upload'));
         add_action( 'wp_enqueue_scripts', array($this,'enqueue_google_fonts' ));
         add_action( 'wp_head', array($this,'preconnect_google_fonts' ));
+
+        add_action('admin_menu', array($this,'remove_admin_elements'));
     
+    }
+
+    public function remove_admin_elements() {
+        // remove_menu_page('index.php');
+        // remove_menu_page('edit.php');
     }
 
     public function allow_ics_upload($mime_types)

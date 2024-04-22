@@ -62,6 +62,12 @@
 		exporterFlatpickr("today");
 
 		$('.download_export_ical').on('click', function() {
+
+			var button = $(this);
+
+			button.find('.spinner-zone').addClass('spinner-border');
+			button.prop("disabled", true);
+
 			var roomId = $(this).data('room-id');
 			var selectedMonth = $(".exporter_calendar").val(); // Get the selected month from the input field
 			console.log( selectedMonth );
@@ -86,6 +92,9 @@
 					a.click();
 					a.remove();
 					window.URL.revokeObjectURL(url);
+
+					button.prop("disabled", false);
+					button.find('.spinner-zone').removeClass('spinner-border');
 				}
 			});
 		});
