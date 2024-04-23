@@ -42,7 +42,7 @@
 }
 
 .left-columns {
-    flex: 2; /* Allocates double the space compared to right column */
+    flex: 3; /* Allocates double the space compared to right column */
     display: flex;
 }
 

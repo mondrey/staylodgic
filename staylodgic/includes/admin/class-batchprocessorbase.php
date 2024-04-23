@@ -95,6 +95,9 @@ class BatchProcessorBase
 
         echo '<h4>Invoicing</h4>';
         echo '<ul>';
+        echo '<li>- Add property logo</li>';
+        echo '<li>- Add activity logo</li>';
+        echo '<li>- Footer and Header</li>';
         echo '<li>- Generate invoices for bookings</li>';
         echo '<li>- Generate invoices for activities</li>';
         echo '</ul>';
@@ -104,6 +107,31 @@ class BatchProcessorBase
         echo '<li>- Export CSV Bookings</li>';
         echo '<li>- Import and Sync iCal Availability</li>';
         echo '<li>- Export iCal Availability Feeds</li>';
+        echo '</ul>';
+
+        echo '</div>'; // End of second left column
+
+        echo '<div class="left-column">';
+
+        echo '<h4>Taxes</h4>';
+        echo '<ul>';
+        echo '<li>- Fixed tax</li>';
+        echo '<li>- Percentage tax</li>';
+        echo '<li>- Per day tax</li>';
+        echo '<li>- Per person tax</li>';
+        echo '</ul>';
+
+        echo '<h4>Meal plans</h4>';
+        echo '<ul>';
+        echo '<li>- Create free plans</li>';
+        echo '<li>- Create paid plans</li>';
+        echo '</ul>';
+
+        echo '<h4>Discounts</h4>';
+        echo '<ul>';
+        echo '<li>- Last minute discount</li>';
+        echo '<li>- Early booking discount</li>';
+        echo '<li>- Long stay discount</li>';
         echo '</ul>';
 
         echo '</div>'; // End of second left column
