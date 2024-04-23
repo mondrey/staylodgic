@@ -607,7 +607,7 @@ function staylodgic_generate_metaboxes($meta_data, $post_id)
                     $bed_container = '
                         <div id="bed_setup_container" class="bed-setup-container-template">
                         <div class="metabox_label"><label for="staylodgic_alt_bedsetup_${uniqueID}"></label></div>
-                        <div id="staylodgic_alt_bedsetup_${uniqueID}-section-title" class="sectiontitle clearfix">Add a single or multiple beds</div>
+                        <div id="staylodgic_alt_bedsetup_${uniqueID}-section-title" class="sectiontitle clearfix">Set single or multiple beds</div>
                         <div class="bedlayout-wrap" data-repeat="staylodgic_alt_bedsetup_${uniqueID}">
                         <div class="bedlayout">
                             <div class="bedlayout-box" id="bedlayout-box">

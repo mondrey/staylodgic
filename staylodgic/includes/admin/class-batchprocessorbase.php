@@ -37,7 +37,87 @@ class BatchProcessorBase
     public function display_main_page()
     {
         // The HTML content of the 'Staylodgic' page goes here
-        echo "<h1>Welcome to Staylodgic</h1>";
+
+        echo '<div class="admin-page-wrapper">';
+        echo '<div class="content-container">';
+        echo '<div class="left-columns">'; // Container for both content columns
+        
+        echo '<div class="left-column">';
+        echo '<h1>Staylodgic</h1>';
+        echo '<h2>Hotel Management Software</h2>';
+        echo '<h4>Setup Hotel for Bookings</h4>';
+        echo '<ul>';
+        echo '<li>Step 1: Create Rooms</li>';
+        echo '<li>Step 2: Dashboard > View Availability</li>';
+        echo '<ul>';
+        echo '<li>- Add Room Rates</li>';
+        echo '<li>- Add Room Quantity</li>';
+        echo '</ul>';
+        echo '<li>Step 3: Create Reservations</li>';
+        echo '</ul>';
+
+        echo '<h4>Setup Activities</h4>';
+        echo '<ul>';
+        echo '<li>Step 1: Create Activities</li>';
+        echo '<ul>';
+        echo '<li>- Add Scheduled Time to Week</li>';
+        echo '</ul>';
+        echo '<li>Step 2: Create Activity Reservations</li>';
+        echo '</ul>';
+
+        echo '<h4>Using Dashboard</h4>';
+        echo '<ul>';
+        echo '<li>- View Bookings Overview</li>';
+        echo '<li>- View Activities Overview</li>';
+        echo '<li>- View Availability Calendar</li>';
+        echo '<li>- View Annual Availability</li>';
+        echo '</ul>';
+
+        echo '</div>'; // End of first left column
+        
+        echo '<div class="left-column">';
+        echo '<h4>Customer Registry</h4>';
+        echo '<ul>';
+        echo '<li>- Create new customers</li>';
+        echo '<li>- Assign existing customers</li>';
+        echo '</ul>';
+
+        echo '<h4>Guest Registration</h4>';
+        echo '<ul>';
+        echo '<li>Step 1: Create guest registration</li>';
+        echo '<li>Step 2: Customize registration fields</li>';
+        echo '<li>Step 3: Online registration</li>';
+            echo '<ul>';
+            echo '<li>- Email links</li>';
+            echo '<li>- Use QR Code to scan and fill</li>';
+            echo '</ul>';
+        echo '</ul>';
+
+        echo '<h4>Invoicing</h4>';
+        echo '<ul>';
+        echo '<li>- Generate invoices for bookings</li>';
+        echo '<li>- Generate invoices for activities</li>';
+        echo '</ul>';
+
+        echo '<h4>Import / Export</h4>';
+        echo '<ul>';
+        echo '<li>- Export CSV Bookings</li>';
+        echo '<li>- Import and Sync iCal Availability</li>';
+        echo '<li>- Export iCal Availability Feeds</li>';
+        echo '</ul>';
+
+        echo '</div>'; // End of second left column
+        
+        echo '</div>'; // End of left-columns container
+        
+        echo '<div class="right-column">';
+        echo '<div class="svg-container">';
+        echo '<!-- SVG or SVG CSS Background here -->';
+        echo '</div>';
+        echo '</div>'; // End of right column
+        
+        echo '</div>'; // End of content container
+        echo '</div>'; // End of page wrapper
 
     }
 
