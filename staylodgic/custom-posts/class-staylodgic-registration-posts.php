@@ -100,7 +100,7 @@ class Staylodgic_GuestRegistration_Posts
             'hierarchical'       => false,
             'has_archive'        => true,
             'menu_position'      => 38,
-            'menu_icon'          => plugin_dir_url(__FILE__) . 'images/portfolio.png',
+            'menu_icon'          => 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NDAgNTEyIj48IS0tIUZvbnQgQXdlc29tZSBGcmVlIDYuNS4yIGJ5IEBmb250YXdlc29tZSAtIGh0dHBzOi8vZm9udGF3ZXNvbWUuY29tIExpY2Vuc2UgLSBodHRwczovL2ZvbnRhd2Vzb21lLmNvbS9saWNlbnNlL2ZyZWUgQ29weXJpZ2h0IDIwMjQgRm9udGljb25zLCBJbmMuLS0+PHBhdGggZmlsbD0iIzYzRTZCRSIgZD0iTTIyNCAyNTZBMTI4IDEyOCAwIDEgMCAyMjQgMGExMjggMTI4IDAgMSAwIDAgMjU2em0tNDUuNyA0OEM3OS44IDMwNCAwIDM4My44IDAgNDgyLjNDMCA0OTguNyAxMy4zIDUxMiAyOS43IDUxMkgzMjIuOGMtMy4xLTguOC0zLjctMTguNC0xLjQtMjcuOGwxNS02MC4xYzIuOC0xMS4zIDguNi0yMS41IDE2LjgtMjkuN2w0MC4zLTQwLjNjLTMyLjEtMzEtNzUuNy01MC4xLTEyMy45LTUwLjFIMTc4LjN6bTQzNS41LTY4LjNjLTE1LjYtMTUuNi00MC45LTE1LjYtNTYuNiAwbC0yOS40IDI5LjQgNzEgNzEgMjkuNC0yOS40YzE1LjYtMTUuNiAxNS42LTQwLjkgMC01Ni42bC0xNC40LTE0LjR6TTM3NS45IDQxN2MtNC4xIDQuMS03IDkuMi04LjQgMTQuOWwtMTUgNjAuMWMtMS40IDUuNSAuMiAxMS4yIDQuMiAxNS4yczkuNyA1LjYgMTUuMiA0LjJsNjAuMS0xNWM1LjYtMS40IDEwLjgtNC4zIDE0LjktOC40TDU3Ni4xIDM1OC43bC03MS03MUwzNzUuOSA0MTd6Ii8+PC9zdmc+',
             'rewrite'            => array('slug' => $staylodgic_registrations_slug), //Use a slug like "work" or "project" that shouldnt be same with your page name
             'supports' => array('title', 'author', 'thumbnail'), //Boxes will be shown in the panel
         );

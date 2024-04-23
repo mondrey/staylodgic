@@ -176,7 +176,7 @@ class staylodgic_Room_Posts
             'hierarchical'    => false,
             'has_archive'     => true,
             'menu_position'   => 35,
-            'menu_icon'       => plugin_dir_url(__FILE__) . 'images/portfolio.png',
+            'menu_icon'       => 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NDAgNTEyIj48IS0tIUZvbnQgQXdlc29tZSBGcmVlIDYuNS4yIGJ5IEBmb250YXdlc29tZSAtIGh0dHBzOi8vZm9udGF3ZXNvbWUuY29tIExpY2Vuc2UgLSBodHRwczovL2ZvbnRhd2Vzb21lLmNvbS9saWNlbnNlL2ZyZWUgQ29weXJpZ2h0IDIwMjQgRm9udGljb25zLCBJbmMuLS0+PHBhdGggZmlsbD0iIzYzRTZCRSIgZD0iTTMyIDMyYzE3LjcgMCAzMiAxNC4zIDMyIDMyVjMyMEgyODhWMTYwYzAtMTcuNyAxNC4zLTMyIDMyLTMySDU0NGM1MyAwIDk2IDQzIDk2IDk2VjQ0OGMwIDE3LjctMTQuMyAzMi0zMiAzMnMtMzItMTQuMy0zMi0zMlY0MTZIMzUyIDMyMCA2NHYzMmMwIDE3LjctMTQuMyAzMi0zMiAzMnMtMzItMTQuMy0zMi0zMlY2NEMwIDQ2LjMgMTQuMyAzMiAzMiAzMnptMTQ0IDk2YTgwIDgwIDAgMSAxIDAgMTYwIDgwIDgwIDAgMSAxIDAtMTYweiIvPjwvc3ZnPg==',
             'rewrite'         => array('slug' => $staylodgic_room_slug), //Use a slug like "work" or "project" that shouldnt be same with your page name
             'supports' => array('title', 'author', 'thumbnail'), //Boxes will be shown in the panel
         );

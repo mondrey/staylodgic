@@ -170,7 +170,7 @@ class staylodgic_Reservation_Posts
             'hierarchical'       => false,
             'has_archive'        => true,
             'menu_position'      => 36,
-            'menu_icon'          => plugin_dir_url(__FILE__) . 'images/portfolio.png',
+            'menu_icon'          => 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0NDggNTEyIj48IS0tIUZvbnQgQXdlc29tZSBGcmVlIDYuNS4yIGJ5IEBmb250YXdlc29tZSAtIGh0dHBzOi8vZm9udGF3ZXNvbWUuY29tIExpY2Vuc2UgLSBodHRwczovL2ZvbnRhd2Vzb21lLmNvbS9saWNlbnNlL2ZyZWUgQ29weXJpZ2h0IDIwMjQgRm9udGljb25zLCBJbmMuLS0+PHBhdGggZmlsbD0iIzYzRTZCRSIgZD0iTTk2IDBDNDMgMCAwIDQzIDAgOTZWNDE2YzAgNTMgNDMgOTYgOTYgOTZIMzg0aDMyYzE3LjcgMCAzMi0xNC4zIDMyLTMycy0xNC4zLTMyLTMyLTMyVjM4NGMxNy43IDAgMzItMTQuMyAzMi0zMlYzMmMwLTE3LjctMTQuMy0zMi0zMi0zMkgzODQgOTZ6bTAgMzg0SDM1MnY2NEg5NmMtMTcuNyAwLTMyLTE0LjMtMzItMzJzMTQuMy0zMiAzMi0zMnptMzItMjQwYzAtOC44IDcuMi0xNiAxNi0xNkgzMzZjOC44IDAgMTYgNy4yIDE2IDE2cy03LjIgMTYtMTYgMTZIMTQ0Yy04LjggMC0xNi03LjItMTYtMTZ6bTE2IDQ4SDMzNmM4LjggMCAxNiA3LjIgMTYgMTZzLTcuMiAxNi0xNiAxNkgxNDRjLTguOCAwLTE2LTcuMi0xNi0xNnM3LjItMTYgMTYtMTZ6Ii8+PC9zdmc+',
             'rewrite'            => array('slug' => $staylodgic_reservations_slug), //Use a slug like "work" or "project" that shouldnt be same with your page name
             'supports' => array('title', 'author', 'thumbnail'), //Boxes will be shown in the panel
         );
