@@ -1554,8 +1554,8 @@ return ob_get_clean();
                 'totalCost'      => $reservationData[ 'total' ],
             ];
 
-            $email = new EmailDispatcher($email_address, 'Room Booking Confirmation for:' . $booking_number);
-            $email->setHTMLContent()->setBookingConfirmationTemplate($bookingDetails);
+            $email = new EmailDispatcher($email_address, 'Booking Confirmation for: ' . $booking_number);
+            $email->setHTMLContent()->setActivityConfirmationTemplate($bookingDetails);
 
             if ($email->send()) {
                 // echo 'Confirmation email sent successfully to the guest.';

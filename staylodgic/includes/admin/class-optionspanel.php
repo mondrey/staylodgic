@@ -1171,6 +1171,12 @@ $panel_settings = [
         'description' => 'My field 1 description.',
         'tab'         => 'property',
     ],
+    'property_emailfooter'   => [
+        'label'       => esc_html__('Email footer', 'staylodgic'),
+        'type'        => 'textarea',
+        'description' => 'My field 1 description.',
+        'tab'         => 'property',
+    ],
 
     'activity_property_logo'         => [
         'label'       => esc_html__('Upload Logo', 'staylodgic'),
@@ -1205,6 +1211,12 @@ $panel_settings = [
     'activity_property_footer'   => [
         'label'       => esc_html__('Invoice footer', 'staylodgic'),
         'type'        => 'text',
+        'description' => 'My field 1 description.',
+        'tab'         => 'activity-property',
+    ],
+    'activity_property_emailfooter'   => [
+        'label'       => esc_html__('Email footer', 'staylodgic'),
+        'type'        => 'textarea',
         'description' => 'My field 1 description.',
         'tab'         => 'activity-property',
     ],

@@ -1962,7 +1962,7 @@ HTML;
             $new_bookingstatus = 'pending';
         }
         $new_bookingsubstatus = staylodgic_get_option('new_bookingsubstatus');
-        if ('' !== $new_bookingstatus) {
+        if ('' == $new_bookingstatus) {
             $new_bookingsubstatus = 'onhold';
         }
 
@@ -2030,7 +2030,7 @@ HTML;
                 'totalCost'      => $reservationData[ 'total' ],
              ];
 
-            $email = new EmailDispatcher($email_address, 'Room Booking Confirmation for:' . $booking_number);
+            $email = new EmailDispatcher($email_address, 'Room Booking Confirmation for: ' . $booking_number);
             $email->setHTMLContent()->setBookingConfirmationTemplate($bookingDetails);
 
             if ($email->send()) {
