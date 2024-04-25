@@ -43,6 +43,7 @@ class EmailDispatcher {
         $emailMessage .= "<p><strong>Children:</strong> {$bookingDetails['childrenGuests']}</p>";
         $emailMessage .= "<p><strong>Total Cost:</strong> {$total_price}</p>";
         $emailMessage .= "<p>We look forward to welcoming you and ensuring a pleasant stay.</p>";
+        $emailMessage .= "<p>Please contact us to cancel, modify or if there's any questions regarding the booking.</p>";   
         $emailMessage .= "<p>{$property_emailfooter_formatted}</p>";
 
         $this->message = $emailMessage;
@@ -64,7 +65,8 @@ class EmailDispatcher {
         $emailMessage .= "<p><strong>Adults:</strong> {$bookingDetails['adultGuests']}</p>";
         $emailMessage .= "<p><strong>Children:</strong> {$bookingDetails['childrenGuests']}</p>";
         $emailMessage .= "<p><strong>Total Cost:</strong> {$total_price}</p>";
-        $emailMessage .= "<p>We look forward to welcoming you and ensuring a pleasant stay.</p>";
+        $emailMessage .= "<p>Thank you for choosing our services.</p>";
+        $emailMessage .= "<p>Should you need any further information or wish to make specific arrangements, please feel free to contact us. We’re here to assist you!</p>";        
         $emailMessage .= "<p>{$activity_emailfooter_formatted}</p>";
 
         $this->message = $emailMessage;

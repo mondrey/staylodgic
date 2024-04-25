@@ -6,8 +6,6 @@ class staylodgic_Room_Posts
     {
         add_action('init', array($this, 'init'));
         add_action('admin_init', array($this, 'sort_admin_init'));
-        add_filter("manage_edit-room_columns", array($this, 'room_edit_columns'));
-        add_action("manage_posts_custom_column", array($this, 'room_custom_columns'));
         add_action('admin_menu', array($this, 'staylodgic_enable_room_sort'));
         add_action('wp_ajax_room_sort', array($this, 'staylodgic_save_room_order'));
 
@@ -33,39 +31,45 @@ class staylodgic_Room_Posts
     public function staylodgic_sort_room()
     {
         $room = new WP_Query('post_type=slgc_room&posts_per_page=-1&orderby=menu_order&order=ASC');
-        ?>
-		<div class="wrap">
-		<h2>Sort room<img src="<?php echo home_url(); ?>/wp-admin/images/loading.gif" id="loading-animation" /></h2>
-		<div class="description">
-		Drag and Drop the slides to order them
-		</div>
-		<ul id="portfolio-list">
-		<?php while ($room->have_posts()): $room->the_post();?>
-				<li id="<?php the_id();?>">
-				<div>
-				<?php
-    $image_url = wp_get_attachment_thumb_url(get_post_thumbnail_id());
-            $custom    = get_post_custom(get_the_ID());
-            $room_cats = get_the_terms(get_the_ID(), 'slgc_roomtype');
+?>
+        <div class="wrap">
+            <h2><?php _e('Sort room', 'staylodgic'); ?> <img src="<?php echo esc_url(home_url() . '/wp-admin/images/loading.gif'); ?>" id="loading-animation" /></h2>
+            <div class="description">
+                <?php _e('Drag and Drop the slides to order them', 'staylodgic'); ?>
+            </div>
+            <ul id="portfolio-list">
+                <?php while ($room->have_posts()) : $room->the_post(); ?>
+                    <li id="<?php the_id(); ?>">
+                        <div>
+                            <?php
+                            $image_url = wp_get_attachment_thumb_url(get_post_thumbnail_id());
+                            $custom    = get_post_custom(get_the_ID());
+                            $room_cats = get_the_terms(get_the_ID(), 'slgc_roomtype');
 
-            ?>
-				<?php if ($image_url) {echo '<img class="staylodgic_admin_sort_image" src="' . $image_url . '" width="30px" height="30px" alt="" />';}?>
-				<span class="staylodgic_admin_sort_title"><?php the_title();?></span>
-				<?php
-    if ($room_cats) {
-                ?>
-				<span class="staylodgic_admin_sort_categories"><?php foreach ($room_cats as $taxonomy) {echo ' | ' . $taxonomy->name;}?></span>
-				<?php
+                            ?>
+                            <?php if ($image_url) {
+                                echo '<img class="staylodgic_admin_sort_image" src="' . $image_url . '" width="30px" height="30px" alt="" />';
+                            } ?>
+                            <span class="staylodgic_admin_sort_title"><?php the_title(); ?></span>
+                            <?php
+                            if ($room_cats) {
+                            ?>
+                                <span class="staylodgic_admin_sort_categories">
+                                    <?php foreach ($room_cats as $taxonomy) {
+                                        echo ' | ' .  esc_html($taxonomy->name);
+                                    } ?>
+                                </span>
+                            <?php
+                            }
+                            ?>
+                        </div>
+
+                    </li>
+                <?php endwhile; ?>
+        </div><!-- End div#wrap //-->
+
+<?php
     }
-            ?>
-				</div>
-
-				</li>
-			<?php endwhile;?>
-		</div><!-- End div#wrap //-->
-
-	<?php
-}
     public function staylodgic_save_room_order()
     {
 
@@ -73,69 +77,21 @@ class staylodgic_Room_Posts
         if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'staylodgic-nonce-admin')) {
             wp_die();
         }
-        
+
         global $wpdb; // WordPress database class
 
         $order   = explode(',', $_POST['order']);
         $counter = 0;
 
         foreach ($order as $sort_id) {
-            $wpdb->update($wpdb->posts, array('menu_order' => $counter), array('ID' => $sort_id));
+            $wpdb->update(
+                $wpdb->posts,
+                array('menu_order' => intval($counter)), // Ensuring integer
+                array('ID' => intval($sort_id))          // Ensuring integer
+            );
             $counter++;
         }
         die(1);
-    }
-
-    /*
-     * room Admin columns
-     */
-    public function room_custom_columns($column)
-    {
-        global $post;
-        $custom    = get_post_custom();
-        $image_url = wp_get_attachment_thumb_url(get_post_thumbnail_id($post->ID));
-
-        $full_image_id  = get_post_thumbnail_id(($post->ID), 'fullimage');
-        $full_image_url = wp_get_attachment_image_src($full_image_id, 'fullimage');
-        if (isset($full_image_url[0])) {
-            $full_image_url = $full_image_url[0];
-        }
-
-        if (!defined('MTHEME')) {
-            $staylodgic_shortname = "staylodgic_p2";
-            define('MTHEME', $staylodgic_shortname);
-        }
-
-        switch ($column) {
-            case "room_image":
-                if (isset($image_url) && $image_url != "") {
-                    echo '<a class="thickbox" href="' . $full_image_url . '"><img src="' . $image_url . '" width="60px" height="60px" alt="featured" /></a>';
-                }
-                break;
-            case "theme_description":
-                if (isset($custom['staylodgic_thumbnail_desc'][0])) {echo $custom['staylodgic_thumbnail_desc'][0];}
-                break;
-            case "video":
-                if (isset($custom['staylodgic_lightbox_video'][0])) {echo $custom['staylodgic_lightbox_video'][0];}
-                break;
-            case 'slgc_roomtype':
-                echo get_the_term_list($post->ID, 'slgc_roomtype', '', ', ', '');
-                break;
-        }
-    }
-
-    public function room_edit_columns($columns)
-    {
-        $columns = array(
-            "cb"                    => "<input type=\"checkbox\" />",
-            "title"                 => __('Room Title', 'staylodgic'),
-            "theme_description"     => __('Description', 'staylodgic'),
-            "video"                 => __('Video', 'staylodgic'),
-            "staylodgic_roomtypes" => __('slgc_roomtype', 'staylodgic'),
-            "room_image"            => __('Image', 'staylodgic'),
-        );
-
-        return $columns;
     }
 
     /**
@@ -146,29 +102,10 @@ class staylodgic_Room_Posts
     public function init()
     {
         /*
-         * Register Featured Post Manager
+         * Register Room Post
          */
-        //add_action('init', 'staylodgic_featured_register');
-        //add_action('init', 'room_register');//Always use a shortname like "staylodgic_" not to see any 404 errors
-        /*
-         * Register room Post Manager
-         */
-        $staylodgic_room_slug = "rooms";
-        if (function_exists('staylodgic_get_option_data')) {
-            $staylodgic_room_slug = staylodgic_get_option_data('room_permalink_slug');
-        }
-        if ($staylodgic_room_slug == "" || !isset($staylodgic_room_slug)) {
-            $staylodgic_room_slug = "rooms";
-        }
-        $staylodgic_room_singular_refer = "Rooms";
-        if (function_exists('staylodgic_get_option_data')) {
-            $staylodgic_room_singular_refer = staylodgic_get_option_data('room_archive_title');
-        }
-        if ('' === $staylodgic_room_singular_refer || empty($staylodgic_room_singular_refer)) {
-            $staylodgic_room_singular_refer = "Rooms";
-        }
         $args = array(
-            'label'           => $staylodgic_room_singular_refer,
+            'label'           => 'Rooms',
             'singular_label'  => __('Room', 'staylodgic'),
             'public'          => true,
             'show_ui'         => true,
@@ -177,7 +114,7 @@ class staylodgic_Room_Posts
             'has_archive'     => true,
             'menu_position'   => 35,
             'menu_icon'       => 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NDAgNTEyIj48IS0tIUZvbnQgQXdlc29tZSBGcmVlIDYuNS4yIGJ5IEBmb250YXdlc29tZSAtIGh0dHBzOi8vZm9udGF3ZXNvbWUuY29tIExpY2Vuc2UgLSBodHRwczovL2ZvbnRhd2Vzb21lLmNvbS9saWNlbnNlL2ZyZWUgQ29weXJpZ2h0IDIwMjQgRm9udGljb25zLCBJbmMuLS0+PHBhdGggZmlsbD0iIzYzRTZCRSIgZD0iTTMyIDMyYzE3LjcgMCAzMiAxNC4zIDMyIDMyVjMyMEgyODhWMTYwYzAtMTcuNyAxNC4zLTMyIDMyLTMySDU0NGM1MyAwIDk2IDQzIDk2IDk2VjQ0OGMwIDE3LjctMTQuMyAzMi0zMiAzMnMtMzItMTQuMy0zMi0zMlY0MTZIMzUyIDMyMCA2NHYzMmMwIDE3LjctMTQuMyAzMi0zMiAzMnMtMzItMTQuMy0zMi0zMlY2NEMwIDQ2LjMgMTQuMyAzMiAzMiAzMnptMTQ0IDk2YTgwIDgwIDAgMSAxIDAgMTYwIDgwIDgwIDAgMSAxIDAtMTYweiIvPjwvc3ZnPg==',
-            'rewrite'         => array('slug' => $staylodgic_room_slug), //Use a slug like "work" or "project" that shouldnt be same with your page name
+            'rewrite'         => array('slug' => 'rooms'), //Use a slug like "work" or "project" that shouldnt be same with your page name
             'supports' => array('title', 'author', 'thumbnail'), //Boxes will be shown in the panel
         );
 
@@ -213,179 +150,6 @@ class staylodgic_Room_Posts
             }
         }
     }
-
 }
 $staylodgic_room_post_type = new staylodgic_Room_Posts();
-
-class staylodgic_Roomcategory_add_image
-{
-
-    public function __construct()
-    {
-        add_action('admin_head', array(&$this, 'staylodgic_admin_head'));
-        add_action('edit_term', array(&$this, 'staylodgic_save_tax_pic'));
-        add_action('create_term', array(&$this, 'staylodgic_save_tax_pic'));
-        add_filter("manage_edit-staylodgic_roomtypes_columns", array(&$this, 'staylodgic_roomtype_columns'));
-        add_action("manage_staylodgic_roomtypes_custom_column", array(&$this, 'staylodgic_manage_workype_columns'), 10, 3);
-    }
-
-    // Add to admin_init function
-
-    public function staylodgic_roomtype_columns($columns)
-    {
-        $columns['roomtype_image'] = 'Image';
-        return $columns;
-    }
-
-    // Add to admin_init function
-
-    public function staylodgic_manage_workype_columns($value, $columns, $term_id)
-    {
-        $staylodgic_roomtype_image_id = get_option('staylodgic_roomtype_image_id' . $term_id);
-        switch ($columns) {
-            case 'roomtype_image':
-                if ($staylodgic_roomtype_image_id) {
-                    $staylodgic_roomtype_image_url = wp_get_attachment_image_src($staylodgic_roomtype_image_id, 'thumbnail', false);
-                    $value                          = '<img src="' . $staylodgic_roomtype_image_url[0] . '" width="100px" height="auto" />';
-                }
-                break;
-
-            default:
-                break;
-        }
-        return $value;
-    }
-
-    public function staylodgic_admin_head()
-    {
-        $taxonomies = get_taxonomies();
-        $taxonomies = array('slgc_roomtype'); // uncomment and specify particular taxonomies you want to add image feature.
-        if (is_array($taxonomies)) {
-            foreach ($taxonomies as $z_taxonomy) {
-                add_action($z_taxonomy . '_add_form_fields', array(&$this, 'staylodgic_tax_field'));
-                add_action($z_taxonomy . '_edit_form_fields', array(&$this, 'staylodgic_tax_field'));
-            }
-        }
-    }
-
-    // add image field in add form
-    public function staylodgic_tax_field($taxonomy)
-    {
-        wp_enqueue_style('thickbox');
-        wp_enqueue_script('thickbox');
-        wp_enqueue_media();
-
-        if (empty($taxonomy)) {
-            echo '<div class="form-field">
-					<label for="staylodgic_roomtype_input">Image</label>
-					<input size="40" type="text" name="staylodgic_roomtype_input" id="staylodgic_roomtype_input" value="" />
-					<input type="text" name="staylodgic_roomtype_image_id" id="staylodgic_roomtype_image_id" value="" />
-				</div>';
-        } else {
-
-            $staylodgic_roomtype_input_url = '';
-            $staylodgic_roomtype_image_id  = '';
-
-            if (isset($taxonomy->term_id)) {
-                //$staylodgic_roomtype_input_url = get_option('staylodgic_roomtype_input' . $taxonomy->term_id);
-                $staylodgic_roomtype_image_id = get_option('staylodgic_roomtype_image_id' . $taxonomy->term_id);
-            }
-
-            echo '<tr class="form-field">
-			<th scope="row" valign="top"><label for="staylodgic_roomtype_input">Image</label></th>
-			<td>
-			<input type="hidden" name="staylodgic_roomtype_image_id" id="staylodgic_roomtype_image_id" value="' . $staylodgic_roomtype_image_id . '" />
-			<a class="button" id="staylodgic_upload_work_image">Set category image</a>
-			<div class="inside" id="featured_roomtype_image_wrap">';
-            if (!empty($staylodgic_roomtype_image_id)) {
-                $staylodgic_roomtype_image_url = wp_get_attachment_image_src($staylodgic_roomtype_image_id, 'thumbnail', false);
-                echo '<img id="featured_roomtype_image" src="' . $staylodgic_roomtype_image_url[0] . '" style="max-width:200px;border: 1px solid #ccc;padding: 5px;box-shadow: 5px 5px 10px #ccc;margin-top: 10px;" >';
-                echo '<a style="display:block;" id="remove_roomtype_image" href="#">Remove category Image</a>';
-            }
-            echo '</div>';
-            echo '</td></tr><br/>';
-        }
-        ?>
-	<script>
-	jQuery(document).ready(function($){
-		// Get input target field
-		var targetfield="staylodgic_roomtype_input";
-
-		jQuery("#staylodgic_upload_work_image").click( function( event ) {
-			var jQueryel = jQuery(this);
-			event.preventDefault();
-
-			// If the media frame already exists, reopen it.
-			if ( typeof(custom_file_frame)!=="undefined" ) {
-				custom_file_frame.open();
-				return;
-			}
-
-			// Create the media frame.
-			custom_file_frame = wp.media.frames.customHeader = wp.media({
-				// Set the title of the modal.
-				title: jQueryel.data("choose"),
-
-				// Tell the modal to show only images. Ignore if want ALL
-				library: {
-					type: 'image'
-				},
-				// Customize the submit button.
-				button: {
-					// Set the text of the button.
-					text: jQueryel.data("update")
-				}
-			});
-
-			custom_file_frame.on( "select", function() {
-				// Grab the selected attachment.
-				var attachment = custom_file_frame.state().get("selection").first();
-				var active_image = jQuery('#featured_roomtype_image');
-
-				if (active_image.length > 0 ) {
-					$(active_image).attr('src', attachment.attributes.sizes.thumbnail.url);
-				} else {
-					var roomtypeImg = jQuery('<img/>');
-						roomtypeImg.attr('id','featured_roomtype_image')
-						roomtypeImg.attr('src', attachment.attributes.sizes.thumbnail.url);
-						roomtypeImg.attr('style',"max-width:200px;border: 1px solid #ccc;padding: 5px;box-shadow: 5px 5px 10px #ccc;margin-top: 10px;")
-						roomtypeImg.appendTo('#featured_roomtype_image_wrap');
-
-					jQuery( '<a style="display:block;" id="remove_roomtype_image" href="#">Remove roomtype Image</a>' ).appendTo( "#featured_roomtype_image_wrap" );
-				}
-				jQuery("#staylodgic_roomtype_image_id").val(attachment.id);
-			});
-
-			custom_file_frame.open();
-		});
-
-		jQuery("#featured_roomtype_image_wrap").on("click", "#remove_roomtype_image", function(){
-			jQuery('#remove_roomtype_image,#featured_roomtype_image').remove();
-			jQuery('#staylodgic_roomtype_image_id').val("");
-			return false;
-		});
-	});
-	</script>
-	<?php
-}
-
-    // save our taxonomy image while edit or save term
-    public function staylodgic_save_tax_pic($term_id)
-    {
-        if (isset($_POST['staylodgic_roomtype_image_id'])) {
-            update_option('staylodgic_roomtype_image_id' . $term_id, $_POST['staylodgic_roomtype_image_id']);
-        }
-    }
-
-    // output taxonomy image url for the given term_id (NULL by default)
-    public function staylodgic_roomtype_input_url($term_id = null)
-    {
-        if ($term_id) {
-            $current_term = get_term_by('slug', get_query_var('term'), get_query_var('taxonomy'));
-            return get_option('staylodgic_roomtype_input' . $current_term->term_id);
-        }
-    }
-
-}
-$staylodgic_Roomcategory_add_image = new staylodgic_Roomcategory_add_image();
 ?>

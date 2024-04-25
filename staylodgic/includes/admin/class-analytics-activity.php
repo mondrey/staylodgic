@@ -50,7 +50,9 @@ class ActivityAnalytics
         $this->activityColors = [];
 
         $activityQuery = new \WP_Query([
-            'post_type'      => 'slgc_activity',
+            'post_type' => 'slgc_activity',
+            'orderby' => 'menu_order',
+            'order' => 'ASC',
             'posts_per_page' => -1,
         ]);
 

@@ -40,7 +40,7 @@ class Staylodgic_Customer_Posts
 
         switch ($columns) {
             case "customer_booking":
-                echo $customer_instance->generateCustomerBookingNumbers($customer_post_id);
+                echo esc_attr( $customer_instance->generateCustomerBookingNumbers($customer_post_id) );
                 break;
             case "customer_reservations":
 
@@ -50,19 +50,24 @@ class Staylodgic_Customer_Posts
                 $reservation_array = \Staylodgic\Activity::getActivityIDsForCustomer($customer_post_id);
                 if ( is_array( $reservation_array ) && !empty( $reservation_array ) ) {
                     echo '<i class="fas fa-umbrella-beach"></i>';
-                    echo $reservation_instance->getEditLinksForActivity($reservation_array);
+                    $editlinks = $reservation_instance->getEditLinksForActivity($reservation_array);
+                    echo wp_kses( $editlinks, staylodgic_get_allowed_tags() );
                 }
 
                 $reservation_instance = new \Staylodgic\Reservations();
                 $reservation_array = \Staylodgic\Reservations::getReservationIDsForCustomer($customer_post_id);
                 if ( is_array( $reservation_array ) && !empty( $reservation_array ) ) {
                     echo '<i class="fas fa-bed"></i>';
-                    echo $reservation_instance->getEditLinksForReservations($reservation_array);
+                    $editlinks = $reservation_instance->getEditLinksForReservations($reservation_array);
+                    echo wp_kses( $editlinks, staylodgic_get_allowed_tags() );
                 }
 
                 break;
             case "customer_rooms":
-                echo $customer_instance->generateCustomerRooms($customer_post_id);
+                $customer_room = $customer_instance->generateCustomerRooms($customer_post_id);
+                if ( isset( $customer_room) ) {
+                    echo wp_kses( $customer_room, staylodgic_get_allowed_tags() );
+                }
                 break;
             case "mcustomer_section":
                 echo get_the_term_list(get_the_id(), 'slgc_customercat', '', ', ', '');
@@ -81,27 +86,15 @@ class Staylodgic_Customer_Posts
     public function init()
     {
         /*
-         * Register Featured Post Manager
-         */
-        //add_action('init', 'staylodgic_featured_register');
-        //add_action('init', 'staylodgic_kbase_register');//Always use a shortname like "staylodgic_" not to see any 404 errors
-        /*
-         * Register kbase Post Manager
+         * Register Customer Post
          */
 
-        $staylodgic_customers_slug = "customers";
-        if (function_exists('staylodgic_get_option_data')) {
-            $staylodgic_customers_slug = staylodgic_get_option_data('customers_permalink_slug');
-        }
-        if ($staylodgic_customers_slug == "" || !isset($staylodgic_customers_slug)) {
-            $staylodgic_customers_slug = "customers";
-        }
         $args = array(
             'labels'             => array(
-                'name'          => 'Customers',
-                'menu_name'     => 'Customers',
-                'singular_name' => 'Customer',
-                'all_items'     => 'All Customers',
+                'name'          => __('Customers', 'staylodgic'),
+                'menu_name'     => __('Customers', 'staylodgic'),
+                'singular_name' => __('Customer', 'staylodgic'),
+                'all_items'     => __('All Customers', 'staylodgic'),
             ),
             'singular_label'     => __('Customer', 'staylodgic'),
             'public'             => true,
@@ -114,7 +107,7 @@ class Staylodgic_Customer_Posts
             'has_archive'        => true,
             'menu_position'      => 37,
             'menu_icon'          => 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0NDggNTEyIj48IS0tIUZvbnQgQXdlc29tZSBGcmVlIDYuNS4yIGJ5IEBmb250YXdlc29tZSAtIGh0dHBzOi8vZm9udGF3ZXNvbWUuY29tIExpY2Vuc2UgLSBodHRwczovL2ZvbnRhd2Vzb21lLmNvbS9saWNlbnNlL2ZyZWUgQ29weXJpZ2h0IDIwMjQgRm9udGljb25zLCBJbmMuLS0+PHBhdGggZmlsbD0iIzYzRTZCRSIgZD0iTTIyNCAyNTZBMTI4IDEyOCAwIDEgMCAyMjQgMGExMjggMTI4IDAgMSAwIDAgMjU2em0tNDUuNyA0OEM3OS44IDMwNCAwIDM4My44IDAgNDgyLjNDMCA0OTguNyAxMy4zIDUxMiAyOS43IDUxMkg0MTguM2MxNi40IDAgMjkuNy0xMy4zIDI5LjctMjkuN0M0NDggMzgzLjggMzY4LjIgMzA0IDI2OS43IDMwNEgxNzguM3oiLz48L3N2Zz4=',
-            'rewrite'            => array('slug' => $staylodgic_customers_slug), //Use a slug like "work" or "project" that shouldnt be same with your page name
+            'rewrite'            => array('slug' => 'customers'), //Use a slug like "work" or "project" that shouldnt be same with your page name
             'supports' => array('title', 'author', 'thumbnail'), //Boxes will be shown in the panel
         );
 
@@ -125,10 +118,10 @@ class Staylodgic_Customer_Posts
         register_taxonomy('slgc_customercat', array('slgc_customers'),
             array(
                 'labels'       => array(
-                    'name'          => 'Sections',
-                    'menu_name'     => 'Sections',
-                    'singular_name' => 'Section',
-                    'all_items'     => 'All Sections',
+                    'name'          => __('Sections', 'staylodgic'),
+                    'menu_name'     => __('Sections', 'staylodgic'),
+                    'singular_name' => __('Section', 'staylodgic'),
+                    'all_items'     => __('All Sections', 'staylodgic'),
                 ),
                 'public'       => true,
                 'hierarchical' => true,

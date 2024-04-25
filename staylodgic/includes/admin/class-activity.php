@@ -1,4 +1,5 @@
 <?php
+
 namespace Staylodgic;
 
 class Activity
@@ -13,7 +14,7 @@ class Activity
     protected $children_age;
     protected $totalGuests;
     protected $activitiesArray;
-    
+
     public function __construct(
         $bookingNumber = null,
         $reservation_id = false,
@@ -24,8 +25,7 @@ class Activity
         $children_age = null,
         $totalGuests = null,
         $activitiesArray = array()
-    )
-    {
+    ) {
         add_action('wp_ajax_get_activity_schedules', array($this, 'get_activity_schedules_ajax_handler'));
         add_action('wp_ajax_nopriv_get_activity_schedules', array($this, 'get_activity_schedules_ajax_handler'));
 
@@ -43,19 +43,19 @@ class Activity
 
         add_filter('the_content', array($this, 'activity_content'));
 
-        $this->bookingNumber         = uniqid();
-        $this->reservation_id        = $reservation_id;
-        $this->checkinDate           = $checkinDate;
-        $this->staynights            = $staynights;
-        $this->adultGuests           = $adultGuests;
-        $this->childrenGuests        = $childrenGuests;
-        $this->children_age          = $children_age;
-        $this->totalGuests           = $totalGuests;
-        $this->activitiesArray           = $activitiesArray;
-
+        $this->bookingNumber   = uniqid();
+        $this->reservation_id  = $reservation_id;
+        $this->checkinDate     = $checkinDate;
+        $this->staynights      = $staynights;
+        $this->adultGuests     = $adultGuests;
+        $this->childrenGuests  = $childrenGuests;
+        $this->children_age    = $children_age;
+        $this->totalGuests     = $totalGuests;
+        $this->activitiesArray = $activitiesArray;
     }
 
-    public function getActivityTime( $reservation_id = false ) {
+    public function getActivityTime($reservation_id = false)
+    {
 
         if (false !== $reservation_id) {
             $this->reservation_id = $reservation_id;
@@ -66,7 +66,7 @@ class Activity
         return $time;
     }
 
-    public function getNumberOfAdultsForReservation( $reservation_id = false )
+    public function getNumberOfAdultsForReservation($reservation_id = false)
     {
 
         if (false !== $reservation_id) {
@@ -75,13 +75,13 @@ class Activity
 
         $number_of_adults = get_post_meta($this->reservation_id, 'staylodgic_reservation_activity_adults', true);
 
-        if ( isset($number_of_adults) && $number_of_adults ) {
+        if (isset($number_of_adults) && $number_of_adults) {
             return $number_of_adults;
         }
 
         return false;
     }
-    public function getNumberOfChildrenForReservation( $reservation_id = false )
+    public function getNumberOfChildrenForReservation($reservation_id = false)
     {
 
         if (false !== $reservation_id) {
@@ -89,14 +89,14 @@ class Activity
         }
 
         $number_of_children = get_post_meta($this->reservation_id, 'staylodgic_reservation_activity_children', true);
-        if ( isset($number_of_children['number']) && $number_of_children ) {
+        if (isset($number_of_children['number']) && $number_of_children) {
             return $number_of_children['number'];
         }
 
         return false;
     }
 
-    public function getTotalOccupantsForReservation( $reservation_id = false )
+    public function getTotalOccupantsForReservation($reservation_id = false)
     {
 
         if (false !== $reservation_id) {
@@ -106,13 +106,14 @@ class Activity
         $number_of_adults = $this->getNumberOfAdultsForReservation();
         $number_of_children = $this->getNumberOfChildrenForReservation();
 
-        return intval( $number_of_adults ) + intval( $number_of_children );
+        return intval($number_of_adults) + intval($number_of_children);
     }
 
-    public static function hasActivities() {
+    public static function hasActivities()
+    {
         $roomlist = [];
-        $rooms = self::queryActivities(); // Call queryRooms() method here
-        if ( $rooms ) {
+        $activities = self::queryActivities(); // Call queryRooms() method here
+        if ($activities) {
             return true;
         }
         return false;
@@ -120,16 +121,16 @@ class Activity
 
     public static function queryActivities()
     {
-        $rooms = get_posts(
+        $activities = get_posts(
             array(
                 'post_type' => 'slgc_activity',
-                'orderby' => 'title',
-                'numberposts' => -1,
+                'orderby' => 'menu_order',
                 'order' => 'ASC',
+                'numberposts' => -1,
                 'post_status' => 'publish',
             )
         );
-        return $rooms;
+        return $activities;
     }
 
 
@@ -165,7 +166,7 @@ class Activity
         $reservation_query = new \WP_Query($args);
 
         if ($reservation_query->have_posts()) {
-            $reservation = $reservation_query->posts[ 0 ];
+            $reservation = $reservation_query->posts[0];
             $customer_id = get_post_meta($reservation->ID, 'staylodgic_customer_id', true);
             return $customer_id;
         }
@@ -204,7 +205,6 @@ class Activity
         }
 
         return false;
-
     }
 
     public static function getActivityIDforBooking($booking_number)
@@ -223,14 +223,15 @@ class Activity
         $reservation_query = new \WP_Query($args);
 
         if ($reservation_query->have_posts()) {
-            $reservation = $reservation_query->posts[ 0 ];
+            $reservation = $reservation_query->posts[0];
             return $reservation->ID;
         }
 
         return false; // Return an false if no reservatuib found
     }
 
-    public function get_activity_schedules_ajax_handler() {
+    public function get_activity_schedules_ajax_handler()
+    {
 
         // Check for nonce security
         if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'staylodgic-nonce-admin')) {
@@ -242,26 +243,27 @@ class Activity
         $the_post_id = isset($_POST['the_post_id']) ? sanitize_text_field($_POST['the_post_id']) : null;
 
         error_log('AJAX handler triggered. Selected date: ' . $selected_date);
-    
+
         // Call the method and capture the output
         ob_start();
         $this->display_activity_schedules_with_availability($selected_date, $the_post_id, $total_people);
         $output = ob_get_clean();
-    
+
         // Return the output as a JSON response
         wp_send_json_success($output);
     }
 
-    public function get_activity_frontend_schedules_ajax_handler() {
+    public function get_activity_frontend_schedules_ajax_handler()
+    {
 
         // Verify the nonce
-        if (!isset($_POST[ 'staylodgic_searchbox_nonce' ]) || !check_admin_referer('staylodgic-searchbox-nonce', 'staylodgic_searchbox_nonce')) {
+        if (!isset($_POST['staylodgic_searchbox_nonce']) || !check_admin_referer('staylodgic-searchbox-nonce', 'staylodgic_searchbox_nonce')) {
             // Nonce verification failed; handle the error or reject the request
             // For example, you can return an error response
-            wp_send_json_error([ 'message' => 'Failed' ]);
+            wp_send_json_error(['message' => 'Failed']);
             return;
         }
-        
+
         $selected_date = isset($_POST['selected_date']) ? sanitize_text_field($_POST['selected_date']) : null;
         $total_people = isset($_POST['totalpeople']) ? sanitize_text_field($_POST['totalpeople']) : null;
         $the_post_id = isset($_POST['the_post_id']) ? sanitize_text_field($_POST['the_post_id']) : null;
@@ -271,24 +273,24 @@ class Activity
         $number_of_guests   = 0;
         $children_age       = array();
 
-        if (isset($_POST[ 'number_of_adults' ])) {
-            $number_of_adults = $_POST[ 'number_of_adults' ];
+        if (isset($_POST['number_of_adults'])) {
+            $number_of_adults = $_POST['number_of_adults'];
         }
 
-        if (isset($_POST[ 'number_of_children' ])) {
-            $number_of_children = $_POST[ 'number_of_children' ];
+        if (isset($_POST['number_of_children'])) {
+            $number_of_children = $_POST['number_of_children'];
         }
 
-        if (isset($_POST[ 'children_age' ])) {
+        if (isset($_POST['children_age'])) {
             // Loop through all the select elements with the class 'children-age-selector'
-            foreach ($_POST[ 'children_age' ] as $selected_age) {
+            foreach ($_POST['children_age'] as $selected_age) {
                 // Sanitize and store the selected values in an array
-                $children_age[  ] = sanitize_text_field($selected_age);
+                $children_age[] = sanitize_text_field($selected_age);
             }
         }
 
         error_log('AJAX handler triggered. Selected date: ' . $selected_date);
-    
+
         // Call the method and capture the output
         ob_start();
         echo $this->display_activity_frontend_schedules_with_availability(
@@ -300,7 +302,7 @@ class Activity
             $number_of_adults
         );
         $output = ob_get_clean();
-    
+
         // Return the output as a JSON response
         wp_send_json_success($output);
     }
@@ -337,32 +339,34 @@ class Activity
             $existing_activity_id = get_post_meta($the_post_id, 'staylodgic_activity_id', true);
         }
 
-        $this->activitiesArray['date'] = $selected_date;
-        $this->activitiesArray['adults'] = $this->adultGuests;
-        $this->activitiesArray['children'] = $this->childrenGuests;
+        $this->activitiesArray['date']         = $selected_date;
+        $this->activitiesArray['adults']       = $this->adultGuests;
+        $this->activitiesArray['children']     = $this->childrenGuests;
         $this->activitiesArray['children_age'] = $this->children_age;
         $this->activitiesArray['person_total'] = $this->totalGuests;
-    
+
         // Get the day of the week for the selected date
         $day_of_week = strtolower(date('l', strtotime($selected_date)));
-    
+
         // Query all activity posts
         $args = array(
             'post_type' => 'slgc_activity',
+            'orderby' => 'menu_order',
+            'order' => 'ASC',
             'posts_per_page' => -1,
         );
         $activities = new \WP_Query($args);
-    
+
         $html = '<form action="" method="post" id="hotel-acitivity-listing" class="needs-validation" novalidate>';
         $roomlistingbox = wp_create_nonce('staylodgic-roomlistingbox-nonce');
         $html .= '<input type="hidden" name="staylodgic_roomlistingbox_nonce" value="' . esc_attr($roomlistingbox) . '" />';
 
-        $html .= '<div id="activity-data" data-bookingnumber="' . $this->bookingNumber . '" data-children="' . $this->childrenGuests . '" data-adults="' . $this->adultGuests . '" data-guests="' . $this->totalGuests . '" data-checkin="' . $this->checkinDate . '">';
+        $html .= '<div id="activity-data" data-bookingnumber="' . esc_attr($this->bookingNumber) . '" data-children="' . esc_attr($this->childrenGuests) . '" data-adults="' . esc_attr($this->adultGuests) . '" data-guests="' . esc_attr($this->totalGuests) . '" data-checkin="' . esc_attr($this->checkinDate) . '">';
         // Start the container div
         $html .= '<div class="activity-schedules-container">';
-    
 
-        $html .= '<h3>' . ucfirst($day_of_week) . '</h3>';
+
+        $html .= '<h3>' . esc_attr(ucfirst($day_of_week)) . '</h3>';
         // Loop through each activity post
         if ($activities->have_posts()) {
             while ($activities->have_posts()) {
@@ -373,11 +377,11 @@ class Activity
                 $max_guests = get_post_meta($post_id, 'staylodgic_max_guests', true);
 
                 if (null !== get_post_meta($post_id, 'staylodgic_activity_rate', true)) {
-                    $activity_rate= get_post_meta($post_id, 'staylodgic_activity_rate', true);
+                    $activity_rate = get_post_meta($post_id, 'staylodgic_activity_rate', true);
                 }
-    
+
                 // Display the activity identifier (e.g., post title)
-                $html .= '<div class="activity-schedule room-occupied-group" id="activity-schedule-' . $post_id . '">';
+                $html .= '<div class="activity-schedule room-occupied-group" id="activity-schedule-' . esc_attr($post_id) . '">';
 
                 if (null !== get_post_meta($post_id, 'staylodgic_activity_desc', true)) {
                     $activity_desc = get_post_meta($post_id, 'staylodgic_activity_desc', true);
@@ -387,37 +391,37 @@ class Activity
                     $activity_image = staylodgic_featured_image_link($post_id);
                 }
 
-                $html .= '<div class="activity-column-one">';
-                $image_id  = get_post_thumbnail_id($post_id);
-                $fullimage_url = wp_get_attachment_image_url($image_id, 'staylodgic-full'); // Get the URL of the custom-sized image
-                $image_url = wp_get_attachment_image_url($image_id, 'staylodgic-large-square'); // Get the URL of the custom-sized image
-                $html .= '<a href="' . esc_url($fullimage_url) . '" data-toggle="lightbox" data-gallery="lightbox-gallery-'.esc_attr($post_id).'">';
-                $html .= '<img class="lightbox-trigger activity-summary-image" data-image="' . esc_url($image_url) . '" src="' . esc_url($image_url) . '" alt="Activity">';
-                $html .= '</a>';
-                $supported_gallery = staylodgic_output_custom_image_links($post_id);
-                if ( $supported_gallery ) {
+                $html              .= '<div class="activity-column-one">';
+                $image_id           = get_post_thumbnail_id($post_id);
+                $fullimage_url      = wp_get_attachment_image_url($image_id, 'staylodgic-full');
+                $image_url          = wp_get_attachment_image_url($image_id, 'staylodgic-large-square');
+                $html              .= '<a href="' . esc_url($fullimage_url) . '" data-toggle="lightbox" data-gallery="lightbox-gallery-' . esc_attr($post_id) . '">';
+                $html              .= '<img class="lightbox-trigger activity-summary-image" data-image="' . esc_url($image_url) . '" src="' . esc_url($image_url) . '" alt="Activity">';
+                $html              .= '</a>';
+                $supported_gallery  = staylodgic_output_custom_image_links($post_id);
+                if ($supported_gallery) {
                     $html .= staylodgic_output_custom_image_links($post_id);
                 }
                 $html .= '</div>';
                 $html .= '<div class="activity-column-two">';
                 $html .= '<h4 class="activity-title">' . get_the_title() . '</h4>';
-                $html .= '<div class="activity-desc">'.$activity_desc.'</div>';
+                $html .= '<div class="activity-desc">' . wp_kses_post($activity_desc) . '</div>';
 
-    
+
                 // Display the time slots for the day of the week that matches the selected date
                 if (!empty($activity_schedule) && isset($activity_schedule[$day_of_week])) {
                     $html .= '<div class="day-schedule">';
                     foreach ($activity_schedule[$day_of_week] as $index => $time) {
                         // Calculate remaining spots for this time slot
-                        
+
                         $remaining_spots = $this->calculate_remaining_spots($post_id, $selected_date, $time, $max_guests);
 
                         $remaining_spots_compare = $remaining_spots;
                         $existing_found = false;
 
-                        if ( $existing_activity_id == $post_id && $time == $existing_activity_time ) {
+                        if ($existing_activity_id == $post_id && $time == $existing_activity_time) {
 
-                            $reservedForGuests = $this->getActivityReservationNumbers( $the_post_id );
+                            $reservedForGuests = $this->getActivityReservationNumbers($the_post_id);
                             $existing_spots_for_day = $reservedForGuests['total'];
 
                             $remaining_spots_compare = $remaining_spots + $existing_spots_for_day;
@@ -426,43 +430,42 @@ class Activity
                         // echo $selected_date;
                         $active_class = "time-disabled";
 
-                        if ( $this->totalGuests <= $remaining_spots_compare && 0 !== $remaining_spots ) {
+                        if ($this->totalGuests <= $remaining_spots_compare && 0 !== $remaining_spots) {
                             $active_class = "time-active";
-                            if ( $existing_found ) {
+                            if ($existing_found) {
                                 $active_class .= ' time-choice';
                             }
                         }
 
                         $time_index = $day_of_week . '-' . $index;
 
-                        if ( '' !== $time) {
-                            $total_rate = intval( $activity_rate * $this->totalGuests );
+                        if ('' !== $time) {
+                            $total_rate = intval($activity_rate * $this->totalGuests);
                             $this->activitiesArray[$post_id][$time] = $total_rate;
-                            $html .= '<span class="time-slot '.$active_class.'" id="time-slot-' . $time_index . '" data-activity="'.$post_id.'" data-time="' . $time . '"><span class="activity-time-slot"><i class="fa-regular fa-clock"></i> ' . $time . '</span><span class="time-slots-remaining">( ' . $remaining_spots . ' of ' .$max_guests. ' remaining )</span><div class="activity-rate" data-activityprice="'.$total_rate.'">'. staylodgic_price( $total_rate ) . '</div></span> ';
+                            $html .= '<span class="time-slot ' . esc_attr($active_class) . '" id="time-slot-' . esc_attr($time_index) . '" data-activity="' . esc_attr($post_id) . '" data-time="' . esc_attr($time) . '"><span class="activity-time-slot"><i class="fa-regular fa-clock"></i> ' . esc_attr($time) . '</span><span class="time-slots-remaining">( ' . esc_attr($remaining_spots) . ' of ' . esc_attr($max_guests) . ' remaining )</span><div class="activity-rate" data-activityprice="' . esc_attr($total_rate) . '">' . wp_kses_post(staylodgic_price($total_rate)) . '</div></span> ';
                         } else {
-                            $html .= '<span class="time-slot-unavailable time-slot '.$active_class.'" id="time-slot-' . $time_index . '" data-activity="'.$post_id.'" data-time="' . $time . '"><span class="activity-time-slot">Unavailable</span></span> ';
+                            $html .= '<span class="time-slot-unavailable time-slot ' . esc_attr($active_class) . '" id="time-slot-' . esc_attr($time_index) . '" data-activity="' . esc_attr($post_id) . '" data-time="' . esc_attr($time) . '"><span class="activity-time-slot">Unavailable</span></span> ';
                         }
-                        
                     }
                     $html .= '</div>';
                 }
                 $html .= '</div>';
-    
+
                 $html .= '</div>'; // Close the activity-schedule div
             }
         }
-    
+
         // Close the container div
         $html .= '</div>';
         $html .= '</div>';
         $html .= $this->register_Guest_Form();
         $html .= '</form>';
-        error_log('Activities array');
-        error_log(print_r( $this->activitiesArray, true ));
+        // error_log('Activities array');
+        // error_log(print_r($this->activitiesArray, true));
         staylodgic_set_booking_transient($this->activitiesArray, $this->bookingNumber);
-        $activities_data = staylodgic_get_booking_transient( $this->bookingNumber );
-        error_log('Activities array from transient');
-        error_log(print_r($activities_data, true ));
+        $activities_data = staylodgic_get_booking_transient($this->bookingNumber);
+        // error_log('Activities array from transient');
+        // error_log(print_r($activities_data, true));
         // Reset post data
         wp_reset_postdata();
 
@@ -472,17 +475,17 @@ class Activity
     public function process_SelectedActivity()
     {
 
-        $bookingnumber   = sanitize_text_field($_POST[ 'bookingnumber' ]);
-        $activity_id         = sanitize_text_field($_POST[ 'activity_id' ]);
-        $activity_date         = sanitize_text_field($_POST[ 'activity_date' ]);
-        $activity_time         = sanitize_text_field($_POST[ 'activity_time' ]);
-        $activity_price      = sanitize_text_field($_POST[ 'activity_price' ]);
+        $bookingnumber  = sanitize_text_field($_POST['bookingnumber']);
+        $activity_id    = sanitize_text_field($_POST['activity_id']);
+        $activity_date  = sanitize_text_field($_POST['activity_date']);
+        $activity_time  = sanitize_text_field($_POST['activity_time']);
+        $activity_price = sanitize_text_field($_POST['activity_price']);
 
         // Verify the nonce
-        if (!isset($_POST[ 'staylodgic_roomlistingbox_nonce' ]) || !check_admin_referer('staylodgic-roomlistingbox-nonce', 'staylodgic_roomlistingbox_nonce')) {
+        if (!isset($_POST['staylodgic_roomlistingbox_nonce']) || !check_admin_referer('staylodgic-roomlistingbox-nonce', 'staylodgic_roomlistingbox_nonce')) {
             // Nonce verification failed; handle the error or reject the request
             // For example, you can return an error response
-            wp_send_json_error([ 'message' => 'Failed' ]);
+            wp_send_json_error(['message' => 'Failed']);
             return;
         }
 
@@ -498,17 +501,16 @@ class Activity
 
             $html = $this->bookingSummary(
                 $bookingnumber,
-                $booking_results[ 'choice' ][ 'activity_id' ],
-                $booking_results[ 'choice' ][ 'activity_name' ],
-                $booking_results[ 'date' ],
-                $booking_results[ 'choice' ][ 'time' ],
-                $booking_results[ 'adults' ],
-                $booking_results[ 'children' ],
-                $booking_results[ 'choice' ][ 'price' ],
+                $booking_results['choice']['activity_id'],
+                $booking_results['choice']['activity_name'],
+                $booking_results['date'],
+                $booking_results['choice']['time'],
+                $booking_results['adults'],
+                $booking_results['children'],
+                $booking_results['choice']['price'],
             );
-
         } else {
-            $html = '<div id="booking-summary-wrap" class="booking-summary-warning"><i class="fa-solid fa-circle-exclamation"></i>Session timed out. Please reload the page.</div>';
+            $html = '<div id="booking-summary-wrap" class="booking-summary-warning"><i class="fa-solid fa-circle-exclamation"></i>' . __('Session timed out. Please reload the page', 'staylodgic') . '</div>';
         }
 
         // Send the JSON response
@@ -516,10 +518,10 @@ class Activity
     }
 
     public function process_ActivityData(
-        $bookingnumber = null,
-        $activity_id = null,
-        $activity_date = null,
-        $activity_time = null,
+        $bookingnumber  = null,
+        $activity_id    = null,
+        $activity_date  = null,
+        $activity_time  = null,
         $activity_price = null
     ) {
         // Get the data sent via AJAX
@@ -541,23 +543,21 @@ class Activity
 
             error_log('====== From Transient ======');
             error_log(print_r($booking_results, true));
-            
-            $booking_results['bookingnumber'] = $bookingnumber;
-            
-            $booking_results['choice'][ 'activity_id' ] = $activity_id;
-            $booking_results['choice'][ 'activity_name' ] = $activityName;
-            $booking_results['choice'][ 'date' ] = $activity_date;
-            $booking_results['choice'][ 'time' ] = $activity_time;
-            $booking_results['choice'][ 'price' ] = $booking_results[$activity_id][$activity_time];
+
+            $booking_results['bookingnumber']           = $bookingnumber;
+            $booking_results['choice']['activity_id']   = $activity_id;
+            $booking_results['choice']['activity_name'] = $activityName;
+            $booking_results['choice']['date']          = $activity_date;
+            $booking_results['choice']['time']          = $activity_time;
+            $booking_results['choice']['price']         = $booking_results[$activity_id][$activity_time];
 
             staylodgic_set_booking_transient($booking_results, $bookingnumber);
 
-            error_log('====== Saved Activity Transient ======');
-            error_log(print_r($booking_results, true));
+            // error_log('====== Saved Activity Transient ======');
+            // error_log(print_r($booking_results, true));
 
-            error_log('====== Specific Activity ======');
-            error_log(print_r($booking_results[ 'choice' ], true));
-
+            // error_log('====== Specific Activity ======');
+            // error_log(print_r($booking_results['choice'], true));
         } else {
             $booking_results = false;
         }
@@ -579,18 +579,18 @@ class Activity
     public function bookingDataFields()
     {
         $dataFields = [
-            'full_name'      => 'Full Name',
-            'passport'       => 'Passport No',
-            'email_address'  => 'Email Address',
-            'phone_number'   => 'Phone Number',
-            'street_address' => 'Street Address',
-            'city'           => 'City',
-            'state'          => 'State/Province',
-            'zip_code'       => 'Zip Code',
-            'country'        => 'Country',
-            'guest_comment'  => 'Notes',
-            'guest_consent'  => 'By clicking "Book this Room" you agree to our terms and conditions and privacy policy.',
-         ];
+            'full_name'      => __('Full Name', 'staylodgic'),
+            'passport'       => __('Passport No', 'staylodgic'),
+            'email_address'  => __('Email Address', 'staylodgic'),
+            'phone_number'   => __('Phone Number', 'staylodgic'),
+            'street_address' => __('Street Address', 'staylodgic'),
+            'city'           => __('City', 'staylodgic'),
+            'state'          => __('State/Province', 'staylodgic'),
+            'zip_code'       => __('Zip Code', 'staylodgic'),
+            'country'        => __('Country', 'staylodgic'),
+            'guest_comment'  => __('Notes', 'staylodgic'),
+            'guest_consent'  => __('By clicking "Book this Room" you agree to our terms and conditions and privacy policy.', 'staylodgic'),
+        ];
 
         return $dataFields;
     }
@@ -603,7 +603,7 @@ class Activity
         $html .= self::bookingSummary(
             $bookingnumber = '',
             $activity_id = '',
-            $booking_results[ $activity_id ][ 'roomtitle' ] = '',
+            $booking_results[$activity_id]['roomtitle'] = '',
             $this->checkinDate,
             $this->staynights,
             $this->adultGuests,
@@ -729,13 +729,13 @@ HTML;
 
     public function bookingSummary(
         $bookingnumber = null,
-        $activity_id = null,
+        $activity_id   = null,
         $activity_name = null,
-        $checkin = null,
-        $time = null,
-        $adults = null,
-        $children = null,
-        $totalrate = null
+        $checkin       = null,
+        $time          = null,
+        $adults        = null,
+        $children      = null,
+        $totalrate     = null
     ) {
 
         $totalguests = intval($adults) + intval($children);
@@ -748,7 +748,7 @@ HTML;
 
         $html .= '<div class="main-summary-wrap">';
 
-        $html .= \Staylodgic\Common::generatePersonIcons( $adults, $children );
+        $html .= \Staylodgic\Common::generatePersonIcons($adults, $children);
 
         $html .= '</div>';
 
@@ -776,11 +776,11 @@ HTML;
             $staynights = 1;
             $tax_instance = new \Staylodgic\Tax('activities');
             $totalprice = $tax_instance->apply_tax($subtotalprice, $staynights, $totalguests, $output = 'html');
-            foreach ($totalprice[ 'details' ] as $totalID => $totalvalue) {
+            foreach ($totalprice['details'] as $totalID => $totalvalue) {
                 $html .= '<div class="tax-summary tax-summary-details">' . $totalvalue . '</div>';
             }
 
-            $html .= '<div class="tax-summary tax-summary-total">' . staylodgic_price($totalprice[ 'total' ]) . '</div>';
+            $html .= '<div class="tax-summary tax-summary-total">' . staylodgic_price($totalprice['total']) . '</div>';
             $html .= '</div>';
         }
 
@@ -798,7 +798,8 @@ HTML;
     }
 
 
-    function activity_content($content) {
+    function activity_content($content)
+    {
         if (is_singular('slgc_activity')) {
             $custom_content = $this->activityBooking_SearchForm();
             $content = $custom_content . $content; // Prepend custom content
@@ -807,7 +808,8 @@ HTML;
         return $content;
     }
 
-    function activity_search_shortcode() {
+    function activity_search_shortcode()
+    {
         $search_form = $this->activityBooking_SearchForm();
         return $search_form;
     }
@@ -861,7 +863,7 @@ HTML;
         $posts           = get_posts($args);
         $reservation_ids = array();
         foreach ($posts as $post) {
-            $reservation_ids[  ] = $post->ID;
+            $reservation_ids[] = $post->ID;
         }
         return $reservation_ids;
     }
@@ -882,7 +884,7 @@ HTML;
         $reservation_query = new \WP_Query($args);
 
         if ($reservation_query->have_posts()) {
-            $reservation = $reservation_query->posts[ 0 ];
+            $reservation = $reservation_query->posts[0];
             $customer_id = get_post_meta($reservation->ID, 'staylodgic_customer_id', true);
             return $customer_id;
         }
@@ -906,7 +908,7 @@ HTML;
         $reservation_query = new \WP_Query($args);
 
         if ($reservation_query->have_posts()) {
-            $reservation = $reservation_query->posts[ 0 ];
+            $reservation = $reservation_query->posts[0];
             $customer_id = get_post_meta($reservation->ID, 'staylodgic_customer_id', true);
 
             if (!empty($customer_id)) {
@@ -974,7 +976,7 @@ HTML;
 
     public function activityBooking_SearchForm()
     {
-        
+
         // Generate unique booking number
         staylodgic_set_booking_transient('1', $this->bookingNumber);
         ob_start();
@@ -988,15 +990,15 @@ HTML;
 
         $fullybooked_dates = array();
         $display_fullbooked_status = false;
-        if ( true === $display_fullbooked_status ) {
+        if (true === $display_fullbooked_status) {
             $reservations_instance = new \Staylodgic\Reservations();
-            $fullybooked_dates     = $reservations_instance->daysFullyBooked_For_DateRange($currentDate, $endDate);    
+            $fullybooked_dates     = $reservations_instance->daysFullyBooked_For_DateRange($currentDate, $endDate);
         }
         // error_log( '-------------------- availability percent check');
         // error_log( print_r( $fullybooked_dates, true ));
         // error_log( '-------------------- availability percent check');
-        ?>
-		<div class="staylodgic-content staylodgic-activity-booking">
+?>
+        <div class="staylodgic-content staylodgic-activity-booking">
             <div id="hotel-booking-form">
 
                 <div class="front-booking-search">
@@ -1018,10 +1020,10 @@ HTML;
                 </div>
 
 
-				<div class="staylodgic_reservation_datepicker">
-					<input type="hidden" name="staylodgic_searchbox_nonce" value="<?php echo esc_attr($searchbox_nonce); ?>" />
-					<input data-booked="<?php echo htmlspecialchars(json_encode($fullybooked_dates), ENT_QUOTES, 'UTF-8'); ?>" type="date" id="activity-reservation-date" name="reservation_date">
-				</div>
+                <div class="staylodgic_reservation_datepicker">
+                    <input type="hidden" name="staylodgic_searchbox_nonce" value="<?php echo esc_attr($searchbox_nonce); ?>" />
+                    <input data-booked="<?php echo htmlspecialchars(json_encode($fullybooked_dates), ENT_QUOTES, 'UTF-8'); ?>" type="date" id="activity-reservation-date" name="reservation_date">
+                </div>
                 <div class="staylodgic_reservation_room_guests_wrap">
                     <div id="staylodgic_reservation_room_adults_wrap" class="number-input occupant-adult occupants-range">
                         <div class="column-one">
@@ -1046,30 +1048,32 @@ HTML;
                     </div>
                     <div id="guest-age"></div>
                 </div>
-				<div class="recommended-alt-wrap">
-					<div class="recommended-alt-title">Rooms unavailable</div><div class="recommended-alt-description">Following range from your selection is avaiable.</div>
-					<div id="recommended-alt-dates"></div>
-				</div>
-			<div class="available-list">
-				<div id="available-list-ajax"></div>
-			</div>
-		</div>
-		</div>
-		<?php
-return ob_get_clean();
+                <div class="recommended-alt-wrap">
+                    <div class="recommended-alt-title">Rooms unavailable</div>
+                    <div class="recommended-alt-description">Following range from your selection is avaiable.</div>
+                    <div id="recommended-alt-dates"></div>
+                </div>
+                <div class="available-list">
+                    <div id="available-list-ajax"></div>
+                </div>
+            </div>
+        </div>
+<?php
+        return ob_get_clean();
     }
 
-    public function getActivities( $the_post_id ) {
+    public function getActivities($the_post_id)
+    {
 
         $activities = '';
 
         if (null !== get_post_meta($the_post_id, 'staylodgic_reservation_checkin', true)) {
             $activity_date = get_post_meta($the_post_id, 'staylodgic_reservation_checkin', true);
-            
+
             // Check if $activity_date is a valid date
             if (strtotime($activity_date) !== false) {
                 // Create an instance of the Activity class
-                $reservedForGuests = $this->getActivityReservationNumbers( $the_post_id );
+                $reservedForGuests = $this->getActivityReservationNumbers($the_post_id);
                 $existing_spots_for_day = $reservedForGuests['total'];
                 $activities .= '<div class="activity-schedules-container-wrap">';
                 $this->display_activity_schedules_with_availability($activity_date, $the_post_id, $existing_spots_for_day); // Today's date
@@ -1083,7 +1087,8 @@ return ob_get_clean();
         return $activities;
     }
 
-    public function displayTicket( $the_post_id, $activity_id ) {
+    public function displayTicket($the_post_id, $activity_id)
+    {
 
         $ticket = '';
 
@@ -1103,55 +1108,54 @@ return ob_get_clean();
             if (null !== $activity_id) {
                 $activity_image = staylodgic_featured_image_link($activity_id);
             }
-            
+
             $booking_number = get_post_meta($the_post_id, 'staylodgic_booking_number', true);
             $activity_date = get_post_meta($the_post_id, 'staylodgic_reservation_checkin', true);
-            
+
             $staylodgic_customer_id = get_post_meta($the_post_id, 'staylodgic_customer_id', true);
             $full_name = get_post_meta($staylodgic_customer_id, 'staylodgic_full_name', true);
-            
+
             $ticket_price = get_post_meta($the_post_id, 'staylodgic_reservation_total_room_cost', true);
             $booking_number = get_post_meta($the_post_id, 'staylodgic_booking_number', true);
-            $reservation_status = get_post_meta($the_post_id, 'staylodgic_reservation_status', true);            
+            $reservation_status = get_post_meta($the_post_id, 'staylodgic_reservation_status', true);
 
             $data_array = staylodgic_get_select_target_options('activity_names');
-            $time = $this->getActivityTime( $the_post_id );
+            $time = $this->getActivityTime($the_post_id);
 
-            $reservedForGuests = $this->getActivityReservationNumbers( $the_post_id );
+            $reservedForGuests = $this->getActivityReservationNumbers($the_post_id);
             $reservedTotal = $reservedForGuests['total'];
 
-            if ( isset( $data_array[$activity_id] ) && isset($ticket_price) && 0 < $ticket_price ) {
+            if (isset($data_array[$activity_id]) && isset($ticket_price) && 0 < $ticket_price) {
 
-                $ticket = '<div class="ticket-container-outer">';
-                $ticket .= '<div data-file="'.esc_attr($booking_number).'-'.esc_attr($the_post_id).'" data-postid="'.esc_attr($the_post_id).'" id="ticket-'.esc_attr($booking_number).'" data-bookingnumber="'.esc_attr($booking_number).'" class="ticket ticket-container">';
+                $ticket  = '<div class="ticket-container-outer">';
+                $ticket .= '<div data-file="' . esc_attr($booking_number) . '-' . esc_attr($the_post_id) . '" data-postid="' . esc_attr($the_post_id) . '" id="ticket-' . esc_attr($booking_number) . '" data-bookingnumber="' . esc_attr($booking_number) . '" class="ticket ticket-container">';
                 $ticket .= '<div class="ticket-header">';
-                $ticket .= '<p class="ticket-company">'.esc_html($property_name).'</p>';
-                $ticket .= '<p class="ticket-phone">'.esc_html($property_phone).'</p>';
-                $ticket .= '<p class="ticket-address">'.esc_html($property_address).'</p>';
+                $ticket .= '<p class="ticket-company">' . esc_html($property_name) . '</p>';
+                $ticket .= '<p class="ticket-phone">' . esc_html($property_phone) . '</p>';
+                $ticket .= '<p class="ticket-address">' . esc_html($property_address) . '</p>';
                 $ticket .= '<p class="ticket-break"></p>';
-                $ticket .= '<h1>'.esc_html($data_array[$activity_id]).'</h1>';
-                $ticket .= '<p class="ticket-date">'.date("F jS Y", strtotime($activity_date)).'</p>';
+                $ticket .= '<h1>' . esc_html($data_array[$activity_id]) . '</h1>';
+                $ticket .= '<p class="ticket-date">' . date("F jS Y", strtotime($activity_date)) . '</p>';
                 $ticket .= '</div>';
-                $ticket .= '<div style="background: url('.esc_url($activity_image).'); background-size:cover" class="ticket-image">';
+                $ticket .= '<div style="background: url(' . esc_url($activity_image) . '); background-size:cover" class="ticket-image">';
                 $ticket .= '</div>';
                 $ticket .= '<div class="ticket-info">';
-                $ticket .= '<p>'.esc_html($reservedTotal) . ' x <i class="fa-solid fa-user"></i></p>';
-                $ticket .= '<p class="ticket-name">'.esc_html($full_name).'</p>';
-                $ticket .= '<p class="ticket-time"><i class="fa-regular fa-clock"></i> '.esc_html($time) . '</p>';
-                $ticket .= '<p class="ticket-price">'.staylodgic_price($ticket_price).'</p>';
-                $ticket .= '<div id="ticketqrcode" data-qrcode="'.esc_html($booking_number).'" class="qrcode"></div>';
+                $ticket .= '<p>' . esc_html($reservedTotal) . ' x <i class="fa-solid fa-user"></i></p>';
+                $ticket .= '<p class="ticket-name">' . esc_html($full_name) . '</p>';
+                $ticket .= '<p class="ticket-time"><i class="fa-regular fa-clock"></i> ' . esc_html($time) . '</p>';
+                $ticket .= '<p class="ticket-price">' . staylodgic_price($ticket_price) . '</p>';
+                $ticket .= '<div id="ticketqrcode" data-qrcode="' . esc_html($booking_number) . '" class="qrcode"></div>';
                 $ticket .= '</div>';
-                $ticket .= '<div class="ticket-button">'.esc_html($reservation_status).'</div>';
+                $ticket .= '<div class="ticket-button">' . esc_html($reservation_status) . '</div>';
                 $ticket .= '</div>';
                 $ticket .= '</div>';
-                
             } else {
-                if ( !isset($ticket_price) || 0 >= $ticket_price ) {
-                    $ticket .= '<div class="ticket-price-not-found">' . __('Ticket price not found','staylodgic') . '</div>';
+                if (!isset($ticket_price) || 0 >= $ticket_price) {
+                    $ticket .= '<div class="ticket-price-not-found">' . __('Ticket price not found', 'staylodgic') . '</div>';
                 }
             }
         }
-        
+
         return $ticket;
     }
 
@@ -1161,7 +1165,8 @@ return ob_get_clean();
      * @param int $the_post_id The post ID of the reservation.
      * @return array An array containing the number of adults, children, and the total.
      */
-    public function getActivityReservationNumbers($the_post_id) {
+    public function getActivityReservationNumbers($the_post_id)
+    {
         $existing_adults = get_post_meta($the_post_id, 'staylodgic_reservation_activity_adults', true);
         $existing_children_array = get_post_meta($the_post_id, 'staylodgic_reservation_activity_children', true);
         $existing_children = is_array($existing_children_array) ? $existing_children_array['number'] : 0;
@@ -1173,38 +1178,41 @@ return ob_get_clean();
         $existing_spots_for_day = $existing_adults + $existing_children;
 
         return [
-            'adults' => $existing_adults,
+            'adults'   => $existing_adults,
             'children' => $existing_children,
-            'total' => $existing_spots_for_day
+            'total'    => $existing_spots_for_day
         ];
     }
 
-    public function display_activity_schedules_with_availability($selected_date = null, $the_post_id = false, $total_people = false) {
+    public function display_activity_schedules_with_availability($selected_date = null, $the_post_id = false, $total_people = false)
+    {
         // Use today's date if $selected_date is not provided
         if (is_null($selected_date)) {
             $selected_date = date('Y-m-d');
         }
-        
+
         if (null !== get_post_meta($the_post_id, 'staylodgic_activity_time', true)) {
             $existing_activity_time = get_post_meta($the_post_id, 'staylodgic_activity_time', true);
         }
         if (null !== get_post_meta($the_post_id, 'staylodgic_activity_id', true)) {
             $existing_activity_id = get_post_meta($the_post_id, 'staylodgic_activity_id', true);
         }
-    
+
         // Get the day of the week for the selected date
         $day_of_week = strtolower(date('l', strtotime($selected_date)));
-    
+
         // Query all activity posts
         $args = array(
-            'post_type' => 'slgc_activity',
+            'post_type'      => 'slgc_activity',
+            'orderby'        => 'menu_order',
+            'order'          => 'ASC',
             'posts_per_page' => -1,
         );
         $activities = new \WP_Query($args);
-    
+
         // Start the container div
         echo '<div class="spinner"></div><div class="activity-schedules-container">';
-    
+
 
         echo '<h3>' . ucfirst($day_of_week) . '</h3>';
         // Loop through each activity post
@@ -1215,26 +1223,26 @@ return ob_get_clean();
 
                 $activity_schedule = get_post_meta($post_id, 'staylodgic_activity_schedule', true);
                 $max_guests = get_post_meta($post_id, 'staylodgic_max_guests', true);
-    
+
                 // Display the activity identifier (e.g., post title)
                 echo '<div class="activity-schedule" id="activity-schedule-' . $post_id . '">';
 
                 echo '<h4>' . get_the_title() . '</h4>';
-    
+
                 // Display the time slots for the day of the week that matches the selected date
                 if (!empty($activity_schedule) && isset($activity_schedule[$day_of_week])) {
                     echo '<div class="day-schedule">';
                     foreach ($activity_schedule[$day_of_week] as $index => $time) {
                         // Calculate remaining spots for this time slot
-                        
+
                         $remaining_spots = $this->calculate_remaining_spots($post_id, $selected_date, $time, $max_guests);
 
                         $remaining_spots_compare = $remaining_spots;
                         $existing_found = false;
 
-                        if ( $existing_activity_id == $post_id && $time == $existing_activity_time ) {
+                        if ($existing_activity_id == $post_id && $time == $existing_activity_time) {
 
-                            $reservedForGuests = $this->getActivityReservationNumbers( $the_post_id );
+                            $reservedForGuests = $this->getActivityReservationNumbers($the_post_id);
                             $existing_spots_for_day = $reservedForGuests['total'];
 
                             $remaining_spots_compare = $remaining_spots + $existing_spots_for_day;
@@ -1243,34 +1251,33 @@ return ob_get_clean();
                         // echo $selected_date;
                         $active_class = "time-disabled";
 
-                        if ( $total_people <= $remaining_spots_compare && 0 !== $remaining_spots && '' !== $time ) {
+                        if ($total_people <= $remaining_spots_compare && 0 !== $remaining_spots && '' !== $time) {
                             $active_class = "time-active";
-                            if ( $existing_found ) {
+                            if ($existing_found) {
                                 $active_class .= ' time-choice';
                             }
 
-                            echo '<span class="time-slot '.$active_class.'" id="time-slot-' . $day_of_week . '-' . $index . '" data-activity="'.$post_id.'" data-time="' . $time . '"><span class="activity-time-slot"><i class="fa-regular fa-clock"></i> ' . $time . '</span><span class="time-slots-remaining">( ' . $remaining_spots . ' of ' .$max_guests. ' remaining )</span></span> ';
+                            echo '<span class="time-slot ' . $active_class . '" id="time-slot-' . $day_of_week . '-' . $index . '" data-activity="' . $post_id . '" data-time="' . $time . '"><span class="activity-time-slot"><i class="fa-regular fa-clock"></i> ' . $time . '</span><span class="time-slots-remaining">( ' . $remaining_spots . ' of ' . $max_guests . ' remaining )</span></span> ';
                         } else {
-                            echo '<span class="time-slot '.$active_class.'" id="time-slot-' . $day_of_week . '-' . $index . '" data-activity="'.$post_id.'" data-time="' . $time . '"><span class="activity-time-slot"><i class="fa-regular fa-clock"></i> Unavailable</span><span class="time-slots-remaining">( - of - )</span></span> ';
+                            echo '<span class="time-slot ' . $active_class . '" id="time-slot-' . $day_of_week . '-' . $index . '" data-activity="' . $post_id . '" data-time="' . $time . '"><span class="activity-time-slot"><i class="fa-regular fa-clock"></i> Unavailable</span><span class="time-slots-remaining">( - of - )</span></span> ';
                         }
-                       
-                        
                     }
                     echo '</div>';
                 }
-    
+
                 echo '</div>'; // Close the activity-schedule div
             }
         }
-    
+
         // Close the container div
         echo '</div>';
-    
+
         // Reset post data
         wp_reset_postdata();
     }
-    
-    public function calculate_remaining_spots($activity_id, $selected_date, $selected_time, $max_guests) {
+
+    public function calculate_remaining_spots($activity_id, $selected_date, $selected_time, $max_guests)
+    {
         // Query all reservation posts for this activity, date, and time
         $args = array(
             'post_type' => 'slgc_activityres',
@@ -1291,7 +1298,7 @@ return ob_get_clean();
             ),
         );
         $reservations = new \WP_Query($args);
-    
+
         // Calculate the total number of guests from the reservations
         $total_guests = 0;
         if ($reservations->have_posts()) {
@@ -1302,64 +1309,63 @@ return ob_get_clean();
                 $total_guests += $adults + $children['number'];
             }
         }
-    
+
         wp_reset_postdata();
         // Calculate remaining spots
         $remaining_spots = $max_guests - $total_guests;
-    
+
         return $remaining_spots;
     }
 
     public function buildReservationArray($booking_data)
     {
-        $reservationArray = [  ];
+        $reservationArray = [];
 
         if (array_key_exists('bookingnumber', $booking_data)) {
-            $reservationArray[ 'bookingnumber' ] = $booking_data[ 'bookingnumber' ];
+            $reservationArray['bookingnumber'] = $booking_data['bookingnumber'];
         }
         if (array_key_exists('choice', $booking_data)) {
-            $reservationArray[ 'date' ] = $booking_data[ 'choice' ]['date'];
+            $reservationArray['date'] = $booking_data['choice']['date'];
         }
         if (array_key_exists('choice', $booking_data)) {
-            $reservationArray[ 'activity_id' ] = $booking_data[ 'choice' ]['activity_id'];
+            $reservationArray['activity_id'] = $booking_data['choice']['activity_id'];
         }
         if (array_key_exists('choice', $booking_data)) {
-            $reservationArray[ 'time' ] = $booking_data[ 'choice' ]['time'];
+            $reservationArray['time'] = $booking_data['choice']['time'];
         }
         if (array_key_exists('choice', $booking_data)) {
-            $reservationArray[ 'price' ] = $booking_data[ 'choice' ]['price'];
+            $reservationArray['price'] = $booking_data['choice']['price'];
         }
         if (array_key_exists('adults', $booking_data)) {
-            $reservationArray[ 'adults' ] = $booking_data[ 'adults' ];
+            $reservationArray['adults'] = $booking_data['adults'];
         }
         if (array_key_exists('children', $booking_data)) {
-            $reservationArray[ 'children' ] = $booking_data[ 'children' ];
+            $reservationArray['children'] = $booking_data['children'];
         }
         if (array_key_exists('children_age', $booking_data)) {
-            $reservationArray[ 'children_age' ] = $booking_data[ 'children_age' ];
+            $reservationArray['children_age'] = $booking_data['children_age'];
         }
         if (array_key_exists('person_total', $booking_data)) {
-            $reservationArray[ 'person_total' ] = $booking_data[ 'person_total' ];
+            $reservationArray['person_total'] = $booking_data['person_total'];
         }
 
-        $reservationArray[ 'staynights' ] = 1;
+        $reservationArray['staynights'] = 1;
 
         $currency = staylodgic_get_option('currency');
         if (isset($currency)) {
-            $reservationArray[ 'currency' ] = $currency;
+            $reservationArray['currency'] = $currency;
         }
 
         $tax_instance = new \Staylodgic\Tax('activities');
 
-        $subtotalprice                  = intval($reservationArray[ 'price' ]);
-        $reservationArray[ 'tax' ]      = $tax_instance->apply_tax($subtotalprice, $reservationArray[ 'staynights' ], $reservationArray[ 'person_total' ], $output = 'data');
-        $reservationArray[ 'tax_html' ] = $tax_instance->apply_tax($subtotalprice, $reservationArray[ 'staynights' ], $reservationArray[ 'person_total' ], $output = 'html');
-
-        $rateperperson                       = intval($subtotalprice) / intval($reservationArray[ 'person_total' ]);
-        $rateperperson_rounded               = round($rateperperson, 2);
-        $reservationArray[ 'rateperperson' ] = $rateperperson_rounded;
-        $reservationArray[ 'subtotal' ]     = round($subtotalprice, 2);
-        $reservationArray[ 'total' ]        = $reservationArray[ 'tax' ][ 'total' ];
+        $subtotalprice                     = intval($reservationArray['price']);
+        $reservationArray['tax']           = $tax_instance->apply_tax($subtotalprice, $reservationArray['staynights'], $reservationArray['person_total'], $output = 'data');
+        $reservationArray['tax_html']      = $tax_instance->apply_tax($subtotalprice, $reservationArray['staynights'], $reservationArray['person_total'], $output = 'html');
+        $rateperperson                     = intval($subtotalprice) / intval($reservationArray['person_total']);
+        $rateperperson_rounded             = round($rateperperson, 2);
+        $reservationArray['rateperperson'] = $rateperperson_rounded;
+        $reservationArray['subtotal']      = round($subtotalprice, 2);
+        $reservationArray['total']         = $reservationArray['tax']['total'];
 
         return $reservationArray;
     }
@@ -1372,7 +1378,7 @@ return ob_get_clean();
         error_log('------- acitvity posted data -------');
         error_log(print_r($_POST, true));
 
-        $serializedData = $_POST[ 'bookingdata' ];
+        $serializedData = $_POST['bookingdata'];
         // Parse the serialized data into an associative array
         parse_str($serializedData, $formData);
 
@@ -1380,34 +1386,34 @@ return ob_get_clean();
         error_log(print_r($formData, true));
 
         // Verify the nonce
-        if (!isset($_POST[ 'staylodgic_roomlistingbox_nonce' ]) || !check_admin_referer('staylodgic-roomlistingbox-nonce', 'staylodgic_roomlistingbox_nonce')) {
+        if (!isset($_POST['staylodgic_roomlistingbox_nonce']) || !check_admin_referer('staylodgic-roomlistingbox-nonce', 'staylodgic_roomlistingbox_nonce')) {
             // Nonce verification failed; handle the error or reject the request
             // For example, you can return an error response
-            wp_send_json_error([ 'message' => 'Failed' ]);
+            wp_send_json_error(['message' => 'Failed']);
             return;
         }
 
         // Generate unique booking number
-        $booking_number = sanitize_text_field($_POST[ 'booking_number' ]);
+        $booking_number = sanitize_text_field($_POST['booking_number']);
         $booking_data   = staylodgic_get_booking_transient($booking_number);
 
         if (!isset($booking_data)) {
             wp_send_json_error('Invalid or timeout. Please try again');
         }
         // Obtain customer details from form submission
-        $bookingdata    = sanitize_text_field($_POST[ 'bookingdata' ]);
-        $booking_number = sanitize_text_field($_POST[ 'booking_number' ]);
-        $full_name      = sanitize_text_field($_POST[ 'full_name' ]);
-        $passport       = sanitize_text_field($_POST[ 'passport' ]);
-        $email_address  = sanitize_email($_POST[ 'email_address' ]);
-        $phone_number   = sanitize_text_field($_POST[ 'phone_number' ]);
-        $street_address = sanitize_text_field($_POST[ 'street_address' ]);
-        $city           = sanitize_text_field($_POST[ 'city' ]);
-        $state          = sanitize_text_field($_POST[ 'state' ]);
-        $zip_code       = sanitize_text_field($_POST[ 'zip_code' ]);
-        $country        = sanitize_text_field($_POST[ 'country' ]);
-        $guest_comment  = sanitize_text_field($_POST[ 'guest_comment' ]);
-        $guest_consent  = sanitize_text_field($_POST[ 'guest_consent' ]);
+        $bookingdata    = sanitize_text_field($_POST['bookingdata']);
+        $booking_number = sanitize_text_field($_POST['booking_number']);
+        $full_name      = sanitize_text_field($_POST['full_name']);
+        $passport       = sanitize_text_field($_POST['passport']);
+        $email_address  = sanitize_email($_POST['email_address']);
+        $phone_number   = sanitize_text_field($_POST['phone_number']);
+        $street_address = sanitize_text_field($_POST['street_address']);
+        $city           = sanitize_text_field($_POST['city']);
+        $state          = sanitize_text_field($_POST['state']);
+        $zip_code       = sanitize_text_field($_POST['zip_code']);
+        $country        = sanitize_text_field($_POST['country']);
+        $guest_comment  = sanitize_text_field($_POST['guest_comment']);
+        $guest_consent  = sanitize_text_field($_POST['guest_consent']);
 
         error_log('------- Transient acitvity Data -------');
         error_log($booking_number);
@@ -1416,24 +1422,24 @@ return ob_get_clean();
         // add other fields as necessary
 
         $rooms                      = array();
-        $rooms[ '0' ][ 'id' ]       = $booking_data[ 'choice' ][ 'activity_id' ];
-        $rooms[ '0' ][ 'quantity' ] = '1';
-        $adults                     = $booking_data[ 'adults' ];
-        $children                   = $booking_data[ 'children' ];
+        $rooms['0']['id']       = $booking_data['choice']['activity_id'];
+        $rooms['0']['quantity'] = '1';
+        $adults                     = $booking_data['adults'];
+        $children                   = $booking_data['children'];
 
         $reservationData = self::buildReservationArray($booking_data);
 
-        $reservationData[ 'customer' ][ 'full_name' ]      = $full_name;
-        $reservationData[ 'customer' ][ 'passport' ]       = $passport;
-        $reservationData[ 'customer' ][ 'email_address' ]  = $email_address;
-        $reservationData[ 'customer' ][ 'phone_number' ]   = $phone_number;
-        $reservationData[ 'customer' ][ 'street_address' ] = $street_address;
-        $reservationData[ 'customer' ][ 'city' ]           = $city;
-        $reservationData[ 'customer' ][ 'state' ]          = $state;
-        $reservationData[ 'customer' ][ 'zip_code' ]       = $zip_code;
-        $reservationData[ 'customer' ][ 'country' ]        = $country;
-        $reservationData[ 'customer' ][ 'guest_comment' ]  = $guest_comment;
-        $reservationData[ 'customer' ][ 'guest_consent' ]  = $guest_consent;
+        $reservationData['customer']['full_name']      = $full_name;
+        $reservationData['customer']['passport']       = $passport;
+        $reservationData['customer']['email_address']  = $email_address;
+        $reservationData['customer']['phone_number']   = $phone_number;
+        $reservationData['customer']['street_address'] = $street_address;
+        $reservationData['customer']['city']           = $city;
+        $reservationData['customer']['state']          = $state;
+        $reservationData['customer']['zip_code']       = $zip_code;
+        $reservationData['customer']['country']        = $country;
+        $reservationData['customer']['guest_comment']  = $guest_comment;
+        $reservationData['customer']['guest_consent']  = $guest_consent;
 
         error_log('------- Final acitvity Data -------');
         error_log(print_r($reservationData, true));
@@ -1472,14 +1478,14 @@ return ob_get_clean();
             return;
         }
 
-        $checkin  = $reservationData[ 'date' ];
-        $room_id  = $reservationData[ 'activity_id' ];
+        $checkin  = $reservationData['date'];
+        $room_id  = $reservationData['activity_id'];
 
         $children_array             = array();
-        $children_array[ 'number' ] = $reservationData[ 'children' ];
+        $children_array['number'] = $reservationData['children'];
 
-        foreach ($reservationData[ 'children_age' ] as $key => $value) {
-            $children_array[ 'age' ][  ] = $value;
+        foreach ($reservationData['children_age'] as $key => $value) {
+            $children_array['age'][] = $value;
         }
 
         $tax_status = 'excluded';
@@ -1487,7 +1493,7 @@ return ob_get_clean();
         if (staylodgic_has_activity_tax()) {
             $tax_status = 'enabled';
             $tax_instance = new \Staylodgic\Tax('activities');
-            $tax_html   = $tax_instance->tax_summary($reservationData[ 'tax_html' ][ 'details' ]);
+            $tax_html   = $tax_instance->tax_summary($reservationData['tax_html']['details']);
         }
 
         $new_bookingstatus = staylodgic_get_option('new_bookingstatus');
@@ -1511,26 +1517,26 @@ return ob_get_clean();
             'post_title' => $booking_number, // Set the booking number as post title
             'post_status' => 'publish', // The status you want to give new posts
             'meta_input' => array(
-                'staylodgic_activity_id'                        => $reservationData[ 'activity_id' ],
-                'staylodgic_reservation_status'             => $new_bookingstatus,
-                'staylodgic_reservation_substatus'          => $new_bookingsubstatus,
-                'staylodgic_reservation_checkin'                   => $checkin,
-                'staylodgic_activity_time'                   => $reservationData[ 'time' ],
-                'staylodgic_checkin_date'                   => $checkin,
-                'staylodgic_tax'                            => $tax_status,
-                'staylodgic_tax_html_data'                  => $tax_html,
-                'staylodgic_tax_data'                       => $reservationData[ 'tax' ],
-                'staylodgic_reservation_activity_adults'        => $reservationData[ 'adults' ],
+                'staylodgic_activity_id'                        => $reservationData['activity_id'],
+                'staylodgic_reservation_status'                 => $new_bookingstatus,
+                'staylodgic_reservation_substatus'              => $new_bookingsubstatus,
+                'staylodgic_reservation_checkin'                => $checkin,
+                'staylodgic_activity_time'                      => $reservationData['time'],
+                'staylodgic_checkin_date'                       => $checkin,
+                'staylodgic_tax'                                => $tax_status,
+                'staylodgic_tax_html_data'                      => $tax_html,
+                'staylodgic_tax_data'                           => $reservationData['tax'],
+                'staylodgic_reservation_activity_adults'        => $reservationData['adults'],
                 'staylodgic_reservation_activity_children'      => $children_array,
-                'staylodgic_reservation_rate_per_person'     => $reservationData[ 'rateperperson' ],
-                'staylodgic_reservation_subtotal_activity_cost' => $reservationData[ 'subtotal' ],
-                'staylodgic_reservation_total_room_cost'    => $reservationData[ 'total' ],
-                'staylodgic_booking_number'                 => $booking_number,
-                'staylodgic_booking_uid'                    => $reservation_booking_uid,
-                'staylodgic_customer_id'                    => $customer_post_id,
-                'staylodgic_ics_signature'                  => $signature,
-                'staylodgic_booking_data'                   => $reservationData,
-                'staylodgic_booking_channel'                => $booking_channel,
+                'staylodgic_reservation_rate_per_person'        => $reservationData['rateperperson'],
+                'staylodgic_reservation_subtotal_activity_cost' => $reservationData['subtotal'],
+                'staylodgic_reservation_total_room_cost'        => $reservationData['total'],
+                'staylodgic_booking_number'                     => $booking_number,
+                'staylodgic_booking_uid'                        => $reservation_booking_uid,
+                'staylodgic_customer_id'                        => $customer_post_id,
+                'staylodgic_ics_signature'                      => $signature,
+                'staylodgic_booking_data'                       => $reservationData,
+                'staylodgic_booking_channel'                    => $booking_channel,
             ),
         );
 
@@ -1549,9 +1555,9 @@ return ob_get_clean();
                 'bookingNumber'  => $booking_number,
                 'roomTitle'      => $roomName,
                 'checkinDate'    => $checkin,
-                'adultGuests'    => $reservationData[ 'adults' ],
-                'childrenGuests' => $reservationData[ 'children' ],
-                'totalCost'      => $reservationData[ 'total' ],
+                'adultGuests'    => $reservationData['adults'],
+                'childrenGuests' => $reservationData['children'],
+                'totalCost'      => $reservationData['total'],
             ];
 
             $email = new EmailDispatcher($email_address, 'Booking Confirmation for: ' . $booking_number);
@@ -1562,7 +1568,6 @@ return ob_get_clean();
             } else {
                 // echo 'Failed to send the confirmation email.';
             }
-
         } else {
             // Handle error
         }
@@ -1571,8 +1576,6 @@ return ob_get_clean();
         wp_send_json_success('Booking successfully registered.');
         wp_die();
     }
-    
-
 }
 
 $instance = new \Staylodgic\Activity();

@@ -129,18 +129,21 @@ class Customers
     public function generateCustomerRooms($customer_id)
     {
 
+        $custom_room = '';
         $rooms = self::get_room_names_by_customer($customer_id);
 
         if (is_array($rooms) && !empty($rooms)) {
-            echo "<ul>";
+            $custom_room .= "<ul>";
             // Iterate over the room names and create a list item for each one
             foreach ($rooms as $room) {
-                echo "<li>" . $room . "</li>";
+                $custom_room .= "<li>" . $room . "</li>";
             }
-            echo "</ul>";
+            $custom_room .= "</ul>";
         } else {
-            echo "No rooms found.";
+            $custom_room .= "No rooms found.";
         }
+
+        return $custom_room;
     }
 
     public function generateCustomerBookingNumbers($customer_id)

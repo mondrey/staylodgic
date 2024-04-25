@@ -34,7 +34,6 @@ class Rooms
         $rooms = get_posts(
             array(
                 'post_type' => 'slgc_room',
-                'orderby' => 'title',
                 'numberposts' => -1,
                 'orderby' => 'menu_order',
                 'order' => 'ASC',

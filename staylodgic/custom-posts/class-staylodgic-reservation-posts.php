@@ -12,7 +12,6 @@ class staylodgic_Reservation_Posts
         add_filter('manage_edit-slgc_reservations_sortable_columns', array($this, 'slgc_reservations_sortable_columns'));
 
         add_action('pre_get_posts', array($this, 'slgc_reservations_orderby'));
-
     }
 
     public function slgc_reservations_orderby($query)
@@ -20,28 +19,28 @@ class staylodgic_Reservation_Posts
         if (!is_admin() || !$query->is_main_query()) {
             return;
         }
-    
+
         $orderby = $query->get('orderby');
-    
+
         if ('reservation_checkinout' == $orderby) {
             $query->set('meta_key', 'staylodgic_checkin_date'); // Assuming 'reservation_checkin_date' is the meta key for check-in date
             $query->set('orderby', 'meta_value');
         }
     }
-    
-    
+
+
     public function slgc_reservations_sortable_columns($columns)
     {
         $columns['reservation_checkinout'] = 'reservation_checkinout';
         return $columns;
     }
-    
+
 
     // Kbase lister
     public function slgc_reservations_edit_columns($columns)
     {
-        unset($columns[ 'author' ]);
-        unset($columns[ 'date' ]);
+        unset($columns['author']);
+        unset($columns['date']);
         $new_columns = array(
             //"mreservation_section" => __('Section', 'staylodgic'),
             "reservation_customer"   => __('Customer', 'staylodgic'),
@@ -64,8 +63,8 @@ class staylodgic_Reservation_Posts
 
         $full_image_id  = get_post_thumbnail_id(($post->ID), 'fullimage');
         $full_image_url = wp_get_attachment_image_src($full_image_id, 'fullimage');
-        if (isset($full_image_url[ 0 ])) {
-            $full_image_url = $full_image_url[ 0 ];
+        if (isset($full_image_url[0])) {
+            $full_image_url = $full_image_url[0];
         }
 
         $reservation_instance = new \Staylodgic\Reservations($date = false, $room_id = false, $reservation_id = $post->ID);
@@ -74,10 +73,12 @@ class staylodgic_Reservation_Posts
         switch ($columns) {
             case "reservation_customer":
                 $customer_name = $reservation_instance->getCustomerEditLinkForReservation();
-                echo $customer_name;
+                if (null !== $customer_name) {
+                    echo wp_kses($customer_name, staylodgic_get_allowed_tags());
+                }
                 break;
             case "reservation_bookingnr":
-                echo $bookingnumber;
+                echo esc_attr($bookingnumber);
                 break;
             case "reservation_checkinout":
                 $reservation_checkin       = $reservation_instance->getCheckinDate();
@@ -94,32 +95,33 @@ class staylodgic_Reservation_Posts
                         echo '<p class="post-status-reservation post-status-reservation-staying">' . __('Staying', 'staylodgic') . '</p>';
                     }
                 }
-                echo '<p class="post-status-reservation-date post-status-reservation-date-checkin"><i class="fa-solid fa-arrow-right"></i> ' . staylodgic_formatDate($reservation_checkin) . '</p>';
-                echo '<p class="post-status-reservation-date post-status-reservation-date-checkout"><i class="fa-solid fa-arrow-left"></i> ' . staylodgic_formatDate($reservation_checkout) . '</p>';
+                echo '<p class="post-status-reservation-date post-status-reservation-date-checkin"><i class="fa-solid fa-arrow-right"></i> ' . esc_attr(staylodgic_formatDate($reservation_checkin)) . '</p>';
+                echo '<p class="post-status-reservation-date post-status-reservation-date-checkout"><i class="fa-solid fa-arrow-left"></i> ' . esc_attr(staylodgic_formatDate($reservation_checkout)) . '</p>';
 
                 break;
             case "reservation_registered":
                 $registry_instance = new \Staylodgic\GuestRegistry();
-                $resRegIDs =  $registry_instance->fetchResRegIDsByBookingNumber( $bookingnumber );
-                if ( $resRegIDs ) {
-                    echo $registry_instance->outputRegistrationAndOccupancy($resRegIDs['reservationID'], $resRegIDs['guestRegisterID'], 'icons');
+                $resRegIDs =  $registry_instance->fetchResRegIDsByBookingNumber($bookingnumber);
+                if ($resRegIDs) {
+                    $registration_occupancy = $registry_instance->outputRegistrationAndOccupancy($resRegIDs['reservationID'], $resRegIDs['guestRegisterID'], 'icons');
+                    echo wp_kses($registration_occupancy, staylodgic_get_allowed_tags());
                 }
                 break;
             case "reservation_nights":
                 $reservation_nights = $reservation_instance->countReservationDays();
-                echo $reservation_nights;
+                echo esc_attr($reservation_nights);
                 break;
             case "reservation_status":
                 $reservation_status = $reservation_instance->getReservationStatus();
-                echo ucfirst($reservation_status);
+                echo esc_attr(ucfirst($reservation_status));
                 break;
             case "reservation_substatus":
                 $reservation_substatus = $reservation_instance->getReservationSubStatus();
-                echo ucfirst($reservation_substatus);
+                echo esc_attr(ucfirst($reservation_substatus));
                 break;
             case "reservation_room":
                 $room_title = $reservation_instance->getRoomTitleForReservation();
-                echo $room_title;
+                echo esc_html($room_title);
                 break;
             case "mreservation_section":
                 echo get_the_term_list(get_the_id(), 'slgc_rescat', '', ', ', '');
@@ -131,34 +133,20 @@ class staylodgic_Reservation_Posts
      */
 
     /**
-     * Registers TinyMCE rich editor buttons
      *
      * @return    void
      */
     public function init()
     {
         /*
-         * Register Featured Post Manager
+         * Register Post
          */
-        //add_action('init', 'staylodgic_featured_register');
-        //add_action('init', 'staylodgic_kbase_register');//Always use a shortname like "staylodgic_" not to see any 404 errors
-        /*
-         * Register kbase Post Manager
-         */
-
-        $staylodgic_reservations_slug = "reservations";
-        if (function_exists('staylodgic_get_option_data')) {
-            $staylodgic_reservations_slug = staylodgic_get_option_data('reservations_permalink_slug');
-        }
-        if ($staylodgic_reservations_slug == "" || !isset($staylodgic_reservations_slug)) {
-            $staylodgic_reservations_slug = "reservations";
-        }
         $args = array(
             'labels'             => array(
-                'name'          => 'Reservations',
-                'menu_name'     => 'Reservations',
-                'singular_name' => 'Reservation',
-                'all_items'     => 'All Reservations',
+                'name'          => __('Reservations', 'staylodgic'),
+                'menu_name'     => __('Reservations', 'staylodgic'),
+                'singular_name' => __('Reservation', 'staylodgic'),
+                'all_items'     => __('All Reservations', 'staylodgic'),
             ),
             'singular_label'     => __('Reservation', 'staylodgic'),
             'public'             => true,
@@ -171,7 +159,7 @@ class staylodgic_Reservation_Posts
             'has_archive'        => true,
             'menu_position'      => 36,
             'menu_icon'          => 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0NDggNTEyIj48IS0tIUZvbnQgQXdlc29tZSBGcmVlIDYuNS4yIGJ5IEBmb250YXdlc29tZSAtIGh0dHBzOi8vZm9udGF3ZXNvbWUuY29tIExpY2Vuc2UgLSBodHRwczovL2ZvbnRhd2Vzb21lLmNvbS9saWNlbnNlL2ZyZWUgQ29weXJpZ2h0IDIwMjQgRm9udGljb25zLCBJbmMuLS0+PHBhdGggZmlsbD0iIzYzRTZCRSIgZD0iTTk2IDBDNDMgMCAwIDQzIDAgOTZWNDE2YzAgNTMgNDMgOTYgOTYgOTZIMzg0aDMyYzE3LjcgMCAzMi0xNC4zIDMyLTMycy0xNC4zLTMyLTMyLTMyVjM4NGMxNy43IDAgMzItMTQuMyAzMi0zMlYzMmMwLTE3LjctMTQuMy0zMi0zMi0zMkgzODQgOTZ6bTAgMzg0SDM1MnY2NEg5NmMtMTcuNyAwLTMyLTE0LjMtMzItMzJzMTQuMy0zMiAzMi0zMnptMzItMjQwYzAtOC44IDcuMi0xNiAxNi0xNkgzMzZjOC44IDAgMTYgNy4yIDE2IDE2cy03LjIgMTYtMTYgMTZIMTQ0Yy04LjggMC0xNi03LjItMTYtMTZ6bTE2IDQ4SDMzNmM4LjggMCAxNiA3LjIgMTYgMTZzLTcuMiAxNi0xNiAxNkgxNDRjLTguOCAwLTE2LTcuMi0xNi0xNnM3LjItMTYgMTYtMTZ6Ii8+PC9zdmc+',
-            'rewrite'            => array('slug' => $staylodgic_reservations_slug), //Use a slug like "work" or "project" that shouldnt be same with your page name
+            'rewrite'            => array('slug' => 'reservations'), //Use a slug like "work" or "project" that shouldnt be same with your page name
             'supports' => array('title', 'author', 'thumbnail'), //Boxes will be shown in the panel
         );
 
@@ -179,13 +167,15 @@ class staylodgic_Reservation_Posts
         /*
          * Add Taxonomy for kbase 'Type'
          */
-        register_taxonomy('slgc_rescat', array('slgc_reservations'),
+        register_taxonomy(
+            'slgc_rescat',
+            array('slgc_reservations'),
             array(
                 'labels'       => array(
-                    'name'          => 'Sections',
-                    'menu_name'     => 'Sections',
-                    'singular_name' => 'Section',
-                    'all_items'     => 'All Sections',
+                    'name'          => __('Sections', 'staylodgic'),
+                    'menu_name'     => __('Sections', 'staylodgic'),
+                    'singular_name' => __('Section', 'staylodgic'),
+                    'all_items'     => __('All Sections', 'staylodgic'),
                 ),
                 'public'       => true,
                 'hierarchical' => true,
@@ -193,8 +183,6 @@ class staylodgic_Reservation_Posts
                 'rewrite'      => array('slug' => 'reservations-section', 'hierarchical' => true, 'with_front' => false),
             )
         );
-
     }
-
 }
 $staylodgic_kbase_post_type = new staylodgic_Reservation_Posts();
