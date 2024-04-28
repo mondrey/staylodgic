@@ -242,7 +242,7 @@ class Activity
         $total_people = isset($_POST['totalpeople']) ? sanitize_text_field($_POST['totalpeople']) : null;
         $the_post_id = isset($_POST['the_post_id']) ? sanitize_text_field($_POST['the_post_id']) : null;
 
-        error_log('AJAX handler triggered. Selected date: ' . $selected_date);
+        // error_log('AJAX handler triggered. Selected date: ' . $selected_date);
 
         // Call the method and capture the output
         ob_start();
@@ -289,7 +289,7 @@ class Activity
             }
         }
 
-        error_log('AJAX handler triggered. Selected date: ' . $selected_date);
+        // error_log('AJAX handler triggered. Selected date: ' . $selected_date);
 
         // Call the method and capture the output
         ob_start();
@@ -541,8 +541,8 @@ class Activity
 
         if (is_array($booking_results)) {
 
-            error_log('====== From Transient ======');
-            error_log(print_r($booking_results, true));
+            // error_log('====== From Transient ======');
+            // error_log(print_r($booking_results, true));
 
             $booking_results['bookingnumber']           = $bookingnumber;
             $booking_results['choice']['activity_id']   = $activity_id;
@@ -589,7 +589,7 @@ class Activity
             'zip_code'       => __('Zip Code', 'staylodgic'),
             'country'        => __('Country', 'staylodgic'),
             'guest_comment'  => __('Notes', 'staylodgic'),
-            'guest_consent'  => __('By clicking "Book this Room" you agree to our terms and conditions and privacy policy.', 'staylodgic'),
+            'guest_consent'  => __('By clicking "Book this Activity" you agree to our terms and conditions and privacy policy.', 'staylodgic'),
         ];
 
         return $dataFields;
@@ -617,77 +617,74 @@ class Activity
 
         $formInputs = self::bookingDataFields();
 
-        $form_html = <<<HTML
-		<div class="registration_form_outer registration_request">
-			<div class="registration_form_wrap">
-				<div class="registration_form">
-					<div class="registration-column registration-column-one registration_form_inputs">
-                    <div class="booking-backto-activitychoice"><div class="booking-backto-roomchoice-inner"><i class="fa-solid fa-arrow-left"></i> Back</div></div>
-                    <h3>Registration</h3>
-                    <div class="form-group form-floating">
-						<input placeholder="Full Name" type="text" class="form-control" id="full_name" name="full_name" required>
-						<label for="full_name" class="control-label">$formInputs[full_name]</label>
-					</div>
-					<div class="form-group form-floating">
-						<input placeholder="Passport No." type="text" class="form-control" id="passport" name="passport" required>
-						<label for="passport" class="control-label">$formInputs[passport]</label>
-					</div>
-					<div class="form-group form-floating">
-						<input placeholder="" type="email" class="form-control" id="email_address" name="email_address" required>
-						<label for="email_address" class="control-label">$formInputs[email_address]</label>
-					</div>
-					<div class="form-group form-floating">
-						<input placeholder="" type="tel" class="form-control" id="phone_number" name="phone_number" required>
-						<label for="phone_number" class="control-label">$formInputs[phone_number]</label>
-					</div>
-                    <div class="form-group form-floating">
-                        <input placeholder="" type="text" class="form-control" id="street_address" name="street_address">
-                        <label for="street_address" class="control-label">$formInputs[street_address]</label>
-                    </div>
-                    <div class="form-group form-floating">
-                        <input placeholder="" type="text" class="form-control" id="city" name="city">
-                        <label for="city" class="control-label">$formInputs[city]</label>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <div class="form-group form-floating">
-                                <input placeholder="" type="text" class="form-control" id="state" name="state">
-                                <label for="state" class="control-label">$formInputs[state]</label>
+        $form_html = '
+        <div class="registration_form_outer registration_request">
+            <div class="registration_form_wrap">
+                <div class="registration_form">
+                    <div class="registration-column registration-column-one registration_form_inputs">
+                        <div class="booking-backto-activitychoice"><div class="booking-backto-roomchoice-inner"><i class="fa-solid fa-arrow-left"></i> ' . __('Back', 'staylodgic') . '</div></div>
+                        <h3>' . __('Registration', 'staylodgic') . '</h3>
+                        <div class="form-group form-floating">
+                            <input placeholder="' . esc_attr__('Full Name', 'staylodgic') . '" type="text" class="form-control" id="full_name" name="full_name" required>
+                            <label for="full_name" class="control-label">' . esc_html($formInputs['full_name']) . '</label>
+                        </div>
+                        <div class="form-group form-floating">
+                            <input placeholder="' . esc_attr__('Passport No.', 'staylodgic') . '" type="text" class="form-control" id="passport" name="passport" required>
+                            <label for="passport" class="control-label">' . esc_html($formInputs['passport']) . '</label>
+                        </div>
+                        <div class="form-group form-floating">
+                            <input placeholder="' . esc_attr__('Email Address', 'staylodgic') . '" type="email" class="form-control" id="email_address" name="email_address" required>
+                            <label for="email_address" class="control-label">' . esc_html($formInputs['email_address']) . '</label>
+                        </div>
+                        <div class="form-group form-floating">
+                            <input placeholder="' . esc_attr__('Phone Number', 'staylodgic') . '" type="tel" class="form-control" id="phone_number" name="phone_number" required>
+                            <label for="phone_number" class="control-label">' . esc_html($formInputs['phone_number']) . '</label>
+                        </div>
+                        <div class="form-group form-floating">
+                            <input placeholder="' . esc_attr__('Street Address', 'staylodgic') . '" type="text" class="form-control" id="street_address" name="street_address">
+                            <label for="street_address" class="control-label">' . esc_html($formInputs['street_address']) . '</label>
+                        </div>
+                        <div class="form-group form-floating">
+                            <input placeholder="' . esc_attr__('City', 'staylodgic') . '" type="text" class="form-control" id="city" name="city">
+                            <label for="city" class="control-label">' . esc_html($formInputs['city']) . '</label>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group form-floating">
+                                    <input placeholder="' . esc_attr__('State', 'staylodgic') . '" type="text" class="form-control" id="state" name="state">
+                                    <label for="state" class="control-label">' . esc_html($formInputs['state']) . '</label>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group form-floating">
+                                    <input placeholder="' . esc_attr__('Zip Code', 'staylodgic') . '" type="text" class="form-control" id="zip_code" name="zip_code">
+                                    <label for="zip_code" class="control-label">' . esc_html($formInputs['zip_code']) . '</label>
+                                </div>
                             </div>
                         </div>
-                        <div class="col">
-                            <div class="form-group form-floating">
-                                <input placeholder="" type="text" class="form-control" id="zip_code" name="zip_code">
-                                <label for="zip_code" class="control-label">$formInputs[zip_code]</label>
-                            </div>
+                        <div class="form-group form-floating">
+                            <select required class="form-control" id="country" name="country" >
+                            ' . $country_options . '
+                            </select>
+                            <label for="country" class="control-label">' . esc_html($formInputs['country']) . '</label>
+                        </div>
+                        <div class="form-group form-floating">
+                            <textarea class="form-control" id="guest_comment" name="guest_comment"></textarea>
+                            <label for="guest_comment" class="control-label">' . esc_html($formInputs['guest_comment']) . '</label>
+                        </div>
+                        <div class="checkbox guest-consent-checkbox">
+                            <label for="guest_consent">
+                                <input type="checkbox" class="form-check-input" id="guest_consent" name="guest_consent" required /><span class="consent-notice">' . esc_html__($formInputs['guest_consent'], 'staylodgic') . '</span>
+                                <div class="invalid-feedback">
+                                    ' . __('Consent is required for booking.', 'staylodgic') . '
+                                </div>
+                            </label>
                         </div>
                     </div>
-					<div class="form-group form-floating">
-						<select required placeholder="" class="form-control" id="country" name="country" >
-						$country_options
-						</select>
-						<label for="country" class="control-label">$formInputs[country]</label>
-					</div>
-					<div class="form-group form-floating">
-					<textarea placeholder="" class="form-control" id="guest_comment" name="guest_comment"></textarea>
-					<label for="guest_comment" class="control-label">$formInputs[guest_comment]</label>
-					</div>
-					<div class="checkbox guest-consent-checkbox">
-					<label for="guest_consent">
-						<input type="checkbox" class="form-check-input" id="guest_consent" name="guest_consent" required /><span class="consent-notice">$formInputs[guest_consent]</span>
-                        <div class="invalid-feedback">
-                            Consent is required for booking.
-                        </div>
-                    </label>
-					</div>
-				</div>
-
-				$html
-
-				</div>
-			</div>
-		</div>
-HTML;
+                    ' . $html . '
+                </div>
+            </div>
+        </div>';
 
         return $form_html . $bookingsuccess;
     }
@@ -698,31 +695,30 @@ HTML;
         $reservation_instance = new \Staylodgic\Reservations();
         $booking_page_link    = $reservation_instance->getBookingDetailsPageLinkForGuest();
 
-        $booking_details_link = '<a href="' . esc_attr(esc_url(get_page_link($booking_page_link))) . '">Booking Details</a>';
-
-        $success_html = <<<HTML
-		<div class="registration_form_outer registration_successful">
-			<div class="registration_form_wrap">
-				<div class="registration_form">
-        <div class="registration-successful-inner">
-            <h3>Booking Successful</h3>
-            <p>
-                Hi,
-            </p>
-            <p>
-                Your booking number is: <span class="booking-number">$this->bookingNumber</span>
-            </p>
-            <p>
-                Please contact us to cancel, modify or if there's any questions regarding the booking.
-            </p>
-            <p>
-                <div id="booking-details" class="book-button not-fullwidth">$booking_details_link</div>
-            </p>
-        </div>
-        </div>
-        </div>
-        </div>
-HTML;
+        $success_html = '
+        <div class="registration_form_outer registration_successful">
+            <div class="registration_form_wrap">
+                <div class="registration_form">
+                    <div class="registration-successful-inner">
+                        <h3>' . esc_html__('Booking Successful', 'staylodgic') . '</h3>
+                        <p>
+                            ' . esc_html__('Hi,', 'staylodgic') . '
+                        </p>
+                        <p>
+                            ' . esc_html__('Your booking number is:', 'staylodgic') . ' <span class="booking-number">' . esc_html($this->bookingNumber) . '</span>
+                        </p>
+                        <p>
+                            ' . esc_html__('Please contact us to cancel, modify or if there\'s any questions regarding the booking.', 'staylodgic') . '
+                        </p>
+                        <p>
+                            <div id="booking-details" class="book-button not-fullwidth">
+                                <a href="' . esc_attr(esc_url(get_page_link($booking_page_link))) . '">' . esc_html__('Booking Details', 'staylodgic') . '</a>
+                            </div>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>';
 
         return $success_html;
     }
@@ -743,7 +739,7 @@ HTML;
 
         $html = '<div id="booking-summary-wrap">';
         if ('' !== $activity_name) {
-            $html .= '<div class="room-summary"><span class="summary-room-name">' . $activity_name . '</span></div>';
+            $html .= '<div class="room-summary"><span class="summary-room-name">' . esc_html($activity_name) . '</span></div>';
         }
 
         $html .= '<div class="main-summary-wrap">';
@@ -755,9 +751,9 @@ HTML;
         $html .= '<div class="stay-summary-wrap">';
 
         $html .= '<div class="summary-icon checkin-summary-icon"><i class="fa-regular fa-calendar-check"></i></div>';
-        $html .= '<div class="summary-heading checkin-summary-heading">Activity Time:</div>';
-        $html .= '<div class="checkin-summary">' . $checkin . '</div>';
-        $html .= '<div class="checkin-summary">' . $time . '</div>';
+        $html .= '<div class="summary-heading checkin-summary-heading">' . esc_html__('Activity Time:', 'staylodgic') . '</div>';
+        $html .= '<div class="checkin-summary">' . esc_html($checkin) . '</div>';
+        $html .= '<div class="checkin-summary">' . esc_html($time) . '</div>';
 
         $html .= '<div class="summary-icon stay-summary-icon"><i class="fa-solid fa-moon"></i></div>';
         $html .= '</div>';
@@ -767,11 +763,11 @@ HTML;
             $html .= '<div class="price-summary-wrap">';
 
             if (staylodgic_has_tax()) {
-                $html .= '<div class="summary-heading total-summary-heading">Subtotal:</div>';
+                $html .= '<div class="summary-heading total-summary-heading">' . esc_html__('Subtotal:', 'staylodgic') . '</div>';
                 $html .= '<div class="price-summary">' . staylodgic_price($subtotalprice) . '</div>';
             }
 
-            $html .= '<div class="summary-heading total-summary-heading">Total:</div>';
+            $html .= '<div class="summary-heading total-summary-heading">' . esc_html__('Total:', 'staylodgic') . '</div>';
 
             $staynights = 1;
             $tax_instance = new \Staylodgic\Tax('activities');
@@ -787,7 +783,7 @@ HTML;
         if ('' !== $activity_id) {
             $html .= '<div class="form-group">';
             $html .= '<div id="bookingResponse" class="booking-response"></div>';
-            $html .= '<div id="activity-register" class="book-button">Book this activity</div>';
+            $html .= '<div id="activity-register" class="book-button">' . esc_html__('Book this activity', 'staylodgic') . '</div>';
             // $html .= self::paymentHelperButton($totalprice[ 'total' ], $bookingnumber);
             $html .= '</div>';
         }
@@ -1375,15 +1371,15 @@ HTML;
     public function bookActivity()
     {
 
-        error_log('------- acitvity posted data -------');
-        error_log(print_r($_POST, true));
+        // error_log('------- acitvity posted data -------');
+        // error_log(print_r($_POST, true));
 
         $serializedData = $_POST['bookingdata'];
         // Parse the serialized data into an associative array
         parse_str($serializedData, $formData);
 
-        error_log('------- acitvity posted deserialized data -------');
-        error_log(print_r($formData, true));
+        // error_log('------- acitvity posted deserialized data -------');
+        // error_log(print_r($formData, true));
 
         // Verify the nonce
         if (!isset($_POST['staylodgic_roomlistingbox_nonce']) || !check_admin_referer('staylodgic-roomlistingbox-nonce', 'staylodgic_roomlistingbox_nonce')) {
@@ -1415,10 +1411,10 @@ HTML;
         $guest_comment  = sanitize_text_field($_POST['guest_comment']);
         $guest_consent  = sanitize_text_field($_POST['guest_consent']);
 
-        error_log('------- Transient acitvity Data -------');
-        error_log($booking_number);
-        error_log(print_r($booking_data, true));
-        error_log('------- Transient acitvity Data End -------');
+        // error_log('------- Transient acitvity Data -------');
+        // error_log($booking_number);
+        // error_log(print_r($booking_data, true));
+        // error_log('------- Transient acitvity Data End -------');
         // add other fields as necessary
 
         $rooms                      = array();
@@ -1441,9 +1437,9 @@ HTML;
         $reservationData['customer']['guest_comment']  = $guest_comment;
         $reservationData['customer']['guest_consent']  = $guest_consent;
 
-        error_log('------- Final acitvity Data -------');
-        error_log(print_r($reservationData, true));
-        error_log('------- Final acitvity Data End -------');
+        // error_log('------- Final acitvity Data -------');
+        // error_log(print_r($reservationData, true));
+        // error_log('------- Final acitvity Data End -------');
 
         // error_log(print_r($can_accomodate, true));
         // error_log("Rooms:");
