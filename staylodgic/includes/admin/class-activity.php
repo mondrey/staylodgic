@@ -1221,7 +1221,7 @@ class Activity
                 $max_guests = get_post_meta($post_id, 'staylodgic_max_guests', true);
 
                 // Display the activity identifier (e.g., post title)
-                echo '<div class="activity-schedule" id="activity-schedule-' . $post_id . '">';
+                echo '<div class="activity-schedule" id="activity-schedule-' . esc_attr($post_id) . '">';
 
                 echo '<h4>' . get_the_title() . '</h4>';
 
@@ -1253,9 +1253,9 @@ class Activity
                                 $active_class .= ' time-choice';
                             }
 
-                            echo '<span class="time-slot ' . $active_class . '" id="time-slot-' . $day_of_week . '-' . $index . '" data-activity="' . $post_id . '" data-time="' . $time . '"><span class="activity-time-slot"><i class="fa-regular fa-clock"></i> ' . $time . '</span><span class="time-slots-remaining">( ' . $remaining_spots . ' of ' . $max_guests . ' remaining )</span></span> ';
+                            echo '<span class="time-slot ' . esc_attr($active_class) . '" id="time-slot-' . esc_attr($day_of_week) . '-' . esc_attr($index) . '" data-activity="' . esc_attr($post_id) . '" data-time="' . esc_attr($time) . '"><span class="activity-time-slot"><i class="fa-regular fa-clock"></i> ' . esc_attr($time) . '</span><span class="time-slots-remaining">( ' . esc_attr($remaining_spots) . ' of ' . esc_attr($max_guests) . ' remaining )</span></span> ';
                         } else {
-                            echo '<span class="time-slot ' . $active_class . '" id="time-slot-' . $day_of_week . '-' . $index . '" data-activity="' . $post_id . '" data-time="' . $time . '"><span class="activity-time-slot"><i class="fa-regular fa-clock"></i> Unavailable</span><span class="time-slots-remaining">( - of - )</span></span> ';
+                            echo '<span class="time-slot ' . esc_attr($active_class) . '" id="time-slot-' . esc_attr($day_of_week) . '-' . esc_attr($index) . '" data-activity="' . esc_attr($post_id) . '" data-time="' . esc_attr($time) . '"><span class="activity-time-slot"><i class="fa-regular fa-clock"></i> Unavailable</span><span class="time-slots-remaining">( - of - )</span></span> ';
                         }
                     }
                     echo '</div>';
