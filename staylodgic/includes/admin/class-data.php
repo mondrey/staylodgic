@@ -56,14 +56,14 @@ class Data
         $full_name = get_post_meta($post_id, 'staylodgic_full_name', true);
 
         // Check if customer post exists
-        error_log("customer_choice: " . $customer_choice . '||' . $booking_number);
+        // error_log("customer_choice: " . $customer_choice . '||' . $booking_number);
         $customer_id = get_post_meta($post_id, 'staylodgic_customer_id', true);
-        error_log("checking customer post: " . $customer_id . '||' . $post_id . '||' . $full_name);
+        // error_log("checking customer post: " . $customer_id . '||' . $post_id . '||' . $full_name);
 
         if (\Staylodgic\Common::isCustomer_valid_post($existing_customer)) {
             if ('existing' == $customer_choice) {
 
-                error_log("Updating: " . $existing_customer . '||' . $booking_number);
+                // error_log("Updating: " . $existing_customer . '||' . $booking_number);
                 update_post_meta($post_id, 'staylodgic_customer_id', $existing_customer);
 
             }
@@ -76,7 +76,7 @@ class Data
 
         if (!\Staylodgic\Common::isCustomer_valid_post($customer_id)) {
             if ('existing' !== $customer_choice) {
-                error_log("Customer does not exist: " . $customer_id . '||' . $full_name);
+                // error_log("Customer does not exist: " . $customer_id . '||' . $full_name);
                 // Create new customer from the filled inputs in reservation
                 self::create_Customer_From_Reservation_Post($post_id);
             }
@@ -241,7 +241,7 @@ class Data
     public function updateReservationsArray_On_Save($post_id, $post, $update)
     {
 
-        error_log("is here " . $post_id);
+        // error_log("is here " . $post_id);
 
         if (!\Staylodgic\Common::isReservation_valid_post($post_id, $post)) {
             return;

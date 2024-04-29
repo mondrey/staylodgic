@@ -1,4 +1,5 @@
 <?php
+
 namespace Staylodgic;
 
 class Customers
@@ -6,14 +7,14 @@ class Customers
 
     public static function generateCustomerHtmlList($array)
     {
-        $html = "<ul class='existing-customer'>";
+        $html = '<ul class="existing-customer">';
         foreach ($array as $key => $value) {
             if ('Country' == $key) {
                 $value = \Staylodgic\Common::countryCodeToEmoji($value) . ' ' . staylodgic_country_list('display', $value);
             }
-            $html .= "<li><strong>{$key}:</strong> {$value}</li>";
+            $html .= '<li><strong>' . esc_html($key) . ':</strong> ' . esc_html($value) . '</li>';
         }
-        $html .= "</ul>";
+        $html .= '</ul>';
         return $html;
     }
 
@@ -133,14 +134,14 @@ class Customers
         $rooms = self::get_room_names_by_customer($customer_id);
 
         if (is_array($rooms) && !empty($rooms)) {
-            $custom_room .= "<ul>";
+            $custom_room .= '<ul>';
             // Iterate over the room names and create a list item for each one
             foreach ($rooms as $room) {
-                $custom_room .= "<li>" . $room . "</li>";
+                $custom_room .= '<li>' . esc_html($room) . '</li>';
             }
-            $custom_room .= "</ul>";
+            $custom_room .= '</ul>';
         } else {
-            $custom_room .= "No rooms found.";
+            $custom_room .= __('No rooms found.', 'staylodgic');
         }
 
         return $custom_room;
@@ -152,15 +153,14 @@ class Customers
         $booking_numbers = self::get_booking_numbers_by_customer($customer_id);
 
         if (is_array($booking_numbers) && !empty($booking_numbers)) {
-            echo "<ul>";
+            echo '<ul>';
             // Iterate over the booking numbers and create a list item for each one
             foreach ($booking_numbers as $booking_number) {
-                echo "<li>" . $booking_number . "</li>";
+                echo '<li>' . esc_html($booking_number) . '</li>';
             }
-            echo "</ul>";
+            echo '</ul>';
         } else {
-            echo "No booking numbers found.";
+            echo __('No booking numbers found.','staylodgic');
         }
     }
-
 }

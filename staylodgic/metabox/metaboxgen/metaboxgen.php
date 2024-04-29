@@ -1217,9 +1217,14 @@ function staylodgic_generate_metaboxes($meta_data, $post_id)
                     break;
 
                 case 'reservation_for_customer':
+
                     $reservation_instance = new \Staylodgic\Reservations();
                     $reservation_array = \Staylodgic\Reservations::getReservationIDsForCustomer($field['customer_id']);
                     echo $reservation_instance->getEditLinksForReservations($reservation_array);
+
+                    $activity_instance = new \Staylodgic\Activity();
+                    $activity_array = \Staylodgic\Activity::getActivityIDsForCustomer($field['customer_id']);
+                    echo $activity_instance->getEditLinksForActivity($activity_array);
                     break;
 
                 case 'get_customer_data':
