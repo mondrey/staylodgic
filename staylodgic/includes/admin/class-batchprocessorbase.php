@@ -1,4 +1,5 @@
 <?php
+
 namespace Staylodgic;
 
 class BatchProcessorBase
@@ -14,8 +15,8 @@ class BatchProcessorBase
     {
         // Add the main menu page.
         add_menu_page(
-            'Staylodgic Admin',             // Page title
-            'Staylodgic',                   // Menu title
+            __('Staylodgic Admin', 'staylodgic'),             // Page title
+            __('Staylodgic', 'staylodgic'),                   // Menu title
             'manage_options',               // Capability
             'staylodgic-settings',          // Menu slug
             array($this, 'display_main_page'), // Callback function
@@ -26,8 +27,8 @@ class BatchProcessorBase
         // Add the first submenu page. Often this duplicates the main menu page.
         add_submenu_page(
             'staylodgic-settings',          // Parent slug
-            'Main',                    // Page title
-            'Main',                    // Menu title
+            __('Main', 'staylodgic'),                    // Page title
+            __('Main', 'staylodgic'),                    // Menu title
             'manage_options',               // Capability
             'staylodgic-settings',          // Menu slug
             array($this, 'display_main_page') // Callback function
@@ -41,7 +42,7 @@ class BatchProcessorBase
         echo '<div class="admin-page-wrapper">';
         echo '<div class="content-container">';
         echo '<div class="left-columns">'; // Container for both content columns
-        
+
         echo '<div class="left-column">';
         echo '<h1>Staylodgic</h1>';
         echo '<h2>Hotel Management Software</h2>';
@@ -74,7 +75,7 @@ class BatchProcessorBase
         echo '</ul>';
 
         echo '</div>'; // End of first left column
-        
+
         echo '<div class="left-column">';
         echo '<h4>Customer Registry</h4>';
         echo '<ul>';
@@ -87,10 +88,10 @@ class BatchProcessorBase
         echo '<li>Step 1: Create guest registration</li>';
         echo '<li>Step 2: Customize registration fields</li>';
         echo '<li>Step 3: Online registration</li>';
-            echo '<ul>';
-            echo '<li>- Email links</li>';
-            echo '<li>- Use QR Code to scan and fill</li>';
-            echo '</ul>';
+        echo '<ul>';
+        echo '<li>- Email links</li>';
+        echo '<li>- Use QR Code to scan and fill</li>';
+        echo '</ul>';
         echo '</ul>';
 
         echo '<h4>Invoicing</h4>';
@@ -127,6 +128,12 @@ class BatchProcessorBase
         echo '<li>- Create paid plans</li>';
         echo '</ul>';
 
+        echo '<h4>Per Person Pricing</h4>';
+        echo '<ul>';
+        echo '<li>- Set fixed price increments</li>';
+        echo '<li>- Increment by percentage per occupant</li>';
+        echo '</ul>';
+
         echo '<h4>Discounts</h4>';
         echo '<ul>';
         echo '<li>- Last minute discount</li>';
@@ -135,15 +142,15 @@ class BatchProcessorBase
         echo '</ul>';
 
         echo '</div>'; // End of second left column
-        
+
         echo '</div>'; // End of left-columns container
-        
+
         echo '<div class="right-column">';
         echo '<div class="svg-container">';
         echo '<!-- SVG or SVG CSS Background here -->';
         echo '</div>';
         echo '</div>'; // End of right column
-        
+
         echo '</div>'; // End of content container
         echo '</div>'; // End of page wrapper
 
@@ -156,7 +163,8 @@ class BatchProcessorBase
      * @param string $url The URL to check.
      * @return mixed True if the URL can be synced, or the number of minutes left if not ready.
      */
-    private function is_url_ready_for_sync($url) {
+    private function is_url_ready_for_sync($url)
+    {
         $transient_key = 'sync_last_time_' . md5($url);
         $last_sync_time = get_transient($transient_key);
 
@@ -177,8 +185,7 @@ class BatchProcessorBase
     public function process_event_batch(
         $room_id = false,
         $ics_url = false,
-    )
-    {
+    ) {
 
         // Check for nonce security
         if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'staylodgic-nonce-admin')) {
@@ -189,29 +196,29 @@ class BatchProcessorBase
         $parser = new \ICal\ICal();
 
         $jsonOutput = false;
-        if ( ! $room_id ) {
-            $room_id = $_POST[ 'room_id' ];
-            $ics_url = $_POST[ 'ics_url' ];
+        if (!$room_id) {
+            $room_id = $_POST['room_id'];
+            $ics_url = $_POST['ics_url'];
             $jsonOutput = true;
         }
 
         // Check if the URL is ready for syncing.
         $sync_check = self::is_url_ready_for_sync($ics_url);
         if (is_numeric($sync_check)) {
-            wp_send_json_error('Error: Syncing is not allowed yet for this URL. Please wait for ' . $sync_check . ' more minutes.');
+            wp_send_json_error('Error: Syncing is not allowed yet for this URL. Please wait for ' . esc_html($sync_check) . ' more minutes.');
             return;
         }
 
         $file_contents = file_get_contents($ics_url);
         // Check if the feed is empty or incomplete
         if ($file_contents === false || empty($file_contents)) {
-            if ( $jsonOutput ) {
+            if ($jsonOutput) {
                 wp_send_json_error('Error: The iCal feed is empty or could not be retrieved.');
             }
             return;
         }
         if (strpos($file_contents, 'BEGIN:VCALENDAR') === false || strpos($file_contents, 'END:VCALENDAR') === false) {
-            if ( $jsonOutput ) {
+            if ($jsonOutput) {
                 wp_send_json_error('Error: The iCal feed is incomplete.');
             }
             return;
@@ -238,7 +245,7 @@ class BatchProcessorBase
         // Check if the events transient is empty.
         if (!$events) {
             // If empty, display an error or take appropriate action.
-            if ( $jsonOutput ) {
+            if ($jsonOutput) {
                 wp_send_json_error('No events found.');
             }
         }
@@ -254,7 +261,7 @@ class BatchProcessorBase
         $batchSize = 10; // reduce batch size for testing purposes
 
         // Process a batch of events.
-        $processedEvents = [  ];
+        $processedEvents = [];
         for ($i = 0; $i < $this->batchSize; $i++) {
             // Check if there are any more events to process.
             if (empty($events)) {
@@ -266,26 +273,26 @@ class BatchProcessorBase
 
             $description = $event->description;
 
-            $eventData = [  ]; // Initialize the $eventData array
+            $eventData = []; // Initialize the $eventData array
 
             $descriptionLines = explode("\n", $description ?? '');
             foreach ($descriptionLines as $line) {
                 $parts = explode(':', $line, 2);
-                $key   = isset($parts[ 0 ]) ? trim($parts[ 0 ]) : '';
-                $value = isset($parts[ 1 ]) ? trim($parts[ 1 ]) : '';
+                $key   = isset($parts[0]) ? trim($parts[0]) : '';
+                $value = isset($parts[1]) ? trim($parts[1]) : '';
                 if (array_key_exists($key, $eventData)) {
-                    $eventData[ $key ] = $value;
+                    $eventData[$key] = $value;
                 }
 
                 // Extract check-in and check-out dates from the description
                 if ($key === 'CHECKIN') {
                     // Extract date portion and remove time
                     $checkinDate            = date('Y-m-d', strtotime($value));
-                    $eventData[ 'CHECKIN' ] = $checkinDate;
+                    $eventData['CHECKIN'] = $checkinDate;
                 } elseif ($key === 'CHECKOUT') {
                     // Extract date portion and remove time
                     $checkoutDate            = date('Y-m-d', strtotime($value));
-                    $eventData[ 'CHECKOUT' ] = $checkoutDate;
+                    $eventData['CHECKOUT'] = $checkoutDate;
                 }
             }
 
@@ -303,9 +310,9 @@ class BatchProcessorBase
                 'UID'         => $event->uid,
                 'DATA'        => $eventData,
                 'DESCRIPTION' => $description,
-             ];
+            ];
 
-            $processedEvents[  ] = $processedEvent;
+            $processedEvents[] = $processedEvent;
             // Update the transient with the remaining events.
             set_transient('staylodgic_unprocessed_reservation_import', $events, 12 * HOUR_IN_SECONDS);
         }
@@ -321,12 +328,11 @@ class BatchProcessorBase
             ),
         );
 
-        if ( $jsonOutput ) {
+        if ($jsonOutput) {
             wp_send_json($response);
         } else {
             return $response;
         }
-        
     }
 }
 

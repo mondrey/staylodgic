@@ -15,7 +15,7 @@ class AnalyticsBookings
     private $display_tomorrow;
     private $display_dayafter;
 
-    public function __construct($id, $info = 'today', $type = 'bar', $data = [  ], $options = [  ], $guests = array(), $bookings = array())
+    public function __construct($id, $info = 'today', $type = 'bar', $data = [], $options = [], $guests = array(), $bookings = array())
     {
         $this->id       = $id;
         $this->info     = $info;
@@ -25,9 +25,9 @@ class AnalyticsBookings
         $this->guests   = $guests;
         $this->bookings = $bookings;
 
-        $this->display_today    = '<span class="display-stat-date">' . date('M jS') . '</span>';
-        $this->display_tomorrow = '<span class="display-stat-date">' . date('M jS', strtotime('+1 day')) . '</span>';
-        $this->display_dayafter = '<span class="display-stat-date">' . date('M jS', strtotime('+2 day')) . '</span>';
+        $this->display_today    = '<span class="display-stat-date">' . esc_html(date('M jS')) . '</span>';
+        $this->display_tomorrow = '<span class="display-stat-date">' . esc_html(date('M jS', strtotime('+1 day'))) . '</span>';
+        $this->display_dayafter = '<span class="display-stat-date">' . esc_html(date('M jS', strtotime('+2 day'))) . '</span>';
 
         add_action('admin_menu', array($this, 'staylodgic_dashboard'));
     }
@@ -35,20 +35,20 @@ class AnalyticsBookings
     public function staylodgic_dashboard()
     {
         add_menu_page(
-            'Dashboard',
-            'Dashboard',
+            __('Dashboard', 'staylodgic'),
+            __('Dashboard', 'staylodgic'),
             'manage_options',
             'slgc-dashboard',
             array($this, 'display_dashboard'),
             'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48IS0tIUZvbnQgQXdlc29tZSBGcmVlIDYuNS4yIGJ5IEBmb250YXdlc29tZSAtIGh0dHBzOi8vZm9udGF3ZXNvbWUuY29tIExpY2Vuc2UgLSBodHRwczovL2ZvbnRhd2Vzb21lLmNvbS9saWNlbnNlL2ZyZWUgQ29weXJpZ2h0IDIwMjQgRm9udGljb25zLCBJbmMuLS0+PHBhdGggZmlsbD0iIzYzRTZCRSIgZD0iTTAgMjU2YTI1NiAyNTYgMCAxIDEgNTEyIDBBMjU2IDI1NiAwIDEgMSAwIDI1NnpNMjg4IDk2YTMyIDMyIDAgMSAwIC02NCAwIDMyIDMyIDAgMSAwIDY0IDB6TTI1NiA0MTZjMzUuMyAwIDY0LTI4LjcgNjQtNjRjMC0xNy40LTYuOS0zMy4xLTE4LjEtNDQuNkwzNjYgMTYxLjdjNS4zLTEyLjEtLjItMjYuMy0xMi4zLTMxLjZzLTI2LjMgLjItMzEuNiAxMi4zTDI1Ny45IDI4OGMtLjYgMC0xLjMgMC0xLjkgMGMtMzUuMyAwLTY0IDI4LjctNjQgNjRzMjguNyA2NCA2NCA2NHpNMTc2IDE0NGEzMiAzMiAwIDEgMCAtNjQgMCAzMiAzMiAwIDEgMCA2NCAwek05NiAyODhhMzIgMzIgMCAxIDAgMC02NCAzMiAzMiAwIDEgMCAwIDY0em0zNTItMzJhMzIgMzIgMCAxIDAgLTY0IDAgMzIgMzIgMCAxIDAgNjQgMHoiLz48L3N2Zz4=',
-            32// Position parameter
+            32 // Position parameter
         );
 
         // Add the first submenu page. Often this duplicates the main menu page.
         add_submenu_page(
             'slgc-dashboard',          // Parent slug
-            'Bookings Dashboard',                    // Page title
-            'Bookings Dashboard',                    // Menu title
+            __('Bookings Dashboard', 'staylodgic'),                    // Page title
+            __('Bookings Dashboard', 'staylodgic'),                    // Menu title
             'manage_options',               // Capability
             'slgc-dashboard',          // Menu slug
             array($this, 'display_dashboard') // Callback function
@@ -63,8 +63,8 @@ class AnalyticsBookings
         // Add the logo image below the heading
         echo '<div class="staylodgic-main-logo"></div>';
 
-        if ( ! \Staylodgic\Rooms::hasRooms() ) {
-            echo '<h1>' . __('No Rooms Found','staylodgic') . '</h1>';
+        if (!\Staylodgic\Rooms::hasRooms()) {
+            echo '<h1>' . __('No Rooms Found', 'staylodgic') . '</h1>';
             return;
         }
 
@@ -81,46 +81,46 @@ class AnalyticsBookings
         $configs = [
             'past_twelve_months_bookings' => [
                 'info'    => 'past_twelve_months_bookings',
-                'heading' => __('Bookings for past twelve months','staylodgic'),
+                'heading' => __('Bookings for past twelve months', 'staylodgic'),
                 'cache'   => true,
                 'type'    => 'line',
                 'options' => [
                     'scales' => [
                         'y' => [
                             'beginAtZero' => true,
-                         ],
-                     ],
-                 ],
-             ],
+                        ],
+                    ],
+                ],
+            ],
             'past_twelve_months_revenue'  => [
                 'info'    => 'past_twelve_months_revenue',
-                'heading' => __('Revenue for past twelve months','staylodgic'),
+                'heading' => __('Revenue for past twelve months', 'staylodgic'),
                 'cache'   => true,
                 'type'    => 'bar',
                 'options' => [
                     'scales' => [
                         'y' => [
                             'beginAtZero' => true,
-                         ],
-                     ],
-                 ],
-             ],
+                        ],
+                    ],
+                ],
+            ],
             'past_twelve_months_adr'      => [
                 'info'    => 'past_twelve_months_adr',
-                'heading' => __('ADR for past twelve months','staylodgic'),
+                'heading' => __('ADR for past twelve months', 'staylodgic'),
                 'cache'   => true,
                 'type'    => 'bar',
                 'options' => [
                     'scales' => [
                         'y' => [
                             'beginAtZero' => true,
-                         ],
-                     ],
-                 ],
-             ],
+                        ],
+                    ],
+                ],
+            ],
             'bookings_today'              => [
                 'info'    => 'today',
-                'heading' => __('Today','staylodgic') . ' ' . $this->display_today,
+                'heading' => __('Today', 'staylodgic') . ' ' . $this->display_today,
                 'cache'   => false,
                 'type'    => 'polarArea',
                 'options' => [
@@ -132,15 +132,15 @@ class AnalyticsBookings
                                 'centerPointLabels' => true,
                                 'font'              => [
                                     'size' => 18,
-                                 ],
-                             ],
-                         ],
-                     ],
-                 ],
-             ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
             'bookings_tomorrow'           => [
                 'info'    => 'tomorrow',
-                'heading' => 'Tomorrow' . ' ' . $this->display_tomorrow,
+                'heading' => __('Tomorrow', 'staylodgic') . ' ' . $this->display_tomorrow,
                 'cache'   => false,
                 'type'    => 'polarArea',
                 'options' => [
@@ -152,15 +152,15 @@ class AnalyticsBookings
                                 'centerPointLabels' => true,
                                 'font'              => [
                                     'size' => 18,
-                                 ],
-                             ],
-                         ],
-                     ],
-                 ],
-             ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
             'bookings_dayafter'           => [
                 'info'    => 'dayafter',
-                'heading' => 'Day After' . ' ' . $this->display_dayafter,
+                'heading' => __('Day After', 'staylodgic') . ' ' . $this->display_dayafter,
                 'cache'   => false,
                 'type'    => 'polarArea',
                 'options' => [
@@ -172,41 +172,41 @@ class AnalyticsBookings
                                 'centerPointLabels' => true,
                                 'font'              => [
                                     'size' => 18,
-                                 ],
-                             ],
-                         ],
-                     ],
-                 ],
-             ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
             // Add more chart configurations here...
-         ];
+        ];
 
         // Only process data for the requested chart
-        if (isset($configs[ $id ])) {
+        if (isset($configs[$id])) {
             switch ($id) {
                 case 'past_twelve_months_bookings':
-                    $configs[ $id ][ 'data' ] = $this->get_past_twelve_months_bookings_data();
+                    $configs[$id]['data'] = $this->get_past_twelve_months_bookings_data();
                     break;
                 case 'past_twelve_months_revenue':
-                    $configs[ $id ][ 'data' ] = $this->get_past_twelve_months_revenue_data();
+                    $configs[$id]['data'] = $this->get_past_twelve_months_revenue_data();
                     break;
                 case 'past_twelve_months_adr':
-                    $configs[ $id ][ 'data' ] = $this->get_past_twelve_months_adr_data();
+                    $configs[$id]['data'] = $this->get_past_twelve_months_adr_data();
                     break;
                 case 'bookings_today':
-                    $configs[ $id ][ 'data' ] = $this->get_current_day_stats_data();
+                    $configs[$id]['data'] = $this->get_current_day_stats_data();
                     break;
                 case 'bookings_tomorrow':
-                    $configs[ $id ][ 'data' ] = $this->get_tomorrow_stats_data();
+                    $configs[$id]['data'] = $this->get_tomorrow_stats_data();
                     break;
                 case 'bookings_dayafter':
-                    $configs[ $id ][ 'data' ] = $this->get_dayafter_stats_data();
+                    $configs[$id]['data'] = $this->get_dayafter_stats_data();
                     break;
                     // Add cases for other charts as needed...
             }
         }
 
-        return $configs[ $id ] ?? null;
+        return $configs[$id] ?? null;
     }
 
     private function get_dayafter_stats_data()
@@ -225,26 +225,26 @@ class AnalyticsBookings
                     'key'     => 'staylodgic_checkin_date',
                     'value'   => $dayafter,
                     'compare' => '=',
-                 ],
+                ],
                 [
                     'key'     => 'staylodgic_checkout_date',
                     'value'   => $dayafter,
                     'compare' => '=',
-                 ],
+                ],
                 [
                     'key'     => 'staylodgic_checkin_date',
                     'value'   => $dayafter,
                     'compare' => '<=',
                     'type'    => 'DATE',
-                 ],
+                ],
                 [
                     'key'     => 'staylodgic_checkout_date',
                     'value'   => $dayafter,
                     'compare' => '>=',
                     'type'    => 'DATE',
-                 ],
-             ],
-         ]);
+                ],
+            ],
+        ]);
 
         if ($query->have_posts()) {
             while ($query->have_posts()) {
@@ -273,14 +273,14 @@ class AnalyticsBookings
         wp_reset_postdata();
 
         return [
-            'labels'   => [ 'Check-ins', 'Check-outs', 'Staying' ],
+            'labels'   => ['Check-ins', 'Check-outs', 'Staying'],
             'datasets' => [
                 [
-                    'data'            => [ $checkinCount, $checkoutCount, $stayingCount ],
-                    'backgroundColor' => [ 'rgba(255,0,0,0.5)', 'rgba(83, 0, 255, 0.5)', 'rgba(255, 206, 86, 0.5)' ],
-                 ],
-             ],
-         ];
+                    'data'            => [$checkinCount, $checkoutCount, $stayingCount],
+                    'backgroundColor' => ['rgba(255,0,0,0.5)', 'rgba(83, 0, 255, 0.5)', 'rgba(255, 206, 86, 0.5)'],
+                ],
+            ],
+        ];
     }
 
     private function add_guest($booking_number = false, $day = 'today', $type = 'checkin', $checkin = false, $checkout = false)
@@ -291,13 +291,13 @@ class AnalyticsBookings
             $guestID              = $reservation_instance->getGuest_id_forReservation($booking_number);
             if ($guestID) {
                 $name = esc_html(get_post_meta($guestID, 'staylodgic_full_name', true));
-    
+
                 // Generate a UUID using the static method from the Common class
                 $uuid = \Staylodgic\Common::generateUUID();
-    
+
                 // Use the combination of guestID and UUID as the key
                 $uniqueKey = $guestID . '-' . $uuid;
-    
+
                 $this->guests[$day][$type][$guestID][$uniqueKey]['booking_number'] = $booking_number;
                 $this->guests[$day][$type][$guestID][$uniqueKey]['name']           = $name;
                 $this->guests[$day][$type][$guestID][$uniqueKey]['checkin']        = $checkin;
@@ -322,26 +322,26 @@ class AnalyticsBookings
                     'key'     => 'staylodgic_checkin_date',
                     'value'   => $tomorrow,
                     'compare' => '=',
-                 ],
+                ],
                 [
                     'key'     => 'staylodgic_checkout_date',
                     'value'   => $tomorrow,
                     'compare' => '=',
-                 ],
+                ],
                 [
                     'key'     => 'staylodgic_checkin_date',
                     'value'   => $tomorrow,
                     'compare' => '<=',
                     'type'    => 'DATE',
-                 ],
+                ],
                 [
                     'key'     => 'staylodgic_checkout_date',
                     'value'   => $tomorrow,
                     'compare' => '>=',
                     'type'    => 'DATE',
-                 ],
-             ],
-         ]);
+                ],
+            ],
+        ]);
 
         if ($query->have_posts()) {
             while ($query->have_posts()) {
@@ -370,14 +370,14 @@ class AnalyticsBookings
         wp_reset_postdata();
 
         return [
-            'labels'   => [ 'Check-ins', 'Check-outs', 'Staying' ],
+            'labels'   => ['Check-ins', 'Check-outs', 'Staying'],
             'datasets' => [
                 [
-                    'data'            => [ $checkinCount, $checkoutCount, $stayingCount ],
-                    'backgroundColor' => [ 'rgba(255,0,0,0.5)', 'rgba(83, 0, 255, 0.5)', 'rgba(255, 206, 86, 0.5)' ],
-                 ],
-             ],
-         ];
+                    'data'            => [$checkinCount, $checkoutCount, $stayingCount],
+                    'backgroundColor' => ['rgba(255,0,0,0.5)', 'rgba(83, 0, 255, 0.5)', 'rgba(255, 206, 86, 0.5)'],
+                ],
+            ],
+        ];
     }
 
     private function get_current_day_stats_data()
@@ -396,26 +396,26 @@ class AnalyticsBookings
                     'key'     => 'staylodgic_checkin_date',
                     'value'   => $today,
                     'compare' => '=',
-                 ],
+                ],
                 [
                     'key'     => 'staylodgic_checkout_date',
                     'value'   => $today,
                     'compare' => '=',
-                 ],
+                ],
                 [
                     'key'     => 'staylodgic_checkin_date',
                     'value'   => $today,
                     'compare' => '<=',
                     'type'    => 'DATE',
-                 ],
+                ],
                 [
                     'key'     => 'staylodgic_checkout_date',
                     'value'   => $today,
                     'compare' => '>=',
                     'type'    => 'DATE',
-                 ],
-             ],
-         ]);
+                ],
+            ],
+        ]);
 
         if ($query->have_posts()) {
             while ($query->have_posts()) {
@@ -444,27 +444,27 @@ class AnalyticsBookings
         wp_reset_postdata();
 
         return [
-            'labels'   => [ 'Check-ins', 'Check-outs', 'Staying' ],
+            'labels'   => ['Check-ins', 'Check-outs', 'Staying'],
             'datasets' => [
                 [
-                    'data'            => [ $checkinCount, $checkoutCount, $stayingCount ],
-                    'backgroundColor' => [ 'rgba(255,0,0,0.5)', 'rgba(83, 0, 255, 0.5)', 'rgba(255, 206, 86, 0.5)' ],
-                 ],
-             ],
-         ];
+                    'data'            => [$checkinCount, $checkoutCount, $stayingCount],
+                    'backgroundColor' => ['rgba(255,0,0,0.5)', 'rgba(83, 0, 255, 0.5)', 'rgba(255, 206, 86, 0.5)'],
+                ],
+            ],
+        ];
     }
 
     private function get_past_twelve_months_adr_data()
     {
-        $labels       = [  ];
-        $adrData      = [  ];
+        $labels       = [];
+        $adrData      = [];
         $currentMonth = date('Y-m');
 
         $cache = new \Staylodgic\Cache();
 
         for ($i = 12; $i >= 0; $i--) {
             $month      = date('Y-m', strtotime("$currentMonth -$i month"));
-            $labels[  ] = date('F', strtotime($month));
+            $labels[] = date('F', strtotime($month));
 
             // Check if the data is cached
             $cacheKey = $cache->generateAnalyticsCacheKey('analytics_bookings_twelve_months_adr_' . $month);
@@ -475,7 +475,7 @@ class AnalyticsBookings
                 $adr        = $cachedData;
             } else {
 
-                error_log('Not using Cache adr data:' . $month);
+                // error_log('Not using Cache adr data:' . $month);
 
                 // Query for revenue and nights
                 $revenueQuery = new \WP_Query([
@@ -487,14 +487,14 @@ class AnalyticsBookings
                             'key'     => 'staylodgic_checkin_date',
                             'value'   => $month,
                             'compare' => 'LIKE',
-                         ],
+                        ],
                         [
                             'key'     => 'staylodgic_reservation_status',
                             'value'   => 'confirmed',
                             'compare' => '=',
-                         ],
-                     ],
-                 ]);
+                        ],
+                    ],
+                ]);
 
                 $totalRevenue = 0;
                 $totalNights  = 0;
@@ -523,29 +523,29 @@ class AnalyticsBookings
                 }
             }
 
-            $adrData[  ] = $adr;
+            $adrData[] = $adr;
         }
 
         return [
             'labels'   => $labels,
             'datasets' => [
                 [
-                    'label'         => __('Average Daily Rate (ADR)','staylodgic'),
+                    'label'         => __('Average Daily Rate (ADR)', 'staylodgic'),
                     'data'          => $adrData,
                     'useGradient'   => true,
                     'gradientStart' => 'rgba(255,0,0,1)',
                     'gradientEnd'   => 'rgba(83, 0, 255, 1)',
                     'borderColor'   => 'rgba(75, 192, 192, 1)',
                     'fill'          => false,
-                 ],
-             ],
-         ];
+                ],
+            ],
+        ];
     }
 
     private function get_past_twelve_months_revenue_data()
     {
-        $labels        = [  ];
-        $revenueData   = [  ];
+        $labels        = [];
+        $revenueData   = [];
         $currentMonth  = date('Y-m');
         $revenue_count = 0;
 
@@ -553,7 +553,7 @@ class AnalyticsBookings
 
         for ($i = 12; $i >= 0; $i--) {
             $month      = date('Y-m', strtotime("$currentMonth -$i month"));
-            $labels[  ] = date('F', strtotime($month));
+            $labels[] = date('F', strtotime($month));
 
             // Check if the data is cached
             $cacheKey = $cache->generateAnalyticsCacheKey('analytics_bookings_twelve_months_revenue_' . $month);
@@ -575,14 +575,14 @@ class AnalyticsBookings
                             'key'     => 'staylodgic_checkin_date',
                             'value'   => $month,
                             'compare' => 'LIKE',
-                         ],
+                        ],
                         [
                             'key'     => 'staylodgic_reservation_status',
                             'value'   => 'confirmed',
                             'compare' => '=',
-                         ],
-                     ],
-                 ]);
+                        ],
+                    ],
+                ]);
 
                 $totalRevenue = 0;
                 if ($revenueQuery->have_posts()) {
@@ -599,33 +599,33 @@ class AnalyticsBookings
                 }
             }
 
-            $revenueData[  ] = $totalRevenue;
-            $revenue_count += intval( $totalRevenue );
+            $revenueData[] = $totalRevenue;
+            $revenue_count += intval($totalRevenue);
         }
 
-        $this->bookings[ 'revenue' ] = $revenue_count;
+        $this->bookings['revenue'] = $revenue_count;
 
         return [
             'labels'   => $labels,
             'datasets' => [
                 [
-                    'label'         => __('Monthly Revenue','staylodgic'),
+                    'label'         => __('Monthly Revenue', 'staylodgic'),
                     'data'          => $revenueData,
                     'useGradient'   => true,
                     'gradientStart' => 'rgba(177, 14, 236,1)',
                     'gradientEnd'   => 'rgba(83, 0, 255, 1)',
                     'borderColor'   => 'rgba(75, 192, 192, 1)',
                     'fill'          => false,
-                 ],
-             ],
-         ];
+                ],
+            ],
+        ];
     }
 
     private function get_past_twelve_months_bookings_data()
     {
-        $labels        = [  ];
-        $confirmedData = [  ];
-        $cancelledData = [  ];
+        $labels        = [];
+        $confirmedData = [];
+        $cancelledData = [];
         $currentMonth  = date('Y-m');
 
         $confirmed_count = 0;
@@ -635,7 +635,7 @@ class AnalyticsBookings
 
         for ($i = 12; $i >= 0; $i--) {
             $month      = date('Y-m', strtotime("$currentMonth -$i month"));
-            $labels[  ] = date('F', strtotime($month));
+            $labels[] = date('F', strtotime($month));
 
             // Check if the data is cached
             $cacheKey = $cache->generateAnalyticsCacheKey('analytics_bookings_data_' . $month);
@@ -643,9 +643,8 @@ class AnalyticsBookings
             if ($cache->hasCache($cacheKey)) {
                 // Use cached data
                 $cachedData        = $cache->getCache($cacheKey);
-                $confirmedData[  ] = $cachedData[ 'confirmed' ];
-                $cancelledData[  ] = $cachedData[ 'cancelled' ];
-
+                $confirmedData[] = $cachedData['confirmed'];
+                $cancelledData[] = $cachedData['cancelled'];
             } else {
 
                 error_log('Not using Cache bookings data:' . $month);
@@ -659,15 +658,15 @@ class AnalyticsBookings
                             'key'     => 'staylodgic_checkin_date',
                             'value'   => $month,
                             'compare' => 'LIKE',
-                         ],
+                        ],
                         [
                             'key'     => 'staylodgic_reservation_status',
                             'value'   => 'confirmed',
                             'compare' => '=',
-                         ],
-                     ],
-                 ]);
-                $confirmedData[  ] = $confirmedQuery->found_posts;
+                        ],
+                    ],
+                ]);
+                $confirmedData[] = $confirmedQuery->found_posts;
 
                 // Query for cancelled bookings
                 $cancelledQuery = new \WP_Query([
@@ -679,23 +678,22 @@ class AnalyticsBookings
                             'key'     => 'staylodgic_checkin_date',
                             'value'   => $month,
                             'compare' => 'LIKE',
-                         ],
+                        ],
                         [
                             'key'     => 'staylodgic_reservation_status',
                             'value'   => 'cancelled',
                             'compare' => '=',
-                         ],
-                     ],
-                 ]);
-                $cancelledData[  ] = $cancelledQuery->found_posts;
+                        ],
+                    ],
+                ]);
+                $cancelledData[] = $cancelledQuery->found_posts;
 
                 if ($month != $currentMonth) {
-                    $cacheData = [ 'confirmed' => $confirmedQuery->found_posts, 'cancelled' => $cancelledQuery->found_posts ];
+                    $cacheData = ['confirmed' => $confirmedQuery->found_posts, 'cancelled' => $cancelledQuery->found_posts];
                     error_log('Caching Data: ' . print_r($cacheData, true));
                     $cache->setCache($cacheKey, $cacheData);
                 }
             }
-
         }
 
         // Calculate the total counts
@@ -706,28 +704,28 @@ class AnalyticsBookings
             $cancelled_count += $count;
         }
 
-        $this->bookings[ 'confirmed' ] = $confirmed_count;
-        $this->bookings[ 'cancelled' ] = $cancelled_count;
+        $this->bookings['confirmed'] = $confirmed_count;
+        $this->bookings['cancelled'] = $cancelled_count;
 
         return [
             'labels'   => $labels,
             'datasets' => [
                 [
-                    'label'           => __('Confirmed Bookings','staylodgic'),
+                    'label'           => __('Confirmed Bookings', 'staylodgic'),
                     'data'            => $confirmedData,
                     'backgroundColor' => 'rgba(54, 162, 235, 0.2)',
                     'borderColor'     => 'rgba(79,0,255,1)',
                     'fill'            => false,
-                 ],
+                ],
                 [
-                    'label'           => __('Cancelled Bookings','staylodgic'),
+                    'label'           => __('Cancelled Bookings', 'staylodgic'),
                     'data'            => $cancelledData,
                     'backgroundColor' => 'rgba(255, 99, 132, 0.2)',
                     'borderColor'     => 'rgba(255,99,132,1)',
                     'fill'            => false,
-                 ],
-             ],
-         ];
+                ],
+            ],
+        ];
     }
 
     public function chart_generator($id)
@@ -739,14 +737,14 @@ class AnalyticsBookings
             return 'Chart not found.';
         }
 
-        $chart          = new \Staylodgic\AnalyticsBookings($id, $config[ 'info' ], $config[ 'type' ], $config[ 'data' ], $config[ 'options' ], $this->guests);
+        $chart          = new \Staylodgic\AnalyticsBookings($id, $config['info'], $config['type'], $config['data'], $config['options'], $this->guests);
         $rendered_chart = $chart->render();
 
         $chart_output = '';
 
-        $chart_output .= '<div class="staylodgic_analytics_chart staylodgic_analytics_chart_' . $config[ 'type' ] . ' ">';
+        $chart_output .= '<div class="staylodgic_analytics_chart staylodgic_analytics_chart_' . $config['type'] . ' ">';
         $chart_output .= '<h2 class="staylodgic_analytics_subheading">';
-        $chart_output .= $config[ 'heading' ];
+        $chart_output .= $config['heading'];
         $chart_output .= '</h2>';
         $chart_output .= $rendered_chart;
         $chart_output .= '</div>';
@@ -765,18 +763,18 @@ class AnalyticsBookings
             $guestListHtml .= '<div class="staylodgic_analytics_table_wrap">';
             // Add a heading for the day
             if ('today' == $day) {
-                $guestListHtml .= '<h2 class="staylodgic_analytics_subheading staylodgic_dayis_' . $day . '">' . __('Today','staylodgic') . ' ' . $this->display_today . '</h2>';
+                $guestListHtml .= '<h2 class="staylodgic_analytics_subheading staylodgic_dayis_' . $day . '">' . __('Today', 'staylodgic') . ' ' . $this->display_today . '</h2>';
             } elseif ('tomorrow' == $day) {
-                $guestListHtml .= '<h2 class="staylodgic_analytics_subheading staylodgic_dayis_' . $day . '">' . __('Tomorrow','staylodgic') . ' ' . $this->display_tomorrow . '</h2>';
+                $guestListHtml .= '<h2 class="staylodgic_analytics_subheading staylodgic_dayis_' . $day . '">' . __('Tomorrow', 'staylodgic') . ' ' . $this->display_tomorrow . '</h2>';
             } elseif ('dayafter' == $day) {
-                $guestListHtml .= '<h2 class="staylodgic_analytics_subheading staylodgic_dayis_' . $day . '">' . __('Day After','staylodgic') . ' ' . $this->display_dayafter . '</h2>';
+                $guestListHtml .= '<h2 class="staylodgic_analytics_subheading staylodgic_dayis_' . $day . '">' . __('Day After', 'staylodgic') . ' ' . $this->display_dayafter . '</h2>';
             } else {
-                $guestListHtml .= '<h2 class="staylodgic_analytics_subheading staylodgic_dayis_' . $day . '">' . ucfirst($day) . '</h2>';
+                $guestListHtml .= '<h2 class="staylodgic_analytics_subheading staylodgic_dayis_' . $day . '">' . esc_html(ucfirst($day)) . '</h2>';
             }
 
             // Sort the statuses array
             uksort($statuses, function ($a, $b) {
-                $order = [ 'checkin', 'staying', 'checkout' ]; // Define your custom order
+                $order = ['checkin', 'staying', 'checkout']; // Define your custom order
                 return array_search($a, $order) - array_search($b, $order);
             });
 
@@ -798,19 +796,19 @@ class AnalyticsBookings
                 $guestListHtml .= '<div class="staylodgic_table_outer">';
                 $guestListHtml .= '<div class="staylodgic_table sub-heading"><h3>' . $font_icon . ucfirst($status) . '</h3></div>';
 
-                $guestListHtml .= '<table class="staylodgic_analytics_table table table-hover" data-export-title="Reservation - ' . $status.' ' . $day .'">';
+                $guestListHtml .= '<table class="staylodgic_analytics_table table table-hover" data-export-title="Reservation - ' . $status . ' ' . esc_html($day) . '">';
                 $guestListHtml .= '<thead class="table-light">';
                 $guestListHtml .= '<tr>';
                 $guestListHtml .= '<th class="table-cell-heading table-cell-heading-number number-column" scope="col"><i class="fas fa-hashtag"></i></th>';
-                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-booking-number" scope="col"><i class="fas fa-hashtag"></i> ' . __('Booking','staylodgic') . '</th>';
-                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-name" scope="col"><i class="fas fa-user"></i> ' . __('Guest Name','staylodgic') . '</th>';
-                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-room" scope="col"><i class="fas fa-bed"></i> ' . __('Room','staylodgic') . '</th>';
-                $guestListHtml .= '<th data-orderable="false" class="table-cell-heading table-cell-heading-registration" scope="col"><i class="fas fa-clipboard-list"></i> ' . __('Persons','staylodgic') . '</th>';
-                $guestListHtml .= '<th data-orderable="false" class="table-cell-heading table-cell-heading-registration" scope="col"><i class="fas fa-clipboard-list"></i> ' . __('Registration','staylodgic') . '</th>';
-                $guestListHtml .= '<th data-orderable="false" class="table-cell-heading table-cell-heading-notes" scope="col"><i class="fas fa-sticky-note"></i> ' . __('Notes','staylodgic') . '</th>';
-                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-checkin" scope="col"><i class="fas fa-sign-in-alt"></i> ' . __('Check-in Date','staylodgic') . '</th>';
-                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-checkout" scope="col"><i class="fas fa-sign-out-alt"></i> ' . __('Check-out Date','staylodgic') . '</th>';
-                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-nights nights-column" scope="col"><i class="fas fa-moon"></i> ' . __('Nights','staylodgic') . '</th>';
+                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-booking-number" scope="col"><i class="fas fa-hashtag"></i> ' . __('Booking', 'staylodgic') . '</th>';
+                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-name" scope="col"><i class="fas fa-user"></i> ' . __('Guest Name', 'staylodgic') . '</th>';
+                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-room" scope="col"><i class="fas fa-bed"></i> ' . __('Room', 'staylodgic') . '</th>';
+                $guestListHtml .= '<th data-orderable="false" class="table-cell-heading table-cell-heading-registration" scope="col"><i class="fas fa-clipboard-list"></i> ' . __('Persons', 'staylodgic') . '</th>';
+                $guestListHtml .= '<th data-orderable="false" class="table-cell-heading table-cell-heading-registration" scope="col"><i class="fas fa-clipboard-list"></i> ' . __('Registration', 'staylodgic') . '</th>';
+                $guestListHtml .= '<th data-orderable="false" class="table-cell-heading table-cell-heading-notes" scope="col"><i class="fas fa-sticky-note"></i> ' . __('Notes', 'staylodgic') . '</th>';
+                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-checkin" scope="col"><i class="fas fa-sign-in-alt"></i> ' . __('Check-in Date', 'staylodgic') . '</th>';
+                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-checkout" scope="col"><i class="fas fa-sign-out-alt"></i> ' . __('Check-out Date', 'staylodgic') . '</th>';
+                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-nights nights-column" scope="col"><i class="fas fa-moon"></i> ' . __('Nights', 'staylodgic') . '</th>';
                 $guestListHtml .= '</tr>';
                 $guestListHtml .= '</thead>';
                 $guestListHtml .= '<tbody class="table-group-divider">';
@@ -823,24 +821,24 @@ class AnalyticsBookings
                         // error_log( '-------booking-------');
                         // error_log( print_r( $booking,1 ));
                         $reservations_instance = new \Staylodgic\Reservations();
-                        $reservation_id        = $reservations_instance->getReservationIDforBooking($booking[ 'booking_number' ]);
+                        $reservation_id        = $reservations_instance->getReservationIDforBooking($booking['booking_number']);
 
-                        $checkinDate  = new \DateTime($booking[ 'checkin' ]);
-                        $checkoutDate = new \DateTime($booking[ 'checkout' ]);
+                        $checkinDate  = new \DateTime($booking['checkin']);
+                        $checkoutDate = new \DateTime($booking['checkout']);
                         $nights       = $checkoutDate->diff($checkinDate)->days;
 
                         $guestListHtml .= '<tr>';
-                        $guestListHtml .= '<th class="number-column" scope="row">' . $count . '</th>';
+                        $guestListHtml .= '<th class="number-column" scope="row">' . esc_html($count) . '</th>';
                         $guestListHtml .= '<td scope="row">';
                         $guestListHtml .= '<a href="' . esc_url(get_edit_post_link($reservation_id)) . '">';
-                        $guestListHtml .= $booking[ 'booking_number' ];
+                        $guestListHtml .= $booking['booking_number'];
                         $guestListHtml .= '</a>';
                         $guestListHtml .= '</td>';
                         $guestListHtml .= '<td scope="row">';
-                        $guestListHtml .= ucwords(strtolower($booking[ 'name' ]));
+                        $guestListHtml .= ucwords(strtolower($booking['name']));
                         $guestListHtml .= '</td>';
                         $guestListHtml .= '<td scope="row">';
-                        
+
                         $room_name = $reservations_instance->getRoomNameForReservation($reservation_id);
                         $bedlayout             = get_post_meta($reservation_id, 'staylodgic_reservation_room_bedlayout', true);
 
@@ -852,18 +850,18 @@ class AnalyticsBookings
                         $adults = $reservations_instance->getNumberOfAdultsForReservation($reservation_id);
                         $children = $reservations_instance->getNumberOfChildrenForReservation($reservation_id);
 
-                        $guestListHtml .= \Staylodgic\Common::generatePersonIcons( $adults, $children );
+                        $guestListHtml .= \Staylodgic\Common::generatePersonIcons($adults, $children);
 
                         $guestListHtml .= '</td>';
                         $guestListHtml .= '<td scope="row">';
 
                         $registry_instance = new \Staylodgic\GuestRegistry();
-                        $resRegIDs         = $registry_instance->fetchResRegIDsByBookingNumber($booking[ 'booking_number' ]);
+                        $resRegIDs         = $registry_instance->fetchResRegIDsByBookingNumber($booking['booking_number']);
                         if (isset($resRegIDs) && is_array($resRegIDs)) {
-                            $guestListHtml .= $registry_instance->outputRegistrationAndOccupancy($resRegIDs[ 'reservationID' ], $resRegIDs[ 'guestRegisterID' ], 'icons');
+                            $guestListHtml .= $registry_instance->outputRegistrationAndOccupancy($resRegIDs['reservationID'], $resRegIDs['guestRegisterID'], 'icons');
                             $guestListHtml .= '<div class="booking-dashboard registration">';
-                            $guestListHtml .= '<a href="'.get_permalink($resRegIDs['guestRegisterID']).'"><i class="fa-solid fa-file-signature"></i></a>';
-                            $guestListHtml .= '<a href="'.get_edit_post_link($resRegIDs['guestRegisterID']).'"><i class="fa-regular fa-id-card"></i></a>';
+                            $guestListHtml .= '<a href="' . get_permalink($resRegIDs['guestRegisterID']) . '"><i class="fa-solid fa-file-signature"></i></a>';
+                            $guestListHtml .= '<a href="' . get_edit_post_link($resRegIDs['guestRegisterID']) . '"><i class="fa-regular fa-id-card"></i></a>';
                             $guestListHtml .= '</div>';
                         }
                         $guestListHtml .= '</td>';
@@ -872,8 +870,8 @@ class AnalyticsBookings
                         $notes_with_breaks = nl2br($notes);
 
                         $guestListHtml .= '<td scope="row">' . $notes_with_breaks . '</td>';
-                        $guestListHtml .= '<td scope="row">' . $booking[ 'checkin' ] . '</td>';
-                        $guestListHtml .= '<td scope="row">' . $booking[ 'checkout' ] . '</td>';
+                        $guestListHtml .= '<td scope="row">' . $booking['checkin'] . '</td>';
+                        $guestListHtml .= '<td scope="row">' . $booking['checkout'] . '</td>';
                         $guestListHtml .= '<td class="nights-column" scope="row">' . $nights . '</td>';
                         $guestListHtml .= '</tr>';
                     }
@@ -909,7 +907,6 @@ class AnalyticsBookings
 
         $dashboard = $row_one . $guestListHtml . $past_twelve_months_bookings . $past_twelve_months_revenue . $past_twelve_months_adr;
         return $dashboard;
-
     }
 
     public function render()
@@ -925,7 +922,6 @@ class AnalyticsBookings
     $guestListHtml
     HTML;
     }
-
 }
 
 $analytics = new \Staylodgic\AnalyticsBookings($id = false);

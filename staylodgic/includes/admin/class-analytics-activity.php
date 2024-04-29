@@ -80,12 +80,12 @@ class ActivityAnalytics
         // Add the Availability submenu item under the parent menu
         add_submenu_page(
             'slgc-dashboard',
-            'Activity Dashboard',
-            'Activity Dashboard',
+            __('Activity Dashboard', 'staylodgic'),
+            __('Activity Dashboard', 'staylodgic'),
             'manage_options',
             'slgc-activity-dashboard',
             array($this, 'activity_display_dashboard')
-        );
+        );        
     }
 
     public function activity_display_dashboard()
@@ -115,7 +115,7 @@ class ActivityAnalytics
         $configs = [
             'past_twelve_months_bookings' => [
                 'info'    => 'past_twelve_months_bookings',
-                'heading' => 'Bookings for past twelve months',
+                'heading' => __('Bookings for past twelve months', 'staylodgic'),
                 'cache'   => true,
                 'type'    => 'line',
                 'options' => [
@@ -128,7 +128,7 @@ class ActivityAnalytics
             ],
             'past_twelve_months_revenue'  => [
                 'info'    => 'past_twelve_months_revenue',
-                'heading' => 'Revenue for past twelve months',
+                'heading' => __('Revenue for past twelve months', 'staylodgic'),
                 'cache'   => true,
                 'type'    => 'bar',
                 'options' => [
@@ -161,7 +161,7 @@ class ActivityAnalytics
             ],
             'bookings_tomorrow'           => [
                 'info'    => 'tomorrow',
-                'heading' => 'Tomorrow' . ' ' . $this->display_tomorrow,
+                'heading' => __('Tomorrow', 'staylodgic') . ' ' . $this->display_tomorrow,
                 'cache'   => false,
                 'type'    => 'polarArea',
                 'options' => [
@@ -181,7 +181,7 @@ class ActivityAnalytics
             ],
             'bookings_dayafter'           => [
                 'info'    => 'dayafter',
-                'heading' => 'Day After' . ' ' . $this->display_dayafter,
+                'heading' => __('Day After', 'staylodgic') . ' ' . $this->display_dayafter,
                 'cache'   => false,
                 'type'    => 'polarArea',
                 'options' => [
@@ -464,7 +464,7 @@ class ActivityAnalytics
                 $totalRevenue = $cachedData;
             } else {
 
-                error_log('Not using Cache revenue data:' . $month);
+                // error_log('Not using Cache revenue data:' . $month);
                 // Query for revenue
                 $revenueQuery = new \WP_Query([
                     'post_type'      => 'slgc_activityres',
@@ -547,7 +547,7 @@ class ActivityAnalytics
                 $cancelledData[] = $cachedData['cancelled'];
             } else {
 
-                error_log('Not using Cache bookings data:' . $month);
+                // error_log('Not using Cache bookings data:' . $month);
                 // Query for confirmed bookings
                 $confirmedQuery = new \WP_Query([
                     'post_type'      => 'slgc_activityres',
@@ -590,7 +590,7 @@ class ActivityAnalytics
 
                 if ($month != $currentMonth) {
                     $cacheData = ['confirmed' => $confirmedQuery->found_posts, 'cancelled' => $cancelledQuery->found_posts];
-                    error_log('Caching Data: ' . print_r($cacheData, true));
+                    // error_log('Caching Data: ' . print_r($cacheData, true));
                     $cache->setCache($cacheKey, $cacheData);
                 }
             }
@@ -783,12 +783,12 @@ class ActivityAnalytics
         $bookings_dayafter           = $this->chart_generator('bookings_dayafter');
 
 
-        error_log('$this->activityColors');
-        error_log($bookings_dayafter);
-        error_log(print_r($this->activityColors, 1));
+        // error_log('$this->activityColors');
+        // error_log($bookings_dayafter);
+        // error_log(print_r($this->activityColors, 1));
 
-        error_log('Other');
-        error_log($bookings_tomorrow);
+        // error_log('Other');
+        // error_log($bookings_tomorrow);
 
         $guestListHtml = $this->guest_list();
 

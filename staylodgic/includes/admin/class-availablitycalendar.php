@@ -118,8 +118,8 @@ class AvailablityCalendar extends AvailablityCalendarBase
         // Add the parent menu item
         add_submenu_page(
             'slgc-dashboard',
-            'View Availability',
-            'View Availability',
+            __('View Availability','staylodgic'),
+            __('View Availability','staylodgic'),
             'manage_options',
             'slgc-availability',
             array($this, 'room_Reservation_Plugin_Display_Availability_Calendar'), // Callback for the parent page (can be empty if not needed)
@@ -204,15 +204,15 @@ class AvailablityCalendar extends AvailablityCalendarBase
                         <div data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Next Month" class="calendar-nav-buttons" id="nextmonth"><i class="fa-solid fa-arrow-right"></i></div>
                     </li>
                     <li class="nav-item nav-item-seperator">
-                        <div class="calendar-nav-buttons calendar-text-button" id="quantity-modal-link" data-bs-toggle="modal" data-bs-target="#quantity-modal"><i class="fas fa-hashtag"></i>Quanity</div>
+                        <div class="calendar-nav-buttons calendar-text-button" id="quantity-modal-link" data-bs-toggle="modal" data-bs-target="#quantity-modal"><i class="fas fa-hashtag"></i><?php _e('Quanity','staylodgic'); ?></div>
                     </li>
                     <li class="nav-item">
-                        <div class="calendar-nav-buttons calendar-text-button" id="rates-modal-link" data-bs-toggle="modal" data-bs-target="#rates-modal"><i class="fas fa-dollar-sign"></i>Rate</div>
+                        <div class="calendar-nav-buttons calendar-text-button" id="rates-modal-link" data-bs-toggle="modal" data-bs-target="#rates-modal"><i class="fas fa-dollar-sign"></i><?php _e('Rate','staylodgic'); ?></div>
                     </li>
                     <li class="nav-item nav-item-seperator">
                         <div class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" role="switch" id="calendar-booking-status" <?php echo esc_attr($confirmed_status); ?>>
-                            <label class="form-check-label" for="calendar-booking-status">Display Confirmed</label>
+                            <label class="form-check-label" for="calendar-booking-status"><?php _e('Display Confirmed','staylodgic'); ?></label>
                         </div>
                     </li>
                 </ul>
@@ -498,9 +498,9 @@ class AvailablityCalendar extends AvailablityCalendarBase
 
             if ( ! $this->usingCache ) {
 
-                error_log('--------- Saving Cache Data --------');
-                error_log('--------- Room '.$roomName.' --------');
-                error_log(print_r($this->calendarData, true));
+                // error_log('--------- Saving Cache Data --------');
+                // error_log('--------- Room '.$roomName.' --------');
+                // error_log(print_r($this->calendarData, true));
 
                 $cache_instance->setCache($transient_key, $this->calendarData);
 
