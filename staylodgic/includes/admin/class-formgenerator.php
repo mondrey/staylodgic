@@ -1,17 +1,18 @@
 <?php
+
 namespace Staylodgic;
 
 class FormGenerator
 {
 
-// Constructor
+    // Constructor
     public function __construct()
     {
         // Register shortcodes
         $this->registerShortcodes();
     }
 
-// Function to render an input element
+    // Function to render an input element
     private function renderInput($inputObject)
     {
         // Check for required attributes
@@ -32,25 +33,24 @@ class FormGenerator
 
         // Check if 'guest' parameter is present in the URL
         if (current_user_can('manage_options') && isset($_GET['guest']) && !empty($_GET['guest'])) {
-            $guest             = sanitize_text_field($_GET[ 'guest' ]); // Sanitize the input
+            $guest             = sanitize_text_field($_GET['guest']); // Sanitize the input
             $post_id           = get_the_ID(); // Get current post ID
             $registration_data = get_post_meta($post_id, 'staylodgic_registration_data', true); // Retrieve all registration data
 
             // Check if there's specific registration data for the provided guest ID
-            if (isset($registration_data[ $guest ])) {
+            if (isset($registration_data[$guest])) {
                 $predefined = true;
-                if (isset($registration_data[ $guest ][ $id ][ 'value' ])) {
-                    $value = $registration_data[ $guest ][ $id ][ 'value' ];
+                if (isset($registration_data[$guest][$id]['value'])) {
+                    $value = $registration_data[$guest][$id]['value'];
                     if ('checkbox' == $type && 'true' == $value) {
                         $inputObject->checked = true;
                     }
                 }
-                $registration_id = $registration_data[ $guest ][ 'registration_id' ];
+                $registration_id = $registration_data[$guest]['registration_id'];
                 $upload_dir      = wp_upload_dir();
-                $signature_url   = $upload_dir[ 'baseurl' ] . '/signatures/' . $registration_id . '.png';
+                $signature_url   = $upload_dir['baseurl'] . '/signatures/' . $registration_id . '.png';
 
                 $signature_data = 'data-signature-image-url="' . $signature_url . '"';
-
             }
         }
 
@@ -71,38 +71,39 @@ class FormGenerator
             case 'email':
             case 'password':
                 // Common types of inputs
-                echo "<input data-label='$label' placeholder='$label' type='$type' id='$id' data-id='$id' name='$name' class='$class' value='$value' placeholder='$placeholder' $required>";
+                echo "<input data-label='" . esc_attr($label) . "' placeholder='" . esc_attr($label) . "' type='" . esc_attr($type) . "' id='" . esc_attr($id) . "' data-id='" . esc_attr($id) . "' name='" . esc_attr($name) . "' class='" . esc_attr($class) . "' value='" . esc_attr($value) . "' placeholder='" . esc_attr($placeholder) . "' " . esc_attr($required) . ">";
+
                 break;
             case 'date':
                 // Common types of inputs
-                echo "<input data-label='$label' placeholder='$label' type='text' id='$id' data-id='$id' name='$name' class='flatpickr-date-time $class' value='$value' placeholder='$placeholder' $required>";
+                echo "<input data-label='" . esc_attr($label) . "' placeholder='" . esc_attr($label) . "' type='text' id='" . esc_attr($id) . "' data-id='" . esc_attr($id) . "' name='" . esc_attr($name) . "' class='flatpickr-date-time " . esc_attr($class) . "' value='" . esc_attr($value) . "' placeholder='" . esc_attr($placeholder) . "' " . esc_attr($required) . ">";
                 break;
             case 'textarea':
-                echo "<textarea data-label='$label' placeholder='$label' id='$id' data-id='$id' name='$name' class='$class' placeholder='$placeholder' $required>$value</textarea>";
+                echo "<textarea data-label='" . esc_attr($label) . "' placeholder='" . esc_attr($placeholder) . "' id='" . esc_attr($id) . "' data-id='" . esc_attr($id) . "' name='" . esc_attr($name) . "' class='" . esc_attr($class) . "' " . esc_attr($required) . ">" . esc_textarea($value) . "</textarea>";
                 break;
             case 'signature':
 
                 echo '<div class="signature-container">
-                <canvas id="signature-pad" ' . $signature_data . ' class="signature-pad" width="400" height="200"></canvas>
+                <canvas id="signature-pad" ' . esc_attr($signature_data) . ' class="signature-pad" width="400" height="200"></canvas>
                 <div id="clear-signature">Clear</div>
-                <input data-label="' . $label . '" data-id="signature-data" type="hidden" id="signature-data" name="signature-data">
+                <input data-label="' . esc_attr($label) . '" data-id="signature-data" type="hidden" id="signature-data" name="signature-data">
                 </div>';
                 break;
             case 'checkbox':
                 // Checkbox inputs
                 $checked = isset($inputObject->checked) && $inputObject->checked ? 'checked' : '';
-                echo "<input data-label='$label' data-id='$id' type='checkbox' id='$id' name='$name' class='form-check-input' value='$value' $checked>";
-                $label_class = 'form-check-label';
+                echo "<input data-label='" . esc_attr($label) . "' data-id='" . esc_attr($id) . "' type='checkbox' id='" . esc_attr($id) . "' name='" . esc_attr($name) . "' class='form-check-input' value='" . esc_attr($value) . "' " . esc_attr($checked) . ">";
+                $label_class = 'form-check-label';                
                 break;
             case 'button':
             case 'submit':
                 // Button types (button and submit)
                 $value = esc_attr($inputObject->value ?? 'Button');
                 $predefined_data_attr = '';
-                if ( $predefined ) {
-                    $predefined_data_attr = 'data-guest='.$guest;
+                if ($predefined) {
+                    $predefined_data_attr = 'data-guest=' . $guest;
                 }
-                echo "<button ".$predefined_data_attr." type='$type' id='$id' name='$name' class='$class'>$value</button>";
+                echo "<button " . esc_attr($predefined_data_attr) . " type='" . esc_attr($type) . "' id='" . esc_attr($id) . "' name='" . esc_attr($name) . "' class='" . esc_attr($class) . "'>" . esc_html($value) . "</button>";
                 break;
             case 'select':
                 // [form_input type="select" id="mySelect" name="mySelect" class="form-control" value="option1" options="option1:Option 1,option2:Option 2,option3:Option 3"]
@@ -113,22 +114,23 @@ class FormGenerator
                 }
                 $countries = staylodgic_country_list('select-alt', '');
                 $options   = $this->parseSelectOptions($countries);
-                error_log(print_r($options, true));
-                echo "<select data-label='$label' data-id='$id' id='$id' name='$name' class='form-select' aria-label='Default select example'>";
+                // error_log(print_r($options, true));
+                echo "<select data-label='" . esc_attr($label) . "' data-id='" . esc_attr($id) . "' id='" . esc_attr($id) . "' name='" . esc_attr($name) . "' class='form-select' aria-label='Default select'>";
                 foreach ($options as $optionValue => $optionLabel) {
                     $selected = $optionValue == $value ? 'selected' : '';
-                    echo "<option value='$optionValue' $selected>$optionLabel</option>";
+                    echo "<option value='" . esc_attr($optionValue) . "' " . esc_attr($selected) . ">" . esc_html($optionLabel) . "</option>";
                 }
                 echo "</select>";
+                
                 break;
-            // Add more cases for different input types as needed
+                // Add more cases for different input types as needed
             default:
                 throw new \Exception("Unsupported input type: $type");
         }
 
         // Render label if provided
         if ($label) {
-            echo "<label for='$id' class='$label_class'>$label</label>";
+            echo "<label for='" . esc_attr($id) . "' class='" . esc_attr($label_class) . "'>" . esc_html($label) . "</label>";
         }
 
         echo '</div>';
@@ -136,19 +138,19 @@ class FormGenerator
         return ob_get_clean();
     }
 
-// Helper function to parse select options
+    // Helper function to parse select options
     private function parseSelectOptions($optionsString)
     {
-        $options      = [  ];
+        $options      = [];
         $optionsPairs = explode(',', $optionsString);
         foreach ($optionsPairs as $pair) {
             list($value, $label) = array_map('trim', explode(':', $pair));
-            $options[ $value ]   = $label;
+            $options[$value]   = $label;
         }
         return $options;
     }
 
-// Shortcode for form start
+    // Shortcode for form start
     public function shortcodeFormStart($atts)
     {
         $attributes = shortcode_atts([
@@ -156,17 +158,17 @@ class FormGenerator
             'method' => 'post',
             'class'  => '',
             'id'     => '',
-         ], $atts);
+        ], $atts);
 
-        $action = esc_attr($attributes[ 'action' ]);
-        $method = esc_attr($attributes[ 'method' ]);
-        $class  = esc_attr($attributes[ 'class' ]);
-        $id     = esc_attr($attributes[ 'id' ]);
+        $action = esc_attr($attributes['action']);
+        $method = esc_attr($attributes['method']);
+        $class  = esc_attr($attributes['class']);
+        $id     = esc_attr($attributes['id']);
 
         return "<form id='{$id}' action='{$action}' method='{$method}' class='{$class}' novalidate>";
     }
 
-// Shortcode for form end
+    // Shortcode for form end
     public function shortcodeFormEnd()
     {
         return "</form>";
@@ -186,7 +188,7 @@ class FormGenerator
             'options'     => '',
             'target'      => '',
             'required'    => '',
-         ], $atts);
+        ], $atts);
 
         // Convert the array to an object
         $inputObject = (object) $attributes;
@@ -194,17 +196,18 @@ class FormGenerator
         return $this->renderInput($inputObject);
     }
 
-// Register shortcodes with WordPress
+    // Register shortcodes with WordPress
     private function registerShortcodes()
     {
-        add_shortcode('form_start', [ $this, 'shortcodeFormStart' ]);
-        add_shortcode('form_end', [ $this, 'shortcodeFormEnd' ]);
-        add_shortcode('form_input', [ $this, 'shortcodeInput' ]);
+        add_shortcode('form_start', [$this, 'shortcodeFormStart']);
+        add_shortcode('form_end', [$this, 'shortcodeFormEnd']);
+        add_shortcode('form_input', [$this, 'shortcodeInput']);
     }
 
-    public function defaultShortcodes() {
+    public function defaultShortcodes()
+    {
         $shortcodes = '';
-    
+
         $shortcodes .= "[form_input type=\"text\" id=\"bookingnumber\" label=\"Booking number\" required=\"true\"]\n";
         $shortcodes .= "[form_input type=\"text\" id=\"fullname\" label=\"Fullname\" required=\"true\"]\n";
         $shortcodes .= "[form_input type=\"text\" id=\"passport\" label=\"Passport number\" required=\"true\"]\n";
@@ -215,10 +218,9 @@ class FormGenerator
         $shortcodes .= "[form_input type=\"select\" id=\"countries\" name=\"countries\" class=\"form-control\" value=\"\" target=\"countries\" label=\"Countries\" required=\"true\"]\n";
         $shortcodes .= "[form_input type=\"checkbox\" id=\"checkbox1\" label=\"Agree to Terms\" name=\"termsCheckbox\" required=\"true\"]\n";
         $shortcodes .= "[form_input type=\"signature\" id=\"signature\" label=\"Signature\" name=\"signature\"]\n";
-    
+
         return $shortcodes;
     }
-    
 }
 
 // Instantiate the class

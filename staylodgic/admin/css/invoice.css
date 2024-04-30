@@ -310,6 +310,11 @@ h2#invoice-subheading,
 	display: inline-block;
 }
 
+.slgc_activityres_page_staylodgic-activity-invoicing h1 {
+	margin-top: 30px;
+	margin-bottom: 30px;
+	text-align: center;
+}
 
 @media print {
     body {
