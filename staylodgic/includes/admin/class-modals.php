@@ -1,215 +1,223 @@
 <?php
+
 namespace Staylodgic;
 
 class Modals
 {
 
-	public static function rateQtyToasts() {
-		$toast = '<div aria-live="polite" aria-atomic="true" class="availability-calendar-toasts position-relative">';
+	public static function rateQtyToasts()
+	{
+		$toast  = '<div aria-live="polite" aria-atomic="true" class="availability-calendar-toasts position-relative">';
 		$toast .= '<div class="toast-container top-0 end-0 p-3">';
-	
+
 		$toast .= '<div id="rateToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">';
 		$toast .= '<div class="toast-header">';
 		$toast .= '<div class="toast-square"></div>';
-		$toast .= '<strong class="me-auto">Rate Update</strong>';
-		$toast .= '<small class="text-muted toast-time">just now</small>';
-		$toast .= '<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>';
+		$toast .= '<strong class="me-auto">' . __('Rate Update', 'staylodgic') . '</strong>';
+		$toast .= '<small class="text-muted toast-time">' . __('just now', 'staylodgic') . '</small>';
+		$toast .= '<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="' . __('Close', 'staylodgic') . '"></button>';
 		$toast .= '</div>';
 		$toast .= '<div class="toast-body">';
-		$toast .= 'Rate updated successfully.';
+		$toast .= __('Rate updated successfully.', 'staylodgic');
 		$toast .= '</div>';
 		$toast .= '</div>';
 
 		$toast .= '<div id="rateToastFail" class="toast" role="alert" aria-live="assertive" aria-atomic="true">';
 		$toast .= '<div class="toast-header">';
 		$toast .= '<div class="toast-square"></div>';
-		$toast .= '<strong class="me-auto">Rate Failed</strong>';
-		$toast .= '<small class="text-muted toast-time">just now</small>';
-		$toast .= '<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>';
+		$toast .= '<strong class="me-auto">' . __('Rate Failed', 'staylodgic') . '</strong>';
+		$toast .= '<small class="text-muted toast-time">' . __('just now', 'staylodgic') . '</small>';
+		$toast .= '<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="' . __('Close', 'staylodgic') . '"></button>';
 		$toast .= '</div>';
 		$toast .= '<div class="toast-body">';
-		$toast .= 'Rate update failed.';
+		$toast .= __('Rate update failed.', 'staylodgic');
 		$toast .= '</div>';
 		$toast .= '</div>';
-	
+
 		$toast .= '<div id="quantityToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">';
 		$toast .= '<div class="toast-header">';
 		$toast .= '<div class="toast-square"></div>';
-		$toast .= '<strong class="me-auto">Quantity Update</strong>';
-		$toast .= '<small class="text-muted toast-time">just now</small>';
-		$toast .= '<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>';
+		$toast .= '<strong class="me-auto">' . __('Quantity Update', 'staylodgic') . '</strong>';
+		$toast .= '<small class="text-muted toast-time">' . __('just now', 'staylodgic') . '</small>';
+		$toast .= '<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="' . __('Close', 'staylodgic') . '"></button>';
 		$toast .= '</div>';
 		$toast .= '<div class="toast-body">';
-		$toast .= 'Quantity updated successfully.';
+		$toast .= __('Quantity updated successfully.', 'staylodgic');
 		$toast .= '</div>';
 		$toast .= '</div>';
 
 		$toast .= '<div id="quantityToastFail" class="toast" role="alert" aria-live="assertive" aria-atomic="true">';
 		$toast .= '<div class="toast-header">';
 		$toast .= '<div class="toast-square"></div>';
-		$toast .= '<strong class="me-auto">Quantity Update</strong>';
-		$toast .= '<small class="text-muted toast-time">just now</small>';
-		$toast .= '<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>';
+		$toast .= '<strong class="me-auto">' . __('Quantity Update', 'staylodgic') . '</strong>';
+		$toast .= '<small class="text-muted toast-time">' . __('just now', 'staylodgic') . '</small>';
+		$toast .= '<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="' . __('Close', 'staylodgic') . '"></button>';
 		$toast .= '</div>';
 		$toast .= '<div class="toast-body">';
-		$toast .= 'Quantity update failed.';
+		$toast .= __('Quantity update failed.', 'staylodgic');
 		$toast .= '</div>';
 		$toast .= '</div>';
 
 		$toast .= '<div id="calendarToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">';
 		$toast .= '<div class="toast-header">';
 		$toast .= '<div class="toast-square"></div>';
-		$toast .= '<strong class="me-auto">Calendar</strong>';
-		$toast .= '<small class="text-muted toast-time">just now</small>';
-		$toast .= '<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>';
+		$toast .= '<strong class="me-auto">' . __('Calendar', 'staylodgic') . '</strong>';
+		$toast .= '<small class="text-muted toast-time">' . __('just now', 'staylodgic') . '</small>';
+		$toast .= '<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="' . __('Close', 'staylodgic') . '"></button>';
 		$toast .= '</div>';
 		$toast .= '<div class="toast-body">';
-		$toast .= 'Calendar loaded.';
+		$toast .= __('Calendar loaded.', 'staylodgic');
 		$toast .= '</div>';
 		$toast .= '</div>';
-	
+
 		$toast .= '</div>';
 		$toast .= '</div>';
-	
+
 		return $toast;
 	}
-	
-    public static function syncBookingModal()
-    {
-        ?>
+
+	public static function syncBookingModal()
+	{
+?>
 		<!-- Modal -->
 		<div class="modal fade" id="sync-booking-popup" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-			<div class="modal-content">
-			<div class="modal-header">
-				<h1 class="modal-title fs-5" id="sync-booking-popup-label">Import iCal Bookings</h1>
-			</div>
-			<div class="modal-body">
-			<div class="before-importing-content">
-			Importing can change status of existing bookings to cancelled if they are not found or deleted depending on your options settings. Please backup before proceeding.
-			</div>
-			<div class="progress">
-				<div id="ical-sync-progress" class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
-			</div>
-			<p>
-			<button type="button" class="process-ical-booking-sync btn btn-outline-primary">
-			<span class="button-spinner-support spinner-border spinner-border-sm" aria-hidden="true"></span>
-			Import
-			</button>
-		</p>
-		<p><div id="result-notice"></div></p>
-		<p><div id="result"></div></p>
-		<p><div id="result-missing-bookings"></div></p>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="ical-close-button btn btn-secondary" data-bs-dismiss="modal">Close</button>
-			</div>
+				<div class="modal-content">
+					<div class="modal-header">
+						<h1 class="modal-title fs-5" id="sync-booking-popup-label"><?php echo __('Import iCal Bookings', 'staylodgic'); ?></h1>
+					</div>
+					<div class="modal-body">
+						<div class="before-importing-content">
+							<?php echo __('Importing can change status of existing bookings to cancelled if they are not found or deleted depending on your options settings. Please backup before proceeding.', 'staylodgic'); ?>
+						</div>
+						<div class="progress">
+							<div id="ical-sync-progress" class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+						</div>
+						<p>
+							<button type="button" class="process-ical-booking-sync btn btn-outline-primary">
+								<span class="button-spinner-support spinner-border spinner-border-sm" aria-hidden="true"></span>
+								<?php echo __('Import', 'staylodgic'); ?>
+							</button>
+						</p>
+						<p>
+						<div id="result-notice"></div>
+						</p>
+						<p>
+						<div id="result"></div>
+						</p>
+						<p>
+						<div id="result-missing-bookings"></div>
+						</p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="ical-close-button btn btn-secondary" data-bs-dismiss="modal"><?php echo __('Close', 'staylodgic'); ?></button>
+					</div>
+				</div>
 			</div>
 		</div>
-		</div>
-		<?php
-}
+	<?php
+	}
 
-    public static function quanityModal()
-    {
-        ?>
+	public static function quanityModal()
+	{
+	?>
 		<!-- Bootstrap Modal -->
 		<div class="modal fade" id="quantity-modal" tabindex="-1" aria-labelledby="quantity-modal-label" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered">
-			<div class="modal-content">
-				<div class="modal-header">
-						<h5 class="modal-title" id="quantity-modal-label"><?php _e('Quantity', 'staylodgic');?></h5>
-						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="quantity-modal-label"><?php _e('Quantity', 'staylodgic'); ?></h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="<?php echo __('Close', 'staylogic'); ?>"></button>
 					</div>
-					<div class="modal-body">
+					<div class=" modal-body">
 						<div class="form-group">
-							<label for="quantity-modal-input"><i class="fa-solid fa-hashtag"></i> <?php _e('Quantity', 'staylodgic');?></label>
-							<input type="number" class="form-control" name="quantity" placeholder="Quantity" value="0" min="0">
+							<label for="quantity-modal-input"><i class="fa-solid fa-hashtag"></i> <?php _e('Quantity', 'staylodgic'); ?></label>
+							<input type="number" class="form-control" name="quantity" placeholder="<?php echo __('Quantity', 'staylogic'); ?>" value="0" min="0">
 						</div>
 						<div class="form-group">
-							<label for="modaldatepicker"><i class="fa-solid fa-calendar"></i> <?php _e('Date:', 'staylodgic');?></label>
-							<input type="text" class="form-control modaldatepicker" name="modaldatepicker" placeholder="Select date">
+							<label for="modaldatepicker"><i class="fa-solid fa-calendar"></i> <?php _e('Date:', 'staylodgic'); ?></label>
+							<input type="text" class="form-control modaldatepicker" name="modaldatepicker" placeholder="<?php echo __('Select date', 'staylogic'); ?>">
 						</div>
 						<div class="form-group">
-							<label for="room"><i class="fa-solid fa-bed"></i> <?php _e('Room:', 'staylodgic');?></label>
+							<label for="room"><i class="fa-solid fa-bed"></i> <?php _e('Room:', 'staylodgic'); ?></label>
 							<select class="form-select" name="room">
 								<?php
-		$rooms         = get_posts('post_type=slgc_room&orderby=title&numberposts=-1&order=ASC');
-        $list_options[ 'none' ] = "Not Selected";
-        if ($rooms) {
-            foreach ($rooms as $key => $list) {
-                $list_options[ $list->ID ] = $list->post_title;
-            }
-        } else {
-            $list_options[ 0 ] = __('Rooms not found.','staylodgic');
-        }
-        foreach ($list_options as $key => $option) {
-            echo '<option value="' . esc_attr($key) . '">', esc_attr($option), '</option>';
-        }
-        ?>
-						</select>
+								$rooms                = get_posts('post_type=slgc_room&orderby=title&numberposts=-1&order=ASC');
+								$list_options['none'] = "Not Selected";
+								if ($rooms) {
+									foreach ($rooms as $key => $list) {
+										$list_options[$list->ID] = $list->post_title;
+									}
+								} else {
+									$list_options[0] = __('Rooms not found.', 'staylodgic');
+								}
+								foreach ($list_options as $key => $option) {
+									echo '<option value="' . esc_attr($key) . '">', esc_attr($option), '</option>';
+								}
+								?>
+							</select>
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?php _e('Close', 'staylodgic');?></button>
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?php _e('Close', 'staylodgic'); ?></button>
 						<button type="button" class="btn btn-primary save-changes">
-						<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> <?php _e('Save changes', 'staylodgic');?></button>
+							<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> <?php _e('Save changes', 'staylodgic'); ?></button>
 					</div>
 				</div>
 			</div>
 		</div>
-		<?php
-}
+	<?php
+	}
 
-    public static function ratesModal()
-    {
-        ?>
+	public static function ratesModal()
+	{
+	?>
 		<!-- Bootstrap Modal -->
 		<div class="modal fade" id="rates-modal" tabindex="-1" aria-labelledby="rates-modal-label" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered">
-			<div class="modal-content">
-				<div class="modal-header">
-						<h5 class="modal-title" id="rates-modal-label"><?php _e('Set Rate', 'staylodgic');?></h5>
-						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="rates-modal-label"><?php _e('Set Rate', 'staylodgic'); ?></h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="<?php echo __('Close', 'staylodglic'); ?>"></button>
 					</div>
 					<div class="modal-body">
 						<div class="form-group">
-							<label for="rates-modal-input"><i class="fas fa-dollar-sign"></i> <?php _e('Rate:', 'staylodgic');?></label>
-							<input type="number" class="form-control" name="rate" placeholder="Rate" value="0" min="0">
+							<label for="rates-modal-input"><i class="fas fa-dollar-sign"></i> <?php _e('Rate:', 'staylodgic'); ?></label>
+							<input type="number" class="form-control" name="rate" placeholder="<?php echo __('Rate', 'staylodglic'); ?>" value="0" min="0">
 						</div>
 						<div class="form-group">
-							<label for="modaldatepicker"><i class="fa-solid fa-calendar"></i> <?php _e('Date:', 'staylodgic');?></label>
-							<input type="text" class="form-control modaldatepicker" name="modaldatepicker" placeholder="Select date">
+							<label for="modaldatepicker"><i class="fa-solid fa-calendar"></i> <?php _e('Date:', 'staylodgic'); ?></label>
+							<input type="text" class="form-control modaldatepicker" name="modaldatepicker" placeholder="<?php echo __('Select date', 'staylodglic'); ?>">
 						</div>
 						<div class="form-group">
-							<label for="room"><i class="fa-solid fa-bed"></i> <?php _e('Room:', 'staylodgic');?></label>
+							<label for="room"><i class="fa-solid fa-bed"></i> <?php _e('Room:', 'staylodgic'); ?></label>
 							<select class="form-select" name="room">
 								<?php
-$featured_pages         = get_posts('post_type=slgc_room&orderby=title&numberposts=-1&order=ASC');
-        $list_options[ 'none' ] = "Not Selected";
-        if ($featured_pages) {
-            foreach ($featured_pages as $key => $list) {
-                $list_options[ $list->ID ] = $list->post_title;
-            }
-        } else {
-            $list_options[ 0 ] = __('Rooms not found.','staylodgic');
-        }
-        foreach ($list_options as $key => $option) {
-            echo '<option value="' . esc_attr($key) . '">', esc_attr($option), '</option>';
-        }
-        ?>
-						</select>
+								$featured_pages       = get_posts('post_type=slgc_room&orderby=title&numberposts=-1&order=ASC');
+								$list_options['none'] = __('Not Selected', 'staylodgic');
+								if ($featured_pages) {
+									foreach ($featured_pages as $key => $list) {
+										$list_options[$list->ID] = $list->post_title;
+									}
+								} else {
+									$list_options[0] = __('Rooms not found.', 'staylodgic');
+								}
+								foreach ($list_options as $key => $option) {
+									echo '<option value="' . esc_attr($key) . '">', esc_attr($option), '</option>';
+								}
+								?>
+							</select>
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?php _e('Close', 'staylodgic');?></button>
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?php _e('Close', 'staylodgic'); ?></button>
 						<button type="button" class="btn btn-primary save-changes">
-							<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> <?php _e('Save changes', 'staylodgic');?></button>
+							<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> <?php _e('Save changes', 'staylodgic'); ?></button>
 					</div>
 				</div>
 			</div>
 		</div>
-		<?php
-}
+<?php
+	}
 }
 ?>
