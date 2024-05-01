@@ -389,6 +389,14 @@ class GuestRegistry
                                 foreach ($guest_data as $info_key => $info_value) {
                                     // Skip the registration_id in the inner loop since it's handled separately
                                     if ($info_key != 'registration_id') {
+
+                                        if ($info_key == 'countries') {
+                                            $info_value['value'] = staylodgic_country_list('display', $info_value['value'] );
+                                        }
+                                        if ( $info_value['type'] == 'checkbox' && 'true' == $info_value['value'] ) {
+                                            $info_value['value'] = 'Yes';
+                                        }
+
                                         echo '<p class="type-container" data-type="' . esc_attr($info_value['type']) . '" data-id="' . esc_attr($info_key) . '"><strong><span class="registration-label">' . esc_html($info_value['label']) . ':</span></strong> <span class="registration-data">' . esc_html($info_value['value']) . '</span></p>';
                                     }
                                 }
@@ -569,7 +577,7 @@ class GuestRegistry
             $registrationAllowedData = $this->allowGuestRegistration(get_the_id());
 
             $registrationAllowed = $registrationAllowedData['allow'];
-            $registrationAllowed = true;
+            // $registrationAllowed = true;
             if (!$registrationAllowed) {
                 $content .= '<div class="guestregistry-shortcode-content">' . $registrationAllowedData['reason'] . '</div>';
             } else {
