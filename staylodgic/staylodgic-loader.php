@@ -68,6 +68,9 @@ class Staylodgic_Init
         if (isset($_GET['page']) && $_GET['page'] == 'slgc-export-booking-ical') {
             $remove = true;
         }
+        if (isset($_GET['page']) && $_GET['page'] == 'slgc-export-registrations-ical') {
+            $remove = true;
+        }
         if (isset($_GET['page']) && $_GET['page'] == 'slgc-import-availability-ical') {
             $remove = true;
         }
@@ -322,6 +325,24 @@ class Staylodgic_Init
 
             }
             if ($current_admin_screen->base == 'staylodgic_page_slgc-export-booking-ical') {
+
+                wp_enqueue_script('staylodgic-parser');
+                wp_enqueue_style('staylodgic-invoice');
+                wp_enqueue_style('fontawesome-6');
+                wp_enqueue_style('fontawesome-6-brands');
+                wp_enqueue_style('fontawesome-6-solid');
+
+                wp_enqueue_style('flatpickr');
+                wp_enqueue_script('flatpickr');
+                wp_enqueue_script('flatpickr-monthselect');
+                wp_enqueue_style('flatpickr-monthselect');
+                wp_enqueue_style('flatpickr-extra');
+
+                 wp_enqueue_style('bootstrap');
+                wp_enqueue_script('bootstrap');
+
+            }
+            if ($current_admin_screen->base == 'staylodgic_page_slgc-export-registrations-ical') {
 
                 wp_enqueue_script('staylodgic-parser');
                 wp_enqueue_style('staylodgic-invoice');

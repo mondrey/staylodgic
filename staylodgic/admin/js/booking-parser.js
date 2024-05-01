@@ -61,6 +61,70 @@
 		// Call exporterFlatpickr with the current month as the initial date
 		exporterFlatpickr("today");
 
+		$('.download_registrations_export_ical').on('click', function() {
+
+			$('.exporter_calendar-error-wrap').hide();
+
+			var button = $(this);
+
+			button.find('.spinner-zone').addClass('spinner-border');
+			button.prop("disabled", true);
+
+			var selectedMonth = $(".exporter_calendar").val(); // Get the selected month from the input field
+			console.log( selectedMonth );
+			$.ajax({
+				url: ajaxurl,
+				type: 'POST',
+				data: {
+					action: 'download_registrations_ical',
+					month: selectedMonth, // Pass the selected month to the AJAX function
+					nonce: staylodgic_admin_vars.nonce
+				},
+				xhrFields: {
+					responseType: 'blob' // Expecting a Blob response
+				},
+				success: function(data, status, xhr) {
+					// Check if data is undefined or the Blob is empty
+					if (!data || data.size === 0) {
+						alert('No registration data available for download for the selected month.');
+						button.prop("disabled", false);
+						button.find('.spinner-zone').removeClass('spinner-border');
+					} else {
+						var a = document.createElement('a');
+						try {
+							var url = window.URL.createObjectURL(data);
+							a.href = url;
+							// Safely extracting filename from Content-Disposition header
+							var contentDisposition = xhr.getResponseHeader('Content-Disposition');
+							if (contentDisposition) {
+								var filename = contentDisposition.split(';')[1].split('=')[1].replace(/"/g, '');
+								a.download = filename;
+							} else {
+								a.download = 'default-download-name'; // Provide a default download name if header is missing
+							}
+							document.body.append(a);
+							a.click();
+							a.remove();
+							window.URL.revokeObjectURL(url);
+						} catch (error) {
+							$('.exporter_calendar-error-wrap').show();
+						} finally {
+							button.prop("disabled", false);
+							button.find('.spinner-zone').removeClass('spinner-border');
+						}
+					}
+				},
+				error: function(xhr, status, error) {
+					console.error("Error: " + error + ", Status: " + status);
+					alert('Failed to download registration details. Please try again.');
+			
+					button.prop("disabled", false);
+					button.find('.spinner-zone').removeClass('spinner-border');
+				}
+			});
+			
+		});
+
 		$('.download_export_ical').on('click', function() {
 
 			var button = $(this);

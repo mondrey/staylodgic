@@ -186,7 +186,7 @@ class GuestRegistry
         // Check if check-in date has already passed
         if ($today > $checkinDateObj) {
             $allow = false;
-            $reason = 'Check-in date has already passed';
+            $reason = __('Check-in date has already passed','staylodgic');
         } else {
             // Calculate the difference in days
             $dateDiff = $today->diff($checkinDateObj)->days;
@@ -194,7 +194,7 @@ class GuestRegistry
             // If the difference is more than 3 days, set $allow to false
             if ($dateDiff > 2) {
                 $allow = false;
-                $reason = 'Registration open 2 days before check-in';
+                $reason = __('Registration open 2 days before check-in','staylodgic');
             }
         }
 
@@ -569,7 +569,7 @@ class GuestRegistry
             $registrationAllowedData = $this->allowGuestRegistration(get_the_id());
 
             $registrationAllowed = $registrationAllowedData['allow'];
-
+            $registrationAllowed = true;
             if (!$registrationAllowed) {
                 $content .= '<div class="guestregistry-shortcode-content">' . $registrationAllowedData['reason'] . '</div>';
             } else {

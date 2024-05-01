@@ -315,6 +315,17 @@ h2#invoice-subheading,
 	margin-bottom: 30px;
 	text-align: center;
 }
+.exporter_calendar-no-records {
+	font-size: 11px;
+	background: #f00;
+	display: inline-block;
+	color: #fff;
+	padding: 3px 15px;
+	font-weight: 500;
+}
+.exporter_calendar-error-wrap {
+	display: none;
+}
 
 @media print {
     body {

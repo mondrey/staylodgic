@@ -1,7 +1,3 @@
-#toplevel_page_slgc-dashboard {
-	border-top: 1px solid #ffffff2e !important;
-}
-
 #toplevel_page_slgc-dashboard,
 #toplevel_page_staylodgic-settings,
 #menu-posts-slgc_room,
@@ -10,7 +6,6 @@
 #menu-posts-slgc_guestregistry,
 #menu-posts-slgc_activity,
 #menu-posts-slgc_activityres {
-	border-bottom: 1px solid #ffffff2e !important;
 	background: #000;
 }
 #toplevel_page_slgc-dashboard .wp-menu-image.svg,
