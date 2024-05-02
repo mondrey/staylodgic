@@ -5,6 +5,10 @@ class staylodgic_ActivityReservation_Posts
     public function __construct()
     {
         add_action('init', array($this, 'init'));
+
+        add_filter("manage_edit-slgc_activityres_columns", array($this, 'slgc_activityres_edit_columns'));
+        add_filter('manage_slgc_activityres_posts_custom_column', array($this, 'slgc_activityres_custom_columns'));
+
         add_action('admin_init', array($this, 'sort_admin_init'));
         add_action('admin_menu', array($this, 'staylodgic_enable_activityreservation_sort'));
         add_action('wp_ajax_activityreservation_sort', array($this, 'staylodgic_save_activityreservation_order'));
@@ -15,6 +19,67 @@ class staylodgic_ActivityReservation_Posts
                     add_filter('posts_orderby', array($this, 'staylodgic_activityres_orderby'));
                 }
             }
+        }
+    }
+
+    public function slgc_activityres_edit_columns($columns)
+    {
+        unset($columns['author']);
+        $new_columns = array(
+            //"mreservation_section" => __('Section', 'staylodgic'),
+            "reservation_customer"   => __('Customer', 'staylodgic'),
+            "reservation_bookingnr"  => __('Booking Number', 'staylodgic'),
+            "reservation_checkin" => __('Activity Day', 'staylodgic'),
+            "reservation_status"     => __('Status', 'staylodgic'),
+            "reservation_substatus"  => __('Sub Status', 'staylodgic'),
+            "reservation_activitiy"       => __('Activity', 'staylodgic'),
+        );
+
+        return array_merge($columns, $new_columns);
+    }
+
+    public function slgc_activityres_custom_columns($columns)
+    {
+        global $post;
+        $custom    = get_post_custom();
+        $image_url = wp_get_attachment_thumb_url(get_post_thumbnail_id($post->ID));
+
+        $full_image_id  = get_post_thumbnail_id(($post->ID), 'fullimage');
+        $full_image_url = wp_get_attachment_image_src($full_image_id, 'fullimage');
+        if (isset($full_image_url[0])) {
+            $full_image_url = $full_image_url[0];
+        }
+
+        $reservation_instance = new \Staylodgic\Activity($bookingNumber = null, $reservation_id = $post->ID);
+        $bookingnumber = $reservation_instance->getBookingNumber();
+
+        switch ($columns) {
+            case "reservation_customer":
+                $customer_name = $reservation_instance->getCustomerEditLinkForReservation();
+                if (null !== $customer_name) {
+                    echo wp_kses($customer_name, staylodgic_get_allowed_tags());
+                }
+                break;
+            case "reservation_bookingnr":
+                echo esc_attr($bookingnumber);
+                break;
+            case "reservation_checkin":
+                $reservation_checkin       = $reservation_instance->getCheckinDate();
+                echo '<p class="post-status-reservation-date post-status-reservation-date-checkin"><i class="fa-solid fa-arrow-right"></i> ' . esc_attr(staylodgic_formatDate($reservation_checkin)) . '</p>';
+
+                break;
+            case "reservation_status":
+                $reservation_status = $reservation_instance->getReservationStatus();
+                echo esc_attr(ucfirst($reservation_status));
+                break;
+            case "reservation_substatus":
+                $reservation_substatus = $reservation_instance->getReservationSubStatus();
+                echo esc_attr(ucfirst($reservation_substatus));
+                break;
+            case "reservation_activitiy":
+                $activity_title = $reservation_instance->getNameForActivity();
+                echo esc_html($activity_title);
+                break;
         }
     }
 

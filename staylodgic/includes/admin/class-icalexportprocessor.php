@@ -53,8 +53,8 @@ class IcalExportProcessor
         add_submenu_page(
             'staylodgic-settings',
             // This is the slug of the parent menu
-            __('Export CSV Guest Registrations', 'staylodgic'),
-            __('Export CSV Guest Registrations', 'staylodgic'),
+            __('Export Guest Registrations', 'staylodgic'),
+            __('Export Guest Registrations', 'staylodgic'),
             'manage_options',
             'slgc-export-registrations-ical',
             array($this, 'csv_registrations_export')
@@ -66,8 +66,8 @@ class IcalExportProcessor
         add_submenu_page(
             'staylodgic-settings',
             // This is the slug of the parent menu
-            __('Export CSV Bookings', 'staylodgic'),
-            __('Export CSV Bookings', 'staylodgic'),
+            __('Export Bookings', 'staylodgic'),
+            __('Export Bookings', 'staylodgic'),
             'manage_options',
             'slgc-export-booking-ical',
             array($this, 'csv_bookings_export')
@@ -240,7 +240,7 @@ class IcalExportProcessor
     public function generate_guest_registration_csv_from_reservations($start_date, $end_date)
     {
 
-        $csv_data_header = "Booking Number,Full Name,ID,Country,Room Name,Checkin Date,Checkin Time,Checkout Date,Checkout Time\r\n";
+        $csv_data_header = "Booking Number,Full Name,ID,Country,Booking Channel,Room Name,Checkin Date,Checkin Time,Checkout Date,Checkout Time\r\n";
         $csv_data = '';
         // error_log('registrations');
         // error_log($start_date);
@@ -261,10 +261,8 @@ class IcalExportProcessor
                 $checkin_date       = get_post_meta($reservation->ID, 'staylodgic_checkin_date', true) ?: '-';
                 $checkout_date      = get_post_meta($reservation->ID, 'staylodgic_checkout_date', true) ?: '-';
                 $booking_number     = get_post_meta($reservation->ID, 'staylodgic_booking_number', true) ?: '-';
-                $reservation_status = get_post_meta($reservation->ID, 'staylodgic_reservation_status', true) ?: '-';
+                $booking_channel     = get_post_meta($reservation->ID, 'staylodgic_booking_channel', true) ?: '-';
                 $room_name          = $reservation_instance->getRoomNameForReservation($reservation->ID);
-                $adults_number      = $reservation_instance->getNumberOfAdultsForReservation($reservation->ID);
-                $children_number    = $reservation_instance->getNumberOfChildrenForReservation($reservation->ID);
 
                 $registry_instance = new \Staylodgic\GuestRegistry();
                 $resRegIDs         = $registry_instance->fetchResRegIDsByBookingNumber($booking_number);
@@ -296,7 +294,7 @@ class IcalExportProcessor
 
                             $country = staylodgic_country_list('display', $country_code);
 
-                            $csv_data .= "$booking_number,$fullname,$passport,$country,$room_name,$checkin_date,$checkin_time,$checkout_date,$checkout_time\r\n";
+                            $csv_data .= "$booking_number,$fullname,$passport,$country,$booking_channel,$room_name,$checkin_date,$checkin_time,$checkout_date,$checkout_time\r\n";
                         }
                     }
                 }

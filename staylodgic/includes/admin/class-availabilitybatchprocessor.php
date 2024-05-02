@@ -392,7 +392,7 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
         echo '<div class="main-sync-form-wrap">';
         echo '<div id="sync-form">';
         echo '<h1>' . __('Sync Your Calendar', 'staylodgic') . '</h1>';
-        echo '<p>' . __('Keep your bookings up-to-date. Connect your iCalendar feeds to synchronize your booking availability with your StayLogic calendar. Simply enter the URLs for the calendars you wish to sync below.', 'staylodgic') . '</p>';
+        echo '<p>' . __('Keep your bookings up-to-date. Connect your iCalendar feeds to synchronize your booking availability with your StayLodgic calendar. Simply enter the URLs for the calendars you wish to sync below.', 'staylodgic') . '</p>';
         echo '<div class="how-to-admin">';
         echo '<h2>' . __('How to Sync:', 'staylodgic') . '</h2>';
         echo '<ol>';

@@ -127,16 +127,16 @@ class Modals
 				<div class="modal-content">
 					<div class="modal-header">
 						<h5 class="modal-title" id="quantity-modal-label"><?php _e('Quantity', 'staylodgic'); ?></h5>
-						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="<?php echo __('Close', 'staylogic'); ?>"></button>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="<?php echo __('Close', 'staylodgic'); ?>"></button>
 					</div>
 					<div class=" modal-body">
 						<div class="form-group">
 							<label for="quantity-modal-input"><i class="fa-solid fa-hashtag"></i> <?php _e('Quantity', 'staylodgic'); ?></label>
-							<input type="number" class="form-control" name="quantity" placeholder="<?php echo __('Quantity', 'staylogic'); ?>" value="0" min="0">
+							<input type="number" class="form-control" name="quantity" placeholder="<?php echo __('Quantity', 'staylodgic'); ?>" value="0" min="0">
 						</div>
 						<div class="form-group">
 							<label for="modaldatepicker"><i class="fa-solid fa-calendar"></i> <?php _e('Date:', 'staylodgic'); ?></label>
-							<input type="text" class="form-control modaldatepicker" name="modaldatepicker" placeholder="<?php echo __('Select date', 'staylogic'); ?>">
+							<input type="text" class="form-control modaldatepicker" name="modaldatepicker" placeholder="<?php echo __('Select date', 'staylodgic'); ?>">
 						</div>
 						<div class="form-group">
 							<label for="room"><i class="fa-solid fa-bed"></i> <?php _e('Room:', 'staylodgic'); ?></label>

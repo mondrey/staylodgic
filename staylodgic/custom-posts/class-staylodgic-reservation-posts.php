@@ -7,7 +7,7 @@ class staylodgic_Reservation_Posts
         add_action('init', array($this, 'init'));
 
         add_filter("manage_edit-slgc_reservations_columns", array($this, 'slgc_reservations_edit_columns'));
-        add_filter('manage_posts_custom_column', array($this, 'slgc_reservations_custom_columns'));
+        add_filter('manage_slgc_reservations_posts_custom_column', array($this, 'slgc_reservations_custom_columns'));
 
         add_filter('manage_edit-slgc_reservations_sortable_columns', array($this, 'slgc_reservations_sortable_columns'));
 
@@ -35,12 +35,9 @@ class staylodgic_Reservation_Posts
         return $columns;
     }
 
-
-    // Kbase lister
     public function slgc_reservations_edit_columns($columns)
     {
         unset($columns['author']);
-        unset($columns['date']);
         $new_columns = array(
             //"mreservation_section" => __('Section', 'staylodgic'),
             "reservation_customer"   => __('Customer', 'staylodgic'),
@@ -128,9 +125,6 @@ class staylodgic_Reservation_Posts
                 break;
         }
     }
-    /*
-     * kbase Admin columns
-     */
 
     /**
      *

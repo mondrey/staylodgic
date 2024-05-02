@@ -54,6 +54,87 @@ class Activity
         $this->activitiesArray = $activitiesArray;
     }
 
+    public function getReservationStatus($reservation_id = false)
+    {
+
+        if (!$reservation_id) {
+            $reservation_id = $this->reservation_id;
+        }
+        // Get the reservation status for the reservation
+        $reservation_status = get_post_meta($reservation_id, 'staylodgic_reservation_status', true);
+
+        return $reservation_status;
+    }
+
+    public function getReservationSubStatus($reservation_id = false)
+    {
+
+        if (!$reservation_id) {
+            $reservation_id = $this->reservation_id;
+        }
+        // Get the reservation sub status for the reservation
+        $reservation_substatus = get_post_meta($reservation_id, 'staylodgic_reservation_substatus', true);
+
+        return $reservation_substatus;
+    }
+
+    public function getCheckinDate($reservation_id = false)
+    {
+
+        if (!$reservation_id) {
+            $reservation_id = $this->reservation_id;
+        }
+        // Get the check-in and check-out dates for the reservation
+        $checkin_date = get_post_meta($reservation_id, 'staylodgic_reservation_checkin', true);
+
+        return $checkin_date;
+    }
+
+    public function getCustomerEditLinkForReservation($reservation_id = false)
+    {
+
+        if (!$reservation_id) {
+            $reservation_id = $this->reservation_id;
+        }
+        // Get the customer post ID from the reservation's meta data
+        $customer_post_id = get_post_meta($reservation_id, 'staylodgic_customer_id', true);
+
+        if ($customer_post_id) {
+            // Check if the customer post exists
+            $customer_post = get_post($customer_post_id);
+            if ($customer_post) {
+                // Get the admin URL and create the link
+                $edit_link = admin_url('post.php?post=' . $customer_post_id . '&action=edit');
+                return '<a href="' . $edit_link . '">' . $customer_post->post_title . '</a>';
+            }
+        } else {
+            // If customer post doesn't exist, retrieve customer name from reservation post
+            $reservation_post = get_post($reservation_id);
+            if ($reservation_post) {
+                $customer_name = get_post_meta($reservation_id, 'staylodgic_full_name', true);
+                if (!empty($customer_name)) {
+                    return $customer_name;
+                }
+            }
+        }
+
+        // Return null if no customer was found for the reservation
+        return null;
+    }
+
+    public function getBookingNumber()
+    {
+        // Get the booking number from the reservation post meta
+        $booking_number = get_post_meta($this->reservation_id, 'staylodgic_booking_number', true);
+
+        if (!$booking_number) {
+            // Handle error if booking number not found
+            return '';
+        }
+
+        return $booking_number;
+    }
+
     public function getActivityTime($reservation_id = false)
     {
 
@@ -812,6 +893,10 @@ class Activity
 
     public function getNameForActivity($reservation_id = false)
     {
+
+        if (!$reservation_id) {
+            $reservation_id = $this->reservation_id;
+        }
 
         // Get room id from post meta
         $activity_id = get_post_meta($reservation_id, 'staylodgic_activity_id', true);
