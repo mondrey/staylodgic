@@ -12,45 +12,29 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
     public function __construct()
     {
 
-        $site_sync_feature = get_blog_option(get_current_blog_id(), 'site_sync_feature');
-        if ( 'enabled' == $site_sync_feature ) {
-            add_action('admin_menu', array($this, 'add_availability_admin_menu')); // This now points to the add_admin_menu function
 
+        $site_sync_feature = get_blog_option(get_current_blog_id(), 'site_sync_feature');
+        if ('enabled' == $site_sync_feature) {
+
+            add_action('admin_menu', array($this, 'add_availability_admin_menu'));
             add_action('wp_ajax_save_ical_availability_meta', array($this, 'save_ical_availability_meta'));
             add_action('wp_ajax_nopriv_save_ical_availability_meta', array($this, 'save_ical_availability_meta'));
-    
-            // Add the new admin page
             add_action('admin_menu', array($this, 'add_export_availability_admin_menu'));
+    
+            // Add the cron hook for batch processing
+            $this->add_cron_hook();
         }
-
-        // Add the export handler hook
+    
         add_action('init', array($this, 'add_ics_rewrite_rule'));
         add_filter('query_vars', array($this, 'register_query_vars'));
         add_action('template_redirect', array($this, 'handle_ics_export'));
-
-        if ( 'enabled' == $site_sync_feature ) {
-
-            error_log('Sync Enabled');
-
-            // Add custom interval
-            add_filter('cron_schedules', array($this, 'add_cron_interval'));
-
-            // Check and schedule the cron event
-            // $this->schedule_cron_event();
-
-            // Hook the function to the cron event
-            add_action('staylodgic_ical_availability_processor_event', array($this, 'ical_availability_processor'));
+    }
 
 
-            // Initialize batch count
-            if (!get_option('ical_processing_batch_count')) {
-                update_option('ical_processing_batch_count', 0);
-            }
-
-            // Add the cron hook for batch processing
-            $this->add_cron_hook();
-
-        }
+    public function add_cron_hook()
+    {
+        // Hook the function to the cron event
+        add_action('staylodgic_ical_availability_processor_event', array($this, 'ical_availability_processor'));
     }
 
     public function add_availability_admin_menu()
@@ -111,95 +95,6 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
     
         return false; // Return false if no schedule found
     }    
-
-    public function get_scheduled_time() {
-        $qtysync_interval = null; // or set a default value
-        $qtysync_interval = get_blog_option(get_current_blog_id(), 'site_sync_interval');
-
-        // Define the cron schedule based on the validated interval
-        switch ($qtysync_interval) {
-            case '1':
-                $schedule = 'staylodgic_1_minute';
-                break;
-            case '5':
-                $schedule = 'staylodgic_5_minutes';
-                break;
-            case '10':
-                $schedule = 'staylodgic_10_minutes';
-                break;
-            case '15':
-                $schedule = 'staylodgic_15_minutes';
-                break;
-            case '30':
-                $schedule = 'staylodgic_30_minutes';
-                break;
-            case '60':
-                $schedule = 'staylodgic_60_minutes';
-                break;
-        }
-
-        error_log('Sync ' . $qtysync_interval );
-        error_log('Sync schedule ' . $schedule );
-
-        return $schedule;
-    }
-
-    public function schedule_cron_event()
-    {
-
-        error_log('-------- All Crons List Start -----------');
-        $cron_jobs = _get_cron_array(); // Retrieve the cron array
-        error_log(print_r($cron_jobs, true)); // Log it to see all scheduled cron jobs
-        error_log('-------- All Crons List End -----------');
-
-
-        $current_meta_schedule = get_option('current_ical_processor_schedule');
-        $new_schedule = $this->get_scheduled_time();
-    
-        error_log('Current Schedule from Metadata: ' . $current_meta_schedule);
-        error_log('New Schedule from Settings: ' . $new_schedule);
-        
-        if ($current_meta_schedule !== $new_schedule) {
-            $scheduled_time = wp_next_scheduled('staylodgic_ical_availability_processor_event');
-            
-            if ($scheduled_time) {
-                error_log('Attempting to unschedule at timestamp: ' . $scheduled_time);
-                $unschedule_result = wp_unschedule_event($scheduled_time, 'staylodgic_ical_availability_processor_event');
-                error_log('Unschedule result: ' . ($unschedule_result ? 'Success' : 'Failed'));
-            }
-            
-            $reschedule_result = wp_schedule_event(time(), $new_schedule, 'staylodgic_ical_availability_processor_event');
-            error_log('Attempting to reschedule: ' . $new_schedule);
-            error_log('Reschedule result: ' . ($reschedule_result ? 'Success' : 'Failed'));
-    
-            update_option('current_ical_processor_schedule', $new_schedule);
-        } else {
-            error_log('No rescheduling needed. Current schedule matches the new schedule.');
-        }
-    }
-    
-    // Custom intervals for cron job
-    public function add_cron_interval($schedules)
-    {
-        $sync_intervals = array(
-            '1' => esc_attr__('One Minute', 'staylodgic'),
-            '5' => esc_attr__('Five Minutes', 'staylodgic'),
-            '10' => esc_attr__('Ten Minutes', 'staylodgic'),
-            '15' => esc_attr__('Fifteen Minutes', 'staylodgic'),
-            '30' => esc_attr__('Thirty Minutes', 'staylodgic'),
-            '60' => esc_attr__('Sixty Minutes', 'staylodgic')
-        );
-
-        foreach ($sync_intervals as $interval => $display) {
-            $schedules["staylodgic_{$interval}_minutes"] = array(
-                'interval' => intval($interval) * 60,
-                'display' => $display
-            );
-        }
-
-        // error_log( print_r( $schedules, true ) );
-        return $schedules;
-    }
 
     public function save_ical_availability_meta()
     {
@@ -275,7 +170,7 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
             }
 
             // Sync on Save processing full batch ( process intensive )
-            self::ical_availability_processor(true);
+            $this->ical_availability_processor();
 
             if (!wp_next_scheduled('continue_ical_availability_processing')) {
                 wp_schedule_single_event(time(), 'continue_ical_availability_processing');
@@ -317,28 +212,13 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
         return get_option('is_syncing', false);
     }
 
-    public function ical_availability_processor($process_all = false)
+    public function ical_availability_processor()
     {
         $rooms = Rooms::queryRooms();
-        $processed_rooms = get_option('staylodgic_processed_rooms', []);
-
-        // Increment batch count only if not processing all
-        if (!$process_all) {
-            // Set the is_syncing flag
-            update_option('is_syncing', true);
-            $batch_count = get_option('ical_processing_batch_count', 0) + 1;
-            update_option('ical_processing_batch_count', $batch_count);
-        } else {
-            $batch_count = 'manual';
-        }
-
         $count = 0;
         $changedDateRanges = array();
 
         foreach ($rooms as $room) {
-            if (in_array($room->ID, $processed_rooms)) {
-                continue; // Skip already processed rooms
-            }
 
             $room_ical_data = get_post_meta($room->ID, 'staylodgic_availability_ical_data', true);
 
@@ -367,28 +247,10 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
                     $blocked_dates['ical'][$room->ID]['stats'][$ics_id]['synctime'] = date('H:i:s');
                     $blocked_dates['ical'][$room->ID]['stats'][$ics_id]['file_ok'] = $file_ok; // Store elapsed time
                     $blocked_dates['ical'][$room->ID]['stats'][$ics_id]['syncprocessing_time'] = $elapsedProcessTime; // Store elapsed time
-                    $blocked_dates['ical'][$room->ID]['stats'][$ics_id]['batch_count'] = $batch_count;
                 }
             }
 
-            $processed_rooms[] = $room->ID;
-            update_option('staylodgic_processed_rooms', $processed_rooms); // Update the list of processed rooms
-
-            $count++;
-
-            if (!$process_all && $count < $this->batchSize) {
-                // Reset batch count when all rooms are processed
-                update_option('ical_processing_batch_count', 0);
-                // Clear the is_syncing flag when all rooms are processed or on manual full process
-                update_option('is_syncing', false);
-            }
-
-            if (!$process_all && $count >= $this->batchSize) {
-                break; // Stop processing after reaching batch size
-            }
-
             if (isset($blocked_dates['ical'][$room->ID])) {
-
                 update_post_meta($room->ID, 'staylodgic_channel_quantity_array', $blocked_dates['ical'][$room->ID]);
             }
         }
@@ -399,29 +261,6 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
             error_log( print_r($blocked_dates, 1) );
             error_log( '-----------------------------------' );
         }
-
-        // Clear the is_syncing flag under two conditions:
-        // 1. All rooms are processed in batch mode.
-        // 2. When processing all rooms in one go (manual processing).
-        if (($count < $this->batchSize && !$process_all) || $process_all) {
-            update_option('is_syncing', false);
-        }
-
-        if ($count < $this->batchSize) {
-            // All rooms processed, reset the list
-            update_option('staylodgic_processed_rooms', []);
-            // Optionally trigger a notification that processing is complete
-        }
-
-        // Schedule next batch
-        if (!wp_next_scheduled('continue_ical_availability_processing')) {
-            wp_schedule_single_event(time() + 60, 'continue_ical_availability_processing'); // 300 seconds = 5 minutes
-        }
-    }
-
-    public function add_cron_hook()
-    {
-        add_action('continue_ical_availability_processing', array($this, 'ical_availability_processor'));
     }
 
     public function process_availability_link(

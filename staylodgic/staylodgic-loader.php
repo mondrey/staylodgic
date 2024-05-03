@@ -109,6 +109,8 @@ class Staylodgic_Init
     public function staylodgic_load_availablity_calendar()
     {
 
+        require_once plugin_dir_path(__FILE__) . 'includes/admin/class-cron.php';
+
         require_once plugin_dir_path(__FILE__) . 'includes/admin-property-data.php';
 
         require_once plugin_dir_path(__FILE__) . 'vendors/ics-parser/src/ICal/ICal.php';
