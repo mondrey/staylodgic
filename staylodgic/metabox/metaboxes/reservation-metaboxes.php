@@ -81,15 +81,6 @@ function staylodgic_reservations_metadata()
             ),
             array(
                 'name'    => '',
-                'id'      => 'staylodgic_booking_channel',
-                'type'    => 'offview',
-                'class'   => 'textsmall',
-                'heading' => 'subhead',
-                'desc'    => '',
-                'std'     => 'Admin: Staylodgic',
-            ),
-            array(
-                'name'    => '',
                 'id'      => 'staylodgic_checkin_date',
                 'type'    => 'offview',
                 'class'   => 'textsmall',
@@ -130,6 +121,15 @@ function staylodgic_reservations_metadata()
                 'type'    => 'select',
                 'desc'    => esc_html__('Reservation Sub Status', 'staylodgic'),
                 'options' => staylodgic_get_booking_substatuses(),
+            ),
+            array(
+                'name'    => 'Referral / Channel',
+                'id'      => 'staylodgic_booking_channel',
+                'type'    => 'text',
+                'class'   => 'reservation_status',
+                'heading' => 'subhead',
+                'desc'    => '',
+                'std'     => 'Admin: Staylodgic',
             ),
             array(
                 'name'     => 'Bed Layout',

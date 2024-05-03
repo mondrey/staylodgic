@@ -11,35 +11,46 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
 
     public function __construct()
     {
-        add_action('admin_menu', array($this, 'add_availability_admin_menu')); // This now points to the add_admin_menu function
 
-        add_action('wp_ajax_save_ical_availability_meta', array($this, 'save_ical_availability_meta'));
-        add_action('wp_ajax_nopriv_save_ical_availability_meta', array($this, 'save_ical_availability_meta'));
+        $site_sync_feature = get_blog_option(get_current_blog_id(), 'site_sync_feature');
+        if ( 'enabled' == $site_sync_feature ) {
+            add_action('admin_menu', array($this, 'add_availability_admin_menu')); // This now points to the add_admin_menu function
 
-        // Add the new admin page
-        add_action('admin_menu', array($this, 'add_export_availability_admin_menu'));
+            add_action('wp_ajax_save_ical_availability_meta', array($this, 'save_ical_availability_meta'));
+            add_action('wp_ajax_nopriv_save_ical_availability_meta', array($this, 'save_ical_availability_meta'));
+    
+            // Add the new admin page
+            add_action('admin_menu', array($this, 'add_export_availability_admin_menu'));
+        }
 
         // Add the export handler hook
         add_action('init', array($this, 'add_ics_rewrite_rule'));
         add_filter('query_vars', array($this, 'register_query_vars'));
         add_action('template_redirect', array($this, 'handle_ics_export'));
 
-        // Check and schedule the cron event
-        $this->schedule_cron_event();
+        if ( 'enabled' == $site_sync_feature ) {
 
-        // Hook the function to the cron event
-        add_action('staylodgic_ical_availability_processor_event', array($this, 'ical_availability_processor'));
+            error_log('Sync Enabled');
 
-        // Add custom interval
-        add_filter('cron_schedules', array($this, 'add_cron_interval'));
+            // Add custom interval
+            add_filter('cron_schedules', array($this, 'add_cron_interval'));
 
-        // Initialize batch count
-        if (!get_option('ical_processing_batch_count')) {
-            update_option('ical_processing_batch_count', 0);
+            // Check and schedule the cron event
+            // $this->schedule_cron_event();
+
+            // Hook the function to the cron event
+            add_action('staylodgic_ical_availability_processor_event', array($this, 'ical_availability_processor'));
+
+
+            // Initialize batch count
+            if (!get_option('ical_processing_batch_count')) {
+                update_option('ical_processing_batch_count', 0);
+            }
+
+            // Add the cron hook for batch processing
+            $this->add_cron_hook();
+
         }
-
-        // Add the cron hook for batch processing
-        $this->add_cron_hook();
     }
 
     public function add_availability_admin_menu()
@@ -73,51 +84,111 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
         }
     }
 
+    private function get_current_schedule()
+    {
+        // Check if the event is scheduled and return its interval
+        $timestamp = wp_next_scheduled('staylodgic_ical_availability_processor_event');
+        if (!$timestamp) {
+            return false; // No event scheduled
+        }
+    
+        // Get the cron array
+        $cron = _get_cron_array();
+        if (!isset($cron[$timestamp]['staylodgic_ical_availability_processor_event'])) {
+            return false;
+        }
+    
+        // Log the relevant cron entry
+        error_log('Cron entry for staylodgic_ical_availability_processor_event:');
+        error_log(print_r($cron[$timestamp]['staylodgic_ical_availability_processor_event'], true));
+    
+        // Extract the schedule name from the cron entry
+        foreach ($cron[$timestamp]['staylodgic_ical_availability_processor_event'] as $event) {
+            if (isset($event['schedule'])) {
+                return $event['schedule']; // Return the schedule name
+            }
+        }
+    
+        return false; // Return false if no schedule found
+    }    
+
+    public function get_scheduled_time() {
+        $qtysync_interval = null; // or set a default value
+        $qtysync_interval = get_blog_option(get_current_blog_id(), 'site_sync_interval');
+
+        // Define the cron schedule based on the validated interval
+        switch ($qtysync_interval) {
+            case '1':
+                $schedule = 'staylodgic_1_minute';
+                break;
+            case '5':
+                $schedule = 'staylodgic_5_minutes';
+                break;
+            case '10':
+                $schedule = 'staylodgic_10_minutes';
+                break;
+            case '15':
+                $schedule = 'staylodgic_15_minutes';
+                break;
+            case '30':
+                $schedule = 'staylodgic_30_minutes';
+                break;
+            case '60':
+                $schedule = 'staylodgic_60_minutes';
+                break;
+        }
+
+        error_log('Sync ' . $qtysync_interval );
+        error_log('Sync schedule ' . $schedule );
+
+        return $schedule;
+    }
+
     public function schedule_cron_event()
     {
 
-        $qtysync_interval = null; // or set a default value
-        $settings = get_option('staylodgic_settings');
+        error_log('-------- All Crons List Start -----------');
+        $cron_jobs = _get_cron_array(); // Retrieve the cron array
+        error_log(print_r($cron_jobs, true)); // Log it to see all scheduled cron jobs
+        error_log('-------- All Crons List End -----------');
 
-        if (is_array($settings) && isset($settings['qtysync_interval'])) {
-            $qtysync_interval = $settings['qtysync_interval'];
 
-            // Define the cron schedule based on the validated interval
-            switch ($qtysync_interval) {
-                case '1':
-                    $schedule = 'staylodgic_1_minute';
-                    break;
-                case '5':
-                    $schedule = 'staylodgic_5_minutes';
-                    break;
-                case '10':
-                    $schedule = 'staylodgic_10_minutes';
-                    break;
-                case '15':
-                    $schedule = 'staylodgic_15_minutes';
-                    break;
-                case '30':
-                    $schedule = 'staylodgic_30_minutes';
-                    break;
-                case '60':
-                    $schedule = 'staylodgic_60_minutes';
-                    break;
-                default:
-                    $schedule = 'staylodgic_5_minutes'; // Default case
-                    break;
+        $current_meta_schedule = get_option('current_ical_processor_schedule');
+        $new_schedule = $this->get_scheduled_time();
+    
+        error_log('Current Schedule from Metadata: ' . $current_meta_schedule);
+        error_log('New Schedule from Settings: ' . $new_schedule);
+        
+        if ($current_meta_schedule !== $new_schedule) {
+            $scheduled_time = wp_next_scheduled('staylodgic_ical_availability_processor_event');
+            
+            if ($scheduled_time) {
+                error_log('Attempting to unschedule at timestamp: ' . $scheduled_time);
+                $unschedule_result = wp_unschedule_event($scheduled_time, 'staylodgic_ical_availability_processor_event');
+                error_log('Unschedule result: ' . ($unschedule_result ? 'Success' : 'Failed'));
             }
-
-            // Schedule the cron event if it's not already scheduled
-            if (!wp_next_scheduled('staylodgic_ical_availability_processor_event')) {
-                wp_schedule_event(time(), $schedule, 'staylodgic_ical_availability_processor_event');
-            }
+            
+            $reschedule_result = wp_schedule_event(time(), $new_schedule, 'staylodgic_ical_availability_processor_event');
+            error_log('Attempting to reschedule: ' . $new_schedule);
+            error_log('Reschedule result: ' . ($reschedule_result ? 'Success' : 'Failed'));
+    
+            update_option('current_ical_processor_schedule', $new_schedule);
+        } else {
+            error_log('No rescheduling needed. Current schedule matches the new schedule.');
         }
     }
-
+    
     // Custom intervals for cron job
     public function add_cron_interval($schedules)
     {
-        $sync_intervals = staylodgic_sync_intervals(); // Get intervals from your function
+        $sync_intervals = array(
+            '1' => esc_attr__('One Minute', 'staylodgic'),
+            '5' => esc_attr__('Five Minutes', 'staylodgic'),
+            '10' => esc_attr__('Ten Minutes', 'staylodgic'),
+            '15' => esc_attr__('Fifteen Minutes', 'staylodgic'),
+            '30' => esc_attr__('Thirty Minutes', 'staylodgic'),
+            '60' => esc_attr__('Sixty Minutes', 'staylodgic')
+        );
 
         foreach ($sync_intervals as $interval => $display) {
             $schedules["staylodgic_{$interval}_minutes"] = array(
@@ -324,9 +395,9 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
 
         if (isset($blocked_dates) && is_array($blocked_dates)) {
 
-            // error_log( '----- Blocked dates being processed ' . $count );
-            // error_log( print_r($blocked_dates, 1) );
-            // error_log( '-----------------------------------' );
+            error_log( '----- Blocked dates being processed ' . $count );
+            error_log( print_r($blocked_dates, 1) );
+            error_log( '-----------------------------------' );
         }
 
         // Clear the is_syncing flag under two conditions:
@@ -344,7 +415,7 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
 
         // Schedule next batch
         if (!wp_next_scheduled('continue_ical_availability_processing')) {
-            wp_schedule_single_event(time() + 300, 'continue_ical_availability_processing'); // 300 seconds = 5 minutes
+            wp_schedule_single_event(time() + 60, 'continue_ical_availability_processing'); // 300 seconds = 5 minutes
         }
     }
 

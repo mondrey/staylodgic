@@ -1120,7 +1120,6 @@ $panel_args = [
         'perperson'     => '<i class="fa fa-user"></i> ' . esc_html__('Per person price', 'staylodgic'),
         'tax'           => '<i class="fa fa-calculator"></i> ' . esc_html__('Room Tax', 'staylodgic'),
         'activity-tax'  => '<i class="fa fa-calculator"></i> ' . esc_html__('Activity Tax', 'staylodgic'),
-        'sync' => '<i class="fa fa-exchange"></i> ' . esc_html__('Sync', 'staylodgic'),        
      ],
  ];
 
@@ -1244,14 +1243,6 @@ $panel_settings = [
         'description' => 'Booking details.',
         'choices'     => staylodgic_get_pages_for_select(),
         'tab'         => 'pages',
-     ],
-    'qtysync_interval'     => [
-        'label'       => esc_html__('Availability Sync interval', 'staylodgic'),
-        'type'        => 'select',
-        'inputwidth'  => '250',
-        'description' => 'Availability Sync interval',
-        'choices'     => staylodgic_sync_intervals(),
-        'tab'         => 'sync',
      ],
     'discount_lastminute'             => [
         'label'       => esc_html__('Last minute discount', 'staylodgic'),
