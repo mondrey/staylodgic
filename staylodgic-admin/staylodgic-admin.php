@@ -107,9 +107,9 @@ class SiteAdmin
 
         ?>
         <div class="wrap">
-            <h1 id="edit-site">Edit Site: <?php echo $site->blogname ?></h1>
+            <h1 id="edit-site">Edit Site: <?php echo esc_html($site->blogname); ?></h1>
             <p class="edit-site-actions">
-                <a href="<?php echo esc_url(get_home_url($id, '/')) ?>">Visit</a> | <a href="<?php echo esc_url(get_admin_url($id)) ?>">Dashboard</a>
+                <a href="<?php echo esc_url(get_home_url($id, '/')); ?>">Visit</a> | <a href="<?php echo esc_url(get_admin_url($id)); ?>">Dashboard</a>
             </p>
             <?php
             // navigation tabs
@@ -125,11 +125,11 @@ class SiteAdmin
             ?>
             <form method="post" action="edit.php?action=staylodgicupdate">
                 <?php wp_nonce_field('staylodgic-network-check' . $id); ?>
-                <input type="hidden" name="id" value="<?php echo $id ?>" />
+                <input type="hidden" name="id" value="<?php echo esc_attr($id); ?>" />
                 <table class="form-table">
                     <tr>
                         <th scope="row"><label for="site_max_rooms">Max Rooms</label></th>
-                        <td><input name="site_max_rooms" class="network-options-settings" type="number" id="site_max_rooms" value="<?php echo esc_attr(get_blog_option($id, 'site_max_rooms')) ?>" /></td>
+                        <td><input name="site_max_rooms" class="network-options-settings" type="number" id="site_max_rooms" value="<?php echo esc_attr(get_blog_option($id, 'site_max_rooms')); ?>" /></td>
                     </tr>
                     <tr>
                         <th scope="row"><label for="site_sync_feature">Sync Feature</label></th>
