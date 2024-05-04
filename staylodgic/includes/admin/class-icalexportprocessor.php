@@ -55,7 +55,7 @@ class IcalExportProcessor
             // This is the slug of the parent menu
             __('Export Guest Registrations', 'staylodgic'),
             __('Export Guest Registrations', 'staylodgic'),
-            'manage_options',
+            'edit_posts',
             'slgc-export-registrations-ical',
             array($this, 'csv_registrations_export')
         );
@@ -68,7 +68,7 @@ class IcalExportProcessor
             // This is the slug of the parent menu
             __('Export Bookings', 'staylodgic'),
             __('Export Bookings', 'staylodgic'),
-            'manage_options',
+            'edit_posts',
             'slgc-export-booking-ical',
             array($this, 'csv_bookings_export')
         );

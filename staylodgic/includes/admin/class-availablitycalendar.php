@@ -120,7 +120,7 @@ class AvailablityCalendar extends AvailablityCalendarBase
             'slgc-dashboard',
             __('View Availability','staylodgic'),
             __('View Availability','staylodgic'),
-            'manage_options',
+            'edit_posts',
             'slgc-availability',
             array($this, 'room_Reservation_Plugin_Display_Availability_Calendar'), // Callback for the parent page (can be empty if not needed)
         );
@@ -161,7 +161,7 @@ class AvailablityCalendar extends AvailablityCalendarBase
     public function room_Reservation_Plugin_Display_Availability_Calendar()
     {
         // Check if user has sufficient permissions
-        if (!current_user_can('manage_options')) {
+        if (!current_user_can('edit_posts')) {
             return;
         }
 

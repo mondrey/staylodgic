@@ -66,7 +66,7 @@ class Staylodgic_GuestRegistration_Posts
             'edit.php?post_type=slgc_guestregistry', // Parent slug
             'Guest Registration Shortcodes', // Page title
             'Form Shortcodes', // Menu title
-            'manage_options', // Capability
+            'edit_posts', // Capability
             'slgc_guestregistry_shortcodes', // Menu slug
             array($this, 'submenu_page_callback') // Callback function
         );
@@ -74,7 +74,7 @@ class Staylodgic_GuestRegistration_Posts
 
     public function submenu_page_callback() {
         // Check if user has the required capability
-        if (!current_user_can('manage_options')) {
+        if (!current_user_can('edit_posts')) {
             return;
         }
 

@@ -91,7 +91,7 @@ class Invoicing
             'edit.php?post_type=slgc_reservations', // Set the parent slug to your custom post type slug
             __('Invoices', 'staylodgic'),
             __('Invoices', 'staylodgic'),
-            'manage_options',
+            'edit_posts',
             'staylodgic-invoicing',
             array($this, 'booking_invoices')
         );
@@ -102,7 +102,7 @@ class Invoicing
             'edit.php?post_type=slgc_activityres', // Set the parent slug to your custom post type slug
             __('Invoices', 'staylodgic'),
             __('Invoices', 'staylodgic'),
-            'manage_options',
+            'edit_posts',
             'staylodgic-activity-invoicing',
             array($this, 'activity_invoices')
         );

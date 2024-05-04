@@ -35,9 +35,9 @@ class AnalyticsBookings
     public function staylodgic_dashboard()
     {
         add_menu_page(
-            __('Dashboard', 'staylodgic'),
-            __('Dashboard', 'staylodgic'),
-            'manage_options',
+            __('Overview', 'staylodgic'),
+            __('Overview', 'staylodgic'),
+            'edit_posts',
             'slgc-dashboard',
             array($this, 'display_dashboard'),
             'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48IS0tIUZvbnQgQXdlc29tZSBGcmVlIDYuNS4yIGJ5IEBmb250YXdlc29tZSAtIGh0dHBzOi8vZm9udGF3ZXNvbWUuY29tIExpY2Vuc2UgLSBodHRwczovL2ZvbnRhd2Vzb21lLmNvbS9saWNlbnNlL2ZyZWUgQ29weXJpZ2h0IDIwMjQgRm9udGljb25zLCBJbmMuLS0+PHBhdGggZmlsbD0iIzYzRTZCRSIgZD0iTTAgMjU2YTI1NiAyNTYgMCAxIDEgNTEyIDBBMjU2IDI1NiAwIDEgMSAwIDI1NnpNMjg4IDk2YTMyIDMyIDAgMSAwIC02NCAwIDMyIDMyIDAgMSAwIDY0IDB6TTI1NiA0MTZjMzUuMyAwIDY0LTI4LjcgNjQtNjRjMC0xNy40LTYuOS0zMy4xLTE4LjEtNDQuNkwzNjYgMTYxLjdjNS4zLTEyLjEtLjItMjYuMy0xMi4zLTMxLjZzLTI2LjMgLjItMzEuNiAxMi4zTDI1Ny45IDI4OGMtLjYgMC0xLjMgMC0xLjkgMGMtMzUuMyAwLTY0IDI4LjctNjQgNjRzMjguNyA2NCA2NCA2NHpNMTc2IDE0NGEzMiAzMiAwIDEgMCAtNjQgMCAzMiAzMiAwIDEgMCA2NCAwek05NiAyODhhMzIgMzIgMCAxIDAgMC02NCAzMiAzMiAwIDEgMCAwIDY0em0zNTItMzJhMzIgMzIgMCAxIDAgLTY0IDAgMzIgMzIgMCAxIDAgNjQgMHoiLz48L3N2Zz4=',
@@ -47,9 +47,9 @@ class AnalyticsBookings
         // Add the first submenu page. Often this duplicates the main menu page.
         add_submenu_page(
             'slgc-dashboard',          // Parent slug
-            __('Bookings Dashboard', 'staylodgic'),                    // Page title
-            __('Bookings Dashboard', 'staylodgic'),                    // Menu title
-            'manage_options',               // Capability
+            __('Bookings Overview', 'staylodgic'),                    // Page title
+            __('Bookings Overview', 'staylodgic'),                    // Menu title
+            'edit_posts',               // Capability
             'slgc-dashboard',          // Menu slug
             array($this, 'display_dashboard') // Callback function
         );

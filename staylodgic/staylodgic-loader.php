@@ -62,6 +62,9 @@ class Staylodgic_Init
         if (isset($_GET['page']) && $_GET['page'] == 'slgc-activity-dashboard') {
             $remove = true;
         }
+        if (isset($_GET['page']) && $_GET['page'] == 'staylodgic-settings') {
+            $remove = true;
+        }
         if (isset($_GET['page']) && $_GET['page'] == 'slgc-settings-panel') {
             $remove = true;
         }

@@ -80,12 +80,12 @@ class ActivityAnalytics
         // Add the Availability submenu item under the parent menu
         add_submenu_page(
             'slgc-dashboard',
-            __('Activity Dashboard', 'staylodgic'),
-            __('Activity Dashboard', 'staylodgic'),
-            'manage_options',
+            __('Activity Overview', 'staylodgic'),
+            __('Activity Overview', 'staylodgic'),
+            'edit_posts',
             'slgc-activity-dashboard',
             array($this, 'activity_display_dashboard')
-        );        
+        );
     }
 
     public function activity_display_dashboard()

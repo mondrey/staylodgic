@@ -32,7 +32,7 @@ class FormGenerator
         $required       = isset($inputObject->required) && $inputObject->required === 'true' ? 'required' : '';
 
         // Check if 'guest' parameter is present in the URL
-        if (current_user_can('manage_options') && isset($_GET['guest']) && !empty($_GET['guest'])) {
+        if (current_user_can('edit_posts') && isset($_GET['guest']) && !empty($_GET['guest'])) {
             $guest             = sanitize_text_field($_GET['guest']); // Sanitize the input
             $post_id           = get_the_ID(); // Get current post ID
             $registration_data = get_post_meta($post_id, 'staylodgic_registration_data', true); // Retrieve all registration data

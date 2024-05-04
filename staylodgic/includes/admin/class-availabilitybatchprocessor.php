@@ -44,7 +44,7 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
             // This is the slug of the parent menu
             __('Import iCal Availabilitiy', 'staylodgic'),
             __('Import iCal Availabilitiy', 'staylodgic'),
-            'manage_options',
+            'edit_posts',
             'slgc-import-availability-ical',
             array($this, 'ical_availability_import')
         );
@@ -390,7 +390,7 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
             'staylodgic-settings', // Replace with the slug of the parent menu item
             __('Export iCal Availability', 'staylodgic'),
             __('Export iCal Availability', 'staylodgic'),
-            'manage_options',
+            'edit_posts',
             'slgc-export-availability-ical',
             array($this, 'export_availability_ical_page')
         );

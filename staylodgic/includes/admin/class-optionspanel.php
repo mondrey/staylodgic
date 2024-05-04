@@ -57,7 +57,7 @@ class OptionsPanel
         $this->slug              = $this->args['slug'] ?? sanitize_key($this->title);
         $this->option_name       = $this->args['option_name'] ?? sanitize_key($this->title);
         $this->option_group_name = $this->option_name . '_group';
-        $this->user_capability   = $args['user_capability'] ?? 'manage_options';
+        $this->user_capability   = $args['user_capability'] ?? 'edit_posts';
 
         add_action('admin_menu', [$this, 'export_settings']);
         add_action('admin_menu', [$this, 'register_menu_page']);
@@ -970,7 +970,7 @@ $panel_args = [
     'title'           => 'Settings',
     'option_name'     => 'staylodgic_settings',
     'slug'            => 'slgc-settings-panel',
-    'user_capability' => 'manage_options',
+    'user_capability' => 'edit_posts',
     'tabs'            => [
         'property'       => '<i class="fa fa-building"></i> ' . esc_html__('Property', 'staylodgic'),
         'activity-property' => '<i class="fa fa-suitcase"></i> ' . esc_html__('Activity Property', 'staylodgic'),

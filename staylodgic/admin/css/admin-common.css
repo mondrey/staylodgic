@@ -19,6 +19,9 @@
 	filter: grayscale(100%);
 }
 
+.toplevel_page_staylodgic-settings #wpwrap {
+    background: #fff;
+}
 .admin-page-wrapper {
     display: flex;
     justify-content: center;
@@ -29,11 +32,8 @@
 
 .content-container {
     display: flex;
-    width: 100%; /* Adjust width as desired */
-    max-width: 1200px; /* Maximum width of the container */
-    background: #f9f9f9; /* Optional: background color for visibility */
+    width: 100%;
     padding: 60px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1); /* Optional: adds shadow for better focus */
 }
 
 .left-columns {

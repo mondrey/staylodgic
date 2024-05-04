@@ -20,7 +20,7 @@ class AvailablityCalendarYear extends AvailablityCalendarBase
             'slgc-dashboard',
             __('Availability Annum', 'staylodgic'),
             __('Availability Annum', 'staylodgic'),
-            'manage_options',
+            'edit_posts',
             'slgc-availability-yearly',
             array($this, 'room_Reservation_Plugin_Display_Availability_Calendar_Yearly')
         );
