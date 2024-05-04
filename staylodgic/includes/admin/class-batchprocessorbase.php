@@ -39,34 +39,38 @@ class BatchProcessorBase
     {
         // The HTML content of the 'Staylodgic' page goes here
 
+        // Header
+        echo '<div class="admin-page-header">';
+        echo '<h2>Hotel Management</h2>';
+        echo '<h1>Staylodgic<span class="the-dot">.</span></h1>';
+        echo '</div>';
+
         echo '<div class="admin-page-wrapper">';
         echo '<div class="content-container">';
         echo '<div class="left-columns">'; // Container for both content columns
 
         echo '<div class="left-column">';
-        echo '<h1>Staylodgic</h1>';
-        echo '<h2>Hotel Management Software</h2>';
-        echo '<h4>Setup Hotel for Bookings</h4>';
+        echo '<h4><i class="fa-solid fa-gear"></i> Hotel Settings</h4>';
+        echo '<ul>';
+        echo '<li>Setup New Hotel</li>';
+        echo '</ul>';
+
+        echo '<h4><i class="fas fa-bed"></i> Rooms for Reservation</h4>';
         echo '<ul>';
         echo '<li>Step 1: Create Rooms</li>';
-        echo '<li>Step 2: Dashboard > View Availability</li>';
-        echo '<ul>';
-        echo '<li>- Add Room Rates</li>';
-        echo '<li>- Add Room Quantity</li>';
-        echo '</ul>';
-        echo '<li>Step 3: Create Reservations</li>';
+        echo '<li>Step 2: Add Room Rates</li>';
+        echo '<li>Step 3: Add Room Quantity</li>';
+        echo '<li>Step 4: Create Reservations</li>';
         echo '</ul>';
 
-        echo '<h4>Setup Activities</h4>';
+        echo '<h4><i class="fas fa-biking"></i> Setup Activities</h4>';
         echo '<ul>';
         echo '<li>Step 1: Create Activities</li>';
-        echo '<ul>';
-        echo '<li>- Add Scheduled Time to Week</li>';
-        echo '</ul>';
-        echo '<li>Step 2: Create Activity Reservations</li>';
+        echo '<li>Step 2: Add Scheduled Time to Week</li>';
+        echo '<li>Step 3: Create Activity Reservations</li>';
         echo '</ul>';
 
-        echo '<h4>Using Dashboard</h4>';
+        echo '<h4><i class="fas fa-tachometer-alt"></i> Using Dashboard</h4>';
         echo '<ul>';
         echo '<li>- View Bookings Overview</li>';
         echo '<li>- View Activities Overview</li>';
@@ -77,33 +81,27 @@ class BatchProcessorBase
         echo '</div>'; // End of first left column
 
         echo '<div class="left-column">';
-        echo '<h4>Customer Registry</h4>';
+        echo '<h4><i class="fas fa-users"></i> Customer Registry</h4>';
         echo '<ul>';
         echo '<li>- Create new customers</li>';
         echo '<li>- Assign existing customers</li>';
         echo '</ul>';
 
-        echo '<h4>Guest Registration</h4>';
+        echo '<h4><i class="fas fa-user-check"></i> Guest Registration</h4>';
         echo '<ul>';
-        echo '<li>Step 1: Create guest registration</li>';
-        echo '<li>Step 2: Customize registration fields</li>';
+        echo '<li>Step 1: Customize registration fields</li>';
+        echo '<li>Step 2: Create guest registration</li>';
         echo '<li>Step 3: Online registration</li>';
-        echo '<ul>';
-        echo '<li>- Email links</li>';
-        echo '<li>- Use QR Code to scan and fill</li>';
-        echo '</ul>';
+        echo '<li>Step 4: Send Links or QR Code</li>';
         echo '</ul>';
 
-        echo '<h4>Invoicing</h4>';
+        echo '<h4><i class="fas fa-file-invoice-dollar"></i> Invoicing</h4>';
         echo '<ul>';
-        echo '<li>- Add property logo</li>';
-        echo '<li>- Add activity logo</li>';
-        echo '<li>- Footer and Header</li>';
         echo '<li>- Generate invoices for bookings</li>';
         echo '<li>- Generate invoices for activities</li>';
         echo '</ul>';
 
-        echo '<h4>Import / Export</h4>';
+        echo '<h4><i class="fas fa-file-import"></i> Import / Export</h4>';
         echo '<ul>';
         echo '<li>- Export CSV Bookings</li>';
         echo '<li>- Export Guests Registration for Month</li>';
@@ -115,7 +113,7 @@ class BatchProcessorBase
 
         echo '<div class="left-column">';
 
-        echo '<h4>Taxes</h4>';
+        echo '<h4><i class="fas fa-hand-holding-usd"></i> Taxes</h4>';
         echo '<ul>';
         echo '<li>- Fixed tax</li>';
         echo '<li>- Percentage tax</li>';
@@ -123,19 +121,19 @@ class BatchProcessorBase
         echo '<li>- Per person tax</li>';
         echo '</ul>';
 
-        echo '<h4>Meal plans</h4>';
+        echo '<h4><i class="fas fa-utensils"></i> Meal plans</h4>';
         echo '<ul>';
         echo '<li>- Create free plans</li>';
         echo '<li>- Create paid plans</li>';
         echo '</ul>';
 
-        echo '<h4>Per Person Pricing</h4>';
+        echo '<h4><i class="fas fa-user-tag"></i> Per Person Pricing</h4>';
         echo '<ul>';
         echo '<li>- Set fixed price increments</li>';
         echo '<li>- Increment by percentage per occupant</li>';
         echo '</ul>';
 
-        echo '<h4>Discounts</h4>';
+        echo '<h4><i class="fas fa-percent"></i> Discounts</h4>';
         echo '<ul>';
         echo '<li>- Last minute discount</li>';
         echo '<li>- Early booking discount</li>';
@@ -154,6 +152,11 @@ class BatchProcessorBase
 
         echo '</div>'; // End of content container
         echo '</div>'; // End of page wrapper
+
+        // Footer
+        echo '<div class="admin-page-footer">';
+        echo '<p>Thank you for using Staylodgic Hotel Management</p>';
+        echo '</div>';
 
     }
 

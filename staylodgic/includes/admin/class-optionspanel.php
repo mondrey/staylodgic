@@ -371,7 +371,7 @@ class OptionsPanel
 
 ?>
         <div class="wrap">
-            <h1 class="options-heading">Staylodgic <span>Settings</span></h1>
+            <h1 class="options-heading">Staylodgic <span>Hotel Settings</span></h1>
             <div class="staylodgic-tabform-wrapper">
                 <?php $this->render_tabs(); ?>
                 <div class="staylodgic-tab-content active" id="tab-property">
@@ -967,7 +967,7 @@ class OptionsPanel
 // Register new Options panel.
 $panel_args = [
     'parent_page'     => 'staylodgic-settings',
-    'title'           => 'Settings',
+    'title'           => 'Hotel Settings',
     'option_name'     => 'staylodgic_settings',
     'slug'            => 'slgc-settings-panel',
     'user_capability' => 'edit_posts',

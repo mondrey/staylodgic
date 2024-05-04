@@ -117,6 +117,7 @@ class staylodgic_Activity_Posts
         $args = array(
             'labels'           => $labels,
             'public'          => true,
+            'publicly_queryable' => false,
             'show_ui'         => true,
             'capability_type' => 'post',
             'hierarchical'    => false,

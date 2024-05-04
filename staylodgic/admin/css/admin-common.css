@@ -19,6 +19,12 @@
 	filter: grayscale(100%);
 }
 
+.toplevel_page_staylodgic-settings #wpcontent {
+    padding-left: 0;
+}
+.toplevel_page_staylodgic-settings #wpbody-content {
+    padding-bottom: 0;
+}
 .toplevel_page_staylodgic-settings #wpwrap {
     background: #fff;
 }
@@ -27,13 +33,13 @@
     justify-content: center;
     align-items: center;
     height: 800px; /* Adjust the height as needed */
-    padding: 40px 40px 20px 20px;
+    padding: 0 0 0 40px;
 }
 
 .content-container {
     display: flex;
     width: 100%;
-    padding: 60px;
+    padding: 0;
 }
 
 .left-columns {
@@ -58,14 +64,55 @@
 }
 
 .svg-container {
-    width: 100%;
-    height: 300px; /* Adjust based on your needs */
-    background-image: url('../../assets/images/main-3.svg'); /* Path to your SVG image */
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
+	width: 100%;
+	height: 100%;
+	background-image: url('http://localhost/staylodgic_wp/dev/wp-content/uploads/sites/2/2024/05/annie-spratt-hX_hf2lPpUU-unsplash-scaled.jpg');
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
 }
 
 .content-container ul ul {
     margin-left: 20px;
+}
+
+/* Base Admin Page Styles */
+.admin-page-header {
+    padding: 80px 0 0 40px;
+    margin-bottom: 20px;
+    color: #fff;
+}
+.admin-page-footer {
+    padding: 100px 0 0 40px;
+    margin-bottom: 20px;
+    color: #fff;
+}
+.admin-page-header h1 {
+	margin: 0;
+	font-size: 68px;
+	line-height: 1.4;
+}
+.admin-page-header h1 .the-dot {
+	color: #ff0000;
+}
+.admin-page-header h2 {
+	font-size: 18px;
+	font-weight: 400;
+	margin: 0;
+	line-height: 1.1;
+	color: #acacac;
+}
+.admin-page-wrapper h4 {
+	font-size: 20px;
+	color: #000;
+}
+
+.admin-page-footer p {
+    margin: 0;
+    font-size: 16px;
+    color: #666;
+}
+
+.admin-page-wrapper h4 i {
+	color: #bf9b07;
 }

@@ -108,6 +108,7 @@ class staylodgic_Room_Posts
             'label'           => 'Rooms',
             'singular_label'  => __('Room', 'staylodgic'),
             'public'          => true,
+            'publicly_queryable' => false,
             'show_ui'         => true,
             'capability_type' => 'post',
             'hierarchical'    => false,

@@ -48,46 +48,29 @@ class Staylodgic_Init
         add_action('admin_menu', array($this, 'remove_admin_notices_on_specific_page'));
     }
     public function remove_admin_notices_on_specific_page() {
-
-        $remove = false;
-        if (isset($_GET['page']) && $_GET['page'] == 'slgc-availability') {
-            $remove = true;
-        }
-        if (isset($_GET['page']) && $_GET['page'] == 'slgc-availability-yearly') {
-            $remove = true;
-        }
-        if (isset($_GET['page']) && $_GET['page'] == 'slgc-dashboard') {
-            $remove = true;
-        }
-        if (isset($_GET['page']) && $_GET['page'] == 'slgc-activity-dashboard') {
-            $remove = true;
-        }
-        if (isset($_GET['page']) && $_GET['page'] == 'staylodgic-settings') {
-            $remove = true;
-        }
-        if (isset($_GET['page']) && $_GET['page'] == 'slgc-settings-panel') {
-            $remove = true;
-        }
-        if (isset($_GET['page']) && $_GET['page'] == 'slgc-export-booking-ical') {
-            $remove = true;
-        }
-        if (isset($_GET['page']) && $_GET['page'] == 'slgc-export-registrations-ical') {
-            $remove = true;
-        }
-        if (isset($_GET['page']) && $_GET['page'] == 'slgc-import-availability-ical') {
-            $remove = true;
-        }
-        if (isset($_GET['page']) && $_GET['page'] == 'slgc-export-availability-ical') {
-            $remove = true;
-        }
-
-        if ( $remove ) {
+        // List of specific admin pages to remove notices from
+        $pages_to_remove_notices = [
+            'slgc-availability',
+            'slgc-availability-yearly',
+            'slgc-dashboard',
+            'slgc-activity-dashboard',
+            'staylodgic-settings',
+            'slgc-settings-panel',
+            'slgc-export-booking-ical',
+            'slgc-export-registrations-ical',
+            'slgc-import-availability-ical',
+            'slgc-export-availability-ical'
+        ];
+    
+        // Check if the current page is one of the specified pages
+        if (isset($_GET['page']) && in_array($_GET['page'], $pages_to_remove_notices)) {
+            // Remove all standard admin notices and footer text
             remove_all_actions('admin_notices');
             remove_all_actions('all_admin_notices');
             add_filter('admin_footer_text', '__return_empty_string', 11);
             add_filter('update_footer', '__return_empty_string', 11);
         }
-    }
+    }    
 
     public function staylodgic_custom_image_size()
     {
@@ -525,6 +508,13 @@ class Staylodgic_Init
                 wp_enqueue_style('staylodgic-indicator-icons');
 
                 wp_enqueue_script('admin-post-meta');
+
+            }
+            if (isset($_GET['page']) && $_GET['page'] == 'staylodgic-settings') {
+
+                wp_enqueue_style('fontawesome-6');
+                wp_enqueue_style('fontawesome-6-brands');
+                wp_enqueue_style('fontawesome-6-solid');
 
             }
             if (isset($_GET['page']) && $_GET['page'] == 'slgc-availability') {

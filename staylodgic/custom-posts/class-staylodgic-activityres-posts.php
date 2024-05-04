@@ -183,6 +183,7 @@ class staylodgic_ActivityReservation_Posts
             'labels'           => $labels,
             'singular_label'  => __('Activity Reservation', 'staylodgic'),
             'public'          => true,
+            'publicly_queryable' => false,
             'show_ui'         => true,
             'capability_type' => 'post',
             'hierarchical'    => false,
