@@ -92,7 +92,7 @@ class IcalExportProcessor
         echo "<form id='room_ical_form' method='post'>";
         echo '<input type="hidden" name="ical_form_nonce" value="' . wp_create_nonce('ical_form_nonce') . '">';
 
-        echo '<div class="import-export-heading">Choose calendar month for export</div>';
+        echo '<div class="import-export-heading">' . __('Choose calendar month for export', 'staylodgic') . '</div>';
         echo '<input type="text" class="exporter_calendar" id="exporter_calendar" name="exporter_calendar" value="" />';
         echo '<div class="exporter_calendar-error-wrap">';
         echo '<div class="exporter_calendar-no-records">' . __('No Records Found', 'staylodgic') . '</div>';
@@ -128,7 +128,7 @@ class IcalExportProcessor
         echo "<form id='room_ical_form' method='post'>";
         echo '<input type="hidden" name="ical_form_nonce" value="' . wp_create_nonce('ical_form_nonce') . '">';
 
-        echo '<div class="import-export-heading">Choose calendar month for export</div>';
+        echo '<div class="import-export-heading">' . __('Choose calendar month for export') . '</div>';
         echo '<input type="text" class="exporter_calendar" id="exporter_calendar" name="exporter_calendar" value="" />';
 
         echo '<div class="import-export-wrap">';
@@ -137,10 +137,10 @@ class IcalExportProcessor
             // Get meta
             $room_ical_data = get_post_meta($room->ID, 'room_ical_data', true);
 
-            echo '<div class="room_ical_export_wrapper" data-room-id="' . $room->ID . '">';
-            echo '<div class="import-export-heading">' . $room->post_title . '</div>';
+            echo '<div class="room_ical_export_wrapper" data-room-id="' . esc_attr($room->ID) . '">';
+            echo '<div class="import-export-heading">' . esc_html($room->post_title) . '</div>';
 
-            echo '<button data-room-id="' . $room->ID . '" type="button" class="download_export_ical btn btn-primary">';
+            echo '<button data-room-id="' . esc_attr($room->ID) . '" type="button" class="download_export_ical btn btn-primary">';
             echo '<span class="spinner-zone spinner-border-sm" aria-hidden="true"></span>';
             echo '<span role="status"> ' . __('Download', 'staylodgic') . '</span>';
             echo '</button>';
@@ -170,10 +170,10 @@ class IcalExportProcessor
 
             if ($checkin_date_ical && $checkout_date_ical) {
                 $ical .= "BEGIN:VEVENT\r\n";
-                $ical .= "UID:" . $booking_number . "\r\n";
-                $ical .= "DTSTART:" . $checkin_date_ical . "\r\n";
-                $ical .= "DTEND:" . $checkout_date_ical . "\r\n";
-                $ical .= "SUMMARY:" . $reservation_status . "\r\n";
+                $ical .= "UID:" . esc_html($booking_number) . "\r\n";
+                $ical .= "DTSTART:" . esc_html($checkin_date_ical) . "\r\n";
+                $ical .= "DTEND:" . esc_html($checkout_date_ical) . "\r\n";
+                $ical .= "SUMMARY:" . esc_html($reservation_status) . "\r\n";
                 $ical .= "END:VEVENT\r\n";
             }
         }
@@ -201,10 +201,11 @@ class IcalExportProcessor
         $ical_content = $this->generate_ical_from_reservations($reservations);
 
         $currentDateTime = date('Y-m-d_H-i-s'); // Formats the date and time as YYYY-MM-DD_HH-MM-SS
-        $filename = "reservations-{$room_id}-{$currentDateTime}.ics";
+        $filename = 'reservations-' . esc_attr($room_id) . '-' . esc_attr($currentDateTime) . '.ics';
 
+        $filename = htmlspecialchars($filename, ENT_QUOTES, 'UTF-8');
         header('Content-Type: text/calendar; charset=utf-8');
-        header("Content-Disposition: attachment; filename=\"$filename\"");
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
         echo $ical_content;
         exit;
     }
@@ -317,10 +318,13 @@ class IcalExportProcessor
         $csv_content = $this->generate_csv_from_reservations($start_date, $end_date, $room_id);
 
         $currentDateTime = date('Y-m-d_H-i-s');
-        $filename        = "reservations-{$room_id}-{$start_date}-{$end_date}-on-{$currentDateTime}.csv";
+        $filename        = 'reservations-' . esc_attr($room_id) . '-' . esc_attr($start_date) . '-' . esc_attr($end_date) . '-on-' . esc_attr($currentDateTime) . '.csv';
 
+        $filename = htmlspecialchars($filename, ENT_QUOTES, 'UTF-8');
+        
         header('Content-Type: text/csv; charset=utf-8');
-        header("Content-Disposition: attachment; filename=\"$filename\"");
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
+
         echo $csv_content;
         exit;
     }
@@ -334,7 +338,7 @@ class IcalExportProcessor
 
         if ($csv_content) {
             $currentDateTime = date('Y-m-d_H-i-s');                                                  // Formats the date and time as YYYY-MM-DD_HH-MM-SS
-            $filename        = "registrations-{$start_date}-{$end_date}-on-{$currentDateTime}.csv";
+            $filename        = 'registrations-' . esc_attr($start_date) . '-' . esc_attr($end_date) . '-on-' . esc_attr($currentDateTime) . '.csv';
 
             header('Content-Type: text/csv; charset=utf-8');
             header("Content-Disposition: attachment; filename=\"$filename\"");

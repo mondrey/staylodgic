@@ -48,12 +48,12 @@
 	padding: 8px 0;
 	text-align: left;
 	text-decoration: none;
-	color: rgba(255,255,255,0.6);
+	color: rgba(255, 255, 255, 0.6);
 	transition: color 0.3s;
 	margin: 0;
 	background: none;
 	border: 0;
-	border-bottom: 1px solid rgba(255,255,255,0.3);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 	font-size: 14px;
 	font-weight: 400;
 	letter-spacing: 0.3px;
@@ -149,15 +149,15 @@
 }
 
 /* On mouse-over, add a grey background color */
-.staylodgic-checkbox-container:hover input~.checkmark {
+.staylodgic-checkbox-container:hover input ~ .checkmark {
 	background-color: #dbf7ff;
 	border-color: #dbf7ff;
 }
 
 /* When the checkbox is checked, add a blue background */
-.staylodgic-checkbox-container input:checked~.checkmark {
-	background-color: #2196F3;
-	border-color: #2196F3;
+.staylodgic-checkbox-container input:checked ~ .checkmark {
+	background-color: #2196f3;
+	border-color: #2196f3;
 }
 
 /* Create the checkmark/indicator (hidden when not checked) */
@@ -168,7 +168,7 @@
 }
 
 /* Show the checkmark when checked */
-.staylodgic-checkbox-container input:checked~.checkmark:after {
+.staylodgic-checkbox-container input:checked ~ .checkmark:after {
 	display: block;
 }
 
@@ -199,21 +199,21 @@
 	font-size: 11px;
 }
 .staylodgic-tabform-wrapper .nav-tab-wrapper.staylodgic-tabs {
-	padding-top:0;
+	padding-top: 0;
 }
 
 .staylodgic-modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgb(0,0,0);
-    background-color: rgba(0,0,0,0.4);
-    padding-top: 60px;
+	display: none;
+	position: fixed;
+	z-index: 1;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgb(0, 0, 0);
+	background-color: rgba(0, 0, 0, 0.4);
+	padding-top: 60px;
 }
 
 .staylodgic-modal-content {
@@ -226,17 +226,17 @@
 }
 
 .staylodgic-close {
-    color: #aaaaaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
+	color: #aaaaaa;
+	float: right;
+	font-size: 28px;
+	font-weight: bold;
 }
 
 .staylodgic-close:hover,
 .staylodgic-close:focus {
-    color: #000;
-    text-decoration: none;
-    cursor: pointer;
+	color: #000;
+	text-decoration: none;
+	cursor: pointer;
 }
 .staylodgic-modal-content textarea {
 	width: 100%;
@@ -246,59 +246,58 @@
 	margin-bottom: 24px;
 }
 
-
-
-
 /* Container for the tabs and tab content */
 .staylodgic-tabform-wrapper {
-    display: flex;
-	background:#fff;
+	display: flex;
+	background: #fff;
 	margin-top: 10px;
 }
 
 /* Style for the tabs */
 .staylodgic-tabs {
-    display: flex;
-    flex-direction: column;
-    margin-right: 20px;
+	display: flex;
+	flex-direction: column;
+	margin-right: 20px;
 	background: #075497;
 }
 
 /* Style for the tab content */
 .staylodgic-tab-content {
-    flex-grow: 1;
+	flex-grow: 1;
 }
 
 /* Hide all tab content by default */
 .staylodgic-tab-content {
-    display: none;
+	display: none;
 }
 
 /* Show the active tab content */
 .staylodgic-tab-content.active {
-    display: block;
+	display: block;
 }
 
 /* Style for the active tab */
-.staylodgic-tabform-wrapper .nav-tab-active
-.staylodgic-tabform-wrapper .nav-tab:hover {
-    background: none;
-    border: 0;
+.staylodgic-tabform-wrapper
+	.nav-tab-active
+	.staylodgic-tabform-wrapper
+	.nav-tab:hover {
+	background: none;
+	border: 0;
 }
 
 .staylodgic-tabs-container {
-    display: flex;
-    flex-direction: column;
+	display: flex;
+	flex-direction: column;
 	padding: 10px 30px 50px;
 }
 
 .staylodgic-tab-heading {
-    margin: 30px 0 5px; /* Add space above the heading */
-    padding-left: 0; /* Align with the tabs */
-    font-size: 22px; /* Adjust the font size */
+	margin: 30px 0 5px; /* Add space above the heading */
+	padding-left: 0; /* Align with the tabs */
+	font-size: 22px; /* Adjust the font size */
 	font-weight: 200;
-    color: #fff; /* Adjust the text color */
-    padding-bottom: 5px; /* Add space below the heading */
+	color: #fff; /* Adjust the text color */
+	padding-bottom: 5px; /* Add space below the heading */
 }
 .repeatable {
 	position: relative;
@@ -323,12 +322,12 @@
 .staylodgic-options-form .dashicons.drag-handle {
 	position: absolute;
 	left: -26px;
-	top: calc( 50% - 10px);
+	top: calc(50% - 10px);
 }
 .staylodgic-options-form .remove-set-button {
 	position: absolute;
 	right: -26px;
-	top: calc(50% - 8px );
+	top: calc(50% - 8px);
 }
 .staylodgic-tab-item .fa-solid.fa-sort:hover {
 	cursor: grab;
@@ -413,4 +412,30 @@ h1.options-heading {
 }
 h1.options-heading span {
 	font-weight: 300;
+}
+
+.toggle-section {
+	margin-bottom: 20px;
+}
+
+.import-export-section {
+	display: none; /* Initial state set via CSS for cleaner loading */
+}
+
+.export-import-form {
+	position: relative;
+}
+
+.toggle-section {
+	position: absolute;
+	top: -31px;
+	left: 10px;
+	font-size: 21px;
+	color: #fff;
+	cursor: pointer;
+	opacity: 0.8;
+	transition: color 0.3s;
+}
+.toggle-section:hover {
+	opacity: 1;
 }

@@ -106,8 +106,9 @@ class BatchProcessorBase
         echo '<h4>Import / Export</h4>';
         echo '<ul>';
         echo '<li>- Export CSV Bookings</li>';
-        echo '<li>- Import and Sync iCal Availability</li>';
-        echo '<li>- Export iCal Availability Feeds</li>';
+        echo '<li>- Export Guests Registration for Month</li>';
+        echo '<li>- Import and Sync iCal Availability<br/><span class="feature-update">( Future premium update )</span></li>';
+        echo '<li>- Export iCal Availability Feeds<br/><span class="feature-update">( Future premium update )</span></li>';
         echo '</ul>';
 
         echo '</div>'; // End of second left column
