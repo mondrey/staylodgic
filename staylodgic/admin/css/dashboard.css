@@ -57,6 +57,7 @@ body.wp-admin {
 
 .staylodgic_table_outer {
 	margin-top: 24px;
+	overflow-y: scroll;
 }
 
 .staylodgic_analytics_chart,

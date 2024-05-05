@@ -16,15 +16,19 @@
 .invoice-container footer {
 	page-break-inside: avoid;
 }
+.invoice-container-outer {
+	overflow-y: scroll;
+}
 .invoice-container {
-    width: 100%;
-    max-width: 800px; /* Adjust this value based on your requirements */
-    margin: auto;
-    aspect-ratio: 1 / 1.4142; /* A4 ratio */
-    position: relative;
-    min-height: 95vh;
-    padding-bottom: 5vh;
+	width: 800px;
+	max-width: 800px;
+	margin: auto;
+	aspect-ratio: 1 / 1.4142; /* A4 ratio */
+	position: relative;
+	min-height: 95vh;
+	padding-bottom: 5vh;
 	border: 1px solid #eee;
+	overflow-y: scroll;
 }
 .invoice-container,
 .invoice-container * {
@@ -51,20 +55,20 @@
 .registration-button,
 .save-pdf-invoice-button,
 .print-invoice-button {
-    /* Button styling */
-    margin-top: 15px;
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    cursor: pointer;
+	/* Button styling */
+	margin-top: 15px;
+	padding: 10px 20px;
+	background-color: #4caf50;
+	color: white;
+	border: none;
+	cursor: pointer;
 	text-decoration: none;
-	margin-right:1px;
+	margin-right: 1px;
 }
 .registration-button:hover,
 .save-pdf-invoice-button:hover,
 .print-invoice-button:hover {
-    background-color: #45a049;
+	background-color: #45a049;
 }
 
 .invoice-buttons-container {
@@ -129,14 +133,14 @@ h2#invoice-subheading,
 }
 
 #invoice-hotel-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: start;
+	display: flex;
+	justify-content: space-between;
+	align-items: start;
 }
 
 #invoice-hotel-logo {
-    flex: 1;
-    /* Adjust if needed */
+	flex: 1;
+	/* Adjust if needed */
 }
 
 .invoice-logo {
@@ -145,26 +149,26 @@ h2#invoice-subheading,
 }
 
 #invoice-info {
-    flex: 1;
-    text-align: right;
-    /* Adjust if needed */
+	flex: 1;
+	text-align: right;
+	/* Adjust if needed */
 }
 
 #invoice-booking-information {
-    display: flex;
-    justify-content: space-between;
+	display: flex;
+	justify-content: space-between;
 }
 
-#invoice-booking-details, 
+#invoice-booking-details,
 #invoice-booking-pricing {
-    flex: 1;
-    /* Optional: Add some margin between columns */
-    margin-right: 20px; 
+	flex: 1;
+	/* Optional: Add some margin between columns */
+	margin-right: 20px;
 }
 
 /* If you want the last section to not have margin on the right */
 #invoice-booking-pricing {
-    margin-right: 0;
+	margin-right: 0;
 }
 .invoice-booking-status {
 	font-size: 27px;
@@ -328,21 +332,19 @@ h2#invoice-subheading,
 }
 
 @media print {
-    body {
-        font-family: Arial, Helvetica, sans-serif;
-    }
-    .invoice-container {
-        width: auto;
-        max-width: none;
-        min-height: 0;
-        padding-bottom: 0;
-        box-shadow: none;
-        aspect-ratio: auto; /* Let the browser handle the page size */
-    }
+	body {
+		font-family: Arial, Helvetica, sans-serif;
+	}
+	.invoice-container {
+		width: auto;
+		max-width: none;
+		min-height: 0;
+		padding-bottom: 0;
+		box-shadow: none;
+		aspect-ratio: auto; /* Let the browser handle the page size */
+	}
 
 	.invoice-container-inner {
 		padding: 0;
 	}
-
-    /* Rest of your print styles */
 }

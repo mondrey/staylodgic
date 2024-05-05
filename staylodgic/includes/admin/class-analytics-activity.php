@@ -94,7 +94,9 @@ class ActivityAnalytics
         echo '<div class="staylodgic_analytics_wrap">';
 
         // Add the logo image below the heading
-        echo '<div class="staylodgic-main-logo"></div>';
+        echo '<div class="staylodgic-overview-heading">';
+        echo '<h1>'.__('Activity Overview', 'staylodgic').'</h1>';
+        echo '</div>';
 
         if (!\Staylodgic\Activity::hasActivities()) {
             echo '<h1>' . __('No Activities Found', 'staylodgic') . '</h1>';

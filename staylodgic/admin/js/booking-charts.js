@@ -68,6 +68,7 @@
         $('.staylodgic_analytics_table').each(function() {
             var exportTitle = $(this).data('export-title');
             $(this).DataTable({
+                responsive: true,
                 lengthChange: false,
                 paging: false,
                 info: false,

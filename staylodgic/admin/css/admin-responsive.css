@@ -1,0 +1,168 @@
+@media only screen and (max-width: 1280px) {
+    
+    .wp-admin .metabox-column {
+        float: none;
+        width: 100%;
+    }
+
+    .wp-admin .staylodgic_anaytlics_row_one .staylodgic_anaytlics_module {
+        width: 100%;
+        margin: 0;
+    }
+
+}
+
+/* #Tablet (Landscape)
+================================================== */
+
+@media only screen and (max-width: 1024px) {
+
+    .wp-admin .metabox-column {
+        float: none;
+        width: 100%;
+    }
+
+    .content-container {
+        flex-direction: column; /* Stacks the content vertically */
+    }
+
+    .left-columns {
+        flex-direction: column; /* Stacks the left columns vertically */
+    }
+
+    .left-column {
+        padding-right: 0; /* Removes spacing between columns on small screens */
+        padding-bottom: 20px; /* Adds spacing between stacked columns */
+    }
+
+    .right-column {
+        order: -1; /* Optionally moves the right column above the left columns */
+    }
+
+    .admin-page-wrapper {
+        align-items: flex-start;
+        height: auto;
+    }
+
+    .wp-admin .calendarRow .rowHeader {
+        width: 130px;
+    }
+    .wp-admin .occupancy-total .occupancy-total-stats {
+        font-size: 10px;
+        font-weight: 400;
+    }
+    .wp-admin .calendar-room-row .calendarCell.rowHeader {
+        font-size: 12px;
+        font-weight: 300;
+    }
+    .wp-admin .calendar-controls-wrap ul {
+        padding-left: 13px;
+    }
+    .wp-admin .nav-item.nav-item-seperator {
+        margin-left: 7px;
+    }
+    
+}
+
+/* #Tablet (Portrait)
+================================================== */
+/* Note: Design for a width of 768px */
+@media only screen and (min-width: 768px) and (max-width: 959px) {
+
+    .wp-admin .metabox-column {
+        float: none;
+        width: 100%;
+    }
+
+    .content-container {
+        flex-direction: column; /* Stacks the content vertically */
+    }
+
+    .left-columns {
+        flex-direction: column; /* Stacks the left columns vertically */
+    }
+
+    .left-column {
+        padding-right: 0; /* Removes spacing between columns on small screens */
+        padding-bottom: 20px; /* Adds spacing between stacked columns */
+    }
+
+    .right-column {
+        order: -1; /* Optionally moves the right column above the left columns */
+    }
+
+    .admin-page-wrapper {
+        align-items: flex-start;
+        height: auto;
+    }
+    
+}
+
+/*  #Mobile (Portrait)
+================================================== */
+/* Note: Design for a width of 320px */
+@media only screen and (max-width: 767px) {
+    
+    .wp-admin .metabox-column {
+        float: none;
+        width: 100%;
+    }
+
+    .content-container {
+        flex-direction: column; /* Stacks the content vertically */
+    }
+
+    .left-columns {
+        flex-direction: column; /* Stacks the left columns vertically */
+    }
+
+    .left-column {
+        padding-right: 0; /* Removes spacing between columns on small screens */
+        padding-bottom: 20px; /* Adds spacing between stacked columns */
+    }
+
+    .right-column {
+        order: -1; /* Optionally moves the right column above the left columns */
+    }
+
+    .admin-page-wrapper {
+        align-items: flex-start;
+        height: auto;
+    }
+    
+}
+
+/* #Mobile (Landscape)
+================================================== */
+/* Note: Design for a width of 480px */
+
+@media only screen and (min-width: 480px) and (max-width: 767px) {
+
+    .wp-admin .metabox-column {
+        float: none;
+        width: 100%;
+    }
+
+    .content-container {
+        flex-direction: column; /* Stacks the content vertically */
+    }
+
+    .left-columns {
+        flex-direction: column; /* Stacks the left columns vertically */
+    }
+
+    .left-column {
+        padding-right: 0; /* Removes spacing between columns on small screens */
+        padding-bottom: 20px; /* Adds spacing between stacked columns */
+    }
+
+    .right-column {
+        order: -1; /* Optionally moves the right column above the left columns */
+    }
+
+    .admin-page-wrapper {
+        align-items: flex-start;
+        height: auto;
+    }
+
+}
