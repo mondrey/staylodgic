@@ -35,6 +35,8 @@ class Cron
             case '60':
                 $schedule = 'staylodgic_60_minutes';
                 break;
+            default:
+                $schedule = 'staylodgic_30_minutes';
         }
     
         error_log('Sync ' . $qtysync_interval );

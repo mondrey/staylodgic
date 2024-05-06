@@ -181,7 +181,6 @@ class Staylodgic_Init
 
         wp_register_style('availability-admin-styles', plugin_dir_url(__FILE__) . 'admin/css/admin-core-applies.css', false, 'screen');
         wp_enqueue_style('admin-common', plugin_dir_url(__FILE__) . 'admin/css/admin-common.css', false, 'screen');
-        wp_enqueue_style('admin-responsive', plugin_dir_url(__FILE__) . 'admin/css/admin-responsive.css', false, 'screen');
         wp_enqueue_style('availability-styles', plugin_dir_url(__FILE__) . 'admin/css/availability-calendar.css', false, 'screen');
         wp_enqueue_script('availability-scripts', plugin_dir_url(__FILE__) . 'admin/js/availability-calendar.js', array('jquery'), null, true);
 
@@ -555,6 +554,8 @@ class Staylodgic_Init
 
             }
         }
+
+        wp_enqueue_style('admin-responsive', plugin_dir_url(__FILE__) . 'admin/css/admin-responsive.css', false, 'screen');
     }
 
     public function staylodgic_load_front_end_scripts_styles()

@@ -1,13 +1,23 @@
 @media only screen and (max-width: 1280px) {
     
-    .wp-admin .metabox-column {
+    .metabox-column {
         float: none;
         width: 100%;
     }
 
-    .wp-admin .staylodgic_anaytlics_row_one .staylodgic_anaytlics_module {
+    .staylodgic_anaytlics_row_one .staylodgic_anaytlics_module {
         width: 100%;
         margin: 0;
+    }
+
+    #quantity-modal .modal-body,
+    #rates-modal .modal-body {
+        padding: 30px 20px 40px;
+    }
+
+    #container,
+    .calendar-controls-wrap {
+        width: calc( 100% - 10px );
     }
 
 }
@@ -17,7 +27,7 @@
 
 @media only screen and (max-width: 1024px) {
 
-    .wp-admin .metabox-column {
+    .metabox-column {
         float: none;
         width: 100%;
     }
@@ -44,21 +54,25 @@
         height: auto;
     }
 
-    .wp-admin .calendarRow .rowHeader {
+    .calendarRow .rowHeader {
         width: 130px;
     }
-    .wp-admin .occupancy-total .occupancy-total-stats {
-        font-size: 10px;
+    .occupancy-total .occupancy-total-stats {
+        font-size: 14px;
         font-weight: 400;
     }
-    .wp-admin .calendar-room-row .calendarCell.rowHeader {
-        font-size: 12px;
-        font-weight: 300;
+    .occupancy-total .occupancy-percent-symbol {
+        margin-right: 0;
+        display: block;
     }
-    .wp-admin .calendar-controls-wrap ul {
+    .calendar-room-row .calendarCell.rowHeader {
+        font-size: 13px;
+        font-weight: 400;
+    }
+    .calendar-controls-wrap ul {
         padding-left: 13px;
     }
-    .wp-admin .nav-item.nav-item-seperator {
+    .nav-item.nav-item-seperator {
         margin-left: 7px;
     }
     
@@ -69,7 +83,7 @@
 /* Note: Design for a width of 768px */
 @media only screen and (min-width: 768px) and (max-width: 959px) {
 
-    .wp-admin .metabox-column {
+    .metabox-column {
         float: none;
         width: 100%;
     }
@@ -103,7 +117,7 @@
 /* Note: Design for a width of 320px */
 @media only screen and (max-width: 767px) {
     
-    .wp-admin .metabox-column {
+    .metabox-column {
         float: none;
         width: 100%;
     }
@@ -138,7 +152,7 @@
 
 @media only screen and (min-width: 480px) and (max-width: 767px) {
 
-    .wp-admin .metabox-column {
+    .metabox-column {
         float: none;
         width: 100%;
     }

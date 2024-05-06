@@ -194,7 +194,7 @@ class AvailablityCalendar extends AvailablityCalendarBase
                         <div data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Previous Month" class="calendar-nav-buttons" id="prevmonth"><i class="fa-solid fa-arrow-left"></i></div>
                     </li>
                     <li class="nav-item">
-                        <input type="text" class="availabilitycalendar" id="availabilitycalendar" name="availabilitycalendar" value="" />
+                        <input type="month" class="availabilitycalendar" id="availabilitycalendar" name="availabilitycalendar" value="" />
                         <?php
                         $availabilitycalendar = wp_create_nonce('staylodgic-availabilitycalendar-nonce');
                         echo '<input type="hidden" name="staylodgic_availabilitycalendar_nonce" value="' . esc_attr($availabilitycalendar) . '" />';
@@ -553,8 +553,9 @@ class AvailablityCalendar extends AvailablityCalendarBase
         $output .= '<div class="occupancyStats-inner">';
         $output .= '<div class="occupancy-total">';
         $output .= '<span class="occupancy-total-stats">';
+        $output .= '<span class="occupancy-percent-symbol">';
         $output .= esc_html( $occupancy_percent );
-        $output .= '<span class="occupancy-percent-symbol">%</span>';
+        $output .= '%</span>';
         $output .= __('Occupancy', 'staylodgic');
         $output .= '</span>';
         $output .= '</div>';

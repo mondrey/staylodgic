@@ -226,7 +226,9 @@ jQuery(document).ready(function($) {
 			// Handle the Ajax response
 			// Display the room names in the desired element
 			$('#input-tax-summary').html(response.html);
-			$('#staylodgic_reservation_total_room_cost').val( response.total.toFixed(2) );
+			
+			var floatTotal = parseFloat(response.total);
+			$('#staylodgic_reservation_total_room_cost').val( floatTotal.toFixed(2) );
 		  },
 		  error: function(xhr, status, error) {
 			// Handle any errors that occur during the Ajax request
