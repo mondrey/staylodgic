@@ -7,6 +7,11 @@
 			return mobileRegex.test(navigator.userAgent);
 		};
 
+		var calMonthsToDisplay = 2;
+		if (window.isMobile()) {
+			calMonthsToDisplay = 1;
+		}
+
 		// function updateCalendarCells() {
 		// 	// For each td.calendarCell element...
 		// 	$('td.calendarCell').each(function() {
@@ -216,7 +221,7 @@
 				"#quantity-modal .modaldatepicker"
 			).flatpickr({
 				mode: "range",
-				showMonths: 2,
+				showMonths: calMonthsToDisplay,
 				dateFormat: "Y-m-d",
 				enableTime: false,
 				onClose: function (selectedDates, dateStr, instance) {
@@ -234,7 +239,7 @@
 			ratesModalDatepicker = $("#rates-modal .modaldatepicker").flatpickr(
 				{
 					mode: "range",
-					showMonths: 2,
+					showMonths: calMonthsToDisplay,
 					dateFormat: "Y-m-d",
 					enableTime: false,
 					onClose: function (selectedDates, dateStr, instance) {
@@ -816,9 +821,10 @@
 			}
 
 			let defaultDates = getExistingDates();
+
 			const flatpickrInstance = flatpickr(".reservation", {
 				mode: "range",
-				showMonths: 2,
+				showMonths: calMonthsToDisplay,
 				dateFormat: "Y-m-d",
 				defaultDate: defaultDates,
 				enableTime: false,

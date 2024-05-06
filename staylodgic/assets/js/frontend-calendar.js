@@ -1,6 +1,17 @@
 (function ($) {
 	$(document).ready(function () {
 
+		window.isMobile = function () {
+			const mobileRegex =
+				/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
+			return mobileRegex.test(navigator.userAgent);
+		};
+
+		var calMonthsToDisplay = 2;
+		if (window.isMobile()) {
+			calMonthsToDisplay = 1;
+		}
+
 		$(document).on('click', Lightbox.defaultSelector, Lightbox.initialize);
 
 		$('#bookingDetails').on('click', function(e) {
@@ -407,7 +418,7 @@
 				flatpickrInstance = flatpickr("#reservation-date", {
 					mode: "range",
 					dateFormat: "Y-m-d",
-					showMonths: 2,
+					showMonths: calMonthsToDisplay,
 					enableTime: false,
 					locale: {
 						firstDayOfWeek: 1 // Start week on Monday
@@ -454,7 +465,7 @@
 				flatpickrInstance = flatpickr("#activity-reservation-date", {
 					mode: "single",
 					dateFormat: "Y-m-d",
-					showMonths: 2,
+					showMonths: calMonthsToDisplay,
 					enableTime: false,
 					locale: {
 						firstDayOfWeek: 1 // Start week on Monday
