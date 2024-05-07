@@ -827,6 +827,10 @@ ul.existing-customer li {
 	text-decoration: none;
 }
 
+.form-group.form-floating > label {
+	top: -4px;
+}
+
 /* HTML: <div class="loader"></div> */
 .preloader-element-outer {
 	display: inline-block;

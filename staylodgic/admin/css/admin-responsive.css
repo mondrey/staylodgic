@@ -7,7 +7,10 @@
 
     .staylodgic_anaytlics_row_one .staylodgic_anaytlics_module {
         width: 100%;
-        margin: 0;
+        margin: 0 0 10px;
+    }
+    .staylodgic-overview-heading {
+        margin-top: 10px;
     }
 
     #quantity-modal .modal-body,
@@ -18,6 +21,60 @@
     #container,
     .calendar-controls-wrap {
         width: calc( 100% - 10px );
+    }
+
+    .metabox-fields.is-a-group,
+    .metabox-fields {
+        padding: 10px 10px 10px;
+    }
+
+    .staylodgic_analytics_wrap {
+        background: #fff;
+        margin: 0;
+        padding: 10px;
+    }
+    .overview_page_slgc-activity-dashboard.auto-fold #wpcontent,
+    .toplevel_page_slgc-dashboard.auto-fold #wpcontent {
+        position: relative;
+        margin-left: 0;
+        padding-left: 0;
+      }
+    .staylodgic_anaytlics_module {
+        padding: 15px 5px 0;
+    }
+    .staylodgic_anaytlics_row_one {
+        padding: 20px 0;
+    }
+    .staylodgic_analytics_chart,
+    .staylodgic_analytics_table_wrap {
+        margin-bottom: 50px;
+        border-radius: 10px;
+        padding: 20px;
+    }
+
+    .staylodgic_table.sub-heading {
+        margin-top: 3px;
+    }
+    .staylodgic_analytics_wrap h3 {
+        font-size: 16px;
+        font-weight: 400;
+    }
+
+    .metaboxtype_range {
+        max-width: 100%;
+    }
+    .ranger-bar {
+        left: -12px;
+    }
+    .ranger-min-max-wrap,
+    .ui-slider-horizontal {
+        width: 250px;
+    }
+    .settings-change-log {
+        column-count: 2;
+    }
+    #portfolio-list li {
+        width: calc(100% - 20px);
     }
 
 }

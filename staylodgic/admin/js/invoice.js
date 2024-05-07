@@ -135,30 +135,31 @@
 		$(document).on('click', '.print-invoice-button', function(e) {
 			e.preventDefault();
 			var bookingNumber = $(this).data('id'); // Get the booking number from the button's data-id attribute
-			var bookingTitle = $(this).data('title'); // Get the booking number from the button's data-id attribute
+			var bookingTitle = $(this).data('title'); // Get the booking title from the button's data-title attribute
+		
 			// Find the invoice container that matches the booking number
 			var invoiceContent = $('.invoice-container[data-bookingnumber="' + bookingNumber + '"]').html();
-			
-			var printFrame = $('<iframe id="print-frame" style="display:none;"></iframe>').appendTo('body');
-			
-			var frameDoc = printFrame[0].contentWindow ? printFrame[0].contentWindow : printFrame[0].contentDocument.document ? printFrame[0].contentDocument.document : printFrame[0].contentDocument;
-			frameDoc.document.open();
-			frameDoc.document.write('<html><head><title>' + bookingTitle + '</title>');
-			
-			// Include the external CSS file
-			frameDoc.document.write('<link rel="stylesheet" type="text/css" href="' + staylodgicData.pluginUrl + 'admin/css/invoice.css">');
-			
-			frameDoc.document.write('</head><body>');
-			frameDoc.document.write(invoiceContent);
-			frameDoc.document.write('</body></html>');
-			frameDoc.document.close();
-			
+		
+			// Create a new window or tab for printing
+			var printWindow = window.open('', '_blank', 'width=800,height=600');
+			printWindow.document.open();
+			printWindow.document.write('<html><head><title>' + bookingTitle + '</title>');
+		
+			// Include the external CSS file for styling the print document
+			printWindow.document.write('<link rel="stylesheet" type="text/css" href="' + staylodgicData.pluginUrl + 'admin/css/invoice.css">');
+		
+			printWindow.document.write('</head><body>');
+			printWindow.document.write(invoiceContent);
+			printWindow.document.write('</body></html>');
+			printWindow.document.close();
+		
+			// Use a slight delay to ensure the document is fully loaded before printing
 			setTimeout(function () {
-				frameDoc.window.print();
-				printFrame.remove();
+				printWindow.print();
+				printWindow.close();
 			}, 500);
-		});		
-
+		});
+		
 		
 	});
 })(jQuery);
