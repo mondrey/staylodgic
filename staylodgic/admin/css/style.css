@@ -411,7 +411,7 @@
 
 .ranger-min-max-wrap {
 	display: block;
-	width: 300px;
+	width: calc(100% - 80px);
 	padding-top: 25px;
 	position: relative;
 	top: 14px;
@@ -439,7 +439,7 @@
 
 .ranger-bar {
 	float: right;
-	left: -95px;
+	left: 0;
 	position: relative;
 	top: -45px;
 	width: 65px;
@@ -465,17 +465,16 @@
 	position: relative;
 	text-align: left;
 }
-
-.ui-slider .ui-slider-handle {}
-
-.ui-slider .ui-slider-range {}
+.ranger-min-max-wrap-outer {
+	width: 60%;
+}
 
 .ui-slider-horizontal {
 	border-width: 2px;
 	border-style: solid;
 	border-color: #f4f4f4;
 	border-radius: 25px;
-	width: 300px;
+	width: calc(100% - 80px);
 	height: 8px;
 	margin-bottom: 18px;
 	background-color: #f7f7f7;

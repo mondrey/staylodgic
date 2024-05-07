@@ -796,12 +796,11 @@ class AnalyticsBookings
                 }
 
                 $guestListHtml .= '<div class="staylodgic_table_outer">';
-                $guestListHtml .= '<div class="staylodgic_table sub-heading"><h3>' . $font_icon . ucfirst($status) . '</h3></div>';
+                $guestListHtml .= '<div class="staylodgic_table sub-heading"><h3>' . $font_icon . ' ' . ucfirst($status) . '</h3></div>';
 
                 $guestListHtml .= '<table class="staylodgic_analytics_table table table-hover" data-export-title="Reservation - ' . $status . ' ' . esc_html($day) . '">';
                 $guestListHtml .= '<thead class="table-light">';
                 $guestListHtml .= '<tr>';
-                $guestListHtml .= '<th class="table-cell-heading table-cell-heading-number number-column" scope="col"><i class="fas fa-hashtag"></i></th>';
                 $guestListHtml .= '<th class="table-cell-heading table-cell-heading-booking-number" scope="col"><i class="fas fa-hashtag"></i> ' . __('Booking', 'staylodgic') . '</th>';
                 $guestListHtml .= '<th class="table-cell-heading table-cell-heading-name" scope="col"><i class="fas fa-user"></i> ' . __('Guest Name', 'staylodgic') . '</th>';
                 $guestListHtml .= '<th class="table-cell-heading table-cell-heading-room" scope="col"><i class="fas fa-bed"></i> ' . __('Room', 'staylodgic') . '</th>';
@@ -830,12 +829,12 @@ class AnalyticsBookings
                         $nights       = $checkoutDate->diff($checkinDate)->days;
 
                         $guestListHtml .= '<tr>';
-                        $guestListHtml .= '<th class="number-column" scope="row">' . esc_html($count) . '</th>';
-                        $guestListHtml .= '<td scope="row">';
+                        $guestListHtml .= '<th scope="row">';
+                        $guestListHtml .= esc_html($count) . '. ';
                         $guestListHtml .= '<a href="' . esc_url(get_edit_post_link($reservation_id)) . '">';
                         $guestListHtml .= $booking['booking_number'];
                         $guestListHtml .= '</a>';
-                        $guestListHtml .= '</td>';
+                        $guestListHtml .= '</th>';
                         $guestListHtml .= '<td scope="row">';
                         $guestListHtml .= ucwords(strtolower($booking['name']));
                         $guestListHtml .= '</td>';
@@ -851,8 +850,10 @@ class AnalyticsBookings
 
                         $adults = $reservations_instance->getNumberOfAdultsForReservation($reservation_id);
                         $children = $reservations_instance->getNumberOfChildrenForReservation($reservation_id);
-
-                        $guestListHtml .= \Staylodgic\Common::generatePersonIcons($adults, $children);
+                        $guestListHtml .= $adults; ' + ' . $children;
+                        if ( 0 < $children ) {
+                            $guestListHtml .= ' + ' . $children;
+                        }
 
                         $guestListHtml .= '</td>';
                         $guestListHtml .= '<td scope="row">';

@@ -844,7 +844,7 @@ class Booking
                 $html .= '</div>';
 
                 $html .= '</div>';
-                $html .= '<div class="room-details-column">';
+                $html .= '<div class="room-details-column room-details-second-column">';
 
                 $html .= \Staylodgic\Common::generatePersonIcons($this->adultGuests, $this->childrenGuests);
 

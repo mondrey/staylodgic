@@ -330,6 +330,9 @@ h2#invoice-subheading,
 .exporter_calendar-error-wrap {
 	display: none;
 }
+.expor-import-calendar {
+	padding-right: 10px;
+}
 
 @media print {
 	body {

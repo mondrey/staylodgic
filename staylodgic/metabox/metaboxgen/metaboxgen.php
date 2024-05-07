@@ -1356,6 +1356,7 @@ function staylodgic_generate_metaboxes($meta_data, $post_id)
 
                 case 'range':
                     $output = "";
+                    echo '<div class="ranger-min-max-wrap-outer">';
                     if (isset($field['unit'])) {
                         echo '<div class="ranger-min-max-wrap"><span class="ranger-min-value">' . esc_attr($field['min']) . '</span>';
                         echo '<span class="ranger-max-value">' . esc_attr($field['max']) . '</span></div>';
@@ -1390,6 +1391,7 @@ function staylodgic_generate_metaboxes($meta_data, $post_id)
                     } else {
                         echo ' />';
                     }
+                    echo '</div>';
 
                     break;
 
