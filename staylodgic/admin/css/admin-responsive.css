@@ -210,7 +210,38 @@
     .staylodgic_page_slgc-settings-panel .wrap {
         margin-right:0;
     }
-    
+
+    #repeatable-activitytax-container input,
+    #repeatable-activitytax-container select,
+    #repeatable-tax-container input,
+    #repeatable-tax-container select,
+    #repeatable-perperson-container input,
+    #repeatable-perperson-container select,
+    #repeatable-mealplan-container input,
+    #repeatable-mealplan-container select {
+        display: block;
+        margin-bottom: 25px;
+        padding: 0 8px;
+        font-size: 15px;
+    }
+    #repeatable-activitytax-container,
+    #repeatable-tax-container,
+    #repeatable-perperson-container,
+    #repeatable-mealplan-container {
+        width: calc(100% - 25px);
+    }
+    .input-label-inner {
+        top: -3px;
+    }
+    h1.options-heading {
+        font-size: 22px;
+        font-weight: 600;
+        margin-left: 12px;
+    }
+    .export-import-form {
+        display: none;
+    }
+
 }
 
 /* #Mobile (Landscape)
@@ -295,6 +326,37 @@
     }
     .staylodgic_page_slgc-settings-panel .wrap {
         margin-right:0;
+    }
+
+    #repeatable-activitytax-container input,
+    #repeatable-activitytax-container select,
+    #repeatable-tax-container input,
+    #repeatable-tax-container select,
+    #repeatable-perperson-container input,
+    #repeatable-perperson-container select,
+    #repeatable-mealplan-container input,
+    #repeatable-mealplan-container select {
+        display: block;
+        margin-bottom: 25px;
+        padding: 0 8px;
+        font-size: 15px;
+    }
+    #repeatable-activitytax-container,
+    #repeatable-tax-container,
+    #repeatable-perperson-container,
+    #repeatable-mealplan-container {
+        width: calc(100% - 25px);
+    }
+    .input-label-inner {
+        top: -3px;
+    }
+    h1.options-heading {
+        font-size: 22px;
+        font-weight: 600;
+        margin-left: 12px;
+    }
+    .export-import-form {
+        display: none;
     }
 
 }

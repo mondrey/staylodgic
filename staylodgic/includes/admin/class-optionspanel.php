@@ -506,25 +506,33 @@ class OptionsPanel
     ?>
         <div class="repeatable-perperson-template" style="display: none;">
             <div class="repeatable">
-                <select disabled id="<?php echo esc_attr($args['label_for']); ?>_people" name="people">
-                    <option value="1"><?php _e('1', 'staylodgic'); ?></option>
-                    <option value="3"><?php _e('3', 'staylodgic'); ?></option>
-                    <option value="4"><?php _e('4', 'staylodgic'); ?></option>
-                    <option value="5"><?php _e('5', 'staylodgic'); ?></option>
-                    <option value="6"><?php _e('6', 'staylodgic'); ?></option>
-                    <option value="7"><?php _e('7', 'staylodgic'); ?></option>
-                    <option value="8"><?php _e('8', 'staylodgic'); ?></option>
-                    <option value="9"><?php _e('9', 'staylodgic'); ?></option>
-                </select>
-                <input disabled type="number" placeholder="Value" id="<?php echo esc_attr($args['label_for']); ?>_number" name="number" value="">
-                <select disabled id="<?php echo esc_attr($args['label_for']); ?>_type" name="type">
-                    <option value="fixed"><?php _e('Fixed', 'staylodgic'); ?></option>
-                    <option value="percentage"><?php _e('Percentage', 'staylodgic'); ?></option>
-                </select>
+                <span class="input-label-outer"><span class="input-label-inner">People</span>
+                    <select disabled id="<?php echo esc_attr($args['label_for']); ?>_people" name="people">
+                        <option value="1"><?php _e('1', 'staylodgic'); ?></option>
+                        <option value="3"><?php _e('3', 'staylodgic'); ?></option>
+                        <option value="4"><?php _e('4', 'staylodgic'); ?></option>
+                        <option value="5"><?php _e('5', 'staylodgic'); ?></option>
+                        <option value="6"><?php _e('6', 'staylodgic'); ?></option>
+                        <option value="7"><?php _e('7', 'staylodgic'); ?></option>
+                        <option value="8"><?php _e('8', 'staylodgic'); ?></option>
+                        <option value="9"><?php _e('9', 'staylodgic'); ?></option>
+                    </select>
+                </span>
+                <span class="input-label-outer"><span class="input-label-inner">Value</span>
+                    <input disabled type="number" placeholder="Value" id="<?php echo esc_attr($args['label_for']); ?>_number" name="number" value="">
+                </span>
+                <span class="input-label-outer"><span class="input-label-inner">Type</span>
+                    <select disabled id="<?php echo esc_attr($args['label_for']); ?>_type" name="type">
+                        <option value="fixed"><?php _e('Fixed', 'staylodgic'); ?></option>
+                        <option value="percentage"><?php _e('Percentage', 'staylodgic'); ?></option>
+                    </select>
+                </span>
+                <span class="input-label-outer"><span class="input-label-inner">Difference</span>
                 <select disabled id="<?php echo esc_attr($args['label_for']); ?>_total" name="total">
                     <option value="increase"><?php _e('Increase', 'staylodgic'); ?></option>
                     <option value="decrease"><?php _e('Decrease', 'staylodgic'); ?></option>
                 </select>
+                </span>
                 <span class="remove-set-button"><i class="dashicons dashicons-remove"></i></span>
             </div>
         </div>
@@ -689,19 +697,26 @@ class OptionsPanel
         <div class="repeatable-tax-template" style="display: none;">
             <div class="repeatable">
                 <span class="fa-solid fa-sort"></span>
-                <input disabled type="text" placeholder="Label" id="<?php echo esc_attr($args['label_for']); ?>_label" name="label" value="">
-                <input disabled type="number" placeholder="Value" id="<?php echo esc_attr($args['label_for']); ?>_number" name="number" value="">
-
-                <select disabled id="<?php echo esc_attr($args['label_for']); ?>_type" name="type">
-                    <option value="fixed">Fixed</option>
-                    <option value="percentage">Percentage</option>
-                </select>
-                <select disabled id="<?php echo esc_attr($args['label_for']); ?>_duration" name="duration">
-                    <option value="inrate"><?php _e('Add to rate', 'staylodgic'); ?></option>
-                    <option value="perperson"><?php _e('Per person', 'staylodgic'); ?></option>
-                    <option value="perday"><?php _e('Per day', 'staylodgic'); ?></option>
-                    <option value="perpersonperday"><?php _e('Per person per day', 'staylodgic'); ?></option>
-                </select>
+                <span class="input-label-outer"><span class="input-label-inner">Name</span>
+                    <input disabled type="text" placeholder="Label" id="<?php echo esc_attr($args['label_for']); ?>_label" name="label" value="">
+                </span>
+                <span class="input-label-outer"><span class="input-label-inner">Value</span>
+                    <input disabled type="number" placeholder="Value" id="<?php echo esc_attr($args['label_for']); ?>_number" name="number" value="">
+                </span>
+                <span class="input-label-outer"><span class="input-label-inner">Type</span>
+                    <select disabled id="<?php echo esc_attr($args['label_for']); ?>_type" name="type">
+                        <option value="fixed">Fixed</option>
+                        <option value="percentage">Percentage</option>
+                    </select>
+                </span>
+                <span class="input-label-outer"><span class="input-label-inner">Frequency</span>
+                    <select disabled id="<?php echo esc_attr($args['label_for']); ?>_duration" name="duration">
+                        <option value="inrate"><?php _e('Add to rate', 'staylodgic'); ?></option>
+                        <option value="perperson"><?php _e('Per person', 'staylodgic'); ?></option>
+                        <option value="perday"><?php _e('Per day', 'staylodgic'); ?></option>
+                        <option value="perpersonperday"><?php _e('Per person per day', 'staylodgic'); ?></option>
+                    </select>
+                </span>
                 <span class="remove-set-button"><i class="dashicons dashicons-remove"></i></span>
             </div>
         </div>
@@ -776,17 +791,24 @@ class OptionsPanel
         <div class="repeatable-activitytax-template" style="display: none;">
             <div class="repeatable">
                 <span class="fa-solid fa-sort"></span>
-                <input disabled type="text" placeholder="Label" id="<?php echo esc_attr($args['label_for']); ?>_label" name="label" value="">
-                <input disabled type="number" placeholder="Value" id="<?php echo esc_attr($args['label_for']); ?>_number" name="number" value="">
-
-                <select disabled id="<?php echo esc_attr($args['label_for']); ?>_type" name="type">
-                    <option value="fixed">Fixed</option>
-                    <option value="percentage">Percentage</option>
-                </select>
-                <select disabled id="<?php echo esc_attr($args['label_for']); ?>_duration" name="duration">
-                    <option value="inrate"><?php _e('Add to rate', 'staylodgic'); ?></option>
-                    <option value="perperson"><?php _e('Per person', 'staylodgic'); ?></option>
-                </select>
+                <span class="input-label-outer"><span class="input-label-inner">Name</span>
+                    <input disabled type="text" placeholder="Label" id="<?php echo esc_attr($args['label_for']); ?>_label" name="label" value="">
+                </span>
+                <span class="input-label-outer"><span class="input-label-inner">Value</span>
+                    <input disabled type="number" placeholder="Value" id="<?php echo esc_attr($args['label_for']); ?>_number" name="number" value="">
+                </span>
+                <span class="input-label-outer"><span class="input-label-inner">Type</span>
+                    <select disabled id="<?php echo esc_attr($args['label_for']); ?>_type" name="type">
+                        <option value="fixed">Fixed</option>
+                        <option value="percentage">Percentage</option>
+                    </select>
+                </span>
+                <span class="input-label-outer"><span class="input-label-inner">Frequency</span>
+                    <select disabled id="<?php echo esc_attr($args['label_for']); ?>_duration" name="duration">
+                        <option value="inrate"><?php _e('Add to rate', 'staylodgic'); ?></option>
+                        <option value="perperson"><?php _e('Per person', 'staylodgic'); ?></option>
+                    </select>
+                </span>
                 <span class="remove-set-button"><i class="dashicons dashicons-remove"></i></span>
             </div>
         </div>
@@ -801,18 +823,24 @@ class OptionsPanel
             ?>
                         <div class="repeatable">
                             <span class="fa-solid fa-sort"></span>
-                            <input type="text" id="<?php echo esc_attr($args['label_for']); ?>_label_<?php echo esc_attr($count); ?>" name="<?php echo esc_attr($this->option_name); ?>[<?php echo esc_attr($args['label_for']); ?>][<?php echo esc_attr($key); ?>][label]" value="<?php echo esc_attr($value['label']); ?>">
-
-                            <input type="number" id="<?php echo esc_attr($args['label_for']); ?>_number_<?php echo esc_attr($count); ?>" name="<?php echo esc_attr($this->option_name); ?>[<?php echo esc_attr($args['label_for']); ?>][<?php echo esc_attr($key); ?>][number]" value="<?php echo esc_attr($value['number']); ?>">
-
-                            <select id="<?php echo esc_attr($args['label_for']); ?>_type_<?php echo esc_attr($count); ?>" name="<?php echo esc_attr($this->option_name); ?>[<?php echo esc_attr($args['label_for']); ?>][<?php echo esc_attr($key); ?>][type]">
-                                <option value="fixed" <?php selected('fixed', $value['type'], true); ?>><?php _e('Fixed', 'staylodgic'); ?></option>
-                                <option value="percentage" <?php selected('percentage', $value['type'], true); ?>><?php _e('Percentage', 'staylodgic'); ?></option>
-                            </select>
-                            <select id="<?php echo esc_attr($args['label_for']); ?>_duration_<?php echo esc_attr($count); ?>" name="<?php echo esc_attr($this->option_name); ?>[<?php echo esc_attr($args['label_for']); ?>][<?php echo esc_attr($key); ?>][duration]">
-                                <option value="inrate" <?php selected('inrate', $value['duration'], true); ?>><?php _e('Add to rate', 'staylodgic'); ?></option>
-                                <option value="perperson" <?php selected('perperson', $value['duration'], true); ?>><?php _e('Per person', 'staylodgic'); ?></option>
-                            </select>
+                            <span class="input-label-outer"><span class="input-label-inner">Name</span>
+                                <input type="text" id="<?php echo esc_attr($args['label_for']); ?>_label_<?php echo esc_attr($count); ?>" name="<?php echo esc_attr($this->option_name); ?>[<?php echo esc_attr($args['label_for']); ?>][<?php echo esc_attr($key); ?>][label]" value="<?php echo esc_attr($value['label']); ?>">
+                            </span>
+                            <span class="input-label-outer"><span class="input-label-inner">Value</span>
+                                <input type="number" id="<?php echo esc_attr($args['label_for']); ?>_number_<?php echo esc_attr($count); ?>" name="<?php echo esc_attr($this->option_name); ?>[<?php echo esc_attr($args['label_for']); ?>][<?php echo esc_attr($key); ?>][number]" value="<?php echo esc_attr($value['number']); ?>">
+                            </span>
+                            <span class="input-label-outer"><span class="input-label-inner">Type</span>
+                                <select id="<?php echo esc_attr($args['label_for']); ?>_type_<?php echo esc_attr($count); ?>" name="<?php echo esc_attr($this->option_name); ?>[<?php echo esc_attr($args['label_for']); ?>][<?php echo esc_attr($key); ?>][type]">
+                                    <option value="fixed" <?php selected('fixed', $value['type'], true); ?>><?php _e('Fixed', 'staylodgic'); ?></option>
+                                    <option value="percentage" <?php selected('percentage', $value['type'], true); ?>><?php _e('Percentage', 'staylodgic'); ?></option>
+                                </select>
+                            </span>
+                            <span class="input-label-outer"><span class="input-label-inner">Frequency</span>
+                                <select id="<?php echo esc_attr($args['label_for']); ?>_duration_<?php echo esc_attr($count); ?>" name="<?php echo esc_attr($this->option_name); ?>[<?php echo esc_attr($args['label_for']); ?>][<?php echo esc_attr($key); ?>][duration]">
+                                    <option value="inrate" <?php selected('inrate', $value['duration'], true); ?>><?php _e('Add to rate', 'staylodgic'); ?></option>
+                                    <option value="perperson" <?php selected('perperson', $value['duration'], true); ?>><?php _e('Per person', 'staylodgic'); ?></option>
+                                </select>
+                            </span>
                             <span class="remove-set-button"><i class="dashicons dashicons-remove"></i></span>
                         </div>
             <?php
