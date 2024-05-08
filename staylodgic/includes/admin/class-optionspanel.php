@@ -372,7 +372,7 @@ class OptionsPanel
 ?>
         <div class="wrap">
             <h1 class="options-heading">Staylodgic <span>Hotel Settings</span></h1>
-            <div class="staylodgic-tabform-wrapper">
+            <div class="staylodgic-tabform-wrapper menu-closed">
                 <?php $this->render_tabs(); ?>
                 <div class="staylodgic-tab-content active" id="tab-property">
                     <form action="options.php" method="post" class="staylodgic-options-form">
@@ -395,7 +395,7 @@ class OptionsPanel
             echo '<input type="submit" name="submit" id="submit" class="button button-primary" value="Export Settings">';
             echo '<button type="button" id="import-settings-button" class="button button-secondary">Import Settings</button>';
             echo '</div>';
-            echo '</form>';            
+            echo '</form>';
             ?>
             <?php
             // Modal structure
@@ -602,7 +602,8 @@ class OptionsPanel
 
     ?>
         <div class="repeatable-mealplan-template" style="display: none;">
-            <div class="repeatable">
+            <div class="repeatable new-container">
+                <span class="input-label-outer"><span class="input-label-inner">Meal</span>
                 <select disabled id="<?php echo esc_attr($args['label_for']); ?>_mealtype" name="mealtype">
                     <option value="RO"><?php _e('Room Only', 'staylodgic'); ?></option>
                     <option value="BB"><?php _e('Bed and Breakfast', 'staylodgic'); ?></option>
@@ -610,11 +611,16 @@ class OptionsPanel
                     <option value="FB"><?php _e('Full Board', 'staylodgic'); ?></option>
                     <option value="AN"><?php _e('All-Inclusive', 'staylodgic'); ?></option>
                 </select>
+                </span>
+                <span class="input-label-outer"><span class="input-label-inner">Type</span>
                 <select disabled id="<?php echo esc_attr($args['label_for']); ?>_choice" name="choice">
                     <option value="included"><?php _e('Included in rate', 'staylodgic'); ?></option>
                     <option value="optional"><?php _e('Optional', 'staylodgic'); ?></option>
                 </select>
+                </span>
+                <span class="input-label-outer"><span class="input-label-inner">Price</span>
                 <input disabled type="number" id="<?php echo esc_attr($args['label_for']); ?>_price" name="price" value="">
+                </span>
                 <span class="remove-set-button"><i class="dashicons dashicons-remove"></i></span>
             </div>
         </div>
@@ -972,16 +978,16 @@ $panel_args = [
     'slug'            => 'slgc-settings-panel',
     'user_capability' => 'edit_posts',
     'tabs'            => [
-        'property'       => '<i class="fa fa-building"></i> ' . esc_html__('Property', 'staylodgic'),
-        'activity-property' => '<i class="fa fa-suitcase"></i> ' . esc_html__('Activity Property', 'staylodgic'),
-        'currency'      => '<i class="fa fa-dollar"></i> ' . esc_html__('Currency', 'staylodgic'),
-        'general'       => '<i class="fa fa-cogs"></i> ' . esc_html__('General', 'staylodgic'),
-        'pages'         => '<i class="fa fa-file-text"></i> ' . esc_html__('Pages', 'staylodgic'),
-        'discounts'     => '<i class="fa fa-percent"></i> ' . esc_html__('Discounts', 'staylodgic'),
-        'mealplan'      => '<i class="fa fa-cutlery"></i> ' . esc_html__('Meal Plan', 'staylodgic'),
-        'perperson'     => '<i class="fa fa-user"></i> ' . esc_html__('Per person price', 'staylodgic'),
-        'tax'           => '<i class="fa fa-calculator"></i> ' . esc_html__('Room Tax', 'staylodgic'),
-        'activity-tax'  => '<i class="fa fa-calculator"></i> ' . esc_html__('Activity Tax', 'staylodgic'),
+        'property'       => '<i class="fa fa-building"></i> <span class="options-menu-link-text">' . esc_html__('Property', 'staylodgic') . '</span>',
+        'activity-property' => '<i class="fa fa-suitcase"></i> <span class="options-menu-link-text">' . esc_html__('Activity Property', 'staylodgic') . '</span>',
+        'currency'      => '<i class="fa fa-dollar"></i> <span class="options-menu-link-text">' . esc_html__('Currency', 'staylodgic') . '</span>',
+        'general'       => '<i class="fa fa-cogs"></i> <span class="options-menu-link-text">' . esc_html__('General', 'staylodgic') . '</span>',
+        'pages'         => '<i class="fa fa-file-text"></i> <span class="options-menu-link-text">' . esc_html__('Pages', 'staylodgic') . '</span>',
+        'discounts'     => '<i class="fa fa-percent"></i> <span class="options-menu-link-text">' . esc_html__('Discounts', 'staylodgic') . '</span>',
+        'mealplan'      => '<i class="fa fa-cutlery"></i> <span class="options-menu-link-text">' . esc_html__('Meal Plan', 'staylodgic') . '</span>',
+        'perperson'     => '<i class="fa fa-user"></i> <span class="options-menu-link-text">' . esc_html__('Per person price', 'staylodgic') . '</span>',
+        'tax'           => '<i class="fa fa-calculator"></i> <span class="options-menu-link-text">' . esc_html__('Room Tax', 'staylodgic') . '</span>',
+        'activity-tax'  => '<i class="fa fa-calculator"></i> <span class="options-menu-link-text">' . esc_html__('Activity Tax', 'staylodgic') . '</span>',
     ],
 ];
 

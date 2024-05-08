@@ -197,6 +197,19 @@
     .ranger-min-max-wrap-outer {
         width: 90%;
     }
+
+    .staylodgic-tabs {
+        margin-right: 0;
+    }
+    .staylodgic-options-form {
+        padding-right: 15px;
+    }
+    .staylodgic_page_slgc-settings-panel.auto-fold #wpcontent {
+        padding-left:0;
+    }
+    .staylodgic_page_slgc-settings-panel .wrap {
+        margin-right:0;
+    }
     
 }
 
@@ -269,6 +282,19 @@
 
     .ranger-min-max-wrap-outer {
         width: 90%;
+    }
+
+    .staylodgic-tabs {
+        margin-right: 0;
+    }
+    .staylodgic-options-form {
+        padding-right: 15px;
+    }
+    .staylodgic_page_slgc-settings-panel.auto-fold #wpcontent {
+        padding-left:0;
+    }
+    .staylodgic_page_slgc-settings-panel .wrap {
+        margin-right:0;
     }
 
 }

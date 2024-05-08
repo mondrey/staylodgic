@@ -85,14 +85,17 @@ jQuery(document).ready(function ($) {
 	// }
 
 	$(".staylodgic-tabs a.nav-tab").on("click", function (event) {
-		const target = event.target;
+		
+		const target = $(this);
+		const targetTab = $(target).attr("data-tab");
+		
 		if (!$(target).closest(".staylodgic-tabs a.nav-tab").length) {
 			return;
 		}
 		event.preventDefault();
 		$(".staylodgic-tabs a.nav-tab").removeClass("nav-tab-active");
 		$(target).addClass("nav-tab-active");
-		const targetTab = $(target).attr("data-tab");
+		
 		if (typeof targetTab !== "undefined") {
 			const heading = $(target).attr("data-heading");
 			$(".section_heading").html(heading);
