@@ -242,6 +242,22 @@
         display: none;
     }
 
+    .menu-closed .staylodgic-tabs-container {
+        padding-left: 15px;
+        padding-right: 15px;
+        width: 15px;
+    }
+    .menu-closed .options-menu-link-text {
+        opacity: 0;
+    }
+    .menu-closed .staylodgic-tab-heading {
+        opacity: 0;
+        height: 10px;
+    }
+    .menu-closed .section_heading .options-menu-link-text {
+        opacity: 1;
+    }
+
 }
 
 /* #Mobile (Landscape)
@@ -357,6 +373,22 @@
     }
     .export-import-form {
         display: none;
+    }
+
+    .menu-closed .staylodgic-tabs-container {
+        padding-left: 15px;
+        padding-right: 15px;
+        width: 15px;
+    }
+    .menu-closed .options-menu-link-text {
+        opacity: 0;
+    }
+    .menu-closed .staylodgic-tab-heading {
+        opacity: 0;
+        height: 10px;
+    }
+    .menu-closed .section_heading .options-menu-link-text {
+        opacity: 1;
     }
 
 }
