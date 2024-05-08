@@ -17,6 +17,7 @@
 		if (typeof flatpickr !== "undefined") {
 			const flatpickrInstance = flatpickr(".activity-reservation", {
 				showMonths: 1,
+				disableMobile: "true",
 				dateFormat: "Y-m-d",
 				enableTime: false,
 				onChange: function(selectedDates, dateStr, instance) {

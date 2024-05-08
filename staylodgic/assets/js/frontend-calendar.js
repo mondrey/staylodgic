@@ -295,7 +295,7 @@
 				formattedCheckIn +
 				" to </span><span class='date-front-calendar-block'>" +
 				formattedCheckOut +
-				"</span>";
+				"</span> ";
 			var nights = calculateDaysBetweenDates(checkIn, checkOut);
 
 			nightsSuffix = "Nights";
