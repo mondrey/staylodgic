@@ -39,124 +39,228 @@ class BatchProcessorBase
     {
         // The HTML content of the 'Staylodgic' page goes here
 
+echo '<div class="admin-container">';
+echo '<div class="admin-column admin-column1">';
+echo '<div class="section-main">';
+echo '<div class="admin-page-header">';
+echo '<h2>Hotel Management</h2>';
+echo '<h1>Staylodgic<span class="the-dot">.</span></h1>';
+echo '</div>';
+echo '<ul class="admin-horizontal-list">';
+echo '<li><i class="fas fa-plus-square"></i> New Reservation</li>';
+echo '<li><i class="fas fa-chart-bar"></i> Booking Overview</li>';
+echo '<li><i class="fas fa-calendar-alt"></i> Availability Calendar</li>';
+echo '</ul>';
+echo '</div>';
+echo '</div>';
+echo '<div class="admin-column admin-column2 admin-page-wrapper">';
+    echo '<div class="section-features">';
+    echo '<h4><i class="fa-solid fa-gear"></i> Hotel Settings</h4>';
+    echo '<ul>';
+    echo '<li>Setup New Hotel</li>';
+    echo '</ul>';
+
+    echo '<h4><i class="fas fa-bed"></i> Rooms for Reservation</h4>';
+    echo '<ul>';
+    echo '<li>Step 1: Create Rooms</li>';
+    echo '<li>Step 2: Add Room Rates</li>';
+    echo '<li>Step 3: Add Room Quantity</li>';
+    echo '<li>Step 4: Create Reservations</li>';
+    echo '</ul>';
+
+    echo '<h4><i class="fas fa-biking"></i> Setup Activities</h4>';
+    echo '<ul>';
+    echo '<li>Step 1: Create Activities</li>';
+    echo '<li>Step 2: Add Scheduled Time to Week</li>';
+    echo '<li>Step 3: Create Activity Reservations</li>';
+    echo '</ul>';
+
+    echo '<h4><i class="fas fa-tachometer-alt"></i> Using Dashboard</h4>';
+    echo '<ul>';
+    echo '<li>- View Bookings Overview</li>';
+    echo '<li>- View Activities Overview</li>';
+    echo '<li>- View Availability Calendar</li>';
+    echo '<li>- View Annual Availability</li>';
+    echo '</ul>';
+
+    echo '<h4><i class="fas fa-users"></i> Customer Registry</h4>';
+    echo '<ul>';
+    echo '<li>- Create new customers</li>';
+    echo '<li>- Assign existing customers</li>';
+    echo '</ul>';
+
+    echo '<h4><i class="fas fa-user-check"></i> Guest Registration</h4>';
+    echo '<ul>';
+    echo '<li>Step 1: Customize registration fields</li>';
+    echo '<li>Step 2: Create guest registration</li>';
+    echo '<li>Step 3: Online registration</li>';
+    echo '<li>Step 4: Send Links or QR Code</li>';
+    echo '</ul>';
+
+    echo '<h4><i class="fas fa-file-invoice-dollar"></i> Invoicing</h4>';
+    echo '<ul>';
+    echo '<li>- Generate invoices for bookings</li>';
+    echo '<li>- Generate invoices for activities</li>';
+    echo '</ul>';
+
+    echo '<h4><i class="fas fa-file-import"></i> Import / Export</h4>';
+    echo '<ul>';
+    echo '<li>- Export CSV Bookings</li>';
+    echo '<li>- Export Guests Registration for Month</li>';
+    echo '<li>- Import and Sync iCal Availability<br/><span class="feature-update">( Future premium update )</span></li>';
+    echo '<li>- Export iCal Availability Feeds<br/><span class="feature-update">( Future premium update )</span></li>';
+    echo '</ul>';
+
+
+    echo '<h4><i class="fas fa-hand-holding-usd"></i> Taxes</h4>';
+    echo '<ul>';
+    echo '<li>- Fixed tax</li>';
+    echo '<li>- Percentage tax</li>';
+    echo '<li>- Per day tax</li>';
+    echo '<li>- Per person tax</li>';
+    echo '</ul>';
+
+    echo '<h4><i class="fas fa-utensils"></i> Meal plans</h4>';
+    echo '<ul>';
+    echo '<li>- Create free plans</li>';
+    echo '<li>- Create paid plans</li>';
+    echo '</ul>';
+
+    echo '<h4><i class="fas fa-user-tag"></i> Per Person Pricing</h4>';
+    echo '<ul>';
+    echo '<li>- Set fixed price increments</li>';
+    echo '<li>- Increment by percentage per occupant</li>';
+    echo '</ul>';
+
+    echo '<h4><i class="fas fa-percent"></i> Discounts</h4>';
+    echo '<ul>';
+    echo '<li>- Last minute discount</li>';
+    echo '<li>- Early booking discount</li>';
+    echo '<li>- Long stay discount</li>';
+    echo '</ul>';
+    echo '</div>';
+
+echo '</div>';
+echo '</div>';
+
         // Header
-        echo '<div class="admin-page-header">';
-        echo '<h2>Hotel Management</h2>';
-        echo '<h1>Staylodgic<span class="the-dot">.</span></h1>';
-        echo '</div>';
+        // echo '<div class="admin-page-header">';
+        // echo '<h2>Hotel Management</h2>';
+        // echo '<h1>Staylodgic<span class="the-dot">.</span></h1>';
+        // echo '</div>';
 
-        echo '<div class="admin-page-wrapper">';
-        echo '<div class="content-container">';
-        echo '<div class="left-columns">'; // Container for both content columns
+        // echo '<div class="admin-page-wrapper">';
+        // echo '<div class="content-container">';
+        // echo '<div class="left-columns">'; // Container for both content columns
 
-        echo '<div class="left-column">';
-        echo '<h4><i class="fa-solid fa-gear"></i> Hotel Settings</h4>';
-        echo '<ul>';
-        echo '<li>Setup New Hotel</li>';
-        echo '</ul>';
+        // echo '<div class="left-column">';
+        // echo '<h4><i class="fa-solid fa-gear"></i> Hotel Settings</h4>';
+        // echo '<ul>';
+        // echo '<li>Setup New Hotel</li>';
+        // echo '</ul>';
 
-        echo '<h4><i class="fas fa-bed"></i> Rooms for Reservation</h4>';
-        echo '<ul>';
-        echo '<li>Step 1: Create Rooms</li>';
-        echo '<li>Step 2: Add Room Rates</li>';
-        echo '<li>Step 3: Add Room Quantity</li>';
-        echo '<li>Step 4: Create Reservations</li>';
-        echo '</ul>';
+        // echo '<h4><i class="fas fa-bed"></i> Rooms for Reservation</h4>';
+        // echo '<ul>';
+        // echo '<li>Step 1: Create Rooms</li>';
+        // echo '<li>Step 2: Add Room Rates</li>';
+        // echo '<li>Step 3: Add Room Quantity</li>';
+        // echo '<li>Step 4: Create Reservations</li>';
+        // echo '</ul>';
 
-        echo '<h4><i class="fas fa-biking"></i> Setup Activities</h4>';
-        echo '<ul>';
-        echo '<li>Step 1: Create Activities</li>';
-        echo '<li>Step 2: Add Scheduled Time to Week</li>';
-        echo '<li>Step 3: Create Activity Reservations</li>';
-        echo '</ul>';
+        // echo '<h4><i class="fas fa-biking"></i> Setup Activities</h4>';
+        // echo '<ul>';
+        // echo '<li>Step 1: Create Activities</li>';
+        // echo '<li>Step 2: Add Scheduled Time to Week</li>';
+        // echo '<li>Step 3: Create Activity Reservations</li>';
+        // echo '</ul>';
 
-        echo '<h4><i class="fas fa-tachometer-alt"></i> Using Dashboard</h4>';
-        echo '<ul>';
-        echo '<li>- View Bookings Overview</li>';
-        echo '<li>- View Activities Overview</li>';
-        echo '<li>- View Availability Calendar</li>';
-        echo '<li>- View Annual Availability</li>';
-        echo '</ul>';
+        // echo '<h4><i class="fas fa-tachometer-alt"></i> Using Dashboard</h4>';
+        // echo '<ul>';
+        // echo '<li>- View Bookings Overview</li>';
+        // echo '<li>- View Activities Overview</li>';
+        // echo '<li>- View Availability Calendar</li>';
+        // echo '<li>- View Annual Availability</li>';
+        // echo '</ul>';
 
-        echo '</div>'; // End of first left column
+        // echo '</div>'; // End of first left column
 
-        echo '<div class="left-column">';
-        echo '<h4><i class="fas fa-users"></i> Customer Registry</h4>';
-        echo '<ul>';
-        echo '<li>- Create new customers</li>';
-        echo '<li>- Assign existing customers</li>';
-        echo '</ul>';
+        // echo '<div class="left-column">';
+        // echo '<h4><i class="fas fa-users"></i> Customer Registry</h4>';
+        // echo '<ul>';
+        // echo '<li>- Create new customers</li>';
+        // echo '<li>- Assign existing customers</li>';
+        // echo '</ul>';
 
-        echo '<h4><i class="fas fa-user-check"></i> Guest Registration</h4>';
-        echo '<ul>';
-        echo '<li>Step 1: Customize registration fields</li>';
-        echo '<li>Step 2: Create guest registration</li>';
-        echo '<li>Step 3: Online registration</li>';
-        echo '<li>Step 4: Send Links or QR Code</li>';
-        echo '</ul>';
+        // echo '<h4><i class="fas fa-user-check"></i> Guest Registration</h4>';
+        // echo '<ul>';
+        // echo '<li>Step 1: Customize registration fields</li>';
+        // echo '<li>Step 2: Create guest registration</li>';
+        // echo '<li>Step 3: Online registration</li>';
+        // echo '<li>Step 4: Send Links or QR Code</li>';
+        // echo '</ul>';
 
-        echo '<h4><i class="fas fa-file-invoice-dollar"></i> Invoicing</h4>';
-        echo '<ul>';
-        echo '<li>- Generate invoices for bookings</li>';
-        echo '<li>- Generate invoices for activities</li>';
-        echo '</ul>';
+        // echo '<h4><i class="fas fa-file-invoice-dollar"></i> Invoicing</h4>';
+        // echo '<ul>';
+        // echo '<li>- Generate invoices for bookings</li>';
+        // echo '<li>- Generate invoices for activities</li>';
+        // echo '</ul>';
 
-        echo '<h4><i class="fas fa-file-import"></i> Import / Export</h4>';
-        echo '<ul>';
-        echo '<li>- Export CSV Bookings</li>';
-        echo '<li>- Export Guests Registration for Month</li>';
-        echo '<li>- Import and Sync iCal Availability<br/><span class="feature-update">( Future premium update )</span></li>';
-        echo '<li>- Export iCal Availability Feeds<br/><span class="feature-update">( Future premium update )</span></li>';
-        echo '</ul>';
+        // echo '<h4><i class="fas fa-file-import"></i> Import / Export</h4>';
+        // echo '<ul>';
+        // echo '<li>- Export CSV Bookings</li>';
+        // echo '<li>- Export Guests Registration for Month</li>';
+        // echo '<li>- Import and Sync iCal Availability<br/><span class="feature-update">( Future premium update )</span></li>';
+        // echo '<li>- Export iCal Availability Feeds<br/><span class="feature-update">( Future premium update )</span></li>';
+        // echo '</ul>';
 
-        echo '</div>'; // End of second left column
+        // echo '</div>'; // End of second left column
 
-        echo '<div class="left-column">';
+        // echo '<div class="left-column">';
 
-        echo '<h4><i class="fas fa-hand-holding-usd"></i> Taxes</h4>';
-        echo '<ul>';
-        echo '<li>- Fixed tax</li>';
-        echo '<li>- Percentage tax</li>';
-        echo '<li>- Per day tax</li>';
-        echo '<li>- Per person tax</li>';
-        echo '</ul>';
+        // echo '<h4><i class="fas fa-hand-holding-usd"></i> Taxes</h4>';
+        // echo '<ul>';
+        // echo '<li>- Fixed tax</li>';
+        // echo '<li>- Percentage tax</li>';
+        // echo '<li>- Per day tax</li>';
+        // echo '<li>- Per person tax</li>';
+        // echo '</ul>';
 
-        echo '<h4><i class="fas fa-utensils"></i> Meal plans</h4>';
-        echo '<ul>';
-        echo '<li>- Create free plans</li>';
-        echo '<li>- Create paid plans</li>';
-        echo '</ul>';
+        // echo '<h4><i class="fas fa-utensils"></i> Meal plans</h4>';
+        // echo '<ul>';
+        // echo '<li>- Create free plans</li>';
+        // echo '<li>- Create paid plans</li>';
+        // echo '</ul>';
 
-        echo '<h4><i class="fas fa-user-tag"></i> Per Person Pricing</h4>';
-        echo '<ul>';
-        echo '<li>- Set fixed price increments</li>';
-        echo '<li>- Increment by percentage per occupant</li>';
-        echo '</ul>';
+        // echo '<h4><i class="fas fa-user-tag"></i> Per Person Pricing</h4>';
+        // echo '<ul>';
+        // echo '<li>- Set fixed price increments</li>';
+        // echo '<li>- Increment by percentage per occupant</li>';
+        // echo '</ul>';
 
-        echo '<h4><i class="fas fa-percent"></i> Discounts</h4>';
-        echo '<ul>';
-        echo '<li>- Last minute discount</li>';
-        echo '<li>- Early booking discount</li>';
-        echo '<li>- Long stay discount</li>';
-        echo '</ul>';
+        // echo '<h4><i class="fas fa-percent"></i> Discounts</h4>';
+        // echo '<ul>';
+        // echo '<li>- Last minute discount</li>';
+        // echo '<li>- Early booking discount</li>';
+        // echo '<li>- Long stay discount</li>';
+        // echo '</ul>';
 
-        echo '</div>'; // End of second left column
+        // echo '</div>'; // End of second left column
 
-        echo '</div>'; // End of left-columns container
+        // echo '</div>'; // End of left-columns container
 
-        echo '<div class="right-column">';
-        echo '<div class="svg-container">';
-        echo '<!-- SVG or SVG CSS Background here -->';
-        echo '</div>';
-        echo '</div>'; // End of right column
+        // echo '<div class="right-column">';
+        // echo '<div class="svg-container">';
+        // echo '<!-- SVG or SVG CSS Background here -->';
+        // echo '</div>';
+        // echo '</div>'; // End of right column
 
-        echo '</div>'; // End of content container
-        echo '</div>'; // End of page wrapper
+        // echo '</div>'; // End of content container
+        // echo '</div>'; // End of page wrapper
 
-        // Footer
-        echo '<div class="admin-page-footer">';
-        echo '<p>Thank you for using Staylodgic Hotel Management</p>';
-        echo '</div>';
+        // // Footer
+        // echo '<div class="admin-page-footer">';
+        // echo '<p>Thank you for using Staylodgic Hotel Management</p>';
+        // echo '</div>';
 
     }
 
