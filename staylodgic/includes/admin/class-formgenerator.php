@@ -76,7 +76,11 @@ class FormGenerator
                 break;
             case 'date':
                 // Common types of inputs
-                echo "<input data-label='" . esc_attr($label) . "' placeholder='" . esc_attr($label) . "' type='text' id='" . esc_attr($id) . "' data-id='" . esc_attr($id) . "' name='" . esc_attr($name) . "' class='flatpickr-date-time " . esc_attr($class) . "' value='" . esc_attr($value) . "' placeholder='" . esc_attr($placeholder) . "' " . esc_attr($required) . ">";
+                echo "<input data-label='" . esc_attr($label) . "' placeholder='" . esc_attr($label) . "' type='date' id='" . esc_attr($id) . "' data-id='" . esc_attr($id) . "' name='" . esc_attr($name) . "' class='" . esc_attr($class) . "' value='" . esc_attr($value) . "' placeholder='" . esc_attr($placeholder) . "' " . esc_attr($required) . ">";
+                break;
+            case 'datetime-local':
+                // Common types of inputs
+                echo "<input data-label='" . esc_attr($label) . "' placeholder='" . esc_attr($label) . "' type='datetime-local' id='" . esc_attr($id) . "' data-id='" . esc_attr($id) . "' name='" . esc_attr($name) . "' class='" . esc_attr($class) . "' value='" . esc_attr($value) . "' placeholder='" . esc_attr($placeholder) . "' " . esc_attr($required) . ">";
                 break;
             case 'textarea':
                 echo "<textarea data-label='" . esc_attr($label) . "' placeholder='" . esc_attr($placeholder) . "' id='" . esc_attr($id) . "' data-id='" . esc_attr($id) . "' name='" . esc_attr($name) . "' class='" . esc_attr($class) . "' " . esc_attr($required) . ">" . esc_textarea($value) . "</textarea>";
@@ -125,7 +129,7 @@ class FormGenerator
                 break;
                 // Add more cases for different input types as needed
             default:
-                throw new \Exception("Unsupported input type: $type");
+                echo "<input data-label='" . esc_attr($label) . "' placeholder='" . esc_attr($label) . "' type='" . esc_attr($type) . "' id='" . esc_attr($id) . "' data-id='" . esc_attr($id) . "' name='" . esc_attr($name) . "' class='" . esc_attr($class) . "' value='" . esc_attr($value) . "' placeholder='" . esc_attr($placeholder) . "' " . esc_attr($required) . ">";
         }
 
         // Render label if provided
@@ -213,8 +217,8 @@ class FormGenerator
         $shortcodes .= "[form_input type=\"text\" id=\"passport\" label=\"Passport number\" required=\"true\"]\n";
         $shortcodes .= "[form_input type=\"email\" id=\"email\" label=\"e-Mail\"]\n";
         $shortcodes .= "[form_input type=\"tel\" id=\"phone\" label=\"Phone number\"]\n";
-        $shortcodes .= "[form_input type=\"date\" id=\"checkin-date\" label=\"Check-In Date\"]\n";
-        $shortcodes .= "[form_input type=\"date\" id=\"checkout-date\" label=\"Check-Out Date\"]\n";
+        $shortcodes .= "[form_input type=\"datetime-local\" id=\"checkin-date\" label=\"Check-In\"]\n";
+        $shortcodes .= "[form_input type=\"datetime-local\" id=\"checkout-date\" label=\"Check-Out\"]\n";
         $shortcodes .= "[form_input type=\"select\" id=\"countries\" name=\"countries\" class=\"form-control\" value=\"\" target=\"countries\" label=\"Countries\" required=\"true\"]\n";
         $shortcodes .= "[form_input type=\"checkbox\" id=\"checkbox1\" label=\"Agree to Terms\" name=\"termsCheckbox\" required=\"true\"]\n";
         $shortcodes .= "[form_input type=\"signature\" id=\"signature\" label=\"Signature\" name=\"signature\"]\n";

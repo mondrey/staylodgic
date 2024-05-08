@@ -491,6 +491,7 @@
 				flatpickrInstance = flatpickr("#reservation-date", {
 					mode: "range",
 					dateFormat: "Y-m-d",
+					disableMobile: "true",
 					showMonths: calMonthsToDisplay,
 					enableTime: false,
 					locale: {
@@ -549,7 +550,8 @@
 				flatpickrInstance = flatpickr("#activity-reservation-date", {
 					mode: "single",
 					dateFormat: "Y-m-d",
-					showMonths: calMonthsToDisplay,
+					showMonths: 1,
+					disableMobile: "true",
 					enableTime: false,
 					locale: {
 						firstDayOfWeek: 1, // Start week on Monday

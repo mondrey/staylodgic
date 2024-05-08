@@ -385,6 +385,8 @@ class GuestRegistry
                             <h2 id="invoice-subheading"><?php _e('Registration:', 'staylodgic'); ?></h2>
                             <div class="invoice-customer-registration">
                                 <?php
+                                error_log('print_r($guest_data,1)');
+                                error_log(print_r($guest_data,1));
                                 // Display guest information
                                 foreach ($guest_data as $info_key => $info_value) {
                                     // Skip the registration_id in the inner loop since it's handled separately
@@ -395,6 +397,11 @@ class GuestRegistry
                                         }
                                         if ( $info_value['type'] == 'checkbox' && 'true' == $info_value['value'] ) {
                                             $info_value['value'] = 'Yes';
+                                        }
+                                        if ( $info_value['type'] == 'datetime-local' ) {
+                                            $date = new \DateTime($info_value['value']);
+                                            $formattedDate = $date->format('l, F j, Y g:i A');
+                                            $info_value['value'] = $formattedDate;
                                         }
 
                                         echo '<p class="type-container" data-type="' . esc_attr($info_value['type']) . '" data-id="' . esc_attr($info_key) . '"><strong><span class="registration-label">' . esc_html($info_value['label']) . ':</span></strong> <span class="registration-data">' . esc_html($info_value['value']) . '</span></p>';

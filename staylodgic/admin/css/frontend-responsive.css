@@ -73,6 +73,12 @@
         border-bottom: 0;
         padding-bottom: 0;
     }
+	.activity-schedule {
+		flex-direction: column;
+	}
+	.activity-column-one {
+		padding: 0 0 20px 0;
+	}
 }
 
 /* #Mobile (Landscape)
@@ -136,4 +142,10 @@
         border-bottom: 0;
         padding-bottom: 0;
     }
+	.activity-schedule {
+		flex-direction: column;
+	}
+	.activity-column-one {
+		padding: 0 0 20px 0;
+	}
 }

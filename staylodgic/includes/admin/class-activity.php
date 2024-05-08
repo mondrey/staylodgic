@@ -446,8 +446,6 @@ class Activity
         // Start the container div
         $html .= '<div class="activity-schedules-container">';
 
-
-        $html .= '<h3>' . esc_attr(ucfirst($day_of_week)) . '</h3>';
         // Loop through each activity post
         if ($activities->have_posts()) {
             while ($activities->have_posts()) {
@@ -1085,7 +1083,7 @@ class Activity
                 <div class="front-booking-search">
                     <div class="front-booking-calendar-wrap">
                         <div class="front-booking-calendar-icon"><i class="fa-solid fa-calendar-days"></i></div>
-                        <div class="front-booking-calendar-date">Choose activity date</div>
+                        <div class="front-booking-calendar-date">Activity date</div>
                     </div>
                     <div class="front-booking-guests-wrap">
                         <div class="front-booking-guests-container"> <!-- New container -->

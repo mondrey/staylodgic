@@ -378,7 +378,7 @@ class OptionsPanel
 
 ?>
         <div class="wrap">
-            <h1 class="options-heading">Staylodgic <span>Hotel Settings</span></h1>
+            <h1 class="options-heading"><span>Hotel Settings</span></h1>
             <div class="staylodgic-tabform-wrapper menu-closed">
                 <?php $this->render_tabs(); ?>
                 <div class="staylodgic-tab-content active" id="tab-property">

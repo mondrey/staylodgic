@@ -16,9 +16,6 @@
 .invoice-container footer {
 	page-break-inside: avoid;
 }
-.invoice-container-outer {
-	overflow-y: scroll;
-}
 .invoice-container {
 	width: 800px;
 	max-width: 800px;
@@ -332,6 +329,10 @@ h2#invoice-subheading,
 }
 .expor-import-calendar {
 	padding-right: 10px;
+}
+
+.metaboxtype_staylodgic_registration_data {
+	overflow-y: scroll;
 }
 
 @media print {

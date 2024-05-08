@@ -1036,7 +1036,7 @@ a.book-button:hover:active,
 
 
 .day-schedule .time-slot {
-	border: 1px solid #000;
+	border: 1px solid rgba(0,0,0,0.3);
 	background-color: #fff;
 	padding: 12px;
 	display: inline-block;
@@ -1049,7 +1049,7 @@ a.book-button:hover:active,
 }
 .day-schedule .time-slot:hover {
 	cursor:pointer;
-	border-color: #d00;
+	border-color: #000;
 }
 .day-schedule .time-slot.time-disabled {
 	opacity: 0.2;
@@ -1069,13 +1069,13 @@ a.book-button:hover:active,
 	color: #808080;
 	letter-spacing: 0.5px;
 }
-.day-schedule .time-slot.time-choice {
+.wp-admin .day-schedule .time-slot.time-choice {
 	border-color: #d00;
 	background-color: #d00;
 }
-.day-schedule .time-slot.time-choice .activity-time-slot,
-.day-schedule .time-slot.time-choice .time-slots-remaining,
-.day-schedule .time-slot.time-choice .activity-rate {
+.wp-admin .day-schedule .time-slot.time-choice .activity-time-slot,
+.wp-admin .day-schedule .time-slot.time-choice .time-slots-remaining,
+.wp-admin .day-schedule .time-slot.time-choice .activity-rate {
 	color: #fff;
 }
 .time-slot-unavailable {
