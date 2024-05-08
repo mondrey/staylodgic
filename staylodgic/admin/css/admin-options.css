@@ -226,9 +226,30 @@
 	background-color: #fefefe;
 	margin: 0 auto;
 	border: 1px solid #888;
-	width: 800px;
+	width: 380px;
 	box-sizing: border-box;
 	padding: 40px;
+}
+.import-file-upload-section {
+	margin-bottom: 20px;
+}
+
+.discount-input-outer {
+	position: relative;
+}
+.discount-display-label {
+	position: absolute;
+	top: -10px;
+}
+.discount-display-label {
+	position: absolute;
+	top: -28px;
+	left: 0;
+	font-weight: 300;
+	font-size: 11px;
+	color: #a6a6a6;
+	text-transform: uppercase;
+	letter-spacing: 0.6px;
 }
 
 .staylodgic-close {
@@ -316,11 +337,12 @@
 }
 .input-label-inner {
 	position: absolute;
-	top: -26px;
+	top: -23px;
 	font-weight: 300;
-	font-size: 13px;
+	font-size: 11px;
 	color: #a6a6a6;
 	text-transform: uppercase;
+	letter-spacing: 0.5px;
 }
 .staylodgic-options-form .dashicons.drag-handle {
 	position: absolute;
@@ -453,7 +475,7 @@ h1.options-heading span {
 	font-size: 13px;
 	font-weight: 300;
 	text-transform: uppercase;
-	color: #a4a4a4;
+	color: #8f8c8c;
 	letter-spacing: 0.2px;
 }
 .staylodgic-tab-item input,

@@ -258,6 +258,15 @@
         opacity: 1;
     }
 
+    .discount-input-outer {
+        position: relative;
+        display: block;
+        padding-top: 15px;
+    }
+    .discount-display-label {
+        top: 1px;
+    }
+
 }
 
 /* #Mobile (Landscape)

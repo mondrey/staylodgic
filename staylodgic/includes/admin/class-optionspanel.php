@@ -75,56 +75,63 @@ class OptionsPanel
             isset($_POST['import_settings_nonce_field']) &&
             wp_verify_nonce($_POST['import_settings_nonce_field'], 'import_settings_nonce')
         ) {
-            // Check if action is set to import_settings
-            if (isset($_POST['action']) && $_POST['action'] === 'import_settings') {
-                // Decode the JSON data
-                $import_data = json_decode(stripslashes($_POST['import_settings_data']), true);
 
-                error_log('---------- IMPORT DATA ----------');
-                error_log(print_r($import_data, true));
+            if (isset($_POST['action']) && $_POST['action'] === 'import_settings' && isset($_FILES['import_settings_file'])) {
 
-                // Validate the decoded data. This depends on your settings structure.
-                // Here, we assume $import_data is an associative array matching your options structure.
-                if (is_array($import_data)) {
-                    // Iterate through each setting to validate and sanitize it
-                    $sanitized_data = [];
-                    foreach ($import_data as $key => $value) {
-                        if (isset($this->settings[$key]) && $this->settings[$key]['type'] == 'checkbox') {
-                            // Convert "1" to "on" for checkboxes
-                            $sanitized_data[$key] = ($value == "1") ? 'on' : ''; // Convert 1 to 'on', anything else to '' (unchecked)
-                        } elseif (is_array($value)) {
-                            // The value is an array, handle each element according to its expected type
-                            foreach ($value as $subKey => $subValue) {
-                                if (is_array($subValue)) {
-                                    // If the subValue is also an array, apply further sanitization as needed
-                                    // This example assumes subValue might be a structured array needing detailed sanitization
-                                    foreach ($subValue as $fieldKey => $fieldValue) {
-                                        // Apply sanitization based on fieldKey or expected data type
-                                        // This is a placeholder for actual sanitization logic
-                                        $sanitized_data[$key][$subKey][$fieldKey] = sanitize_text_field($fieldValue);
+                $file = $_FILES['import_settings_file'];
+                // Ensure the file was uploaded without errors
+                if ($file['error'] === UPLOAD_ERR_OK && $file['type'] === 'application/json') {
+                    // Read the file and decode the JSON data
+                    $json_data = file_get_contents($file['tmp_name']);
+                    $import_data = json_decode($json_data, true);
+
+                    // Log the import data
+                    error_log('---------- IMPORT DATA ----------');
+                    error_log(print_r($import_data, true));
+
+                    // Validate the decoded data. This depends on your settings structure.
+                    // Here, we assume $import_data is an associative array matching your options structure.
+                    if (is_array($import_data)) {
+                        // Iterate through each setting to validate and sanitize it
+                        $sanitized_data = [];
+                        foreach ($import_data as $key => $value) {
+                            if (isset($this->settings[$key]) && $this->settings[$key]['type'] == 'checkbox') {
+                                // Convert "1" to "on" for checkboxes
+                                $sanitized_data[$key] = ($value == "1") ? 'on' : ''; // Convert 1 to 'on', anything else to '' (unchecked)
+                            } elseif (is_array($value)) {
+                                // The value is an array, handle each element according to its expected type
+                                foreach ($value as $subKey => $subValue) {
+                                    if (is_array($subValue)) {
+                                        // If the subValue is also an array, apply further sanitization as needed
+                                        // This example assumes subValue might be a structured array needing detailed sanitization
+                                        foreach ($subValue as $fieldKey => $fieldValue) {
+                                            // Apply sanitization based on fieldKey or expected data type
+                                            // This is a placeholder for actual sanitization logic
+                                            $sanitized_data[$key][$subKey][$fieldKey] = sanitize_text_field($fieldValue);
+                                        }
+                                    } else {
+                                        // For simple nested arrays, directly apply a generic sanitization
+                                        $sanitized_data[$key][$subKey] = sanitize_text_field($subValue);
                                     }
-                                } else {
-                                    // For simple nested arrays, directly apply a generic sanitization
-                                    $sanitized_data[$key][$subKey] = sanitize_text_field($subValue);
                                 }
+                            } else {
+                                // For other non-array settings, apply generic sanitization or specific based on type
+                                $sanitized_data[$key] = sanitize_text_field($value);
                             }
-                        } else {
-                            // For other non-array settings, apply generic sanitization or specific based on type
-                            $sanitized_data[$key] = sanitize_text_field($value);
                         }
+
+                        error_log('---------- Santized DATA ----------');
+                        error_log(print_r($sanitized_data, true));
+
+                        // Update the settings in the database
+                        update_option('staylodgic_settings', $sanitized_data);
+
+                        // Optionally, add a message to show success or redirect back to the settings page
+                        add_settings_error('staylodgic_settings', 'settings_updated', 'Settings imported successfully.', 'updated');
+                    } else {
+                        // Handle error in case JSON is invalid
+                        add_settings_error('staylodgic_settings', 'settings_error', 'Invalid JSON data provided.', 'error');
                     }
-
-                    error_log('---------- Santized DATA ----------');
-                    error_log(print_r($sanitized_data, true));
-
-                    // Update the settings in the database
-                    update_option('staylodgic_settings', $sanitized_data);
-
-                    // Optionally, add a message to show success or redirect back to the settings page
-                    add_settings_error('staylodgic_settings', 'settings_updated', 'Settings imported successfully.', 'updated');
-                } else {
-                    // Handle error in case JSON is invalid
-                    add_settings_error('staylodgic_settings', 'settings_error', 'Invalid JSON data provided.', 'error');
                 }
             }
         }
@@ -402,10 +409,12 @@ class OptionsPanel
             echo '<div id="import-settings-modal" class="staylodgic-modal" style="display:none;">
         <div class="staylodgic-modal-content">
             <span class="staylodgic-close">&times;</span>
-            <form id="import-settings-form" method="post">
+            <form id="import-settings-form" method="post" enctype="multipart/form-data">
+            <div class="import-file-upload-section">
                 ' . wp_nonce_field('import_settings_nonce', 'import_settings_nonce_field', true, false) . '
-                <textarea name="import_settings_data" rows="10" cols="50" placeholder="Paste JSON data here"></textarea>
+                <input type="file" name="import_settings_file" accept=".json">
                 <input type="hidden" name="action" value="import_settings">
+            </div>
                 <input type="submit" class="button-primary" value="Import Settings">
             </form>
         </div>
@@ -528,10 +537,10 @@ class OptionsPanel
                     </select>
                 </span>
                 <span class="input-label-outer"><span class="input-label-inner">Difference</span>
-                <select disabled id="<?php echo esc_attr($args['label_for']); ?>_total" name="total">
-                    <option value="increase"><?php _e('Increase', 'staylodgic'); ?></option>
-                    <option value="decrease"><?php _e('Decrease', 'staylodgic'); ?></option>
-                </select>
+                    <select disabled id="<?php echo esc_attr($args['label_for']); ?>_total" name="total">
+                        <option value="increase"><?php _e('Increase', 'staylodgic'); ?></option>
+                        <option value="decrease"><?php _e('Decrease', 'staylodgic'); ?></option>
+                    </select>
                 </span>
                 <span class="remove-set-button"><i class="dashicons dashicons-remove"></i></span>
             </div>
@@ -612,22 +621,22 @@ class OptionsPanel
         <div class="repeatable-mealplan-template" style="display: none;">
             <div class="repeatable new-container">
                 <span class="input-label-outer"><span class="input-label-inner">Meal</span>
-                <select disabled id="<?php echo esc_attr($args['label_for']); ?>_mealtype" name="mealtype">
-                    <option value="RO"><?php _e('Room Only', 'staylodgic'); ?></option>
-                    <option value="BB"><?php _e('Bed and Breakfast', 'staylodgic'); ?></option>
-                    <option value="HB"><?php _e('Half Board', 'staylodgic'); ?></option>
-                    <option value="FB"><?php _e('Full Board', 'staylodgic'); ?></option>
-                    <option value="AN"><?php _e('All-Inclusive', 'staylodgic'); ?></option>
-                </select>
+                    <select disabled id="<?php echo esc_attr($args['label_for']); ?>_mealtype" name="mealtype">
+                        <option value="RO"><?php _e('Room Only', 'staylodgic'); ?></option>
+                        <option value="BB"><?php _e('Bed and Breakfast', 'staylodgic'); ?></option>
+                        <option value="HB"><?php _e('Half Board', 'staylodgic'); ?></option>
+                        <option value="FB"><?php _e('Full Board', 'staylodgic'); ?></option>
+                        <option value="AN"><?php _e('All-Inclusive', 'staylodgic'); ?></option>
+                    </select>
                 </span>
                 <span class="input-label-outer"><span class="input-label-inner">Type</span>
-                <select disabled id="<?php echo esc_attr($args['label_for']); ?>_choice" name="choice">
-                    <option value="included"><?php _e('Included in rate', 'staylodgic'); ?></option>
-                    <option value="optional"><?php _e('Optional', 'staylodgic'); ?></option>
-                </select>
+                    <select disabled id="<?php echo esc_attr($args['label_for']); ?>_choice" name="choice">
+                        <option value="included"><?php _e('Included in rate', 'staylodgic'); ?></option>
+                        <option value="optional"><?php _e('Optional', 'staylodgic'); ?></option>
+                    </select>
                 </span>
                 <span class="input-label-outer"><span class="input-label-inner">Price</span>
-                <input disabled type="number" id="<?php echo esc_attr($args['label_for']); ?>_price" name="price" value="">
+                    <input disabled type="number" id="<?php echo esc_attr($args['label_for']); ?>_price" name="price" value="">
                 </span>
                 <span class="remove-set-button"><i class="dashicons dashicons-remove"></i></span>
             </div>
@@ -873,9 +882,18 @@ class OptionsPanel
         // error_log( print_r( $values,1 ));
         $description = $this->settings[$option_name]['description'] ?? '';
     ?>
-        <input type="text" id="<?php echo esc_attr($args['label_for']); ?>_label" name="<?php echo esc_attr($this->option_name); ?>[<?php echo esc_attr($args['label_for']); ?>][label]" value="<?php echo esc_attr($values['label']); ?>" placeholder="Label for discount">
-        <input type="number" id="<?php echo esc_attr($args['label_for']); ?>_days" name="<?php echo esc_attr($this->option_name); ?>[<?php echo esc_attr($args['label_for']); ?>][days]" value="<?php echo esc_attr($values['days']); ?>" placeholder="Number of days">
-        <input type="number" id="<?php echo esc_attr($args['label_for']); ?>_percent" name="<?php echo esc_attr($this->option_name); ?>[<?php echo esc_attr($args['label_for']); ?>][percent]" value="<?php echo esc_attr($values['percent']); ?>" placeholder="Discount percent">
+        <span class="discount-input-outer">
+            <span class="discount-display-label">Label</span>
+            <input type="text" id="<?php echo esc_attr($args['label_for']); ?>_label" name="<?php echo esc_attr($this->option_name); ?>[<?php echo esc_attr($args['label_for']); ?>][label]" value="<?php echo esc_attr($values['label']); ?>" placeholder="Label for discount">
+        </span>
+        <span class="discount-input-outer">
+            <span class="discount-display-label">Days</span>
+            <input type="number" id="<?php echo esc_attr($args['label_for']); ?>_days" name="<?php echo esc_attr($this->option_name); ?>[<?php echo esc_attr($args['label_for']); ?>][days]" value="<?php echo esc_attr($values['days']); ?>" placeholder="Number of days">
+        </span>
+        <span class="discount-input-outer">
+            <span class="discount-display-label">Percent</span>
+            <input type="number" id="<?php echo esc_attr($args['label_for']); ?>_percent" name="<?php echo esc_attr($this->option_name); ?>[<?php echo esc_attr($args['label_for']); ?>][percent]" value="<?php echo esc_attr($values['percent']); ?>" placeholder="Discount percent">
+        </span>
         <?php
         if ($description) {
         ?>
