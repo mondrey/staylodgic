@@ -1051,86 +1051,79 @@ $panel_settings = [
     'property_logo'         => [
         'label'       => esc_html__('Upload Logo', 'staylodgic'),
         'type'        => 'media_upload',
-        'description' => 'Upload your logo here.',
+        'description' => 'Upload property logo.',
         'tab'         => 'property', // You can change the tab as per your requirement
     ],
     'property_name'             => [
         'label'       => esc_html__('Name', 'staylodgic'),
         'type'        => 'text',
-        'description' => 'My field 1 description.',
         'tab'         => 'property',
     ],
     'property_phone'             => [
         'label'       => esc_html__('Phone', 'staylodgic'),
         'type'        => 'text',
-        'description' => 'My field 1 description.',
         'tab'         => 'property',
     ],
     'property_address'   => [
         'label'       => esc_html__('Address', 'staylodgic'),
         'type'        => 'text',
-        'description' => 'My field 1 description.',
         'tab'         => 'property',
     ],
     'property_header'   => [
         'label'       => esc_html__('Invoice header', 'staylodgic'),
         'type'        => 'text',
-        'description' => 'My field 1 description.',
+        'description' => 'Header text for invoice',
         'tab'         => 'property',
     ],
     'property_footer'   => [
         'label'       => esc_html__('Invoice footer', 'staylodgic'),
         'type'        => 'text',
-        'description' => 'My field 1 description.',
+        'description' => 'Footer text for invoice',
         'tab'         => 'property',
     ],
     'property_emailfooter'   => [
         'label'       => esc_html__('Email footer', 'staylodgic'),
         'type'        => 'textarea',
-        'description' => 'My field 1 description.',
+        'description' => 'Footer text for email',
         'tab'         => 'property',
     ],
 
     'activity_property_logo'         => [
         'label'       => esc_html__('Upload Logo', 'staylodgic'),
         'type'        => 'media_upload',
-        'description' => 'Upload your logo here.',
         'tab'         => 'activity-property', // You can change the tab as per your requirement
     ],
     'activity_property_name'             => [
         'label'       => esc_html__('Name', 'staylodgic'),
         'type'        => 'text',
-        'description' => 'My field 1 description.',
         'tab'         => 'activity-property',
     ],
     'activity_property_phone'             => [
         'label'       => esc_html__('Phone', 'staylodgic'),
         'type'        => 'text',
-        'description' => 'My field 1 description.',
         'tab'         => 'activity-property',
     ],
     'activity_property_address'   => [
         'label'       => esc_html__('Address', 'staylodgic'),
         'type'        => 'text',
-        'description' => 'My field 1 description.',
         'tab'         => 'activity-property',
     ],
     'activity_property_header'   => [
         'label'       => esc_html__('Invoice header', 'staylodgic'),
         'type'        => 'text',
-        'description' => 'My field 1 description.',
+        'description' => 'Header text for invoice',
         'tab'         => 'activity-property',
     ],
     'activity_property_footer'   => [
         'label'       => esc_html__('Invoice footer', 'staylodgic'),
         'type'        => 'text',
-        'description' => 'My field 1 description.',
+        'description' => 'Footer text for invoice',
         'tab'         => 'activity-property',
     ],
     'activity_property_emailfooter'   => [
         'label'       => esc_html__('Email footer', 'staylodgic'),
         'type'        => 'textarea',
-        'description' => 'My field 1 description.',
+        'description' => 'Footer text for email',
         'tab'         => 'activity-property',
     ],
 
@@ -1212,36 +1205,23 @@ $panel_settings = [
         'choices'     => staylodgic_get_GmtTimezoneChoices(),
         'tab'         => 'general',
     ],
-    // Tab 2
-    'option_3'             => [
-        'label'       => esc_html__('Text Option', 'staylodgic'),
-        'type'        => 'text',
-        'description' => 'My field 1 description.',
-        'tab'         => 'tab-2',
-    ],
-    'option_4'             => [
-        'label'       => esc_html__('Textarea Option', 'staylodgic'),
-        'type'        => 'textarea',
-        'description' => 'My textarea field description.',
-        'tab'         => 'tab-2',
-    ],
     'taxes'                => [
         'label'       => esc_html__('Room taxes', 'staylodgic'),
         'type'        => 'repeatable_tax',
-        'description' => 'My textarea field description.',
+        'description' => 'Room taxes',
         'tab'         => 'tax',
     ],
     'activity_taxes'                => [
         'label'       => esc_html__('Activity taxes', 'staylodgic'),
         'type'        => 'activity_repeatable_tax',
-        'description' => 'My textarea field description.',
+        'description' => 'Activity taxes',
         'tab'         => 'activity-tax',
     ],
     'childfreestay'        => [
         'label'       => esc_html__('Children under the age can stay for free', 'staylodgic'),
         'type'        => 'select',
         'inputwidth'  => '100',
-        'description' => 'My select field description.',
+        'description' => 'Under which age should be free stay',
         'choices'     => [
             '0'  => esc_html__('0', 'staylodgic'),
             '1'  => esc_html__('1', 'staylodgic'),
@@ -1267,13 +1247,13 @@ $panel_settings = [
     'perpersonpricing'     => [
         'label'       => esc_html__('Per person price', 'staylodgic'),
         'type'        => 'repeatable_perperson',
-        'description' => 'My textarea field description.',
+        'description' => 'Price per person.',
         'tab'         => 'perperson',
     ],
     'mealplan'             => [
         'label'       => esc_html__('Meal Plan', 'staylodgic'),
         'type'        => 'repeatable_mealplan',
-        'description' => 'My textarea field description.',
+        'description' => 'Meal plans',
         'tab'         => 'mealplan',
     ],
     'currency'             => [
@@ -1281,7 +1261,7 @@ $panel_settings = [
         'type'        => 'select',
         'inputwidth'  => '250',
         'default'        => 'USD',
-        'description' => 'My select field description.',
+        'description' => 'Choose currency',
         'choices'     => $curr_choices,
         'tab'         => 'currency',
     ],
@@ -1290,7 +1270,6 @@ $panel_settings = [
         'type'        => 'select',
         'inputwidth'  => '250',
         'default'        => 'left_space',
-        'description' => 'My select field description.',
         'choices'     => [
             'left_space'  => esc_html__('Left with space', 'staylodgic'),
             'right_space' => esc_html__('Right with space', 'staylodgic'),
@@ -1303,29 +1282,19 @@ $panel_settings = [
         'label'       => esc_html__('Thousand seperator', 'staylodgic'),
         'type'        => 'text',
         'default'        => ',',
-        'description' => 'My field 1 description.',
         'tab'         => 'currency',
     ],
     'decimal_seperator'    => [
         'label'       => esc_html__('Decimal seperator', 'staylodgic'),
         'type'        => 'text',
         'default'        => '.',
-        'description' => 'My field 1 description.',
         'tab'         => 'currency',
     ],
     'number_of_decimals'   => [
         'label'       => esc_html__('Number of Decimals', 'staylodgic'),
         'type'        => 'number',
         'default'        => '2',
-        'description' => 'My field 1 description.',
         'tab'         => 'currency',
-    ],
-    'import_settings_data'   => [
-        'label'       => esc_html__('Import Settings', 'staylodgic'),
-        'type'        => 'textarea',
-        'default'        => '2',
-        'description' => 'My field 1 description.',
-        'tab'         => 'import',
     ],
 ];
 
