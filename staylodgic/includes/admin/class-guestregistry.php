@@ -186,7 +186,7 @@ class GuestRegistry
         // Check if check-in date has already passed
         if ($today > $checkinDateObj) {
             $allow = false;
-            $reason = __('Check-in date has already passed','staylodgic');
+            $reason = __('Check-in date has already passed', 'staylodgic');
         } else {
             // Calculate the difference in days
             $dateDiff = $today->diff($checkinDateObj)->days;
@@ -194,7 +194,7 @@ class GuestRegistry
             // If the difference is more than 3 days, set $allow to false
             if ($dateDiff > 2) {
                 $allow = false;
-                $reason = __('Registration open 2 days before check-in','staylodgic');
+                $reason = __('Registration open 2 days before check-in', 'staylodgic');
             }
         }
 
@@ -254,8 +254,8 @@ class GuestRegistry
             $registration_output .= '<span class="registration-label">';
             $registration_output .= 'Registered: ' . esc_html($registeredGuestCount) . '/' . esc_html($reservation_occupants) . ' ';
             $registration_output .= '</span>';
-            $registration_output .= '<a href="' . esc_url(get_edit_post_link($registerID)) . '">';
-            $registration_output .= '<i class="fa-solid fa-eye"></i>';
+            $registration_output .= '<a title="' . __('View Registrations', 'staylodgic') . '" href="' . esc_url(get_edit_post_link($registerID)) . '">';
+            $registration_output .= '<i class="fa-regular fa-id-card"></i>';
             $registration_output .= '</a>';
             $registration_output .= '</div>';
             $registration_output .= '</div>';
@@ -386,19 +386,19 @@ class GuestRegistry
                             <div class="invoice-customer-registration">
                                 <?php
                                 error_log('print_r($guest_data,1)');
-                                error_log(print_r($guest_data,1));
+                                error_log(print_r($guest_data, 1));
                                 // Display guest information
                                 foreach ($guest_data as $info_key => $info_value) {
                                     // Skip the registration_id in the inner loop since it's handled separately
                                     if ($info_key != 'registration_id') {
 
                                         if ($info_key == 'countries') {
-                                            $info_value['value'] = staylodgic_country_list('display', $info_value['value'] );
+                                            $info_value['value'] = staylodgic_country_list('display', $info_value['value']);
                                         }
-                                        if ( $info_value['type'] == 'checkbox' && 'true' == $info_value['value'] ) {
+                                        if ($info_value['type'] == 'checkbox' && 'true' == $info_value['value']) {
                                             $info_value['value'] = 'Yes';
                                         }
-                                        if ( $info_value['type'] == 'datetime-local' ) {
+                                        if ($info_value['type'] == 'datetime-local') {
                                             $date = new \DateTime($info_value['value']);
                                             $formattedDate = $date->format('l, F j, Y g:i A');
                                             $info_value['value'] = $formattedDate;

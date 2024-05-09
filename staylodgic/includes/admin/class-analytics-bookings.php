@@ -62,7 +62,7 @@ class AnalyticsBookings
 
         // Add the logo image below the heading
         echo '<div class="staylodgic-overview-heading">';
-        echo '<h1>'.__('Bookings Overview', 'staylodgic').'</h1>';
+        echo '<h1>' . __('Bookings Overview', 'staylodgic') . '</h1>';
         echo '</div>';
 
         if (!\Staylodgic\Rooms::hasRooms()) {
@@ -762,16 +762,16 @@ class AnalyticsBookings
         // Iterate over each day in the guests array
         foreach ($this->guests as $day => $statuses) {
 
-            $guestListHtml .= '<div class="staylodgic_analytics_table_wrap">';
+            $guestListHtml .= '<div class="staylodgic_analytics_table_wrap staylodgic-analytics-' . esc_attr($day) . '">';
             // Add a heading for the day
             if ('today' == $day) {
-                $guestListHtml .= '<h2 class="staylodgic_analytics_subheading staylodgic_dayis_' . $day . '">' . __('Today', 'staylodgic') . ' ' . $this->display_today . '</h2>';
+                $guestListHtml .= '<h2 class="staylodgic_analytics_subheading staylodgic_dayis_' . esc_attr($day) . '">' . __('Today', 'staylodgic') . ' ' . $this->display_today . '</h2>';
             } elseif ('tomorrow' == $day) {
-                $guestListHtml .= '<h2 class="staylodgic_analytics_subheading staylodgic_dayis_' . $day . '">' . __('Tomorrow', 'staylodgic') . ' ' . $this->display_tomorrow . '</h2>';
+                $guestListHtml .= '<h2 class="staylodgic_analytics_subheading staylodgic_dayis_' . esc_attr($day) . '">' . __('Tomorrow', 'staylodgic') . ' ' . $this->display_tomorrow . '</h2>';
             } elseif ('dayafter' == $day) {
-                $guestListHtml .= '<h2 class="staylodgic_analytics_subheading staylodgic_dayis_' . $day . '">' . __('Day After', 'staylodgic') . ' ' . $this->display_dayafter . '</h2>';
+                $guestListHtml .= '<h2 class="staylodgic_analytics_subheading staylodgic_dayis_' . esc_attr($day) . '">' . __('Day After', 'staylodgic') . ' ' . $this->display_dayafter . '</h2>';
             } else {
-                $guestListHtml .= '<h2 class="staylodgic_analytics_subheading staylodgic_dayis_' . $day . '">' . esc_html(ucfirst($day)) . '</h2>';
+                $guestListHtml .= '<h2 class="staylodgic_analytics_subheading staylodgic_dayis_' . esc_attr($day) . '">' . esc_html(ucfirst($day)) . '</h2>';
             }
 
             // Sort the statuses array
@@ -850,8 +850,9 @@ class AnalyticsBookings
 
                         $adults = $reservations_instance->getNumberOfAdultsForReservation($reservation_id);
                         $children = $reservations_instance->getNumberOfChildrenForReservation($reservation_id);
-                        $guestListHtml .= $adults; ' + ' . $children;
-                        if ( 0 < $children ) {
+                        $guestListHtml .= $adults;
+                        ' + ' . $children;
+                        if (0 < $children) {
                             $guestListHtml .= ' + ' . $children;
                         }
 
@@ -863,8 +864,7 @@ class AnalyticsBookings
                         if (isset($resRegIDs) && is_array($resRegIDs)) {
                             $guestListHtml .= $registry_instance->outputRegistrationAndOccupancy($resRegIDs['reservationID'], $resRegIDs['guestRegisterID'], 'icons');
                             $guestListHtml .= '<div class="booking-dashboard registration">';
-                            $guestListHtml .= '<a href="' . get_permalink($resRegIDs['guestRegisterID']) . '"><i class="fa-solid fa-file-signature"></i></a>';
-                            $guestListHtml .= '<a href="' . get_edit_post_link($resRegIDs['guestRegisterID']) . '"><i class="fa-regular fa-id-card"></i></a>';
+                            $guestListHtml .= '<a title="Registration Link" href="' . get_permalink($resRegIDs['guestRegisterID']) . '"><i class="fa-solid fa-pen-to-square"></i></a>';
                             $guestListHtml .= '</div>';
                         }
                         $guestListHtml .= '</td>';

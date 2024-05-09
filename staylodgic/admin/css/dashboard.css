@@ -55,10 +55,6 @@ body.wp-admin {
 	margin-bottom: 50px;
 }
 
-.staylodgic_table_outer {
-	margin-top: 24px;
-}
-
 .staylodgic_analytics_chart,
 .staylodgic_analytics_table_wrap {
 	margin-bottom: 50px;
@@ -97,4 +93,27 @@ div.dataTables_wrapper div.dataTables_filter {
 	display: block;
 	font-size: 14px;
 	margin-top: 6px;
+}
+
+.staylodgic-analytics-today {
+	background: #eef7fb;
+}
+.staylodgic-analytics-tomorrow {
+	background: #f2f3fb;
+}
+.staylodgic-analytics-dayafter {
+	background: #f7f4ed;
+}
+
+.staylodgic_table_outer .dataTables_filter {
+	display: inline-block;
+}
+.staylodgic_table_outer .dt-buttons.btn-group.flex-wrap {
+	margin-right: 20px;
+}
+.staylodgic_table.sub-heading {
+	border-bottom: 1px solid #00000021;
+	margin-bottom: 20px;
+	padding-bottom: 8px;
+	margin-top: 40px;
 }
