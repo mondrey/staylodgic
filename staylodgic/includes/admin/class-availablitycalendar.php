@@ -118,8 +118,8 @@ class AvailablityCalendar extends AvailablityCalendarBase
         // Add the parent menu item
         add_submenu_page(
             'slgc-dashboard',
-            __('View Availability','staylodgic'),
-            __('View Availability','staylodgic'),
+            __('Availability Calendar','staylodgic'),
+            __('Availability Calendar','staylodgic'),
             'edit_posts',
             'slgc-availability',
             array($this, 'room_Reservation_Plugin_Display_Availability_Calendar'), // Callback for the parent page (can be empty if not needed)

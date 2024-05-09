@@ -29,6 +29,52 @@
     background: #fff;
 }
 
+.content-container,
+.admin-page-twp-header {
+	width: 70%;
+	margin: 0 auto;
+}
+
+.left-columns {
+    flex: 3; /* Allocates double the space compared to right column */
+    display: flex;
+}
+.left-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    padding-right: 20px; /* Adds spacing between columns */
+}
+.right-column {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Centers the SVG vertically in the column */
+}
+
+.svg-container {
+    width: 100%;
+    height: 300px; /* Adjust based on your needs */
+    background-image: url('../../assets/images/main-3.svg'); /* Path to your SVG image */
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+	width: 100%;
+	height: 100%;
+	background-image: url('http://localhost/staylodgic_wp/dev/wp-content/uploads/sites/2/2024/05/annie-spratt-hX_hf2lPpUU-unsplash-scaled.jpg');
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+}
+.admin-page-two-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+}
+
 .content-container ul ul {
     margin-left: 20px;
 }
@@ -50,7 +96,8 @@
 	line-height: 1.1;
 	color: #ffffff85;
 }
-.admin-page-wrapper h4 {
+.admin-page-wrapper h4,
+.admin-page-two-wrapper h4 {
 	font-size: 20px;
 	color: #000;
 }
@@ -61,7 +108,8 @@
     color: #666;
 }
 
-.admin-page-wrapper h4 i {
+.admin-page-wrapper h4 i,
+.admin-page-two-wrapper h4 i {
 	color: #bf9b07;
 }
 
@@ -70,7 +118,7 @@
 .admin-container {
     display: flex;
     height: calc(100vh - 30px); /* Adjusted for any top navbar or padding you might have */
-    width: calc(100vw - 200px); /* Adjusted for any sidebar or padding */
+    width: calc(100vw - 160px); /* Adjusted for any sidebar or padding */
 }
 
 .admin-column {

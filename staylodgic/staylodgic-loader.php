@@ -107,6 +107,7 @@ class Staylodgic_Init
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-analytics-bookings.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-activity.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-analytics-activity.php';
+        require_once plugin_dir_path(__FILE__) . 'includes/admin/class-welcomescreen.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-batchprocessorbase.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-icalexportprocessor.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-availabilitybatchprocessor.php';
@@ -186,6 +187,10 @@ class Staylodgic_Init
         wp_enqueue_style('admin-common', plugin_dir_url(__FILE__) . 'admin/css/admin-common.css', false, 'screen');
         wp_enqueue_style('availability-styles', plugin_dir_url(__FILE__) . 'admin/css/availability-calendar.css', false, 'screen');
         wp_enqueue_script('availability-scripts', plugin_dir_url(__FILE__) . 'admin/js/availability-calendar.js', array('jquery'), null, true);
+
+        wp_register_style('driver-js-css', plugin_dir_url(__FILE__) . 'admin/js/driverjs/driver.css', false, 'screen');
+        wp_register_script('driver-js-init', plugin_dir_url(__FILE__) . 'admin/js/driverjs/driver.js.iife.js', array('jquery'), null, true);
+        wp_register_script('driver-js-welcome', plugin_dir_url(__FILE__) . 'admin/js/admin-welcome.js', array('jquery'), null, true);
 
         wp_register_style('availability-yearly-styles', plugin_dir_url(__FILE__) . 'admin/css/availability-yearly-calendar.css', false, 'screen');
         wp_register_script('availability-yearly-scripts', plugin_dir_url(__FILE__) . 'admin/js/availability-yearly-calendar.js', array('jquery'), null, true);
@@ -527,6 +532,10 @@ class Staylodgic_Init
                 wp_enqueue_style('fontawesome-6');
                 wp_enqueue_style('fontawesome-6-brands');
                 wp_enqueue_style('fontawesome-6-solid');
+
+                wp_enqueue_style('driver-js-css');
+                wp_enqueue_script('driver-js-init');
+                wp_enqueue_script('driver-js-welcome');
 
             }
             if (isset($_GET['page']) && $_GET['page'] == 'slgc-availability') {
