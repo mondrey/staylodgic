@@ -23,7 +23,7 @@ class staylodgic_Reservation_Posts
         $orderby = $query->get('orderby');
 
         if ('reservation_checkinout' == $orderby) {
-            $query->set('meta_key', 'staylodgic_checkin_date'); // Assuming 'reservation_checkin_date' is the meta key for check-in date
+            $query->set('meta_key', 'staylodgic_checkin_date');
             $query->set('orderby', 'meta_value');
         }
     }

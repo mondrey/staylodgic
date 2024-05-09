@@ -37,7 +37,7 @@
 				$.ajax({
 					url: frontendAjax.ajaxurl, // Replace with your AJAX URL
 					type: "POST",
-					dataType: "html", // Assuming the response is HTML
+					dataType: "html",
 					data: {
 						action: "requestRegistrationDetails", // Replace with your actual action hook
 						booking_number: bookingNumber,
@@ -68,7 +68,7 @@
 				$.ajax({
 					url: frontendAjax.ajaxurl, // Replace with your AJAX URL
 					type: "POST",
-					dataType: "html", // Assuming the response is HTML
+					dataType: "html",
 					data: {
 						action: "getBookingDetails", // Replace with your actual action hook
 						booking_number: bookingNumber,
@@ -388,8 +388,8 @@
 
 			updateSelectedDates(checkInDate, checkOutDate);
 			var selectedDates = []; // Correct array declaration
-			selectedDates[0] = checkInDate; // Assuming checkInDate is already defined
-			selectedDates[1] = checkOutDate; // Assuming checkOutDate is already defined
+			selectedDates[0] = checkInDate;
+			selectedDates[1] = checkOutDate;
 			// updateInfoDisplay(selectedDates); // Call the function with the array
 
 			// Trigger click on the bookingSearch button

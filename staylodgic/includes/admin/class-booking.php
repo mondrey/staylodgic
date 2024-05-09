@@ -1094,7 +1094,6 @@ class Booking
         $total_roomrate = 0;
         $html           = '';
 
-        // Assuming this finds the earliest check-in date from the rates
         $checkinDate = $this->findCheckinDate($room_id);
         $checkoutDate = $this->findCheckoutDate($room_id);
 

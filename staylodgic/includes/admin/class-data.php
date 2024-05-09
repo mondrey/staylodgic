@@ -272,7 +272,6 @@ class Data
             return; // Exit the function if the post is being trashed
         }
         
-        // Assuming room_type is the ID of the room associated with the reservation
         if ($room_type) {
             $reservation_instance = new \Staylodgic\Reservations();
             $reservation_instance->updateRemainingRoomCount($room_type);

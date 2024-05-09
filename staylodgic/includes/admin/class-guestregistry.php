@@ -347,7 +347,7 @@ class GuestRegistry
             foreach ($registration_data as $guest_id => $guest_data) {
 
                 // Get the post URL
-                $post_url = get_permalink(get_the_id()); // Assuming $post_id is the ID of the post
+                $post_url = get_permalink(get_the_id());
 
                 // Append guest ID as a query parameter
                 $edit_url = add_query_arg('guest', $guest_id, $post_url);

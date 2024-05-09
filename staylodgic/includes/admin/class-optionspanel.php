@@ -263,11 +263,9 @@ class OptionsPanel
                         $sanitized_value['label'] = sanitize_text_field($sub_value);
                         break;
                     case 'days':
-                        // Assuming 'days' should be an integer
                         $sanitized_value['days'] = intval($sub_value);
                         break;
                     case 'percent':
-                        // Assuming 'percent' should be a float
                         $sanitized_value['percent'] = floatval($sub_value);
                         break;
                 }

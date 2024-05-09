@@ -2,7 +2,7 @@ jQuery(document).ready(function ($) {
 	"use strict";
 
     $('#start-tour-button').click(function() {
-        startDriverTour(); // Assuming this function initializes and starts your Driver.js tour
+        startDriverTour();
     });
 
 	function startDriverTour() {

@@ -280,7 +280,7 @@
 						// Option updated successfully
 						// Update the calendar without reloading the page
 						if (!window.isMobile()) {
-							var currentDate = fp.selectedDates[0]; // Assuming fp is your flatpickr instance
+							var currentDate = fp.selectedDates[0];
 						} else {
 							var currentDateVal = $('.availabilitycalendar').val() + '-01';
 							var currentDate = new Date(currentDateVal);
@@ -352,7 +352,7 @@
 						save_button.find(".spinner-border").css("opacity", "0");
 						save_button.prop("disabled", false);
 						// Update the calendar without reloading the page
-						var currentDate = fp.selectedDates[0]; // Assuming fp is your flatpickr instance
+						var currentDate = fp.selectedDates[0];
 						var startDate = new Date(
 							currentDate.getFullYear(),
 							currentDate.getMonth(),
@@ -501,7 +501,7 @@
 						save_button.find(".spinner-border").css("opacity", "0");
 						save_button.prop("disabled", false);
 						// Update the calendar without reloading the page
-						var currentDate = fp.selectedDates[0]; // Assuming fp is your flatpickr instance
+						var currentDate = fp.selectedDates[0];
 						var startDate = new Date(
 							currentDate.getFullYear(),
 							currentDate.getMonth(),
@@ -1010,7 +1010,7 @@
 
 				// Event handler for when the availability calendar changes
 				$(document).on('change', '.availabilitycalendar', function() {
-					var dateValue = $(this).val() + '-01';  // Assuming the input gives year and month
+					var dateValue = $(this).val() + '-01';
 					var startDate = new Date(dateValue);
 					var endDate = new Date(startDate.getFullYear(), startDate.getMonth() + 1, 0);  // Last day of the selected month
 					// Call the debounced update function

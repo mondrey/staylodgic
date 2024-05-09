@@ -578,7 +578,6 @@ class AvailablityCalendar extends AvailablityCalendarBase
     {
         $startOfMonth_class = '';
 
-        // Assuming $occupancydate is in 'Y-m-d' format, extract year and month
         $yearMonth = substr($occupancydate, 0, 7); // This gives 'YYYY-MM'
 
         // Create the first day of the month string for the given date
