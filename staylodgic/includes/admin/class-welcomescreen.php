@@ -60,7 +60,9 @@ echo '<div class="admin-column admin-column2 admin-page-wrapper">';
     $current_user = wp_get_current_user();
 
     echo '<h1>Welcome '.$current_user->user_login.'</h1>';
-    echo '<div id="start-tour-button" class="button-primary">' . __('How to accept bookings', 'your-text-domain') . '</div>';
+    echo '<div id="start-bookings-button" class="button-primary">' . __('How to accept bookings', 'staylodgic') . '</div>';
+    echo '<div id="start-activities-button" class="button-primary">' . __('How to accept bookings', 'staylodgic') . '</div>';
+    echo '<div id="start-registration-button" class="button-primary">' . __('How to create guest registration', 'staylodgic') . '</div>';
     echo '</div>';
 
 echo '</div>';
