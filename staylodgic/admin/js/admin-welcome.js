@@ -36,9 +36,11 @@ jQuery(document).ready(function ($) {
 			showProgress: true,
 			overlayColor: 'blue',
 			steps: [
-			  { element: '#menu-posts-slgc_activity', popover: { title: 'Step: 1: Create Activities', description: 'Create acitivities and assign daily timings for schedule. Attach a featured image and add more to form a gallery.', side: "right", align: 'start' }},
-			  { element: '#menu-posts-slgc_activityres', popover: { title: 'Step 2: Create Activity Reservation', description: 'Create activity reservations.', side: "right", align: 'start' }},
-			  { element: '#toplevel_page_slgc-dashboard', popover: { title: 'Activity Overview', description: 'Display overview of daily and upcoming activity reservations.', side: "right", align: 'start' }},
+				{ element: 'a[href="admin.php?page=slgc-settings-panel"]', popover: { title: 'Step: 1: Hotel Settings', description: 'Configure your hotel.', side: "right", align: 'start' }},
+				{ element: '#menu-posts-slgc_activity', popover: { title: 'Step: 2: Create Activities', description: 'Create acitivities and assign daily timings for schedule. Attach a featured image and add more to form a gallery.', side: "right", align: 'start' }},
+				{ element: '#menu-posts-slgc_activityres', popover: { title: 'Step 3: Create Activity Reservation', description: 'Create activity reservations.', side: "right", align: 'start' }},
+				{ element: '#menu-posts-slgc_activityres', popover: { title: 'Activity Ticket', description: 'The acitvitiy ticket will be generated once you save an acitivity reservation.', side: "right", align: 'start' }},
+				{ element: '#toplevel_page_slgc-dashboard', popover: { title: 'Activity Overview', description: 'Display overview of daily and upcoming activity reservations.', side: "right", align: 'start' }},
 			]
 		  });
 		  
