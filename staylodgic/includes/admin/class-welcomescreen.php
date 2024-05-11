@@ -59,10 +59,15 @@ echo '<div class="admin-column admin-column2 admin-page-wrapper">';
 
     $current_user = wp_get_current_user();
 
-    echo '<h1>Welcome '.$current_user->user_login.'</h1>';
-    echo '<div id="start-bookings-button" class="button-primary">' . __('How to accept bookings', 'staylodgic') . '</div>';
-    echo '<div id="start-activities-button" class="button-primary">' . __('How to accept activities', 'staylodgic') . '</div>';
-    echo '<div id="start-registration-button" class="button-primary">' . __('How to create guest registration', 'staylodgic') . '</div>';
+    echo '<h1>Welcome '.$current_user->user_login.'!</h1>';
+    echo '<p>New to Staylodgic?</p>';
+    echo '<p>Tap on the following for a quick guided tour to the steps and sections to get started.</p>';
+    echo '<div class="guided-tour-link-wrap">';
+    echo '<div id="start-bookings-button" class="guided-tour-link"><i class="fa-solid fa-arrow-right"></i> ' . __('How to accept bookings', 'staylodgic') . '</div>';
+    echo '<div id="start-activities-button" class="guided-tour-link"><i class="fa-solid fa-arrow-right"></i> ' . __('How to accept activities', 'staylodgic') . '</div>';
+    echo '<div id="start-registration-button" class="guided-tour-link"><i class="fa-solid fa-arrow-right"></i> ' . __('How to create guest registration', 'staylodgic') . '</div>';
+    echo '</div>';
+    echo '<div class="view-all-features">View all features</div>';
     echo '</div>';
 
 echo '</div>';
@@ -70,7 +75,7 @@ echo '</div>';
 
         // Header
         echo '<div class="admin-page-two-main">';
-        echo '<div class="admin-page-twp-header">';
+        echo '<div class="admin-page-two-header">';
         echo '<h2>Hotel Management</h2>';
         echo '<h1>Staylodgic<span class="the-dot">.</span></h1>';
         echo '</div>';

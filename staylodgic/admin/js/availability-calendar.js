@@ -44,12 +44,17 @@
 
 		moveModals();
 
-		function showToast(toastId) {
+		function showToast(toastId, message) {
 			var toastEl = document.getElementById(toastId);
 			var timeElement = toastEl.querySelector(".toast-time");
+			var messageElement = toastEl.querySelector(".toast-body");
 
 			// Update the time to "just now"
 			timeElement.textContent = "just now";
+			console.log( message );
+			if (message) {
+				messageElement.textContent = message;
+			}
 
 			var toast = new bootstrap.Toast(toastEl);
 			toast.show();
@@ -276,16 +281,16 @@
 				dataType: "json",
 				success: function (response) {
 					if (response.success) {
-						
 						// Option updated successfully
 						// Update the calendar without reloading the page
 						if (!window.isMobile()) {
 							var currentDate = fp.selectedDates[0];
 						} else {
-							var currentDateVal = $('.availabilitycalendar').val() + '-01';
+							var currentDateVal =
+								$(".availabilitycalendar").val() + "-01";
 							var currentDate = new Date(currentDateVal);
 						}
-						
+
 						var startDate = new Date(
 							currentDate.getFullYear(),
 							currentDate.getMonth(),
@@ -352,7 +357,15 @@
 						save_button.find(".spinner-border").css("opacity", "0");
 						save_button.prop("disabled", false);
 						// Update the calendar without reloading the page
-						var currentDate = fp.selectedDates[0];
+						// var currentDate = fp.selectedDates[0];
+						if (!window.isMobile()) {
+							var currentDate = fp.selectedDates[0];
+						} else {
+							var currentDateVal =
+								$(".availabilitycalendar").val() + "-01";
+							var currentDate = new Date(currentDateVal);
+						}
+
 						var startDate = new Date(
 							currentDate.getFullYear(),
 							currentDate.getMonth(),
@@ -501,7 +514,15 @@
 						save_button.find(".spinner-border").css("opacity", "0");
 						save_button.prop("disabled", false);
 						// Update the calendar without reloading the page
-						var currentDate = fp.selectedDates[0];
+						// var currentDate = fp.selectedDates[0];
+						if (!window.isMobile()) {
+							var currentDate = fp.selectedDates[0];
+						} else {
+							var currentDateVal =
+								$(".availabilitycalendar").val() + "-01";
+							var currentDate = new Date(currentDateVal);
+						}
+
 						var startDate = new Date(
 							currentDate.getFullYear(),
 							currentDate.getMonth(),
@@ -523,7 +544,22 @@
 						save_button.find(".spinner-border").css("opacity", "0");
 						save_button.prop("disabled", false);
 
-						showToast("quantityToastFail");
+						console.log(response.data.data.code);
+
+						if (
+							response.success === false &&
+							response.data.data.code === "106"
+						) {
+							console.log( response.data.data.message );
+							// Handle the specific case where code is '106'
+							showToast(
+								"quantityToastFail",
+								response.data.data.message
+							);
+						} else {
+							// Handle other cases
+							showToast("quantityToastFail");
+						}
 					}
 				},
 				error: function (xhr, status, error) {
@@ -964,59 +1000,66 @@
 			// For Mobile specific using Native date picker
 			function shiftDatesMobile(buttonId, months) {
 				$(buttonId).click(function () {
-					var dateValue = $('.availabilitycalendar').val() + '-01';
+					var dateValue = $(".availabilitycalendar").val() + "-01";
 					var startDate = new Date(dateValue);
-			
+
 					var newMonth = startDate.getMonth() + months;
 					var newYear = startDate.getFullYear();
-			
+
 					// Handle month underflow and overflow
 					if (newMonth < 0) {
 						newMonth = 11; // December
-						newYear -= 1;  // Previous year
+						newYear -= 1; // Previous year
 					} else if (newMonth > 11) {
-						newMonth = 0;  // January
-						newYear += 1;  // Next year
+						newMonth = 0; // January
+						newYear += 1; // Next year
 					}
-			
+
 					// Since newMonth is zero-indexed, format it to be human-readable
-					var formattedMonth = (newMonth + 1 < 10 ? '0' : '') + (newMonth + 1);
-					$(".availabilitycalendar").val(newYear + '-' + formattedMonth);
-			
+					var formattedMonth =
+						(newMonth + 1 < 10 ? "0" : "") + (newMonth + 1);
+					$(".availabilitycalendar").val(
+						newYear + "-" + formattedMonth
+					);
+
 					var newStartDate = new Date(newYear, newMonth, 1);
 					var newEndDate = new Date(newYear, newMonth + 1, 0); // Last day of the new month
-			
+
 					debouncedCalendarUpdate([newStartDate, newEndDate]);
 				});
 			}
 
 			if (!window.isMobile()) {
-
 				shiftDates('#prevmonth:not(".disabled")', -1);
 				shiftDates('#nextmonth:not(".disabled")', 1);
 
 				// Call the initialize function with the initial dates
 				initializeFlatpickr(startDate, endDate);
 			} else {
-
 				shiftDatesMobile('#prevmonth:not(".disabled")', -1);
 				shiftDatesMobile('#nextmonth:not(".disabled")', 1);
 
 				var dateObject = new Date(startDate);
 				var selectedMonth = dateObject.getMonth() + 1; // getMonth() is 0-indexed, add 1 for the correct month
 				var selectedYear = dateObject.getFullYear();
-				var formattedMonth = selectedMonth < 10 ? '0' + selectedMonth : selectedMonth; // Ensure two-digit month
-				$(".availabilitycalendar").val(selectedYear + '-' + formattedMonth);
+				var formattedMonth =
+					selectedMonth < 10 ? "0" + selectedMonth : selectedMonth; // Ensure two-digit month
+				$(".availabilitycalendar").val(
+					selectedYear + "-" + formattedMonth
+				);
 
 				// Event handler for when the availability calendar changes
-				$(document).on('change', '.availabilitycalendar', function() {
-					var dateValue = $(this).val() + '-01';
+				$(document).on("change", ".availabilitycalendar", function () {
+					var dateValue = $(this).val() + "-01";
 					var startDate = new Date(dateValue);
-					var endDate = new Date(startDate.getFullYear(), startDate.getMonth() + 1, 0);  // Last day of the selected month
+					var endDate = new Date(
+						startDate.getFullYear(),
+						startDate.getMonth() + 1,
+						0
+					); // Last day of the selected month
 					// Call the debounced update function
 					debouncedCalendarUpdate([startDate, endDate]);
 				});
-				
 			}
 
 			function updateCalendarData(selectedDates) {

@@ -701,7 +701,7 @@ ul.existing-customer li {
 .toast-square {
 	width: 12px;
 	height: 12px;
-	background: #0087ff;
+	background: #ff0083;
 	border-radius: 4px;
 	position: relative;
 	top: 1px;
@@ -709,7 +709,7 @@ ul.existing-customer li {
 }
 
 #quantityToast .toast-square {
-	background: #ff0083;
+	background: #0087ff;
 }
 
 #calendarToast .toast-square {

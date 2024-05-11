@@ -257,9 +257,9 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
 
         if (isset($blocked_dates) && is_array($blocked_dates)) {
 
-            error_log( '----- Blocked dates being processed ' . $count );
-            error_log( print_r($blocked_dates, 1) );
-            error_log( '-----------------------------------' );
+            // error_log( '----- Blocked dates being processed ' . $count );
+            // error_log( print_r($blocked_dates, 1) );
+            // error_log( '-----------------------------------' );
         }
     }
 

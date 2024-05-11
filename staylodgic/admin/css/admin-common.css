@@ -15,68 +15,68 @@
 #menu-posts-slgc_customers .wp-menu-image.svg,
 #menu-posts-slgc_guestregistry .wp-menu-image.svg,
 #menu-posts-slgc_activity .wp-menu-image.svg,
-#menu-posts-slgc_activityres .wp-menu-image.svg{
+#menu-posts-slgc_activityres .wp-menu-image.svg {
 	filter: grayscale(100%);
 }
 
 .toplevel_page_staylodgic-settings #wpcontent {
-    padding-left: 0;
+	padding-left: 0;
 }
 .toplevel_page_staylodgic-settings #wpbody-content {
-    padding-bottom: 0;
+	padding-bottom: 0;
 }
 .toplevel_page_staylodgic-settings #wpwrap {
-    background: #fff;
+	background: #fff;
 }
 
 .content-container,
-.admin-page-twp-header {
+.admin-page-two-header {
 	width: 70%;
 	margin: 0 auto;
 }
 
 .left-columns {
-    flex: 3; /* Allocates double the space compared to right column */
-    display: flex;
+	flex: 3; /* Allocates double the space compared to right column */
+	display: flex;
 }
 .left-column {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    text-align: left;
-    padding-right: 20px; /* Adds spacing between columns */
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	text-align: left;
+	padding-right: 20px; /* Adds spacing between columns */
 }
 .right-column {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center; /* Centers the SVG vertically in the column */
+	flex: 1;
+	display: flex;
+	justify-content: center;
+	align-items: center; /* Centers the SVG vertically in the column */
 }
 
 .svg-container {
-    width: 100%;
-    height: 300px; /* Adjust based on your needs */
-    background-image: url('../../assets/images/main-3.svg'); /* Path to your SVG image */
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
+	width: 100%;
+	height: 300px; /* Adjust based on your needs */
+	background-image: url("../../assets/images/main-3.svg"); /* Path to your SVG image */
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: contain;
 	width: 100%;
 	height: 100%;
-	background-image: url('http://localhost/staylodgic_wp/dev/wp-content/uploads/sites/2/2024/05/annie-spratt-hX_hf2lPpUU-unsplash-scaled.jpg');
+	background-image: url("http://localhost/staylodgic_wp/dev/wp-content/uploads/sites/2/2024/05/annie-spratt-hX_hf2lPpUU-unsplash-scaled.jpg");
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: cover;
 }
 .admin-page-two-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 0;
 }
 
 .content-container ul ul {
-    margin-left: 20px;
+	margin-left: 20px;
 }
 
 /* Base Admin Page Styles */
@@ -84,7 +84,7 @@
 	margin: 0;
 	font-size: 68px;
 	line-height: 1.4;
-    color: #fff;
+	color: #fff;
 }
 .admin-page-header h1 .the-dot {
 	color: #ff0000;
@@ -103,9 +103,9 @@
 }
 
 .admin-page-footer p {
-    margin: 0;
-    font-size: 16px;
-    color: #666;
+	margin: 0;
+	font-size: 16px;
+	color: #666;
 }
 
 .admin-page-wrapper h4 i,
@@ -113,41 +113,35 @@
 	color: #bf9b07;
 }
 
-
-
 .admin-container {
-    display: flex;
-    height: calc(100vh - 30px); /* Adjusted for any top navbar or padding you might have */
-    width: calc(100vw - 160px); /* Adjusted for any sidebar or padding */
+	display: flex;
+	height: calc(
+		100vh - 30px
+	); /* Adjusted for any top navbar or padding you might have */
+	width: calc(100vw - 160px); /* Adjusted for any sidebar or padding */
 }
 
 .admin-column {
-    flex: 1; /* This ensures each column takes up half the container width */
-    overflow: hidden; /* Prevents any overflow from the columns themselves */
+	flex: 1; /* This ensures each column takes up half the container width */
+	overflow: hidden; /* Prevents any overflow from the columns themselves */
 }
 
 .admin-column1 {
-    background-image: url('http://192.168.88.251/static-wp/staylodgic/wp-content/uploads/sites/2/2024/05/cody-weiss-hEMYwIE6GEY-unsplash.jpg'); /* Replace with your image URL */
-    background-size: cover;
-    background-position: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-}
-
-.admin-column2 {
-    overflow-y: auto; /* Enables vertical scrolling */
-    display: flex; /* Ensures content is managed by flexbox */
-    flex-direction: column; /* Aligns children (like ul) in a column */
+	background-image: url("http://192.168.88.251/static-wp/staylodgic/wp-content/uploads/sites/2/2024/05/cody-weiss-hEMYwIE6GEY-unsplash.jpg"); /* Replace with your image URL */
+	background-size: cover;
+	background-position: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
 }
 
 .admin-horizontal-list {
-    list-style: none;
-    padding: 0;
-    margin: 0; /* Ensures no default margin affects your layout */
-    display: flex;
-    gap: 10px;
-    margin-top: 40px;
+	list-style: none;
+	padding: 0;
+	margin: 0; /* Ensures no default margin affects your layout */
+	display: flex;
+	gap: 10px;
+	margin-top: 40px;
 }
 
 .admin-horizontal-list li {
@@ -156,8 +150,7 @@
 	font-size: 17px;
 }
 .admin-column.admin-column1 {
-  position: relative;
-
+	position: relative;
 }
 .admin-column.admin-column1::after {
 	position: absolute;
@@ -167,10 +160,50 @@
 	height: 100%;
 	background: #0009;
 	z-index: 1;
-	content: ' ';
+	content: " ";
 }
 .section-main {
-    position: relative;
-    z-index: 2;
-    padding: 60px;
+	position: relative;
+	z-index: 2;
+	padding: 60px;
+}
+
+.guided-tour-link {
+	margin-bottom: 11px;
+	font-size: 18px;
+}
+.section-features h1 {
+	font-size: 32px;
+	font-weight: 300;
+	margin-bottom: 40px;
+}
+
+.guided-tour-link-wrap {
+	margin-top: 24px;
+}
+.view-all-features {
+	margin-top: 20px;
+}
+
+.admin-column2 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center;   
+    height: 100vh;
+    overflow-y: auto;
+}
+
+.section-features {
+    width: 100%;
+    max-width: 600px;
+    padding: 20px;    
+    box-sizing: border-box;
+}
+
+.admin-page-two-header {
+	padding-top: 50px;
+}
+.admin-page-two-wrapper {
+	padding-bottom: 50px;
 }

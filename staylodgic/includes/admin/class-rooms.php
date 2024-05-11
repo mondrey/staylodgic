@@ -16,18 +16,19 @@ class Rooms
         add_action('wp_ajax_nopriv_update_RoomRate', array($this, 'update_RoomRate'));
     }
 
-    public static function hasRooms() {
+    public static function hasRooms()
+    {
         $args = array(
             'post_type'      => 'slgc_room',
             'posts_per_page' => 1, // Only need to check if at least one room exists
             'fields'         => 'ids', // Only retrieve the post IDs
             'post_status'    => 'publish',
         );
-    
+
         $query = new \WP_Query($args);
-    
+
         return $query->have_posts(); // Returns true if there is at least one room, false otherwise
-    }    
+    }
 
     public static function queryRooms()
     {
@@ -68,7 +69,7 @@ class Rooms
 
         // Check if the quantity_array exists and the date is available
         if (!empty($quantityArray) && isset($quantityArray[$dateString])) {
-            if ( '0' == $quantityArray[$dateString] ) {
+            if ('0' == $quantityArray[$dateString]) {
                 return true;
             }
         }
@@ -95,7 +96,7 @@ class Rooms
     public static function getMaxQuantityForRoom($room_id, $dateString)
     {
 
-        if ( self::isChannelRoomBooked($room_id, $dateString) ) {
+        if (self::isChannelRoomBooked($room_id, $dateString)) {
             return '0';
         }
         $quantityArray = get_post_meta($room_id, 'staylodgic_quantity_array', true);
@@ -257,7 +258,6 @@ class Rooms
         $can_occomodate['guests']   = $max_guests;
 
         return $can_occomodate;
-
     }
 
     public function getMaxRoom_QTY_For_DateRange($roomId, $checkin_date, $checkout_date, $reservationid)
@@ -309,13 +309,13 @@ class Rooms
     {
 
         // Verify the nonce
-        if (!isset($_POST[ 'staylodgic_availabilitycalendar_nonce' ]) || !check_admin_referer('staylodgic-availabilitycalendar-nonce', 'staylodgic_availabilitycalendar_nonce')) {
+        if (!isset($_POST['staylodgic_availabilitycalendar_nonce']) || !check_admin_referer('staylodgic-availabilitycalendar-nonce', 'staylodgic_availabilitycalendar_nonce')) {
             // Nonce verification failed; handle the error or reject the request
             // For example, you can return an error response
-            wp_send_json_error([ 'message' => 'Failed' ]);
+            wp_send_json_error(['message' => 'Failed']);
             return;
         }
-        
+
         if (isset($_POST['dateRange'])) {
             $dateRange = $_POST['dateRange'];
         } else {
@@ -323,6 +323,7 @@ class Rooms
             $response = array(
                 'success' => false,
                 'data' => array(
+                    'code' => '101',
                     'message' => 'Missing date range parameter.',
                 ),
             );
@@ -330,27 +331,32 @@ class Rooms
             return;
         }
 
+        error_log('Date Range');
+        error_log($dateRange);
+
         if (isset($_POST['quantity'])) {
             $quantity = $_POST['quantity'];
 
-            if ( '' == $quantity ) {
+            if ('' == $quantity) {
                 $quantity = 0;
                 // Return an error response if quantity is not set
                 $response = array(
                     'success' => false,
                     'data' => array(
+                        'code' => '102',
                         'message' => 'Missing quantity parameter.',
                     ),
                 );
                 wp_send_json_error($response);
                 return;
             }
-            if ( 0 > $quantity ) {
+            if (0 > $quantity) {
                 $quantity = 0;
                 // Return an error response if quantity is not set
                 $response = array(
                     'success' => false,
                     'data' => array(
+                        'code' => '102',
                         'message' => 'Missing quantity parameter.',
                     ),
                 );
@@ -362,6 +368,7 @@ class Rooms
             $response = array(
                 'success' => false,
                 'data' => array(
+                    'code' => '102',
                     'message' => 'Missing quantity parameter.',
                 ),
             );
@@ -376,6 +383,7 @@ class Rooms
             $response = array(
                 'success' => false,
                 'data' => array(
+                    'code' => '103',
                     'message' => 'Missing post ID parameter.',
                 ),
             );
@@ -394,6 +402,7 @@ class Rooms
             $response = array(
                 'success' => false,
                 'data' => array(
+                    'code' => '104',
                     'message' => 'Invalid date range.',
                 ),
             );
@@ -409,18 +418,19 @@ class Rooms
             $endDate = $startDate;
         }
 
-        $numberOfDaysInSelection = \Staylodgic\Common::countDays_BetweenDates( $startDate, $endDate );
+        $numberOfDaysInSelection = \Staylodgic\Common::countDays_BetweenDates($startDate, $endDate);
 
-        if ( $numberOfDaysInSelection > 64 ) {
+        if ($numberOfDaysInSelection > 64) {
             // Return an error response if dateRange is invalid
             $response = array(
                 'success' => false,
                 'data' => array(
+                    'code' => '105',
                     'message' => 'Too many days to process.',
                 ),
             );
             wp_send_json_error($response);
-            return;            
+            return;
         }
 
         // Retrieve the existing quantity_array meta value
@@ -435,7 +445,7 @@ class Rooms
         $dateRange = \Staylodgic\Common::create_inBetween_DateRange_Array($startDate, $endDate);
 
         $reservation_instance = new \Staylodgic\Reservations();
-        $reserved_array = $reservation_instance->getRoomReservationsForDateRange( $startDate, $endDate, $postID );
+        $reserved_array = $reservation_instance->getRoomReservationsForDateRange($startDate, $endDate, $postID);
 
 
         $room_data = get_post_custom($postID);
@@ -452,11 +462,12 @@ class Rooms
             $reserved_rooms = $reserved_array[$date];
             $final_quantity = $quantity + $reserved_rooms;
 
-            if ( $max_rooms < $final_quantity ) {
+            if ($max_rooms < $final_quantity) {
                 $response = array(
                     'success' => false,
                     'data' => array(
-                        'message' => 'Exceeds maximum quanity for room',
+                        'code' => '106',
+                        'message' => 'Exceeds maximum total (' . esc_attr($max_rooms) . ') quantity for this room.',
                     ),
                 );
                 wp_send_json_error($response);
@@ -471,7 +482,7 @@ class Rooms
         // error_log('-------- Quantity ----------');
         // error_log( print_r($quantityArray,1 ) );
         // error_log('-------- Final Quantity ----------');
-        
+
 
         // Update the metadata for the 'slgc_reservations' post
         if (!empty($postID) && is_numeric($postID) && is_array($quantityArray)) {
@@ -490,6 +501,7 @@ class Rooms
             $response = array(
                 'success' => false,
                 'data' => array(
+                    'code' => '107',
                     'message' => 'Invalid post ID.',
                 ),
             );
@@ -503,13 +515,13 @@ class Rooms
     {
 
         // Verify the nonce
-        if (!isset($_POST[ 'staylodgic_availabilitycalendar_nonce' ]) || !check_admin_referer('staylodgic-availabilitycalendar-nonce', 'staylodgic_availabilitycalendar_nonce')) {
+        if (!isset($_POST['staylodgic_availabilitycalendar_nonce']) || !check_admin_referer('staylodgic-availabilitycalendar-nonce', 'staylodgic_availabilitycalendar_nonce')) {
             // Nonce verification failed; handle the error or reject the request
             // For example, you can return an error response
-            wp_send_json_error([ 'message' => 'Failed' ]);
+            wp_send_json_error(['message' => 'Failed']);
             return;
         }
-        
+
         if (isset($_POST['dateRange'])) {
             $dateRange = $_POST['dateRange'];
         } else {
@@ -526,9 +538,9 @@ class Rooms
 
         if (isset($_POST['rate'])) {
             $rate = $_POST['rate'];
-            error_log( '$rate' );
-            error_log( $rate );
-            if ( '' == $rate ) {
+            error_log('$rate');
+            error_log($rate);
+            if ('' == $rate) {
                 $response = array(
                     'success' => false,
                     'data' => array(
@@ -536,9 +548,9 @@ class Rooms
                     ),
                 );
                 wp_send_json_error($response);
-                return;                
+                return;
             }
-            if ( 0 >= $rate ) {
+            if (0 >= $rate) {
                 $response = array(
                     'success' => false,
                     'data' => array(
@@ -546,7 +558,7 @@ class Rooms
                     ),
                 );
                 wp_send_json_error($response);
-                return;                
+                return;
             }
         } else {
             // Return an error response if quantity is not set
@@ -600,9 +612,9 @@ class Rooms
             $endDate = $startDate;
         }
 
-        $numberOfDaysInSelection = \Staylodgic\Common::countDays_BetweenDates( $startDate, $endDate );
+        $numberOfDaysInSelection = \Staylodgic\Common::countDays_BetweenDates($startDate, $endDate);
 
-        if ( $numberOfDaysInSelection > 64 ) {
+        if ($numberOfDaysInSelection > 64) {
             // Return an error response if dateRange is invalid
             $response = array(
                 'success' => false,
@@ -611,7 +623,7 @@ class Rooms
                 ),
             );
             wp_send_json_error($response);
-            return;            
+            return;
         }
 
         // Retrieve the existing roomrate_array meta value

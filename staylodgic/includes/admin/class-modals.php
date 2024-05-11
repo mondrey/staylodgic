@@ -8,12 +8,12 @@ class Modals
 	public static function rateQtyToasts()
 	{
 		$toast  = '<div aria-live="polite" aria-atomic="true" class="availability-calendar-toasts position-relative">';
-		$toast .= '<div class="toast-container top-0 end-0 p-3">';
+		$toast .= '<div class="toast-container position-fixed bottom-0 end-0 p-3">';
 
 		$toast .= '<div id="rateToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">';
 		$toast .= '<div class="toast-header">';
 		$toast .= '<div class="toast-square"></div>';
-		$toast .= '<strong class="me-auto">' . __('Rate Update', 'staylodgic') . '</strong>';
+		$toast .= '<strong class="me-auto">' . __('Rate Updated', 'staylodgic') . '</strong>';
 		$toast .= '<small class="text-muted toast-time">' . __('just now', 'staylodgic') . '</small>';
 		$toast .= '<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="' . __('Close', 'staylodgic') . '"></button>';
 		$toast .= '</div>';
@@ -37,7 +37,7 @@ class Modals
 		$toast .= '<div id="quantityToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">';
 		$toast .= '<div class="toast-header">';
 		$toast .= '<div class="toast-square"></div>';
-		$toast .= '<strong class="me-auto">' . __('Quantity Update', 'staylodgic') . '</strong>';
+		$toast .= '<strong class="me-auto">' . __('Quantity Updated', 'staylodgic') . '</strong>';
 		$toast .= '<small class="text-muted toast-time">' . __('just now', 'staylodgic') . '</small>';
 		$toast .= '<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="' . __('Close', 'staylodgic') . '"></button>';
 		$toast .= '</div>';
@@ -49,7 +49,7 @@ class Modals
 		$toast .= '<div id="quantityToastFail" class="toast" role="alert" aria-live="assertive" aria-atomic="true">';
 		$toast .= '<div class="toast-header">';
 		$toast .= '<div class="toast-square"></div>';
-		$toast .= '<strong class="me-auto">' . __('Quantity Update', 'staylodgic') . '</strong>';
+		$toast .= '<strong class="me-auto">' . __('Quantity Failed', 'staylodgic') . '</strong>';
 		$toast .= '<small class="text-muted toast-time">' . __('just now', 'staylodgic') . '</small>';
 		$toast .= '<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="' . __('Close', 'staylodgic') . '"></button>';
 		$toast .= '</div>';

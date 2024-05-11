@@ -81,7 +81,7 @@ class Cron
         }
     
         $cron_jobs = _get_cron_array(); // Retrieve the cron array
-        error_log('Current cron jobs: ' . print_r($cron_jobs, true)); // Log it to see all scheduled cron jobs
+        // error_log('Current cron jobs: ' . print_r($cron_jobs, true)); // Log it to see all scheduled cron jobs
     }
     
     public function add_cron_intervals($schedules) {
