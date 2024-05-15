@@ -60,13 +60,15 @@ class AnalyticsBookings
 
         echo '<div class="staylodgic_analytics_wrap">';
 
-        // Add the logo image below the heading
-        echo '<div class="staylodgic-overview-heading">';
-        echo '<h1>' . __('Bookings Overview', 'staylodgic') . '</h1>';
-        echo '</div>';
-
-        if (!\Staylodgic\Rooms::hasRooms()) {
+        error_log( '\Staylodgic\Rooms::hasRooms()' );
+        if ( \Staylodgic\Rooms::hasRooms() ) {
+            // Add the logo image below the heading
+            echo '<div class="staylodgic-overview-heading">';
+            echo '<h1>' . __('Bookings Overview', 'staylodgic') . '</h1>';
+            echo '</div>';
+        } else {
             echo '<h1>' . __('No Rooms Found', 'staylodgic') . '</h1>';
+            echo '<p>Please configure atleast 1 Room from Rooms section</p>';
             return;
         }
 

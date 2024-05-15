@@ -21,6 +21,8 @@ class Staylodgic_GuestRegistration_Posts
         $args = array(
             'labels'             => array(
                 'name'          => __('Guest Registrations', 'staylodgic'),
+                'add_new'       => __('Create a Registration', 'staylodgic'),
+                'add_new_item'  => __( 'Add New Registration', 'staylodgic' ),
                 'menu_name'     => __('Guest Registrations', 'staylodgic'),
                 'singular_name' => __('Guest Registration', 'staylodgic'),
                 'all_items'     => __('All Registrations', 'staylodgic'),

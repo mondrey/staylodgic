@@ -167,7 +167,7 @@ class staylodgic_ActivityReservation_Posts
             'singular_name'      => _x('Activity Reservation', 'post type singular name', 'staylodgic'),
             'menu_name'          => _x('Activity Reservations', 'admin menu', 'staylodgic'),
             'name_admin_bar'     => _x('Activity Reservation', 'add new on admin bar', 'staylodgic'),
-            'add_new'            => _x('Add New', 'activity reservation', 'staylodgic'),
+            'add_new'            => _x('Add New Reservation', 'activity reservation', 'staylodgic'),
             'add_new_item'       => __('Add New Activity Reservation', 'staylodgic'),
             'new_item'           => __('New Activity Reservation', 'staylodgic'),
             'edit_item'          => __('Edit Activity Reservation', 'staylodgic'),

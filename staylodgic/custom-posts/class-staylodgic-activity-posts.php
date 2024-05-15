@@ -102,7 +102,7 @@ class staylodgic_Activity_Posts
             'singular_name'      => _x('Activity', 'post type singular name', 'staylodgic'),
             'menu_name'          => _x('Activities', 'admin menu', 'staylodgic'),
             'name_admin_bar'     => _x('Activity', 'add new on admin bar', 'staylodgic'),
-            'add_new'            => _x('Add New', 'activity', 'staylodgic'),
+            'add_new'            => _x('Add New Activity', 'activity', 'staylodgic'),
             'add_new_item'       => __('Add New Activity', 'staylodgic'),
             'new_item'           => __('New Activity', 'staylodgic'),
             'edit_item'          => __('Edit Activity', 'staylodgic'),

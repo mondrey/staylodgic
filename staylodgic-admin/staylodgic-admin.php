@@ -27,6 +27,34 @@ class SiteAdmin
         add_action('network_admin_edit_staylodgicupdate',  array($this, 'staylodgicadmin_siteadmin_save'));
 
         add_action('network_admin_notices', array($this, 'staylodgicadmin_notice'));
+
+        add_action('init', array($this, 'initialize_user_role'));
+
+    }
+
+    public function initialize_user_role() {
+        add_action('add_user_to_blog', array($this, 'set_user_role_to_editor'), 10, 3);
+    }
+
+    public function set_user_role_to_editor($user_id, $role, $blog_id) {
+        error_log('------ set_user_role_to_editor is fired.');
+        error_log('blog id: ' . $blog_id);
+        error_log('user id: ' . $user_id);
+        // Switch to the new blog
+        switch_to_blog($blog_id);
+        
+        // Get the user object
+        $user = new \WP_User($user_id);
+        // error_log( print_r( $user, 1));
+        // Set the user's role to Editor
+        $user->set_role('editor');
+        
+        // Restore the current blog
+        restore_current_blog();
+    }
+
+    public function staylodgic_admin_load() {
+        require_once plugin_dir_path(__FILE__) . '/class-loginregistration.php';
     }
 
     function staylodgicadmin_notice()
@@ -161,6 +189,8 @@ class SiteAdmin
 <?php
     }
 }
+
+
 
 // Instantiate the class
 if (is_multisite()) {

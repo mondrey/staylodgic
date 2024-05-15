@@ -138,6 +138,8 @@ class staylodgic_Reservation_Posts
         $args = array(
             'labels'             => array(
                 'name'          => __('Reservations', 'staylodgic'),
+                'add_new'       => __('Create Reservation', 'staylodgic'),
+                'add_new_item'  => __( 'Add New Reservation', 'staylodgic' ),
                 'menu_name'     => __('Reservations', 'staylodgic'),
                 'singular_name' => __('Reservation', 'staylodgic'),
                 'all_items'     => __('All Reservations', 'staylodgic'),

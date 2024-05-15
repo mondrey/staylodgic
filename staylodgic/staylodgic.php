@@ -72,3 +72,69 @@ function staylodgic_custom_login_redirect($redirect_to, $request, $user) {
     return admin_url('admin.php?page=staylodgic-settings');
 }
 add_filter('login_redirect', 'staylodgic_custom_login_redirect', 10, 3);
+
+function disable_export_tools_for_non_network_admins() {
+    // Check if the current user is a network admin
+    if (!is_super_admin()) {
+        // Remove the export tools menu
+        remove_submenu_page('tools.php', 'export.php');
+        remove_submenu_page('tools.php', 'import.php');
+
+        // Disable access to the export tools page directly via URL
+        if (isset($_GET['page']) && $_GET['page'] === 'export') {
+            wp_die(__('You do not have sufficient permissions to access this page.'));
+        }
+
+        // Disable access to the export tools page directly via URL
+        if (isset($_GET['page']) && $_GET['page'] === 'import') {
+            wp_die(__('You do not have sufficient permissions to access this page.'));
+        }
+    }
+}
+
+// Hook the function to the admin_menu action
+add_action('admin_menu', 'disable_export_tools_for_non_network_admins', 999);
+
+
+function disable_sections_for_non_network_admins() {
+    // Check if the current user is a network admin
+    if (!is_super_admin()) {
+        // Remove the Themes menu
+        remove_submenu_page('themes.php', 'themes.php');
+        remove_submenu_page('themes.php', 'theme-editor.php');
+        remove_menu_page('themes.php');
+
+        remove_submenu_page('users.php', 'user-new.php');
+        remove_submenu_page('tools.php', 'tools.php');
+    }
+}
+
+// Hook the function to the admin_menu action
+add_action('admin_menu', 'disable_sections_for_non_network_admins', 999);
+
+function disable_sections_admin_bar($wp_admin_bar) {
+    // Check if the current user is a network admin
+    if (!is_super_admin()) {
+        // Remove the Themes menu from the admin bar
+        $wp_admin_bar->remove_node('appearance');
+
+        // Remove the Users menu from the admin bar
+        $wp_admin_bar->remove_node('users');
+    }
+}
+
+// Hook the function to the admin_bar_menu action
+add_action('admin_bar_menu', 'disable_sections_admin_bar', 999);
+
+function disable_direct_access_to_sections() {
+    // Check if the current user is a network admin
+    if (!is_super_admin() && (
+        stripos($_SERVER['REQUEST_URI'], 'themes.php') !== false || 
+        stripos($_SERVER['REQUEST_URI'], 'theme-editor.php') !== false || 
+        stripos($_SERVER['REQUEST_URI'], 'user-new.php') !== false)) {
+        wp_die(__('You do not have sufficient permissions to access this page.'));
+    }
+}
+
+// Hook the function to the admin_init action
+add_action('admin_init', 'disable_direct_access_to_sections');

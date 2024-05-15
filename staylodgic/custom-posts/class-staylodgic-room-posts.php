@@ -105,7 +105,14 @@ class staylodgic_Room_Posts
          * Register Room Post
          */
         $args = array(
-            'label'           => 'Rooms',
+            'labels'            => array(
+                'name'          => __('Rooms', 'staylodgic'),
+                'add_new'       => __('Create a Room', 'staylodgic'),
+                'add_new_item'  => __( 'Add New Room', 'staylodgic' ),
+                'menu_name'     => __('Rooms', 'staylodgic'),
+                'singular_name' => __('Room', 'staylodgic'),
+                'all_items'     => __('All Rooms', 'staylodgic'),
+            ),
             'singular_label'  => __('Room', 'staylodgic'),
             'public'          => true,
             'publicly_queryable' => false,

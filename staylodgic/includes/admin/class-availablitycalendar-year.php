@@ -30,23 +30,25 @@ class AvailablityCalendarYear extends AvailablityCalendarBase
         // Output the HTML for the Availability page
 ?>
         <div class="wrap">
-            <h1><?php _e('12 Months Availability Overview', 'staylodgic'); ?></h1>
             <?php
             if (!\Staylodgic\Rooms::hasRooms()) {
                 echo '<h1>' . __('No Rooms Found', 'staylodgic') . '</h1>';
                 return;
+            } else {
+
+                echo '<h1>' . __('12 Months Availability Overview', 'staylodgic') . '</h1>';
             }
 
 
             echo '<div class="calendars-container">';
-            // Display the calendar for the current month and the next six months
-            $current_month = date('n');
-            $current_year = date('Y');
-            for ($i = 0; $i <= 12; $i++) {
-                $month = ($current_month + $i - 1) % 12 + 1;
-                $year = $current_year + floor(($current_month + $i - 1) / 12);
-                $this->display_monthly_calendar($month, $year);
-            }
+                // Display the calendar for the current month and the next six months
+                $current_month = date('n');
+                $current_year = date('Y');
+                for ($i = 0; $i <= 12; $i++) {
+                    $month = ($current_month + $i - 1) % 12 + 1;
+                    $year = $current_year + floor(($current_month + $i - 1) / 12);
+                    $this->display_monthly_calendar($month, $year);
+                }
             echo '</div>';
             ?>
         </div>

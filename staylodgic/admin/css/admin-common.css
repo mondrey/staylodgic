@@ -207,3 +207,20 @@
 .admin-page-two-wrapper {
 	padding-bottom: 50px;
 }
+
+.guided-tour-link-wrap {
+	font-weight: 400;
+}
+.guided-tour-link-wrap div {
+	margin-bottom: 20px;
+}
+.guided-tour-link-wrap i {
+	height: 30px;
+	width: 30px;
+	border: 1px solid #00000061;
+	line-height: 30px;
+	text-align: center;
+	border-radius: 20px;
+	margin-right: 6px;
+	font-size: 12px;
+}

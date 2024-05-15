@@ -1,4 +1,6 @@
 <?php
+namespace Staylodgic;
+
 class Staylodgic_Init
 {
     public function __construct()
@@ -680,4 +682,4 @@ class Staylodgic_Init
     }
 }
 
-new Staylodgic_Init();
+new \Staylodgic\Staylodgic_Init();

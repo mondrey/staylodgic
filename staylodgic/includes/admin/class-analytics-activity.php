@@ -91,17 +91,20 @@ class ActivityAnalytics
     public function activity_display_dashboard()
     {
 
-        echo '<div class="staylodgic_analytics_wrap">';
 
-        // Add the logo image below the heading
-        echo '<div class="staylodgic-overview-heading">';
-        echo '<h1>'.__('Activity Overview', 'staylodgic').'</h1>';
-        echo '</div>';
+        echo '<div class="staylodgic_analytics_wrap">';
 
         if (!\Staylodgic\Activity::hasActivities()) {
             echo '<h1>' . __('No Activities Found', 'staylodgic') . '</h1>';
+            echo '<p>Please configure atleast 1 activity from Activities section</p>';
             return;
         } else {
+
+
+            // Add the logo image below the heading
+            echo '<div class="staylodgic-overview-heading">';
+            echo '<h1>'.__('Activity Overview', 'staylodgic').'</h1>';
+            echo '</div>';
 
             // Create an instance of the ChartGenerator class
             $analytics = new \Staylodgic\ActivityAnalytics($id = false);

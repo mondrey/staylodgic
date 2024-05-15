@@ -92,6 +92,8 @@ class Staylodgic_Customer_Posts
         $args = array(
             'labels'             => array(
                 'name'          => __('Customers', 'staylodgic'),
+                'add_new'       => __('Create a Customer', 'staylodgic'),
+                'add_new_item'  => __('Add New Customer', 'staylodgic' ),
                 'menu_name'     => __('Customers', 'staylodgic'),
                 'singular_name' => __('Customer', 'staylodgic'),
                 'all_items'     => __('All Customers', 'staylodgic'),
