@@ -50,6 +50,10 @@ class LoginRegistration {
             if ($errmsg_hotel_name) {
                 echo '<p class="error" id="hotel-name-error">' . $errmsg_hotel_name . '</p>';
             }
+            $errmsg_signup_for = $errors->get_error_message('signup_for_error');
+            if ($errmsg_signup_for) {
+                echo '<p class="error" id="signup-for-error">' . $errmsg_signup_for . '</p>';
+            }
             ?>
             <input type="text" name="hotel_name" id="hotel_name" class="input" value="<?php if (!empty($_POST['hotel_name'])) echo esc_attr($_POST['hotel_name']); ?>" maxlength="60" required="required" />
         </p>
@@ -63,8 +67,8 @@ class LoginRegistration {
         if (empty($_POST['hotel_name'])) {
             $result['errors']->add('hotel_name_error', __('Please enter your hotel name.'));
         }
-        if (empty($_POST['last_name'])) {
-            $result['errors']->add('last_name_error', __('<strong>ERROR</strong>: Please enter your last name.'));
+        if ( 'user' == $_POST['signup_for'] ) {
+            $result['errors']->add('signup_for_error', __('<strong>ERROR</strong>: Invalid option detected.'));
         }
 
         // Validate reCAPTCHA response
