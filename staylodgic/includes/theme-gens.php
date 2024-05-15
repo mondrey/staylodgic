@@ -582,6 +582,12 @@ function staylodgic_country_list($output_type = "select", $selected = "")
             $country_list .= $key . ':' . $option;
         }
     }
+    
+    if ($output_type == "select-array") {
+        $country_list = array();
+        $countries = array_merge(array('none' => 'Choose a country'), $countries);
+        $country_list = $countries;
+    }
     if ($output_type == "display") {
         if (array_key_exists($selected, $countries)) {
             $country_list = $countries[$selected];

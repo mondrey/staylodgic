@@ -30,6 +30,8 @@ class SiteAdmin
 
         add_action('init', array($this, 'initialize_user_role'));
 
+        $this->staylodgic_admin_load();
+
     }
 
     public function initialize_user_role() {

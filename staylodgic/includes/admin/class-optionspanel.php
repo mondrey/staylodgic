@@ -1045,6 +1045,8 @@ foreach ($currencies as $currencyCode => $currencyName) {
     $curr_choices[$currencyCode] = $currencyName . ' ( ' . $currency_symbol . ' )';
 }
 
+$country_options = staylodgic_country_list('select-array', '');
+
 $panel_settings = [
     'property_logo'         => [
         'label'       => esc_html__('Upload Logo', 'staylodgic'),
@@ -1065,6 +1067,26 @@ $panel_settings = [
     'property_address'   => [
         'label'       => esc_html__('Address', 'staylodgic'),
         'type'        => 'text',
+        'tab'         => 'property',
+    ],
+    'property_longitude'   => [
+        'label'       => esc_html__('Property Longitude', 'staylodgic'),
+        'type'        => 'text',
+        'description' => 'Longitude',
+        'tab'         => 'property',
+    ],
+    'property_latitude'   => [
+        'label'       => esc_html__('Property Latitude', 'staylodgic'),
+        'type'        => 'text',
+        'description' => 'Latitude',
+        'tab'         => 'property',
+    ],
+    'property_country'    => [
+        'label'       => esc_html__('Country', 'staylodgic'),
+        'type'        => 'select',
+        'inputwidth'  => '250',
+        'description' => 'Country.',
+        'choices'     => $country_options,
         'tab'         => 'property',
     ],
     'property_header'   => [
@@ -1104,6 +1126,26 @@ $panel_settings = [
     'activity_property_address'   => [
         'label'       => esc_html__('Address', 'staylodgic'),
         'type'        => 'text',
+        'tab'         => 'activity-property',
+    ],
+    'activity_property_longitude'   => [
+        'label'       => esc_html__('Property Longitude', 'staylodgic'),
+        'type'        => 'text',
+        'description' => 'Longitude',
+        'tab'         => 'activity-property',
+    ],
+    'activity_property_latitude'   => [
+        'label'       => esc_html__('Property Latitude', 'staylodgic'),
+        'type'        => 'text',
+        'description' => 'Latitude',
+        'tab'         => 'activity-property',
+    ],
+    'activity_property_country'    => [
+        'label'       => esc_html__('Country', 'staylodgic'),
+        'type'        => 'select',
+        'inputwidth'  => '250',
+        'description' => 'Country.',
+        'choices'     => $country_options,
         'tab'         => 'activity-property',
     ],
     'activity_property_header'   => [
