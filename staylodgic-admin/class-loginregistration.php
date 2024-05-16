@@ -40,24 +40,26 @@ class LoginRegistration {
         wp_enqueue_script('google-recaptcha', 'https://www.google.com/recaptcha/api.js', array(), null, true);
     }
 
-    // Display reCAPTCHA widget and additional fields on registration form
-    public function display_recaptcha_and_fields($errors) {
+    // Process error fields
+    private function display_field_with_error($errors, $field, $label, $type = 'text', $required = true) {
+        $error_message = $errors->get_error_message($field . '_error');
+        $required_attr = $required ? 'required="required"' : '';
         ?>
         <p>
-            <label for="hotel_name"><?php _e('Hotel Name') ?></label>
-            <?php
-            $errmsg_hotel_name = $errors->get_error_message('hotel_name_error');
-            if ($errmsg_hotel_name) {
-                echo '<p class="error" id="hotel-name-error">' . $errmsg_hotel_name . '</p>';
-            }
-            $errmsg_signup_for = $errors->get_error_message('signup_for_error');
-            if ($errmsg_signup_for) {
-                echo '<p class="error" id="signup-for-error">' . $errmsg_signup_for . '</p>';
-            }
-            ?>
-            <input type="text" name="hotel_name" id="hotel_name" class="input" value="<?php if (!empty($_POST['hotel_name'])) echo esc_attr($_POST['hotel_name']); ?>" maxlength="60" required="required" />
+            <label for="<?php echo esc_attr($field); ?>"><?php echo esc_html($label); ?></label>
+            <?php if ($error_message): ?>
+                <p class="error" id="<?php echo esc_attr($field); ?>-error"><?php echo esc_html($error_message); ?></p>
+            <?php endif; ?>
+            <input type="<?php echo esc_attr($type); ?>" name="<?php echo esc_attr($field); ?>" id="<?php echo esc_attr($field); ?>" class="input" value="<?php if (!empty($_POST[$field])) echo esc_attr($_POST[$field]); ?>" maxlength="60" <?php echo $required_attr; ?> />
         </p>
         <?php
+    }
+
+    // Display reCAPTCHA widget and additional fields on registration form
+    public function display_recaptcha_and_fields($errors) {
+        $this->display_field_with_error($errors, 'hotel_name', __('Property Name'));
+        $this->display_field_with_error($errors, 'hotel_longitude', __('Property Longitude'));
+        $this->display_field_with_error($errors, 'hotel_latitude', __('Property Latitude'));
         echo '<div class="g-recaptcha" data-sitekey="' . esc_attr($this->site_key) . '"></div>';
     }
 
@@ -65,10 +67,16 @@ class LoginRegistration {
     public function validate_recaptcha_and_fields($result) {
         // Validate additional fields
         if (empty($_POST['hotel_name'])) {
-            $result['errors']->add('hotel_name_error', __('Please enter your hotel name.'));
+            $result['errors']->add('hotel_name_error', __('Please enter your property name.'));
         }
-        if ( 'user' == $_POST['signup_for'] ) {
-            $result['errors']->add('signup_for_error', __('<strong>ERROR</strong>: Invalid option detected.'));
+        if (empty($_POST['hotel_longitude'])) {
+            $result['errors']->add('hotel_longitude_error', __('Longitude required.'));
+        }
+        if (empty($_POST['hotel_latitude'])) {
+            $result['errors']->add('hotel_latitude_error', __('Latitude required.'));
+        }
+        if ('user' == $_POST['signup_for']) {
+            $result['errors']->add('signup_for_error', __('ERROR: Invalid option detected.'));
         }
 
         // Validate reCAPTCHA response
@@ -79,10 +87,10 @@ class LoginRegistration {
             $result_data = json_decode($response_body);
 
             if (!$result_data->success) {
-                $result['errors']->add('recaptcha_error', __('<strong>ERROR</strong>: Please complete the CAPTCHA.'));
+                $result['errors']->add('recaptcha_error', __('ERROR: Please complete the CAPTCHA.'));
             }
         } else {
-            $result['errors']->add('recaptcha_error', __('<strong>ERROR</strong>: Please complete the CAPTCHA.'));
+            $result['errors']->add('recaptcha_error', __('ERROR: Please complete the CAPTCHA.'));
         }
 
         return $result;
