@@ -1346,6 +1346,16 @@ a.book-button:hover:active,
 	margin: 5px 0;
 	padding: 0 8px;
 	box-sizing: border-box;
+	border-radius: 6px;
+	border: 1px solid #d2d2d2;
+	transition: 0.3s border-color;
+}
+.container-outer .mu_register input:focus,
+.container-outer .mu_register #blog_title:focus,
+.container-outer .mu_register #user_email:focus,
+.container-outer .mu_register #blogname:focus,
+.container-outer .mu_register #user_name:focus {
+	border-color: #000;
 }
 .container-outer #privacy,
 .container-outer .signup-options {
