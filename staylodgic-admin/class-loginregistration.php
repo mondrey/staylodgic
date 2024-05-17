@@ -1,6 +1,8 @@
 <?php
 namespace StaylodgicAdmin;
 
+use Error;
+
 class LoginRegistration {
     private $site_key;
     private $secret_key;
@@ -35,7 +37,19 @@ class LoginRegistration {
         if (is_multisite() && $pagenow === 'wp-signup.php') {
             switch ($untranslated_text) {
                 case 'Get your own %s account in seconds':
-                    $translated_text = __('Register your hotel', 'staylodgic-admin');
+                    $translated_text = __('Register your property', 'staylodgic-admin');
+                    break;
+                case 'Get <em>another</em> %s site in seconds':
+                    $translated_text = __('Register <em>another</em> property', 'staylodgic-admin');
+                    break;
+                case 'Welcome back, %s. By filling out the form below, you can <strong>add another site to your account</strong>. There is no limit to the number of sites you can have, so create to your heart&#8217;s content, but write responsibly!':
+                    $translated_text = __('Welcome back, %s. By filling out the form below, you can <strong>add another property to your account</strong>', 'staylodgic-admin');
+                    break;
+                case 'Sites you are already a member of:':
+                    $translated_text = __('Properties you are already a member of:', 'staylodgic-admin');
+                    break;
+                case 'If you are not going to use a great site domain, leave it for a new user. Now have at it!':
+                    $translated_text = __('Proceed to register', 'staylodgic-admin');
                     break;
             }
         }
@@ -68,24 +82,21 @@ class LoginRegistration {
 
     // Display reCAPTCHA widget and additional fields on registration form
     public function display_recaptcha_and_fields($errors) {
-        $this->display_field_with_error($errors, 'property_name', __('Property Name'));
-        $this->display_field_with_error($errors, 'property_longitude', __('Property Longitude'));
-        $this->display_field_with_error($errors, 'property_latitude', __('Property Latitude'));
         echo '<div class="g-recaptcha" data-sitekey="' . esc_attr($this->site_key) . '"></div>';
     }
 
     // Validate reCAPTCHA response and additional fields
     public function validate_recaptcha_and_fields($result) {
         // Validate additional fields
-        if (empty($_POST['property_name'])) {
-            $result['errors']->add('property_name_error', __('Please enter your property name.'));
-        }
-        if (empty($_POST['property_longitude'])) {
-            $result['errors']->add('property_longitude_error', __('Longitude required.'));
-        }
-        if (empty($_POST['property_latitude'])) {
-            $result['errors']->add('property_latitude_error', __('Latitude required.'));
-        }
+        // if (empty($_POST['property_name'])) {
+        //     $result['errors']->add('property_name_error', __('Please enter your property name.'));
+        // }
+        // if (empty($_POST['property_longitude'])) {
+        //     $result['errors']->add('property_longitude_error', __('Longitude required.'));
+        // }
+        // if (empty($_POST['property_latitude'])) {
+        //     $result['errors']->add('property_latitude_error', __('Latitude required.'));
+        // }
         if ( isset( $_POST['signup_for'] )) {
             if ('user' == $_POST['signup_for']) {
                 $result['errors']->add('signup_for_error', __('ERROR: Invalid option detected.'));
@@ -111,31 +122,52 @@ class LoginRegistration {
 
     // Save additional fields to user meta
     public function save_custom_fields($user_id) {
-        if (isset($_POST['hotel_name'])) {
-            update_user_meta($user_id, 'hotel_name', sanitize_text_field($_POST['hotel_name']));
+        error_log('Saving to user id:' . $user_id );
+        if (isset($_POST['property_name'])) {
+            error_log( 'Saving property_name: ' . $_POST['property_name'] );
+            update_user_meta($user_id, 'property_name', sanitize_text_field($_POST['property_name']));
         }
-        if (isset($_POST['hotel_longitude'])) {
-            update_user_meta($user_id, 'hotel_longitude', sanitize_text_field($_POST['hotel_longitude']));
+        if (isset($_POST['property_longitude'])) {
+            error_log( 'Saving property_longitude: ' . $_POST['property_longitude'] );
+            update_user_meta($user_id, 'property_longitude', sanitize_text_field($_POST['property_longitude']));
         }
-        if (isset($_POST['hotel_latitude'])) {
-            update_user_meta($user_id, 'hotel_latitude', sanitize_text_field($_POST['hotel_latitude']));
+        if (isset($_POST['property_latitude'])) {
+            error_log( 'Saving property_latitude: ' . $_POST['property_latitude'] );
+            update_user_meta($user_id, 'property_latitude', sanitize_text_field($_POST['property_latitude']));
         }
     }
 
     // Save additional fields to the newly created site's theme options
     public function initialize_site_custom_fields($new_site, $args) {
-        if (isset($_POST['hotel_name']) || isset($_POST['hotel_longitude']) || isset($_POST['hotel_latitude'])) {
+
+        error_log('Saving to site');
+        // Retrieve the user ID
+        $user_id = $args['user_id'];
+
+        // Get the custom fields from the user meta
+        $property_name = get_user_meta($user_id, 'property_name', true);
+        $property_longitude = get_user_meta($user_id, 'property_longitude', true);
+        $property_latitude = get_user_meta($user_id, 'property_latitude', true);
+
+        // Check if the custom fields exist and are not empty
+        if ($property_name || $property_longitude || $property_latitude) {
             // Switch to the newly created site
             switch_to_blog($new_site->blog_id);
 
-            if (isset($_POST['hotel_name'])) {
-                set_theme_mod('hotel_name', sanitize_text_field($_POST['hotel_name']));
+            error_log('Saving to site: ' . $new_site->blog_id );
+
+            // Set the theme modifications
+            if ($property_name) {
+                error_log('Saving property_name: ' . $property_name );
+                set_theme_mod('property_name', sanitize_text_field($property_name));
             }
-            if (isset($_POST['hotel_longitude'])) {
-                set_theme_mod('hotel_longitude', sanitize_text_field($_POST['hotel_longitude']));
+            if ($property_longitude) {
+                error_log('Saving property_longitude: ' . $property_longitude );
+                set_theme_mod('property_longitude', sanitize_text_field($property_longitude));
             }
-            if (isset($_POST['hotel_latitude'])) {
-                set_theme_mod('hotel_latitude', sanitize_text_field($_POST['hotel_latitude']));
+            if ($property_latitude) {
+                error_log('Saving property_latitude: ' . $property_latitude );
+                set_theme_mod('property_latitude', sanitize_text_field($property_latitude));
             }
 
             // Switch back to the original site
