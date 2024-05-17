@@ -1405,6 +1405,9 @@ a.book-button:hover:active,
 .entry-content .container-outer label {
 	margin: 10px 0 0;
 }
+.entry-content .container-outer p {
+	margin-bottom: 20px;
+}
 .container-outer .mu_register .error {
 	padding: 0;
 	background: none;
@@ -1420,6 +1423,18 @@ a.book-button:hover:active,
 .container-outer .entry-content .mu_register h2 {
 	font-size: 34px;
 	font-weight: 500;
-	line-height: 1.1;
+	line-height: 1.4;
 	letter-spacing: -0.7px;
+	margin-bottom: 18px;
+}
+
+.container-outer #noemail-tips p {
+	display: inline;
+	margin: 0 0 0 5px;
+}
+.container-outer #noemail-tips li,
+.container-outer #noemail-tips p,
+.container-outer #noemail-tips strong {
+	font-size: 13px;
+	font-weight: 400;
 }
