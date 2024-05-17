@@ -13,7 +13,7 @@ class LoginRegistration {
         add_action('signup_extra_fields', array($this, 'display_recaptcha_and_fields')); // For multisite user registration
         add_filter('wpmu_validate_user_signup', array($this, 'validate_recaptcha_and_fields')); // For multisite user validation
         add_action('user_register', array($this, 'save_custom_fields'));
-        add_action('wpmu_new_blog', array($this, 'save_site_custom_fields'), 10, 6);
+        add_action('wp_initialize_site', array($this, 'initialize_site_custom_fields'), 10, 2); // Use wp_initialize_site for new site
         add_action('signup_hidden_fields', array($this, 'add_hidden_fields')); // Add hidden fields to the second form
         add_action('wp_enqueue_scripts', array($this, 'enqueue_recaptcha_script'));
 
@@ -123,10 +123,10 @@ class LoginRegistration {
     }
 
     // Save additional fields to the newly created site's theme options
-    public function save_site_custom_fields($blog_id, $user_id, $domain, $path, $site_id, $meta) {
+    public function initialize_site_custom_fields($new_site, $args) {
         if (isset($_POST['hotel_name']) || isset($_POST['hotel_longitude']) || isset($_POST['hotel_latitude'])) {
             // Switch to the newly created site
-            switch_to_blog($blog_id);
+            switch_to_blog($new_site->blog_id);
 
             if (isset($_POST['hotel_name'])) {
                 set_theme_mod('hotel_name', sanitize_text_field($_POST['hotel_name']));
