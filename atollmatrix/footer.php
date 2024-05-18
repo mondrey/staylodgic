@@ -208,34 +208,6 @@ if ( $display_footer ) {
 	}
 	echo '</div>';
 	?>
-	<div id="copyright" class="footer-container <?php echo esc_attr( $footer_class ); ?>">
-		<div class="footer-logo">
-				<?php
-				if ( '' !== $footer_logo_url ) {
-					echo '<a href="' . esc_url($footer_logo_url) . '" class="custom-footer-logo-url">';
-				}
-				if ( '' !== $footer_logo ) {
-					echo '<img class="custom-footer-logo footer-logo-image" src="' . esc_url( $footer_logo ) . '" alt="' . esc_attr__( 'logo', 'atollmatrix' ) . '" />';
-				}
-				if ( '' !== $footer_logo_url ) {
-					echo '</a>';
-				}
-				?>
-		</div>
-		<?php
-		$footer_text           = do_shortcode( atollmatrix_get_option_data( 'footer_copyright' ) );
-		$copyright_allowedtags = array(
-			'a'      => array(
-				'href'  => true,
-				'title' => true,
-			),
-			'br'     => array(),
-			'b'      => array(),
-			'strong' => array(),
-		);
-		?>
-			<div class="horizontal-footer-copyright"><?php echo wp_kses( $footer_text, atollmatrix_get_allowed_tags() ); ?></div>
-		</div>
 	</div>
 	<?php
 }

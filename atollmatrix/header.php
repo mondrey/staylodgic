@@ -27,12 +27,6 @@ if ( is_page_template( 'template-blank.php' ) ) {
 
 	$site_layout_width = 'fullwidth';
 
-} else {
-	get_template_part( 'template-parts/menu/mobile', 'menu' );
-	//Header Navigation elements with Elementor header location check
-	if ( ! function_exists( 'elementor_theme_do_location' ) || ! elementor_theme_do_location( 'header' ) ) {
-		get_template_part( 'template-parts/header', 'navigation' );
-	}
 }
 do_action( 'atollmatrix_header_woocommerce_shopping_cart_counter' );
 echo '<div id="home" class="container-wrapper container-fullwidth entry-content">';
