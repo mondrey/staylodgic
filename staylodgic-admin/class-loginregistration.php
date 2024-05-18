@@ -1,8 +1,6 @@
 <?php
 namespace StaylodgicAdmin;
 
-use Error;
-
 class LoginRegistration {
     private $site_key;
     private $secret_key;
@@ -14,10 +12,9 @@ class LoginRegistration {
         // Hook into WordPress
         add_action('signup_extra_fields', array($this, 'display_recaptcha_and_fields')); // For multisite user registration
         add_filter('wpmu_validate_user_signup', array($this, 'validate_recaptcha_and_fields')); // For multisite user validation
-        add_action('user_register', array($this, 'save_custom_fields'));
-        add_action('wp_initialize_site', array($this, 'initialize_site_custom_fields'), 10, 2); // Use wp_initialize_site for new site
         add_action('signup_hidden_fields', array($this, 'add_hidden_fields')); // Add hidden fields to the second form
         add_action('wp_enqueue_scripts', array($this, 'enqueue_recaptcha_script'));
+        add_action('wp_initialize_site', array($this, 'create_initial_pages'), 10, 2); // Use wp_initialize_site for new site
 
         add_filter('gettext', array($this, 'mu_registration_text'), 10, 3);
     }
@@ -87,20 +84,8 @@ class LoginRegistration {
 
     // Validate reCAPTCHA response and additional fields
     public function validate_recaptcha_and_fields($result) {
-        // Validate additional fields
-        // if (empty($_POST['property_name'])) {
-        //     $result['errors']->add('property_name_error', __('Please enter your property name.'));
-        // }
-        // if (empty($_POST['property_longitude'])) {
-        //     $result['errors']->add('property_longitude_error', __('Longitude required.'));
-        // }
-        // if (empty($_POST['property_latitude'])) {
-        //     $result['errors']->add('property_latitude_error', __('Latitude required.'));
-        // }
-        if ( isset( $_POST['signup_for'] )) {
-            if ('user' == $_POST['signup_for']) {
-                $result['errors']->add('signup_for_error', __('ERROR: Invalid option detected.'));
-            }
+        if (isset($_POST['signup_for']) && $_POST['signup_for'] === 'user') {
+            $result['errors']->add('signup_for_error', __('ERROR: Invalid option detected.'));
         }
 
         // Validate reCAPTCHA response
@@ -120,60 +105,63 @@ class LoginRegistration {
         return $result;
     }
 
-    // Save additional fields to user meta
-    public function save_custom_fields($user_id) {
-        error_log('Saving to user id:' . $user_id );
-        if (isset($_POST['property_name'])) {
-            error_log( 'Saving property_name: ' . $_POST['property_name'] );
-            update_user_meta($user_id, 'property_name', sanitize_text_field($_POST['property_name']));
-        }
-        if (isset($_POST['property_longitude'])) {
-            error_log( 'Saving property_longitude: ' . $_POST['property_longitude'] );
-            update_user_meta($user_id, 'property_longitude', sanitize_text_field($_POST['property_longitude']));
-        }
-        if (isset($_POST['property_latitude'])) {
-            error_log( 'Saving property_latitude: ' . $_POST['property_latitude'] );
-            update_user_meta($user_id, 'property_latitude', sanitize_text_field($_POST['property_latitude']));
-        }
+    // Function to create custom pages
+    public function create_custom_page($title, $template, $content, $slug) {
+        $page_data = array(
+            'post_title'    => $title,
+            'post_content'  => $content,
+            'post_status'   => 'publish',
+            'post_type'     => 'page',
+            'post_name'     => $slug, // Set the slug for the page
+            'meta_input'    => array(
+                '_wp_page_template' => $template,
+            ),
+        );
+
+        $page_id = wp_insert_post($page_data);
+
+        return $page_id;
     }
 
-    // Save additional fields to the newly created site's theme options
-    public function initialize_site_custom_fields($new_site, $args) {
+    // Function to create initial pages
+    public function create_initial_pages($new_site, $args) {
+        switch_to_blog($new_site->blog_id);
 
-        error_log('Saving to site');
-        // Retrieve the user ID
-        $user_id = $args['user_id'];
+        $pages = array(
+            array(
+                'title' => 'Book Room',
+                'slug' => 'book-room',
+                'template' => 'template-bookroom.php',
+                'content' => '[hotel_booking_search]'
+            ),
+            array(
+                'title' => 'Book Activity',
+                'slug' => 'book-activity',
+                'template' => 'template-bookactivity.php',
+                'content' => '[activity_booking_search]'
+            ),
+            array(
+                'title' => 'Booking Details',
+                'slug' => 'booking-details',
+                'template' => 'template-bookingdetails.php',
+                'content' => '[hotel_booking_details]'
+            ),
+            array(
+                'title' => 'Guest Registration',
+                'slug' => 'guest-registration',
+                'template' => 'template-guestregistration.php',
+                'content' => '[guest_registration]'
+            ),
+            // Add more pages as needed
+        );
 
-        // Get the custom fields from the user meta
-        $property_name = get_user_meta($user_id, 'property_name', true);
-        $property_longitude = get_user_meta($user_id, 'property_longitude', true);
-        $property_latitude = get_user_meta($user_id, 'property_latitude', true);
-
-        // Check if the custom fields exist and are not empty
-        if ($property_name || $property_longitude || $property_latitude) {
-            // Switch to the newly created site
-            switch_to_blog($new_site->blog_id);
-
-            error_log('Saving to site: ' . $new_site->blog_id );
-
-            // Set the theme modifications
-            if ($property_name) {
-                error_log('Saving property_name: ' . $property_name );
-                set_theme_mod('property_name', sanitize_text_field($property_name));
-            }
-            if ($property_longitude) {
-                error_log('Saving property_longitude: ' . $property_longitude );
-                set_theme_mod('property_longitude', sanitize_text_field($property_longitude));
-            }
-            if ($property_latitude) {
-                error_log('Saving property_latitude: ' . $property_latitude );
-                set_theme_mod('property_latitude', sanitize_text_field($property_latitude));
-            }
-
-            // Switch back to the original site
-            restore_current_blog();
+        foreach ($pages as $page) {
+            $this->create_custom_page($page['title'], $page['template'], $page['content'], $page['slug']);
         }
+
+        restore_current_blog();
     }
+
 }
 
 // Usage example
