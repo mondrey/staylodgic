@@ -1625,14 +1625,7 @@ function atollmatrix_widgets_init() {
 
 }
 add_action( 'widgets_init', 'atollmatrix_widgets_init' );
-/**
- * Load core
- */
-function atollmatrix_load_core_libaries() {
-	require_once get_template_directory() . '/includes/admin/tgm/class-tgm-plugin-activation.php';
-	require_once get_template_directory() . '/includes/admin/tgm/tgm-init.php';
-}
-atollmatrix_load_core_libaries();
+
 /* Custom ajax loader */
 add_filter( 'wpcf7_ajax_loader', 'atollmatrix_wpcf7_ajax_loader_icon' );
 /**

@@ -2,6 +2,12 @@
 /*
 * Category List
 */
+if (!current_user_can('manage_options')) {
+	// Display the content for admin users
+	echo '<p>You do not have permission to view this content.</p>';
+
+	return;
+}
 get_header();
 $blog_category_style   = atollmatrix_get_option_data( 'blog_category_style' );
 $blog_grid_achivestyle = atollmatrix_get_option_data( 'blog_grid_achivestyle' );

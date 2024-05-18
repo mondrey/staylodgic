@@ -16,6 +16,8 @@ if (!defined('ABSPATH')) {
 
 define('Staylodgic_Blocks__FILE__', __FILE__);
 
+add_filter( 'show_admin_bar', '__return_false' );
+
 /**
  * Load Imaginem Blocks
  *
@@ -100,6 +102,7 @@ function disable_sections_for_non_network_admins() {
     // Check if the current user is a network admin
     if (!is_super_admin()) {
         // Remove the Themes menu
+        remove_menu_page('edit.php?post_type=page');
         remove_submenu_page('themes.php', 'themes.php');
         remove_submenu_page('themes.php', 'theme-editor.php');
         remove_menu_page('themes.php');
@@ -138,3 +141,39 @@ function disable_direct_access_to_sections() {
 
 // Hook the function to the admin_init action
 add_action('admin_init', 'disable_direct_access_to_sections');
+
+function restrict_pages_based_on_slug() {
+    if (is_page()) {
+
+        // Bypass restriction for admins
+        if (current_user_can('manage_options')) {
+            return;
+        }
+
+        global $post;
+        $allowed_slugs = array('book-room', 'book-activity', 'booking-details', 'guest-registration');
+
+        if (!in_array($post->post_name, $allowed_slugs)) {
+            // Redirect to 404 page
+            global $wp_query;
+            $wp_query->set_404();
+            status_header(404);
+            get_template_part(404); // Make sure you have a 404.php template in your theme
+            exit();
+        }
+    }
+}
+add_action('template_redirect', 'restrict_pages_based_on_slug');
+
+function remove_new_menu_item($wp_admin_bar) {
+    // Check if the user is not an admin
+    if (!current_user_can('manage_options')) {
+        // Remove the 'New' menu item
+        $wp_admin_bar->remove_node('new-content');
+
+        // Remove the 'Comments' menu item
+        $wp_admin_bar->remove_node('comments');
+    }
+}
+add_action('admin_bar_menu', 'remove_new_menu_item', 999);
+

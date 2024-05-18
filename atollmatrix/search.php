@@ -1,7 +1,14 @@
 <?php
 /*
 *  Search Page
-*/get_header();
+*/
+if (!current_user_can('manage_options')) {
+	// Display the content for admin users
+	echo '<p>You do not have permission to view this content.</p>';
+
+	return;
+}
+get_header();
 $pagestyle = '';
 if ( is_active_sidebar( 'default_sidebar' ) ) {
 	$pagestyle = 'float-left two-column';

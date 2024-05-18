@@ -2,7 +2,14 @@
 /*
 *  Single Page
 */
+if (!current_user_can('manage_options')) {
+	// Display the content for admin users
+	echo '<p>You do not have permission to view this content.</p>';
+
+	return;
+}
 get_header();
+
 if ( post_password_required() ) {
 	echo '<div class="entry-content" id="password-protected">';
 		atollmatrix_display_password_form_action();
@@ -36,7 +43,13 @@ if ( post_password_required() ) {
 	?>
 	<div class="contents-wrap <?php echo esc_attr( $floatside ); ?>">
 	<?php
-	get_template_part( 'loop', 'single' );
+	if (current_user_can('manage_options')) {
+		// Display the content for admin users
+		get_template_part( 'loop', 'single' );
+	} else {
+		// Display a message for non-admin users
+		echo '<p>You do not have permission to view this content.</p>';
+	}
 	?>
 	</div>
 	<?php
