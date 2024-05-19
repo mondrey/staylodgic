@@ -75,7 +75,7 @@ function staylodgic_custom_login_redirect($redirect_to, $request, $user) {
 }
 add_filter('login_redirect', 'staylodgic_custom_login_redirect', 10, 3);
 
-function disable_export_tools_for_non_network_admins() {
+function staylodgic_disable_export_tools_for_non_network_admins() {
     // Check if the current user is a network admin
     if (!is_super_admin()) {
         // Remove the export tools menu
@@ -95,10 +95,10 @@ function disable_export_tools_for_non_network_admins() {
 }
 
 // Hook the function to the admin_menu action
-add_action('admin_menu', 'disable_export_tools_for_non_network_admins', 999);
+add_action('admin_menu', 'staylodgic_disable_export_tools_for_non_network_admins', 999);
 
 
-function disable_sections_for_non_network_admins() {
+function staylodgic_disable_sections_for_non_network_admins() {
     // Check if the current user is a network admin
     if (!is_super_admin()) {
         // Remove the Themes menu
@@ -113,7 +113,7 @@ function disable_sections_for_non_network_admins() {
 }
 
 // Hook the function to the admin_menu action
-add_action('admin_menu', 'disable_sections_for_non_network_admins', 999);
+add_action('admin_menu', 'staylodgic_disable_sections_for_non_network_admins', 999);
 
 function disable_sections_admin_bar($wp_admin_bar) {
     // Check if the current user is a network admin
@@ -129,7 +129,7 @@ function disable_sections_admin_bar($wp_admin_bar) {
 // Hook the function to the admin_bar_menu action
 add_action('admin_bar_menu', 'disable_sections_admin_bar', 999);
 
-function disable_direct_access_to_sections() {
+function staylodgic_disable_direct_access_to_sections() {
     // Check if the current user is a network admin
     if (!is_super_admin() && (
         stripos($_SERVER['REQUEST_URI'], 'themes.php') !== false || 
@@ -140,9 +140,9 @@ function disable_direct_access_to_sections() {
 }
 
 // Hook the function to the admin_init action
-add_action('admin_init', 'disable_direct_access_to_sections');
+add_action('admin_init', 'staylodgic_disable_direct_access_to_sections');
 
-function restrict_pages_based_on_slug() {
+function staylodgic_restrict_pages_based_on_slug() {
     if (is_page()) {
 
         // Bypass restriction for admins
@@ -163,9 +163,9 @@ function restrict_pages_based_on_slug() {
         }
     }
 }
-add_action('template_redirect', 'restrict_pages_based_on_slug');
+add_action('template_redirect', 'staylodgic_restrict_pages_based_on_slug');
 
-function remove_new_menu_item($wp_admin_bar) {
+function staylodgic_remove_new_menu_item($wp_admin_bar) {
     // Check if the user is not an admin
     if (!current_user_can('manage_options')) {
         // Remove the 'New' menu item
@@ -175,5 +175,4 @@ function remove_new_menu_item($wp_admin_bar) {
         $wp_admin_bar->remove_node('comments');
     }
 }
-add_action('admin_bar_menu', 'remove_new_menu_item', 999);
-
+add_action('admin_bar_menu', 'staylodgic_remove_new_menu_item', 999);

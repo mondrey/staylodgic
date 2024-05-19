@@ -7,8 +7,11 @@ class Cron
 
     public function __construct() {
 
-        add_filter('cron_schedules',  array($this, 'add_cron_intervals'));
-        $this->cron_initialize();
+        $site_sync_feature = get_blog_option(get_current_blog_id(), 'site_sync_feature');
+        if ('enabled' == $site_sync_feature) {
+            add_filter('cron_schedules',  array($this, 'add_cron_intervals'));
+            $this->cron_initialize();
+        }
     }
 
     public function get_scheduled_time() {
@@ -39,21 +42,21 @@ class Cron
                 $schedule = 'staylodgic_30_minutes';
         }
     
-        error_log('Sync ' . $qtysync_interval );
-        error_log('Sync schedule ' . $schedule );
+        // error_log('Sync ' . $qtysync_interval );
+        // error_log('Sync schedule ' . $schedule );
     
         return $schedule;
     }
     
     
     public function cron_initialize() {
-        error_log('Activating Staylodgic Plugin.');
+        error_log('Cron Init Staylodgic Plugin.');
         
         $current_meta_schedule = get_option('current_ical_processor_schedule');
         $new_schedule = $this->get_scheduled_time();
     
-        error_log('Current Schedule from Metadata: ' . $current_meta_schedule);
-        error_log('New Schedule from Settings: ' . $new_schedule);
+        // error_log('Current Schedule from Metadata: ' . $current_meta_schedule);
+        // error_log('New Schedule from Settings: ' . $new_schedule);
         
         if ($current_meta_schedule !== $new_schedule) {
             $scheduled_time = wp_next_scheduled('staylodgic_ical_availability_processor_event');
@@ -70,14 +73,14 @@ class Cron
     
             update_option('current_ical_processor_schedule', $new_schedule);
         } else {
-            error_log('No rescheduling needed. Current schedule matches the new schedule.');
+            // error_log('No rescheduling needed. Current schedule matches the new schedule.');
         }
     
         // Schedule the cron event if it's not already scheduled
         if (!wp_next_scheduled('staylodgic_ical_availability_processor_event')) {
             $fresh_schedule_result = wp_schedule_event(time(), $new_schedule, 'staylodgic_ical_availability_processor_event');
-            error_log('Attempting to set a fresh schedule: ' . $fresh_schedule_result);
-            error_log('Fresh schedule result: ' . ($fresh_schedule_result ? 'Success' : 'Failed'));
+            // error_log('Attempting to set a fresh schedule: ' . $fresh_schedule_result);
+            // error_log('Fresh schedule result: ' . ($fresh_schedule_result ? 'Success' : 'Failed'));
         }
     
         $cron_jobs = _get_cron_array(); // Retrieve the cron array
