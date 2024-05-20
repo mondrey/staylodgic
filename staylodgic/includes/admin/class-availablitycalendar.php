@@ -400,6 +400,22 @@ class AvailablityCalendar extends AvailablityCalendarBase
             $room_output = '<tr class="calendarRow calendar-room-row" data-id="' . esc_attr($roomID) . '">';
             $room_output .= '<td class="calendarCell rowHeader">';
             $room_output .= esc_html($roomName);
+
+            $total_rooms = get_post_meta($roomID, 'staylodgic_max_rooms_of_type', true);
+            if ('' == $total_rooms) {
+                $room_output .= '<div class="availability-warning"><p class="availability-room-warning-notice">' . __('Warning: Max room undefined', 'staylodgic') . '</p></div>';
+            }
+            if ('0' == $total_rooms) {
+                $room_output .= '<div class="availability-warning"><p class="availability-room-warning-notice">' . __('Warning: Max room is zero', 'staylodgic') . '</p></div>';
+            }
+            $base_rate = get_post_meta($roomID, 'staylodgic_base_rate', true);
+            if ('' == $base_rate) {
+                $room_output .= '<div class="availability-warning"><p class="availability-room-warning-notice">' . __('Warning: Base rate undefined', 'staylodgic') . '</p></div>';
+            }
+            if ('0' == $base_rate) {
+                $room_output .= '<div class="availability-warning"><p class="availability-room-warning-notice">' . __('Warning: Base rate is zero', 'staylodgic') . '</p></div>';
+            }
+
             $room_output .= '</td>';
 
             if (!$this->usingCache) {
