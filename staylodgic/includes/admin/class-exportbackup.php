@@ -14,7 +14,7 @@ class ExportBackup {
         if (current_user_can('editor') || current_user_can('administrator')) {
             add_menu_page(
                 'Custom Export', 
-                'Export Content', 
+                'Download XML Records', 
                 'edit_posts', 
                 'custom-export', 
                 [$this, 'custom_export_page'], 
@@ -27,7 +27,7 @@ class ExportBackup {
     public function custom_export_page() {
         ?>
         <div class="wrap">
-            <h1><?php _e('Export Content'); ?></h1>
+            <h1><?php _e('Download XML Records'); ?></h1>
             <form method="get" id="export-filters">
                 <fieldset>
                     <legend class="screen-reader-text"><?php _e('Content to export'); ?></legend>

@@ -1166,7 +1166,7 @@ function atollmatrix_body_class( $classes ) {
 		$classes[] = 'stickymenu-enabled-sitewide';
 	}
 
-	$header_menu_type = atollmatrix_get_option_data( 'menu_type' );
+	$header_menu_type = 'centered-logo';
 
 	if ( function_exists( 'theme_demo_feature_mode' ) ) {
 		$header_menu_type = apply_filters( 'header_style', $header_menu_type );
@@ -1206,7 +1206,7 @@ function atollmatrix_body_class( $classes ) {
 			break;
 
 		default:
-			$classes[] = 'left-logo';
+			$classes[] = 'centered-logo';
 			$classes[] = 'menu-is-horizontal';
 			break;
 	}
