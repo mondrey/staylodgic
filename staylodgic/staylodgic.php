@@ -123,6 +123,12 @@ function disable_sections_admin_bar($wp_admin_bar) {
 
         // Remove the Users menu from the admin bar
         $wp_admin_bar->remove_node('users');
+
+        // Remove WordPress logo
+        $wp_admin_bar->remove_node('wp-logo');
+
+        // Remove "My Sites" item
+        $wp_admin_bar->remove_node('my-sites');
     }
 }
 
@@ -176,3 +182,21 @@ function staylodgic_remove_new_menu_item($wp_admin_bar) {
     }
 }
 add_action('admin_bar_menu', 'staylodgic_remove_new_menu_item', 999);
+
+// add_action('admin_init', 'check_user_capabilities');
+// function check_user_capabilities() {
+//     if (current_user_can('edit_posts')) {
+//         error_log('User can edit posts.');
+//     } else {
+//         error_log('User cannot edit posts.');
+//     }
+
+//     $user = wp_get_current_user();
+//     error_log('Current User Roles: ' . implode(', ', $user->roles));
+//     error_log('Current User Capabilities: ' . implode(', ', array_keys($user->allcaps)));
+// }
+
+function staylodgic_settings_page_capability($capability) {
+    return 'edit_posts'; // Allow editors to manage settings
+}
+add_filter('option_page_capability_staylodgic_settings_group', 'staylodgic_settings_page_capability');

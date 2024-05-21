@@ -1,3 +1,23 @@
+.wp-admin #adminmenu,
+.wp-admin #adminmenuback,
+.wp-admin #adminmenuwrap {
+	background-color: #351508;
+}
+.wp-admin #adminmenu .wp-submenu {
+	background-color: #44300a;	
+}
+.wp-admin #adminmenu .wp-submenu a:focus,
+.wp-admin #adminmenu .wp-submenu a:hover,
+.wp-admin #adminmenu a:hover,
+.wp-admin #adminmenu li.menu-top > a:focus {
+	color: #fff;
+}
+.wp-admin #adminmenu li.menu-top:hover,
+.wp-admin #adminmenu li.opensub > a.menu-top,
+.wp-admin #adminmenu li > a.menu-top:focus {
+	background-color: #590e3f;
+	color: #fff;
+}
 #toplevel_page_slgc-dashboard,
 #toplevel_page_staylodgic-settings,
 #menu-posts-slgc_room,
@@ -6,7 +26,7 @@
 #menu-posts-slgc_guestregistry,
 #menu-posts-slgc_activity,
 #menu-posts-slgc_activityres {
-	background: #000;
+
 }
 #toplevel_page_slgc-dashboard .wp-menu-image.svg,
 #toplevel_page_staylodgic-settings .wp-menu-image.svg,

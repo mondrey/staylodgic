@@ -74,6 +74,34 @@ function staylodgic_get_GmtTimezoneChoices() {
 
     return $timezones;
 }
+function staylodgic_get_booking_homepages_for_select() {
+    // Get an array of all pages
+    $page_list = array();
+
+	$page_list = array('none' => 'Choose a page');
+
+// Array of allowed templates
+
+    $page_list['template-bookroom.php'] = 'Book Reservation';
+    $page_list['template-bookactivity.php'] = 'Book Activity';
+
+    return $page_list;
+}
+function staylodgic_get_booking_pages_for_select() {
+    // Get an array of all pages
+    $page_list = array();
+
+	$page_list = array('none' => 'Choose a page');
+
+// Array of allowed templates
+
+    $page_list['template-bookroom.php'] = 'Book Reservation';
+    $page_list['template-bookactivity.php'] = 'Book Activity';
+    $page_list['template-guestregistration.php'] = 'Guest Registration';
+    $page_list['template-bookingdetails.php'] = 'Booking Details';
+
+    return $page_list;
+}
 function staylodgic_get_pages_for_select() {
     // Get an array of all pages
     $pages = get_pages(); 

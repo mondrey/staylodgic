@@ -14,7 +14,24 @@ class Staylodgic_Init
         add_action( 'wp_head', array($this,'preconnect_google_fonts' ));
 
         add_action('admin_menu', array($this,'remove_admin_elements'));
+
+        add_action('wp_head', array($this, 'output_dynamic_css'));
     
+    }
+
+    public function output_dynamic_css()
+    {
+        // Get the main_logo_height option value
+        $main_logo_height = staylodgic_get_option('main_logo_height');
+
+        // Check if the value is set and is a valid number
+        if ($main_logo_height && is_numeric($main_logo_height)) {
+            echo '<style type="text/css">
+                .menu-is-horizontal .logo img {
+                    height: ' . esc_attr($main_logo_height) . 'px;
+                }
+                </style>';
+        }
     }
 
     public function remove_admin_elements() {

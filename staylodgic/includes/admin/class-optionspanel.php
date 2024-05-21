@@ -358,7 +358,7 @@ class OptionsPanel
     public function render_options_page()
     {
         if (!current_user_can($this->user_capability)) {
-            return;
+            wp_die(__('You do not have sufficient permissions to access this page.'));
         }
 
         if (isset($_GET['settings-updated'])) {
@@ -1026,6 +1026,7 @@ $panel_args = [
         'activity-property' => '<i class="fa fa-suitcase"></i> <span class="options-menu-link-text">' . esc_html__('Activity Property', 'staylodgic') . '</span>',
         'currency'      => '<i class="fa fa-dollar"></i> <span class="options-menu-link-text">' . esc_html__('Currency', 'staylodgic') . '</span>',
         'general'       => '<i class="fa fa-cogs"></i> <span class="options-menu-link-text">' . esc_html__('General', 'staylodgic') . '</span>',
+        'logo'         => '<i class="fa-solid fa-panorama"></i> <span class="options-menu-link-text">' . esc_html__('Logo', 'staylodgic') . '</span>',
         'pages'         => '<i class="fa fa-file-text"></i> <span class="options-menu-link-text">' . esc_html__('Pages', 'staylodgic') . '</span>',
         'discounts'     => '<i class="fa fa-percent"></i> <span class="options-menu-link-text">' . esc_html__('Discounts', 'staylodgic') . '</span>',
         'mealplan'      => '<i class="fa fa-cutlery"></i> <span class="options-menu-link-text">' . esc_html__('Meal Plan', 'staylodgic') . '</span>',
@@ -1166,29 +1167,62 @@ $panel_settings = [
         'description' => 'Footer text for email',
         'tab'         => 'activity-property',
     ],
-
-    'page_bookingsearch'   => [
-        'label'       => esc_html__('Booking search page', 'staylodgic'),
+    'main_logo'         => [
+        'label'       => esc_html__('Header logo', 'staylodgic'),
+        'type'        => 'media_upload',
+        'description' => 'Upload header logo.',
+        'tab'         => 'logo', // You can change the tab as per your requirement
+    ],
+    'main_logo_height'   => [
+        'label'       => esc_html__('Header logo height in pixels', 'staylodgic'),
+        'type'        => 'number',
+        'default'        => '100',
+        'description' => 'Height of header logo in pixels.',
+        'tab'         => 'logo',
+    ],
+    'responsive_logo'         => [
+        'label'       => esc_html__('Responsive logo', 'staylodgic'),
+        'type'        => 'media_upload',
+        'description' => 'Upload header logo.',
+        'tab'         => 'logo', // You can change the tab as per your requirement
+    ],
+    'responsive_logo_height'   => [
+        'label'       => esc_html__('Responsive logo height in pixels', 'staylodgic'),
+        'type'        => 'number',
+        'default'        => '50',
+        'description' => 'Height of header logo in pixels.',
+        'tab'         => 'logo',
+    ],
+    'booking_menu_one'   => [
+        'label'       => esc_html__('Menu One ( Homepage )', 'staylodgic'),
         'type'        => 'select',
         'inputwidth'  => '250',
-        'description' => 'Booking search page.',
-        'choices'     => staylodgic_get_pages_for_select(),
+        'description' => 'Homepage for booking.',
+        'choices'     => staylodgic_get_booking_homepages_for_select(),
         'tab'         => 'pages',
     ],
-    'page_activitybookingsearch'   => [
-        'label'       => esc_html__('Activities search page', 'staylodgic'),
+    'booking_menu_two'   => [
+        'label'       => esc_html__('Menu Two', 'staylodgic'),
         'type'        => 'select',
         'inputwidth'  => '250',
-        'description' => 'Activities search page.',
-        'choices'     => staylodgic_get_pages_for_select(),
+        'description' => 'Page as first menu item.',
+        'choices'     => staylodgic_get_booking_pages_for_select(),
         'tab'         => 'pages',
     ],
-    'page_bookingdetails'  => [
-        'label'       => esc_html__('Booking details', 'staylodgic'),
+    'booking_menu_three'   => [
+        'label'       => esc_html__('Menu Three', 'staylodgic'),
         'type'        => 'select',
         'inputwidth'  => '250',
-        'description' => 'Booking details.',
-        'choices'     => staylodgic_get_pages_for_select(),
+        'description' => 'Page as second menu item.',
+        'choices'     => staylodgic_get_booking_pages_for_select(),
+        'tab'         => 'pages',
+    ],
+    'booking_menu_four'   => [
+        'label'       => esc_html__('Menu Four', 'staylodgic'),
+        'type'        => 'select',
+        'inputwidth'  => '250',
+        'description' => 'Page as third menu item.',
+        'choices'     => staylodgic_get_booking_pages_for_select(),
         'tab'         => 'pages',
     ],
     'discount_lastminute'             => [

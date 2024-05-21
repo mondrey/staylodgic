@@ -38,8 +38,8 @@ function atollmatrix_main_menu_logo( $header_menu_type = 'center-logo' ) {
 	$theme_style     = 'light';
 	
 	if ( function_exists('staylodgic_get_option')) {
-		$property_logo_id = staylodgic_get_option('property_logo');
-		$main_logo       = $property_logo_id ? wp_get_attachment_image_url($property_logo_id, 'full') : '';
+		$main_logo_id = staylodgic_get_option('main_logo');
+		$main_logo       = $main_logo_id ? wp_get_attachment_image_url($main_logo_id, 'full') : '';
 		$secondary_logo = $main_logo;
 
 	}
