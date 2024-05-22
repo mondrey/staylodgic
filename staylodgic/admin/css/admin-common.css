@@ -28,6 +28,20 @@
 #menu-posts-slgc_activityres {
 
 }
+.logo-staylodgic {
+	background: url('../../assets/images/staylodgic-logo-white.png');
+	height: 100px;
+	width: auto;
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+.logo-staylodgic-alt {
+	background: url('../../assets/images/staylodgic-logo-black.png');
+	height: 100px;
+	width: auto;
+	background-size: contain;
+	background-repeat: no-repeat;
+}
 #toplevel_page_slgc-dashboard .wp-menu-image.svg,
 #toplevel_page_staylodgic-settings .wp-menu-image.svg,
 #menu-posts-slgc_room .wp-menu-image.svg,

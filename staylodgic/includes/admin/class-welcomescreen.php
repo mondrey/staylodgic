@@ -43,8 +43,7 @@ echo '<div class="admin-container">';
 echo '<div class="admin-column admin-column1">';
 echo '<div class="section-main">';
 echo '<div class="admin-page-header">';
-echo '<h2>Hotel Management</h2>';
-echo '<h1>Staylodgic<span class="the-dot">.</span></h1>';
+echo '<div class="logo-staylodgic"></div>';
 echo '</div>';
 echo '<ul class="admin-horizontal-list">';
 echo '<li><i class="fas fa-plus-square"></i> New Reservation</li>';
@@ -76,8 +75,7 @@ echo '</div>';
         // Header
         echo '<div class="admin-page-two-main">';
         echo '<div class="admin-page-two-header">';
-        echo '<h2>Hotel Management</h2>';
-        echo '<h1>Staylodgic<span class="the-dot">.</span></h1>';
+        echo '<div class="logo-staylodgic-alt"></div>';
         echo '</div>';
 
         echo '<div class="admin-page-two-wrapper">';
