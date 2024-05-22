@@ -101,7 +101,7 @@ function staylodgic_get_booking_homepages_for_select() {
 
 // Array of allowed templates
 
-    $page_list['template-bookroom.php'] = 'Book Reservation';
+    $page_list['template-bookroom.php'] = 'Book Room';
     $page_list['template-bookactivity.php'] = 'Book Activity';
 
     return $page_list;
@@ -114,7 +114,7 @@ function staylodgic_get_booking_pages_for_select() {
 
 // Array of allowed templates
 
-    $page_list['template-bookroom.php'] = 'Book Reservation';
+    $page_list['template-bookroom.php'] = 'Book Room';
     $page_list['template-bookactivity.php'] = 'Book Activity';
     $page_list['template-guestregistration.php'] = 'Guest Registration';
     $page_list['template-bookingdetails.php'] = 'Booking Details';

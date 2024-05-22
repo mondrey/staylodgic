@@ -14,7 +14,7 @@ class LoginRegistration {
         add_filter('wpmu_validate_user_signup', array($this, 'validate_recaptcha_and_fields')); // For multisite user validation
         add_action('signup_hidden_fields', array($this, 'add_hidden_fields')); // Add hidden fields to the second form
         add_action('wp_enqueue_scripts', array($this, 'enqueue_recaptcha_script'));
-        add_action('wp_initialize_site', array($this, 'create_initial_pages'), 10, 2); // Use wp_initialize_site for new site
+        // add_action('wp_initialize_site', array($this, 'create_initial_pages'), 10, 2); // Use wp_initialize_site for new site
 
         add_filter('gettext', array($this, 'mu_registration_text'), 10, 3);
     }
@@ -103,63 +103,6 @@ class LoginRegistration {
         // }
 
         return $result;
-    }
-
-    // Function to create custom pages
-    public function create_custom_page($title, $template, $content, $slug) {
-        $page_data = array(
-            'post_title'    => $title,
-            'post_content'  => $content,
-            'post_status'   => 'publish',
-            'post_type'     => 'page',
-            'post_name'     => $slug, // Set the slug for the page
-            'meta_input'    => array(
-                '_wp_page_template' => $template,
-            ),
-        );
-
-        $page_id = wp_insert_post($page_data);
-
-        return $page_id;
-    }
-
-    // Function to create initial pages
-    public function create_initial_pages($new_site, $args) {
-        switch_to_blog($new_site->blog_id);
-
-        $pages = array(
-            array(
-                'title' => 'Book Room',
-                'slug' => 'book-room',
-                'template' => 'template-bookroom.php',
-                'content' => '[hotel_booking_search]'
-            ),
-            array(
-                'title' => 'Book Activity',
-                'slug' => 'book-activity',
-                'template' => 'template-bookactivity.php',
-                'content' => '[activity_booking_search]'
-            ),
-            array(
-                'title' => 'Booking Details',
-                'slug' => 'booking-details',
-                'template' => 'template-bookingdetails.php',
-                'content' => '[hotel_booking_details]'
-            ),
-            array(
-                'title' => 'Guest Registration',
-                'slug' => 'guest-registration',
-                'template' => 'template-guestregistration.php',
-                'content' => '[guest_registration]'
-            ),
-            // Add more pages as needed
-        );
-
-        foreach ($pages as $page) {
-            $this->create_custom_page($page['title'], $page['template'], $page['content'], $page['slug']);
-        }
-
-        restore_current_blog();
     }
 
 }

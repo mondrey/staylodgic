@@ -68,6 +68,123 @@ class OptionsPanel
         add_action('admin_enqueue_scripts', [$this, 'enqueue_media_uploader']);
     }
 
+// Function to create custom pages
+public function create_custom_page($title, $template, $content, $slug) {
+    $existing_page = get_page_by_path($slug, OBJECT, 'page');
+    if ($existing_page) {
+        return $existing_page->ID; // Return existing page ID if the page exists
+    }
+
+    $page_data = array(
+        'post_title'    => $title,
+        'post_content'  => $content,
+        'post_status'   => 'publish',
+        'post_type'     => 'page',
+        'post_name'     => $slug, // Set the slug for the page
+        'meta_input'    => array(
+            '_wp_page_template' => $template,
+        ),
+    );
+
+    $page_id = wp_insert_post($page_data);
+
+    return $page_id;
+}
+
+// Function to create initial pages
+public function create_initial_pages() {
+    $pages = array(
+        array(
+            'title' => 'Book Room',
+            'slug' => 'book-room',
+            'template' => 'template-bookroom.php',
+            'content' => '[hotel_booking_search]'
+        ),
+        array(
+            'title' => 'Book Activity',
+            'slug' => 'book-activity',
+            'template' => 'template-bookactivity.php',
+            'content' => '[activity_booking_search]'
+        ),
+        array(
+            'title' => 'Booking Details',
+            'slug' => 'booking-details',
+            'template' => 'template-bookingdetails.php',
+            'content' => '[hotel_booking_details]'
+        ),
+        array(
+            'title' => 'Guest Registration',
+            'slug' => 'guest-registration',
+            'template' => 'template-guestregistration.php',
+            'content' => '[guest_registration]'
+        ),
+        // Add more pages as needed
+    );
+
+    foreach ($pages as $page) {
+        $this->create_custom_page($page['title'], $page['template'], $page['content'], $page['slug']);
+    }
+
+    // After creating pages, create the menu
+    $this->create_booking_menu();
+}
+
+// Function to create or update the booking menu
+public function create_booking_menu() {
+    $menu_name = 'booking-menu';
+    $menu_exists = wp_get_nav_menu_object($menu_name);
+
+    // Delete the existing menu if it exists
+    if ($menu_exists) {
+        wp_delete_nav_menu($menu_exists->term_id);
+    }
+
+    // Create a new menu
+    $menu_id = wp_create_nav_menu($menu_name);
+
+    // Get the template file names from theme options
+    $menu_templates = array(
+        'booking_menu_one' => staylodgic_get_option('booking_menu_one'),
+        'booking_menu_two' => staylodgic_get_option('booking_menu_two'),
+        'booking_menu_three' => staylodgic_get_option('booking_menu_three'),
+        'booking_menu_four' => staylodgic_get_option('booking_menu_four'),
+    );
+
+    // Find pages by template files
+    $menu_items = array();
+    foreach ($menu_templates as $template) {
+        $query = new \WP_Query(array(
+            'post_type' => 'page',
+            'meta_key' => '_wp_page_template',
+            'meta_value' => $template,
+            'posts_per_page' => 1,
+        ));
+        if ($query->have_posts()) {
+            $query->the_post();
+            $menu_items[] = get_the_ID();
+        }
+        wp_reset_postdata();
+    }
+
+    // Add new menu items
+    foreach ($menu_items as $page_id) {
+        if ($page_id) {
+            wp_update_nav_menu_item($menu_id, 0, array(
+                'menu-item-object-id' => $page_id,
+                'menu-item-object' => 'page',
+                'menu-item-type' => 'post_type',
+                'menu-item-status' => 'publish',
+            ));
+        }
+    }
+
+    // Set the menu as Main Menu and Mobile Menu
+    $locations = get_theme_mod('nav_menu_locations'); // Get all theme locations
+    $locations['main_menu'] = $menu_id; // Assign the menu to Main Menu
+    $locations['mobile_menu'] = $menu_id; // Assign the menu to Mobile Menu
+    set_theme_mod('nav_menu_locations', $locations); // Update the locations
+}
+
     public function staylodgic_import_settings()
     {
         // Check if our nonce is set and verify it.
@@ -370,6 +487,8 @@ class OptionsPanel
             );
 
             \Staylodgic\Cache::clearAllCache();
+            
+            $this->create_initial_pages();
         }
 
         settings_errors($this->option_name . '_mesages');
@@ -612,8 +731,8 @@ class OptionsPanel
         // if (isset($array) && is_array($array)) {
         //     $setsOfThree = array_chunk($array, 3);
         // }
-        error_log('----- mealplan array -----');
-        error_log(print_r($array, 1));
+        // error_log('----- mealplan array -----');
+        // error_log(print_r($array, 1));
 
     ?>
         <div class="repeatable-mealplan-template" style="display: none;">
