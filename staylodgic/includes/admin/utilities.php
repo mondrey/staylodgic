@@ -1,4 +1,44 @@
 <?php
+function staylodgic_get_page_title_by_template($template) {
+    $pages = staylodgic_get_template_pages();
+    foreach ($pages as $page) {
+        if ($page['template'] === $template) {
+            return $page['title'];
+        }
+    }
+    return null; // Return null if the template is not found
+}
+function staylodgic_get_template_pages() {
+    $pages = array(
+        array(
+            'title' => 'Book Room',
+            'slug' => 'book-room',
+            'template' => 'template-bookroom.php',
+            'content' => '[hotel_booking_search]'
+        ),
+        array(
+            'title' => 'Book Activity',
+            'slug' => 'book-activity',
+            'template' => 'template-bookactivity.php',
+            'content' => '[activity_booking_search]'
+        ),
+        array(
+            'title' => 'Booking Details',
+            'slug' => 'booking-details',
+            'template' => 'template-bookingdetails.php',
+            'content' => '[hotel_booking_details]'
+        ),
+        array(
+            'title' => 'Guest Registration',
+            'slug' => 'guest-registration',
+            'template' => 'template-guestregistration.php',
+            'content' => '[guest_registration]'
+        ),
+        // Add more pages as needed
+    );
+
+	return $pages;
+}
 function staylodgic_get_site_max_rooms( $site_id = false ) {
 
 	$default_max = 10;

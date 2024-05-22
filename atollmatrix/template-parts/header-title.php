@@ -92,7 +92,11 @@ if ( 'hide' !== $pagetitle_status ) {
 				elseif ( is_front_page() && ! is_home() ) :
 					the_title( '' );
 				elseif ( is_front_page() ) :
-					bloginfo( 'name' );
+					
+					$booking_menu_one_template = staylodgic_get_option('booking_menu_one');
+					$booking_menu_one_title = staylodgic_get_page_title_by_template($booking_menu_one_template);
+					echo $booking_menu_one_title;
+
 				elseif ( is_home() ) :
 					$frontpage_id = get_option( 'page_for_posts' );
 					echo get_the_title( $frontpage_id );

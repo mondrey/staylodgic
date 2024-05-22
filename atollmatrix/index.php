@@ -2,7 +2,7 @@
 get_header();
 
 // Define the home choice variable
-$home_choice = 'template-bookroom.php'; // Set this variable to one of your template filenames as needed
+$home_choice = staylodgic_get_option('booking_menu_one'); // Set this variable to one of your template filenames as needed
 
 // Array of allowed templates
 $allowed_templates = [

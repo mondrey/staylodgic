@@ -1405,6 +1405,10 @@ a.book-button:hover:active,
 .entry-content .container-outer label {
 	margin: 10px 0 0;
 }
+.container-outer #hotel-booking-form p,
+.container-outer #hotel-booking-form label {
+	margin: 0;
+}
 .entry-content .container-outer p {
 	margin-bottom: 20px;
 }

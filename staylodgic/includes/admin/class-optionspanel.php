@@ -93,33 +93,8 @@ public function create_custom_page($title, $template, $content, $slug) {
 
 // Function to create initial pages
 public function create_initial_pages() {
-    $pages = array(
-        array(
-            'title' => 'Book Room',
-            'slug' => 'book-room',
-            'template' => 'template-bookroom.php',
-            'content' => '[hotel_booking_search]'
-        ),
-        array(
-            'title' => 'Book Activity',
-            'slug' => 'book-activity',
-            'template' => 'template-bookactivity.php',
-            'content' => '[activity_booking_search]'
-        ),
-        array(
-            'title' => 'Booking Details',
-            'slug' => 'booking-details',
-            'template' => 'template-bookingdetails.php',
-            'content' => '[hotel_booking_details]'
-        ),
-        array(
-            'title' => 'Guest Registration',
-            'slug' => 'guest-registration',
-            'template' => 'template-guestregistration.php',
-            'content' => '[guest_registration]'
-        ),
-        // Add more pages as needed
-    );
+    
+    $pages = staylodgic_get_template_pages();
 
     foreach ($pages as $page) {
         $this->create_custom_page($page['title'], $page['template'], $page['content'], $page['slug']);

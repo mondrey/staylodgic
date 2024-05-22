@@ -3939,16 +3939,6 @@ body.single-post:not(.elementor-page) .container-wrapper {
 	font-size: 34px;
 	line-height: 34px;
 }
-.menu-has-site-title .entry-title-wrap {
-	display: none;
-}
-.menu-has-site-title .title-container-outer-wrap {
-	padding-top: 40px;
-}
-.menu-has-site-title.mobile-mode-active .title-container-outer-wrap {
-	padding-top: 30px;
-	margin-bottom: 0;
-}
 body.mtheme-password-required,
 body.single-proofing,
 body.page-is-fullscreen {
