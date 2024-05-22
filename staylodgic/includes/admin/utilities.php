@@ -1,4 +1,23 @@
 <?php
+function staylodgic_get_site_max_rooms( $site_id = false ) {
+
+	$default_max = 10;
+	
+	$max_total_rooms = (int) get_blog_option(get_current_blog_id(), 'site_max_rooms');
+
+	if ( 0 == $max_total_rooms ) {
+		$max_total_rooms = $default_max;
+	}
+	if ( !isset( $max_total_rooms ) ) {
+		$max_total_rooms = $default_max;
+	}
+	if ( '' == $max_total_rooms ) {
+		$max_total_rooms = $default_max;
+	}
+
+	return $max_total_rooms;
+
+}
 function staylodgic_random_color_hex() {
     // Generate a random RGB color
     $red = mt_rand(0, 255);

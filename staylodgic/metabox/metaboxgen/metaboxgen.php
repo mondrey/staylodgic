@@ -1668,7 +1668,7 @@ function staylodgic_calculate_remaining_rooms($exclude_post_id)
     }
 
     // Subtract this total from the maximum allowable rooms
-    $max_total_rooms = (int) get_blog_option(get_current_blog_id(), 'site_max_rooms');
+    $max_total_rooms = staylodgic_get_site_max_rooms( get_current_blog_id() );
     $remaining_rooms = max(0, $max_total_rooms - $total_rooms); // Ensure it doesn't go negative
     error_log('Max Rooms set in Site');
     error_log($max_total_rooms);
@@ -1698,7 +1698,7 @@ function staylodgic_savedata($staylodgic_metaboxdata, $post_id)
                     error_log('Capturing');
                     $remainingTotalExcludingThisRoom = staylodgic_calculate_remaining_rooms($post_id);
                     $new_rooms = isset($_POST['staylodgic_max_rooms_of_type']) ? (int) $_POST['staylodgic_max_rooms_of_type'] : 0;
-                    $max_total_rooms = (int) get_blog_option(get_current_blog_id(), 'site_max_rooms');
+                    $max_total_rooms = staylodgic_get_site_max_rooms( get_current_blog_id() );
 
                     error_log('Aggregate rooms without this room :' . $remainingTotalExcludingThisRoom );
                     error_log('Max rooms allowed:' . $max_total_rooms );

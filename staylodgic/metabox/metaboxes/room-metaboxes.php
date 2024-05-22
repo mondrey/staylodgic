@@ -8,8 +8,7 @@ function staylodgic_room_metadata()
     $staylodgic_imagepath = get_template_directory_uri() . '/framework/options/images/';
 
     $remaining_rooms = staylodgic_calculate_remaining_rooms( get_the_id() );
-    $max_total_rooms = (int) get_blog_option(get_current_blog_id(), 'site_max_rooms');
-
+    $max_total_rooms = staylodgic_get_site_max_rooms( get_current_blog_id() );
 
     // array(
     //     'name' => __('Rooms of this type', 'staylodgic'),
