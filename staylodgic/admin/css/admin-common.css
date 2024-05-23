@@ -28,16 +28,21 @@
 #menu-posts-slgc_activityres {
 
 }
+
+.admin-page-two-main {
+	background: #fbfbfb;
+	padding-bottom: 50px;
+}
 .logo-staylodgic {
 	background: url('../../assets/images/staylodgic-logo-white.png');
-	height: 100px;
+	height: 80px;
 	width: auto;
 	background-size: contain;
 	background-repeat: no-repeat;
 }
 .logo-staylodgic-alt {
 	background: url('../../assets/images/staylodgic-logo-black.png');
-	height: 100px;
+	height: 80px;
 	width: auto;
 	background-size: contain;
 	background-repeat: no-repeat;
@@ -236,7 +241,8 @@
 }
 
 .admin-page-two-header {
-	padding-top: 50px;
+	padding-top: 100px;
+	padding-bottom: 50px;
 }
 .admin-page-two-wrapper {
 	padding-bottom: 50px;

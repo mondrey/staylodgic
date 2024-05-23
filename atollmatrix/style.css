@@ -9426,9 +9426,9 @@ ul.mtree li.mtree-active > a {
 
 .split-menu.menu-is-horizontal .logo img,
 .centered-logo.menu-is-horizontal .logo img {
-	padding-top: 60px;
-	padding-left: 0;
-	padding-bottom: 18px;
+	margin-top: 30px;
+	margin-bottom: 20px;
+	padding: 0;
 }
 .split-menu.menu-is-horizontal .logo img {
 	padding-top: 26px;
