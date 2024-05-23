@@ -1,6 +1,12 @@
 jQuery(document).ready(function ($) {
 	"use strict";
 
+    $('.view-all-features').click(function() {
+        $('html, body').animate({
+            scrollTop: $('.admin-page-two-main').offset().top
+        }, 1000); // Adjust the duration (1000ms) as needed
+    });
+
     $('#start-bookings-button').click(function() {
         startBookingsTour();
     });
