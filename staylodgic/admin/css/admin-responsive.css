@@ -54,10 +54,27 @@
 
 }
 
+
+@media only screen and (max-width: 1150px) {
+
+    .admin-horizontal-list {
+        display: flow-root;
+    }
+    
+}
+
 /* #Tablet (Landscape)
 ================================================== */
 
 @media only screen and (max-width: 1024px) {
+
+    .admin-column2 {
+        display: none;
+    }
+    .admin-container {
+        height: calc( 100vh - 80px );
+        width: 100%;
+    }
 
     .metabox-column {
         float: none;
@@ -115,6 +132,14 @@
 /* Note: Design for a width of 768px */
 @media only screen and (min-width: 768px) and (max-width: 959px) {
 
+    .admin-column2 {
+        display: none;
+    }
+    .admin-container {
+        height: calc( 100vh - 80px );
+        width: 100%;
+    }
+
     .metabox-column {
         float: none;
         width: 100%;
@@ -148,6 +173,14 @@
 ================================================== */
 /* Note: Design for a width of 320px */
 @media only screen and (max-width: 767px) {
+
+    .admin-column2 {
+        display: none;
+    }
+    .admin-container {
+        height: calc( 100vh - 80px );
+        width: 100%;
+    }
     
     .metabox-column {
         float: none;
@@ -287,6 +320,14 @@
 /* Note: Design for a width of 480px */
 
 @media only screen and (min-width: 480px) and (max-width: 767px) {
+
+    .admin-column2 {
+        display: none;
+    }
+    .admin-container {
+        height: calc( 100vh - 80px );
+        width: 100%;
+    }
 
     .metabox-column {
         float: none;

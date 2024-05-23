@@ -30,8 +30,100 @@ class SiteAdmin
 
         add_action('init', array($this, 'initialize_user_role'));
 
+        add_action('login_enqueue_scripts', array($this, 'staylodgicadmin_login_logo'));
+
         $this->staylodgic_admin_load();
 
+    }
+
+    public function staylodgicadmin_login_logo() {
+        $logo_url = plugins_url('images/staylodgic-logo-black.png', __FILE__);
+        ?>
+        <style type="text/css">
+            /* General body styling */
+            body.login {
+                background: #d8d8ff; /* Light grey background for a modern look */
+            }
+
+            /* Customizing the login form */
+            body.login form {
+                background: none; /* White background for the form */
+                border: 0; /* Light border around the form */
+                padding: 20px; /* Adding some padding */
+                border-radius: 8px; /* Rounded corners for a modern touch */
+                box-shadow: none;
+            }
+
+            /* Customizing the logo */
+            #login h1 a {
+                background-image: url('<?php echo esc_url($logo_url); ?>');
+                height: 80px;
+                width: 320px;
+                background-size: contain;
+                background-repeat: no-repeat;
+                margin-bottom: 20px; /* Adding some space below the logo */
+            }
+
+            /* Customizing input fields */
+            body.login form .input, 
+            body.login input[type="text"] {
+                border: 1px solid #dcdcdc; /* Light border for input fields */
+                padding: 12px; /* Adding some padding */
+                border-radius: 4px; /* Slightly rounded corners */
+                font-size: 16px; /* Increasing font size */
+            }
+
+            /* Customizing the login button */
+            body.login .button-primary {
+                background: #0073aa; /* WordPress blue */
+                border-color: #0073aa;
+                box-shadow: none;
+                text-shadow: none;
+                color: #ffffff; /* White text */
+                border-radius: 4px; /* Slightly rounded corners */
+                padding: 12px 20px; /* Adjusting padding */
+                font-size: 16px; /* Increasing font size */
+                transition: background 0.3s ease; /* Smooth transition */
+            }
+
+            body.login .button-primary:hover,
+            body.login .button-primary:focus {
+                background: #005d8b; /* Darker blue on hover/focus */
+                border-color: #005d8b;
+            }
+
+            /* Customizing links */
+            body.login #nav {
+                border-top: 2px solid #000;
+                padding-top: 30px;
+            }
+            body.login #backtoblog {
+                display: none;
+            }
+            body.login #nav a, 
+            body.login #backtoblog a {
+                color: #0073aa; /* WordPress blue */
+            }
+
+            .login #nav a:hover, 
+            .login #backtoblog a:hover {
+                color: #005d8b; /* Darker blue on hover */
+            }
+
+            /* Styling error messages */
+            .login .message, 
+            .login .error {
+                border-left: 4px solid #0073aa; /* Blue border for messages */
+                padding: 12px; /* Adding some padding */
+                border-radius: 4px; /* Rounded corners */
+            }
+
+            /* Ensuring footer links are styled appropriately */
+            .login #backtoblog {
+                margin-top: 20px;
+            }
+        </style>
+    <?php
     }
 
     public function initialize_user_role() {

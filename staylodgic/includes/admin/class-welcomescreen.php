@@ -46,9 +46,9 @@ class WelcomeScreen
         echo '<div class="logo-staylodgic"></div>';
         echo '</div>';
         echo '<ul class="admin-horizontal-list">';
-        echo '<li><i class="fas fa-plus-square"></i> New Reservation</li>';
-        echo '<li><i class="fas fa-chart-bar"></i> Booking Overview</li>';
-        echo '<li><i class="fas fa-calendar-alt"></i> Availability Calendar</li>';
+        echo '<li><a href="' . admin_url() . '/post-new.php?post_type=slgc_reservations"><i class="fas fa-plus-square"></i> New Reservation</a></li>';
+        echo '<li><a href="' . admin_url() . '/admin.php?page=slgc-dashboard"><i class="fas fa-chart-bar"></i> Booking Overview</a></li>';
+        echo '<li><a href="' . admin_url() . '/admin.php?page=slgc-availability"><i class="fas fa-calendar-alt"></i> Availability Calendar</a></li>';
         echo '</ul>';
         echo '</div>';
         echo '</div>';

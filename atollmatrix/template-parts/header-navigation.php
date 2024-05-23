@@ -66,19 +66,9 @@ function atollmatrix_main_menu_logo( $header_menu_type = 'center-logo' ) {
 		$logo_element .= '</a>';
 		$logo_element .= '</div>';
 		$logo_element .= '</div>';
+
 	} else {
 
-		$site_description_tag = atollmatrix_get_site_description();
-		$textlogo_tag         = atollmatrix_get_option_data('textlogo_tag');
-
-		if ( '' == $textlogo_tag || ! isset( $textlogo_tag ) ) {
-			$textlogo_tag = 'h1';
-		}
-
-		$logo_element .= '<div class="header-site-title-section">';
-		$logo_element .= '<' . esc_attr( $textlogo_tag ) . ' class="site-title"><a href="' . esc_url( $home_url_path ) . '" rel="home">' . get_bloginfo( 'name' ) . '</a></' . esc_attr( $textlogo_tag ) . '>';
-		$logo_element .= $site_description_tag;
-		$logo_element .= '</div>';
 	}
 
 	return $logo_element;
