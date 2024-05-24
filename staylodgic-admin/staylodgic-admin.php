@@ -32,14 +32,33 @@ class SiteAdmin
 
         add_action('login_enqueue_scripts', array($this, 'staylodgicadmin_login_logo'));
 
+        add_action('after_signup_form', array($this, 'add_terms_and_conditions_link'));
+        add_action('before_signup_form', array($this, 'add_signup_logo'));
+
         $this->staylodgic_admin_load();
 
     }
+
+    public function add_terms_and_conditions_link() {
+        echo '<div class="sign-up-form-terms">';
+        echo '<p class="terms-conditions">By signing up, you agree to our <a href="/terms-and-conditions" target="_blank">Privacy Policy</a> and <a href="/terms-and-conditions" target="_blank">Terms and Conditions</a>.</p>';
+        echo '</div>';
+
+    }
+    public function add_signup_logo() {
+        echo '<div class="sign-up-form-logo">';
+        echo '<img src="'.plugins_url('images/staylodgic-logo-black.png', __FILE__).'" alt="logo"/>';
+        echo '</div>';
+    }
+    
 
     public function staylodgicadmin_login_logo() {
         $logo_url = plugins_url('images/staylodgic-logo-black.png', __FILE__);
         ?>
         <style type="text/css">
+            #loginform {
+                background: rgba(255,255,255,0.3);
+            }
             /* General body styling */
             body.login {
                 background: #d8d8ff; /* Light grey background for a modern look */
@@ -131,9 +150,9 @@ class SiteAdmin
     }
 
     public function set_user_role_to_editor($user_id, $role, $blog_id) {
-        error_log('------ set_user_role_to_editor is fired.');
-        error_log('blog id: ' . $blog_id);
-        error_log('user id: ' . $user_id);
+        // error_log('------ set_user_role_to_editor is fired.');
+        // error_log('blog id: ' . $blog_id);
+        // error_log('user id: ' . $user_id);
         // Switch to the new blog
         switch_to_blog($blog_id);
         

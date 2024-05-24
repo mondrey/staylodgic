@@ -1442,3 +1442,16 @@ a.book-button:hover:active,
 	font-size: 13px;
 	font-weight: 400;
 }
+
+.sign-up-form-logo,
+.sign-up-form-terms {
+	width: 430px;
+	margin: 0 auto;
+	font-size: 13px;
+}
+.sign-up-form-logo img {
+	width: 240px;
+}
+.sign-up-form-logo {
+	padding-bottom: 30px;
+}

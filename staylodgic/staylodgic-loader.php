@@ -23,12 +23,20 @@ class Staylodgic_Init
     {
         // Get the main_logo_height option value
         $main_logo_height = staylodgic_get_option('main_logo_height');
+        $responsive_logo_height = staylodgic_get_option('responsive_logo_height');
 
         // Check if the value is set and is a valid number
         if ($main_logo_height && is_numeric($main_logo_height)) {
             echo '<style type="text/css">
                 .menu-is-horizontal .logo img {
                     height: ' . esc_attr($main_logo_height) . 'px;
+                }
+                </style>';
+        }
+        if ($responsive_logo_height && is_numeric($responsive_logo_height)) {
+            echo '<style type="text/css">
+                .logo-mobile .logoimage {
+                    height: ' . esc_attr($responsive_logo_height) . 'px;
                 }
                 </style>';
         }

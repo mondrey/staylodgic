@@ -73,7 +73,7 @@ function staylodgic_custom_login_redirect($redirect_to, $request, $user) {
     // Use the admin_url function to redirect to a specific admin page
     return admin_url('admin.php?page=staylodgic-settings');
 }
-add_filter('login_redirect', 'staylodgic_custom_login_redirect', 10, 3);
+// add_filter('login_redirect', 'staylodgic_custom_login_redirect', 10, 3);
 
 function staylodgic_disable_export_tools_for_non_network_admins() {
     // Check if the current user is a network admin
@@ -200,3 +200,15 @@ function staylodgic_settings_page_capability($capability) {
     return 'edit_posts'; // Allow editors to manage settings
 }
 add_filter('option_page_capability_staylodgic_settings_group', 'staylodgic_settings_page_capability');
+
+function staylodgic_redirect_editors_from_dashboard() {
+    if ( ! current_user_can( 'manage_options' ) ) {
+        global $pagenow;
+
+        if ( $pagenow === 'index.php' ) {
+            wp_redirect( admin_url( 'admin.php?page=staylodgic-settings' ) );
+            exit;
+        }
+    }
+}
+add_action('admin_init', 'staylodgic_redirect_editors_from_dashboard');

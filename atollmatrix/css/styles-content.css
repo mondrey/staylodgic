@@ -14582,12 +14582,7 @@ body.mfp-zoom-out-cur {
 .edge-to-edge .contents-wrap #commentform-section {
 	margin-bottom: 80px;
 }
-.entry-content img,
-.container img,
-.mfp-container img,
-.photowall-item img {
-	image-rendering: optimizeQuality;
-}
+
 .single-image-fullwidth img {
 	width: 100%;
 	max-width: 100%;

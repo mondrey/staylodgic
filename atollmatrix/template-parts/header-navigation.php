@@ -41,7 +41,6 @@ function atollmatrix_main_menu_logo( $header_menu_type = 'center-logo' ) {
 		$main_logo_id = staylodgic_get_option('main_logo');
 		$main_logo       = $main_logo_id ? wp_get_attachment_image_url($main_logo_id, 'full') : '';
 		$secondary_logo = $main_logo;
-
 	}
 
 	$custom_logo_url = '';//atollmatrix_get_option_data( 'custom_logo_url' );
