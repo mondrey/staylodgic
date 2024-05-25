@@ -41,7 +41,7 @@ class SiteAdmin
 
     public function add_terms_and_conditions_link() {
         echo '<div class="sign-up-form-terms">';
-        echo '<p class="terms-conditions">By signing up, you agree to our <a href="/terms-and-conditions" target="_blank">Privacy Policy</a> and <a href="/terms-and-conditions" target="_blank">Terms and Conditions</a>.</p>';
+        echo '<p class="terms-conditions">By signing up, you agree to our <a href="https://staylodgic.com/privacy-policy/" target="_blank">Privacy Policy</a> and <a href="https://staylodgic.com/terms-and-conditions/" target="_blank">Terms and Conditions</a>.</p>';
         echo '</div>';
 
     }

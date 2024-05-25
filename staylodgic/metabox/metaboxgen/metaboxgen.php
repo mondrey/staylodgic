@@ -946,6 +946,17 @@ function staylodgic_generate_metaboxes($meta_data, $post_id)
                     $textarea_value = $meta ? $meta : $field['std'];
                     echo '<textarea name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '" cols="60" rows="4" >' . esc_textarea($textarea_value) . '</textarea>';
                     break;
+                case 'wpeditor':
+                    $textarea_value = $meta ? $meta : $field['std'];
+                    $editor_id = esc_attr($field['id']);
+                    $settings = array(
+                        'textarea_name' => esc_attr($field['id']),
+                        'media_buttons' => false, // Set to true if you want to allow media uploads
+                        'textarea_rows' => 10, // Number of rows for the editor
+                        'teeny' => true, // Use teeny editor if you want a simplified version
+                    );
+                    wp_editor($textarea_value, $editor_id, $settings);
+                    break;
                 case 'fontselector':
                     $class = '';
                     if (isset($field['target'])) {

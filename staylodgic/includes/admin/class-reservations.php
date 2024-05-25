@@ -89,8 +89,6 @@ class Reservations
         // Fetch guest details
         if ($guestID) {
             echo "<div class='guest-details'>";
-            echo "<h3>Guest Information:</h3>";
-            echo "<p>Guest ID: " . esc_html($guestID) . "</p>";
             echo "<p>Full Name: " . esc_html(get_post_meta($guestID, 'staylodgic_full_name', true)) . "</p>";
             echo "<p>Email Address: " . esc_html(get_post_meta($guestID, 'staylodgic_email_address', true)) . "</p>";
             // Add other guest details as needed

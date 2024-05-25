@@ -706,8 +706,6 @@ class GuestRegistry
         $guestID = $reservation_instance->getGuest_id_forReservation($booking_number);
         if ($guestID) {
             echo "<div class='guest-details'>";
-            echo "<h3>Guest Information:</h3>";
-            echo "<p>Guest ID: " . esc_html($guestID) . "</p>";
             // echo "<p>Full Name: " . esc_html(get_post_meta($guestID, 'staylodgic_full_name', true)) . "</p>";
             // echo "<p>Email Address: " . esc_html(get_post_meta($guestID, 'staylodgic_email_address', true)) . "</p>";
             $registry_instance = new \Staylodgic\GuestRegistry();

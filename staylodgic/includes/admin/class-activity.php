@@ -475,7 +475,7 @@ class Activity
                 $fullimage_url      = wp_get_attachment_image_url($image_id, 'staylodgic-full');
                 $image_url          = wp_get_attachment_image_url($image_id, 'staylodgic-large-square');
                 $html              .= '<a href="' . esc_url($fullimage_url) . '" data-toggle="lightbox" data-gallery="lightbox-gallery-' . esc_attr($post_id) . '">';
-                $html              .= '<img class="lightbox-trigger activity-summary-image" data-image="' . esc_url($image_url) . '" src="' . esc_url($image_url) . '" alt="Activity">';
+                $html              .= '<img class="lightbox-trigger activity-summary-image" data-image="' . esc_url($fullimage_url) . '" src="' . esc_url($fullimage_url) . '" alt="Activity">';
                 $html              .= '</a>';
                 $supported_gallery  = staylodgic_output_custom_image_links($post_id);
                 if ($supported_gallery) {
@@ -484,7 +484,7 @@ class Activity
                 $html .= '</div>';
                 $html .= '<div class="activity-column-two">';
                 $html .= '<h4 class="activity-title">' . get_the_title() . '</h4>';
-                $html .= '<div class="activity-desc">' . wp_kses_post($activity_desc) . '</div>';
+                $html .= '<div class="activity-desc entry-content">' . wp_kses_post($activity_desc) . '</div>';
 
 
                 // Display the time slots for the day of the week that matches the selected date

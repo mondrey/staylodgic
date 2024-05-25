@@ -75,6 +75,7 @@ function atollmatrix_main_menu_logo( $header_menu_type = 'center-logo' ) {
 if ( atollmatrix_menu_is_vertical() ) {
 	get_template_part( 'template-parts/menu/vertical', 'menu' );
 } else {
+	if ( has_nav_menu( 'main_menu' ) ) {
 	?>
 <div class="outer-wrap stickymenu-zone">
 <div class="outer-wrap-inner-zone">
@@ -137,4 +138,5 @@ if ( atollmatrix_menu_is_vertical() ) {
 </div>
 </div>
 	<?php
+	}
 }

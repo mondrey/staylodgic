@@ -31,7 +31,7 @@ function staylodgic_activity_metadata()
             array(
                 'name' => __('Description', 'staylodgic'),
                 'id'   => 'staylodgic_activity_desc',
-                'type' => 'textarea',
+                'type' => 'wpeditor',
                 'desc' => __('Description', 'staylodgic'),
                 'std'  => '',
             ),

@@ -154,7 +154,7 @@ public function create_booking_menu() {
     }
 
     // Set the menu as Main Menu and Mobile Menu
-    $locations = get_theme_mod('nav_menu_locations'); // Get all theme locations
+    // $locations = get_theme_mod('nav_menu_locations'); // Get all theme locations
     $locations['main_menu'] = $menu_id; // Assign the menu to Main Menu
     $locations['mobile_menu'] = $menu_id; // Assign the menu to Mobile Menu
     set_theme_mod('nav_menu_locations', $locations); // Update the locations

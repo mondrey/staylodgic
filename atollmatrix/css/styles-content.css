@@ -1386,7 +1386,7 @@ hr,
 	margin: 0;
 }
 .entry-content strong {
-	font-weight: 500;
+	font-weight: 600;
 }
 .entry-content small {
 	font-size: 90%;
@@ -16181,6 +16181,9 @@ div.jp-play-bar {
 .gridblock-parallax-wrap .work-description {
 	color: rgb(126, 126, 126);
 }
+.activity-desc.entry-content {
+	color: rgb(0, 0, 0, 0.6);
+}
 .gridblock-five .work-description,
 .gridblock-four .work-description,
 .gridblock-three .work-description,
@@ -17798,6 +17801,15 @@ h2.food-main-title,
 	font-weight: 400;
 	line-height: 1.7;
 	letter-spacing: 0;
+}
+.activity-desc.entry-content {
+	font-size: 13px;
+	font-weight: 400;
+	line-height: 1.7;
+	letter-spacing: 0;
+}
+.activity-desc.entry-content {
+	padding-bottom: 0;
 }
 .sidebar-widget .product-title,
 .sidebar-widget .woocommerce ul.product_list_widget li a,

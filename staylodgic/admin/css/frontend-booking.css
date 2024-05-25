@@ -1023,13 +1023,15 @@ a.book-button:hover:active,
 
 .activity-schedule {
 	display: flex;
-	justify-content: space-between;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: flex-start;
 }
 
 .activity-column-one {
-	flex: 0 1 280px;
+	width: 100%;
 	text-align: left;
-	padding: 0 35px 20px 0;
+	padding: 0 0 20px 0;
 }
 
 .activity-summary-image {
@@ -1043,6 +1045,7 @@ a.book-button:hover:active,
 
 .activity-column-two {
 	flex: 1;
+	width: 100%;
 }
 
 .activity-image {
@@ -1053,12 +1056,23 @@ a.book-button:hover:active,
 	background-position: center center;
 }
 
+.day-schedule .time-slot.time-slot-unavailable {
+	border: 1px solid #999;
+	background-color: #999;
+	padding: 3px 10px;
+}
+.day-schedule .time-slot.time-slot-unavailable .activity-time-slot {
+	font-size: 13px;
+}
+
 .day-schedule .time-slot {
-	border: 1px solid rgba(0, 0, 0, 0.3);
-	background-color: #fff;
+	color: #fff;
+	border: 1px solid #012aff;
+	background-color: #012aff;
 	padding: 12px;
 	display: inline-block;
 	border-radius: 10px;
+	width: 180px;
 
 	-webkit-transition: border-color 0.2s ease-in-out, opacity 0.2s ease-in-out,
 		background-color 0.2s ease-in-out;
@@ -1071,7 +1085,8 @@ a.book-button:hover:active,
 }
 .day-schedule .time-slot:hover {
 	cursor: pointer;
-	border-color: #000;
+	background-color: #00abff;
+	border-color: #00abff;
 }
 .day-schedule .time-slot.time-disabled {
 	opacity: 0.2;
@@ -1088,8 +1103,9 @@ a.book-button:hover:active,
 .day-schedule .time-slot .time-slots-remaining {
 	font-size: 11px;
 	display: block;
-	color: #808080;
+	color: #fff;
 	letter-spacing: 0.5px;
+	font-style: italic;
 }
 .wp-admin .day-schedule .time-slot.time-choice {
 	border-color: #d00;
@@ -1137,8 +1153,8 @@ a.book-button:hover:active,
 .activity-column-two h4.activity-title {
 	margin: 0;
 	margin-bottom: 0px;
-	font-size: 30px;
-	font-weight: 300;
+	font-size: 27px;
+	font-weight: 400;
 	color: #000;
 	letter-spacing: -0.2px;
 	margin-bottom: 9px;

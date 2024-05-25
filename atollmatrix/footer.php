@@ -248,6 +248,6 @@ if ( atollmatrix_get_option_data( 'enable_animated_cursor' ) ) {
 do_action( 'atollmatrix_starting_footer' );
 wp_footer();
 ?>
-<div class="staylodgic-footer-bar">Powered by <span><a href="#">Staylodgic</a></span></div>
+<div class="staylodgic-footer-bar">Powered by <span><a href="https://staylodgic.com/">Staylodgic</a></span></div>
 </body>
 </html>
