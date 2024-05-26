@@ -16,21 +16,23 @@
 		$("#bookingDetails").on("click", function (e) {
 			e.preventDefault();
 
-			// Retrieve the booking number
 			var bookingNumber = $("#booking_number").val();
+			if (!bookingNumber) {
+				return;
+			}
+
+			$("#bookingDetails").addClass("booking-disabled");
+
+			// Retrieve the booking number
 			var staylodgic_bookingdetails_nonce = $(
 				'input[name="staylodgic_bookingdetails_nonce"]'
 			).val();
 
 			var requestType = $(this).data("request");
 
-			console.log(bookingNumber);
-			console.log(frontendAjax.ajaxurl);
+			// console.log(bookingNumber);
+			// console.log(frontendAjax.ajaxurl);
 			// Check if the booking number is entered
-			if (!bookingNumber) {
-				alert("Please enter a booking number.");
-				return;
-			}
 
 			if ("guestregistration" == requestType) {
 				// AJAX call to get booking details
@@ -49,6 +51,8 @@
 						var details = response; // Parse the JSON string to HTML
 						console.log(details);
 						$("#guestregistration-details-ajax").html(response);
+
+						$("#bookingDetails").removeClass("booking-disabled");
 					},
 					error: function (jqXHR, textStatus, errorThrown) {
 						console.error(
@@ -302,7 +306,12 @@
 			if (1 == nights) {
 				nightsSuffix = "Night";
 			}
-			var nightsText = "<span class='date-front-calendar-nights-block'>( " + nights + " " + nightsSuffix + " )</spa>";
+			var nightsText =
+				"<span class='date-front-calendar-nights-block'>( " +
+				nights +
+				" " +
+				nightsSuffix +
+				" )</spa>";
 
 			$(".front-booking-calendar-date").html(
 				formattedDateRange + nightsText
@@ -611,6 +620,7 @@
 			e.preventDefault();
 
 			$("#bookingSearch").addClass("booking-disabled");
+			$('.available-list').fadeOut();
 
 			// Retrieve the date from the input field
 			var inputVal = $("#reservation-date").val();
@@ -718,6 +728,7 @@
 								);
 							}
 							$("#bookingSearch").removeClass("booking-disabled");
+							$('.available-list').fadeIn();
 						},
 						error: function (err) {
 							// Handle error here
@@ -908,49 +919,69 @@
 			// Changed here
 			e.preventDefault();
 
+			$("#activitySearch").addClass("booking-disabled");
+			$('.available-list').fadeOut();
+
 			// Retrieve the date from the input field
 			var inputVal = $("#activity-reservation-date").val();
 			var dates = inputVal.split(" to ");
 
-			var checkInDate, checkOutDate;
-			var reservationDate;
+			if (inputVal == "") {
+				console.log("One");
+				// Only one date in input field, get date from #check-in-display
+				// var checkInDateStr = $('#check-in-display span').text();
+				// checkInDate = new Date(checkInDateStr);
+				// checkOutDate = new Date(checkInDateStr); // Use the same date for check-out
+				// updateSelectedDates(checkInDate, checkOutDate);
+				// var formattedCheckIn = formatDateToYYYYMMDD(checkInDate);
+				// var formattedCheckOut = formatDateToYYYYMMDD(checkOutDate);
+				// reservationDate = formattedCheckIn + ' to ' + formattedCheckOut;
+				// console.log( reservationDate );
+				$("#activitySearch").removeClass("booking-disabled");
+			} else {
+				var checkInDate, checkOutDate;
+				var reservationDate;
 
-			reservationDate = $("#activity-reservation-date").val();
+				reservationDate = $("#activity-reservation-date").val();
 
-			var bookingNumber = $("#booking-number").val();
-			var numberOfAdults = $("#number-of-adults").val();
-			var numberOfChildren = $("#number-of-children").val();
-			var staylodgic_searchbox_nonce = $(
-				'input[name="staylodgic_searchbox_nonce"]'
-			).val();
+				var bookingNumber = $("#booking-number").val();
+				var numberOfAdults = $("#number-of-adults").val();
+				var numberOfChildren = $("#number-of-children").val();
+				var staylodgic_searchbox_nonce = $(
+					'input[name="staylodgic_searchbox_nonce"]'
+				).val();
 
-			var childrenAge = [];
+				var childrenAge = [];
 
-			// Loop through all select elements with the class 'children-age-selector'
-			$('#guest-age input[name="children_age[]"]').each(function () {
-				childrenAge.push($(this).val());
-			});
+				// Loop through all select elements with the class 'children-age-selector'
+				$('#guest-age input[name="children_age[]"]').each(function () {
+					childrenAge.push($(this).val());
+				});
 
-			$.ajax({
-				url: frontendAjax.ajaxurl, // the localized URL
-				type: "POST",
-				data: {
-					action: "get_activity_frontend_schedules",
-					selected_date: reservationDate,
-					number_of_adults: numberOfAdults,
-					number_of_children: numberOfChildren,
-					children_age: childrenAge,
-					staylodgic_searchbox_nonce: staylodgic_searchbox_nonce,
-				},
-				success: function (response) {
-					$("#available-list-ajax").html(response.data);
-					$("#available-list-ajax").show();
-				},
-				error: function (err) {
-					// Handle error here
-					console.log(err);
-				},
-			});
+				$.ajax({
+					url: frontendAjax.ajaxurl, // the localized URL
+					type: "POST",
+					data: {
+						action: "get_activity_frontend_schedules",
+						selected_date: reservationDate,
+						number_of_adults: numberOfAdults,
+						number_of_children: numberOfChildren,
+						children_age: childrenAge,
+						staylodgic_searchbox_nonce: staylodgic_searchbox_nonce,
+					},
+					success: function (response) {
+						$("#available-list-ajax").html(response.data);
+						$("#available-list-ajax").show();
+
+						$("#activitySearch").removeClass("booking-disabled");
+						$('.available-list').fadeIn();
+					},
+					error: function (err) {
+						// Handle error here
+						console.log(err);
+					},
+				});
+			}
 		});
 
 		$(document).on("click", "#activity-register", function (e) {

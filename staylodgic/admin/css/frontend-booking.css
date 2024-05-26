@@ -658,6 +658,7 @@ a.book-button:hover:active,
 	font-weight: 600;
 	transition: 0.4s background-color;
 }
+#bookingDetails.booking-disabled,
 .form-search-button.booking-disabled {
 	background: #e4e4e4;
 	pointer-events: none;
@@ -1046,6 +1047,8 @@ a.book-button:hover:active,
 .activity-column-two {
 	flex: 1;
 	width: 100%;
+	border-top: 1px solid #0000001a;
+	padding-top: 25px;
 }
 
 .activity-image {
@@ -1166,6 +1169,12 @@ a.book-button:hover:active,
 .day-schedule .activity-rate span {
 	font-size: 13px;
 	font-weight: 600;
+}
+
+.day-schedule {
+	border-top: 1px solid #0000001a;
+	padding-top: 30px;
+	margin-top: 30px;
 }
 
 .room-details-column {
