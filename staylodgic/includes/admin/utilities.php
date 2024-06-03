@@ -1,4 +1,15 @@
 <?php
+function staylodgic_getLoggedInUserEmail() {
+	$user = wp_get_current_user();
+
+	if ( $user ) {
+		if ( in_array( 'administrator', $user->roles ) || in_array( 'editor', $user->roles ) ) {
+			return $user->user_email;
+		}
+	}
+
+	return false;
+}
 function staylodgic_get_page_title_by_template($template) {
     $pages = staylodgic_get_template_pages();
     foreach ($pages as $page) {

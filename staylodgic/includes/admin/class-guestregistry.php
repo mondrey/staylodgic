@@ -242,7 +242,7 @@ class GuestRegistry
         $registration_output = '';
 
         // Determine the output format
-        if ($outputFormat === 'icons' && $registeredGuestCount <= $reservation_occupants) {
+        if ($outputFormat === 'icons') {
             $registration_output .= '<div class="reservation-details">';
             // Output filled circles for registered guests
             for ($i = 0; $i < $registeredGuestCount; $i++) {
@@ -253,7 +253,7 @@ class GuestRegistry
                 $registration_output .= '<i class="far fa-circle"></i> ';
             }
             $registration_output .= '</div>';
-        } elseif ($outputFormat === 'fraction' || $registeredGuestCount > $reservation_occupants) {
+        } elseif ($outputFormat === 'fraction') {
             // Fallback to fraction if registered guests exceed total occupancy or fraction is requested
             $registration_output .= '<div class="reservation-details">';
             $registration_output .= '<div class="occupancy-details">';
@@ -261,7 +261,7 @@ class GuestRegistry
             $registration_output .= 'Registered: ' . esc_html($registeredGuestCount) . '/' . esc_html($reservation_occupants) . ' ';
             $registration_output .= '</span>';
             $registration_output .= '<a title="' . __('View Registrations', 'staylodgic') . '" href="' . esc_url(get_edit_post_link($registerID)) . '">';
-            $registration_output .= '<i class="fa-regular fa-id-card"></i>';
+            $registration_output .= '<i class="fa-solid fa-pen-to-square"></i>';
             $registration_output .= '</a>';
             $registration_output .= '</div>';
             $registration_output .= '</div>';
@@ -515,6 +515,18 @@ class GuestRegistry
                     }
                     $registration_data[$registration_id] = $booking_data;
                     update_post_meta($post_id, 'staylodgic_registration_data', $registration_data);
+
+                    $email_address = staylodgic_getLoggedInUserEmail();
+                    $page_title = get_the_title($post_id);
+
+                    $email = new EmailDispatcher($email_address, 'Online Check-in: ' . $page_title);
+                    $email->setHTMLContent()->setRegistrationTemplate($booking_data, $post_id);
+        
+                    if ($email->send( $cc = false )) {
+                        // echo 'Confirmation email sent successfully to the guest.';
+                    } else {
+                        // echo 'Failed to send the confirmation email.';
+                    }
                 }
             }
         } else {

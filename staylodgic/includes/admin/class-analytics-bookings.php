@@ -864,9 +864,10 @@ class AnalyticsBookings
                         $registry_instance = new \Staylodgic\GuestRegistry();
                         $resRegIDs         = $registry_instance->fetchResRegIDsByBookingNumber($booking['booking_number']);
                         if (isset($resRegIDs) && is_array($resRegIDs)) {
-                            $guestListHtml .= $registry_instance->outputRegistrationAndOccupancy($resRegIDs['reservationID'], $resRegIDs['guestRegisterID'], 'icons');
+                            $guestListHtml .= $registry_instance->outputRegistrationAndOccupancy($resRegIDs['reservationID'], $resRegIDs['guestRegisterID'], 'default');
                             $guestListHtml .= '<div class="booking-dashboard registration">';
-                            $guestListHtml .= '<a title="Registration Link" href="' . get_permalink($resRegIDs['guestRegisterID']) . '"><i class="fa-solid fa-pen-to-square"></i></a>';
+                            $guestListHtml .= '<a title="View Registrations" href="' . get_edit_post_link($resRegIDs['reservationID']) . '"><i class="fa-solid fa-pen-to-square"></i></a>';
+                            $guestListHtml .= '<a title="Registration Link" href="' . get_permalink($resRegIDs['guestRegisterID']) . '"><i class="fa-regular fa-id-card"></i></a>';
                             $guestListHtml .= '</div>';
                         }
                         $guestListHtml .= '</td>';
