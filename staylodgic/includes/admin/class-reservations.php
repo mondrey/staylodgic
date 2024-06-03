@@ -754,7 +754,7 @@ class Reservations
     public function getBookingDetailsPageLinkForGuest()
     {
         // Get the booking number from the reservation post meta
-        $booking_page_link = staylodgic_get_option('page_bookingdetails');
+        $booking_page_link = home_url('/booking-details/');
 
         return $booking_page_link;
     }

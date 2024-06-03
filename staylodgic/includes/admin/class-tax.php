@@ -135,19 +135,19 @@ class Tax
                     $percentage = $tax[ 'number' ] . '%';
                     if ($tax[ 'duration' ] === 'inrate') {
                         // Decrease the rate by the given percentage
-                        $total = $roomrate * ($tax[ 'number' ] / 100);
+                        $total = $subtotal * ($tax[ 'number' ] / 100);
                         $roomrate += $total;
                     } elseif ($tax[ 'duration' ] === 'perperson') {
                         // Increase the rate by the fixed amount
-                        $total = $guests * ($roomrate * $tax[ 'number' ] / 100);
+                        $total = $guests * ($subtotal * $tax[ 'number' ] / 100);
                         $roomrate += $total;
                     } elseif ($tax[ 'duration' ] === 'perday') {
                         // Increase the rate by the given percentage
-                        $total = $nights * ($roomrate * $tax[ 'number' ] / 100);
+                        $total = $nights * ($subtotal * $tax[ 'number' ] / 100);
                         $roomrate += $total;
                     } elseif ($tax[ 'duration' ] === 'perpersonperday') {
                         // Increase the rate by the given percentage
-                        $total = $nights * ($guests * ($roomrate * $tax[ 'number' ] / 100));
+                        $total = $nights * ($guests * ($subtotal * $tax[ 'number' ] / 100));
                         $roomrate += $total;
                     }
                 }

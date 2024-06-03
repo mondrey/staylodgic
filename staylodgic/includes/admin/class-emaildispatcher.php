@@ -43,10 +43,19 @@ class EmailDispatcher
         $emailMessage .= '<h2>Booking Details</h2>';
         $emailMessage .= '<p><strong>Booking Number:</strong> '.esc_html($bookingDetails['bookingNumber']).'</p>';
         $emailMessage .= '<p><strong>Room:</strong> '.esc_html($bookingDetails['roomTitle']).'</p>';
+        $emailMessage .= '<p><strong>Meal Plan:</strong> '.esc_html($bookingDetails['mealplan']).'</p>';
+        $emailMessage .= '<p><strong>Included Meal Plans:</strong> '.esc_html($bookingDetails['included_mealplan']).'</p>';
         $emailMessage .= '<p><strong>Check-in Date:</strong> '.esc_html($bookingDetails['checkinDate']).'</p>';
         $emailMessage .= '<p><strong>Check-out Date:</strong> '.esc_html($bookingDetails['checkoutDate']).'</p>';
         $emailMessage .= '<p><strong>Adults:</strong> '.esc_html($bookingDetails['adultGuests']).'</p>';
         $emailMessage .= '<p><strong>Children:</strong> '.esc_html($bookingDetails['childrenGuests']).'</p>';
+        $emailMessage .= '<p><strong>Subtotal:</strong> '. $bookingDetails['subtotal'] .'</p>';
+        if ( $bookingDetails['tax'] ) {
+            $emailMessage .= '<p><strong>Tax:</strong></p>';
+            foreach ($bookingDetails['tax'] as $totalID => $totalvalue) {
+                $emailMessage .= '<p>' . wp_kses($totalvalue, staylodgic_get_allowed_tags()) . '</p>';
+            }
+        }
         $emailMessage .= '<p><strong>Total Cost:</strong> '.$total_price.'</p>';
         $emailMessage .= '<p>We look forward to welcoming you and ensuring a pleasant stay.</p>';
         $emailMessage .= '<p>Please contact us to cancel, modify or if there are any questions regarding the booking.</p>';
@@ -82,7 +91,25 @@ class EmailDispatcher
 
     public function send()
     {
-        return wp_mail($this->to, $this->subject, $this->message, $this->headers, $this->attachments);
+        $user = wp_get_current_user();
+    
+        if ( $user ) {
+            if ( in_array( 'administrator', $user->roles ) || in_array( 'editor', $user->roles ) ) {
+                $cc_email = $user->user_email;
+                $this->headers[] = 'Cc: ' . $cc_email;
+            }
+        }
+    
+        // Convert headers array to string format for wp_mail
+        $headers_string = implode("\r\n", $this->headers);
+
+        error_log( 'Sending Email' );
+        error_log( $this->to);
+        error_log( $this->subject);
+        error_log( $this->message);
+        error_log( $headers_string);
+    
+        return wp_mail($this->to, $this->subject, $this->message, $headers_string, $this->attachments);
     }
 
 }

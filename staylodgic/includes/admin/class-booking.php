@@ -1492,17 +1492,49 @@ class Booking
                         <p>
                             ' . esc_html__('Please contact us to cancel, modify or if there\'s any questions regarding the booking.', 'staylodgic') . '
                         </p>
-                        <p>
-                            <div id="booking-details" class="book-button not-fullwidth">
-                                <a href="' . esc_attr(esc_url(get_page_link($booking_page_link))) . '">' . esc_html__('Booking Details', 'staylodgic') . '</a>
-                            </div>
-                        </p>
+                        <div id="booking-details" class="book-button not-fullwidth booking-successful-button">
+                            <a href="' . esc_url($booking_page_link) . '">' . esc_html__('Booking Details', 'staylodgic') . '</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>';
 
         return $success_html;
+    }
+
+    public function getMealPlanLabel($key) {
+        $labels = [
+            'RO' => __('Room Only', 'staylodgic'),
+            'BB' => __('Bed and Breakfast', 'staylodgic'),
+            'HB' => __('Half Board', 'staylodgic'),
+            'FB' => __('Full Board', 'staylodgic'),
+            'AN' => __('All-Inclusive', 'staylodgic'),
+        ];
+
+        return isset($labels[$key]) ? $labels[$key] : $key;
+    }
+
+    public function getIncludedMealPlanKeysFromData($room_data, $returnString = false) {
+        // Check if meal_plan key exists in room_data and is an array
+        if (isset($room_data['meal_plan']) && is_array($room_data['meal_plan'])) {
+            // Filter the meal_plan array to get only the entries with 'included' as the value
+            $included_meal_plans = array_filter($room_data['meal_plan'], function($value) {
+                return $value === 'included';
+            });
+
+            // Get the keys of the filtered array
+            $keys = array_keys($included_meal_plans);
+
+            // Map the keys to their corresponding labels using the current instance context
+            $labels = array_map([$this, 'getMealPlanLabel'], $keys);
+
+            // Return as a comma-separated string or an array based on the $returnString parameter
+            return $returnString ? implode(', ', $labels) : $labels;
+        }
+
+        // Return an empty array or an empty string if meal_plan is not set or not an array
+        return $returnString ? '' : array();
     }
 
     public function generate_MealPlanIncluded($room_id)
@@ -1874,9 +1906,9 @@ class Booking
         $reservationData['customer']['guest_comment']  = $guest_comment;
         $reservationData['customer']['guest_consent']  = $guest_consent;
 
-        // error_log('------- Final Booking Data -------');
-        // error_log(print_r($reservationData, true));
-        // error_log('------- Final Booking Data End -------');
+        error_log('------- Final Booking Data -------');
+        error_log(print_r($reservationData, true));
+        error_log('------- Final Booking Data End -------');
 
         // Check if number of people can be occupied by room
         $can_accomodate = self::canAccomodate_to_rooms($rooms, $adults, $children);
@@ -1998,14 +2030,25 @@ class Booking
 
             $roomName = \Staylodgic\Rooms::getRoomName_FromID($room_id);
 
+            $email_tax_html = false;
+            if ( 'enabled' == $tax_status) {
+                $email_tax_html = $reservationData['tax_html']['details'];
+            }
+
+            $included_mealplans = $this->getIncludedMealPlanKeysFromData( $reservationData['room_data'] , true );
+
             $bookingDetails = [
                 'guestName'      => $full_name,
                 'bookingNumber'  => $booking_number,
                 'roomTitle'      => $roomName,
+                'included_mealplan'      => $included_mealplans,
+                'mealplan'      => $this->getMealPlanLabel($reservationData['mealplan']),
                 'checkinDate'    => $checkin,
                 'checkoutDate'   => $checkout,
                 'adultGuests'    => $reservationData['adults'],
                 'childrenGuests' => $reservationData['children'],
+                'subtotal' => staylodgic_price( $reservationData['subtotal'] ),
+                'tax' => $email_tax_html,
                 'totalCost'      => $reservationData['total'],
             ];
 

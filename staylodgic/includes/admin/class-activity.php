@@ -789,9 +789,9 @@ class Activity
                         <p>
                             ' . esc_html__('Please contact us to cancel, modify or if there\'s any questions regarding the booking.', 'staylodgic') . '
                         </p>
-                        <p>
+                        <p class="booking-successful-button">
                             <div id="booking-details" class="book-button not-fullwidth">
-                                <a href="' . esc_attr(esc_url(get_page_link($booking_page_link))) . '">' . esc_html__('Booking Details', 'staylodgic') . '</a>
+                                <a href="' . esc_url($booking_page_link) . '">' . esc_html__('Booking Details', 'staylodgic') . '</a>
                             </div>
                         </p>
                     </div>

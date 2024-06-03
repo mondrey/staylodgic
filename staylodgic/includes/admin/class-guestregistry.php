@@ -182,19 +182,20 @@ class GuestRegistry
 
         // Get today's date
         $today = new \DateTime();
+        $yesterday = $today->modify('-1 day');
 
         // Check if check-in date has already passed
-        if ($today > $checkinDateObj) {
+        if ($yesterday > $checkinDateObj) {
             $allow = false;
             $reason = __('Check-in date has already passed', 'staylodgic');
         } else {
             // Calculate the difference in days
             $dateDiff = $today->diff($checkinDateObj)->days;
 
-            // If the difference is more than 3 days, set $allow to false
-            if ($dateDiff > 2) {
+            // If the difference is more than 7 days, set $allow to false
+            if ($dateDiff > 7) {
                 $allow = false;
-                $reason = __('Registration open 2 days before check-in', 'staylodgic');
+                $reason = __('Registration open 7 days before check-in', 'staylodgic');
             }
         }
 
@@ -206,11 +207,16 @@ class GuestRegistry
 
         if ((intval($reservation_occupants) + 2) < $registeredGuestCount) {
             $allow = false;
-            $reason = __('Exceeds total registrations allowed for this booking', 'staylodgic');
+            $reason = __('Total registrations allowed for this booking exceeded.', 'staylodgic');
         }
 
         if ($reason) {
             $reason = '<div class="error-registration-reason">' . $reason . '</div>';
+        }
+
+        if ( current_user_can( 'edit_pages' ) ) {
+            // The current user is an editor
+            $allow = true;
         }
 
         return ['allow' => $allow, 'reason' => $reason];
