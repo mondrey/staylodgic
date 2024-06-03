@@ -466,6 +466,7 @@ class Invoicing
         $totalAmount,
         $hotelFooter
     ) {
+        $activity_property_logo_width  = staylodgic_get_option('activity_property_logo_width');
         $currentDate = date('F jS, Y'); // Outputs: January 1st, 2024
         ob_start();
     ?>
@@ -478,7 +479,7 @@ class Invoicing
                 <div class="invoice-container-inner">
                     <div id="invoice-hotel-header">
                         <section id="invoice-hotel-logo">
-                            <img class="invoice-logo" src="<?php echo esc_url($hotelLogo); ?>" />
+                            <img class="invoice-logo" src="<?php echo esc_url($hotelLogo); ?>" width="<?php echo esc_attr($activity_property_logo_width) . 'px'; ?>" height="auto" />
                         </section>
                         <section id="invoice-info">
                             <p><?php echo esc_html($hotelHeader); ?></p>
@@ -575,6 +576,8 @@ class Invoicing
         $totalAmount,
         $hotelFooter
     ) {
+
+        $property_logo_width  = staylodgic_get_option('property_logo_width');
         $currentDate = date('F jS, Y'); // Outputs: January 1st, 2024
         ob_start();
     ?>
@@ -587,7 +590,7 @@ class Invoicing
                 <div class="invoice-container-inner">
                     <div id="invoice-hotel-header">
                         <section id="invoice-hotel-logo">
-                            <img class="invoice-logo" src="<?php echo esc_url($hotelLogo); ?>" />
+                            <img class="invoice-logo" src="<?php echo esc_url($hotelLogo); ?>" width="<?php echo esc_attr($property_logo_width) . 'px'; ?>" height="auto" />
                         </section>
                         <section id="invoice-info">
                             <p><?php echo $hotelHeader; ?></p>

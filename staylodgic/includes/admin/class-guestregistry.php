@@ -214,7 +214,7 @@ class GuestRegistry
             $reason = '<div class="error-registration-reason">' . $reason . '</div>';
         }
 
-        if ( current_user_can( 'edit_pages' ) ) {
+        if (current_user_can('edit_pages')) {
             // The current user is an editor
             $allow = true;
         }
@@ -346,6 +346,8 @@ class GuestRegistry
 
         $registration_data = get_post_meta(get_the_id(), 'staylodgic_registration_data', true);
 
+        $property_logo_width  = staylodgic_get_option('property_logo_width');
+
         // error_log('staylodgic_registration_data');
         // error_log(print_r($registration_data, true));
 
@@ -373,7 +375,7 @@ class GuestRegistry
                     <div class="invoice-container-inner">
                         <div id="invoice-hotel-header">
                             <section id="invoice-hotel-logo">
-                                <img class="invoice-logo" src="<?php echo esc_url($hotelLogo); ?>" />
+                                <img class="invoice-logo" src="<?php echo esc_url($hotelLogo); ?>" width="<?php echo esc_attr($property_logo_width) . 'px'; ?>" height="auto" />
                             </section>
                             <section id="invoice-info">
                                 <p><?php echo esc_html($hotelHeader); ?></p>

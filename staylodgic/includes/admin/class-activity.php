@@ -790,7 +790,7 @@ class Activity
                             ' . esc_html__('Please contact us to cancel, modify or if there\'s any questions regarding the booking.', 'staylodgic') . '
                         </p>
                         <p class="booking-successful-button">
-                            <div id="booking-details" class="book-button not-fullwidth">
+                            <div id="booking-details" class="book-button not-fullwidth booking-successful-button">
                                 <a href="' . esc_url($booking_page_link) . '">' . esc_html__('Booking Details', 'staylodgic') . '</a>
                             </div>
                         </p>
@@ -1629,6 +1629,11 @@ class Activity
 
             $roomName = \Staylodgic\Rooms::getRoomName_FromID($room_id);
 
+            $email_tax_html = false;
+            if ( 'enabled' == $tax_status) {
+                $email_tax_html = $reservationData['tax_html']['details'];
+            }
+
             $bookingDetails = [
                 'guestName'      => $full_name,
                 'bookingNumber'  => $booking_number,
@@ -1636,6 +1641,8 @@ class Activity
                 'checkinDate'    => $checkin,
                 'adultGuests'    => $reservationData['adults'],
                 'childrenGuests' => $reservationData['children'],
+                'subtotal' => staylodgic_price( $reservationData['subtotal'] ),
+                'tax' => $email_tax_html,
                 'totalCost'      => $reservationData['total'],
             ];
 

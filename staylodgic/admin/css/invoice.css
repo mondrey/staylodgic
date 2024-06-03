@@ -86,9 +86,6 @@
 	font-weight: 100;
 	text-align: center;
 }
-.invoice-logo {
-	max-width: 100px;
-}
 
 h2#invoice-subheading,
 .invoice-container h2 {
@@ -141,8 +138,7 @@ h2#invoice-subheading,
 }
 
 .invoice-logo {
-	max-width: 100px;
-	height: auto;
+	max-width: 250px;
 }
 
 #invoice-info {

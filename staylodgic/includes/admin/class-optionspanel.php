@@ -1149,6 +1149,13 @@ $panel_settings = [
         'description' => 'Upload property logo.',
         'tab'         => 'property', // You can change the tab as per your requirement
     ],
+    'property_logo_width'   => [
+        'label'       => esc_html__('On-paper logo width in pixels', 'staylodgic'),
+        'type'        => 'number',
+        'default'        => '100',
+        'description' => 'Width of registration and invoice logo in pixels.',
+        'tab'         => 'property',
+    ],
     'property_name'             => [
         'label'       => esc_html__('Name', 'staylodgic'),
         'type'        => 'text',
@@ -1207,6 +1214,13 @@ $panel_settings = [
         'label'       => esc_html__('Upload Logo', 'staylodgic'),
         'type'        => 'media_upload',
         'tab'         => 'activity-property', // You can change the tab as per your requirement
+    ],
+    'activity_property_logo_width'   => [
+        'label'       => esc_html__('On-paper logo width in pixels', 'staylodgic'),
+        'type'        => 'number',
+        'default'        => '100',
+        'description' => 'Width of invoice logo in pixels.',
+        'tab'         => 'activity-property',
     ],
     'activity_property_name'             => [
         'label'       => esc_html__('Name', 'staylodgic'),
