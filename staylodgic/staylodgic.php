@@ -212,3 +212,14 @@ function staylodgic_redirect_editors_from_dashboard() {
     }
 }
 add_action('admin_init', 'staylodgic_redirect_editors_from_dashboard');
+// Change the "From" name
+function staylodgic_custom_wp_mail_from_name($original_email_from) {
+    return 'Staylodgic'; // Replace with your desired name
+}
+add_filter('wp_mail_from_name', 'staylodgic_custom_wp_mail_from_name');
+
+// Change the "From" email address
+function staylodgic_custom_wp_mail_from($original_email_address) {
+    return 'no-reply@staylodgic.com'; // Replace with your desired email address
+}
+add_filter('wp_mail_from', 'staylodgic_custom_wp_mail_from');
