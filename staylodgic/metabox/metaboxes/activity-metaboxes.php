@@ -58,7 +58,7 @@ function staylodgic_activity_metadata()
                 'id'   => 'staylodgic_dashboard_color',
                 'std'  => staylodgic_random_color_hex(),
                 'type' => 'color',
-                'desc' => __('Color which represents in dashboard.', 'staylodgic'),
+                'desc' => __('Graph color which is presented in Activity Overview.', 'staylodgic'),
             ),
             array(
                 'name'         => esc_html__('Page Settings', 'staylodgic'),
@@ -73,13 +73,6 @@ function staylodgic_activity_metadata()
                 'type'    => 'actvity_schedule',
                 'desc'    => esc_html__('Activity Schedule Setup', 'staylodgic'),
                 'std'     => '',
-            ),
-            array(
-                'name'    => __('Switch Menu', 'staylodgic'),
-                'id'      => 'staylodgic_menu_choice',
-                'type'    => 'select',
-                'desc'    => __('Select a different menu for this page', 'staylodgic'),
-                'options' => staylodgic_generate_menulist(),
             ),
         ),
     );

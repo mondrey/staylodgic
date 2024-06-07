@@ -476,6 +476,8 @@ function staylodgic_generate_metaboxes($meta_data, $post_id)
                         echo '<div class="ticket-save-pdf-button">';
                         echo '<button data-file="registration-' . $field['page_id'] . '" data-id="' . $field['page_id'] . '" id="save-pdf-ticket-button" class="save-pdf-ticket-button button button-primary button-large">Save PDF</button>';
                         echo '</div>';
+                    } else {
+                        echo '<div class="ticket-generate">Please create reservation to generate a ticket.<br/>Ticket will display after the reservation is published.</div>';
                     }
 
                     break;
@@ -1207,11 +1209,28 @@ function staylodgic_generate_metaboxes($meta_data, $post_id)
 
                     $reservation_instance = new \Staylodgic\Reservations();
                     $reservation_array = \Staylodgic\Reservations::getReservationIDsForCustomer($field['customer_id']);
-                    echo $reservation_instance->getEditLinksForReservations($reservation_array);
+                    $bookings = $reservation_instance->getEditLinksForReservations($reservation_array);
 
                     $activity_instance = new \Staylodgic\Activity();
                     $activity_array = \Staylodgic\Activity::getActivityIDsForCustomer($field['customer_id']);
-                    echo $activity_instance->getEditLinksForActivity($activity_array);
+                    $activities = $activity_instance->getEditLinksForActivity($activity_array);
+
+                    if ( '<ul></ul>' != $bookings ) {
+                        echo '<h4 class="metabox-bookings-found">Bookings</h4>';
+                        echo $bookings;
+                    }
+                    if ( '<ul></ul>' != $activities ) {
+                        echo '<h4 class="metabox-bookings-found">Activities</h4>';
+                        echo $activities;
+                    }
+
+                    if ( '<ul></ul>' == $bookings ) {
+                        echo '<div class="metabox-no-bookings-found">No Bookings found</div>';
+                        echo '<br/>';
+                    }
+                    if ( '<ul></ul>' == $activities ) {
+                        echo '<div class="metabox-no-bookings-found">No Activities found</div>';
+                    }
                     break;
 
                 case 'get_customer_data':

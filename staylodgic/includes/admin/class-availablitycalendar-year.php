@@ -18,8 +18,8 @@ class AvailablityCalendarYear extends AvailablityCalendarBase
         // Add the Availability submenu item under the parent menu
         add_submenu_page(
             'slgc-dashboard',
-            __('Availability Annum', 'staylodgic'),
-            __('Availability Annum', 'staylodgic'),
+            __('Annual Availability', 'staylodgic'),
+            __('Annual Availability', 'staylodgic'),
             'edit_posts',
             'slgc-availability-yearly',
             array($this, 'room_Reservation_Plugin_Display_Availability_Calendar_Yearly')

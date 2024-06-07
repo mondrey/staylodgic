@@ -186,13 +186,6 @@ function staylodgic_room_metadata()
                 'desc'    => esc_html__('Bed Setup', 'staylodgic'),
                 'std'     => '',
             ),
-            array(
-                'name'    => __('Switch Menu', 'staylodgic'),
-                'id'      => 'staylodgic_menu_choice',
-                'type'    => 'select',
-                'desc'    => __('Select a different menu for this page', 'staylodgic'),
-                'options' => staylodgic_generate_menulist(),
-            ),
         ),
     );
     return $staylodgic_room_box;
