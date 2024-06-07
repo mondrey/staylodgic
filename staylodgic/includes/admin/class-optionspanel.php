@@ -479,6 +479,7 @@ public function create_booking_menu() {
                         settings_fields($this->option_group_name);
                         do_settings_sections($this->option_name);
                         submit_button('Save Settings');
+                        echo '<div class="help-guide-footer">View Staylodgic <a target="_blank" href="https://staylodgic.com/staylodgic-help-guide/">Help Guide</a></div>';
                         ?>
                     </form>
                 </div>

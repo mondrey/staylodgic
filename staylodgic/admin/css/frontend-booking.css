@@ -1474,6 +1474,42 @@ a.book-button:hover:active,
 	margin: 0 auto;
 	font-size: 13px;
 }
+.sign-up-form-terms a,
+.container-outer #signup-content a {
+	color: #0004ff;
+}
+.sign-up-form-terms {
+	display: block;
+	color: #424242;
+	border-top: 2px solid #000;
+}
+.wp-activate-container #signup-welcome {
+	background: #fff9df;
+	padding: 20px 15px;
+	font-size: 14px;
+	color: #000;
+}
+.wp-activate-container #signup-welcome p {
+	margin: 0;
+}
+.wp-activate-container #signup-welcome span.h3 {
+	font-size: 14px;
+}
+#signup-content #noemail-tips {
+	padding: 40px;
+	background: #fffbe9;
+}
+#signup-content #noemail-tips strong,
+#signup-content #noemail-tips {
+	color: #555;	
+}
+#signup-content strong {
+	color: #000;
+}
+#signup-content h2 {
+	font-size: 24px;
+	font-weight: 600;
+}
 .sign-up-form-logo img {
 	width: 240px;
 }

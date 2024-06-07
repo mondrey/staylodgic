@@ -62,12 +62,13 @@ class WelcomeScreen
         echo '<h1>Welcome ' . $current_user->user_login . '!</h1>';
         echo '<div class="welcome-text">';
         echo '<p class="main-greet">New to Staylodgic?</p>';
-        echo '<p>Click on the following for a quick guided tour to the steps and sections to get started.</p>';
+        echo '<a class="view-help-guide" target="_blank" href="https://staylodgic.com/staylodgic-help-guide/">View Help Guide</a>';
         echo '</div>';
         echo '<div class="guided-tour-link-wrap">';
+        echo '<div class="guided-tour-heading">Guided tours</div>';
         echo '<div id="start-bookings-button" class="guided-tour-link"><i class="fa-solid fa-arrow-right"></i> ' . __('How to accept bookings?', 'staylodgic') . '</div>';
         echo '<div id="start-activities-button" class="guided-tour-link"><i class="fa-solid fa-arrow-right"></i> ' . __('How to accept activities?', 'staylodgic') . '</div>';
-        echo '<div id="start-registration-button" class="guided-tour-link"><i class="fa-solid fa-arrow-right"></i> ' . __('How to create guest registration?', 'staylodgic') . '</div>';
+        echo '<div id="start-registration-button" class="guided-tour-link guided-tour-last-link"><i class="fa-solid fa-arrow-right"></i> ' . __('How to create guest registration?', 'staylodgic') . '</div>';
         echo '</div>';
         echo '<div class="view-all-features">View all features</div>';
         echo '</div>';
