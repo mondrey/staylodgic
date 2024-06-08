@@ -62,7 +62,7 @@ class WelcomeScreen
         echo '<h1>Welcome ' . $current_user->user_login . '!</h1>';
         echo '<div class="welcome-text">';
         echo '<p class="main-greet">New to Staylodgic?</p>';
-        echo '<a class="view-help-guide" target="_blank" href="https://staylodgic.com/staylodgic-help-guide/">View Help Guide</a>';
+        echo '<a class="view-help-guide" target="_blank" href="https://staylodgic.com/staylodgic-help-guide-viewer/">View Help Guide</a>';
         echo '</div>';
         echo '<div class="guided-tour-link-wrap">';
         echo '<div class="guided-tour-heading">Guided tours</div>';

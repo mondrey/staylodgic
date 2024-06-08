@@ -4,7 +4,7 @@
  * Plugin Name: Staylodgic Site Admin
  * Plugin URI:  http://yourwebsite.com/
  * Description: Manage site settings for Staylodgic in the network admin.
- * Version:     1.0.0
+ * Version:     1.0.2
  * Author:      Your Name
  * Author URI:  http://yourwebsite.com/
  * Network:     true
@@ -35,8 +35,14 @@ class SiteAdmin
         add_action('after_signup_form', array($this, 'add_terms_and_conditions_link'));
         add_action('before_signup_form', array($this, 'add_signup_logo'));
 
+        add_filter( 'login_headerurl', array($this, 'custom_login_logo_url'));
+
         $this->staylodgic_admin_load();
 
+    }
+
+    public function custom_login_logo_url() {
+        return home_url();
     }
 
     public function add_terms_and_conditions_link() {
@@ -59,17 +65,15 @@ class SiteAdmin
             #loginform {
                 background: rgba(255,255,255,0.3);
             }
-            /* General body styling */
             body.login {
-                background: #d8d8ff; /* Light grey background for a modern look */
+                background: #c3d5ff;
             }
 
-            /* Customizing the login form */
             body.login form {
-                background: none; /* White background for the form */
-                border: 0; /* Light border around the form */
-                padding: 20px; /* Adding some padding */
-                border-radius: 8px; /* Rounded corners for a modern touch */
+                background: none;
+                border: 0;
+                padding: 20px;
+                border-radius: 8px;
                 box-shadow: none;
             }
 
@@ -80,38 +84,36 @@ class SiteAdmin
                 width: 320px;
                 background-size: contain;
                 background-repeat: no-repeat;
-                margin-bottom: 20px; /* Adding some space below the logo */
+                margin-bottom: 20px;
             }
 
             /* Customizing input fields */
             body.login form .input, 
             body.login input[type="text"] {
-                border: 1px solid #dcdcdc; /* Light border for input fields */
-                padding: 12px; /* Adding some padding */
-                border-radius: 4px; /* Slightly rounded corners */
-                font-size: 16px; /* Increasing font size */
+                border: 1px solid #dcdcdc;
+                padding: 12px;
+                border-radius: 4px;
+                font-size: 16px;
             }
 
-            /* Customizing the login button */
             body.login .button-primary {
-                background: #0073aa; /* WordPress blue */
+                background: #0073aa;
                 border-color: #0073aa;
                 box-shadow: none;
                 text-shadow: none;
-                color: #ffffff; /* White text */
-                border-radius: 4px; /* Slightly rounded corners */
-                padding: 12px 20px; /* Adjusting padding */
-                font-size: 16px; /* Increasing font size */
-                transition: background 0.3s ease; /* Smooth transition */
+                color: #ffffff;
+                border-radius: 4px;
+                padding: 12px 20px;
+                font-size: 16px;
+                transition: background 0.3s ease;
             }
 
             body.login .button-primary:hover,
             body.login .button-primary:focus {
-                background: #005d8b; /* Darker blue on hover/focus */
+                background: #005d8b;
                 border-color: #005d8b;
             }
 
-            /* Customizing links */
             body.login #nav {
                 border-top: 2px solid #000;
                 padding-top: 30px;
@@ -121,23 +123,21 @@ class SiteAdmin
             }
             body.login #nav a, 
             body.login #backtoblog a {
-                color: #0073aa; /* WordPress blue */
+                color: #0073aa;
             }
 
             .login #nav a:hover, 
             .login #backtoblog a:hover {
-                color: #005d8b; /* Darker blue on hover */
+                color: #005d8b;
             }
 
-            /* Styling error messages */
             .login .message, 
             .login .error {
-                border-left: 4px solid #0073aa; /* Blue border for messages */
-                padding: 12px; /* Adding some padding */
-                border-radius: 4px; /* Rounded corners */
+                border-left: 4px solid #0073aa;
+                padding: 12px;
+                border-radius: 4px;
             }
 
-            /* Ensuring footer links are styled appropriately */
             .login #backtoblog {
                 margin-top: 20px;
             }

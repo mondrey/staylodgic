@@ -3,7 +3,7 @@
  * Plugin Name: Staylodgic
  * Description: Staylodgic Booking System
  * Plugin URI:  https://staylodgic.com/
- * Version:     1.0.1
+ * Version:     1.0.3
  * Author:      Staylodgic
  * Author URI:  https://staylodgic.com/
  * Text Domain: staylodgic
