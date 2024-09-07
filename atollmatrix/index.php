@@ -22,8 +22,15 @@ if (is_user_logged_in()) {
 
     } else {
         // Redirect to the login page if the user is not logged in
-        wp_redirect(wp_login_url());
-        exit;
+        if ( current_user_can('editor') || current_user_can('administrator') ) {
+            get_header();
+            echo '<div class="home-center-wrapper">';
+                echo '<div class="home-center-centered">';
+                    echo 'Please fill settings in Staylodgic - Hotel Settings';
+                echo '</div>';
+            echo '</div>';
+            get_footer();
+        }
     }
 } else {
     // Redirect to the login page if the user is not logged in

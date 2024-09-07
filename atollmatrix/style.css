@@ -1,23 +1,15 @@
 /*
 Theme Name: Atollmatrix
-Theme URI: https://imaginem.io/atollmatrix/
-Description: Atollmatrix - Photography Theme for WordPress.
+Description: Atollmatrix - Staylogic theme
 
 Version: 1.0
-Author: imaginem
-Author URI: https://themeforest.net/user/imaginem/
-License: GNU General Public License
-License URI: http://themeforest.net/licenses/regular_extended
+Author: mondrey
 Tags: two-columns, custom-background, threaded-comments, translation-ready, custom-menu
 Text Domain: atollmatrix
 
-	atollmatrix v9.1
-	https://imaginem.io/atollmatrix/
+	atollmatrix v1.0
 
-	Theme designed and developed by imaginem,
-	https://themeforest.net/user/imaginem/
-	in Themeforest
-
+	Theme designed and developed by Mohamed Musthafa
 */
 /*
 
@@ -10879,4 +10871,17 @@ body.fullscreen-portfoliocarousel.mobile-mode-active {
 body.elementor-template-full-width .container {
 	width: auto;
 	padding: 0;
+}
+
+.home-center-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.home-center-centered {
+    padding: 20px;
+	margin-top: -230px;
+	color: #000;
 }
