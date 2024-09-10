@@ -12,18 +12,13 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
     public function __construct()
     {
 
+        add_action('admin_menu', array($this, 'add_availability_admin_menu'));
+        add_action('wp_ajax_save_ical_availability_meta', array($this, 'save_ical_availability_meta'));
+        add_action('wp_ajax_nopriv_save_ical_availability_meta', array($this, 'save_ical_availability_meta'));
+        add_action('admin_menu', array($this, 'add_export_availability_admin_menu'));
 
-        $site_sync_feature = get_blog_option(get_current_blog_id(), 'site_sync_feature');
-        if ('enabled' == $site_sync_feature) {
-
-            add_action('admin_menu', array($this, 'add_availability_admin_menu'));
-            add_action('wp_ajax_save_ical_availability_meta', array($this, 'save_ical_availability_meta'));
-            add_action('wp_ajax_nopriv_save_ical_availability_meta', array($this, 'save_ical_availability_meta'));
-            add_action('admin_menu', array($this, 'add_export_availability_admin_menu'));
-    
-            // Add the cron hook for batch processing
-            $this->add_cron_hook();
-        }
+        // Add the cron hook for batch processing
+        $this->add_cron_hook();
     
         add_action('init', array($this, 'add_ics_rewrite_rule'));
         add_filter('query_vars', array($this, 'register_query_vars'));

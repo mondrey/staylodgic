@@ -7,17 +7,19 @@ class Cron
 
     public function __construct() {
 
-        $site_sync_feature = get_blog_option(get_current_blog_id(), 'site_sync_feature');
-        if ('enabled' == $site_sync_feature) {
-            add_filter('cron_schedules',  array($this, 'add_cron_intervals'));
-            $this->cron_initialize();
-        }
+        add_filter('cron_schedules',  array($this, 'add_cron_intervals'));
+        $this->cron_initialize();
     }
 
     public function get_scheduled_time() {
-        $qtysync_interval = null; // or set a default value
-        $qtysync_interval = get_blog_option(get_current_blog_id(), 'site_sync_interval');
-    
+        $qtysync_interval = null;
+
+        $settings = get_option('staylodgic_settings');
+
+        if (is_array($settings) && isset($settings['sync_interval'])) {
+            $qtysync_interval = $settings['sync_interval'];
+        }
+
         // Define the cron schedule based on the validated interval
         switch ($qtysync_interval) {
             case '1':
@@ -41,9 +43,6 @@ class Cron
             default:
                 $schedule = 'staylodgic_30_minutes';
         }
-    
-        // error_log('Sync ' . $qtysync_interval );
-        // error_log('Sync schedule ' . $schedule );
     
         return $schedule;
     }

@@ -1380,12 +1380,27 @@ $panel_settings = [
         'choices'     => staylodgic_get_booking_substatuses(),
         'tab'         => 'general',
     ],
-    'timezone'             => [
+    'timezone'        => [
         'label'       => esc_html__('Select Time Zone', 'staylodgic'),
         'type'        => 'select',
         'inputwidth'  => '250',
         'description' => 'Select your time zone relative to GMT.',
         'choices'     => staylodgic_get_GmtTimezoneChoices(),
+        'tab'         => 'general',
+    ],
+    'sync_interval'   => [
+        'label'       => esc_html__('iCal sync interval', 'staylodgic'),
+        'type'        => 'select',
+        'inputwidth'  => '100',
+        'description' => 'iCal feeds sync interval between another calendar.',
+        'choices'     => [
+            '60'  => esc_html__('60', 'staylodgic'),
+            '30'  => esc_html__('30', 'staylodgic'),
+            '15'  => esc_html__('15', 'staylodgic'),
+            '10'  => esc_html__('10', 'staylodgic'),
+            '5'  => esc_html__('5', 'staylodgic'),
+            '1'  => esc_html__('1', 'staylodgic'),
+        ],
         'tab'         => 'general',
     ],
     'taxes'                => [
