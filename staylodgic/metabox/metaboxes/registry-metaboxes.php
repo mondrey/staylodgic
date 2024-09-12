@@ -2,11 +2,6 @@
 function staylodgic_registry_metadata()
 {
 
-    $staylodgic_imagepath     = get_template_directory_uri() . '/framework/options/images/metaboxes/';
-    $staylodgic_imagepath_alt = get_template_directory_uri() . '/framework/options/images/';
-
-    $staylodgic_imagepath = get_template_directory_uri() . '/framework/options/images/';
-
     $staylodgic_registry_box = array(
         'id'       => 'registrymeta-box',
         'title'    => 'Registry Metabox',

@@ -2,11 +2,6 @@
 function staylodgic_activity_metadata()
 {
 
-    $staylodgic_imagepath     = get_template_directory_uri() . '/framework/options/images/metaboxes/';
-    $staylodgic_imagepath_alt = get_template_directory_uri() . '/framework/options/images/';
-
-    $staylodgic_imagepath = get_template_directory_uri() . '/framework/options/images/';
-
     $staylodgic_activity_box = array(
         'id'       => 'activitymeta-box',
         'title'    => 'Room Metabox',
@@ -99,7 +94,7 @@ function staylodgic_activity_changelog()
     return $staylodgic_activity_changelog;
 }
 /*
- * Meta options for Room post type
+ * Meta options for Activity post type
  */
 function staylodgic_activityitem_metaoptions()
 {

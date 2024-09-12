@@ -1681,30 +1681,6 @@ function staylodgic_checkdata($post_id)
     }
 }
 
-function staylodgic_calculate_remaining_rooms($exclude_post_id)
-{
-    $args = array(
-        'post_type' => 'slgc_room',
-        'posts_per_page' => -1,
-        'fields' => 'ids',
-    );
-    $rooms = new WP_Query($args);
-    $total_rooms = 0;
-
-    foreach ($rooms->posts as $room_id) {
-        if ($room_id != $exclude_post_id) {
-            $total_rooms += (int) get_post_meta($room_id, 'staylodgic_max_rooms_of_type', true);
-        }
-    }
-
-    // Subtract this total from the maximum allowable rooms
-    $max_total_rooms = staylodgic_get_site_max_rooms( get_current_blog_id() );
-    $remaining_rooms = max(0, $max_total_rooms - $total_rooms); // Ensure it doesn't go negative
-    error_log('Max Rooms set in Site');
-    error_log($max_total_rooms);
-
-    return $remaining_rooms;
-}
 function staylodgic_savedata($staylodgic_metaboxdata, $post_id)
 {
 
@@ -1716,39 +1692,6 @@ function staylodgic_savedata($staylodgic_metaboxdata, $post_id)
             $field_id = $field['id'];
             $old = get_post_meta($post_id, $field_id, true);
             $new = isset($_POST[$field_id]) ? $_POST[$field_id] : '';
-
-
-
-            $max_exceeded = false;
-
-            // Check if this is the 'slgc_room' post type and calculate room counts
-            if ('slgc_room' === get_post_type($post_id)) {
-                if ('staylodgic_max_rooms_of_type' == $field_id) {
-
-                    error_log('Capturing');
-                    $remainingTotalExcludingThisRoom = staylodgic_calculate_remaining_rooms($post_id);
-                    $new_rooms = isset($_POST['staylodgic_max_rooms_of_type']) ? (int) $_POST['staylodgic_max_rooms_of_type'] : 0;
-                    $max_total_rooms = staylodgic_get_site_max_rooms( get_current_blog_id() );
-
-                    error_log('Aggregate rooms without this room :' . $remainingTotalExcludingThisRoom );
-                    error_log('Max rooms allowed:' . $max_total_rooms );
-                    error_log('Saving request :' . $new_rooms );
-                    error_log('If saved eventual outcome :' . $remainingTotalExcludingThisRoom + $new_rooms );
-
-                    // Check if the total rooms would exceed the maximum allowed
-                    //if ($remainingTotalExcludingThisRoom + $new_rooms > $max_total_rooms) {
-                    if ( $new_rooms <= $remainingTotalExcludingThisRoom ) {
-                        $max_exceeded = false;
-                    } else {
-                        $max_exceeded = true;
-                        $_POST['staylodgic_max_rooms_of_type'] = 0; // Set to 0 when max is exceeded
-                        $new = 0; // Set to 0 when max is exceeded
-
-                        error_log('Exceeded is true and saving this :' . $_POST['staylodgic_max_rooms_of_type'] );
-                        error_log('Exceeded is true and saving this :' . $new );
-                    }
-                }
-            }
 
             if ('staylodgic_reservation_room_paid' == $field_id) {
                 // Get the first element of the array

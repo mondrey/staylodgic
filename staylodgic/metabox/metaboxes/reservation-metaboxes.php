@@ -1,9 +1,6 @@
 <?php
 function staylodgic_reservations_metadata()
 {
-    $staylodgic_imagepath = plugin_dir_url(__FILE__) . 'assets/images/';
-
-    $staylodgic_sidebar_options = staylodgic_generate_sidebarlist('reservations');
 
     // Pull all the Featured into an array
     $bg_slideshow_pages = get_posts('post_type=fullscreen&orderby=title&numberposts=-1&order=ASC');
