@@ -202,7 +202,6 @@ class Staylodgic_Init
      */
     public function staylodgic_load_metaboxes()
     {
-        require_once plugin_dir_path(__FILE__) . '/includes/google-fonts.php';
         require_once plugin_dir_path(__FILE__) . '/includes/theme-gens.php';
         require_once plugin_dir_path(__FILE__) . '/metabox/metaboxgen/metaboxgen.php';
         require_once plugin_dir_path(__FILE__) . '/metabox/metaboxes/registry-metaboxes.php';

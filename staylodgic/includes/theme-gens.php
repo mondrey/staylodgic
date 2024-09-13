@@ -1,41 +1,63 @@
 <?php
-function staylodgic_string_to_html_spans($input_string, $class) {
+
+/**
+ * Add passed string to SPAN with class
+ *
+ * @param $input_string
+ * @param $class
+ *
+ * @return string html_output
+ */
+function staylodgic_string_to_html_spans($input_string, $class)
+{
     // Split the input string by commas
     $pieces = explode(',', $input_string);
-    
+
     // Initialize an empty HTML string
     $html_output = '';
-    
+
     // Iterate through the pieces and wrap each in a <span> tag
     foreach ($pieces as $piece) {
         // Remove leading and trailing whitespaces from each piece
         $piece = trim($piece);
-        
+
         // Add the piece wrapped in a <span> tag to the HTML output
-        $html_output .= '<span class="'.$class.'"><span class="facility"><i class="fa-solid fa-check"></i>' . $piece . '</span></span> ';
+        $html_output .= '<span class="' . $class . '"><span class="facility"><i class="fa-solid fa-check"></i>' . $piece . '</span></span> ';
     }
-    
+
     // Remove the trailing comma and space
     $html_output = rtrim($html_output, ', ');
-    
+
     return $html_output;
 }
 
+/**
+ * Get featured image link
+ *
+ * @param $the_image_id
+ *
+ * @return string image_url
+ */
 function staylodgic_featured_image_link($the_image_id)
 {
     $image_url = '';
-    
+
     if (!isset($the_image_id)) {
         $the_image_id = get_the_id();
     }
     $image_id  = get_post_thumbnail_id($the_image_id, 'full');
     $image_url = wp_get_attachment_image_src($image_id, 'full');
-    if ( isset( $image_url[0])) {
+    if (isset($image_url[0])) {
 
         $image_url = $image_url[0];
     }
     return $image_url;
 }
+/**
+ * Gwt list of revolution slider slides
+ *
+ * @return string staylodgic_revslides
+ */
 function staylodgic_rev_slider_selectors()
 {
     $staylodgic_revslides                         = array();
@@ -56,6 +78,11 @@ function staylodgic_rev_slider_selectors()
     }
     return $staylodgic_revslides;
 }
+/**
+ * Generate a list of existing menus
+ *
+ * @return string menu_select
+ */
 function staylodgic_generate_menulist()
 {
     $menus       = get_terms('nav_menu', array('hide_empty' => false));
@@ -70,6 +97,14 @@ function staylodgic_generate_menulist()
     }
     return $menu_select;
 }
+/**
+ * Get elementor page data
+ *
+ * @param $post_id
+ * @param $field_id
+ *
+ * @return string got_data
+ */
 function staylodgic_get_elementor_data($post_id, $field_id)
 {
 
@@ -83,8 +118,14 @@ function staylodgic_get_elementor_data($post_id, $field_id)
     }
 
     return $got_data;
-
 }
+/**
+ * Get page layout
+ *
+ * @param $post_id 
+ *
+ * @return string pagestyle
+ */
 function staylodgic_get_pagestyle($post_id)
 {
     $got_pagestyle = get_post_meta($post_id, 'staylodgic_pagestyle', true);
@@ -114,6 +155,13 @@ function staylodgic_get_pagestyle($post_id)
     }
     return $pagestyle;
 }
+/**
+ * Check if page has password protection
+ *
+ * @param $id
+ *
+ * @return booleen
+ */
 function staylodgic_has_password($id)
 {
     $checking_for_password = get_post($id);
@@ -122,6 +170,13 @@ function staylodgic_has_password($id)
     }
     return false;
 }
+/**
+ * Generate options for select input based on type
+ *
+ * @param $type
+ *
+ * @return array
+ */
 function staylodgic_get_select_target_options($type)
 {
     $list_options = array();
@@ -308,10 +363,17 @@ function staylodgic_get_select_target_options($type)
 
     return $list_options;
 }
+/**
+ * Output an array or select choices with countries
+ *
+ * @param $output_type
+ * @param $selected
+ *
+ * @return array
+ */
 function staylodgic_country_list($output_type = "select", $selected = "")
 {
-    $countries = array
-        (
+    $countries = array(
         'AF'   => 'Afghanistan',
         'AX'   => 'Aland Islands',
         'AL'   => 'Albania',
@@ -575,14 +637,14 @@ function staylodgic_country_list($output_type = "select", $selected = "")
         $country_list = "";
         $count = 0;
         foreach ($countries as $key => $option) {
-            if ( $count > 0 ) {
+            if ($count > 0) {
                 $country_list .= ',';
             }
             $count++;
             $country_list .= $key . ':' . $option;
         }
     }
-    
+
     if ($output_type == "select-array") {
         $country_list = array();
         $countries = array_merge(array('none' => 'Choose a country'), $countries);
@@ -596,6 +658,13 @@ function staylodgic_country_list($output_type = "select", $selected = "")
     return $country_list;
 }
 
+/**
+ * Get image ID from a url if it is present in WordPress media library
+ *
+ * @param $image_url
+ *
+ * @return int|bool
+ */
 function staylodgic_get_image_id_from_url($image_url)
 {
     $attachment = attachment_url_to_postid($image_url);
@@ -605,6 +674,13 @@ function staylodgic_get_image_id_from_url($image_url)
         return false;
     }
 }
+/**
+ * For a proofing set gallery
+ *
+ * @param $page_id
+ *
+ * @return string
+ */
 function staylodgic_get_proofing_attachments($page_id)
 {
     $filter_image_ids = false;
@@ -614,6 +690,13 @@ function staylodgic_get_proofing_attachments($page_id)
         return $filter_image_ids;
     }
 }
+/**
+ * Get page attached image IDs
+ *
+ * @param $page_id
+ *
+ * @return string
+ */
 function staylodgic_get_custom_attachments($page_id)
 {
     $filter_image_ids = false;
@@ -623,6 +706,13 @@ function staylodgic_get_custom_attachments($page_id)
         return $filter_image_ids;
     }
 }
+/**
+ * Get image urls of page attachements
+ *
+ * @param $page_id
+ *
+ * @return array
+ */
 function staylodgic_get_custom_attachment_images($page_id)
 {
     $images = array();
@@ -640,6 +730,13 @@ function staylodgic_get_custom_attachment_images($page_id)
     }
     return $images;
 }
+/**
+ * Get custom image links
+ *
+ * @param $page_id
+ *
+ * @return string
+ */
 function staylodgic_output_custom_image_links($page_id)
 {
     $images = staylodgic_get_custom_attachment_images($page_id);
@@ -651,7 +748,7 @@ function staylodgic_output_custom_image_links($page_id)
 
     $output .= '<div class="supporting-image-gallery">';
     foreach ($images as $image) {
-        $output .= '<a class="lightbox-image"  data-gallery="lightbox-gallery-'.esc_attr($page_id).'" data-toggle="lightbox" href="' . esc_url($image['full_image']) . '">';
+        $output .= '<a class="lightbox-image"  data-gallery="lightbox-gallery-' . esc_attr($page_id) . '" data-toggle="lightbox" href="' . esc_url($image['full_image']) . '">';
         $output .= '<img class="main-image" src="' . esc_url($image['thumbnail']) . '" alt="main image">';
         $output .= '</a>';
     }
@@ -659,16 +756,36 @@ function staylodgic_output_custom_image_links($page_id)
 
     return $output;
 }
+/**
+ * Check if page is built with elementor
+ *
+ * @param $post_id
+ *
+ * @return string
+ */
 function staylodgic_page_is_built_with_elementor($post_id)
 {
     $status = get_post_meta($post_id, '_elementor_edit_mode', true);
     return $status;
 }
+/**
+ * Get max sidebars
+ *
+ * @return int
+ */
 function staylodgic_get_max_sidebars()
 {
     $max_sidebars = 50;
     return $max_sidebars;
 }
+/**
+ * Get option data
+ *
+ * @param $name
+ * @param $default
+ *
+ * @return array
+ */
 function staylodgic_get_option_data($name, $default = false)
 {
 
@@ -679,6 +796,11 @@ function staylodgic_get_option_data($name, $default = false)
     return $default;
 }
 
+/**
+ * Get customer page meta options
+ *
+ * @return array
+ */
 function staylodgic_get_customer_array()
 {
     $customer = array(
