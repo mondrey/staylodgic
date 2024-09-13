@@ -18,16 +18,23 @@ class staylodgic_Activity_Posts
         }
     }
 
+    /**
+     * Activity sort
+     *
+     * @return void
+     */
     public function staylodgic_enable_activity_sort()
     {
         add_submenu_page('edit.php?post_type=slgc_activity', __('Sort activities', 'staylodgic'), __('Sort Activities', 'staylodgic'), 'edit_posts', basename(__FILE__), array($this, 'staylodgic_sort_activity'));
     }
+
     public function staylodgic_activity_orderby($orderby)
     {
         global $wpdb;
         $orderby = "{$wpdb->posts}.menu_order, {$wpdb->posts}.post_date DESC";
         return ($orderby);
     }
+
     public function staylodgic_sort_activity()
     {
         $activity = new WP_Query('post_type=slgc_activity&posts_per_page=-1&orderby=menu_order&order=ASC');
@@ -124,19 +131,15 @@ class staylodgic_Activity_Posts
             'has_archive'     => true,
             'menu_position'   => 39,
             'menu_icon'       => 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48IS0tIUZvbnQgQXdlc29tZSBGcmVlIDYuNS4yIGJ5IEBmb250YXdlc29tZSAtIGh0dHBzOi8vZm9udGF3ZXNvbWUuY29tIExpY2Vuc2UgLSBodHRwczovL2ZvbnRhd2Vzb21lLmNvbS9saWNlbnNlL2ZyZWUgQ29weXJpZ2h0IDIwMjQgRm9udGljb25zLCBJbmMuLS0+PHBhdGggZmlsbD0iIzYzRTZCRSIgZD0iTTIyNCAzMkg2NEM0Ni4zIDMyIDMyIDQ2LjMgMzIgNjR2NjRjMCAxNy43IDE0LjMgMzIgMzIgMzJINDQxLjRjNC4yIDAgOC4zLTEuNyAxMS4zLTQuN2w0OC00OGM2LjItNi4yIDYuMi0xNi40IDAtMjIuNmwtNDgtNDhjLTMtMy03LjEtNC43LTExLjMtNC43SDI4OGMwLTE3LjctMTQuMy0zMi0zMi0zMnMtMzIgMTQuMy0zMiAzMnpNNDgwIDI1NmMwLTE3LjctMTQuMy0zMi0zMi0zMkgyODhWMTkySDIyNHYzMkg3MC42Yy00LjIgMC04LjMgMS43LTExLjMgNC43bC00OCA0OGMtNi4yIDYuMi02LjIgMTYuNCAwIDIyLjZsNDggNDhjMyAzIDcuMSA0LjcgMTEuMyA0LjdINDQ4YzE3LjcgMCAzMi0xNC4zIDMyLTMyVjI1NnpNMjg4IDQ4MFYzODRIMjI0djk2YzAgMTcuNyAxNC4zIDMyIDMyIDMyczMyLTE0LjMgMzItMzJ6Ii8+PC9zdmc+',
-            'rewrite'         => array('slug' => 'activities'), //Use a slug like "work" or "project" that shouldnt be same with your page name
-            'supports' => array('title', 'author', 'thumbnail'), //Boxes will be shown in the panel
+            'rewrite'         => array('slug' => 'activities'),
+            'supports' => array('title', 'author', 'thumbnail'),
         );
 
         register_post_type('slgc_activity', $args);
         /*
-         * Add Taxonomy for activity 'Type'
+         * Add Taxonomy for activity
          */
         register_taxonomy('slgc_activitytype', array("staylodgic_activity"), array("hierarchical" => true, "label" => "Activity Category", "singular_label" => "staylodgic_activitytypes", "rewrite" => true));
-
-        /*
-     * Hooks for the activity and Featured viewables
-     */
     }
     /**
      * Enqueue Scripts and Styles

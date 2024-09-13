@@ -14,6 +14,11 @@ class staylodgic_Reservation_Posts
         add_action('pre_get_posts', array($this, 'slgc_reservations_orderby'));
     }
 
+    /**
+     * Reservation post columns
+     *
+     * @return void
+     */
     public function slgc_reservations_orderby($query)
     {
         if (!is_admin() || !$query->is_main_query()) {
@@ -39,7 +44,6 @@ class staylodgic_Reservation_Posts
     {
         unset($columns['author']);
         $new_columns = array(
-            //"mreservation_section" => __('Section', 'staylodgic'),
             "reservation_customer"   => __('Customer', 'staylodgic'),
             "reservation_bookingnr"  => __('Booking Number', 'staylodgic'),
             "reservation_checkinout" => __('Checkin / Checkout', 'staylodgic'),
@@ -127,8 +131,9 @@ class staylodgic_Reservation_Posts
     }
 
     /**
+     * Register Reservation post
      *
-     * @return    void
+     * @return void
      */
     public function init()
     {
@@ -139,7 +144,7 @@ class staylodgic_Reservation_Posts
             'labels'             => array(
                 'name'          => __('Reservations', 'staylodgic'),
                 'add_new'       => __('Create Reservation', 'staylodgic'),
-                'add_new_item'  => __( 'Add New Reservation', 'staylodgic' ),
+                'add_new_item'  => __('Add New Reservation', 'staylodgic'),
                 'menu_name'     => __('Reservations', 'staylodgic'),
                 'singular_name' => __('Reservation', 'staylodgic'),
                 'all_items'     => __('All Reservations', 'staylodgic'),
@@ -155,13 +160,13 @@ class staylodgic_Reservation_Posts
             'has_archive'        => true,
             'menu_position'      => 36,
             'menu_icon'          => 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0NDggNTEyIj48IS0tIUZvbnQgQXdlc29tZSBGcmVlIDYuNS4yIGJ5IEBmb250YXdlc29tZSAtIGh0dHBzOi8vZm9udGF3ZXNvbWUuY29tIExpY2Vuc2UgLSBodHRwczovL2ZvbnRhd2Vzb21lLmNvbS9saWNlbnNlL2ZyZWUgQ29weXJpZ2h0IDIwMjQgRm9udGljb25zLCBJbmMuLS0+PHBhdGggZmlsbD0iIzYzRTZCRSIgZD0iTTk2IDBDNDMgMCAwIDQzIDAgOTZWNDE2YzAgNTMgNDMgOTYgOTYgOTZIMzg0aDMyYzE3LjcgMCAzMi0xNC4zIDMyLTMycy0xNC4zLTMyLTMyLTMyVjM4NGMxNy43IDAgMzItMTQuMyAzMi0zMlYzMmMwLTE3LjctMTQuMy0zMi0zMi0zMkgzODQgOTZ6bTAgMzg0SDM1MnY2NEg5NmMtMTcuNyAwLTMyLTE0LjMtMzItMzJzMTQuMy0zMiAzMi0zMnptMzItMjQwYzAtOC44IDcuMi0xNiAxNi0xNkgzMzZjOC44IDAgMTYgNy4yIDE2IDE2cy03LjIgMTYtMTYgMTZIMTQ0Yy04LjggMC0xNi03LjItMTYtMTZ6bTE2IDQ4SDMzNmM4LjggMCAxNiA3LjIgMTYgMTZzLTcuMiAxNi0xNiAxNkgxNDRjLTguOCAwLTE2LTcuMi0xNi0xNnM3LjItMTYgMTYtMTZ6Ii8+PC9zdmc+',
-            'rewrite'            => array('slug' => 'reservations'), //Use a slug like "work" or "project" that shouldnt be same with your page name
-            'supports' => array('title', 'author', 'thumbnail'), //Boxes will be shown in the panel
+            'rewrite'            => array('slug' => 'reservations'),
+            'supports' => array('title', 'author', 'thumbnail'),
         );
 
         register_post_type('slgc_reservations', $args);
         /*
-         * Add Taxonomy for kbase 'Type'
+         * Add Taxonomy
          */
         register_taxonomy(
             'slgc_rescat',

@@ -13,19 +13,22 @@ class Staylodgic_Init
         add_action( 'wp_enqueue_scripts', array($this,'enqueue_google_fonts' ));
         add_action( 'wp_head', array($this,'preconnect_google_fonts' ));
 
-        add_action('admin_menu', array($this,'remove_admin_elements'));
-
         add_action('wp_head', array($this, 'output_dynamic_css'));
     
     }
 
+    /**
+     * Dynamic CSS
+     *
+     * @return void
+     */
     public function output_dynamic_css()
     {
         // Get the main_logo_height option value
         $main_logo_height = staylodgic_get_option('main_logo_height');
         $responsive_logo_height = staylodgic_get_option('responsive_logo_height');
 
-        // Check if the value is set and is a valid number
+        // Check if height value is set and is a valid number
         if ($main_logo_height && is_numeric($main_logo_height)) {
             echo '<style type="text/css">
                 .menu-is-horizontal .logo img {
@@ -42,14 +45,15 @@ class Staylodgic_Init
         }
     }
 
-    public function remove_admin_elements() {
-        // remove_menu_page('index.php');
-        // remove_menu_page('edit.php');
-    }
-
+    /**
+     * Add ICS file extension and mime type to the allowed list
+     *
+	 * @param string $mime_types
+     *
+     * @return $mime_types
+     */
     public function allow_ics_upload($mime_types)
     {
-        // Add ICS file extension and mime type to the allowed list
         $mime_types['ics'] = 'text/calendar';
         return $mime_types;
     }
@@ -74,8 +78,13 @@ class Staylodgic_Init
 
         add_action('admin_menu', array($this, 'remove_admin_notices_on_specific_page'));
     }
+
+    /**
+     * List of specific admin pages to remove notices from
+     *
+     * @return void
+     */
     public function remove_admin_notices_on_specific_page() {
-        // List of specific admin pages to remove notices from
         $pages_to_remove_notices = [
             'slgc-availability',
             'slgc-availability-yearly',
@@ -92,9 +101,7 @@ class Staylodgic_Init
             'slgc-export-availability-ical'
         ];
     
-        // Check if the current page is one of the specified pages
         if (isset($_GET['page']) && in_array($_GET['page'], $pages_to_remove_notices)) {
-            // Remove all standard admin notices and footer text
             remove_all_actions('admin_notices');
             remove_all_actions('all_admin_notices');
             add_filter('admin_footer_text', '__return_empty_string', 11);
@@ -102,16 +109,31 @@ class Staylodgic_Init
         }
     }    
 
+    /**
+     * Register images size
+     *
+     * @return void
+     */
     public function staylodgic_custom_image_size()
     {
         add_image_size( 'staylodgic-large-square', 770, 770, true ); // Square.
     }
 
+    /**
+     * Set textdomain
+     *
+     * @return void
+     */
     public function staylodgic_load_textdomain()
     {
         load_plugin_textdomain('staylodgic', false, basename(dirname(__FILE__)) . '/languages');
     }
 
+    /**
+     * Load Custom Post types
+     *
+     * @return void
+     */
     public function staylodgic_load_custom_posts()
     {
         require_once plugin_dir_path(__FILE__) . '/custom-posts/class-staylodgic-reservation-posts.php';
@@ -122,6 +144,11 @@ class Staylodgic_Init
         require_once plugin_dir_path(__FILE__) . '/custom-posts/class-staylodgic-activityres-posts.php';
     }
 
+    /**
+     * Load availability calendar
+     *
+     * @return void
+     */
     public function staylodgic_load_availablity_calendar()
     {
 
@@ -156,14 +183,23 @@ class Staylodgic_Init
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-guestregistry.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-formgenerator.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-tax.php';
-        // require_once plugin_dir_path(__FILE__) . 'includes/admin/class-exportbackup.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/utilities.php';
     }
 
+    /**
+     * Load Theme options panel
+     *
+     * @return void
+     */
     public function staylodgic_load_themeoptions() {
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-optionspanel.php';
     }
 
+    /**
+     * Load metaboxes
+     *
+     * @return void
+     */
     public function staylodgic_load_metaboxes()
     {
         require_once plugin_dir_path(__FILE__) . '/includes/google-fonts.php';
@@ -177,17 +213,30 @@ class Staylodgic_Init
         require_once plugin_dir_path(__FILE__) . '/metabox/metaboxes/activity-metaboxes.php';
     }
 
+    /**
+     * Load Google Fonts
+     *
+     * @return void
+     */
     function enqueue_google_fonts() {
-        // Enqueue the main font style
         wp_enqueue_style( 'staylodgic-google-fonts', 'https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap', array(), null );
     }
     
+    /**
+     * Preconntect Google Fonts
+     *
+     * @return void
+     */
     function preconnect_google_fonts() {
-        // Preconnect for performance improvement
         echo '<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>';
         echo '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>';
     }
 
+    /**
+     * Load Admin styles
+     *
+     * @return void
+     */
     public function staylodgic_load_admin_styles( $hook )
     {
         wp_register_script('select2', plugin_dir_url(__FILE__) . 'assets/js/select2/js/select2.full.min.js', array('jquery'), null, true);
@@ -234,11 +283,6 @@ class Staylodgic_Init
 
         wp_register_script('bootstrap', plugin_dir_url(__FILE__) . 'assets/js/bootstrap/js/bootstrap.bundle.min.js', array('jquery'), null, true);
         wp_register_style('bootstrap', plugin_dir_url(__FILE__) . 'assets/js/bootstrap/css/bootstrap.min.css', false, 'screen');
-        
-        // wp_register_style('dataTables-bootstrap5', plugin_dir_url(__FILE__) . 'admin/js/dataTables/dataTables.bootstrap5.min.css', false, 'screen');
-
-        // wp_register_script('staylodgic-dataTables-bootstrap5', plugin_dir_url(__FILE__) . 'admin/js/dataTables/dataTables.bootstrap5.min.js', array('jquery', 'staylodgic-dataTables'), null, true);
-        // wp_register_script('staylodgic-dataTables', plugin_dir_url(__FILE__) . 'admin/js/dataTables/dataTables.min.js', array('jquery'), null, true);
 
         wp_register_style('dataTables-bootstrap5', plugin_dir_url(__FILE__) . 'admin/js/DataTables/datatables.min.css', false, 'screen');
         wp_register_style('dataTables-bootstrap5-responsive', plugin_dir_url(__FILE__) . 'admin/js/DataTables/datatables.responsive.min.css', false, 'screen');
@@ -255,6 +299,7 @@ class Staylodgic_Init
             $current_admin_screen = get_current_screen();
         }
 
+        // Custom post type
         if ($current_admin_screen->post_type === 'slgc_customers') {
 
             wp_enqueue_style('fontawesome-6');
@@ -262,7 +307,11 @@ class Staylodgic_Init
             wp_enqueue_style('fontawesome-6-solid');
 
         }
+
+        // Is an admin screen
         if (isset($current_admin_screen)) {
+
+            // For all posts
             if ($current_admin_screen->base == 'post') {
                 wp_enqueue_media();
 
@@ -287,6 +336,7 @@ class Staylodgic_Init
             
             }
 
+            // Invoicing pages
             if ($current_admin_screen->base == 'slgc_reservations_page_staylodgic-invoicing') {
                 wp_enqueue_style('staylodgic-admin-styles');
                 wp_enqueue_style('staylodgic-indicator-icons');
@@ -301,6 +351,8 @@ class Staylodgic_Init
             
                 wp_enqueue_style('staylodgic-invoice');
             }
+
+            // Staylodgic Dashboard
             if ($current_admin_screen->base == 'toplevel_page_slgc-dashboard') {
 
                 wp_enqueue_style('staylodgic-dashboard');
@@ -324,6 +376,8 @@ class Staylodgic_Init
                 wp_enqueue_style('bootstrap');
                 wp_enqueue_script('bootstrap');
             }
+
+            // Activity pages
             if (isset($_GET['page']) && $_GET['page'] == 'slgc-activity-dashboard') {
 
                 wp_enqueue_style('staylodgic-dashboard');
@@ -346,6 +400,8 @@ class Staylodgic_Init
                 wp_enqueue_style('bootstrap');
                 wp_enqueue_script('bootstrap');
             }
+
+            // Import Calendar
             if ($current_admin_screen->base == 'staylodgic_page_import-booking-ical') {
 
                 wp_enqueue_script('staylodgic-parser');
@@ -357,6 +413,8 @@ class Staylodgic_Init
                 wp_enqueue_script('bootstrap');
 
             }
+
+            // Export Calendar
             if ($current_admin_screen->base == 'staylodgic_page_slgc-export-booking-ical') {
 
                 wp_enqueue_script('staylodgic-parser');
@@ -375,6 +433,8 @@ class Staylodgic_Init
                 wp_enqueue_script('bootstrap');
 
             }
+
+            // Registrations
             if ($current_admin_screen->base == 'staylodgic_page_slgc-export-registrations-ical') {
 
                 wp_enqueue_script('staylodgic-parser');
@@ -393,6 +453,8 @@ class Staylodgic_Init
                 wp_enqueue_script('bootstrap');
 
             }
+
+            // Import availability ical
             if ($current_admin_screen->base == 'staylodgic_page_slgc-import-availability-ical') {
 
                 wp_enqueue_script('staylodgic-parser');
@@ -405,6 +467,8 @@ class Staylodgic_Init
                 wp_enqueue_script('bootstrap');
 
             }
+
+            // Export availability
             if ($current_admin_screen->base == 'staylodgic_page_slgc-export-availability-ical') {
 
                 wp_enqueue_script('staylodgic-parser');
@@ -418,6 +482,8 @@ class Staylodgic_Init
                 wp_enqueue_script('bootstrap');
 
             }
+
+            // Import availability
             if ($current_admin_screen->base == 'staylodgic_page_import-availablity') {
 
                 wp_enqueue_script('staylodgic-parser');
@@ -429,6 +495,8 @@ class Staylodgic_Init
                 wp_enqueue_script('bootstrap');
 
             }
+
+            // Activity invoice
             if ($current_admin_screen->base == 'slgc_activityres_page_staylodgic-activity-invoicing') {
 
                 wp_enqueue_script('staylodgic-invoice');
@@ -445,6 +513,8 @@ class Staylodgic_Init
                 wp_enqueue_script('bootstrap');
 
             }
+
+            // General Invoicing
             if ($current_admin_screen->base == 'staylodgic_page_staylodgic-invoicing') {
 
                 wp_enqueue_script('staylodgic-invoice');
@@ -461,6 +531,8 @@ class Staylodgic_Init
                 wp_enqueue_script('bootstrap');
 
             }
+
+            // Reservations
             if ($current_admin_screen && $current_admin_screen->base == 'edit' && $current_admin_screen->post_type == 'slgc_reservations') {
 
                 wp_enqueue_script('staylodgic-parser');
@@ -469,6 +541,8 @@ class Staylodgic_Init
                 wp_enqueue_style('fontawesome-6-solid');
 
             }
+
+            // Activity Reservations
             if ($current_admin_screen && $current_admin_screen->post_type == 'slgc_activityres') {
 
                 wp_enqueue_style('staylodgic-admin-styles');
@@ -485,6 +559,8 @@ class Staylodgic_Init
                 wp_enqueue_style('staylodgic-invoice');
 
             }
+
+            // Guest registry
             if ($current_admin_screen->post_type === 'slgc_guestregistry' && ($hook === 'post.php' || $hook === 'post-new.php')) {
 
                 wp_enqueue_style('staylodgic-admin-styles');
@@ -510,6 +586,7 @@ class Staylodgic_Init
                 )
             );
 
+            // Page settings
             if ($current_admin_screen->base == 'staylodgic_page_slgc-settings-panel') {
 
                 wp_enqueue_style('fontawesome-6');
@@ -518,16 +595,16 @@ class Staylodgic_Init
                 
                 wp_enqueue_script('admin_options', plugin_dir_url(__FILE__) . 'admin/js/admin-options.js', array('jquery'), null, true);
                 wp_enqueue_style('admin_options', plugin_dir_url(__FILE__) . 'admin/css/admin-options.css', false, 'screen');
-                // Enqueue jQuery UI Sortable
+
                 wp_enqueue_script('jquery-ui-sortable');
 
-                // Add CSS styles for the sortable placeholder
                 wp_enqueue_style('jquery-ui-sortable');
 
                 wp_enqueue_script('select2', plugin_dir_url(__FILE__) . 'assets/js/select2/js/select2.full.min.js', array('jquery'), null, true);
                 wp_enqueue_style('select2', plugin_dir_url(__FILE__) . 'assets/js/select2/css/select2.min.css', array(), false, 'screen');
             }
             
+            // Yearly Availability
             if (isset($_GET['page']) && $_GET['page'] == 'slgc-availability-yearly') {
 
                 wp_enqueue_style('availability-admin-styles');
@@ -555,6 +632,8 @@ class Staylodgic_Init
                 wp_enqueue_script('admin-post-meta');
 
             }
+
+            // Settings
             if (isset($_GET['page']) && $_GET['page'] == 'staylodgic-settings') {
 
                 wp_enqueue_style('fontawesome-6');
@@ -566,6 +645,8 @@ class Staylodgic_Init
                 wp_enqueue_script('driver-js-welcome');
 
             }
+
+            // Availability
             if (isset($_GET['page']) && $_GET['page'] == 'slgc-availability') {
 
                 wp_enqueue_style('availability-admin-styles');
@@ -604,9 +685,15 @@ class Staylodgic_Init
             }
         }
 
+        // General responsive styles
         wp_enqueue_style('admin-responsive', plugin_dir_url(__FILE__) . 'admin/css/admin-responsive.css', false, 'screen');
     }
 
+    /**
+     * Load frontend scripts styles
+     *
+     * @return void
+     */
     public function staylodgic_load_front_end_scripts_styles()
     {
 
@@ -700,7 +787,7 @@ class Staylodgic_Init
         add_meta_box("room-meta", esc_html__("Room Options", "staylodgic"), "staylodgic_roomitem_metaoptions", "slgc_room", "normal", "low");
         add_meta_box("room-changelog", esc_html__("Room Changelog", "staylodgic"), "staylodgic_roomitem_changelog", "slgc_room", "normal", "low");
     }
-    // Room Metabox
+    // Acitivity Metabox
     public function staylodgic_activityitemmetabox_init()
     {
         add_meta_box("activity-meta", esc_html__("Activity Options", "staylodgic"), "staylodgic_activityitem_metaoptions", "slgc_activity", "normal", "low");

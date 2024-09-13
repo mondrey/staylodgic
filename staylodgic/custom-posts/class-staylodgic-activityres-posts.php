@@ -22,6 +22,11 @@ class staylodgic_ActivityReservation_Posts
         }
     }
 
+    /**
+     * Activity reservation post columns
+     *
+     * @return void
+     */
     public function slgc_activityres_edit_columns($columns)
     {
         unset($columns['author']);
@@ -83,16 +88,23 @@ class staylodgic_ActivityReservation_Posts
         }
     }
 
+    /**
+     * Activity post sort
+     *
+     * @return void
+     */
     public function staylodgic_enable_activityreservation_sort()
     {
         add_submenu_page('edit.php?post_type=slgc_activityreservation', 'Sort activityreservations', 'Sort Activities', 'edit_posts', basename(__FILE__), array($this, 'staylodgic_sort_activityreservation'));
     }
+
     public function staylodgic_activityres_orderby($orderby)
     {
         global $wpdb;
         $orderby = "{$wpdb->posts}.menu_order, {$wpdb->posts}.post_date DESC";
         return ($orderby);
     }
+
     public function staylodgic_sort_activityreservation()
     {
         $activityreservation = new WP_Query('post_type=slgc_activityreservation&posts_per_page=-1&orderby=menu_order&order=ASC');
@@ -131,10 +143,11 @@ class staylodgic_ActivityReservation_Posts
 
                     </li>
                 <?php endwhile; ?>
-        </div><!-- End div#wrap //-->
+        </div>
 
 <?php
     }
+
     public function staylodgic_save_activityreservation_order()
     {
         global $wpdb; // WordPress database class
@@ -154,14 +167,13 @@ class staylodgic_ActivityReservation_Posts
     }
 
     /**
+     * Register activityreservation Post Manager
      *
-     * @return    void
+     * @return void
      */
     public function init()
     {
-        /*
-         * Register activityreservation Post Manager
-         */
+
         $labels = array(
             'name'               => _x('Activity Reservations', 'post type general name', 'staylodgic'),
             'singular_name'      => _x('Activity Reservation', 'post type singular name', 'staylodgic'),
@@ -190,19 +202,15 @@ class staylodgic_ActivityReservation_Posts
             'has_archive'     => true,
             'menu_position'   => 40,
             'menu_icon'       => 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1NzYgNTEyIj48IS0tIUZvbnQgQXdlc29tZSBGcmVlIDYuNS4yIGJ5IEBmb250YXdlc29tZSAtIGh0dHBzOi8vZm9udGF3ZXNvbWUuY29tIExpY2Vuc2UgLSBodHRwczovL2ZvbnRhd2Vzb21lLmNvbS9saWNlbnNlL2ZyZWUgQ29weXJpZ2h0IDIwMjQgRm9udGljb25zLCBJbmMuLS0+PHBhdGggZmlsbD0iIzYzRTZCRSIgZD0iTTY0IDY0QzI4LjcgNjQgMCA5Mi43IDAgMTI4djY0YzAgOC44IDcuNCAxNS43IDE1LjcgMTguNkMzNC41IDIxNy4xIDQ4IDIzNSA0OCAyNTZzLTEzLjUgMzguOS0zMi4zIDQ1LjRDNy40IDMwNC4zIDAgMzExLjIgMCAzMjB2NjRjMCAzNS4zIDI4LjcgNjQgNjQgNjRINTEyYzM1LjMgMCA2NC0yOC43IDY0LTY0VjMyMGMwLTguOC03LjQtMTUuNy0xNS43LTE4LjZDNTQxLjUgMjk0LjkgNTI4IDI3NyA1MjggMjU2czEzLjUtMzguOSAzMi4zLTQ1LjRjOC4zLTIuOSAxNS43LTkuOCAxNS43LTE4LjZWMTI4YzAtMzUuMy0yOC43LTY0LTY0LTY0SDY0em02NCAxMTJsMCAxNjBjMCA4LjggNy4yIDE2IDE2IDE2SDQzMmM4LjggMCAxNi03LjIgMTYtMTZWMTc2YzAtOC44LTcuMi0xNi0xNi0xNkgxNDRjLTguOCAwLTE2IDcuMi0xNiAxNnpNOTYgMTYwYzAtMTcuNyAxNC4zLTMyIDMyLTMySDQ0OGMxNy43IDAgMzIgMTQuMyAzMiAzMlYzNTJjMCAxNy43LTE0LjMgMzItMzIgMzJIMTI4Yy0xNy43IDAtMzItMTQuMy0zMi0zMlYxNjB6Ii8+PC9zdmc+',
-            'rewrite'         => array('slug' => 'activityreservations'), //Use a slug like "work" or "project" that shouldnt be same with your page name
-            'supports' => array('title', 'author', 'thumbnail'), //Boxes will be shown in the panel
+            'rewrite'         => array('slug' => 'activityreservations'),
+            'supports' => array('title', 'author', 'thumbnail'),
         );
 
         register_post_type('slgc_activityres', $args);
         /*
-         * Add Taxonomy for activityreservation 'Type'
+         * Add Taxonomy for activityreservation
          */
         register_taxonomy('slgc_slgc_activityrestype', array("staylodgic_activityres"), array("hierarchical" => true, "label" => "Activity Reservation Category", "singular_label" => "staylodgic_activityrestypes", "rewrite" => true));
-
-        /*
-     * Hooks for the activityreservation and Featured viewables
-     */
     }
     /**
      * Enqueue Scripts and Styles

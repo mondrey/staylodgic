@@ -18,6 +18,11 @@ class staylodgic_Room_Posts
         }
     }
 
+    /**
+     * Register Room columns
+     *
+     * @return void
+     */
     public function staylodgic_enable_room_sort()
     {
         add_submenu_page('edit.php?post_type=slgc_room', 'Sort rooms', 'Sort Rooms', 'edit_posts', basename(__FILE__), array($this, 'staylodgic_sort_room'));
@@ -66,10 +71,16 @@ class staylodgic_Room_Posts
 
                     </li>
                 <?php endwhile; ?>
-        </div><!-- End div#wrap //-->
+        </div>
 
 <?php
     }
+
+    /**
+     * Save Room order
+     *
+     * @return void
+     */
     public function staylodgic_save_room_order()
     {
 
@@ -78,7 +89,7 @@ class staylodgic_Room_Posts
             wp_die();
         }
 
-        global $wpdb; // WordPress database class
+        global $wpdb;
 
         $order   = explode(',', $_POST['order']);
         $counter = 0;
@@ -86,8 +97,8 @@ class staylodgic_Room_Posts
         foreach ($order as $sort_id) {
             $wpdb->update(
                 $wpdb->posts,
-                array('menu_order' => intval($counter)), // Ensuring integer
-                array('ID' => intval($sort_id))          // Ensuring integer
+                array('menu_order' => intval($counter)),
+                array('ID' => intval($sort_id))
             );
             $counter++;
         }
@@ -95,9 +106,9 @@ class staylodgic_Room_Posts
     }
 
     /**
-     * Registers TinyMCE rich editor buttons
+     * Register Room post
      *
-     * @return    void
+     * @return void
      */
     public function init()
     {
@@ -108,7 +119,7 @@ class staylodgic_Room_Posts
             'labels'            => array(
                 'name'          => __('Rooms', 'staylodgic'),
                 'add_new'       => __('Create a Room', 'staylodgic'),
-                'add_new_item'  => __( 'Add New Room', 'staylodgic' ),
+                'add_new_item'  => __('Add New Room', 'staylodgic'),
                 'menu_name'     => __('Rooms', 'staylodgic'),
                 'singular_name' => __('Room', 'staylodgic'),
                 'all_items'     => __('All Rooms', 'staylodgic'),
@@ -122,29 +133,24 @@ class staylodgic_Room_Posts
             'has_archive'     => true,
             'menu_position'   => 35,
             'menu_icon'       => 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NDAgNTEyIj48IS0tIUZvbnQgQXdlc29tZSBGcmVlIDYuNS4yIGJ5IEBmb250YXdlc29tZSAtIGh0dHBzOi8vZm9udGF3ZXNvbWUuY29tIExpY2Vuc2UgLSBodHRwczovL2ZvbnRhd2Vzb21lLmNvbS9saWNlbnNlL2ZyZWUgQ29weXJpZ2h0IDIwMjQgRm9udGljb25zLCBJbmMuLS0+PHBhdGggZmlsbD0iIzYzRTZCRSIgZD0iTTMyIDMyYzE3LjcgMCAzMiAxNC4zIDMyIDMyVjMyMEgyODhWMTYwYzAtMTcuNyAxNC4zLTMyIDMyLTMySDU0NGM1MyAwIDk2IDQzIDk2IDk2VjQ0OGMwIDE3LjctMTQuMyAzMi0zMiAzMnMtMzItMTQuMy0zMi0zMlY0MTZIMzUyIDMyMCA2NHYzMmMwIDE3LjctMTQuMyAzMi0zMiAzMnMtMzItMTQuMy0zMi0zMlY2NEMwIDQ2LjMgMTQuMyAzMiAzMiAzMnptMTQ0IDk2YTgwIDgwIDAgMSAxIDAgMTYwIDgwIDgwIDAgMSAxIDAtMTYweiIvPjwvc3ZnPg==',
-            'rewrite'         => array('slug' => 'rooms'), //Use a slug like "work" or "project" that shouldnt be same with your page name
-            'supports' => array('title', 'author', 'thumbnail'), //Boxes will be shown in the panel
+            'rewrite'         => array('slug' => 'rooms'),
+            'supports' => array('title', 'author', 'thumbnail'),
         );
 
         register_post_type('slgc_room', $args);
         /*
-         * Add Taxonomy for room 'Type'
+         * Add Taxonomy
          */
         register_taxonomy('slgc_roomtype', array("staylodgic_room"), array("hierarchical" => true, "label" => "Room Category", "singular_label" => "staylodgic_roomtypes", "rewrite" => true));
-
-        /*
-     * Hooks for the room and Featured viewables
-     */
     }
     /**
-     * Enqueue Scripts and Styles
+     * Load styles and scripts
      *
-     * @return    void
+     * @return void
      */
     public function sort_admin_init()
     {
         if (is_admin()) {
-            // Load only if in a Post or Page Manager
             if ('edit.php' == basename($_SERVER['PHP_SELF'])) {
                 wp_enqueue_script('jquery-ui-sortable');
                 wp_enqueue_script('thickbox');

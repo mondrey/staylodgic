@@ -19,10 +19,7 @@ define('Staylodgic_Blocks__FILE__', __FILE__);
 add_filter( 'show_admin_bar', '__return_false' );
 
 /**
- * Load Imaginem Blocks
- *
- * Load the plugin after Elementor (and other plugins) are loaded.
- *
+ * Load Staylodgic
  * @since 1.0.0
  */
 function staylodgic_load()

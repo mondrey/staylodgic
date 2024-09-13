@@ -9,20 +9,18 @@ class Staylodgic_GuestRegistration_Posts
     }
 
     /**
+     * Register Registration post
      *
-     * @return    void
+     * @return void
      */
     public function init()
     {
-        /*
-         * Register Guest Registrations
-         */
 
         $args = array(
             'labels'             => array(
                 'name'          => __('Guest Registrations', 'staylodgic'),
                 'add_new'       => __('Create a Registration', 'staylodgic'),
-                'add_new_item'  => __( 'Add New Registration', 'staylodgic' ),
+                'add_new_item'  => __('Add New Registration', 'staylodgic'),
                 'menu_name'     => __('Guest Registrations', 'staylodgic'),
                 'singular_name' => __('Guest Registration', 'staylodgic'),
                 'all_items'     => __('All Registrations', 'staylodgic'),
@@ -44,9 +42,11 @@ class Staylodgic_GuestRegistration_Posts
 
         register_post_type('slgc_guestregistry', $args);
         /*
-         * Add Taxonomy for kbase 'Type'
+         * Add Taxonomy
          */
-        register_taxonomy('slgc_guestregistrycat', array('slgc_guestregistry'),
+        register_taxonomy(
+            'slgc_guestregistrycat',
+            array('slgc_guestregistry'),
             array(
                 'labels'       => array(
                     'name'          => __('Sections', 'staylodgic'),
@@ -60,21 +60,27 @@ class Staylodgic_GuestRegistration_Posts
                 'rewrite'      => array('slug' => 'guestregistry-section', 'hierarchical' => true, 'with_front' => false),
             )
         );
-
     }
 
-    public function add_guest_registration_submenu_page() {
+    /**
+     * Add sub page
+     *
+     * @return void
+     */
+    public function add_guest_registration_submenu_page()
+    {
         add_submenu_page(
-            'edit.php?post_type=slgc_guestregistry', // Parent slug
-            'Guest Registration Shortcodes', // Page title
-            'Form Fields', // Menu title
-            'edit_posts', // Capability
-            'slgc_guestregistry_shortcodes', // Menu slug
-            array($this, 'submenu_page_callback') // Callback function
+            'edit.php?post_type=slgc_guestregistry',
+            __('Guest Registration Shortcodes', 'staylodgic'),
+            __('Form Fields', 'staylodgic'),
+            'edit_posts',
+            'slgc_guestregistry_shortcodes',
+            array($this, 'submenu_page_callback')
         );
     }
 
-    public function submenu_page_callback() {
+    public function submenu_page_callback()
+    {
         // Check if user has the required capability
         if (!current_user_can('edit_posts')) {
             return;
@@ -89,7 +95,7 @@ class Staylodgic_GuestRegistration_Posts
         // Retrieve saved data
         $saved_shortcode = get_option('staylodgic_guestregistry_shortcode', '');
 
-        if ( '' == $saved_shortcode ) {
+        if ('' == $saved_shortcode) {
             $formGenInstance = new \Staylodgic\FormGenerator();
             $saved_shortcode = $formGenInstance->defaultShortcodes();
         }
@@ -98,13 +104,12 @@ class Staylodgic_GuestRegistration_Posts
 
         // HTML for the submenu page
         echo '<div class="wrap">';
-        echo '<h1>Guest Registration Fields</h1>';
+        echo '<h1>' . __('Guest Registration Fields', 'staylodgic') . '</h1>';
         echo '<form method="post">';
         echo '<textarea name="staylodgic_guestregistry_shortcode" style="width:100%;height:200px;">' . esc_textarea($saved_shortcode) . '</textarea>';
         echo '<br><input type="submit" value="Save" class="button button-primary">';
         echo '</form>';
         echo '</div>';
     }
-
 }
 $staylodgic_kbase_post_type = new Staylodgic_GuestRegistration_Posts();
