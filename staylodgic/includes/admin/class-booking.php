@@ -69,7 +69,12 @@ class Booking
         add_action('wp_ajax_bookRooms', array($this, 'bookRooms'));
         add_action('wp_ajax_nopriv_bookRooms', array($this, 'bookRooms'));
     }
-
+    
+    /**
+     * Method process_RoomData
+     *
+     * @return void
+     */
     public function process_RoomData(
         $bookingnumber = null,
         $room_id = null,
@@ -84,9 +89,6 @@ class Booking
 
         $booking_results = staylodgic_get_booking_transient($bookingnumber);
 
-        // Perform any processing you need with the data
-        // For example, you can save it to the database or perform calculations
-
         // Return a response (you can modify this as needed)
         $response = array(
             'success' => true,
@@ -94,9 +96,6 @@ class Booking
         );
 
         if (is_array($booking_results)) {
-
-            // error_log('====== From Transient ======');
-            // error_log(print_r($booking_results, true));
 
             $booking_results['choice']['room_id']   = $room_id;
             $booking_results['choice']['bedlayout'] = $bed_layout;
@@ -111,12 +110,6 @@ class Booking
 
             staylodgic_set_booking_transient($booking_results, $bookingnumber);
 
-            // error_log('====== Saved Transient ======');
-            // error_log(print_r($booking_results, true));
-
-            // error_log('====== Specific Room ======');
-            // error_log(print_r($booking_results[ $room_id ], true));
-
         } else {
             $booking_results = false;
         }
@@ -124,7 +117,12 @@ class Booking
         // Send the JSON response
         return $booking_results;
     }
-
+    
+    /**
+     * Method process_SelectedRoom
+     *
+     * @return void
+     */
     public function process_SelectedRoom()
     {
 
@@ -138,7 +136,6 @@ class Booking
         // Verify the nonce
         if (!isset($_POST['staylodgic_roomlistingbox_nonce']) || !check_admin_referer('staylodgic-roomlistingbox-nonce', 'staylodgic_roomlistingbox_nonce')) {
             // Nonce verification failed; handle the error or reject the request
-            // For example, you can return an error response
             wp_send_json_error(['message' => 'Failed']);
             return;
         }
@@ -176,14 +173,18 @@ class Booking
         // Send the JSON response
         wp_send_json($html);
     }
-
+    
+    /**
+     * Method process_RoomPrice
+     *
+     * @return void
+     */
     public function process_RoomPrice()
     {
 
         // Verify the nonce
         if (!isset($_POST['staylodgic_searchbox_nonce']) || !check_admin_referer('staylodgic-searchbox-nonce', 'staylodgic_searchbox_nonce')) {
             // Nonce verification failed; handle the error or reject the request
-            // For example, you can return an error response
             wp_send_json_error(['message' => 'Failed']);
             return;
         }
@@ -214,13 +215,26 @@ class Booking
         // Send the JSON response
         wp_send_json($html);
     }
-
+    
+    /**
+     * Method getSelectedPlanPrice
+     *
+     * @param $room_id $room_id
+     * @param $booking_results $booking_results
+     *
+     * @return void
+     */
     public function getSelectedPlanPrice($room_id, $booking_results)
     {
         $total_price_tag = staylodgic_price(intval($booking_results[$room_id]['totalroomrate']) + intval($booking_results['choice']['mealplan_price']));
         return $total_price_tag;
     }
-
+    
+    /**
+     * Method bookingSummary
+     *
+     * @return void
+     */
     public function bookingSummary(
         $bookingnumber = null,
         $room_id = null,
@@ -305,7 +319,6 @@ class Booking
             $html .= '<div class="form-group">';
             $html .= '<div id="bookingResponse" class="booking-response"></div>';
             $html .= '<div id="booking-register" class="book-button">' . __('Book this room', 'staylodgic') . '</div>';
-            // $html .= self::paymentHelperButton($totalprice[ 'total' ], $bookingnumber);
             $html .= '</div>';
         }
 
@@ -313,7 +326,12 @@ class Booking
 
         return $html;
     }
-
+    
+    /**
+     * Method hotelBooking_SearchForm
+     *
+     * @return void
+     */
     public function hotelBooking_SearchForm()
     {
         // Generate unique booking number
@@ -333,10 +351,6 @@ class Booking
             $reservations_instance = new \Staylodgic\Reservations();
             $fullybooked_dates     = $reservations_instance->daysFullyBooked_For_DateRange($currentDate, $endDate);
         }
-
-        // error_log( '-------------------- availability percent check');
-        // error_log( print_r( $fullybooked_dates, true ));
-        // error_log( '-------------------- availability percent check');
 ?>
         <div class="staylodgic-content">
             <div id="hotel-booking-form">
@@ -398,7 +412,12 @@ class Booking
     <?php
         return ob_get_clean();
     }
-
+    
+    /**
+     * Method hotelBooking_Details
+     *
+     * @return void
+     */
     public function hotelBooking_Details()
     {
         ob_start();
@@ -428,22 +447,28 @@ class Booking
 <?php
         return ob_get_clean();
     }
-
+    
+    /**
+     * Method alternative_BookingDates
+     *
+     * @param $checkinDate $checkinDate
+     * @param $checkoutDate $checkoutDate
+     * @param $maxOccpuants $maxOccpuants
+     *
+     * @return void
+     */
     public function alternative_BookingDates($checkinDate, $checkoutDate, $maxOccpuants)
     {
 
         // Perform the greedy search by adjusting the check-in and check-out dates
         $newCheckinDate  = new \DateTime($checkinDate);
         $newCheckoutDate = new \DateTime($checkoutDate);
-        //$newCheckoutDate->add(new \DateInterval('P1D'));
 
         $reservation_instance = new \Staylodgic\Reservations();
         $room_instance = new \Staylodgic\Rooms();
 
         $availableRoomDates = $reservation_instance->Availability_of_Rooms_For_DateRange($newCheckinDate->format('Y-m-d'), $newCheckoutDate->format('Y-m-d'), 3);
 
-        // error_log('---- Alternative Rooms Matrix Early');
-        // error_log(print_r($availableRoomDates, true));
         $new_room_availability_array = array();
 
         // Process each sub-array
@@ -464,21 +489,12 @@ class Booking
                 );
             }
             $can_accomodate = $room_instance->getMax_room_occupants($roomId);
-            // error_log( '------------ can maxOccpuants ' );
-            // error_log( print_r( $maxOccpuants,1 ));
-            // error_log( '------------ can accomodate ' );
-            // error_log( print_r( $can_accomodate,1) );
-            // error_log( '------------ can guests ' );
-            // error_log( $can_accomodate['guests'] );
             if ($can_accomodate['guests'] >= $maxOccpuants) {
                 // Add the new sub-array to the new room availability array
                 $new_room_availability_array[$roomId] = $newSubArray;
             }
         }
         $roomAvailabityArray = $new_room_availability_array;
-
-        // error_log('---- Alternative Room Availability Matrix Before');
-        // error_log(print_r($roomAvailabityArray, true));
 
         // Initialize an empty string
         $output = '';
@@ -487,19 +503,15 @@ class Booking
         $newProcessedDates = array();
 
         foreach ($roomAvailabityArray as $key => $subset) {
-            // Output the key of the subset
-            // error_log("Subset Key: $key\n");
 
             // Iterate through each sub array in the subset
             foreach ($subset as $subArray) {
-                // Output the sub array
-                // error_log(print_r($subArray, true));
+
                 $checkInAlt = $subArray['check-in'];
                 $staylast   = $subArray['check-out'];
 
                 // Check if the current check-in and checkout dates have already been processed
                 if (in_array([$checkInAlt, $staylast], $processedDates)) {
-                    //error_log( 'Skipping .... ' . $checkInAlt, $staylast);
                     continue; // Skip processing identical dates
                 }
 
@@ -519,8 +531,6 @@ class Booking
             }
         }
 
-        // error_log('---- Alternative Room Availability Matrix The Final');
-        // error_log(print_r($newProcessedDates, true));
         ksort($newProcessedDates);
 
         foreach ($newProcessedDates as $key) {
@@ -555,12 +565,15 @@ class Booking
         }
         // Print the output
         $roomAvailabity = '<div class="recommended-dates-wrap">' . $output_text . $output . '</div>';
-        // error_log('---- Alternative Room Availability Matrix for Range');
-        // error_log(print_r($roomAvailabity, true));
 
         return $roomAvailabity;
     }
-
+    
+    /**
+     * Method booking_BookingSearch
+     *
+     * @return void
+     */
     public function booking_BookingSearch()
     {
         $room_type          = '';
@@ -578,9 +591,6 @@ class Booking
             return;
         }
 
-        error_log('----booking search info');
-        error_log(print_r($_POST, 1));
-
         if (isset($_POST['reservation_date'])) {
             $reservation_date = $_POST['reservation_date'];
         }
@@ -593,15 +603,7 @@ class Booking
             $number_of_children = $_POST['number_of_children'];
         }
 
-        // // *********** To be removed
-        // $reservation_date = '2023-09-27 to 2023-09-30';
-        // $number_of_adults = 1;
-        // // ***********
-
         $freeStayAgeUnder = staylodgic_get_option('childfreestay');
-
-        // error_log('---- Free Stay');
-        // error_log(print_r($freeStayAgeUnder, true));
 
         $freeStayChildCount = 0;
 
@@ -617,9 +619,6 @@ class Booking
         }
 
         $this->children_age = $children_age;
-
-        // error_log('---- Children Age');
-        // error_log(print_r($this->children_age, true));
 
         $number_of_guests = intval($number_of_adults) + intval($number_of_children);
 
@@ -667,9 +666,6 @@ class Booking
         $this->bookingSearchResults['totalguest']       = $this->totalGuests;
         $this->bookingSearchResults['chargeableguests'] = $this->totalChargeableGuests;
 
-        // Perform your query here, this is just an example
-        //$result = "Check-in Date: $checkinDate, Check-out Date: $checkoutDate, Number of Adults: $number_of_adults, Number of Children: $number_of_children";
-        // error_log(print_r($result, true));
         $room_instance = new \Staylodgic\Rooms();
 
         // Get a combined array of rooms and rates which are available for the dates.
@@ -679,30 +675,15 @@ class Booking
         $this->ratesArray    = $combo_array['rates'];
         $this->canAccomodate = $combo_array['occupants'];
 
-        // error_log('Value of $combo_array["rooms"]:');
-        // error_log(print_r($combo_array['rooms'], true));
-
         $availableRoomDates = array();
 
         $roomAvailability = false;
-
-        error_log('------------ can number_of_guests ');
-        error_log($number_of_guests);
 
         if (count($combo_array['rooms']) == 0) {
 
             $roomAvailability = self::alternative_BookingDates($checkinDate, $checkoutDate, $number_of_guests);
         }
 
-        //set_transient($bookingNumber, $combo_array, 20 * MINUTE_IN_SECONDS);
-        // error_log(print_r($combo_array, true));
-        // error_log("Rooms array");
-        // error_log(print_r($roomArray, true));
-        // error_log("Date Range from picker");
-        // error_log(print_r($checkinDate, true));
-        // error_log(print_r($checkoutDate, true));
-
-        // Always die in functions echoing AJAX content
         $list = self::list_Rooms_And_Quantities();
 
         ob_start();
@@ -728,11 +709,14 @@ class Booking
         echo json_encode($response, JSON_UNESCAPED_SLASHES);
         die();
     }
-
+    
+    /**
+     * Method list_Rooms_And_Quantities
+     *
+     * @return void
+     */
     public function list_Rooms_And_Quantities()
     {
-        // error_log('====== rates ');
-        // error_log(print_r($combo_array, true));
         // Initialize empty string to hold HTML
         $html = '';
 
@@ -741,28 +725,40 @@ class Booking
         // Return the resulting HTML string
         return $html;
     }
-
+    
+    /**
+     * Method can_ThisRoom_Accomodate
+     *
+     * @param $room_id $room_id
+     *
+     * @return void
+     */
     public function can_ThisRoom_Accomodate($room_id)
     {
 
         $status = true;
         if ($this->canAccomodate[$room_id]['guests'] < $this->totalGuests) {
-            // error_log('Cannot accomodate number of guests');
+            // Cannot accomodate number of guests
             $status = false;
         }
 
         if ($this->canAccomodate[$room_id]['adults'] < $this->adultGuests) {
-            // error_log('Cannot accomodate number of adults');
+            // Cannot accomodate number of adults
             $status = false;
         }
         if ($this->canAccomodate[$room_id]['children'] < $this->childrenGuests) {
-            // error_log('Cannot accomodate number of children');
+            // Cannot accomodate number of children
             $status = false;
         }
 
         return $status;
     }
-
+    
+    /**
+     * Method listRooms
+     *
+     * @return void
+     */
     public function listRooms()
     {
 
@@ -772,10 +768,6 @@ class Booking
         foreach ($this->roomArray as $id => $room_info) {
 
             $room_data = get_post_custom($id);
-
-            // Get quantity and room title
-            // error_log('====== can accomodate ');
-            // error_log(print_r($this->canAccomodate, true));
 
             $can_ThisRoom_Accomodate = self::can_ThisRoom_Accomodate($id);
             if (!$can_ThisRoom_Accomodate) {
@@ -848,13 +840,6 @@ class Booking
 
                 $html .= \Staylodgic\Common::generatePersonIcons($this->adultGuests, $this->childrenGuests);
 
-                // // Append a select element for the quantity
-                // $html .= '<select data-room-id="' . $id . '" name="room_quantity">';
-                // // Append an option for each possible quantity
-                // for ($i = 0; $i <= $quantity; $i++) {
-                //     $html .= '<option value="' . $i . '">' . $i . '</option>';
-                // }
-                // $html .= '</select>';
                 $html .= '<div class="checkin-staydate-wrap">';
 
                 $total_roomrate                                       = self::calculateRoomPriceTotal($id);
@@ -902,13 +887,19 @@ class Booking
             $html .= '</div>';
             $html .= '</div>';
 
-            // error_log( print_r( $this->bookingSearchResults , true ));
             staylodgic_set_booking_transient($this->bookingSearchResults, $this->bookingNumber);
         }
 
         return $html;
     }
-
+    
+    /**
+     * Method displayBookingPerDay
+     *
+     * @param $ratesArray_date $ratesArray_date
+     *
+     * @return void
+     */
     public function displayBookingPerDay($ratesArray_date)
     {
         $total_roomrate = 0;
@@ -1088,7 +1079,14 @@ class Booking
 
         return ['discountValue' => $highestDiscount, 'discountType' => $discountType, 'discountLabel' => $discountLabel];
     }
-
+    
+    /**
+     * Method calculateRoomPriceTotal
+     *
+     * @param $room_id $room_id
+     *
+     * @return void
+     */
     public function calculateRoomPriceTotal($room_id)
     {
         $total_roomrate = 0;
@@ -1096,10 +1094,6 @@ class Booking
 
         $checkinDate = $this->findCheckinDate($room_id);
         $checkoutDate = $this->findCheckoutDate($room_id);
-
-        // if ($lastminute_discountPercent > 0) {
-        //     $this->bookingSearchResults[ $room_id ]['discountlabel'] = $lastminute_label;
-        // }
 
         $highestDiscountInfo = $this->calculateHighestDiscount($checkinDate, $checkoutDate);
         $highestDiscountValue = $highestDiscountInfo['discountValue'];
@@ -1168,7 +1162,14 @@ class Booking
 
         return $latestDate;
     }
-
+    
+    /**
+     * Method applyPricePerPerson
+     *
+     * @param $roomrate $roomrate
+     *
+     * @return void
+     */
     private function applyPricePerPerson($roomrate)
     {
 
@@ -1195,7 +1196,12 @@ class Booking
 
         return $roomrate;
     }
-
+    
+    /**
+     * Method generate_BedMetabox_callback
+     *
+     * @return void
+     */
     public function generate_BedMetabox_callback()
     {
 
@@ -1222,7 +1228,16 @@ class Booking
 
         wp_send_json($html);
     }
-
+    
+    /**
+     * Method generate_BedMetabox
+     *
+     * @param $room_id $room_id
+     * @param $meta_field $meta_field
+     * @param $meta_value $meta_value
+     *
+     * @return void
+     */
     public function generate_BedMetabox($room_id, $meta_field, $meta_value)
     {
 
@@ -1231,10 +1246,6 @@ class Booking
         $room_data = get_post_custom($room_id);
 
         $bedinputcount = 0;
-
-        // error_log($room_id);
-        // error_log($meta_field);
-        // error_log($meta_value);
 
         if (isset($room_data["staylodgic_alt_bedsetup"][0])) {
             $bedsetup       = $room_data["staylodgic_alt_bedsetup"][0];
@@ -1287,7 +1298,14 @@ class Booking
 
         return $html;
     }
-
+    
+    /**
+     * Method generate_BedInformation
+     *
+     * @param $room_id $room_id
+     *
+     * @return void
+     */
     public function generate_BedInformation($room_id)
     {
 
@@ -1348,13 +1366,26 @@ class Booking
 
         return $html;
     }
-
+    
+    /**
+     * Method paymentHelperButton
+     *
+     * @param $total $total
+     * @param $bookingnumber $bookingnumber
+     *
+     * @return void
+     */
     public function paymentHelperButton($total, $bookingnumber)
     {
         $payment_button = '<div data-paytotal="' . esc_attr($total) . '" data-bookingnumber="' . esc_attr($bookingnumber) . '" id="woo-bookingpayment" class="book-button">' . __('Pay Booking', 'staylodgic') . '</div>';
         return $payment_button;
     }
-
+    
+    /**
+     * Method bookingDataFields
+     *
+     * @return void
+     */
     public function bookingDataFields()
     {
         $dataFields = [
@@ -1373,7 +1404,12 @@ class Booking
 
         return $dataFields;
     }
-
+    
+    /**
+     * Method register_Guest_Form
+     *
+     * @return void
+     */
     public function register_Guest_Form()
     {
         $country_options = staylodgic_country_list("select", "");
@@ -1471,7 +1507,12 @@ class Booking
 
         return $form_html . $bookingsuccess;
     }
-
+    
+    /**
+     * Method booking_Successful
+     *
+     * @return void
+     */
     public function booking_Successful()
     {
         $reservation_instance = new \Staylodgic\Reservations();
@@ -1502,7 +1543,14 @@ class Booking
 
         return $success_html;
     }
-
+    
+    /**
+     * Method getMealPlanLabel
+     *
+     * @param $key $key
+     *
+     * @return void
+     */
     public function getMealPlanLabel($key) {
         $labels = [
             'RO' => __('Room Only', 'staylodgic'),
@@ -1514,7 +1562,15 @@ class Booking
 
         return isset($labels[$key]) ? $labels[$key] : $key;
     }
-
+    
+    /**
+     * Method getIncludedMealPlanKeysFromData
+     *
+     * @param $room_data $room_data
+     * @param $returnString $returnString
+     *
+     * @return void
+     */
     public function getIncludedMealPlanKeysFromData($room_data, $returnString = false) {
         // Check if meal_plan key exists in room_data and is an array
         if (isset($room_data['meal_plan']) && is_array($room_data['meal_plan'])) {
@@ -1536,7 +1592,14 @@ class Booking
         // Return an empty array or an empty string if meal_plan is not set or not an array
         return $returnString ? '' : array();
     }
-
+    
+    /**
+     * Method generate_MealPlanIncluded
+     *
+     * @param $room_id $room_id
+     *
+     * @return void
+     */
     public function generate_MealPlanIncluded($room_id)
     {
 
@@ -1570,7 +1633,14 @@ class Booking
         }
         return $html;
     }
-
+    
+    /**
+     * Method generate_MealPlanRadio
+     *
+     * @param $room_id $room_id
+     *
+     * @return void
+     */
     public function generate_MealPlanRadio($room_id)
     {
 
@@ -1616,7 +1686,16 @@ class Booking
         }
         return $html;
     }
-
+    
+    /**
+     * Method canAccomodate_to_rooms
+     *
+     * @param $rooms $rooms
+     * @param $adults $adults
+     * @param $children $children
+     *
+     * @return void
+     */
     public function canAccomodate_to_rooms($rooms, $adults = false, $children = false)
     {
 
@@ -1696,12 +1775,6 @@ class Booking
                 $can_occomodate['error'] = 'Number of children exceed for choice of room';
             }
         }
-        // if ($can_occomodate['max_adults_total']) {
-        //     if ($can_occomodate['max_adults_total'] < $adults) {
-        //         $can_occomodate['allow'] = false;
-        //         $can_occomodate['error'] = 'Too many guests to accomodate choice';
-        //     }
-        // }
         if ($can_occomodate['min_adults'] > $adults) {
             $can_occomodate['allow'] = false;
             $can_occomodate['error'] = 'Should have atleast 1 adult in each room';
@@ -1709,7 +1782,16 @@ class Booking
 
         return $can_occomodate;
     }
-
+    
+    /**
+     * Method canAccomodate_everyone_to_room
+     *
+     * @param $room_id $room_id
+     * @param $adults $adults
+     * @param $children $children
+     *
+     * @return void
+     */
     public function canAccomodate_everyone_to_room($room_id, $adults = false, $children = false)
     {
 
@@ -1764,7 +1846,14 @@ class Booking
 
         return $can_occomodate;
     }
-
+    
+    /**
+     * Method buildReservationArray
+     *
+     * @param $booking_data $booking_data
+     *
+     * @return void
+     */
     public function buildReservationArray($booking_data)
     {
         $reservationArray = [];
@@ -1836,19 +1925,17 @@ class Booking
         return $reservationArray;
     }
 
-    // Ajax function to book rooms
+    /**
+     * Method bookRooms Ajax function to book rooms   
+     *
+     * @return void
+     */
     public function bookRooms()
     {
-
-        // error_log('------- booking posted data -------');
-        // error_log(print_r($_POST, true));
 
         $serializedData = $_POST['bookingdata'];
         // Parse the serialized data into an associative array
         parse_str($serializedData, $formData);
-
-        // error_log('------- booking posted deserialized data -------');
-        // error_log(print_r($formData, true));
 
         // Verify the nonce
         if (!isset($_POST['staylodgic_roomlistingbox_nonce']) || !check_admin_referer('staylodgic-roomlistingbox-nonce', 'staylodgic_roomlistingbox_nonce')) {
@@ -1880,12 +1967,6 @@ class Booking
         $guest_comment  = sanitize_text_field($_POST['guest_comment']);
         $guest_consent  = sanitize_text_field($_POST['guest_consent']);
 
-        // error_log('------- Transient Booking Data -------');
-        // error_log($booking_number);
-        // error_log(print_r($booking_data, true));
-        // error_log('------- Transient Booking Data End -------');
-        // add other fields as necessary
-
         $rooms                      = array();
         $rooms['0']['id']       = $booking_data['choice']['room_id'];
         $rooms['0']['quantity'] = '1';
@@ -1906,21 +1987,12 @@ class Booking
         $reservationData['customer']['guest_comment']  = $guest_comment;
         $reservationData['customer']['guest_consent']  = $guest_consent;
 
-        error_log('------- Final Booking Data -------');
-        error_log(print_r($reservationData, true));
-        error_log('------- Final Booking Data End -------');
-
         // Check if number of people can be occupied by room
         $can_accomodate = self::canAccomodate_to_rooms($rooms, $adults, $children);
-        // error_log(print_r($can_accomodate, true));
+
         if (false == $can_accomodate['allow']) {
             wp_send_json_error($can_accomodate['error']);
         }
-        // error_log(print_r($can_accomodate, true));
-        // error_log("Rooms:");
-        // error_log(print_r($rooms, true));
-
-        //wp_send_json_error(' Temporary block for debugging ');
         // Create customer post
         $customer_post_data = array(
             'post_type' => 'slgc_customers', // Your custom post type for customers
@@ -2056,9 +2128,9 @@ class Booking
             $email->setHTMLContent()->setBookingConfirmationTemplate($bookingDetails);
 
             if ($email->send()) {
-                // echo 'Confirmation email sent successfully to the guest.';
+                // Sent successfully code here
             } else {
-                // echo 'Failed to send the confirmation email.';
+                // Failed to send codings here
             }
         } else {
             // Handle error

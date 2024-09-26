@@ -36,7 +36,12 @@ class BatchProcessorBase
         set_transient($transient_key, time(), 15 * MINUTE_IN_SECONDS);
         return true;
     }
-
+    
+    /**
+     * Method process_event_batch
+     *
+     * @return void
+     */
     public function process_event_batch(
         $room_id = false,
         $ics_url = false,
