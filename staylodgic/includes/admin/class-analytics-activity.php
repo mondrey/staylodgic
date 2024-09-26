@@ -37,7 +37,12 @@ class ActivityAnalytics
 
         add_action('admin_menu', array($this, 'staylodgic_dashboard'));
     }
-
+    
+    /**
+     * Method loadActivities
+     *
+     * @return void
+     */
     public function loadActivities()
     {
         if (!\Staylodgic\Activity::hasActivities()) {
@@ -74,7 +79,11 @@ class ActivityAnalytics
         }
     }
 
-    // Add the Availability menu item to the admin menu
+    /**
+     * Add the Availability menu item to the admin menu    
+     *
+     * @return void
+     */
     public function staylodgic_dashboard()
     {
         // Add the Availability submenu item under the parent menu
@@ -87,7 +96,12 @@ class ActivityAnalytics
             array($this, 'activity_display_dashboard')
         );
     }
-
+    
+    /**
+     * Method activity_display_dashboard
+     *
+     * @return void
+     */
     public function activity_display_dashboard()
     {
 
@@ -114,7 +128,14 @@ class ActivityAnalytics
         echo '</div>';
     }
 
-
+    
+    /**
+     * Method get_chart_config
+     *
+     * @param $id $id 
+     *
+     * @return void
+     */
     public function get_chart_config($id)
     {
         $configs = [
@@ -231,7 +252,12 @@ class ActivityAnalytics
 
         return $configs[$id] ?? null;
     }
-
+    
+    /**
+     * Method get_dayafter_stats_data
+     *
+     * @return void
+     */
     private function get_dayafter_stats_data()
     {
         $dayafter      = date('Y-m-d', strtotime('+2 day'));
@@ -295,7 +321,18 @@ class ActivityAnalytics
             ],
         ];
     }
-
+    
+    /**
+     * Method add_guest
+     *
+     * @param $booking_number 
+     * @param $day $day 
+     * @param $type $type 
+     * @param $checkin $checkin 
+     * @param $checkout $checkout 
+     *
+     * @return void
+     */
     private function add_guest($booking_number = false, $day = 'today', $type = 'checkin', $checkin = false, $checkout = false)
     {
         if ($booking_number) {
@@ -318,7 +355,12 @@ class ActivityAnalytics
             }
         }
     }
-
+    
+    /**
+     * Method get_tomorrow_stats_data
+     *
+     * @return void
+     */
     private function get_tomorrow_stats_data()
     {
         $tomorrow      = date('Y-m-d', strtotime('+1 day'));
@@ -382,7 +424,12 @@ class ActivityAnalytics
             ],
         ];
     }
-
+    
+    /**
+     * Method get_current_day_stats_data
+     *
+     * @return void
+     */
     private function get_current_day_stats_data()
     {
         $today         = date('Y-m-d');
@@ -446,7 +493,12 @@ class ActivityAnalytics
             ],
         ];
     }
-
+    
+    /**
+     * Method get_past_twelve_months_revenue_data
+     *
+     * @return void
+     */
     private function get_past_twelve_months_revenue_data()
     {
         $labels        = [];
@@ -469,7 +521,6 @@ class ActivityAnalytics
                 $totalRevenue = $cachedData;
             } else {
 
-                // error_log('Not using Cache revenue data:' . $month);
                 // Query for revenue
                 $revenueQuery = new \WP_Query([
                     'post_type'      => 'slgc_activityres',
@@ -525,7 +576,12 @@ class ActivityAnalytics
             ],
         ];
     }
-
+    
+    /**
+     * Method get_past_twelve_months_bookings_data
+     *
+     * @return void
+     */
     private function get_past_twelve_months_bookings_data()
     {
         $labels        = [];
@@ -552,7 +608,6 @@ class ActivityAnalytics
                 $cancelledData[] = $cachedData['cancelled'];
             } else {
 
-                // error_log('Not using Cache bookings data:' . $month);
                 // Query for confirmed bookings
                 $confirmedQuery = new \WP_Query([
                     'post_type'      => 'slgc_activityres',
@@ -595,7 +650,6 @@ class ActivityAnalytics
 
                 if ($month != $currentMonth) {
                     $cacheData = ['confirmed' => $confirmedQuery->found_posts, 'cancelled' => $cancelledQuery->found_posts];
-                    // error_log('Caching Data: ' . print_r($cacheData, true));
                     $cache->setCache($cacheKey, $cacheData);
                 }
             }
@@ -632,7 +686,14 @@ class ActivityAnalytics
             ],
         ];
     }
-
+    
+    /**
+     * Method chart_generator
+     *
+     * @param $id $id 
+     *
+     * @return void
+     */
     public function chart_generator($id)
     {
         // $atts = shortcode_atts(['id' => ''], $atts, 'chart');
@@ -716,12 +777,10 @@ class ActivityAnalytics
                 $guestListHtml .= '<tbody class="table-group-divider">';
                 // Iterate over each guest and add them to the table
                 foreach ($guests as $guestId => $bookings) {
-                    // error_log('-------bookings-------');
-                    // error_log(print_r($bookings, 1));
+                    
                     foreach ($bookings as $booking) { // Iterate over each booking for the guest
                         $count++;
-                        // error_log('-------booking-------');
-                        // error_log(print_r($booking, 1));
+                        
                         $reservations_instance = new \Staylodgic\Activity();
                         $reservation_id        = $reservations_instance->getActivityIDforBooking($booking['booking_number']);
 
@@ -776,6 +835,12 @@ class ActivityAnalytics
 
         return $guestListHtml;
     }
+        
+    /**
+     * Method display_stats
+     *
+     * @return void
+     */
     public function display_stats()
     {
 
@@ -786,14 +851,6 @@ class ActivityAnalytics
         $bookings_today              = $this->chart_generator('bookings_today');
         $bookings_tomorrow           = $this->chart_generator('bookings_tomorrow');
         $bookings_dayafter           = $this->chart_generator('bookings_dayafter');
-
-
-        // error_log('$this->activityColors');
-        // error_log($bookings_dayafter);
-        // error_log(print_r($this->activityColors, 1));
-
-        // error_log('Other');
-        // error_log($bookings_tomorrow);
 
         $guestListHtml = $this->guest_list();
 

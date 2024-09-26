@@ -54,42 +54,70 @@ class Activity
         $this->activitiesArray = $activitiesArray;
     }
 
+    /**
+     * Get the reservation status
+     *
+     * @param $reservation_id
+     *
+     * @return string
+     */
     public function getReservationStatus($reservation_id = false)
     {
 
         if (!$reservation_id) {
             $reservation_id = $this->reservation_id;
         }
-        // Get the reservation status for the reservation
+
         $reservation_status = get_post_meta($reservation_id, 'staylodgic_reservation_status', true);
 
         return $reservation_status;
     }
 
+    /**
+     * Get the reservation sub status
+     *
+     * @param $reservation_id
+     *
+     * @return string $reservation_substatus
+     */
     public function getReservationSubStatus($reservation_id = false)
     {
 
         if (!$reservation_id) {
             $reservation_id = $this->reservation_id;
         }
-        // Get the reservation sub status for the reservation
+
         $reservation_substatus = get_post_meta($reservation_id, 'staylodgic_reservation_substatus', true);
 
         return $reservation_substatus;
     }
 
+    /**
+     * Get Checkin Date
+     *
+     * @param $reservation_id
+     *
+     * @return string $checkin_date
+     */
     public function getCheckinDate($reservation_id = false)
     {
 
         if (!$reservation_id) {
             $reservation_id = $this->reservation_id;
         }
-        // Get the check-in and check-out dates for the reservation
+
         $checkin_date = get_post_meta($reservation_id, 'staylodgic_reservation_checkin', true);
 
         return $checkin_date;
     }
 
+    /**
+     * Get Customer Edit Link For Reservation
+     *
+     * @param $reservation_id
+     *
+     * @return string $customer_name
+     */
     public function getCustomerEditLinkForReservation($reservation_id = false)
     {
 
@@ -122,6 +150,11 @@ class Activity
         return null;
     }
 
+    /**
+     * Method getBookingNumber
+     *
+     * @return string $booking_number
+     */
     public function getBookingNumber()
     {
         // Get the booking number from the reservation post meta
@@ -135,6 +168,13 @@ class Activity
         return $booking_number;
     }
 
+    /**
+     * Method getActivityTime
+     *
+     * @param $reservation_id
+     *
+     * @return string $time
+     */
     public function getActivityTime($reservation_id = false)
     {
 
@@ -147,6 +187,13 @@ class Activity
         return $time;
     }
 
+    /**
+     * Method getNumberOfAdultsForReservation
+     *
+     * @param $reservation_id
+     *
+     * @return $number_of_adults
+     */
     public function getNumberOfAdultsForReservation($reservation_id = false)
     {
 
@@ -162,6 +209,13 @@ class Activity
 
         return false;
     }
+    /**
+     * Method getNumberOfChildrenForReservation
+     *
+     * @param $reservation_id
+     *
+     * @return array $number_of_children
+     */
     public function getNumberOfChildrenForReservation($reservation_id = false)
     {
 
@@ -177,6 +231,13 @@ class Activity
         return false;
     }
 
+    /**
+     * Method getTotalOccupantsForReservation
+     *
+     * @param $reservation_id
+     *
+     * @return intval
+     */
     public function getTotalOccupantsForReservation($reservation_id = false)
     {
 
@@ -190,6 +251,11 @@ class Activity
         return intval($number_of_adults) + intval($number_of_children);
     }
 
+    /**
+     * Method hasActivities
+     *
+     * @return boolean
+     */
     public static function hasActivities()
     {
         $roomlist = [];
@@ -200,6 +266,11 @@ class Activity
         return false;
     }
 
+    /**
+     * Method queryActivities
+     *
+     * @return array $activities
+     */
     public static function queryActivities()
     {
         $activities = get_posts(
@@ -215,6 +286,13 @@ class Activity
     }
 
 
+    /**
+     * Method getReservationforActivity
+     *
+     * @param $booking_number
+     *
+     * @return array $args
+     */
     public static function getReservationforActivity($booking_number)
     {
         $args = array(
@@ -231,6 +309,13 @@ class Activity
         return new \WP_Query($args);
     }
 
+    /**
+     * Method getGuest_id_forReservation
+     *
+     * @param $booking_number
+     *
+     * @return string $customer_id
+     */
     public function getGuest_id_forReservation($booking_number)
     {
         $args = array(
@@ -255,6 +340,13 @@ class Activity
         return false; // Return an empty query if no guest found
     }
 
+    /**
+     * Method getActivityNameForReservation
+     *
+     * @param $reservation_id
+     *
+     * @return void
+     */
     public function getActivityNameForReservation($reservation_id = false)
     {
 
@@ -272,6 +364,13 @@ class Activity
         return null;
     }
 
+    /**
+     * Method isConfirmed_Reservation
+     *
+     * @param $reservation_id
+     *
+     * @return void
+     */
     public function isConfirmed_Reservation($reservation_id)
     {
 
@@ -288,6 +387,13 @@ class Activity
         return false;
     }
 
+    /**
+     * Method getActivityIDforBooking
+     *
+     * @param $booking_number
+     *
+     * @return void
+     */
     public static function getActivityIDforBooking($booking_number)
     {
         $args = array(
@@ -311,6 +417,11 @@ class Activity
         return false; // Return an false if no reservatuib found
     }
 
+    /**
+     * Method get_activity_schedules_ajax_handler
+     *
+     * @return void
+     */
     public function get_activity_schedules_ajax_handler()
     {
 
@@ -323,8 +434,6 @@ class Activity
         $total_people = isset($_POST['totalpeople']) ? sanitize_text_field($_POST['totalpeople']) : null;
         $the_post_id = isset($_POST['the_post_id']) ? sanitize_text_field($_POST['the_post_id']) : null;
 
-        // error_log('AJAX handler triggered. Selected date: ' . $selected_date);
-
         // Call the method and capture the output
         ob_start();
         $this->display_activity_schedules_with_availability($selected_date, $the_post_id, $total_people);
@@ -334,13 +443,17 @@ class Activity
         wp_send_json_success($output);
     }
 
+    /**
+     * Method get_activity_frontend_schedules_ajax_handler
+     *
+     * @return void
+     */
     public function get_activity_frontend_schedules_ajax_handler()
     {
 
         // Verify the nonce
         if (!isset($_POST['staylodgic_searchbox_nonce']) || !check_admin_referer('staylodgic-searchbox-nonce', 'staylodgic_searchbox_nonce')) {
             // Nonce verification failed; handle the error or reject the request
-            // For example, you can return an error response
             wp_send_json_error(['message' => 'Failed']);
             return;
         }
@@ -370,8 +483,6 @@ class Activity
             }
         }
 
-        // error_log('AJAX handler triggered. Selected date: ' . $selected_date);
-
         // Call the method and capture the output
         ob_start();
         echo $this->display_activity_frontend_schedules_with_availability(
@@ -388,6 +499,11 @@ class Activity
         wp_send_json_success($output);
     }
 
+    /**
+     * Method display_activity_frontend_schedules_with_availability
+     *
+     * @return void
+     */
     public function display_activity_frontend_schedules_with_availability(
         $selected_date = null,
         $the_post_id = false,
@@ -539,18 +655,20 @@ class Activity
         $html .= '</div>';
         $html .= $this->register_Guest_Form();
         $html .= '</form>';
-        // error_log('Activities array');
-        // error_log(print_r($this->activitiesArray, true));
+
         staylodgic_set_booking_transient($this->activitiesArray, $this->bookingNumber);
         $activities_data = staylodgic_get_booking_transient($this->bookingNumber);
-        // error_log('Activities array from transient');
-        // error_log(print_r($activities_data, true));
         // Reset post data
         wp_reset_postdata();
 
         return $html;
     }
 
+    /**
+     * Method process_SelectedActivity
+     *
+     * @return void
+     */
     public function process_SelectedActivity()
     {
 
@@ -563,7 +681,6 @@ class Activity
         // Verify the nonce
         if (!isset($_POST['staylodgic_roomlistingbox_nonce']) || !check_admin_referer('staylodgic-roomlistingbox-nonce', 'staylodgic_roomlistingbox_nonce')) {
             // Nonce verification failed; handle the error or reject the request
-            // For example, you can return an error response
             wp_send_json_error(['message' => 'Failed']);
             return;
         }
@@ -596,6 +713,11 @@ class Activity
         wp_send_json($html);
     }
 
+    /**
+     * Method process_ActivityData
+     *
+     * @return void
+     */
     public function process_ActivityData(
         $bookingnumber  = null,
         $activity_id    = null,
@@ -609,9 +731,6 @@ class Activity
 
         $booking_results = staylodgic_get_booking_transient($bookingnumber);
 
-        // Perform any processing you need with the data
-        // For example, you can save it to the database or perform calculations
-
         // Return a response (you can modify this as needed)
         $response = array(
             'success' => true,
@@ -619,9 +738,6 @@ class Activity
         );
 
         if (is_array($booking_results)) {
-
-            // error_log('====== From Transient ======');
-            // error_log(print_r($booking_results, true));
 
             $booking_results['bookingnumber']           = $bookingnumber;
             $booking_results['choice']['activity_id']   = $activity_id;
@@ -631,12 +747,6 @@ class Activity
             $booking_results['choice']['price']         = $booking_results[$activity_id][$activity_time];
 
             staylodgic_set_booking_transient($booking_results, $bookingnumber);
-
-            // error_log('====== Saved Activity Transient ======');
-            // error_log(print_r($booking_results, true));
-
-            // error_log('====== Specific Activity ======');
-            // error_log(print_r($booking_results['choice'], true));
         } else {
             $booking_results = false;
         }
@@ -645,6 +755,13 @@ class Activity
         return $booking_results;
     }
 
+    /**
+     * Method getActivityName_FromID
+     *
+     * @param $activity_id
+     *
+     * @return void
+     */
     public function getActivityName_FromID($activity_id)
     {
         $activity_post = get_post($activity_id);
@@ -655,6 +772,11 @@ class Activity
         return $activity_name;
     }
 
+    /**
+     * Method bookingDataFields
+     *
+     * @return void
+     */
     public function bookingDataFields()
     {
         $dataFields = [
@@ -768,6 +890,11 @@ class Activity
         return $form_html . $bookingsuccess;
     }
 
+    /**
+     * Method booking_Successful
+     *
+     * @return void
+     */
     public function booking_Successful()
     {
 
@@ -802,6 +929,11 @@ class Activity
         return $success_html;
     }
 
+    /**
+     * Method bookingSummary
+     *
+     * @return void
+     */
     public function bookingSummary(
         $bookingnumber = null,
         $activity_id   = null,
@@ -873,6 +1005,13 @@ class Activity
     }
 
 
+    /**
+     * Method activity_content
+     *
+     * @param $content $content
+     *
+     * @return void
+     */
     function activity_content($content)
     {
         if (is_singular('slgc_activity')) {
@@ -883,12 +1022,24 @@ class Activity
         return $content;
     }
 
+    /**
+     * Method activity_search_shortcode
+     *
+     * @return void
+     */
     function activity_search_shortcode()
     {
         $search_form = $this->activityBooking_SearchForm();
         return $search_form;
     }
 
+    /**
+     * Method getNameForActivity
+     *
+     * @param $reservation_id
+     *
+     * @return void
+     */
     public function getNameForActivity($reservation_id = false)
     {
 
@@ -910,6 +1061,13 @@ class Activity
         return null;
     }
 
+    /**
+     * Method getEditLinksForActivity
+     *
+     * @param $reservation_array $reservation_array
+     *
+     * @return void
+     */
     public function getEditLinksForActivity($reservation_array)
     {
         $links = '<ul>';
@@ -923,9 +1081,11 @@ class Activity
     }
 
     /**
-     * Summary of getReservationIDsForCustomer
-     * @param mixed $customer_id
-     * @return array
+     * Method getActivityIDsForCustomer
+     *
+     * @param $customer_id $customer_id
+     *
+     * @return void
      */
     public static function getActivityIDsForCustomer($customer_id)
     {
@@ -947,6 +1107,13 @@ class Activity
         return $reservation_ids;
     }
 
+    /**
+     * Method getGuest_id_forActivity
+     *
+     * @param $booking_number $booking_number
+     *
+     * @return void
+     */
     public function getGuest_id_forActivity($booking_number)
     {
         $args = array(
@@ -971,6 +1138,13 @@ class Activity
         return false; // Return an empty query if no guest found
     }
 
+    /**
+     * Method getGuestforActivity
+     *
+     * @param $booking_number $booking_number
+     *
+     * @return void
+     */
     public function getGuestforActivity($booking_number)
     {
         $args = array(
@@ -1003,6 +1177,13 @@ class Activity
         return new \WP_Query(); // Return an empty query if no guest found
     }
 
+    /**
+     * Method haveCustomer
+     *
+     * @param $reservation_id $reservation_id
+     *
+     * @return void
+     */
     public function haveCustomer($reservation_id)
     {
 
@@ -1019,7 +1200,6 @@ class Activity
 
         // Query the customer post with the matching booking number
         $customer_query = $this->getGuestforActivity($booking_number);
-        // error_log(print_r($customer_query, true));
         // Check if a customer post exists
         if ($customer_query->have_posts()) {
             // Restore the original post data
@@ -1033,6 +1213,13 @@ class Activity
         return false;
     }
 
+    /**
+     * Method getReservation_Customer_ID
+     *
+     * @param $reservation_id $reservation_id
+     *
+     * @return void
+     */
     public function getReservation_Customer_ID($reservation_id = false)
     {
 
@@ -1053,6 +1240,11 @@ class Activity
         return $customer_id;
     }
 
+    /**
+     * Method activityBooking_SearchForm
+     *
+     * @return void
+     */
     public function activityBooking_SearchForm()
     {
 
@@ -1073,9 +1265,6 @@ class Activity
             $reservations_instance = new \Staylodgic\Reservations();
             $fullybooked_dates     = $reservations_instance->daysFullyBooked_For_DateRange($currentDate, $endDate);
         }
-        // error_log( '-------------------- availability percent check');
-        // error_log( print_r( $fullybooked_dates, true ));
-        // error_log( '-------------------- availability percent check');
 ?>
         <div class="staylodgic-content staylodgic-activity-booking">
             <div id="hotel-booking-form">
@@ -1141,6 +1330,13 @@ class Activity
         return ob_get_clean();
     }
 
+    /**
+     * Method getActivities
+     *
+     * @param $the_post_id
+     *
+     * @return void
+     */
     public function getActivities($the_post_id)
     {
 
@@ -1166,6 +1362,14 @@ class Activity
         return $activities;
     }
 
+    /**
+     * Method displayTicket
+     *
+     * @param $the_post_id
+     * @param $activity_id
+     *
+     * @return void
+     */
     public function displayTicket($the_post_id, $activity_id)
     {
 
@@ -1239,10 +1443,11 @@ class Activity
     }
 
     /**
-     * Get the number of adults, children, and the total for a reservation.
+     * Method getActivityReservationNumbers
      *
-     * @param int $the_post_id The post ID of the reservation.
-     * @return array An array containing the number of adults, children, and the total.
+     * @param $the_post_id $the_post_id
+     *
+     * @return void
      */
     public function getActivityReservationNumbers($the_post_id)
     {
@@ -1263,6 +1468,15 @@ class Activity
         ];
     }
 
+    /**
+     * Method display_activity_schedules_with_availability
+     *
+     * @param $selected_date
+     * @param $the_post_id
+     * @param $total_people
+     *
+     * @return void
+     */
     public function display_activity_schedules_with_availability($selected_date = null, $the_post_id = false, $total_people = false)
     {
         // Use today's date if $selected_date is not provided
@@ -1355,6 +1569,16 @@ class Activity
         wp_reset_postdata();
     }
 
+    /**
+     * Method calculate_remaining_spots
+     *
+     * @param $activity_id
+     * @param $selected_date
+     * @param $selected_time
+     * @param $max_guests
+     *
+     * @return void
+     */
     public function calculate_remaining_spots($activity_id, $selected_date, $selected_time, $max_guests)
     {
         // Query all reservation posts for this activity, date, and time
@@ -1396,6 +1620,13 @@ class Activity
         return $remaining_spots;
     }
 
+    /**
+     * Method buildReservationArray
+     *
+     * @param $booking_data
+     *
+     * @return void
+     */
     public function buildReservationArray($booking_data)
     {
         $reservationArray = [];
@@ -1450,24 +1681,22 @@ class Activity
     }
 
 
-    // Ajax function to book rooms
+    /**
+     * Method bookActivity
+     *
+     * @return void
+     */
     public function bookActivity()
     {
-
-        // error_log('------- acitvity posted data -------');
-        // error_log(print_r($_POST, true));
 
         $serializedData = $_POST['bookingdata'];
         // Parse the serialized data into an associative array
         parse_str($serializedData, $formData);
 
-        // error_log('------- acitvity posted deserialized data -------');
-        // error_log(print_r($formData, true));
 
         // Verify the nonce
         if (!isset($_POST['staylodgic_roomlistingbox_nonce']) || !check_admin_referer('staylodgic-roomlistingbox-nonce', 'staylodgic_roomlistingbox_nonce')) {
             // Nonce verification failed; handle the error or reject the request
-            // For example, you can return an error response
             wp_send_json_error(['message' => 'Failed']);
             return;
         }
@@ -1494,12 +1723,7 @@ class Activity
         $guest_comment  = sanitize_text_field($_POST['guest_comment']);
         $guest_consent  = sanitize_text_field($_POST['guest_consent']);
 
-        // error_log('------- Transient acitvity Data -------');
-        // error_log($booking_number);
-        // error_log(print_r($booking_data, true));
-        // error_log('------- Transient acitvity Data End -------');
         // add other fields as necessary
-
         $rooms                      = array();
         $rooms['0']['id']       = $booking_data['choice']['activity_id'];
         $rooms['0']['quantity'] = '1';
@@ -1520,15 +1744,6 @@ class Activity
         $reservationData['customer']['guest_comment']  = $guest_comment;
         $reservationData['customer']['guest_consent']  = $guest_consent;
 
-        // error_log('------- Final acitvity Data -------');
-        // error_log(print_r($reservationData, true));
-        // error_log('------- Final acitvity Data End -------');
-
-        // error_log(print_r($can_accomodate, true));
-        // error_log("Rooms:");
-        // error_log(print_r($rooms, true));
-
-        //wp_send_json_error(' Temporary block for debugging ');
         // Create customer post
         $customer_post_data = array(
             'post_type' => 'slgc_customers', // Your custom post type for customers
@@ -1630,7 +1845,7 @@ class Activity
             $roomName = \Staylodgic\Rooms::getRoomName_FromID($room_id);
 
             $email_tax_html = false;
-            if ( 'enabled' == $tax_status) {
+            if ('enabled' == $tax_status) {
                 $email_tax_html = $reservationData['tax_html']['details'];
             }
 
@@ -1641,7 +1856,7 @@ class Activity
                 'checkinDate'    => $checkin,
                 'adultGuests'    => $reservationData['adults'],
                 'childrenGuests' => $reservationData['children'],
-                'subtotal' => staylodgic_price( $reservationData['subtotal'] ),
+                'subtotal' => staylodgic_price($reservationData['subtotal']),
                 'tax' => $email_tax_html,
                 'totalCost'      => $reservationData['total'],
             ];

@@ -22,25 +22,52 @@ class AvailablityCalendarBase
         $this->getToday();
         $this->usingCache = false;
     }
-
+    
+    /**
+     * Method getToday
+     *
+     * @return void
+     */
     public function getToday()
     {
         $today       = new \DateTime();
         $this->today = $today->format('Y-m-d');
     }
-
+    
+    /**
+     * Method setStartDate
+     *
+     * @param $startDate
+     *
+     * @return void
+     */
     public function setStartDate($startDate)
     {
         // Set startDate to the 1st of the current month
         $this->startDate = date('Y-m-01');
     }
-    
+        
+    /**
+     * Method setEndDate
+     *
+     * @param $endDate $endDate
+     *
+     * @return void
+     */
     public function setEndDate($endDate)
     {
         // Set endDate to the 5th of the next month
         $this->endDate = date('Y-m-05', strtotime('+1 month'));
     }
-    
+        
+    /**
+     * Method setNumDays
+     *
+     * @param $startDate $startDate
+     * @param $endDate $endDate
+     *
+     * @return void
+     */
     public function setNumDays($startDate = false, $endDate = false)
     {
 
@@ -54,12 +81,17 @@ class AvailablityCalendarBase
 
         $numDays = $start_Date->diff($end_Date)->days + 1;
 
-        if (!$startDate) {
-            // error_log('Start: ' . $startDate . ' End: ' . $endDate . ' Number: ' . $numDays);
-        }
         return $numDays;
     }
-
+    
+    /**
+     * Method getDates
+     *
+     * @param $startDate $startDate
+     * @param $endDate $endDate
+     *
+     * @return void
+     */
     public function getDates($startDate = false, $endDate = false)
     {
 
@@ -85,7 +117,15 @@ class AvailablityCalendarBase
         }
         return $dates;
     }
-
+    
+    /**
+     * Method calculateOccupancyTotalForRange
+     *
+     * @param $startDateString $startDateString
+     * @param $endDateString $endDateString
+     *
+     * @return void
+     */
     public function calculateOccupancyTotalForRange($startDateString, $endDateString)
     {
         $startDate   = new \DateTime($startDateString);
@@ -111,7 +151,14 @@ class AvailablityCalendarBase
 
         return $averageOccupancyPercentage;
     }
-
+    
+    /**
+     * Method calculateAdrForDate
+     *
+     * @param $currentdateString $currentdateString
+     *
+     * @return void
+     */
     public function calculateAdrForDate($currentdateString)
     {
         $currentDate       = new \DateTime($currentdateString);
@@ -152,7 +199,14 @@ class AvailablityCalendarBase
 
         return $adr;
     }
-
+    
+    /**
+     * Method calculateOccupancyForDate
+     *
+     * @param $currentdateString $currentdateString
+     *
+     * @return void
+     */
     public function calculateOccupancyForDate($currentdateString)
     {
         $totalOccupiedRooms  = 0;
@@ -167,8 +221,6 @@ class AvailablityCalendarBase
               // Increment the total number of available rooms
             $totalAvailableRooms += \Staylodgic\Rooms::getTotalOperatingRoomQtyForDate($room->ID, $currentdateString);
 
-              //echo '<br>'.$currentdateString.'<br>'. $room->ID . '||' . $totalOccupiedRooms. '||' . $totalAvailableRooms . '<br>';
-              //echo '<br>'. $room->ID . '||' . $totalOccupiedRooms. '||' . $totalAvailableRooms . '<br>';
         }
 
         wp_reset_postdata();
@@ -182,7 +234,14 @@ class AvailablityCalendarBase
 
         return $occupancyPercentage;
     }
-
+    
+    /**
+     * Method calculateRemainingRoomsForDate
+     *
+     * @param $currentdateString $currentdateString
+     *
+     * @return void
+     */
     public function calculateRemainingRoomsForDate($currentdateString)
     {
         $totalRemainingRooms  = 0;
@@ -193,9 +252,6 @@ class AvailablityCalendarBase
 
             $reservation_instance  = new \Staylodgic\Reservations($currentdateString, $room->ID);
             $totalRemainingRooms   += $reservation_instance->getDirectRemainingRoomCount();
-
-              //echo '<br>'.$currentdateString.'<br>'. $room->ID . '||' . $totalOccupiedRooms. '||' . $totalAvailableRooms . '<br>';
-              //echo '<br>'. $room->ID . '||' . $totalOccupiedRooms. '||' . $totalAvailableRooms . '<br>';
         }
 
         wp_reset_postdata();

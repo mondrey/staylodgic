@@ -25,13 +25,23 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
         add_action('template_redirect', array($this, 'handle_ics_export'));
     }
 
-
+    
+    /**
+     * Method add_cron_hook
+     *
+     * @return void
+     */
     public function add_cron_hook()
     {
         // Hook the function to the cron event
         add_action('staylodgic_ical_availability_processor_event', array($this, 'ical_availability_processor'));
     }
-
+    
+    /**
+     * Method add_availability_admin_menu
+     *
+     * @return void
+     */
     public function add_availability_admin_menu()
     {
         add_submenu_page(
@@ -44,7 +54,12 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
             array($this, 'ical_availability_import')
         );
     }
-
+    
+    /**
+     * Method add_ics_rewrite_rule
+     *
+     * @return void
+     */
     public function add_ics_rewrite_rule()
     {
         add_rewrite_rule('^ics-export/room/([0-9]+)/?', 'index.php?staylodgic_ics_room=$matches[1]', 'top');
@@ -62,7 +77,12 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
             exit;
         }
     }
-
+    
+    /**
+     * Method get_current_schedule
+     *
+     * @return void
+     */
     private function get_current_schedule()
     {
         // Check if the event is scheduled and return its interval
@@ -77,10 +97,6 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
             return false;
         }
     
-        // Log the relevant cron entry
-        error_log('Cron entry for staylodgic_ical_availability_processor_event:');
-        error_log(print_r($cron[$timestamp]['staylodgic_ical_availability_processor_event'], true));
-    
         // Extract the schedule name from the cron entry
         foreach ($cron[$timestamp]['staylodgic_ical_availability_processor_event'] as $event) {
             if (isset($event['schedule'])) {
@@ -90,7 +106,12 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
     
         return false; // Return false if no schedule found
     }    
-
+    
+    /**
+     * Method save_ical_availability_meta
+     *
+     * @return void
+     */
     public function save_ical_availability_meta()
     {
         // Perform nonce check and other validations as needed
@@ -117,15 +138,12 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
         if (isset($_POST['room_ids'])) {
             $room_ids = $_POST['room_ids'];
 
-
-            //error_log( print_r( $_POST , true ) );
             for ($i = 0; $i < count($room_ids); $i++) {
                 $room_id    = $room_ids[$i];
                 $room_links = array();
 
                 $old_room_data = get_post_meta($room_id, 'staylodgic_channel_quantity_array', true);
-                // error_log( '----- Before Stored iCal Data' );
-                // error_log( print_r( $old_room_data , true ) );
+                
                 // Ensure that $room_links_url[$i] is an array before trying to count its elements
                 if (isset($room_links_url[$i]) && is_array($room_links_url[$i])) {
                     for ($j = 0; $j < count($room_links_url[$i]); $j++) {
@@ -176,7 +194,12 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
             wp_send_json_success('Room data not found');
         }
     }
-
+    
+    /**
+     * Method areCalendarsConfigured
+     *
+     * @return void
+     */
     public function areCalendarsConfigured()
     {
         $rooms = Rooms::queryRooms();
@@ -206,7 +229,12 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
         // Then check the is_syncing flag
         return get_option('is_syncing', false);
     }
-
+    
+    /**
+     * Method ical_availability_processor
+     *
+     * @return void
+     */
     public function ical_availability_processor()
     {
         $rooms = Rooms::queryRooms();
@@ -250,14 +278,13 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
             }
         }
 
-        if (isset($blocked_dates) && is_array($blocked_dates)) {
-
-            // error_log( '----- Blocked dates being processed ' . $count );
-            // error_log( print_r($blocked_dates, 1) );
-            // error_log( '-----------------------------------' );
-        }
     }
-
+    
+    /**
+     * Method process_availability_link
+     *
+     * @return void
+     */
     public function process_availability_link(
         $blocked_dates = array(),
         $room_id = false,
@@ -267,7 +294,6 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
         // Create a new instance of the parser.
         $parser = new \ICal\ICal();
 
-        // error_log( '----- AVAILABILITY FILE VALID ' );
         // Parse the ICS file
         $parser->initString($file_contents);
         $events = $parser->events();
@@ -288,7 +314,12 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
         // Return the array of blocked dates
         return $blocked_dates;
     }
-
+    
+    /**
+     * Method ical_availability_import
+     *
+     * @return void
+     */
     public function ical_availability_import()
     {
 
@@ -378,7 +409,12 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
         echo "</div>";
         echo "</div>";
     }
-
+    
+    /**
+     * Method add_export_availability_admin_menu
+     *
+     * @return void
+     */
     public function add_export_availability_admin_menu()
     {
         add_submenu_page(
@@ -390,7 +426,12 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
             array($this, 'export_availability_ical_page')
         );
     }
-
+    
+    /**
+     * Method export_availability_ical_page
+     *
+     * @return void
+     */
     public function export_availability_ical_page()
     {
 
@@ -434,7 +475,14 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
         echo "</div>";
         echo "</div>";
     }
-
+    
+    /**
+     * Method handle_export_request
+     *
+     * @param $roomId $roomId [explicite description]
+     *
+     * @return void
+     */
     public function handle_export_request($roomId)
     {
 
@@ -458,7 +506,14 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
 
         exit;
     }
-
+    
+    /**
+     * Method filterFutureDates
+     *
+     * @param $remainingQuantityArray $remainingQuantityArray [explicite description]
+     *
+     * @return void
+     */
     public function filterFutureDates($remainingQuantityArray)
     {
         $filteredArray = [];
@@ -472,7 +527,12 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
 
         return $filteredArray;
     }
-
+    
+    /**
+     * Method detect_request_mode
+     *
+     * @return void
+     */
     private function detect_request_mode()
     {
         // Check for certain server variables typical in browser requests
@@ -483,7 +543,16 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
         // Default to server mode for API calls, scripts, etc.
         return 'server';
     }
-
+    
+    /**
+     * Method generate_ics_file
+     *
+     * @param $roomId $roomId [explicite description]
+     * @param $quantityArray $quantityArray [explicite description]
+     * @param $mode $mode [explicite description]
+     *
+     * @return void
+     */
     private function generate_ics_file($roomId, $quantityArray, $mode)
     {
         // Start of the ICS file

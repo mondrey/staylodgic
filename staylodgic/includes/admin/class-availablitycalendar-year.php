@@ -12,7 +12,11 @@ class AvailablityCalendarYear extends AvailablityCalendarBase
         add_action('admin_menu', array($this, 'AvailablityCalendarYearDisplay'));
     }
 
-    // Add the Availability menu item to the admin menu
+    /**
+     * Method AvailablityCalendarYearDisplay Add the Availability menu item to the admin menu 
+     *
+     * @return void
+     */
     public function AvailablityCalendarYearDisplay()
     {
         // Add the Availability submenu item under the parent menu
@@ -25,6 +29,12 @@ class AvailablityCalendarYear extends AvailablityCalendarBase
             array($this, 'room_Reservation_Plugin_Display_Availability_Calendar_Yearly')
         );
     }
+    
+    /**
+     * Method room_Reservation_Plugin_Display_Availability_Calendar_Yearly
+     *
+     * @return void
+     */
     public function room_Reservation_Plugin_Display_Availability_Calendar_Yearly()
     {
         // Output the HTML for the Availability page
@@ -54,7 +64,15 @@ class AvailablityCalendarYear extends AvailablityCalendarBase
         </div>
 <?php
     }
-
+    
+    /**
+     * Method display_monthly_calendar
+     *
+     * @param $month $month
+     * @param $year $year
+     *
+     * @return void
+     */
     public function display_monthly_calendar($month, $year)
     {
         // Calculate the first and last day of the month

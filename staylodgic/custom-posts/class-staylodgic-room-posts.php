@@ -53,7 +53,7 @@ class staylodgic_Room_Posts
 
                             ?>
                             <?php if ($image_url) {
-                                echo '<img class="staylodgic_admin_sort_image" src="' . $image_url . '" width="30px" height="30px" alt="" />';
+                                echo '<img class="staylodgic_admin_sort_image" src="' . esc_url( $image_url ) . '" width="30px" height="30px" alt="" />';
                             } ?>
                             <span class="staylodgic_admin_sort_title"><?php the_title(); ?></span>
                             <?php

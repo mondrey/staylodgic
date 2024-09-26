@@ -31,7 +31,12 @@ class AnalyticsBookings
 
         add_action('admin_menu', array($this, 'staylodgic_dashboard'));
     }
-
+    
+    /**
+     * Method staylodgic_dashboard
+     *
+     * @return void
+     */
     public function staylodgic_dashboard()
     {
         add_menu_page(
@@ -54,13 +59,17 @@ class AnalyticsBookings
             array($this, 'display_dashboard') // Callback function
         );
     }
-
+    
+    /**
+     * Method display_dashboard
+     *
+     * @return void
+     */
     public function display_dashboard()
     {
 
         echo '<div class="staylodgic_analytics_wrap">';
 
-        error_log( '\Staylodgic\Rooms::hasRooms()' );
         if ( \Staylodgic\Rooms::hasRooms() ) {
             // Add the logo image below the heading
             echo '<div class="staylodgic-overview-heading">';
@@ -68,7 +77,7 @@ class AnalyticsBookings
             echo '</div>';
         } else {
             echo '<h1>' . __('No Rooms Found', 'staylodgic') . '</h1>';
-            echo '<p>Please configure atleast 1 Room from Rooms section</p>';
+            echo __('<p>Please configure atleast 1 Room from Rooms section</p>', 'staylodgic');
             return;
         }
 
@@ -78,7 +87,14 @@ class AnalyticsBookings
 
         echo '</div>';
     }
-
+    
+    /**
+     * Method get_chart_config
+     *
+     * @param $id
+     *
+     * @return void
+     */
     public function get_chart_config($id)
     {
 
@@ -212,7 +228,12 @@ class AnalyticsBookings
 
         return $configs[$id] ?? null;
     }
-
+    
+    /**
+     * Method get_dayafter_stats_data
+     *
+     * @return void
+     */
     private function get_dayafter_stats_data()
     {
         $dayafter      = date('Y-m-d', strtotime('+2 day'));
@@ -286,7 +307,18 @@ class AnalyticsBookings
             ],
         ];
     }
-
+    
+    /**
+     * Method add_guest
+     *
+     * @param $booking_number $booking_number
+     * @param $day $day
+     * @param $type $type
+     * @param $checkin $checkin
+     * @param $checkout $checkout
+     *
+     * @return void
+     */
     private function add_guest($booking_number = false, $day = 'today', $type = 'checkin', $checkin = false, $checkout = false)
     {
         if ($booking_number) {
@@ -383,7 +415,12 @@ class AnalyticsBookings
             ],
         ];
     }
-
+    
+    /**
+     * Method get_current_day_stats_data
+     *
+     * @return void
+     */
     private function get_current_day_stats_data()
     {
         $today         = date('Y-m-d');
@@ -457,7 +494,12 @@ class AnalyticsBookings
             ],
         ];
     }
-
+    
+    /**
+     * Method get_past_twelve_months_adr_data
+     *
+     * @return void
+     */
     private function get_past_twelve_months_adr_data()
     {
         $labels       = [];
@@ -478,8 +520,6 @@ class AnalyticsBookings
                 $cachedData = $cache->getCache($cacheKey);
                 $adr        = $cachedData;
             } else {
-
-                // error_log('Not using Cache adr data:' . $month);
 
                 // Query for revenue and nights
                 $revenueQuery = new \WP_Query([
@@ -545,7 +585,12 @@ class AnalyticsBookings
             ],
         ];
     }
-
+    
+    /**
+     * Method get_past_twelve_months_revenue_data
+     *
+     * @return void
+     */
     private function get_past_twelve_months_revenue_data()
     {
         $labels        = [];
@@ -568,7 +613,6 @@ class AnalyticsBookings
                 $totalRevenue = $cachedData;
             } else {
 
-                error_log('Not using Cache revenue data:' . $month);
                 // Query for revenue
                 $revenueQuery = new \WP_Query([
                     'post_type'      => 'slgc_reservations',
@@ -624,7 +668,12 @@ class AnalyticsBookings
             ],
         ];
     }
-
+    
+    /**
+     * Method get_past_twelve_months_bookings_data
+     *
+     * @return void
+     */
     private function get_past_twelve_months_bookings_data()
     {
         $labels        = [];
@@ -651,7 +700,6 @@ class AnalyticsBookings
                 $cancelledData[] = $cachedData['cancelled'];
             } else {
 
-                error_log('Not using Cache bookings data:' . $month);
                 // Query for confirmed bookings
                 $confirmedQuery = new \WP_Query([
                     'post_type'      => 'slgc_reservations',
@@ -694,7 +742,7 @@ class AnalyticsBookings
 
                 if ($month != $currentMonth) {
                     $cacheData = ['confirmed' => $confirmedQuery->found_posts, 'cancelled' => $cancelledQuery->found_posts];
-                    error_log('Caching Data: ' . print_r($cacheData, true));
+
                     $cache->setCache($cacheKey, $cacheData);
                 }
             }
@@ -731,7 +779,14 @@ class AnalyticsBookings
             ],
         ];
     }
-
+    
+    /**
+     * Method chart_generator
+     *
+     * @param $id $id
+     *
+     * @return void
+     */
     public function chart_generator($id)
     {
         // $atts = shortcode_atts(['id' => ''], $atts, 'chart');
@@ -817,12 +872,10 @@ class AnalyticsBookings
                 $guestListHtml .= '<tbody class="table-group-divider">';
                 // Iterate over each guest and add them to the table
                 foreach ($guests as $guestId => $bookings) {
-                    // error_log( '-------bookings-------');
-                    // error_log( print_r( $bookings,1 ));
+                    
                     foreach ($bookings as $booking) { // Iterate over each booking for the guest
                         $count++;
-                        // error_log( '-------booking-------');
-                        // error_log( print_r( $booking,1 ));
+                        
                         $reservations_instance = new \Staylodgic\Reservations();
                         $reservation_id        = $reservations_instance->getReservationIDforBooking($booking['booking_number']);
 
@@ -891,6 +944,12 @@ class AnalyticsBookings
 
         return $guestListHtml;
     }
+        
+    /**
+     * Method display_stats
+     *
+     * @return void
+     */
     public function display_stats()
     {
 
@@ -914,7 +973,12 @@ class AnalyticsBookings
         $dashboard = $row_one . $guestListHtml . $past_twelve_months_bookings . $past_twelve_months_revenue . $past_twelve_months_adr;
         return $dashboard;
     }
-
+    
+    /**
+     * Method render
+     *
+     * @return void
+     */
     public function render()
     {
         $data    = htmlspecialchars(json_encode($this->data), ENT_QUOTES, 'UTF-8');
