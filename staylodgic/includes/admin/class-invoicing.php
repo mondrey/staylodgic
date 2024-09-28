@@ -84,7 +84,12 @@ class Invoicing
         add_action('wp_ajax_getInvoiceActivityDetails', array($this, 'getInvoiceActivityDetails'));
         add_action('wp_ajax_nopriv_getInvoiceActivityDetails', array($this, 'getInvoiceActivityDetails'));
     }
-
+    
+    /**
+     * Method add_invoicing_admin_menu
+     *
+     * @return void
+     */
     public function add_invoicing_admin_menu()
     {
         add_submenu_page(
@@ -95,7 +100,12 @@ class Invoicing
             'staylodgic-invoicing',
             array($this, 'booking_invoices')
         );
-    }
+    }    
+    /**
+     * Method add_activity_invoicing_admin_menu
+     *
+     * @return void
+     */
     public function add_activity_invoicing_admin_menu()
     {
         add_submenu_page(
@@ -107,7 +117,12 @@ class Invoicing
             array($this, 'activity_invoices')
         );
     }
-
+    
+    /**
+     * Method activity_invoices
+     *
+     * @return void
+     */
     public function activity_invoices()
     {
 
@@ -118,6 +133,12 @@ class Invoicing
 
         echo '</div>';
     }
+        
+    /**
+     * Method booking_invoices
+     *
+     * @return void
+     */
     public function booking_invoices()
     {
 
@@ -128,7 +149,12 @@ class Invoicing
 
         echo '</div>';
     }
-
+    
+    /**
+     * Method getInvoiceActivityDetails
+     *
+     * @return void
+     */
     public function getInvoiceActivityDetails()
     {
 
@@ -171,8 +197,7 @@ class Invoicing
 
             $children = array();
             $children = get_post_meta($reservationID, 'staylodgic_reservation_activity_children', true);
-            error_log('children array');
-            error_log(print_r($children, true));
+            
             $this->numberofAdults   = $adults;
 
             $totalGuests            = intval($adults);
@@ -200,8 +225,7 @@ class Invoicing
             if ('enabled' == $taxStatus) {
                 $tax_summary .= '<div class="input-tax-summary-wrap-inner">';
                 $tax_summary .= $taxHTML;
-                // error_log('------ tax out -------');
-                // error_log(print_r($taxHTML, true));
+                
                 $tax_summary .= '</div>';
             }
             $tax_summary .= '</div>';
@@ -254,7 +278,12 @@ class Invoicing
         echo $informationSheet; // Encode the HTML content as JSON
         wp_die(); // Terminate and return a proper response
     }
-
+    
+    /**
+     * Method getInvoiceBookingDetails
+     *
+     * @return void
+     */
     public function getInvoiceBookingDetails()
     {
 
@@ -298,8 +327,7 @@ class Invoicing
 
             $children = array();
             $children = get_post_meta($reservationID, 'staylodgic_reservation_room_children', true);
-            error_log('children array');
-            error_log(print_r($children, true));
+            
             $this->numberofAdults   = $adults;
 
             $totalGuests            = intval($adults);
@@ -328,8 +356,7 @@ class Invoicing
             if ('enabled' == $taxStatus) {
                 $tax_summary .= '<div class="input-tax-summary-wrap-inner">';
                 $tax_summary .= $taxHTML;
-                // error_log('------ tax out -------');
-                // error_log(print_r($taxHTML, true));
+                
                 $tax_summary .= '</div>';
             }
             $tax_summary .= '</div>';
@@ -382,7 +409,12 @@ class Invoicing
         echo $informationSheet; // Encode the HTML content as JSON
         wp_die(); // Terminate and return a proper response
     }
-
+    
+    /**
+     * Method activityBooking_Search
+     *
+     * @return void
+     */
     public function activityBooking_Search()
     {
         ob_start();
@@ -412,7 +444,11 @@ class Invoicing
         return ob_get_clean();
     }
 
-
+    /**
+     * Method hotelBooking_Search
+     *
+     * @return void
+     */
     public function hotelBooking_Search()
     {
         ob_start();
@@ -441,7 +477,12 @@ class Invoicing
     <?php
         return ob_get_clean();
     }
-
+    
+    /**
+     * Method invoiceActivityTemplate
+     *
+     * @return void
+     */
     public function invoiceActivityTemplate(
         $reservationID,
         $bookingStatus,
@@ -551,7 +592,12 @@ class Invoicing
     <?php
         return ob_get_clean();
     }
-
+    
+    /**
+     * Method invoiceTemplate
+     *
+     * @return void
+     */
     public function invoiceTemplate(
         $reservationID,
         $bookingStatus,

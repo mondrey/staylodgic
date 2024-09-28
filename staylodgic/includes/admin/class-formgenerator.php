@@ -11,8 +11,14 @@ class FormGenerator
         // Register shortcodes
         $this->registerShortcodes();
     }
-
-    // Function to render an input element
+   
+    /**
+     * Method Function to render an input element 
+     *
+     * @param $inputObject
+     *
+     * @return void
+     */
     private function renderInput($inputObject)
     {
         // Check for required attributes
@@ -110,7 +116,6 @@ class FormGenerator
                 echo "<button " . esc_attr($predefined_data_attr) . " type='" . esc_attr($type) . "' id='" . esc_attr($id) . "' name='" . esc_attr($name) . "' class='" . esc_attr($class) . "'>" . esc_html($value) . "</button>";
                 break;
             case 'select':
-                // [form_input type="select" id="mySelect" name="mySelect" class="form-control" value="option1" options="option1:Option 1,option2:Option 2,option3:Option 3"]
                 if ('countries' == $inputObject->target) {
                     $options = staylodgic_country_list('select', '');
                 } else {
@@ -118,7 +123,7 @@ class FormGenerator
                 }
                 $countries = staylodgic_country_list('select-alt', '');
                 $options   = $this->parseSelectOptions($countries);
-                // error_log(print_r($options, true));
+                
                 echo "<select data-label='" . esc_attr($label) . "' data-id='" . esc_attr($id) . "' id='" . esc_attr($id) . "' name='" . esc_attr($name) . "' class='form-select' aria-label='Default select'>";
                 foreach ($options as $optionValue => $optionLabel) {
                     $selected = $optionValue == $value ? 'selected' : '';
@@ -142,7 +147,13 @@ class FormGenerator
         return ob_get_clean();
     }
 
-    // Helper function to parse select options
+    /**
+     * Method Helper function to parse select options    
+     *
+     * @param $optionsString
+     *
+     * @return void
+     */
     private function parseSelectOptions($optionsString)
     {
         $options      = [];
@@ -153,8 +164,14 @@ class FormGenerator
         }
         return $options;
     }
-
-    // Shortcode for form start
+ 
+    /**
+     * Method Shortcode for form start
+     *
+     * @param $atts
+     *
+     * @return void
+     */
     public function shortcodeFormStart($atts)
     {
         $attributes = shortcode_atts([
@@ -172,13 +189,23 @@ class FormGenerator
         return "<form id='{$id}' action='{$action}' method='{$method}' class='{$class}' novalidate>";
     }
 
-    // Shortcode for form end
+    /**
+     * Method Shortcode for form end
+     *
+     * @return void
+     */
     public function shortcodeFormEnd()
     {
         return "</form>";
     }
-
-    // Shortcode for rendering an input
+  
+    /**
+     * Method Shortcode for rendering an input  
+     *
+     * @param $atts
+     *
+     * @return void
+     */
     public function shortcodeInput($atts)
     {
         $attributes = shortcode_atts([
@@ -199,15 +226,24 @@ class FormGenerator
 
         return $this->renderInput($inputObject);
     }
-
-    // Register shortcodes with WordPress
+ 
+    /**
+     * Method Register shortcodes with WordPress   
+     *
+     * @return void
+     */
     private function registerShortcodes()
     {
         add_shortcode('form_start', [$this, 'shortcodeFormStart']);
         add_shortcode('form_end', [$this, 'shortcodeFormEnd']);
         add_shortcode('form_input', [$this, 'shortcodeInput']);
     }
-
+    
+    /**
+     * Method defaultShortcodes
+     *
+     * @return void
+     */
     public function defaultShortcodes()
     {
         $shortcodes = '';

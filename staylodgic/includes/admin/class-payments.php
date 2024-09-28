@@ -1,4 +1,5 @@
 <?php
+
 namespace Staylodgic;
 
 class Payments
@@ -30,6 +31,13 @@ class Payments
         add_action('woocommerce_before_calculate_totals', array($this, 'modify_cart_item_prices'));
     }
 
+    /**
+     * Method modify_cart_item_prices
+     *
+     * @param $cart $cart [explicite description]
+     *
+     * @return void
+     */
     public function modify_cart_item_prices($cart)
     {
         foreach ($cart->get_cart() as $cart_item) {
@@ -79,7 +87,11 @@ class Payments
         return $payment_request_link;
     }
 
-    // Ajax callback function to retrieve room names
+    /**
+     * Method Ajax callback function to retrieve room names    
+     *
+     * @return void
+     */
     public function get_room_names_callback()
     {
 
@@ -133,6 +145,13 @@ class Payments
         wp_die();
     }
 
+    /**
+     * Method add_booking_number_column
+     *
+     * @param $columns $columns [explicite description]
+     *
+     * @return void
+     */
     public function add_booking_number_column($columns)
     {
         // Add the custom column after the order total column
@@ -191,6 +210,11 @@ class Payments
         }
     }
 
+    /**
+     * Method processReservationPayment
+     *
+     * @return void
+     */
     public function processReservationPayment()
     {
 
@@ -198,7 +222,7 @@ class Payments
         if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'staylodgic-nonce-admin')) {
             wp_die();
         }
-        
+
         if (isset($_POST['total'])) {
             $total          = sanitize_text_field($_POST['total']);
             $booking_number = sanitize_text_field($_POST['booking_number']);
@@ -240,6 +264,11 @@ class Payments
         }
     }
 
+    /**
+     * Method addBookingNumber_To_Checkout
+     *
+     * @return void
+     */
     public function addBookingNumber_To_Checkout()
     {
         // Get the booking number from the session
@@ -251,6 +280,15 @@ class Payments
         }
     }
 
+    /**
+     * Method processBooking_After_Checkout
+     *
+     * @param $order_id $order_id [explicite description]
+     * @param $posted_data $posted_data [explicite description]
+     * @param $order $order [explicite description]
+     *
+     * @return void
+     */
     public function processBooking_After_Checkout($order_id, $posted_data, $order)
     {
         // Get the booking number from the session
@@ -263,6 +301,14 @@ class Payments
         }
     }
 
+    /**
+     * Method setBooking_Payment_Done
+     *
+     * @param $booking_number $booking_number [explicite description]
+     * @param $order $order [explicite description]
+     *
+     * @return void
+     */
     public function setBooking_Payment_Done($booking_number, $order)
     {
         // Perform your custom logic based on the booking number
@@ -273,6 +319,14 @@ class Payments
         $order->save();
     }
 
+    /**
+     * Method handle_Payment_Failure
+     *
+     * @param $order_id $order_id [explicite description]
+     * @param $retry_count $retry_count [explicite description]
+     *
+     * @return void
+     */
     public function handle_Payment_Failure($order_id, $retry_count)
     {
         // Get the booking number from the session
@@ -281,12 +335,11 @@ class Payments
         // You can retrieve the order details using the order ID if needed
 
         // Example: Log the payment failure
-        error_log('Payment failed for order ID: ' . $order_id);
 
         // Example: Send a notification email to the site admin
         $admin_email = get_option('admin_email');
-        $subject     = 'Payment Failed for Order ID: ' . $order_id;
-        $message     = 'Payment failed for order ID: ' . $order_id;
+        $subject     = __('Payment Failed for Order ID: ', 'staylodgic') . $order_id;
+        $message     = __('Payment failed for order ID: ', 'staylodgic') . $order_id;
         wp_mail($admin_email, $subject, $message);
 
         // Example: Redirect the customer to a specific page
@@ -294,6 +347,13 @@ class Payments
         exit;
     }
 
+    /**
+     * Method get_order_status
+     *
+     * @param $order_id $order_id [explicite description]
+     *
+     * @return void
+     */
     public function get_order_status($order_id)
     {
         $order = wc_get_order($order_id);
@@ -305,6 +365,13 @@ class Payments
         return ''; // Return an empty string if the order is not found
     }
 
+    /**
+     * Method generate_invoice
+     *
+     * @param $order_id $order_id [explicite description]
+     *
+     * @return void
+     */
     public function generate_invoice($order_id)
     {
         $order = wc_get_order($order_id);
@@ -316,16 +383,16 @@ class Payments
             // Start building the invoice HTML
             $invoice_html .= '<div class="invoice">';
             $invoice_html .= '<div class="invoice-header">';
-            $invoice_html .= '<h1>Invoice</h1>';
+            $invoice_html .= '<h1>' . __('Invoice', 'staylodgic') . '</h1>';
             $invoice_html .= '</div>';
             $invoice_html .= '<div class="invoice-body">';
 
             // Get the order number
             $order_number = $order->get_order_number();
-            $invoice_html .= '<h2>Order Details</h2>';
+            $invoice_html .= '<h2>' . __('Order Details', 'staylodgic') . '</h2>';
             $invoice_html .= '<table class="invoice-table">';
             $invoice_html .= '<tr>';
-            $invoice_html .= '<th>Order Number:</th>';
+            $invoice_html .= '<th>' . __('Order Number:', 'staylodgic') . '</th>';
             $invoice_html .= '<td>' . $order_number . '</td>';
             $invoice_html .= '</tr>';
 
@@ -363,32 +430,32 @@ class Payments
             // Complete the invoice HTML
             $invoice_html .= '</table>';
 
-            $invoice_html .= '<h2>Billing Information</h2>';
+            $invoice_html .= '<h2>' . __('Billing Information', 'staylodgic') . '</h2>';
             $invoice_html .= '<table class="invoice-table">';
             $invoice_html .= '<tr>';
-            $invoice_html .= '<th>Name:</th>';
+            $invoice_html .= '<th>' . __('Name:', 'staylodgic') . '</th>';
             $invoice_html .= '<td>' . $billing_name . '</td>';
             $invoice_html .= '</tr>';
             $invoice_html .= '<tr>';
-            $invoice_html .= '<th>Address:</th>';
+            $invoice_html .= '<th>' . __('Address:', 'staylodgic') . '</th>';
             $invoice_html .= '<td>' . $billing_address . '</td>';
             $invoice_html .= '</tr>';
             // Add more billing information as needed
 
             $invoice_html .= '</table>';
 
-            $invoice_html .= '<h2>Products</h2>';
+            $invoice_html .= '<h2>' . __('Products', 'staylodgic') . '</h2>';
             $invoice_html .= '<table class="invoice-table">';
             $invoice_html .= '<tr>';
-            $invoice_html .= '<th>Product Name</th>';
-            $invoice_html .= '<th>Quantity</th>';
-            $invoice_html .= '<th>Price</th>';
+            $invoice_html .= '<th>' . __('Product Name', 'staylodgic') . '</th>';
+            $invoice_html .= '<th>' . __('Quantity', 'staylodgic') . '</th>';
+            $invoice_html .= '<th>' . __('Price', 'staylodgic') . '</th>';
             $invoice_html .= '</tr>';
             $invoice_html .= $products_html;
             $invoice_html .= '</table>';
 
             $invoice_html .= '<div class="invoice-total">';
-            $invoice_html .= '<h3>Total: ' . $order_total . '</h3>';
+            $invoice_html .= '<h3>' . __('Total:', 'staylodgic') . ' ' . $order_total . '</h3>';
             $invoice_html .= '</div>';
 
             $invoice_html .= '</div>';
@@ -400,7 +467,6 @@ class Payments
 
         return ''; // Return an empty string if the order is not found
     }
-
 }
 
 new \Staylodgic\Payments();

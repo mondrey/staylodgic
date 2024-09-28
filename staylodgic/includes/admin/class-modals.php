@@ -4,7 +4,12 @@ namespace Staylodgic;
 
 class Modals
 {
-
+	
+	/**
+	 * Method rateQtyToasts
+	 *
+	 * @return void
+	 */
 	public static function rateQtyToasts()
 	{
 		$toast  = '<div aria-live="polite" aria-atomic="true" class="availability-calendar-toasts position-relative">';
@@ -75,7 +80,12 @@ class Modals
 
 		return $toast;
 	}
-
+	
+	/**
+	 * Method syncBookingModal
+	 *
+	 * @return void
+	 */
 	public static function syncBookingModal()
 	{
 ?>
@@ -117,7 +127,12 @@ class Modals
 		</div>
 	<?php
 	}
-
+	
+	/**
+	 * Method quanityModal
+	 *
+	 * @return void
+	 */
 	public static function quanityModal()
 	{
 	?>
@@ -168,7 +183,12 @@ class Modals
 		</div>
 	<?php
 	}
-
+	
+	/**
+	 * Method ratesModal
+	 *
+	 * @return void
+	 */
 	public static function ratesModal()
 	{
 	?>

@@ -68,98 +68,123 @@ class OptionsPanel
         add_action('admin_enqueue_scripts', [$this, 'enqueue_media_uploader']);
     }
 
-// Function to create custom pages
-public function create_custom_page($title, $template, $content, $slug) {
-    $existing_page = get_page_by_path($slug, OBJECT, 'page');
-    if ($existing_page) {
-        return $existing_page->ID; // Return existing page ID if the page exists
-    }
-
-    $page_data = array(
-        'post_title'    => $title,
-        'post_content'  => $content,
-        'post_status'   => 'publish',
-        'post_type'     => 'page',
-        'post_name'     => $slug, // Set the slug for the page
-        'meta_input'    => array(
-            '_wp_page_template' => $template,
-        ),
-    );
-
-    $page_id = wp_insert_post($page_data);
-
-    return $page_id;
-}
-
-// Function to create initial pages
-public function create_initial_pages() {
-    
-    $pages = staylodgic_get_template_pages();
-
-    foreach ($pages as $page) {
-        $this->create_custom_page($page['title'], $page['template'], $page['content'], $page['slug']);
-    }
-
-    // After creating pages, create the menu
-    $this->create_booking_menu();
-}
-
-// Function to create or update the booking menu
-public function create_booking_menu() {
-    $menu_name = 'booking-menu';
-    $menu_exists = wp_get_nav_menu_object($menu_name);
-
-    // Delete the existing menu if it exists
-    if ($menu_exists) {
-        wp_delete_nav_menu($menu_exists->term_id);
-    }
-
-    // Create a new menu
-    $menu_id = wp_create_nav_menu($menu_name);
-
-    // Get the template file names from theme options
-    $menu_templates = array(
-        'booking_menu_one' => staylodgic_get_option('booking_menu_one'),
-        'booking_menu_two' => staylodgic_get_option('booking_menu_two'),
-        'booking_menu_three' => staylodgic_get_option('booking_menu_three'),
-        'booking_menu_four' => staylodgic_get_option('booking_menu_four'),
-    );
-
-    // Find pages by template files
-    $menu_items = array();
-    foreach ($menu_templates as $template) {
-        $query = new \WP_Query(array(
-            'post_type' => 'page',
-            'meta_key' => '_wp_page_template',
-            'meta_value' => $template,
-            'posts_per_page' => 1,
-        ));
-        if ($query->have_posts()) {
-            $query->the_post();
-            $menu_items[] = get_the_ID();
+    /**
+     * Method Function to create custom pages
+     *
+     * @param $title $title [explicite description]
+     * @param $template $template [explicite description]
+     * @param $content $content [explicite description]
+     * @param $slug $slug [explicite description]
+     *
+     * @return void
+     */
+    public function create_custom_page($title, $template, $content, $slug)
+    {
+        $existing_page = get_page_by_path($slug, OBJECT, 'page');
+        if ($existing_page) {
+            return $existing_page->ID; // Return existing page ID if the page exists
         }
-        wp_reset_postdata();
+
+        $page_data = array(
+            'post_title'    => $title,
+            'post_content'  => $content,
+            'post_status'   => 'publish',
+            'post_type'     => 'page',
+            'post_name'     => $slug, // Set the slug for the page
+            'meta_input'    => array(
+                '_wp_page_template' => $template,
+            ),
+        );
+
+        $page_id = wp_insert_post($page_data);
+
+        return $page_id;
     }
 
-    // Add new menu items
-    foreach ($menu_items as $page_id) {
-        if ($page_id) {
-            wp_update_nav_menu_item($menu_id, 0, array(
-                'menu-item-object-id' => $page_id,
-                'menu-item-object' => 'page',
-                'menu-item-type' => 'post_type',
-                'menu-item-status' => 'publish',
+    /**
+     * Method Function to create initial pages  
+     *
+     * @return void
+     */
+    public function create_initial_pages()
+    {
+
+        $pages = staylodgic_get_template_pages();
+
+        foreach ($pages as $page) {
+            $this->create_custom_page($page['title'], $page['template'], $page['content'], $page['slug']);
+        }
+
+        // After creating pages, create the menu
+        $this->create_booking_menu();
+    }
+
+    /**
+     * Method Function to create or update the booking menu  
+     *
+     * @return void
+     */
+    public function create_booking_menu()
+    {
+        $menu_name = 'booking-menu';
+        $menu_exists = wp_get_nav_menu_object($menu_name);
+
+        // Delete the existing menu if it exists
+        if ($menu_exists) {
+            wp_delete_nav_menu($menu_exists->term_id);
+        }
+
+        // Create a new menu
+        $menu_id = wp_create_nav_menu($menu_name);
+
+        // Get the template file names from theme options
+        $menu_templates = array(
+            'booking_menu_one' => staylodgic_get_option('booking_menu_one'),
+            'booking_menu_two' => staylodgic_get_option('booking_menu_two'),
+            'booking_menu_three' => staylodgic_get_option('booking_menu_three'),
+            'booking_menu_four' => staylodgic_get_option('booking_menu_four'),
+        );
+
+        // Find pages by template files
+        $menu_items = array();
+        foreach ($menu_templates as $template) {
+            $query = new \WP_Query(array(
+                'post_type' => 'page',
+                'meta_key' => '_wp_page_template',
+                'meta_value' => $template,
+                'posts_per_page' => 1,
             ));
+            if ($query->have_posts()) {
+                $query->the_post();
+                $menu_items[] = get_the_ID();
+            }
+            wp_reset_postdata();
         }
+
+        // Add new menu items
+        foreach ($menu_items as $page_id) {
+            if ($page_id) {
+                wp_update_nav_menu_item($menu_id, 0, array(
+                    'menu-item-object-id' => $page_id,
+                    'menu-item-object' => 'page',
+                    'menu-item-type' => 'post_type',
+                    'menu-item-status' => 'publish',
+                ));
+            }
+        }
+
+        // Set the menu as Main Menu and Mobile Menu
+        // $locations = get_theme_mod('nav_menu_locations'); // Get all theme locations
+        $locations['main_menu'] = $menu_id; // Assign the menu to Main Menu
+        $locations['mobile_menu'] = $menu_id; // Assign the menu to Mobile Menu
+        set_theme_mod('nav_menu_locations', $locations); // Update the locations
     }
 
-    // Set the menu as Main Menu and Mobile Menu
-    // $locations = get_theme_mod('nav_menu_locations'); // Get all theme locations
-    $locations['main_menu'] = $menu_id; // Assign the menu to Main Menu
-    $locations['mobile_menu'] = $menu_id; // Assign the menu to Mobile Menu
-    set_theme_mod('nav_menu_locations', $locations); // Update the locations
-}
-
+    /**
+     * Method staylodgic_import_settings
+     *
+     * @return void
+     */
     public function staylodgic_import_settings()
     {
         // Check if our nonce is set and verify it.
@@ -230,6 +255,11 @@ public function create_booking_menu() {
     }
 
 
+    /**
+     * Method enqueue_media_uploader
+     *
+     * @return void
+     */
     public function enqueue_media_uploader()
     {
         wp_enqueue_media();
@@ -237,7 +267,9 @@ public function create_booking_menu() {
     }
 
     /**
-     * Register the new menu page.
+     * Method Register the new menu page.
+     *
+     * @return void
      */
     public function register_menu_page()
     {
@@ -252,7 +284,9 @@ public function create_booking_menu() {
     }
 
     /**
-     * Register the settings.
+     * Method Register the settings.
+     *
+     * @return void
      */
     public function export_settings()
     {
@@ -281,8 +315,11 @@ public function create_booking_menu() {
     {
         echo '<h2 class="section_heading">' . esc_html($this->option_name) . '</h2>';
     }
+
     /**
-     * Register the settings.
+     * Method Register the settings.
+     *
+     * @return void
      */
     public function register_settings()
     {
@@ -322,7 +359,11 @@ public function create_booking_menu() {
     }
 
     /**
-     * Saves our fields.
+     * Method Saves our fields.
+     *
+     * @param $values $values [explicite description]
+     *
+     * @return void
      */
     public function sanitize_fields($values)
     {
@@ -345,6 +386,13 @@ public function create_booking_menu() {
         return $new_values;
     }
 
+    /**
+     * Method sanitize_discount_fileds
+     *
+     * @param $value $value [explicite description]
+     *
+     * @return void
+     */
     protected function sanitize_discount_fileds($value)
     {
         $sanitized_value = [];
@@ -367,7 +415,11 @@ public function create_booking_menu() {
     }
 
     /**
-     * Returns sanitize callback based on field type.
+     * Method Returns sanitize callback based on field type.
+     *
+     * @param $field_type $field_type [explicite description]
+     *
+     * @return void
      */
     protected function get_sanitize_callback_by_type($field_type)
     {
@@ -407,7 +459,9 @@ public function create_booking_menu() {
     }
 
     /**
-     * Returns default values.
+     * Method Returns default values.
+     *
+     * @return void
      */
     protected function get_defaults()
     {
@@ -419,14 +473,25 @@ public function create_booking_menu() {
     }
 
     /**
-     * Sanitizes the tax field.
+     * Method Sanitizes the tax field.
+     *
+     * @param $value $value [explicite description]
+     * @param $field_args $field_args [explicite description]
+     *
+     * @return void
      */
     protected function sanitize_tax_field($value = '', $field_args = [])
     {
         return $value;
     }
+
     /**
-     * Sanitizes the checkbox field.
+     * Method Sanitizes the checkbox field.
+     *
+     * @param $value $value [explicite description]
+     * @param $field_args $field_args [explicite description]
+     *
+     * @return void
      */
     protected function sanitize_checkbox_field($value = '', $field_args = [])
     {
@@ -434,7 +499,12 @@ public function create_booking_menu() {
     }
 
     /**
-     * Sanitizes the select field.
+     * Method Sanitizes the select field.
+     *
+     * @param $value $value [explicite description]
+     * @param $field_args $field_args [explicite description]
+     *
+     * @return void
      */
     protected function sanitize_select_field($value = '', $field_args = [])
     {
@@ -445,7 +515,9 @@ public function create_booking_menu() {
     }
 
     /**
-     * Renders the options page.
+     * Method Renders the options page.
+     *
+     * @return void
      */
     public function render_options_page()
     {
@@ -462,7 +534,7 @@ public function create_booking_menu() {
             );
 
             \Staylodgic\Cache::clearAllCache();
-            
+
             $this->create_initial_pages();
         }
 
@@ -517,6 +589,11 @@ public function create_booking_menu() {
     <?php
     }
 
+    /**
+     * Method render_tabs
+     *
+     * @return void
+     */
     protected function render_tabs()
     {
         if (empty($this->args['tabs'])) {
@@ -547,9 +624,12 @@ public function create_booking_menu() {
     <?php
     }
 
-
     /**
-     * Returns an option value.
+     * Method Returns an option value.
+     *
+     * @param $option_name $option_name [explicite description]
+     *
+     * @return void
      */
     protected function get_option_value($option_name)
     {
@@ -564,7 +644,13 @@ public function create_booking_menu() {
         return $option[$option_name];
     }
 
-    // Media uploading
+    /**
+     * Method Media uploading  
+     *
+     * @param $args $args [explicite description]
+     *
+     * @return void
+     */
     public function render_media_upload_field($args)
     {
         $option_name = $args['label_for'];
@@ -589,21 +675,18 @@ public function create_booking_menu() {
         </div>';
     }
 
-
     /**
-     * Renders perperson field.
+     * Method Renders perperson field.
+     *
+     * @param $args $args [explicite description]
+     *
+     * @return void
      */
     public function render_repeatable_perperson_field($args)
     {
         $option_name = $args['label_for'];
         $array       = $this->get_option_value($option_name);
         $description = $this->settings[$option_name]['description'] ?? '';
-
-        // $setsOfThree = array();
-        // if (isset($array) && is_array($array)) {
-        //     $setsOfThree = array_chunk($array, 4);
-        // }
-        // error_log(print_r($array, 1));
 
     ?>
         <div class="repeatable-perperson-template" style="display: none;">
@@ -695,20 +778,17 @@ public function create_booking_menu() {
     }
 
     /**
-     * Renders Mealplan field.
+     * Method Renders Mealplan field.
+     *
+     * @param $args $args [explicite description]
+     *
+     * @return void
      */
     public function render_repeatable_mealplan_field($args)
     {
         $option_name = $args['label_for'];
         $array       = $this->get_option_value($option_name);
         $description = $this->settings[$option_name]['description'] ?? '';
-
-        // $setsOfThree = array();
-        // if (isset($array) && is_array($array)) {
-        //     $setsOfThree = array_chunk($array, 3);
-        // }
-        // error_log('----- mealplan array -----');
-        // error_log(print_r($array, 1));
 
     ?>
         <div class="repeatable-mealplan-template" style="display: none;">
@@ -781,19 +861,17 @@ public function create_booking_menu() {
     }
 
     /**
-     * Renders tax field.
+     * Method Renders tax field.
+     *
+     * @param $args $args [explicite description]
+     *
+     * @return void
      */
     public function render_repeatable_tax_field($args)
     {
         $option_name = $args['label_for'];
         $array       = $this->get_option_value($option_name);
         $description = $this->settings[$option_name]['description'] ?? '';
-
-        // $setsOfThree = array();
-        // if (isset($array) && is_array($array)) {
-        //     $setsOfThree = array_chunk($array, 4);
-        // }
-        // error_log(print_r($array, 1));
 
     ?>
         <div class="repeatable-tax-template" style="display: none;">
@@ -875,19 +953,17 @@ public function create_booking_menu() {
     }
 
     /**
-     * Renders tax field.
+     * Method Renders tax field.
+     *
+     * @param $args $args [explicite description]
+     *
+     * @return void
      */
     public function render_activity_repeatable_tax_field($args)
     {
         $option_name = $args['label_for'];
         $array       = $this->get_option_value($option_name);
         $description = $this->settings[$option_name]['description'] ?? '';
-
-        // $setsOfThree = array();
-        // if (isset($array) && is_array($array)) {
-        //     $setsOfThree = array_chunk($array, 4);
-        // }
-        // error_log(print_r($array, 1));
 
     ?>
         <div class="repeatable-activitytax-template" style="display: none;">
@@ -963,7 +1039,11 @@ public function create_booking_menu() {
     }
 
     /**
-     * Renders a text field.
+     * Method Renders a text field.
+     *
+     * @param $args $args [explicite description]
+     *
+     * @return void
      */
     public function render_promotion_discount_field($args)
     {
@@ -999,7 +1079,11 @@ public function create_booking_menu() {
     }
 
     /**
-     * Renders a text field.
+     * Method Renders a text field.
+     *
+     * @param $args $args [explicite description]
+     *
+     * @return void
      */
     public function render_text_field($args)
     {
@@ -1019,7 +1103,11 @@ public function create_booking_menu() {
     }
 
     /**
-     * Renders a text field.
+     * Method Renders a text field.
+     *
+     * @param $args $args [explicite description]
+     *
+     * @return void
      */
     public function render_number_field($args)
     {
@@ -1039,7 +1127,11 @@ public function create_booking_menu() {
     }
 
     /**
-     * Renders a textarea field.
+     * Method Renders a textarea field.
+     *
+     * @param $args $args [explicite description]
+     *
+     * @return void
      */
     public function render_textarea_field($args)
     {
@@ -1059,7 +1151,11 @@ public function create_booking_menu() {
     }
 
     /**
-     * Renders a checkbox field.
+     * Method Renders a checkbox field.
+     *
+     * @param $args $args [explicite description]
+     *
+     * @return void
      */
     public function render_checkbox_field($args)
     {
@@ -1080,7 +1176,11 @@ public function create_booking_menu() {
     }
 
     /**
-     * Renders a select field.
+     * Method Renders a select field.
+     *
+     * @param $args $args [explicite description]
+     *
+     * @return void
      */
     public function render_select_field($args)
     {

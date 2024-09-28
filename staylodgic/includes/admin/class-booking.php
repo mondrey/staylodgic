@@ -1940,7 +1940,6 @@ class Booking
         // Verify the nonce
         if (!isset($_POST['staylodgic_roomlistingbox_nonce']) || !check_admin_referer('staylodgic-roomlistingbox-nonce', 'staylodgic_roomlistingbox_nonce')) {
             // Nonce verification failed; handle the error or reject the request
-            // For example, you can return an error response
             wp_send_json_error(['message' => 'Failed']);
             return;
         }
@@ -1995,9 +1994,9 @@ class Booking
         }
         // Create customer post
         $customer_post_data = array(
-            'post_type' => 'slgc_customers', // Your custom post type for customers
-            'post_title' => $full_name, // Set the customer's full name as post title
-            'post_status' => 'publish', // The status you want to give new posts
+            'post_type' => 'slgc_customers',
+            'post_title' => $full_name,
+            'post_status' => 'publish',
             'meta_input' => array(
                 'staylodgic_full_name'      => $full_name,
                 'staylodgic_email_address'  => $email_address,
@@ -2063,9 +2062,9 @@ class Booking
 
         // Here you can also add other post data like post_title, post_content etc.
         $post_data = array(
-            'post_type' => 'slgc_reservations', // Your custom post type
-            'post_title' => $booking_number, // Set the booking number as post title
-            'post_status' => 'publish', // The status you want to give new posts
+            'post_type' => 'slgc_reservations',
+            'post_title' => $booking_number,
+            'post_status' => 'publish',
             'meta_input' => array(
                 'staylodgic_room_id'                        => $room_id,
                 'staylodgic_reservation_status'             => $new_bookingstatus,

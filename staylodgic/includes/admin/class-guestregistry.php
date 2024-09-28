@@ -48,7 +48,12 @@ class GuestRegistry
 
         add_action('wp_ajax_create_guest_registration', array($this, 'create_guest_registration_ajax_handler'));
     }
-
+    
+    /**
+     * Method create_guest_registration_ajax_handler
+     *
+     * @return void
+     */
     public function create_guest_registration_ajax_handler()
     {
 
@@ -161,7 +166,14 @@ class GuestRegistry
             return false;
         }
     }
-
+    
+    /**
+     * Method allowGuestRegistration
+     *
+     * @param $registration_post_id
+     *
+     * @return void
+     */
     public function allowGuestRegistration($registration_post_id)
     {
         $allow = true;
@@ -293,7 +305,12 @@ class GuestRegistry
         }
         return 0; // Return 0 if registration_data is not an array or is empty
     }
-
+    
+    /**
+     * Method display_registration
+     *
+     * @return void
+     */
     public function display_registration()
     {
 
@@ -332,7 +349,12 @@ class GuestRegistry
             echo '</div>';
         }
     }
-
+    
+    /**
+     * Method registrationTemplate
+     *
+     * @return void
+     */
     public function registrationTemplate(
         $bookingNumber,
         $hotelName,
@@ -347,9 +369,6 @@ class GuestRegistry
         $registration_data = get_post_meta(get_the_id(), 'staylodgic_registration_data', true);
 
         $property_logo_width  = staylodgic_get_option('property_logo_width');
-
-        // error_log('staylodgic_registration_data');
-        // error_log(print_r($registration_data, true));
 
         if (is_array($registration_data) && !empty($registration_data)) {
             foreach ($registration_data as $guest_id => $guest_data) {
@@ -453,12 +472,14 @@ class GuestRegistry
             return null;
         }
     }
-
+    
+    /**
+     * Method save_guestregistration_data
+     *
+     * @return void
+     */
     public function save_guestregistration_data()
     {
-        // error_log('Registration post save'); // Log the POST data
-        // error_log(print_r($_POST, true)); // Log the POST data
-
         // Verify nonce
         if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'staylodgic-nonce-search')) {
             wp_die('Security check failed');
@@ -536,7 +557,12 @@ class GuestRegistry
         echo $this->registrationSuccessful($post_id);
         wp_die();
     }
-
+    
+    /**
+     * Method delete_registration
+     *
+     * @return void
+     */
     public function delete_registration()
     {
 
@@ -551,10 +577,6 @@ class GuestRegistry
         // Remove registration data and signature
         $registration_data = get_post_meta($post_id, 'staylodgic_registration_data', true);
 
-        // error_log('Delete guest data');
-        // error_log($post_id);
-        // error_log(print_r($registration_data, true));
-        // error_log('Delete guest data -- end');
         if (isset($registration_data[$guest_id])) {
             $registration_id = $registration_data[$guest_id]['registration_id'];
             unset($registration_data[$guest_id]);
@@ -574,7 +596,12 @@ class GuestRegistry
 
         wp_die(); // This is required to terminate immediately and return a proper response
     }
-
+    
+    /**
+     * Method get_guest_post_permalink
+     *
+     * @return void
+     */
     public function get_guest_post_permalink()
     {
 
@@ -592,9 +619,13 @@ class GuestRegistry
             wp_send_json_error('Post ID is invalid.');
         }
     }
-
+  
     /**
-     * Appends the saved shortcode to the content of slgc_guestregistry posts.
+     * Method Appends the saved shortcode to the content of slgc_guestregistry posts.
+     *
+     * @param $content
+     *
+     * @return void
      */
     public function append_shortcode_to_content($content)
     {
@@ -642,7 +673,14 @@ class GuestRegistry
 
         return $content;
     }
-
+    
+    /**
+     * Method registrationSuccessful
+     *
+     * @param $post_id $post_id [explicite description]
+     *
+     * @return void
+     */
     public function registrationSuccessful($post_id)
     {
         // Localize and escape the button label
@@ -671,7 +709,12 @@ class GuestRegistry
         return $success_html;
     }
 
-
+    
+    /**
+     * Method bookingDataFields
+     *
+     * @return void
+     */
     public function bookingDataFields()
     {
         $dataFields = [
@@ -685,7 +728,14 @@ class GuestRegistry
 
         return $dataFields;
     }
-
+    
+    /**
+     * Method requestRegistrationDetails
+     *
+     * @param $booking_number
+     *
+     * @return void
+     */
     public function requestRegistrationDetails($booking_number)
     {
         $booking_number = $_POST['booking_number'];
@@ -745,7 +795,12 @@ class GuestRegistry
         echo $informationSheet; // Directly output the HTML content
         wp_die(); // Terminate and return a proper response
     }
-
+    
+    /**
+     * Method guestRegistration
+     *
+     * @return void
+     */
     public function guestRegistration()
     {
         ob_start();

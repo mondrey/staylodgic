@@ -14,7 +14,12 @@ class IcalExportProcessor
         add_action('wp_ajax_download_ical', array($this, 'ajax_download_reservations_csv'));
         add_action('wp_ajax_download_registrations_ical', array($this, 'ajax_download_guest_registrations_csv'));
     }
-
+    
+    /**
+     * Method ajax_download_guest_registrations_csv
+     *
+     * @return void
+     */
     public function ajax_download_guest_registrations_csv()
     {
 
@@ -24,13 +29,18 @@ class IcalExportProcessor
         }
 
         $month = isset($_POST['month']) ? $_POST['month'] : false;
-        error_log('init month is ' . $month);
+        
         if ($month) {
             $this->download_guest_registrations_csv($month);
         }
         wp_die(); // this is required to terminate immediately and return a proper response
     }
-
+    
+    /**
+     * Method ajax_download_reservations_csv
+     *
+     * @return void
+     */
     public function ajax_download_reservations_csv()
     {
 
@@ -41,13 +51,18 @@ class IcalExportProcessor
 
         $room_id = isset($_POST['room_id']) ? intval($_POST['room_id']) : false;
         $month = isset($_POST['month']) ? $_POST['month'] : false;
-        error_log('init month is ' . $month);
+        
         if ($room_id) {
             $this->download_reservations_csv($room_id, $month);
         }
         wp_die(); // this is required to terminate immediately and return a proper response
     }
-
+    
+    /**
+     * Method export_csv_registrations
+     *
+     * @return void
+     */
     public function export_csv_registrations()
     {
         add_submenu_page(
@@ -60,7 +75,12 @@ class IcalExportProcessor
             array($this, 'csv_registrations_export')
         );
     }
-
+    
+    /**
+     * Method export_csv_bookings
+     *
+     * @return void
+     */
     public function export_csv_bookings()
     {
         add_submenu_page(
@@ -73,7 +93,12 @@ class IcalExportProcessor
             array($this, 'csv_bookings_export')
         );
     }
-
+    
+    /**
+     * Method csv_registrations_export
+     *
+     * @return void
+     */
     public function csv_registrations_export()
     {
         // The HTML content of the 'Staylodgic' page goes here
@@ -109,7 +134,12 @@ class IcalExportProcessor
         echo "</div>";
         echo "</div>";
     }
-
+    
+    /**
+     * Method csv_bookings_export
+     *
+     * @return void
+     */
     public function csv_bookings_export()
     {
         // The HTML content of the 'Staylodgic' page goes here
@@ -153,7 +183,14 @@ class IcalExportProcessor
         echo "</div>";
         echo "</div>";
     }
-
+    
+    /**
+     * Method generate_ical_from_reservations
+     *
+     * @param $reservations $reservations [explicite description]
+     *
+     * @return void
+     */
     public function generate_ical_from_reservations($reservations)
     {
         $ical = "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Your Company//Your Calendar//EN\r\n";
@@ -182,14 +219,28 @@ class IcalExportProcessor
 
         return $ical;
     }
-
+    
+    /**
+     * Method format_date_for_ical
+     *
+     * @param $date $date [explicite description]
+     *
+     * @return void
+     */
     private function format_date_for_ical($date)
     {
         if (!$date) return false;
         $timestamp = strtotime($date);
         return $timestamp ? date('Ymd\THis', $timestamp) : false;
     }
-
+    
+    /**
+     * Method download_reservations_ical
+     *
+     * @param $room_id $room_id [explicite description]
+     *
+     * @return void
+     */
     public function download_reservations_ical($room_id)
     {
         $reservation_instance = new \Staylodgic\Reservations($dateString = '', $room_id);
@@ -209,7 +260,16 @@ class IcalExportProcessor
         echo $ical_content;
         exit;
     }
-
+    
+    /**
+     * Method generate_csv_from_reservations
+     *
+     * @param $start_date $start_date [explicite description]
+     * @param $end_date $end_date [explicite description]
+     * @param $room_id $room_id [explicite description]
+     *
+     * @return void
+     */
     public function generate_csv_from_reservations($start_date, $end_date, $room_id)
     {
 
@@ -237,15 +297,20 @@ class IcalExportProcessor
 
         return $csv_data;
     }
-
+    
+    /**
+     * Method generate_guest_registration_csv_from_reservations
+     *
+     * @param $start_date $start_date [explicite description]
+     * @param $end_date $end_date [explicite description]
+     *
+     * @return void
+     */
     public function generate_guest_registration_csv_from_reservations($start_date, $end_date)
     {
 
         $csv_data_header = "Booking Number,Full Name,ID,Country,Booking Channel,Room Name,Checkin Date,Checkin Time,Checkout Date,Checkout Time\r\n";
         $csv_data = '';
-        // error_log('registrations');
-        // error_log($start_date);
-        // error_log($end_date);
 
         $rooms = Rooms::queryRooms();
         foreach ($rooms as $room) {
@@ -272,9 +337,6 @@ class IcalExportProcessor
 
                     $registerID = $resRegIDs['guestRegisterID'];
                     $registration_data = get_post_meta($registerID, 'staylodgic_registration_data', true);
-
-                    // error_log('staylodgic_registration_data');
-                    // error_log(print_r($registration_data, true));
 
                     if (is_array($registration_data) && !empty($registration_data)) {
                         foreach ($registration_data as $guest_id => $guest_data) {
@@ -308,7 +370,15 @@ class IcalExportProcessor
             return false;
         }
     }
-
+    
+    /**
+     * Method download_reservations_csv
+     *
+     * @param $room_id $room_id [explicite description]
+     * @param $month $month [explicite description]
+     *
+     * @return void
+     */
     public function download_reservations_csv($room_id, $month)
     {
         // Calculate start date and end date of the selected month
@@ -327,7 +397,14 @@ class IcalExportProcessor
 
         echo $csv_content;
         exit;
-    }
+    }    
+    /**
+     * Method download_guest_registrations_csv
+     *
+     * @param $month $month [explicite description]
+     *
+     * @return void
+     */
     public function download_guest_registrations_csv($month)
     {
 
