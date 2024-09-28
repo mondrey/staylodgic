@@ -3,7 +3,16 @@ namespace Staylodgic;
 
 class Common
 {
-
+	
+	/**
+	 * Method reduceDate
+	 *
+	 * @param $dateString
+	 * @param $days $days
+	 * @param $returnAsString
+	 *
+	 * @return void
+	 */
 	public static function reduceDate($dateString, $days, $returnAsString = true) {
 		$date = new \DateTime($dateString);
 		$date->modify("-$days days");
@@ -14,7 +23,15 @@ class Common
 			return $date;
 		}
 	}
-	
+		
+	/**
+	 * Method generatePersonIcons
+	 *
+	 * @param $adults $adults
+	 * @param $children $children
+	 *
+	 * @return void
+	 */
 	public static function generatePersonIcons( $adults = 0, $children = 0 ) {
 
 		$html = '';
@@ -32,7 +49,12 @@ class Common
 
 		return $html;
 	}
-	
+		
+	/**
+	 * Method generateUUID
+	 *
+	 * @return void
+	 */
 	public static function generateUUID() {
 		// Generate a version 4 UUID
 		return sprintf('%04x%04x-%04x-4%03x-%04x-%04x%04x%04x',
@@ -48,7 +70,14 @@ class Common
 			mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
 		);
 	}
-	
+		
+	/**
+	 * Method countryCodeToEmoji
+	 *
+	 * @param $code
+	 *
+	 * @return void
+	 */
 	public static function countryCodeToEmoji($code)
 	{
 		$emoji = '';
@@ -58,7 +87,14 @@ class Common
 		}
 		return $emoji;
 	}
-
+	
+	/**
+	 * Method splitDateRange
+	 *
+	 * @param $dateRange
+	 *
+	 * @return void
+	 */
 	public static function splitDateRange($dateRange)
 	{
 		// Split the date range into start and end dates
@@ -84,7 +120,15 @@ class Common
 		// Return start and end date as an array
 		return array('startDate' => $startDate, 'endDate' => $endDate);
 	}
-
+	
+	/**
+	 * Method countDays_BetweenDates
+	 *
+	 * @param $startDate
+	 * @param $endDate
+	 *
+	 * @return void
+	 */
 	public static function countDays_BetweenDates($startDate, $endDate)
 	{
 		// Create DateTime objects for the start and end dates
@@ -101,7 +145,14 @@ class Common
 		return $daysBetween;
 	}
 
-	// Function to create an array of dates between two dates
+	/**
+	 * Method Function to create an array of dates between two dates	
+	 *
+	 * @param $startDate
+	 * @param $endDate
+	 *
+	 * @return void
+	 */
 	public static function create_inBetween_DateRange_Array($startDate, $endDate)
 	{
 		$dateRangeArray = array();
@@ -118,7 +169,12 @@ class Common
 	}
 
 	/**
-	 * Gets all the dates between two given dates
+	 * Method Gets all the dates between two given dates
+	 *
+	 * @param $start_date
+	 * @param $end_date
+	 *
+	 * @return void
 	 */
 	public static function getDates_Between($start_date, $end_date)
 	{
@@ -135,7 +191,12 @@ class Common
 	}
 
 	/**
-	 * Checks if the post is valid for processing
+	 * Method Checks if the post is valid for processing
+	 *
+	 * @param $post_id
+	 * @param $post
+	 *
+	 * @return void
 	 */
 	public static function isReservation_valid_post($post_id, $post)
 	{
@@ -143,7 +204,12 @@ class Common
 	}
 
 	/**
-	 * Checks if the post is valid for processing
+	 * Method Checks if the post is valid for processing
+	 *
+	 * @param $post_id
+	 * @param $post
+	 *
+	 * @return void
 	 */
 	public static function isActivities_valid_post($post_id, $post)
 	{
@@ -151,7 +217,11 @@ class Common
 	}
 
 	/**
-	 * Checks if the post is valid for processing
+	 * Method Checks if the post is valid for processing
+	 *
+	 * @param $post_id
+	 *
+	 * @return void
 	 */
 	public static function isCustomer_valid_post($post_id)
 	{
@@ -329,7 +399,12 @@ class Common
 
 		return $currencies;
 	}
-
+	
+	/**
+	 * Method get_staylodgic_currency_symbols
+	 *
+	 * @return void
+	 */
 	public static function get_staylodgic_currency_symbols()
 	{
 
@@ -502,7 +577,14 @@ class Common
 
 		return $symbols;
 	}
-
+	
+	/**
+	 * Method get_symbol_for_currency
+	 *
+	 * @param $currency
+	 *
+	 * @return void
+	 */
 	public static function get_symbol_for_currency($currency = '')
 	{
 		$currency = self::get_staylodgic_currencies();

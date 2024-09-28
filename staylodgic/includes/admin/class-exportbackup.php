@@ -2,62 +2,78 @@
 
 namespace Staylodgic;
 
-class ExportBackup {
-    
-    public function __construct() {
+class ExportBackup
+{
+
+    public function __construct()
+    {
         add_action('admin_menu', [$this, 'custom_export_menu']);
         add_action('admin_init', [$this, 'handle_custom_export']);
         add_action('admin_head', [$this, 'export_add_js']);
     }
-
-    public function custom_export_menu() {
+    
+    /**
+     * Method custom_export_menu
+     *
+     * @return void
+     */
+    public function custom_export_menu()
+    {
         if (current_user_can('editor') || current_user_can('administrator')) {
             add_menu_page(
-                'Custom Export', 
-                'Download XML Records', 
-                'edit_posts', 
-                'custom-export', 
-                [$this, 'custom_export_page'], 
-                'dashicons-download', 
+                __('Custom Export', 'staylodgic'),
+                __('Download XML Records', 'staylodgic'),
+                'edit_posts',
+                'custom-export',
+                [$this, 'custom_export_page'],
+                'dashicons-download',
                 40
             );
         }
     }
-
-    public function custom_export_page() {
-        ?>
+    
+    /**
+     * Method custom_export_page
+     *
+     * @return void
+     */
+    public function custom_export_page()
+    {
+?>
         <div class="wrap">
-            <h1><?php _e('Download XML Records'); ?></h1>
+            <h1><?php _e('Download XML Records', 'staylodgic'); ?></h1>
             <form method="get" id="export-filters">
                 <fieldset>
-                    <legend class="screen-reader-text"><?php _e('Content to export'); ?></legend>
+                    <legend class="screen-reader-text"><?php _e('Content to export', 'staylodgic'); ?></legend>
                     <input type="hidden" name="download" value="true" />
-                    <p><label><input type="radio" name="content" value="all" checked="checked" aria-describedby="all-content-desc" /> <?php _e('All content'); ?></label></p>
-                    <p class="description" id="all-content-desc"><?php _e('This will contain all of your booking posts.'); ?></p>
-                    
+                    <p><label><input type="radio" name="content" value="all" checked="checked" aria-describedby="all-content-desc" /> <?php _e('All content', 'staylodgic'); ?></label></p>
+                    <p class="description" id="all-content-desc"><?php _e('This will contain all of your booking posts.', 'staylodgic'); ?></p>
+
                     <?php
-                    foreach ( get_post_types(
-                        array(
-                            '_builtin'   => false,
-                            'can_export' => true,
-                        ),
-                        'objects'
-                    ) as $post_type ) :
-                        ?>
-                    <p><label><input type="radio" name="content" value="<?php echo esc_attr( $post_type->name ); ?>" /> <?php echo esc_html( $post_type->label ); ?></label></p>
+                    foreach (
+                        get_post_types(
+                            array(
+                                '_builtin'   => false,
+                                'can_export' => true,
+                            ),
+                            'objects'
+                        ) as $post_type
+                    ) :
+                    ?>
+                        <p><label><input type="radio" name="content" value="<?php echo esc_attr($post_type->name); ?>" /> <?php echo esc_html($post_type->label); ?></label></p>
                     <?php endforeach; ?>
-                    
+
                     <p><label><input type="radio" name="content" value="attachment" /> <?php _e('Media'); ?></label></p>
                     <ul id="attachment-filters" class="export-filters">
                         <li>
                             <fieldset>
-                                <legend class="screen-reader-text"><?php _e('Date range:'); ?></legend>
-                                <label for="attachment-start-date" class="label-responsive"><?php _e('Start date:'); ?></label>
+                                <legend class="screen-reader-text"><?php _e('Date range:', 'staylodgic'); ?></legend>
+                                <label for="attachment-start-date" class="label-responsive"><?php _e('Start date:', 'staylodgic'); ?></label>
                                 <select name="attachment_start_date" id="attachment-start-date">
-                                    <option value="0"><?php _e('&mdash; Select &mdash;'); ?></option>
+                                    <option value="0"><?php _e('&mdash; Select &mdash;', 'staylodgic'); ?></option>
                                     <?php $this->export_date_options('attachment'); ?>
                                 </select>
-                                <label for="attachment-end-date" class="label-responsive"><?php _e('End date:'); ?></label>
+                                <label for="attachment-end-date" class="label-responsive"><?php _e('End date:', 'staylodgic'); ?></label>
                                 <select name="attachment_end_date" id="attachment-end-date">
                                     <option value="0"><?php _e('&mdash; Select &mdash;'); ?></option>
                                     <?php $this->export_date_options('attachment'); ?>
@@ -66,13 +82,19 @@ class ExportBackup {
                         </li>
                     </ul>
                 </fieldset>
-                <?php submit_button(__('Download Export File')); ?>
+                <?php submit_button(__('Download Export File', 'staylodgic')); ?>
             </form>
         </div>
-        <?php
+    <?php
     }
-
-    public function handle_custom_export() {
+    
+    /**
+     * Method handle_custom_export
+     *
+     * @return void
+     */
+    public function handle_custom_export()
+    {
         if (isset($_GET['download'])) {
             // Load the export function
             require_once ABSPATH . 'wp-admin/includes/export.php';
@@ -106,9 +128,15 @@ class ExportBackup {
             die();
         }
     }
-
-    public function export_add_js() {
-        ?>
+    
+    /**
+     * Method export_add_js
+     *
+     * @return void
+     */
+    public function export_add_js()
+    {
+    ?>
         <script type="text/javascript">
             jQuery(function($) {
                 var form = $('#export-filters'),
@@ -124,10 +152,18 @@ class ExportBackup {
                 });
             });
         </script>
-        <?php
+<?php
     }
-
-    public function export_date_options($post_type = 'post') {
+    
+    /**
+     * Method export_date_options
+     *
+     * @param $post_type
+     *
+     * @return void
+     */
+    public function export_date_options($post_type = 'post')
+    {
         global $wpdb, $wp_locale;
 
         $months = $wpdb->get_results(

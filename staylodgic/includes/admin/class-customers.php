@@ -4,7 +4,14 @@ namespace Staylodgic;
 
 class Customers
 {
-
+    
+    /**
+     * Method generateCustomerHtmlList
+     *
+     * @param $array
+     *
+     * @return void
+     */
     public static function generateCustomerHtmlList($array)
     {
         $html = '<ul class="existing-customer">';
@@ -17,7 +24,14 @@ class Customers
         $html .= '</ul>';
         return $html;
     }
-
+    
+    /**
+     * Method get_room_names_by_customer
+     *
+     * @param $customer_id
+     *
+     * @return void
+     */
     public function get_room_names_by_customer($customer_id)
     {
         $args = array(
@@ -51,7 +65,14 @@ class Customers
         // Return the array of room names.
         return $room_names;
     }
-
+    
+    /**
+     * Method get_rooms_by_customer
+     *
+     * @param $customer_id
+     *
+     * @return void
+     */
     public function get_rooms_by_customer($customer_id)
     {
         $args = array(
@@ -78,7 +99,14 @@ class Customers
         // Return the array of room ids.
         return $room_ids;
     }
-
+    
+    /**
+     * Method get_booking_numbers_by_customer
+     *
+     * @param $customer_id
+     *
+     * @return void
+     */
     public function get_booking_numbers_by_customer($customer_id)
     {
 
@@ -126,7 +154,14 @@ class Customers
 
         return $booking_numbers;
     }
-
+    
+    /**
+     * Method generateCustomerRooms
+     *
+     * @param $customer_id
+     *
+     * @return void
+     */
     public function generateCustomerRooms($customer_id)
     {
 
@@ -146,7 +181,14 @@ class Customers
 
         return $custom_room;
     }
-
+    
+    /**
+     * Method generateCustomerBookingNumbers
+     *
+     * @param $customer_id
+     *
+     * @return void
+     */
     public function generateCustomerBookingNumbers($customer_id)
     {
 

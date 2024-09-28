@@ -14,7 +14,14 @@ class Data
         add_action('trashed_post', array($this, 'removeReservation_From_Array'));
         add_action('save_post', array($this, 'check_post_status_and_remove_reservation'));
     }
-
+    
+    /**
+     * Method check_post_status_and_remove_reservation
+     *
+     * @param $post_id
+     *
+     * @return void
+     */
     public function check_post_status_and_remove_reservation($post_id) {
         // Check if this is an autosave or a revision.
         if (wp_is_post_autosave($post_id) || wp_is_post_revision($post_id)) {
@@ -30,7 +37,15 @@ class Data
             $this->removeReservation_From_Array($post_id);
         }
     }
-
+    
+    /**
+     * Method getCustomer_MetaData
+     *
+     * @param $customer_array
+     * @param $customer_post_id
+     *
+     * @return void
+     */
     public static function getCustomer_MetaData($customer_array, $customer_post_id)
     {
         $output = array();
@@ -47,7 +62,16 @@ class Data
 
         return $output;
     }
-
+    
+    /**
+     * Method initiateCustomerSave
+     *
+     * @param $post_id
+     * @param $post
+     * @param $update
+     *
+     * @return void
+     */
     public function initiateCustomerSave( $post_id, $post, $update ) {
         $customer_choice    = get_post_meta($post_id, 'staylodgic_customer_choice', true);
         $booking_number     = get_post_meta($post_id, 'staylodgic_booking_number', true);
@@ -84,7 +108,13 @@ class Data
     }
 
     /**
-     * Triggered when a post is saved. If the post type is 'slgc_reservations' and is not autosaved or revision, it updates the reservation details.
+     * Method Triggered when a post is saved. If the post type is 'slgc_reservations' and is not autosaved or revision, it updates the reservation details.
+     *
+     * @param $post_id
+     * @param $post
+     * @param $update
+     *
+     * @return void
      */
     public function createActivitiesCustomer_On_Save($post_id, $post, $update)
     {
@@ -98,7 +128,14 @@ class Data
         $this->initiateCustomerSave($post_id, $post, $update);
 
     }
-
+    
+    /**
+     * Method create_Customer_From_Reservation_Post
+     *
+     * @param $reservation_post_id
+     *
+     * @return void
+     */
     public function create_Customer_From_Reservation_Post($reservation_post_id)
     {
         // Retrieve the reservation post using the ID
@@ -156,7 +193,14 @@ class Data
         // Update the reservation post with the customer post ID
         update_post_meta($reservation_post_id, 'staylodgic_customer_id', $customer_post_id);
     }
-
+    
+    /**
+     * Method removeReservation_From_Array
+     *
+     * @param $post_id
+     *
+     * @return void
+     */
     function removeReservation_From_Array($post_id)
     {
         // Check if the post is of the "reservations" post type
@@ -179,7 +223,15 @@ class Data
             }
         }
     }
-
+    
+    /**
+     * Method removeReservation_ID
+     *
+     * @param $room_type
+     * @param $reservation_post_id
+     *
+     * @return void
+     */
     public function removeReservation_ID($room_type, $reservation_post_id)
     {
         // Retrieve the reservations array for the room type
@@ -236,7 +288,13 @@ class Data
     }
 
     /**
-     * Triggered when a post is saved. If the post type is 'slgc_reservations' and is not autosaved or revision, it updates the reservation details.
+     * Method Triggered when a post is saved. If the post type is 'slgc_reservations' and is not autosaved or revision, it updates the reservation details.
+     *
+     * @param $post_id $post_id
+     * @param $post $post
+     * @param $update $update
+     *
+     * @return void
      */
     public function updateReservationsArray_On_Save($post_id, $post, $update)
     {
@@ -279,7 +337,14 @@ class Data
     }
 
     /**
-     * Updates the reservations array when changes are made to a reservation post.
+     * Method Updates the reservations array when changes are made to a reservation post.
+     *
+     * @param $room_id
+     * @param $checkin_date
+     * @param $checkout_date
+     * @param $reservation_post_id
+     *
+     * @return void
      */
     public static function updateReservationsArray_On_Change($room_id, $checkin_date, $checkout_date, $reservation_post_id)
     {
@@ -303,10 +368,15 @@ class Data
         update_post_meta($reservation_post_id, 'staylodgic_previous_checkin_date', $checkin_date);
         update_post_meta($reservation_post_id, 'staylodgic_previous_checkout_date', $checkout_date); // Keeping original checkout date for records
     }
-
-
+    
     /**
-     * Remove dates from the reservations array for a given reservation post ID.
+     * Method Remove dates from the reservations array for a given reservation post ID.
+     *
+     * @param $dates
+     * @param $reservation_post_id
+     * @param $reservations_array
+     *
+     * @return void
      */
     public static function removeDates_From_ReservationsArray($dates, $reservation_post_id, $reservations_array)
     {
@@ -325,7 +395,13 @@ class Data
     }
 
     /**
-     * Add dates to the reservations array for a given reservation post ID.
+     * Method Add dates to the reservations array for a given reservation post ID.
+     *
+     * @param $dates
+     * @param $reservation_post_id
+     * @param $reservations_array
+     *
+     * @return void
      */
     public static function addDates_To_ReservationsArray($dates, $reservation_post_id, $reservations_array)
     {
@@ -343,9 +419,14 @@ class Data
 
         return $reservations_array;
     }
-
+   
     /**
-     * Remove the reservation ID from the entire array
+     * Method Remove the reservation ID from the entire array
+     *
+     * @param $reservation_post_id
+     * @param $reservations_array
+     *
+     * @return void
      */
     public static function removeIDs_From_ReservationsArray($reservation_post_id, $reservations_array)
     {
@@ -363,23 +444,23 @@ class Data
     }
 
     /**
-     * Remove the reservation from all rooms.
+     * Method Remove the reservation from all rooms.
+     *
+     * @param $reservation_post_id
+     *
+     * @return void
      */
     public static function removeReservationID_From_All_Rooms($reservation_post_id)
     {
         $room_types = get_posts(['post_type' => 'slgc_room']);
-        //error_log("remove reservation_from_all_rooms is called with ID: " . $reservation_post_id);
+        // Remove reservation_from_all_rooms is called with ID
         foreach ($room_types as $room) {
 
             $reservation_instance = new \Staylodgic\Reservations();
             $reservations_array   = $reservation_instance->getReservations_Array($room->ID);
 
             if (!empty($reservations_array)) {
-                //error_log("Before removing ID {$reservation_post_id} from room {$room->ID}: " . print_r($reservations_array, true));
-
                 $reservations_array = self::removeIDs_From_ReservationsArray($reservation_post_id, $reservations_array);
-
-                //error_log("After removing ID {$reservation_post_id} from room {$room->ID}: " . print_r($reservations_array, true));
             }
 
             update_post_meta($room->ID, 'staylodgic_reservations_array', json_encode($reservations_array));
