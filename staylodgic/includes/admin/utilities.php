@@ -1,4 +1,10 @@
 <?php
+
+/**
+ * Method staylodgic_getLoggedInUserEmail
+ *
+ * @return void
+ */
 function staylodgic_getLoggedInUserEmail() {
 	$user = wp_get_current_user();
 
@@ -10,6 +16,14 @@ function staylodgic_getLoggedInUserEmail() {
 
 	return false;
 }
+
+/**
+ * Method staylodgic_get_page_title_by_template
+ *
+ * @param $template $template [explicite description]
+ *
+ * @return void
+ */
 function staylodgic_get_page_title_by_template($template) {
     $pages = staylodgic_get_template_pages();
     foreach ($pages as $page) {
@@ -19,6 +33,12 @@ function staylodgic_get_page_title_by_template($template) {
     }
     return null; // Return null if the template is not found
 }
+
+/**
+ * Method staylodgic_get_template_pages
+ *
+ * @return void
+ */
 function staylodgic_get_template_pages() {
     $pages = array(
         array(
@@ -51,6 +71,11 @@ function staylodgic_get_template_pages() {
 	return $pages;
 }
 
+/**
+ * Method staylodgic_random_color_hex
+ *
+ * @return void
+ */
 function staylodgic_random_color_hex() {
     // Generate a random RGB color
     $red = mt_rand(0, 255);
@@ -63,6 +88,13 @@ function staylodgic_random_color_hex() {
     return $hex;
 }
 
+/**
+ * Method staylodgic_hex_to_rgb
+ *
+ * @param $hex $hex [explicite description]
+ *
+ * @return void
+ */
 function staylodgic_hex_to_rgb($hex) {
     // Remove '#' if present
     $hex = str_replace('#', '', $hex);
@@ -82,6 +114,15 @@ function staylodgic_hex_to_rgb($hex) {
     return array('r' => $r, 'g' => $g, 'b' => $b);
 }
 
+/**
+ * Method staylodgic_applyTimezoneToDateAndTime
+ *
+ * @param $date $date [explicite description]
+ * @param $time $time [explicite description]
+ * @param $timezone $timezone [explicite description]
+ *
+ * @return void
+ */
 function staylodgic_applyTimezoneToDateAndTime($date, $time, $timezone) {
     try {
         // Parse the timezone offset
@@ -112,6 +153,11 @@ function staylodgic_applyTimezoneToDateAndTime($date, $time, $timezone) {
     }
 }
 
+/**
+ * Method staylodgic_get_GmtTimezoneChoices
+ *
+ * @return void
+ */
 function staylodgic_get_GmtTimezoneChoices() {
     $timezones = [];
 
@@ -126,6 +172,11 @@ function staylodgic_get_GmtTimezoneChoices() {
 
     return $timezones;
 }
+/**
+ * Method staylodgic_get_booking_homepages_for_select
+ *
+ * @return void
+ */
 function staylodgic_get_booking_homepages_for_select() {
     // Get an array of all pages
     $page_list = array();
@@ -139,6 +190,11 @@ function staylodgic_get_booking_homepages_for_select() {
 
     return $page_list;
 }
+/**
+ * Method staylodgic_get_booking_pages_for_select
+ *
+ * @return void
+ */
 function staylodgic_get_booking_pages_for_select() {
     // Get an array of all pages
     $page_list = array();
@@ -154,6 +210,11 @@ function staylodgic_get_booking_pages_for_select() {
 
     return $page_list;
 }
+/**
+ * Method staylodgic_get_pages_for_select
+ *
+ * @return void
+ */
 function staylodgic_get_pages_for_select() {
     // Get an array of all pages
     $pages = get_pages(); 
@@ -169,6 +230,13 @@ function staylodgic_get_pages_for_select() {
     return $page_list;
 }
 
+/**
+ * Method staylodgic_is_valid_sync_interval
+ *
+ * @param $qtysync_interval $qtysync_interval [explicite description]
+ *
+ * @return void
+ */
 function staylodgic_is_valid_sync_interval($qtysync_interval) {
     // Retrieve the array of sync intervals
     $sync_intervals = staylodgic_sync_intervals();
@@ -177,6 +245,11 @@ function staylodgic_is_valid_sync_interval($qtysync_interval) {
     return array_key_exists($qtysync_interval, $sync_intervals);
 }
 
+/**
+ * Method staylodgic_sync_intervals
+ *
+ * @return void
+ */
 function staylodgic_sync_intervals() {
 	$sync_intervals = array(
 		'1' => esc_attr__('One Minute', 'staylodgic'),
@@ -189,6 +262,14 @@ function staylodgic_sync_intervals() {
 
 	return $sync_intervals;
 }
+/**
+ * Method staylodgic_formatDate
+ *
+ * @param $dateString $dateString [explicite description]
+ * @param $formatChoice $formatChoice [explicite description]
+ *
+ * @return void
+ */
 function staylodgic_formatDate($dateString, $formatChoice = 'monthshort_first')
 {
 	$formattedDate = '';
@@ -218,6 +299,11 @@ function staylodgic_formatDate($dateString, $formatChoice = 'monthshort_first')
 
 	return $formattedDate;
 }
+/**
+ * Method staylodgic_get_booking_substatuses
+ *
+ * @return void
+ */
 function staylodgic_get_booking_substatuses()
 {
     $bookingSubStatuses = array(
@@ -234,6 +320,11 @@ function staylodgic_get_booking_substatuses()
 
     return $bookingSubStatuses;
 }
+/**
+ * Method staylodgic_get_booking_statuses
+ *
+ * @return void
+ */
 function staylodgic_get_booking_statuses()
 {
     $bookingStatuses = array(
@@ -244,6 +335,11 @@ function staylodgic_get_booking_statuses()
 
     return $bookingStatuses;
 }
+/**
+ * Method staylodgic_get_new_booking_statuses
+ *
+ * @return void
+ */
 function staylodgic_get_new_booking_statuses()
 {
     $bookingStatuses = array(
@@ -253,6 +349,13 @@ function staylodgic_get_new_booking_statuses()
 
     return $bookingStatuses;
 }
+/**
+ * Method staylodgic_get_AllBedLayouts
+ *
+ * @param $bedNames $bedNames [explicite description]
+ *
+ * @return void
+ */
 function staylodgic_get_AllBedLayouts($bedNames)
 {
 	$html           = '';
@@ -263,6 +366,14 @@ function staylodgic_get_AllBedLayouts($bedNames)
 
 	return $html;
 }
+/**
+ * Method staylodgic_get_BedLayout
+ *
+ * @param $bedName $bedName [explicite description]
+ * @param $bedFieldID $bedFieldID [explicite description]
+ *
+ * @return void
+ */
 function staylodgic_get_BedLayout($bedName, $bedFieldID = null)
 {
 
@@ -289,7 +400,14 @@ function staylodgic_get_BedLayout($bedName, $bedFieldID = null)
 
     return $html;
 }
-// Function to recursively format arrays as strings
+
+/**
+ * Method Function to recursively format arrays as strings
+ *
+ * @param $value $value [explicite description]
+ *
+ * @return void
+ */
 function staylodgic_format_value($value)
 {
     $formatted_elements = '';
@@ -309,6 +427,13 @@ function staylodgic_format_value($value)
         return $value;
     }
 }
+/**
+ * Method staylodgic_readable_date
+ *
+ * @param $originalDate $originalDate [explicite description]
+ *
+ * @return void
+ */
 function staylodgic_readable_date($originalDate)
 {
     $formattedDate = date("F jS, Y", strtotime($originalDate));
@@ -316,6 +441,14 @@ function staylodgic_readable_date($originalDate)
     return $formattedDate;
 }
 
+/**
+ * Method staylodgic_get_option
+ *
+ * @param $option $option [explicite description]
+ * @param $default $default [explicite description]
+ *
+ * @return void
+ */
 function staylodgic_get_option($option, $default = '') {
     $settings = get_option('staylodgic_settings');
 
@@ -327,6 +460,13 @@ function staylodgic_get_option($option, $default = '') {
     return $default;
 }
 
+/**
+ * Method staylodgic_price
+ *
+ * @param $originalPrice $originalPrice [explicite description]
+ *
+ * @return void
+ */
 function staylodgic_price($originalPrice)
 {
     $currency           = staylodgic_get_option('currency', 'USD');
@@ -335,11 +475,6 @@ function staylodgic_price($originalPrice)
     $decimal_seperator  = staylodgic_get_option('decimal_seperator', '.');
     $number_of_decimals = staylodgic_get_option('number_of_decimals', '2');
 
-	error_log( '---------------------- NUMBER FORMAT-------------------------');
-	error_log( $originalPrice );
-	error_log ( $number_of_decimals );
-	error_log ( $decimal_seperator );
-	error_log ( $thousand_seperator );
     // Format the price using number_format
     $price = number_format($originalPrice, $number_of_decimals, $decimal_seperator, $thousand_seperator);
 	
@@ -358,15 +493,15 @@ function staylodgic_price($originalPrice)
 
     return $formatted_price;
 }
-// function to reverse find the initial value from the total amount which has been derived with multiple percentages as an array, added to the initial value
-// Example usage
-// $total = 53.00;
-// $percentages = [10.00, 16.00];
 
-// $initialValue = staylodgic_reverse_percentage($total, $percentages);
-
-// echo "The initial value is: $" . number_format($initialValue, 2);
-// The initial value is: $37.30
+/**
+ * Method staylodgic_reverse_percentage
+ *
+ * @param $total $total [explicite description]
+ * @param $percentages $percentages [explicite description]
+ *
+ * @return void
+ */
 function staylodgic_reverse_percentage($total, $percentages)
 {
     $initial_value = $total;
@@ -376,6 +511,11 @@ function staylodgic_reverse_percentage($total, $percentages)
     return $initial_value;
 }
 
+/**
+ * Method staylodgic_has_tax
+ *
+ * @return void
+ */
 function staylodgic_has_tax()
 {
 
@@ -383,6 +523,11 @@ function staylodgic_has_tax()
     return $taxFlag;
 
 }
+/**
+ * Method staylodgic_has_activity_tax
+ *
+ * @return void
+ */
 function staylodgic_has_activity_tax()
 {
 
@@ -391,6 +536,13 @@ function staylodgic_has_activity_tax()
 
 }
 
+/**
+ * Method staylodgic_get_mealplan_labels
+ *
+ * @param $mealtype $mealtype [explicite description]
+ *
+ * @return void
+ */
 function staylodgic_get_mealplan_labels($mealtype)
 {
     switch ($mealtype) {
@@ -407,21 +559,46 @@ function staylodgic_get_mealplan_labels($mealtype)
     }
 }
 
+/**
+ * Method staylodgic_delete_booking_transient
+ *
+ * @param $bookingNumber $bookingNumber [explicite description]
+ *
+ * @return void
+ */
 function staylodgic_delete_booking_transient($bookingNumber)
 {
     delete_transient($bookingNumber);
 }
+/**
+ * Method staylodgic_set_booking_transient
+ *
+ * @param $data $data [explicite description]
+ * @param $bookingNumber $bookingNumber [explicite description]
+ *
+ * @return void
+ */
 function staylodgic_set_booking_transient($data, $bookingNumber)
 {
-    error_log('----- Saving Transisent -----');
-    error_log($bookingNumber);
-    error_log(print_r($data, true));
+	
     set_transient($bookingNumber, $data, 20 * MINUTE_IN_SECONDS);
 }
+/**
+ * Method staylodgic_get_booking_transient
+ *
+ * @param $bookingNumber $bookingNumber [explicite description]
+ *
+ * @return void
+ */
 function staylodgic_get_booking_transient($bookingNumber = null)
 {
     return get_transient($bookingNumber);
 }
+/**
+ * Method staylodgic_get_allowed_tags
+ *
+ * @return void
+ */
 function staylodgic_get_allowed_tags() {
 	$structure_allowed_tags = array(
         'caption'  => array(),

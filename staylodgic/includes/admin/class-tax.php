@@ -17,7 +17,12 @@ class Tax
         add_action('wp_ajax_nopriv_excludeTax', array($this, 'excludeTax'));
 
     }
-
+    
+    /**
+     * Method excludeTax
+     *
+     * @return void
+     */
     public function excludeTax()
     {
         $response = array();
@@ -39,7 +44,12 @@ class Tax
         wp_send_json('Tax Exluded');
 
     }
-
+    
+    /**
+     * Method generateTax
+     *
+     * @return void
+     */
     public function generateTax()
     {
         // Initialize the response array
@@ -96,7 +106,14 @@ class Tax
         // Send the JSON response
         wp_send_json($response);
     }
-
+    
+    /**
+     * Method tax_summary
+     *
+     * @param $tax $tax [explicite description]
+     *
+     * @return void
+     */
     public function tax_summary($tax)
     {
         $html = '<div class="input-tax-summary-wrap-inner">';
@@ -107,7 +124,17 @@ class Tax
 
         return $html;
     }
-
+    
+    /**
+     * Method apply_tax
+     *
+     * @param $roomrate $roomrate [explicite description]
+     * @param $nights $nights [explicite description]
+     * @param $guests $guests [explicite description]
+     * @param $output $output [explicite description]
+     *
+     * @return void
+     */
     public function apply_tax($roomrate, $nights, $guests, $output)
     {
 

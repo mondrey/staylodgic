@@ -15,7 +15,12 @@ class Rooms
         add_action('wp_ajax_update_RoomRate', array($this, 'update_RoomRate'));
         add_action('wp_ajax_nopriv_update_RoomRate', array($this, 'update_RoomRate'));
     }
-
+    
+    /**
+     * Method hasRooms
+     *
+     * @return void
+     */
     public static function hasRooms()
     {
         $args = array(
@@ -29,7 +34,12 @@ class Rooms
 
         return $query->have_posts(); // Returns true if there is at least one room, false otherwise
     }
-
+    
+    /**
+     * Method queryRooms
+     *
+     * @return void
+     */
     public static function queryRooms()
     {
         $rooms = get_posts(
@@ -43,7 +53,12 @@ class Rooms
         );
         return $rooms;
     }
-
+    
+    /**
+     * Method getRoomList
+     *
+     * @return void
+     */
     public static function getRoomList()
     {
         $roomlist = [];
@@ -57,7 +72,15 @@ class Rooms
         }
         return $roomlist;
     }
-
+    
+    /**
+     * Method isChannelRoomBooked
+     *
+     * @param $room_id $room_id [explicite description]
+     * @param $dateString $dateString [explicite description]
+     *
+     * @return void
+     */
     public static function isChannelRoomBooked($room_id, $dateString)
     {
         $channelArray = get_post_meta($room_id, 'staylodgic_channel_quantity_array', true);
@@ -76,7 +99,15 @@ class Rooms
 
         return false;
     }
-
+    
+    /**
+     * Method getTotalOperatingRoomQtyForDate
+     *
+     * @param $room_id $room_id [explicite description]
+     * @param $dateString $dateString [explicite description]
+     *
+     * @return void
+     */
     public static function getTotalOperatingRoomQtyForDate($room_id, $dateString)
     {
 
@@ -92,7 +123,15 @@ class Rooms
 
         return false;
     }
-
+    
+    /**
+     * Method getMaxQuantityForRoom
+     *
+     * @param $room_id $room_id [explicite description]
+     * @param $dateString $dateString [explicite description]
+     *
+     * @return void
+     */
     public static function getMaxQuantityForRoom($room_id, $dateString)
     {
 
@@ -108,7 +147,14 @@ class Rooms
 
         return false;
     }
-
+    
+    /**
+     * Method getRoomName_FromID
+     *
+     * @param $room_id $room_id [explicite description]
+     *
+     * @return void
+     */
     public static function getRoomName_FromID($room_id)
     {
         $room_post = get_post($room_id);
@@ -118,7 +164,14 @@ class Rooms
 
         return $room_name;
     }
-
+    
+    /**
+     * Method getRoomNames_FromIDs
+     *
+     * @param $room_ids $room_ids [explicite description]
+     *
+     * @return void
+     */
     public static function getRoomNames_FromIDs($room_ids)
     {
         $room_names = array();
@@ -139,7 +192,15 @@ class Rooms
 
         return $room_names_list;
     }
-
+    
+    /**
+     * Method getAvailable_Rooms_For_DateRange
+     *
+     * @param $checkin_date $checkin_date [explicite description]
+     * @param $checkout_date $checkout_date [explicite description]
+     *
+     * @return void
+     */
     public function getAvailable_Rooms_For_DateRange($checkin_date, $checkout_date)
     {
         $available_rooms = array();
@@ -158,7 +219,15 @@ class Rooms
 
         return $available_rooms;
     }
-
+    
+    /**
+     * Method getAvailable_Rooms_Rates_Occupants_For_DateRange
+     *
+     * @param $checkin_date $checkin_date [explicite description]
+     * @param $checkout_date $checkout_date [explicite description]
+     *
+     * @return void
+     */
     public function getAvailable_Rooms_Rates_Occupants_For_DateRange($checkin_date, $checkout_date)
     {
         $combo_array = array();
@@ -175,11 +244,11 @@ class Rooms
             // if not fully booked add to available rooms
             if ($count !== 0) {
                 $available_rooms[$room->ID][$count] = $room->post_title; // changed here
-                error_log('fetching rates for :' . $room->ID);
+                
                 $available_roomrates[$room->ID] = self::getRoom_RATE_For_DateRange($room->ID, $checkin_date, $checkout_date);
                 // Get room occupany max numbers
                 $can_accomodate[$room->ID] = self::getMax_room_occupants($room->ID);
-                // error_log(print_r($available_roomrates, true));
+                
             }
         }
 
@@ -191,7 +260,16 @@ class Rooms
 
         return $combo_array;
     }
-
+    
+    /**
+     * Method getRoom_RATE_For_DateRange
+     *
+     * @param $roomId $roomId [explicite description]
+     * @param $checkin_date $checkin_date [explicite description]
+     * @param $checkout_date $checkout_date [explicite description]
+     *
+     * @return void
+     */
     public function getRoom_RATE_For_DateRange($roomId, $checkin_date, $checkout_date)
     {
         $start = new \DateTime($checkin_date);
@@ -209,7 +287,7 @@ class Rooms
         $total_rate = 0;
 
         foreach ($daterange as $date) {
-            //error_log('This is the room ' . $roomId . ' for ' . $date->format("Y-m-d"));
+            
             $rate = $roomrate_instance->getRoomRateByDate($roomId, $date->format("Y-m-d"));
             $rates_daterange['date'][$date->format("Y-m-d")] = $rate;
             $total_rate = $total_rate + $rate;
@@ -217,11 +295,16 @@ class Rooms
 
         $rates_daterange['total'] = $total_rate;
 
-        // error_log(print_r($rates_daterange, true));
-
         return $rates_daterange;
     }
-
+    
+    /**
+     * Method getMax_room_occupants
+     *
+     * @param $room_id $room_id [explicite description]
+     *
+     * @return void
+     */
     public function getMax_room_occupants($room_id)
     {
 
@@ -259,7 +342,17 @@ class Rooms
 
         return $can_occomodate;
     }
-
+    
+    /**
+     * Method getMaxRoom_QTY_For_DateRange
+     *
+     * @param $roomId $roomId [explicite description]
+     * @param $checkin_date $checkin_date [explicite description]
+     * @param $checkout_date $checkout_date [explicite description]
+     * @param $reservationid $reservationid [explicite description]
+     *
+     * @return void
+     */
     public function getMaxRoom_QTY_For_DateRange($roomId, $checkin_date, $checkout_date, $reservationid)
     {
         // get the date range
@@ -276,7 +369,7 @@ class Rooms
         foreach ($daterange as $date) {
             // Check if the room is fully booked for the given date
             $count = $this->getMaxRoom_QTY_ForDay($roomId, $date->format("Y-m-d"), $reservationid);
-            //error_log('QTY check for rooms:::::::: ' . $date->format("Y-m-d"));
+            
             if ($count < $max_count) {
                 $max_count = $count;
             }
@@ -290,7 +383,16 @@ class Rooms
         // If the room is not fully booked for any of the dates in the range, return max_count
         return $max_count;
     }
-
+    
+    /**
+     * Method getMaxRoom_QTY_ForDay
+     *
+     * @param $roomId $roomId [explicite description]
+     * @param $dateString $dateString [explicite description]
+     * @param $excluded_reservation_id $excluded_reservation_id [explicite description]
+     *
+     * @return void
+     */
     public function getMaxRoom_QTY_ForDay($roomId, $dateString, $excluded_reservation_id = null)
     {
 
@@ -304,7 +406,12 @@ class Rooms
         }
         return $avaiblable_count;
     }
-
+    
+    /**
+     * Method update_RoomAvailability
+     *
+     * @return void
+     */
     public function update_RoomAvailability()
     {
 
@@ -330,9 +437,6 @@ class Rooms
             wp_send_json_error($response);
             return;
         }
-
-        error_log('Date Range');
-        error_log($dateRange);
 
         if (isset($_POST['quantity'])) {
             $quantity = $_POST['quantity'];
@@ -477,13 +581,6 @@ class Rooms
             $quantityArray[$date] = $final_quantity;
         }
 
-        // error_log('-------- New Method Quantity ----------');
-        // error_log( print_r($reserved_array,1 ) );
-        // error_log('-------- Quantity ----------');
-        // error_log( print_r($quantityArray,1 ) );
-        // error_log('-------- Final Quantity ----------');
-
-
         // Update the metadata for the 'slgc_reservations' post
         if (!empty($postID) && is_numeric($postID) && is_array($quantityArray)) {
             // Update the post meta with the modified quantity array
@@ -510,7 +607,12 @@ class Rooms
 
         wp_die(); // Optional: Terminate script execution
     }
-
+    
+    /**
+     * Method update_RoomRate
+     *
+     * @return void
+     */
     public function update_RoomRate()
     {
 
@@ -538,8 +640,7 @@ class Rooms
 
         if (isset($_POST['rate'])) {
             $rate = $_POST['rate'];
-            error_log('$rate');
-            error_log($rate);
+            
             if ('' == $rate) {
                 $response = array(
                     'success' => false,

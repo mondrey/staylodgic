@@ -11,6 +11,11 @@ class WelcomeScreen
         add_action('admin_menu', array($this, 'add_admin_menu')); // This now points to the add_admin_menu function
     }
 
+    /**
+     * Method add_admin_menu
+     *
+     * @return void
+     */
     public function add_admin_menu()
     {
 
@@ -35,6 +40,11 @@ class WelcomeScreen
         );
     }
 
+    /**
+     * Method display_main_page
+     *
+     * @return void
+     */
     public function display_main_page()
     {
         // The HTML content of the 'Staylodgic' page goes here
@@ -59,9 +69,9 @@ class WelcomeScreen
         $current_user = wp_get_current_user();
 
         echo '<div class="welcome-user-icon"><i class="fa-solid fa-circle-user"></i></div>';
-        echo '<h1>Welcome ' . $current_user->user_login . '!</h1>';
+        echo '<h1>Welcome ' . esc_html($current_user->user_login) . '!</h1>';
         echo '<div class="welcome-text">';
-        echo '<p class="main-greet">New to Staylodgic?</p>';
+        echo '<p class="main-greet">' . __('New to Staylodgic?', 'staylodgic') . '</p>';
         echo '<a class="view-help-guide" target="_blank" href="https://staylodgic.com/staylodgic-help-guide-viewer/">View Help Guide</a>';
         echo '</div>';
         echo '<div class="guided-tour-link-wrap">';
@@ -87,93 +97,91 @@ class WelcomeScreen
         echo '<div class="left-columns">'; // Container for both content columns
 
         echo '<div class="left-column">';
-        echo '<h4><i class="fa-solid fa-gear"></i> Hotel Settings</h4>';
+        echo '<h4><i class="fa-solid fa-gear"></i> ' . __('Hotel Settings', 'staylodgic') . '</h4>';
         echo '<ul>';
-        echo '<li><a href="' . admin_url() . '/admin.php?page=slgc-settings-panel">Setup New Hotel</a></li>';
+        echo '<li><a href="' . admin_url() . '/admin.php?page=slgc-settings-panel">' . __('Setup New Hotel', 'staylodgic') . '</a></li>';
         echo '</ul>';
 
-        echo '<h4><i class="fas fa-bed"></i> Rooms for Reservation</h4>';
+        echo '<h4><i class="fas fa-bed"></i> ' . __('Rooms for Reservation', 'staylodgic') . '</h4>';
         echo '<ul>';
-        echo '<li>Step 1: <a href="' . admin_url() . '/post-new.php?post_type=slgc_room">Create Rooms</a></li>';
-        echo '<li>Step 2: <a href="' . admin_url() . '/admin.php?page=slgc-availability">Add Room Rates</a></li>';
-        echo '<li>Step 3: <a href="' . admin_url() . '/admin.php?page=slgc-availability">Add Room Quantity</a></li>';
-        echo '<li>Step 4: <a href="' . admin_url() . '/post-new.php?post_type=slgc_reservations">Create Reservations</a></li>';
+        echo '<li>Step 1: <a href="' . admin_url() . '/post-new.php?post_type=slgc_room">' . __('Create Rooms', 'staylodgic') . '</a></li>';
+        echo '<li>Step 2: <a href="' . admin_url() . '/admin.php?page=slgc-availability">' . __('Add Room Rates', 'staylodgic') . '</a></li>';
+        echo '<li>Step 3: <a href="' . admin_url() . '/admin.php?page=slgc-availability">' . __('Add Room Quantity', 'staylodgic') . '</a></li>';
+        echo '<li>Step 4: <a href="' . admin_url() . '/post-new.php?post_type=slgc_reservations">' . __('Create Reservations', 'staylodgic') . '</a></li>';
         echo '</ul>';
 
-        echo '<h4><i class="fas fa-biking"></i> Setup Activities</h4>';
+        echo '<h4><i class="fas fa-biking"></i> ' . __('Setup Activities', 'staylodgic') . '</h4>';
         echo '<ul>';
-        echo '<li>Step 1: <a href="' . admin_url() . '/post-new.php?post_type=slgc_activity">Create Activities</a></li>';
-        echo '<li>Step 2: <a href="' . admin_url() . '/post-new.php?post_type=slgc_activity">Add Scheduled Time to Week</a></li>';
-        echo '<li>Step 3: <a href="' . admin_url() . '/post-new.php?post_type=slgc_activityres">Create Activity Reservations</a></li>';
+        echo '<li>Step 1: <a href="' . admin_url() . '/post-new.php?post_type=slgc_activity">' . __('Create Activities', 'staylodgic') . '</a></li>';
+        echo '<li>Step 2: <a href="' . admin_url() . '/post-new.php?post_type=slgc_activity">' . __('Add Scheduled Time to Week', 'staylodgic') . '</a></li>';
+        echo '<li>Step 3: <a href="' . admin_url() . '/post-new.php?post_type=slgc_activityres">' . __('Create Activity Reservations', 'staylodgic') . '</a></li>';
         echo '</ul>';
 
-        echo '<h4><i class="fas fa-tachometer-alt"></i> Using Dashboard</h4>';
+        echo '<h4><i class="fas fa-tachometer-alt"></i> ' . __('Using Dashboard', 'staylodgic') . '</h4>';
         echo '<ul>';
-        echo '<li>- <a href="' . admin_url() . '/admin.php?page=slgc-dashboard">View Bookings Overview</a></li>';
-        echo '<li>- <a href="' . admin_url() . '/admin.php?page=slgc-activity-dashboard">View Activities Overview</a></li>';
-        echo '<li>- <a href="' . admin_url() . '/admin.php?page=slgc-availability">View Availability Calendar</a></li>';
-        echo '<li>- <a href="' . admin_url() . '/admin.php?page=slgc-availability-yearly">View Annual Availability</a></li>';
+        echo '<li>- <a href="' . admin_url() . '/admin.php?page=slgc-dashboard">' . __('View Bookings Overview', 'staylodgic') . '</a></li>';
+        echo '<li>- <a href="' . admin_url() . '/admin.php?page=slgc-activity-dashboard">' . __('View Activities Overview', 'staylodgic') . '</a></li>';
+        echo '<li>- <a href="' . admin_url() . '/admin.php?page=slgc-availability">' . __('View Availability Calendar', 'staylodgic') . '</a></li>';
+        echo '<li>- <a href="' . admin_url() . '/admin.php?page=slgc-availability-yearly">' . __('View Annual Availability', 'staylodgic') . '</a></li>';
         echo '</ul>';
 
         echo '</div>'; // End of first left column
 
         echo '<div class="left-column">';
-        echo '<h4><i class="fas fa-users"></i> Customer Registry</h4>';
+        echo '<h4><i class="fas fa-users"></i> ' . __('Customer Registry', 'staylodgic') . '</h4>';
         echo '<ul>';
-        echo '<li>- <a href="' . admin_url() . '/post-new.php?post_type=slgc_customers">Create customers</a></li>';
+        echo '<li>- <a href="' . admin_url() . '/post-new.php?post_type=slgc_customers">' . __('Create customers', 'staylodgic') . '</a></li>';
         echo '</ul>';
 
-        echo '<h4><i class="fas fa-user-check"></i> Guest Registration</h4>';
+        echo '<h4><i class="fas fa-user-check"></i> ' . __('Guest Registration', 'staylodgic') . '</h4>';
         echo '<ul>';
-        echo '<li>Step 1: <a href="' . admin_url() . '/edit.php?post_type=slgc_guestregistry&page=slgc_guestregistry_shortcodes">Customize registration form</a></li>';
-        echo '<li>Step 2: <a href="' . admin_url() . '/post-new.php?post_type=slgc_guestregistry">Create guest registration</a></li>';
-        echo '<li>Step 3: <a href="' . admin_url() . '/post-new.php?post_type=slgc_guestregistry">Online registration</a></li>';
-        echo '<li>Step 4: <a href="' . admin_url() . '/post-new.php?post_type=slgc_guestregistry">Send Links or QR Code</a></li>';
+        echo '<li>Step 1: <a href="' . admin_url() . '/edit.php?post_type=slgc_guestregistry&page=slgc_guestregistry_shortcodes">' . __('Customize registration form', 'staylodgic') . '</a></li>';
+        echo '<li>Step 2: <a href="' . admin_url() . '/post-new.php?post_type=slgc_guestregistry">' . __('Create guest registration', 'staylodgic') . '</a></li>';
+        echo '<li>Step 3: <a href="' . admin_url() . '/post-new.php?post_type=slgc_guestregistry">' . __('Online registration', 'staylodgic') . '</a></li>';
+        echo '<li>Step 4: <a href="' . admin_url() . '/post-new.php?post_type=slgc_guestregistry">' . __('Send Links or QR Code', 'staylodgic') . '</a></li>';
         echo '</ul>';
 
-        echo '<h4><i class="fas fa-file-invoice-dollar"></i> Invoicing</h4>';
+        echo '<h4><i class="fas fa-file-invoice-dollar"></i> ' . __('Invoicing', 'staylodgic') . '</h4>';
         echo '<ul>';
-        echo '<li>- <a href="' . admin_url() . '/edit.php?post_type=slgc_reservations&page=staylodgic-invoicing">Bookings Invoice</a></li>';
-        echo '<li>- <a href="' . admin_url() . '/edit.php?post_type=slgc_activityres&page=staylodgic-activity-invoicing">Activity Invoice</a></li>';
+        echo '<li>- <a href="' . admin_url() . '/edit.php?post_type=slgc_reservations&page=staylodgic-invoicing">' . __('Bookings Invoice', 'staylodgic') . '</a></li>';
+        echo '<li>- <a href="' . admin_url() . '/edit.php?post_type=slgc_activityres&page=staylodgic-activity-invoicing">' . __('Activity Invoice', 'staylodgic') . '</a></li>';
         echo '</ul>';
 
-        echo '<h4><i class="fas fa-file-import"></i> Import / Export</h4>';
+        echo '<h4><i class="fas fa-file-import"></i> ' . __('Import / Export', 'staylodgic') . '</h4>';
         echo '<ul>';
-        echo '<li>- <a href="' . admin_url() . '/admin.php?page=slgc-export-booking-ical">Export CSV Bookings</a></li>';
-        echo '<li>- <a href="' . admin_url() . '/admin.php?page=slgc-export-registrations-ical">Export Guests Registration for Month</a></li>';
-        echo '<li>- Import and Sync iCal Availability<br/><span class="feature-update">( Future premium update )</span></li>';
-        echo '<li>- Export iCal Availability Feeds<br/><span class="feature-update">( Future premium update )</span></li>';
+        echo '<li>- <a href="' . admin_url() . '/admin.php?page=slgc-export-booking-ical">' . __('Export CSV Bookings', 'staylodgic') . '</a></li>';
+        echo '<li>- <a href="' . admin_url() . '/admin.php?page=slgc-export-registrations-ical">' . __('Export Guests Registration for Month', 'staylodgic') . '</a></li>';
         echo '</ul>';
 
         echo '</div>'; // End of second left column
 
         echo '<div class="left-column">';
 
-        echo '<h4><i class="fas fa-hand-holding-usd"></i> Taxes</h4>';
+        echo '<h4><i class="fas fa-hand-holding-usd"></i> ' . __('Taxes', 'staylodgic') . '</h4>';
         echo '<ul>';
-        echo '<li>- <a href="' . admin_url() . '/admin.php?page=slgc-settings-panel">Fixed tax</a></li>';
-        echo '<li>- <a href="' . admin_url() . '/admin.php?page=slgc-settings-panel">Percentage tax</a></li>';
-        echo '<li>- <a href="' . admin_url() . '/admin.php?page=slgc-settings-panel">Per day tax</a></li>';
-        echo '<li>- <a href="' . admin_url() . '/admin.php?page=slgc-settings-panel">Per person tax</a></li>';
+        echo '<li>- <a href="' . admin_url() . '/admin.php?page=slgc-settings-panel">' . __('Fixed tax', 'staylodgic') . '</a></li>';
+        echo '<li>- <a href="' . admin_url() . '/admin.php?page=slgc-settings-panel">' . __('Percentage tax', 'staylodgic') . '</a></li>';
+        echo '<li>- <a href="' . admin_url() . '/admin.php?page=slgc-settings-panel">' . __('Per day tax', 'staylodgic') . '</a></li>';
+        echo '<li>- <a href="' . admin_url() . '/admin.php?page=slgc-settings-panel">' . __('Per person tax', 'staylodgic') . '</a></li>';
         echo '</ul>';
 
-        echo '<h4><i class="fas fa-utensils"></i> Meal plans</h4>';
+        echo '<h4><i class="fas fa-utensils"></i> ' . __('Meal plans', 'staylodgic') . '</h4>';
         echo '<ul>';
-        echo '<li>- <a href="' . admin_url() . '/admin.php?page=slgc-settings-panel">Create free plans</a></li>';
-        echo '<li>- <a href="' . admin_url() . '/admin.php?page=slgc-settings-panel">Create paid plans</a></li>';
+        echo '<li>- <a href="' . admin_url() . '/admin.php?page=slgc-settings-panel">' . __('Create free plans', 'staylodgic') . '</a></li>';
+        echo '<li>- <a href="' . admin_url() . '/admin.php?page=slgc-settings-panel">' . __('Create paid plans', 'staylodgic') . '</a></li>';
         echo '</ul>';
 
-        echo '<h4><i class="fas fa-user-tag"></i> Per Person Pricing</h4>';
+        echo '<h4><i class="fas fa-user-tag"></i> ' . __('Per Person Pricing', 'staylodgic') . '</h4>';
         echo '<ul>';
-        echo '<li>- <a href="' . admin_url() . '/admin.php?page=slgc-settings-panel">Set fixed price increments</a></li>';
-        echo '<li>- <a href="' . admin_url() . '/admin.php?page=slgc-settings-panel">Increment by percentage per occupant</a></li>';
+        echo '<li>- <a href="' . admin_url() . '/admin.php?page=slgc-settings-panel">' . __('Set fixed price increments', 'staylodgic') . '</a></li>';
+        echo '<li>- <a href="' . admin_url() . '/admin.php?page=slgc-settings-panel">' . __('Increment by percentage per occupant', 'staylodgic') . '</a></li>';
         echo '</ul>';
 
-        echo '<h4><i class="fas fa-percent"></i> Discounts</h4>';
+        echo '<h4><i class="fas fa-percent"></i> ' . __('Discounts', 'staylodgic') . '</h4>';
         echo '<ul>';
-        echo '<li>- <a href="' . admin_url() . '/admin.php?page=slgc-settings-panel">Last minute discount</a></li>';
-        echo '<li>- <a href="' . admin_url() . '/admin.php?page=slgc-settings-panel">Early booking discount</a></li>';
-        echo '<li>- <a href="' . admin_url() . '/admin.php?page=slgc-settings-panel">Long stay discount</a></li>';
+        echo '<li>- <a href="' . admin_url() . '/admin.php?page=slgc-settings-panel">' . __('Last minute discount', 'staylodgic') . '</a></li>';
+        echo '<li>- <a href="' . admin_url() . '/admin.php?page=slgc-settings-panel">' . __('Early booking discount', 'staylodgic') . '</a></li>';
+        echo '<li>- <a href="' . admin_url() . '/admin.php?page=slgc-settings-panel">' . __('Long stay discount', 'staylodgic') . '</a></li>';
         echo '</ul>';
 
         echo '</div>'; // End of second left column

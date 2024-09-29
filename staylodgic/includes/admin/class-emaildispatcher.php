@@ -145,7 +145,7 @@ class EmailDispatcher
     /**
      * Method setActivityConfirmationTemplate
      *
-     * @param $bookingDetails $bookingDetails [explicite description]
+     * @param $bookingDetails
      *
      * @return void
      */
