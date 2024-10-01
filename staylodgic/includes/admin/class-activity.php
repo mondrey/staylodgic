@@ -132,8 +132,8 @@ class Activity
             $customer_post = get_post($customer_post_id);
             if ($customer_post) {
                 // Get the admin URL and create the link
-                $edit_link = admin_url('post.php?post=' . $customer_post_id . '&action=edit');
-                return '<a href="' . $edit_link . '">' . $customer_post->post_title . '</a>';
+                $edit_link = admin_url('post.php?post=' . esc_attr($customer_post_id) . '&action=edit');
+                return '<a href="' . esc_url($edit_link) . '">' . esc_html($customer_post->post_title) . '</a>';
             }
         } else {
             // If customer post doesn't exist, retrieve customer name from reservation post
@@ -622,7 +622,7 @@ class Activity
                             $remaining_spots_compare = $remaining_spots + $existing_spots_for_day;
                             $existing_found = true;
                         }
-                        // echo $selected_date;
+                        
                         $active_class = "time-disabled";
 
                         if ($this->totalGuests <= $remaining_spots_compare && 0 !== $remaining_spots) {
@@ -995,7 +995,6 @@ class Activity
             $html .= '<div class="form-group">';
             $html .= '<div id="bookingResponse" class="booking-response"></div>';
             $html .= '<div id="activity-register" class="book-button">' . esc_html__('Book this activity', 'staylodgic') . '</div>';
-            // $html .= self::paymentHelperButton($totalprice[ 'total' ], $bookingnumber);
             $html .= '</div>';
         }
 
@@ -1017,7 +1016,6 @@ class Activity
         if (is_singular('slgc_activity')) {
             $custom_content = $this->activityBooking_SearchForm();
             $content = $custom_content . $content; // Prepend custom content
-            // $content .= $custom_content; // Append custom content
         }
         return $content;
     }
@@ -1074,7 +1072,7 @@ class Activity
         foreach ($reservation_array as $post_id) {
             $room_name = self::getNameForActivity($post_id);
             $edit_link = admin_url('post.php?post=' . $post_id . '&action=edit');
-            $links .= '<li><p><a href="' . $edit_link . '" title="' . $room_name . '">Edit Reservation ' . $post_id . '<br/><small>' . $room_name . '</small></a></p></li>';
+            $links .= '<li><p><a href="' . esc_url($edit_link) . '" title="' . esc_attr($room_name) . '">Edit Reservation ' . esc_attr($post_id) . '<br/><small>' . esc_html($room_name) . '</small></a></p></li>';
         }
         $links .= '</ul>';
         return $links;
@@ -1272,7 +1270,7 @@ class Activity
                 <div class="front-booking-search">
                     <div class="front-booking-calendar-wrap">
                         <div class="front-booking-calendar-icon"><i class="fa-solid fa-calendar-days"></i></div>
-                        <div class="front-booking-calendar-date">Activity date</div>
+                        <div class="front-booking-calendar-date"><?php _e('Activity date', 'staylodgic'); ?></div>
                     </div>
                     <div class="front-booking-guests-wrap">
                         <div class="front-booking-guests-container"> <!-- New container -->
@@ -1283,7 +1281,7 @@ class Activity
                                 <div class="front-booking-guest-child-icon"><span class="guest-child-svg"></span><span class="front-booking-adult-child-value">0</span></div>
                             </div>
                         </div>
-                        <div id="activitySearch" class="form-search-button">Search</div>
+                        <div id="activitySearch" class="form-search-button"><?php _e('Search', 'staylodgic'); ?></div>
                     </div>
                 </div>
 
@@ -1295,7 +1293,7 @@ class Activity
                 <div class="staylodgic_reservation_room_guests_wrap">
                     <div id="staylodgic_reservation_room_adults_wrap" class="number-input occupant-adult occupants-range">
                         <div class="column-one">
-                            <label for="number-of-adults">Adults</label>
+                            <label for="number-of-adults"><?php _e('Adults', 'staylodgic'); ?></label>
                         </div>
                         <div class="column-two">
                             <span class="minus-btn">-</span>
@@ -1305,7 +1303,7 @@ class Activity
                     </div>
                     <div id="staylodgic_reservation_room_children_wrap" class="number-input occupant-child occupants-range">
                         <div class="column-one">
-                            <label for="number-of-adults">Children</label>
+                            <label for="number-of-adults"><?php _e('Children', 'staylodgic'); ?></label>
                         </div>
                         <div class="column-two">
                             <span class="minus-btn">-</span>
@@ -1317,8 +1315,8 @@ class Activity
                     <div id="guest-age"></div>
                 </div>
                 <div class="recommended-alt-wrap">
-                    <div class="recommended-alt-title">Rooms unavailable</div>
-                    <div class="recommended-alt-description">Following range from your selection is avaiable.</div>
+                    <div class="recommended-alt-title"><?php _e('Rooms unavailable', 'staylodgic'); ?></div>
+                    <div class="recommended-alt-description"><?php _e('Following range from your selection is avaiable.', 'staylodgic'); ?></div>
                     <div id="recommended-alt-dates"></div>
                 </div>
                 <div class="available-list">
@@ -1541,7 +1539,7 @@ class Activity
                             $remaining_spots_compare = $remaining_spots + $existing_spots_for_day;
                             $existing_found = true;
                         }
-                        // echo $selected_date;
+                        
                         $active_class = "time-disabled";
 
                         if ($total_people <= $remaining_spots_compare && 0 !== $remaining_spots && '' !== $time) {
@@ -1861,7 +1859,7 @@ class Activity
                 'totalCost'      => $reservationData['total'],
             ];
 
-            $email = new EmailDispatcher($email_address, 'Booking Confirmation for: ' . $booking_number);
+            $email = new EmailDispatcher($email_address, __('Booking Confirmation for: ', 'staylodgic') . $booking_number);
             $email->setHTMLContent()->setActivityConfirmationTemplate($bookingDetails);
 
             if ($email->send()) {

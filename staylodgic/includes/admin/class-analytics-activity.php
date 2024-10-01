@@ -37,7 +37,7 @@ class ActivityAnalytics
 
         add_action('admin_menu', array($this, 'staylodgic_dashboard'));
     }
-    
+
     /**
      * Method loadActivities
      *
@@ -96,7 +96,7 @@ class ActivityAnalytics
             array($this, 'activity_display_dashboard')
         );
     }
-    
+
     /**
      * Method activity_display_dashboard
      *
@@ -110,14 +110,14 @@ class ActivityAnalytics
 
         if (!\Staylodgic\Activity::hasActivities()) {
             echo '<h1>' . __('No Activities Found', 'staylodgic') . '</h1>';
-            echo '<p>Please configure atleast 1 activity from Activities section</p>';
+            echo '<p>' . __('Please configure atleast 1 activity from Activities section', 'staylodgic') . '</p>';
             return;
         } else {
 
 
             // Add the logo image below the heading
             echo '<div class="staylodgic-overview-heading">';
-            echo '<h1>'.__('Activity Overview', 'staylodgic').'</h1>';
+            echo '<h1>' . __('Activity Overview', 'staylodgic') . '</h1>';
             echo '</div>';
 
             // Create an instance of the ChartGenerator class
@@ -128,7 +128,7 @@ class ActivityAnalytics
         echo '</div>';
     }
 
-    
+
     /**
      * Method get_chart_config
      *
@@ -252,7 +252,7 @@ class ActivityAnalytics
 
         return $configs[$id] ?? null;
     }
-    
+
     /**
      * Method get_dayafter_stats_data
      *
@@ -321,7 +321,7 @@ class ActivityAnalytics
             ],
         ];
     }
-    
+
     /**
      * Method add_guest
      *
@@ -355,7 +355,7 @@ class ActivityAnalytics
             }
         }
     }
-    
+
     /**
      * Method get_tomorrow_stats_data
      *
@@ -424,7 +424,7 @@ class ActivityAnalytics
             ],
         ];
     }
-    
+
     /**
      * Method get_current_day_stats_data
      *
@@ -493,7 +493,7 @@ class ActivityAnalytics
             ],
         ];
     }
-    
+
     /**
      * Method get_past_twelve_months_revenue_data
      *
@@ -576,7 +576,7 @@ class ActivityAnalytics
             ],
         ];
     }
-    
+
     /**
      * Method get_past_twelve_months_bookings_data
      *
@@ -686,7 +686,7 @@ class ActivityAnalytics
             ],
         ];
     }
-    
+
     /**
      * Method chart_generator
      *
@@ -729,11 +729,11 @@ class ActivityAnalytics
             $guestListHtml .= '<div class="staylodgic_analytics_table_wrap">';
             // Add a heading for the day
             if ('today' == $day) {
-                $guestListHtml .= '<h2 class="staylodgic_analytics_subheading staylodgic_dayis_' . $day . '">' . __('Today', 'staylodgic') . ' ' . $this->display_today . '</h2>';
+                $guestListHtml .= '<h2 class="staylodgic_analytics_subheading staylodgic_dayis_' . $day . '">' . __('Today', 'staylodgic') . ' ' . esc_html($this->display_today) . '</h2>';
             } elseif ('tomorrow' == $day) {
-                $guestListHtml .= '<h2 class="staylodgic_analytics_subheading staylodgic_dayis_' . $day . '">' . __('Tomorrow', 'staylodgic') . ' ' . $this->display_tomorrow . '</h2>';
+                $guestListHtml .= '<h2 class="staylodgic_analytics_subheading staylodgic_dayis_' . $day . '">' . __('Tomorrow', 'staylodgic') . ' ' . esc_html($this->display_tomorrow) . '</h2>';
             } elseif ('dayafter' == $day) {
-                $guestListHtml .= '<h2 class="staylodgic_analytics_subheading staylodgic_dayis_' . $day . '">' . __('Day After', 'staylodgic') . ' ' . $this->display_dayafter . '</h2>';
+                $guestListHtml .= '<h2 class="staylodgic_analytics_subheading staylodgic_dayis_' . $day . '">' . __('Day After', 'staylodgic') . ' ' . esc_html($this->display_dayafter) . '</h2>';
             } else {
                 $guestListHtml .= '<h2 class="staylodgic_analytics_subheading staylodgic_dayis_' . $day . '">' . esc_html(ucfirst($day)) . '</h2>';
             }
@@ -759,9 +759,9 @@ class ActivityAnalytics
                 }
 
                 $guestListHtml .= '<div class="staylodgic_table_outer">';
-                $guestListHtml .= "<h3>" . $font_icon . " Activities</h3>";
+                $guestListHtml .= "<h3>" . $font_icon . __('Activities', 'staylodgic') . "</h3>";
 
-                $guestListHtml .= '<table class="staylodgic_analytics_table table table-hover" data-export-title="Activities for ' . esc_html($day) . '">';
+                $guestListHtml .= '<table class="staylodgic_analytics_table table table-hover" data-export-title="' . __('Activities for ', 'staylodgic') . esc_html($day) . '">';
                 $guestListHtml .= '<thead class="table-light">';
                 $guestListHtml .= '<tr>';
                 $guestListHtml .= '<th class="table-cell-heading table-cell-heading-number number-column" scope="col"><i class="fas fa-hashtag"></i></th>';
@@ -777,10 +777,10 @@ class ActivityAnalytics
                 $guestListHtml .= '<tbody class="table-group-divider">';
                 // Iterate over each guest and add them to the table
                 foreach ($guests as $guestId => $bookings) {
-                    
+
                     foreach ($bookings as $booking) { // Iterate over each booking for the guest
                         $count++;
-                        
+
                         $reservations_instance = new \Staylodgic\Activity();
                         $reservation_id        = $reservations_instance->getActivityIDforBooking($booking['booking_number']);
 
@@ -835,7 +835,7 @@ class ActivityAnalytics
 
         return $guestListHtml;
     }
-        
+
     /**
      * Method display_stats
      *
@@ -874,7 +874,7 @@ class ActivityAnalytics
         // Initialize the guest list HTML
         $guestListHtml = '';
 
-        return '<canvas id="'.esc_attr($this->id).'" class="staylodgic-chart" data-type="'.esc_attr($this->type).'" data-data="'.esc_attr($data).'" data-options="'.esc_attr($options).'"></canvas>' . $guestListHtml;
+        return '<canvas id="' . esc_attr($this->id) . '" class="staylodgic-chart" data-type="' . esc_attr($this->type) . '" data-data="' . esc_attr($data) . '" data-options="' . esc_attr($options) . '"></canvas>' . $guestListHtml;
     }
 }
 
