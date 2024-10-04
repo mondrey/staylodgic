@@ -291,7 +291,7 @@ class Invoicing
 
         // Fetch reservation details
         $reservations_instance = new \Staylodgic\Reservations();
-        $reservationID         = $reservations_instance->getReservationIDforBooking($booking_number);
+        $reservationID         = $reservations_instance->get_reservation_id_for_booking($booking_number);
 
         $reservations_instance = new \Staylodgic\Reservations($date = false, $room_id = false, $reservationID);
         // Verify the nonce
@@ -343,7 +343,7 @@ class Invoicing
             if ($reservations_instance->is_confirmed_reservation($reservationID)) {
                 $this->bookingStatus = __('Booking Confirmed', 'staylodgic');
             }
-            $this->roomType = $reservations_instance->getRoomNameForReservation($reservationID);
+            $this->roomType = $reservations_instance->get_room_name_for_reservation($reservationID);
             $this->numberDays = $reservations_instance->countReservationDays($reservationID);
             // Add other reservation details as needed
 
@@ -679,7 +679,7 @@ class Invoicing
                             <p class="nightly-rate-info"><span class="nightly-rate"><?php echo staylodgic_price($roomPrice); ?></span><span class="nights"> x <?php echo esc_html($numberDays); ?> <?php echo __('Nights', 'staylodgic'); ?></span></p>
                             <?php
                             $reservations_instance = new \Staylodgic\Reservations();
-                            $reservationID         = $reservations_instance->getReservationIDforBooking($stay_booking_number);
+                            $reservationID         = $reservations_instance->get_reservation_id_for_booking($stay_booking_number);
                             $taxStatus             = get_post_meta($reservationID, 'staylodgic_tax', true);
                             if ('enabled' == $taxStatus) {
                             ?>

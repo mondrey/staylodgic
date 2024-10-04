@@ -156,13 +156,13 @@ class Reservations
     }
         
     /**
-     * Method getReservationIDforBooking
+     * Method get_reservation_id_for_booking
      *
      * @param $booking_number
      *
      * @return void
      */
-    public static function getReservationIDforBooking($booking_number)
+    public static function get_reservation_id_for_booking($booking_number)
     {
         $args = array(
             'post_type'      => 'slgc_reservations',
@@ -1170,7 +1170,7 @@ class Reservations
     {
         $links = '<ul>';
         foreach ($reservation_array as $post_id) {
-            $room_name = self::getRoomNameForReservation($post_id);
+            $room_name = self::get_room_name_for_reservation($post_id);
             $edit_link = admin_url('post.php?post=' . $post_id . '&action=edit');
             $links .= '<li><p><a href="' . $edit_link . '" title="' . $room_name . '">Edit Reservation ' . $post_id . '<br/><small>' . $room_name . '</small></a></p></li>';
         }
@@ -1218,13 +1218,13 @@ class Reservations
     }
     
     /**
-     * Method getRoomNameForReservation
+     * Method get_room_name_for_reservation
      *
      * @param $reservation_id $reservation_id [explicite description]
      *
      * @return void
      */
-    public function getRoomNameForReservation($reservation_id = false)
+    public function get_room_name_for_reservation($reservation_id = false)
     {
 
         // Get room id from post meta

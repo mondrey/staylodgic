@@ -126,7 +126,7 @@ class GuestRegistry
      * @param string $stay_booking_number The booking number to search for.
      * @return array|bool An associative array with 'reservationID' and 'guestRegisterID', or false if not both found.
      */
-    public function fetchResRegIDsByBookingNumber($stay_booking_number)
+    public function fetch_res_reg_ids_by_booking_number($stay_booking_number)
     {
         $reservationArgs = array(
             'post_type'   => 'slgc_reservations', // Adjust to your reservation post type
@@ -181,10 +181,10 @@ class GuestRegistry
 
         $stay_booking_number = get_post_meta($registration_post_id, 'staylodgic_registry_bookingnumber', true);
 
-        $resRegIDs = $this->fetchResRegIDsByBookingNumber($stay_booking_number);
+        $res_reg_ids = $this->fetch_res_reg_ids_by_booking_number($stay_booking_number);
 
-        $reservationID = $resRegIDs['reservationID'];
-        $registerID = $resRegIDs['guestRegisterID'];
+        $reservationID = $res_reg_ids['reservationID'];
+        $registerID = $res_reg_ids['guestRegisterID'];
 
         $reservation_instance = new \Staylodgic\Reservations();
 
@@ -241,7 +241,7 @@ class GuestRegistry
      * @param int $registerID The ID used for registering.
      * @param string $outputFormat Specifies the output format: 'text', 'fraction', or 'icons'.
      */
-    public function outputRegistrationAndOccupancy($reservationID, $registerID, $outputFormat = 'text')
+    public function output_registration_and_occupancy($reservationID, $registerID, $outputFormat = 'text')
     {
         $reservation_instance = new \Staylodgic\Reservations();
 
@@ -779,9 +779,9 @@ class GuestRegistry
             // echo "<p>Full Name: " . esc_html(get_post_meta($stay_guest_id, 'staylodgic_full_name', true)) . "</p>";
             // echo "<p>Email Address: " . esc_html(get_post_meta($stay_guest_id, 'staylodgic_email_address', true)) . "</p>";
             $registry_instance = new \Staylodgic\GuestRegistry();
-            $resRegIDs =  $registry_instance->fetchResRegIDsByBookingNumber($booking_number);
-            if ($resRegIDs) {
-                $guest_registration_url = get_permalink($resRegIDs['guestRegisterID']);
+            $res_reg_ids =  $registry_instance->fetch_res_reg_ids_by_booking_number($booking_number);
+            if ($res_reg_ids) {
+                $guest_registration_url = get_permalink($res_reg_ids['guestRegisterID']);
                 echo '<a href="' . esc_url($guest_registration_url) . '" class="book-button button-inline">' . __('Proceed to register', 'staylodgic') . '</a>';
             }
             // Add other guest details as needed

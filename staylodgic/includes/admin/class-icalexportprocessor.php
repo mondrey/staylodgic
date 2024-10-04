@@ -288,7 +288,7 @@ class IcalExportProcessor
             $checkout_date = get_post_meta($reservation->ID, 'staylodgic_checkout_date', true) ?: '-';
             $booking_number = get_post_meta($reservation->ID, 'staylodgic_booking_number', true) ?: '-';
             $reservation_status = get_post_meta($reservation->ID, 'staylodgic_reservation_status', true) ?: '-';
-            $room_name = $reservation_instance->getRoomNameForReservation($reservation->ID);
+            $room_name = $reservation_instance->get_room_name_for_reservation($reservation->ID);
             $adults_number = $reservation_instance->get_number_of_adults_for_reservation($reservation->ID);
             $children_number = $reservation_instance->get_number_of_children_for_reservation($reservation->ID);
 
@@ -328,14 +328,14 @@ class IcalExportProcessor
                 $checkout_date      = get_post_meta($reservation->ID, 'staylodgic_checkout_date', true) ?: '-';
                 $booking_number     = get_post_meta($reservation->ID, 'staylodgic_booking_number', true) ?: '-';
                 $booking_channel     = get_post_meta($reservation->ID, 'staylodgic_booking_channel', true) ?: '-';
-                $room_name          = $reservation_instance->getRoomNameForReservation($reservation->ID);
+                $room_name          = $reservation_instance->get_room_name_for_reservation($reservation->ID);
 
                 $registry_instance = new \Staylodgic\GuestRegistry();
-                $resRegIDs         = $registry_instance->fetchResRegIDsByBookingNumber($booking_number);
+                $res_reg_ids         = $registry_instance->fetch_res_reg_ids_by_booking_number($booking_number);
 
-                if (isset($resRegIDs) && is_array($resRegIDs)) {
+                if (isset($res_reg_ids) && is_array($res_reg_ids)) {
 
-                    $registerID = $resRegIDs['guestRegisterID'];
+                    $registerID = $res_reg_ids['guestRegisterID'];
                     $registration_data = get_post_meta($registerID, 'staylodgic_registration_data', true);
 
                     if (is_array($registration_data) && !empty($registration_data)) {

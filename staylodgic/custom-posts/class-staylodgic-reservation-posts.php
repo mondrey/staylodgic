@@ -102,9 +102,9 @@ class staylodgic_Reservation_Posts
                 break;
             case "reservation_registered":
                 $registry_instance = new \Staylodgic\GuestRegistry();
-                $resRegIDs =  $registry_instance->fetchResRegIDsByBookingNumber($bookingnumber);
-                if ($resRegIDs) {
-                    $registration_occupancy = $registry_instance->outputRegistrationAndOccupancy($resRegIDs['reservationID'], $resRegIDs['guestRegisterID'], 'icons');
+                $res_reg_ids =  $registry_instance->fetch_res_reg_ids_by_booking_number($bookingnumber);
+                if ($res_reg_ids) {
+                    $registration_occupancy = $registry_instance->output_registration_and_occupancy($res_reg_ids['reservationID'], $res_reg_ids['guestRegisterID'], 'icons');
                     echo wp_kses($registration_occupancy, staylodgic_get_allowed_tags());
                 }
                 break;
