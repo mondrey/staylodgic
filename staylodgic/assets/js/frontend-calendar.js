@@ -104,16 +104,16 @@
 			roomOccupiedGroup.addClass("room-selected");
 
 			var bookingnumber = $("#reservation-data").data("bookingnumber");
-			var roomId = roomOccupiedGroup.data("room-id");
+			var stay_room_id = roomOccupiedGroup.data("room-id");
 			var roomPriceTotal = roomOccupiedGroup
 				.find(".room-price-total")
 				.data("roomprice");
 			var bedLayout = $(
-				"input[name='room[" + roomId + "][bedlayout]']:checked"
+				"input[name='room[" + stay_room_id + "][bedlayout]']:checked"
 			).val();
 			var mealPlanInput = $(
 				"input[name='room[" +
-					roomId +
+					stay_room_id +
 					"][meal_plan][optional]']:checked"
 			);
 			var mealPlan = mealPlanInput.val();
@@ -126,7 +126,7 @@
 			var dataToSend = {
 				action: "process_RoomPrice",
 				booking_number: bookingnumber,
-				room_id: roomId,
+				room_id: stay_room_id,
 				room_price: roomPriceTotal,
 				bed_layout: bedLayout,
 				meal_plan: mealPlan,
@@ -195,16 +195,16 @@
 				'input[name="staylodgic_roomlistingbox_nonce"]'
 			).val();
 			var bookingnumber = $("#reservation-data").data("bookingnumber");
-			var roomId = roomOccupiedGroup.data("room-id");
+			var stay_room_id = roomOccupiedGroup.data("room-id");
 			var roomPriceTotal = roomOccupiedGroup
 				.find(".room-price-total")
 				.data("roomprice");
 			var bedLayout = $(
-				"input[name='room[" + roomId + "][bedlayout]']:checked"
+				"input[name='room[" + stay_room_id + "][bedlayout]']:checked"
 			).val();
 			var mealPlanInput = $(
 				"input[name='room[" +
-					roomId +
+					stay_room_id +
 					"][meal_plan][optional]']:checked"
 			);
 			var mealPlan = mealPlanInput.val();
@@ -214,7 +214,7 @@
 			var dataToSend = {
 				action: "process_SelectedRoom",
 				bookingnumber: bookingnumber,
-				room_id: roomId,
+				room_id: stay_room_id,
 				room_price: roomPriceTotal,
 				bed_layout: bedLayout,
 				meal_plan: mealPlan,
@@ -479,7 +479,7 @@
 			function disableFullyBookedDates(date) {
 				var fullyBookedDates = getFullyBookedDates();
 				// Convert date to local YYYY-MM-DD format
-				var dateString =
+				var stay_date_string =
 					date.getFullYear() +
 					"-" +
 					("0" + (date.getMonth() + 1)).slice(-2) +
@@ -487,10 +487,10 @@
 					("0" + date.getDate()).slice(-2);
 
 				if (Array.isArray(fullyBookedDates)) {
-					return fullyBookedDates.includes(dateString);
+					return fullyBookedDates.includes(stay_date_string);
 				} else if (typeof fullyBookedDates === "object") {
 					// Check if the date is in the object keys
-					return fullyBookedDates.hasOwnProperty(dateString);
+					return fullyBookedDates.hasOwnProperty(stay_date_string);
 				}
 
 				return false;

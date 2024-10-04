@@ -248,7 +248,7 @@ class Activity {
 	 */
 	public static function has_activities() {
 		$roomlist   = array();
-		$activities = self::query_activities(); // Call queryRooms() method here
+		$activities = self::query_activities(); // Call query_rooms() method here
 		if ( $activities ) {
 			return true;
 		}

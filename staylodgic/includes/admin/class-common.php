@@ -7,14 +7,14 @@ class Common
 	/**
 	 * Method reduceDate
 	 *
-	 * @param $dateString
+	 * @param $stay_date_string
 	 * @param $days $days
 	 * @param $returnAsString
 	 *
 	 * @return void
 	 */
-	public static function reduceDate($dateString, $days, $returnAsString = true) {
-		$date = new \DateTime($dateString);
+	public static function reduceDate($stay_date_string, $days, $returnAsString = true) {
+		$date = new \DateTime($stay_date_string);
 		$date->modify("-$days days");
 		
 		if ($returnAsString) {

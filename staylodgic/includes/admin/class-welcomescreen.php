@@ -202,4 +202,4 @@ class WelcomeScreen
 }
 
 // Instantiate the class
-$BatchProcessorBase = new \Staylodgic\WelcomeScreen();
+$Batch_Processor_Base = new \Staylodgic\WelcomeScreen();

@@ -265,15 +265,15 @@ function staylodgic_sync_intervals() {
 /**
  * Method staylodgic_formatDate
  *
- * @param $dateString $dateString [explicite description]
+ * @param $stay_date_string $stay_date_string [explicite description]
  * @param $formatChoice $formatChoice [explicite description]
  *
  * @return void
  */
-function staylodgic_formatDate($dateString, $formatChoice = 'monthshort_first')
+function staylodgic_formatDate($stay_date_string, $formatChoice = 'monthshort_first')
 {
 	$formattedDate = '';
-	$dateTime = new DateTime($dateString);
+	$dateTime = new DateTime($stay_date_string);
 
 	switch ($formatChoice) {
 		case 'default':

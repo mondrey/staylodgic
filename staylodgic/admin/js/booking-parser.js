@@ -132,7 +132,7 @@
 			button.find('.spinner-zone').addClass('spinner-border');
 			button.prop("disabled", true);
 
-			var roomId = $(this).data('room-id');
+			var stay_room_id = $(this).data('room-id');
 			var selectedMonth = $(".exporter_calendar").val(); // Get the selected month from the input field
 			console.log( selectedMonth );
 			$.ajax({
@@ -140,7 +140,7 @@
 				type: 'POST',
 				data: {
 					action: 'download_ical',
-					room_id: roomId,
+					room_id: stay_room_id,
 					month: selectedMonth, // Pass the selected month to the AJAX function
 					nonce: staylodgic_admin_vars.nonce
 				},
@@ -314,8 +314,8 @@
 
 		// Function to process and send events in batches
 		function processEventsBatch(events) {
-			var batchSize = 5; // Number of events to process in each batch
-			var eventsBatch = events.splice(0, batchSize); // Get the next batch of events
+			var batch_size = 5; // Number of events to process in each batch
+			var eventsBatch = events.splice(0, batch_size); // Get the next batch of events
 			// console.log( 'The process: ' + originalProcessedEvents );
 			// Make an AJAX request to insert the reservation posts
 			$.ajax({

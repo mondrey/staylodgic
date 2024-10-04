@@ -36,11 +36,11 @@ class Rooms
     }
     
     /**
-     * Method queryRooms
+     * Method query_rooms
      *
      * @return void
      */
-    public static function queryRooms()
+    public static function query_rooms()
     {
         $rooms = get_posts(
             array(
@@ -62,7 +62,7 @@ class Rooms
     public static function getRoomList()
     {
         $roomlist = [];
-        $rooms = self::queryRooms(); // Call queryRooms() method here
+        $rooms = self::query_rooms(); // Call query_rooms() method here
         if ($rooms) {
             foreach ($rooms as $key => $list) {
                 $roomlist[$list->ID] = $list->post_title;
@@ -77,22 +77,22 @@ class Rooms
      * Method isChannelRoomBooked
      *
      * @param $room_id $room_id [explicite description]
-     * @param $dateString $dateString [explicite description]
+     * @param $stay_date_string $stay_date_string [explicite description]
      *
      * @return void
      */
-    public static function isChannelRoomBooked($room_id, $dateString)
+    public static function isChannelRoomBooked($room_id, $stay_date_string)
     {
-        $channelArray = get_post_meta($room_id, 'staylodgic_channel_quantity_array', true);
+        $channel_array = get_post_meta($room_id, 'staylodgic_channel_quantity_array', true);
 
         // Check if the channel_quantity_array exists and the quanitity field is available
-        if (!empty($channelArray) && isset($channelArray['quantity'])) {
-            $quantityArray = $channelArray['quantity'];
+        if (!empty($channel_array) && isset($channel_array['quantity'])) {
+            $stay_quantity_array = $channel_array['quantity'];
         }
 
         // Check if the quantity_array exists and the date is available
-        if (!empty($quantityArray) && isset($quantityArray[$dateString])) {
-            if ('0' == $quantityArray[$dateString]) {
+        if (!empty($stay_quantity_array) && isset($stay_quantity_array[$stay_date_string])) {
+            if ('0' == $stay_quantity_array[$stay_date_string]) {
                 return true;
             }
         }
@@ -104,21 +104,21 @@ class Rooms
      * Method getTotalOperatingRoomQtyForDate
      *
      * @param $room_id $room_id [explicite description]
-     * @param $dateString $dateString [explicite description]
+     * @param $stay_date_string $stay_date_string [explicite description]
      *
      * @return void
      */
-    public static function getTotalOperatingRoomQtyForDate($room_id, $dateString)
+    public static function getTotalOperatingRoomQtyForDate($room_id, $stay_date_string)
     {
 
-        $quantityArray = get_post_meta($room_id, 'staylodgic_quantity_array', true);
+        $stay_quantity_array = get_post_meta($room_id, 'staylodgic_quantity_array', true);
 
-        // $reservation_instance = new \Staylodgic\Reservations($dateString, $room_id);
-        // $remaining = $reservation_instance->getDirectRemainingRoomCount( $dateString, $room_id );
+        // $reservation_instance = new \Staylodgic\Reservations($stay_date_string, $room_id);
+        // $remaining = $reservation_instance->getDirectRemainingRoomCount( $stay_date_string, $room_id );
 
         // Check if the quantity_array exists and the date is available
-        if (!empty($quantityArray) && isset($quantityArray[$dateString])) {
-            return $quantityArray[$dateString];
+        if (!empty($stay_quantity_array) && isset($stay_quantity_array[$stay_date_string])) {
+            return $stay_quantity_array[$stay_date_string];
         }
 
         return false;
@@ -128,21 +128,21 @@ class Rooms
      * Method getMaxQuantityForRoom
      *
      * @param $room_id $room_id [explicite description]
-     * @param $dateString $dateString [explicite description]
+     * @param $stay_date_string $stay_date_string [explicite description]
      *
      * @return void
      */
-    public static function getMaxQuantityForRoom($room_id, $dateString)
+    public static function getMaxQuantityForRoom($room_id, $stay_date_string)
     {
 
-        if (self::isChannelRoomBooked($room_id, $dateString)) {
+        if (self::isChannelRoomBooked($room_id, $stay_date_string)) {
             return '0';
         }
-        $quantityArray = get_post_meta($room_id, 'staylodgic_quantity_array', true);
+        $stay_quantity_array = get_post_meta($room_id, 'staylodgic_quantity_array', true);
 
         // Check if the quantity_array exists and the date is available
-        if (!empty($quantityArray) && isset($quantityArray[$dateString])) {
-            return $quantityArray[$dateString];
+        if (!empty($stay_quantity_array) && isset($stay_quantity_array[$stay_date_string])) {
+            return $stay_quantity_array[$stay_date_string];
         }
 
         return false;
@@ -206,7 +206,7 @@ class Rooms
         $available_rooms = array();
 
         // get all rooms
-        $room_list = $this->queryRooms();
+        $room_list = $this->query_rooms();
 
         foreach ($room_list as $room) {
             $count = $this->getMaxRoom_QTY_For_DateRange($room->ID, $checkin_date, $checkout_date, $reservationid = '');
@@ -236,7 +236,7 @@ class Rooms
         $can_accomodate = array();
 
         // get all rooms
-        $room_list = self::queryRooms();
+        $room_list = self::query_rooms();
 
         foreach ($room_list as $room) {
             $count = self::getMaxRoom_QTY_For_DateRange($room->ID, $checkin_date, $checkout_date, $reservationid = '');
@@ -264,13 +264,13 @@ class Rooms
     /**
      * Method getRoom_RATE_For_DateRange
      *
-     * @param $roomId $roomId [explicite description]
+     * @param $stay_room_id $stay_room_id [explicite description]
      * @param $checkin_date $checkin_date [explicite description]
      * @param $checkout_date $checkout_date [explicite description]
      *
      * @return void
      */
-    public function getRoom_RATE_For_DateRange($roomId, $checkin_date, $checkout_date)
+    public function getRoom_RATE_For_DateRange($stay_room_id, $checkin_date, $checkout_date)
     {
         $start = new \DateTime($checkin_date);
         $end = new \DateTime($checkout_date);
@@ -288,7 +288,7 @@ class Rooms
 
         foreach ($daterange as $date) {
             
-            $rate = $roomrate_instance->getRoomRateByDate($roomId, $date->format("Y-m-d"));
+            $rate = $roomrate_instance->getRoomRateByDate($stay_room_id, $date->format("Y-m-d"));
             $rates_daterange['date'][$date->format("Y-m-d")] = $rate;
             $total_rate = $total_rate + $rate;
         }
@@ -346,14 +346,14 @@ class Rooms
     /**
      * Method getMaxRoom_QTY_For_DateRange
      *
-     * @param $roomId $roomId [explicite description]
+     * @param $stay_room_id $stay_room_id [explicite description]
      * @param $checkin_date $checkin_date [explicite description]
      * @param $checkout_date $checkout_date [explicite description]
      * @param $reservationid $reservationid [explicite description]
      *
      * @return void
      */
-    public function getMaxRoom_QTY_For_DateRange($roomId, $checkin_date, $checkout_date, $reservationid)
+    public function getMaxRoom_QTY_For_DateRange($stay_room_id, $checkin_date, $checkout_date, $reservationid)
     {
         // get the date range
         $start = new \DateTime($checkin_date);
@@ -368,7 +368,7 @@ class Rooms
 
         foreach ($daterange as $date) {
             // Check if the room is fully booked for the given date
-            $count = $this->getMaxRoom_QTY_ForDay($roomId, $date->format("Y-m-d"), $reservationid);
+            $count = $this->getMaxRoom_QTY_ForDay($stay_room_id, $date->format("Y-m-d"), $reservationid);
             
             if ($count < $max_count) {
                 $max_count = $count;
@@ -387,19 +387,19 @@ class Rooms
     /**
      * Method getMaxRoom_QTY_ForDay
      *
-     * @param $roomId $roomId [explicite description]
-     * @param $dateString $dateString [explicite description]
+     * @param $stay_room_id $stay_room_id [explicite description]
+     * @param $stay_date_string $stay_date_string [explicite description]
      * @param $excluded_reservation_id $excluded_reservation_id [explicite description]
      *
      * @return void
      */
-    public function getMaxRoom_QTY_ForDay($roomId, $dateString, $excluded_reservation_id = null)
+    public function getMaxRoom_QTY_ForDay($stay_room_id, $stay_date_string, $excluded_reservation_id = null)
     {
 
-        $reservation_instance = new \Staylodgic\Reservations($dateString, $roomId, $reservation_id = false, $excluded_reservation_id);
+        $reservation_instance = new \Staylodgic\Reservations($stay_date_string, $stay_room_id, $reservation_id = false, $excluded_reservation_id);
         $reserved_room_count = $reservation_instance->countReservationsForDay();
 
-        $max_count = \Staylodgic\Rooms::getMaxQuantityForRoom($roomId, $dateString);
+        $max_count = \Staylodgic\Rooms::getMaxQuantityForRoom($stay_room_id, $stay_date_string);
         $avaiblable_count = $max_count - $reserved_room_count;
         if (empty($avaiblable_count) || !isset($avaiblable_count)) {
             $avaiblable_count = 0;
@@ -538,11 +538,11 @@ class Rooms
         }
 
         // Retrieve the existing quantity_array meta value
-        $quantityArray = get_post_meta($postID, 'staylodgic_quantity_array', true);
+        $stay_quantity_array = get_post_meta($postID, 'staylodgic_quantity_array', true);
 
         // If the quantity_array is not an array, initialize it as an empty array
-        if (!is_array($quantityArray)) {
-            $quantityArray = array();
+        if (!is_array($stay_quantity_array)) {
+            $stay_quantity_array = array();
         }
 
         // Generate an array of dates between the start and end dates
@@ -578,13 +578,13 @@ class Rooms
                 return;
             }
 
-            $quantityArray[$date] = $final_quantity;
+            $stay_quantity_array[$date] = $final_quantity;
         }
 
         // Update the metadata for the 'slgc_reservations' post
-        if (!empty($postID) && is_numeric($postID) && is_array($quantityArray)) {
+        if (!empty($postID) && is_numeric($postID) && is_array($stay_quantity_array)) {
             // Update the post meta with the modified quantity array
-            update_post_meta($postID, 'staylodgic_quantity_array', $quantityArray);
+            update_post_meta($postID, 'staylodgic_quantity_array', $stay_quantity_array);
             // Return a success response
             $response = array(
                 'success' => true,

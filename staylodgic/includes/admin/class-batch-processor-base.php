@@ -2,9 +2,9 @@
 
 namespace Staylodgic;
 
-class BatchProcessorBase
+class Batch_Processor_Base
 {
-    private $batchSize = 50;
+    private $batch_size = 50;
 
     public function __construct()
     {
@@ -94,7 +94,7 @@ class BatchProcessorBase
 
         // Parse the ICS file and store the events in a transient.
         $file_path    = $ics_url;
-        $file_md5Hash = md5($file_path);
+        $file_md5_hash = md5($file_path);
         $parser->initString($file_contents); // Change this line
         $events = $parser->events();
         set_transient('staylodgic_unprocessed_reservation_import', $events, 12 * HOUR_IN_SECONDS); // store for 12 hours
@@ -118,11 +118,11 @@ class BatchProcessorBase
         }
 
         // Define the batch size.
-        $batchSize = 10; // reduce batch size for testing purposes
+        $batch_size = 10; // reduce batch size for testing purposes
 
         // Process a batch of events.
         $processedEvents = [];
-        for ($i = 0; $i < $this->batchSize; $i++) {
+        for ($i = 0; $i < $this->batch_size; $i++) {
             // Check if there are any more events to process.
             if (empty($events)) {
                 break;
@@ -160,7 +160,7 @@ class BatchProcessorBase
             $checkout_date = date('Y-m-d', strtotime($event->dtend));
 
             $processedEvent = [
-                'SIGNATURE'   => $file_md5Hash,
+                'SIGNATURE'   => $file_md5_hash,
                 'CREATED'     => $event->created,
                 'DTEND'       => $event->dtend,
                 'DTSTART'     => $event->dtstart,
@@ -197,4 +197,4 @@ class BatchProcessorBase
 }
 
 // Instantiate the class
-$BatchProcessorBase = new \Staylodgic\BatchProcessorBase();
+$Batch_Processor_Base = new \Staylodgic\Batch_Processor_Base();

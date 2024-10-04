@@ -499,7 +499,7 @@ class Reservations
      * @param int $room_id The ID of the room.
      * @return array An associative array with dates as keys and the number of remaining rooms as values.
      */
-    public function calculateAndUpdateRemainingRoomCountsForAllDates($room_id = false) {
+    public function calculate_and_update_remaining_room_counts_for_all_dates($room_id = false) {
         if (!$room_id) {
             $room_id = $this->room_id;
         }
@@ -518,7 +518,7 @@ class Reservations
         }
 
         // Initialize the remaining rooms count array
-        $remaining_rooms_count = self::getRemainingRoomCountArray( $room_id );
+        $remaining_rooms_count = self::get_remaining_room_count_array( $room_id );
         if (!is_array($remaining_rooms_count)) {
             $remaining_rooms_count = [];
         }
@@ -571,7 +571,7 @@ class Reservations
         $remaining_rooms = $total_rooms - $reserved_rooms;
 
         // Update the remaining rooms count in the metadata
-        $remaining_rooms_count = self::getRemainingRoomCountArray( $room_id );
+        $remaining_rooms_count = self::get_remaining_room_count_array( $room_id );
         if (!is_array($remaining_rooms_count)) {
             $remaining_rooms_count = [];
         }
@@ -584,10 +584,10 @@ class Reservations
     /**
      * Retrieves and returns the remaining room count array for a given room ID.
      * 
-     * @param int $roomId The ID of the room.
+     * @param int $stay_room_id The ID of the room.
      * @return array The associative array of remaining room counts, with dates as keys.
      */
-    public function getRemainingRoomCountArray( $room_id = false ) {
+    public function get_remaining_room_count_array( $room_id = false ) {
         if (!$room_id) {
             $room_id = $this->room_id;
         }
@@ -595,14 +595,14 @@ class Reservations
         $remainingQuantityArray_json = get_post_meta($room_id, 'staylodgic_remaining_rooms_count', true);
 
         // Decode the JSON string
-        $remainingQuantityArray = json_decode($remainingQuantityArray_json, true);
+        $remaining_quantity_array = json_decode($remainingQuantityArray_json, true);
 
         // Check if the result is an array, if not, return an empty array
-        if (!is_array($remainingQuantityArray)) {
-            $remainingQuantityArray = [];
+        if (!is_array($remaining_quantity_array)) {
+            $remaining_quantity_array = [];
         }
 
-        return $remainingQuantityArray;
+        return $remaining_quantity_array;
     }
 
 
@@ -627,7 +627,7 @@ class Reservations
         }
 
         // Retrieve the remaining rooms count array for the room
-        $remaining_rooms_count = self::getRemainingRoomCountArray( $room_id );
+        $remaining_rooms_count = self::get_remaining_room_count_array( $room_id );
 
         // Check if the array and the specific date entry exist
         if (is_array($remaining_rooms_count) && isset($remaining_rooms_count[$date])) {
@@ -651,13 +651,13 @@ class Reservations
         }
         $totalRemaining = 0;
 
-        // Retrieve all rooms using the provided Rooms::queryRooms() method
-        $rooms = Rooms::queryRooms();
+        // Retrieve all rooms using the provided Rooms::query_rooms() method
+        $rooms = Rooms::query_rooms();
 
         // Loop through each room
         foreach ($rooms as $room) {
             // Get the remaining room count array for the room
-            $remainingRoomsArray = $this->getRemainingRoomCountArray($room->ID);
+            $remainingRoomsArray = $this->get_remaining_room_count_array($room->ID);
 
             // Add the remaining count for the specific date to the total
             if (isset($remainingRoomsArray[$date])) {
@@ -1244,28 +1244,28 @@ class Reservations
     /**
      * Method isRoom_For_Day_Fullybooked
      *
-     * @param $roomId $roomId [explicite description]
-     * @param $dateString $dateString [explicite description]
+     * @param $stay_room_id $stay_room_id [explicite description]
+     * @param $stay_date_string $stay_date_string [explicite description]
      * @param $excluded_reservation_id $excluded_reservation_id [explicite description]
      *
      * @return void
      */
-    public function isRoom_For_Day_Fullybooked($roomId = false, $dateString = false, $excluded_reservation_id = null)
+    public function isRoom_For_Day_Fullybooked($stay_room_id = false, $stay_date_string = false, $excluded_reservation_id = null)
     {
 
-        if (!$roomId) {
-            $roomId = $this->room_id;
+        if (!$stay_room_id) {
+            $stay_room_id = $this->room_id;
         }
-        if (!$dateString) {
-            $dateString = $this->date;
+        if (!$stay_date_string) {
+            $stay_date_string = $this->date;
         }
         if (!$excluded_reservation_id) {
             $excluded_reservation_id = $this->reservation_id_excluded;
         }
 
-        $reserved_room_count = $this->countReservationsForDay($room_id = $roomId, $day = $dateString, $excluded_reservation_id);
+        $reserved_room_count = $this->countReservationsForDay($room_id = $stay_room_id, $day = $stay_date_string, $excluded_reservation_id);
 
-        $max_count        = \Staylodgic\Rooms::getMaxQuantityForRoom($roomId, $dateString);
+        $max_count        = \Staylodgic\Rooms::getMaxQuantityForRoom($stay_room_id, $stay_date_string);
         $avaiblable_count = $max_count - $reserved_room_count;
         if (empty($avaiblable_count) || !isset($avaiblable_count)) {
             $avaiblable_count = 0;
@@ -1331,7 +1331,7 @@ class Reservations
         $dailyRoomAvailability = array();
     
         // Query all rooms
-        $room_list = \Staylodgic\Rooms::queryRooms();
+        $room_list = \Staylodgic\Rooms::query_rooms();
     
         // Initialize the array for each date in the range
         foreach ($daterange as $date) {
@@ -1386,7 +1386,7 @@ class Reservations
     
         $room_availablity = array();
     
-        $room_list = \Staylodgic\Rooms::queryRooms();
+        $room_list = \Staylodgic\Rooms::query_rooms();
     
         $count = 0;
     
@@ -1414,18 +1414,18 @@ class Reservations
     /**
      * Method isRoom_Fullybooked_For_DateRange
      *
-     * @param $roomId $roomId [explicite description]
+     * @param $stay_room_id $stay_room_id [explicite description]
      * @param $checkin_date $checkin_date [explicite description]
      * @param $checkout_date $checkout_date [explicite description]
      * @param $reservationid $reservationid [explicite description]
      *
      * @return void
      */
-    public function isRoom_Fullybooked_For_DateRange($roomId = false, $checkin_date = false, $checkout_date = false, $reservationid = false)
+    public function isRoom_Fullybooked_For_DateRange($stay_room_id = false, $checkin_date = false, $checkout_date = false, $reservationid = false)
     {
 
-        if (!$roomId) {
-            $roomId = $this->room_id;
+        if (!$stay_room_id) {
+            $stay_room_id = $this->room_id;
         }
         if (!$reservationid) {
             $reservationid = $this->reservation_id;
@@ -1439,7 +1439,7 @@ class Reservations
 
         foreach ($daterange as $date) {
             // Check if the room is fully booked for the given date
-            if ($this->isRoom_For_Day_Fullybooked($roomId, $date->format("Y-m-d"), $reservationid)) {
+            if ($this->isRoom_For_Day_Fullybooked($stay_room_id, $date->format("Y-m-d"), $reservationid)) {
                 // If the room is fully booked for any of the dates in the range, return true
                 return true;
             }
@@ -1476,50 +1476,50 @@ class Reservations
     /**
      * Method Checks if room was ever opened with a count, even zero.   
      *
-     * @param $dateString $dateString [explicite description]
+     * @param $stay_date_string $stay_date_string [explicite description]
      * @param $room_id $room_id [explicite description]
      *
      * @return void
      */
-    public function wasRoom_Ever_Opened($dateString = false, $room_id = false)
+    public function wasRoom_Ever_Opened($stay_date_string = false, $room_id = false)
     {
 
         if (!$room_id) {
             $room_id = $this->room_id;
         }
-        if (!$dateString) {
-            $dateString = $this->date;
+        if (!$stay_date_string) {
+            $stay_date_string = $this->date;
         }
 
-        $max_count = \Staylodgic\Rooms::getMaxQuantityForRoom($room_id, $dateString);
+        $max_count = \Staylodgic\Rooms::getMaxQuantityForRoom($room_id, $stay_date_string);
         return $max_count;
     }
     
     /**
      * Method remainingRooms_For_Day
      *
-     * @param $dateString $dateString [explicite description]
+     * @param $stay_date_string $stay_date_string [explicite description]
      * @param $room_id $room_id [explicite description]
      * @param $excluded_reservation_id $excluded_reservation_id [explicite description]
      *
      * @return void
      */
-    public function remainingRooms_For_Day($dateString = false, $room_id = false, $excluded_reservation_id = false)
+    public function remainingRooms_For_Day($stay_date_string = false, $room_id = false, $excluded_reservation_id = false)
     {
 
         if (!$room_id) {
             $room_id = $this->room_id;
         }
-        if (!$dateString) {
-            $dateString = $this->date;
+        if (!$stay_date_string) {
+            $stay_date_string = $this->date;
         }
         if (!$excluded_reservation_id) {
             $excluded_reservation_id = $this->reservation_id_excluded;
         }
 
-        $reserved_room_count = $this->countReservationsForDay($room_id, $dateString, $excluded_reservation_id);
+        $reserved_room_count = $this->countReservationsForDay($room_id, $stay_date_string, $excluded_reservation_id);
 
-        $max_count        = \Staylodgic\Rooms::getMaxQuantityForRoom($room_id, $dateString);
+        $max_count        = \Staylodgic\Rooms::getMaxQuantityForRoom($room_id, $stay_date_string);
         $avaiblable_count = $max_count - $reserved_room_count;
         if (empty($avaiblable_count) || !isset($avaiblable_count)) {
             $avaiblable_count = 0;
@@ -1534,22 +1534,22 @@ class Reservations
      * @param $reservations $reservations [explicite description]
      * @param $reservation_status $reservation_status [explicite description]
      * @param $reservation_substatus $reservation_substatus [explicite description]
-     * @param $dateString $dateString [explicite description]
+     * @param $stay_date_string $stay_date_string [explicite description]
      * @param $room_id $room_id [explicite description]
      *
      * @return void
      */
-    public function buildReservationsDataForRoomForDay( $reservations, $reservation_status = false, $reservation_substatus = false, $dateString = false, $room_id = false)
+    public function buildReservationsDataForRoomForDay( $reservations, $reservation_status = false, $reservation_substatus = false, $stay_date_string = false, $room_id = false)
     {
 
         if (!$room_id) {
             $room_id = $this->room_id;
         }
-        if (!$dateString) {
-            $dateString = $this->date;
+        if (!$stay_date_string) {
+            $stay_date_string = $this->date;
         }
 
-        $stay_current_date = strtotime($dateString);
+        $stay_current_date = strtotime($stay_date_string);
         $start       = false;
 
         $reservation_checkin  = '';
@@ -1723,7 +1723,7 @@ class Reservations
         $reservationid   = $_POST[ 'reservationid' ];
         $available_rooms = array();
 
-        $room_list = \Staylodgic\Rooms::queryRooms();
+        $room_list = \Staylodgic\Rooms::query_rooms();
 
         foreach ($room_list as $room) {
             $is_fullybooked = $this->isRoom_Fullybooked_For_DateRange($room->ID, $checkin_date, $checkout_date, $reservation_id = $reservationid);

@@ -211,7 +211,7 @@ class AvailablityCalendarBase
     {
         $totalOccupiedRooms  = 0;
         $totalAvailableRooms = 0;
-        $this->rooms         = \Staylodgic\Rooms::queryRooms();
+        $this->rooms         = \Staylodgic\Rooms::query_rooms();
 
         foreach ($this->rooms as $room) {
               // Increment the total number of occupied rooms
@@ -245,7 +245,7 @@ class AvailablityCalendarBase
     public function calculateRemainingRoomsForDate($currentdateString)
     {
         $totalRemainingRooms  = 0;
-        $this->rooms         = \Staylodgic\Rooms::queryRooms();
+        $this->rooms         = \Staylodgic\Rooms::query_rooms();
 
         foreach ($this->rooms as $room) {
               // Increment the total number of occupied rooms

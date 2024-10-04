@@ -472,7 +472,7 @@ class Booking
         $new_room_availability_array = array();
 
         // Process each sub-array
-        foreach ($availableRoomDates as $roomId => $subArray) {
+        foreach ($availableRoomDates as $stay_room_id => $subArray) {
             // Initialize the new sub-array for the current room
             $newSubArray = array();
 
@@ -488,10 +488,10 @@ class Booking
                     'check-out' => $lastKey,
                 );
             }
-            $can_accomodate = $room_instance->getMax_room_occupants($roomId);
+            $can_accomodate = $room_instance->getMax_room_occupants($stay_room_id);
             if ($can_accomodate['guests'] >= $maxOccpuants) {
                 // Add the new sub-array to the new room availability array
-                $new_room_availability_array[$roomId] = $newSubArray;
+                $new_room_availability_array[$stay_room_id] = $newSubArray;
             }
         }
         $roomAvailabityArray = $new_room_availability_array;
@@ -1251,7 +1251,7 @@ class Booking
             $bedsetup       = $room_data["staylodgic_alt_bedsetup"][0];
             $bedsetup_array = unserialize($bedsetup);
 
-            foreach ($bedsetup_array as $roomId => $roomData) {
+            foreach ($bedsetup_array as $stay_room_id => $roomData) {
                 // Get the bed layout for this room
 
                 $bedLayout = '';
@@ -1319,7 +1319,7 @@ class Booking
 
             $firstRoomId = array_key_first($bedsetup_array);
 
-            foreach ($bedsetup_array as $roomId => $roomData) {
+            foreach ($bedsetup_array as $stay_room_id => $roomData) {
                 // Get the bed layout for this room
 
                 $bedLayout = '';
@@ -1344,7 +1344,7 @@ class Booking
                 $html .= "<input type='radio' id='room-" . esc_attr($room_id) . "-bedlayout-" . esc_attr($bedLayout) . "' name='room[" . esc_attr($room_id) . "][bedlayout]' value='" . esc_attr($bedLayout) . "'";
 
                 // Check the first radio input by default
-                if ($roomId === $firstRoomId) {
+                if ($stay_room_id === $firstRoomId) {
                     $html .= " checked";
                 }
 
@@ -2053,8 +2053,8 @@ class Booking
         $signature = md5('staylodgic_booking_system');
 
         $sync_status           = 'complete';
-        $availabilityProcessor = new AvailabilityBatchProcessor();
-        if ($availabilityProcessor->isSyncingInProgress()) {
+        $availabilityProcessor = new Availability_Batch_Processor();
+        if ($availabilityProcessor->is_syncing_in_progress()) {
             $sync_status = 'incomplete';
         }
 

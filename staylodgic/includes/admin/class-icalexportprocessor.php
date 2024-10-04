@@ -4,7 +4,7 @@ namespace Staylodgic;
 
 class IcalExportProcessor
 {
-    private $batchSize = 50;
+    private $batch_size = 50;
 
     public function __construct()
     {
@@ -162,7 +162,7 @@ class IcalExportProcessor
         echo '<input type="text" class="exporter_calendar" id="exporter_calendar" name="exporter_calendar" value="" />';
 
         echo '<div class="import-export-wrap">';
-        $rooms = Rooms::queryRooms();
+        $rooms = Rooms::query_rooms();
         foreach ($rooms as $room) {
             // Get meta
             $room_ical_data = get_post_meta($room->ID, 'room_ical_data', true);
@@ -243,7 +243,7 @@ class IcalExportProcessor
      */
     public function download_reservations_ical($room_id)
     {
-        $reservation_instance = new \Staylodgic\Reservations($dateString = '', $room_id);
+        $reservation_instance = new \Staylodgic\Reservations($stay_date_string = '', $room_id);
         $reservations_query = $reservation_instance->getReservationsForRoom(false, false, false, false, $room_id);
 
         // Extract post objects from WP_Query
@@ -312,7 +312,7 @@ class IcalExportProcessor
         $csv_data_header = "Booking Number,Full Name,ID,Country,Booking Channel,Room Name,Checkin Date,Checkin Time,Checkout Date,Checkout Time\r\n";
         $csv_data = '';
 
-        $rooms = Rooms::queryRooms();
+        $rooms = Rooms::query_rooms();
         foreach ($rooms as $room) {
 
             // Initialize Reservations instance with start date and end date
