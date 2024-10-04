@@ -73,13 +73,13 @@ class Cache
     }
     
     /**
-     * Method generateAnalyticsCacheKey
+     * Method generate_analytics_cache_key
      *
      * @param $key
      *
      * @return void
      */
-    public function generateAnalyticsCacheKey( $key )
+    public function generate_analytics_cache_key( $key )
     {
         
         $transient_key = 'staylodgic_analytics_' . md5($key);
@@ -185,13 +185,13 @@ class Cache
     }
     
     /**
-     * Method getCache
+     * Method get_cache
      *
      * @param $transient_key
      *
      * @return void
      */
-    public function getCache($transient_key = false)
+    public function get_cache($transient_key = false)
     {
 
         if (!$transient_key) {
@@ -203,16 +203,16 @@ class Cache
     }
     
     /**
-     * Method hasCache
+     * Method has_cache
      *
      * @param $transient_key
      *
      * @return void
      */
-    public function hasCache($transient_key = false)
+    public function has_cache($transient_key = false)
     {
 
-        if (false !== $this->getCache($transient_key)) {
+        if (false !== $this->get_cache($transient_key)) {
             return true;
         }
 

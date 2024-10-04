@@ -28,7 +28,7 @@
 			}
     
             var form_data = {};
-            var guestId = $(this).data('guest'); // Fetch the guest ID from the button
+            var stay_guest_id = $(this).data('guest'); // Fetch the guest ID from the button
 
             $('form#guestregistration input, form#guestregistration select').each(function() {
                 var label = $(this).data('label');
@@ -66,9 +66,9 @@
                 post_id: frontendAjax.post_id,
             };
 
-            // Include guestId only if it is set
-            if (guestId) {
-                ajaxData.guest_id = guestId;
+            // Include stay_guest_id only if it is set
+            if (stay_guest_id) {
+                ajaxData.guest_id = stay_guest_id;
             }
 
             $.ajax({

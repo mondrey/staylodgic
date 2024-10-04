@@ -75,14 +75,14 @@ class Reservations
                 if ( $activityFound ) {
                     echo "<p>Activity Date: " . esc_html(get_post_meta($reservationID, 'staylodgic_checkin_date', true)) . "</p>";
 
-                    $guestID = self::get_guest_id_for_activity($booking_number);
+                    $stay_guest_id = self::get_guest_id_for_activity($booking_number);
                     
                 } else {
                     echo "<p>Check-in Date: " . esc_html(get_post_meta($reservationID, 'staylodgic_checkin_date', true)) . "</p>";
                     echo "<p>Check-out Date: " . esc_html(get_post_meta($reservationID, 'staylodgic_checkout_date', true)) . "</p>";
                     echo "<p class='reservation-details-status-outer ".esc_attr( $reservation_details_status )."'>Status: <span class='reservation-details-status'>" . esc_html( $reservation_details_status ) . "</span></p>";
 
-                    $guestID = self::get_guest_id_for_reservation($booking_number);
+                    $stay_guest_id = self::get_guest_id_for_reservation($booking_number);
                 }
                 
                 // Add other reservation details as needed
@@ -92,12 +92,12 @@ class Reservations
             echo "<p>No reservation found for Booking Number: " . esc_html($booking_number) . "</p>";
         }
     
-        $guestID = false;
+        $stay_guest_id = false;
         // Fetch guest details
-        if ($guestID) {
+        if ($stay_guest_id) {
             echo "<div class='guest-details'>";
-            echo "<p>Full Name: " . esc_html(get_post_meta($guestID, 'staylodgic_full_name', true)) . "</p>";
-            echo "<p>Email Address: " . esc_html(get_post_meta($guestID, 'staylodgic_email_address', true)) . "</p>";
+            echo "<p>Full Name: " . esc_html(get_post_meta($stay_guest_id, 'staylodgic_full_name', true)) . "</p>";
+            echo "<p>Email Address: " . esc_html(get_post_meta($stay_guest_id, 'staylodgic_email_address', true)) . "</p>";
             // Add other guest details as needed
             echo "</div>";
         } else {

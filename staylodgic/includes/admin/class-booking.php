@@ -6,7 +6,7 @@ class Booking
 {
 
     protected $stay_checkin_date;
-    protected $checkoutDate;
+    protected $stay_checkout_date;
     protected $staynights;
     protected $stay_adult_guests;
     protected $stay_children_guests;
@@ -23,7 +23,7 @@ class Booking
     public function __construct(
         $stay_booking_number = null,
         $stay_checkin_date = null,
-        $checkoutDate = null,
+        $stay_checkout_date = null,
         $staynights = null,
         $stay_adult_guests = null,
         $stay_children_guests = null,
@@ -37,7 +37,7 @@ class Booking
         $discountLabel = null
     ) {
         $this->stay_checkin_date           = $stay_checkin_date;
-        $this->checkoutDate          = $checkoutDate;
+        $this->stay_checkout_date          = $stay_checkout_date;
         $this->staynights            = $staynights;
         $this->stay_adult_guests           = $stay_adult_guests;
         $this->stay_children_guests        = $stay_children_guests;
@@ -452,17 +452,17 @@ class Booking
      * Method alternative_BookingDates
      *
      * @param $stay_checkin_date $stay_checkin_date
-     * @param $checkoutDate $checkoutDate
+     * @param $stay_checkout_date $stay_checkout_date
      * @param $maxOccpuants $maxOccpuants
      *
      * @return void
      */
-    public function alternative_BookingDates($stay_checkin_date, $checkoutDate, $maxOccpuants)
+    public function alternative_BookingDates($stay_checkin_date, $stay_checkout_date, $maxOccpuants)
     {
 
         // Perform the greedy search by adjusting the check-in and check-out dates
         $newCheckinDate  = new \DateTime($stay_checkin_date);
-        $newCheckoutDate = new \DateTime($checkoutDate);
+        $newCheckoutDate = new \DateTime($stay_checkout_date);
 
         $reservation_instance = new \Staylodgic\Reservations();
         $room_instance = new \Staylodgic\Rooms();
@@ -634,17 +634,17 @@ class Booking
         $chosenDate = \Staylodgic\Common::splitDateRange($reservation_date);
 
         $stay_checkin_date  = '';
-        $checkoutDate = '';
+        $stay_checkout_date = '';
 
         if (isset($chosenDate['startDate'])) {
             $stay_checkin_date     = $chosenDate['startDate'];
             $checkinDate_obj = new \DateTime($chosenDate['startDate']);
         }
         if (isset($chosenDate['stay_end_date'])) {
-            $checkoutDate     = $chosenDate['stay_end_date'];
-            $checkoutDate_obj = new \DateTime($checkoutDate);
+            $stay_checkout_date     = $chosenDate['stay_end_date'];
+            $checkoutDate_obj = new \DateTime($stay_checkout_date);
 
-            $realCheckoutDate     = date('Y-m-d', strtotime($checkoutDate . ' +1 day'));
+            $realCheckoutDate     = date('Y-m-d', strtotime($stay_checkout_date . ' +1 day'));
             $realCheckoutDate_obj = new \DateTime($realCheckoutDate);
         }
 
@@ -652,13 +652,13 @@ class Booking
         $staynights = $checkinDate_obj->diff($realCheckoutDate_obj)->days;
 
         $this->stay_checkin_date  = $stay_checkin_date;
-        $this->checkoutDate = $realCheckoutDate;
+        $this->stay_checkout_date = $realCheckoutDate;
         $this->staynights   = $staynights;
 
         $this->bookingSearchResults                       = array();
         $this->bookingSearchResults['bookingnumber']    = $this->stay_booking_number;
         $this->bookingSearchResults['checkin']          = $this->stay_checkin_date;
-        $this->bookingSearchResults['checkout']         = $this->checkoutDate;
+        $this->bookingSearchResults['checkout']         = $this->stay_checkout_date;
         $this->bookingSearchResults['staynights']       = $this->staynights;
         $this->bookingSearchResults['adults']           = $this->stay_adult_guests;
         $this->bookingSearchResults['children']         = $this->stay_children_guests;
@@ -669,7 +669,7 @@ class Booking
         $room_instance = new \Staylodgic\Rooms();
 
         // Get a combined array of rooms and rates which are available for the dates.
-        $combo_array = $room_instance->getAvailable_Rooms_Rates_Occupants_For_DateRange($this->stay_checkin_date, $checkoutDate);
+        $combo_array = $room_instance->getAvailable_Rooms_Rates_Occupants_For_DateRange($this->stay_checkin_date, $stay_checkout_date);
 
         $this->roomArray     = $combo_array['rooms'];
         $this->ratesArray    = $combo_array['rates'];
@@ -681,7 +681,7 @@ class Booking
 
         if (count($combo_array['rooms']) == 0) {
 
-            $roomAvailability = self::alternative_BookingDates($stay_checkin_date, $checkoutDate, $number_of_guests);
+            $roomAvailability = self::alternative_BookingDates($stay_checkin_date, $stay_checkout_date, $number_of_guests);
         }
 
         $list = self::list_Rooms_And_Quantities();
@@ -691,7 +691,7 @@ class Booking
             echo '<form action="" method="post" id="hotel-room-listing" class="needs-validation" novalidate>';
             $roomlistingbox = wp_create_nonce('staylodgic-roomlistingbox-nonce');
             echo '<input type="hidden" name="staylodgic_roomlistingbox_nonce" value="' . esc_attr($roomlistingbox) . '" />';
-            echo '<div id="reservation-data" data-bookingnumber="' . esc_attr($this->stay_booking_number) . '" data-children="' . esc_attr($this->stay_children_guests) . '" data-adults="' . esc_attr($this->stay_adult_guests) . '" data-guests="' . esc_attr($this->stay_total_guests) . '" data-checkin="' . esc_attr($this->stay_checkin_date) . '" data-checkout="' . esc_attr($this->checkoutDate) . '">';
+            echo '<div id="reservation-data" data-bookingnumber="' . esc_attr($this->stay_booking_number) . '" data-children="' . esc_attr($this->stay_children_guests) . '" data-adults="' . esc_attr($this->stay_adult_guests) . '" data-guests="' . esc_attr($this->stay_total_guests) . '" data-checkin="' . esc_attr($this->stay_checkin_date) . '" data-checkout="' . esc_attr($this->stay_checkout_date) . '">';
             echo $list;
             echo '</div>';
         } else {
@@ -880,7 +880,7 @@ class Booking
 
             $html .= '<div class="stay-summary-wrap">';
             $html .= '<div class="checkin-summary">Check-in: ' . staylodgic_readable_date($this->stay_checkin_date) . '</div>';
-            $html .= '<div class="checkout-summary">Check-out: ' . staylodgic_readable_date($this->checkoutDate) . '</div>';
+            $html .= '<div class="checkout-summary">Check-out: ' . staylodgic_readable_date($this->stay_checkout_date) . '</div>';
             $html .= '<div class="staynight-summary">Nights: ' . esc_attr($this->staynights) . '</div>';
             $html .= '</div>';
 
@@ -919,15 +919,15 @@ class Booking
      * Calculates long-stay discount.
      *
      * @param string $stay_checkin_date      The check-in date.
-     * @param string $checkoutDate     The check-out date.
+     * @param string $stay_checkout_date     The check-out date.
      * @param int    $longStayWindow   The number of days defining the long-stay window.
      * @param float  $longStayDiscount The percentage discount to apply for long stays.
      * @return float                   Calculated discount percentage or zero if not applicable.
      */
-    public function calculateLongStayDiscount($stay_checkin_date, $checkoutDate, $longStayWindow, $longStayDiscount)
+    public function calculateLongStayDiscount($stay_checkin_date, $stay_checkout_date, $longStayWindow, $longStayDiscount)
     {
         $checkinDateTime  = new \DateTime($stay_checkin_date);
-        $checkoutDateTime = new \DateTime($checkoutDate);
+        $checkoutDateTime = new \DateTime($stay_checkout_date);
 
         $interval = $checkinDateTime->diff($checkoutDateTime);
         $stayDuration = (int) $interval->format('%a'); // Difference in days
@@ -993,11 +993,11 @@ class Booking
      * and identifies the type of discount.
      *
      * @param string $stay_checkin_date        The check-in date.
-     * @param string $checkoutDate       The check-out date.
+     * @param string $stay_checkout_date       The check-out date.
      * @param array  $discountParameters Parameters for each discount type.
      * @return array                     An array with the highest discount value and its type.
      */
-    public function calculateHighestDiscount($stay_checkin_date, $checkoutDate)
+    public function calculateHighestDiscount($stay_checkin_date, $stay_checkout_date)
     {
         $discountParameters = array();
         $discountLabel = '';
@@ -1055,7 +1055,7 @@ class Booking
         if (isset($discountParameters['longstay'])) {
             $longStayDiscount = $this->calculateLongStayDiscount(
                 $stay_checkin_date,
-                $checkoutDate,
+                $stay_checkout_date,
                 $discountParameters['longstay']['window'],
                 $discountParameters['longstay']['discount']
             );
@@ -1093,9 +1093,9 @@ class Booking
         $html           = '';
 
         $stay_checkin_date = $this->findCheckinDate($room_id);
-        $checkoutDate = $this->findCheckoutDate($room_id);
+        $stay_checkout_date = $this->findCheckoutDate($room_id);
 
-        $highestDiscountInfo = $this->calculateHighestDiscount($stay_checkin_date, $checkoutDate);
+        $highestDiscountInfo = $this->calculateHighestDiscount($stay_checkin_date, $stay_checkout_date);
         $highestDiscountValue = $highestDiscountInfo['discountValue'];
         $highestDiscountType = $highestDiscountInfo['discountType'];
         $highestDiscountLabel = $highestDiscountInfo['discountLabel'];
@@ -1420,7 +1420,7 @@ class Booking
             $room_id = '',
             $booking_results[$room_id]['roomtitle'] = '',
             $this->stay_checkin_date,
-            $this->checkoutDate,
+            $this->stay_checkout_date,
             $this->staynights,
             $this->stay_adult_guests,
             $this->stay_children_guests,
@@ -2115,7 +2115,7 @@ class Booking
                 'included_mealplan'      => $included_mealplans,
                 'mealplan'      => $this->getMealPlanLabel($stay_reservation_data['mealplan']),
                 'stay_checkin_date'    => $checkin,
-                'checkoutDate'   => $checkout,
+                'stay_checkout_date'   => $checkout,
                 'stay_adult_guests'    => $stay_reservation_data['adults'],
                 'stay_children_guests' => $stay_reservation_data['children'],
                 'subtotal' => staylodgic_price( $stay_reservation_data['subtotal'] ),

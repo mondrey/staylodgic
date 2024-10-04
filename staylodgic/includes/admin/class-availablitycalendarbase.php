@@ -12,7 +12,7 @@ class AvailablityCalendarBase
     protected $calendarData;
     protected $reservation_tabs;
     protected $usingCache;
-    protected $cachedData;
+    protected $cached_data;
     protected $availConfirmedOnly;
 
     public function __construct($startDate = null, $stay_end_date = null)

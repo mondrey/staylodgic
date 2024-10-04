@@ -773,11 +773,11 @@ class GuestRegistry
         }
 
         // Fetch guest details
-        $guestID = $reservation_instance->get_guest_id_for_reservation($booking_number);
-        if ($guestID) {
+        $stay_guest_id = $reservation_instance->get_guest_id_for_reservation($booking_number);
+        if ($stay_guest_id) {
             echo "<div class='guest-details'>";
-            // echo "<p>Full Name: " . esc_html(get_post_meta($guestID, 'staylodgic_full_name', true)) . "</p>";
-            // echo "<p>Email Address: " . esc_html(get_post_meta($guestID, 'staylodgic_email_address', true)) . "</p>";
+            // echo "<p>Full Name: " . esc_html(get_post_meta($stay_guest_id, 'staylodgic_full_name', true)) . "</p>";
+            // echo "<p>Email Address: " . esc_html(get_post_meta($stay_guest_id, 'staylodgic_email_address', true)) . "</p>";
             $registry_instance = new \Staylodgic\GuestRegistry();
             $resRegIDs =  $registry_instance->fetchResRegIDsByBookingNumber($booking_number);
             if ($resRegIDs) {

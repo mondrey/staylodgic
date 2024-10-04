@@ -242,10 +242,10 @@ class Invoicing
             $this->totalAmount = $totalAmount;
 
             // Fetch guest details
-            $guestID = $reservations_instance->get_guest_id_for_reservation($booking_number);
-            if ($guestID) {
-                $this->customerName  = get_post_meta($guestID, 'staylodgic_full_name', true);
-                $this->customerEmail = get_post_meta($guestID, 'staylodgic_email_address', true);
+            $stay_guest_id = $reservations_instance->get_guest_id_for_reservation($booking_number);
+            if ($stay_guest_id) {
+                $this->customerName  = get_post_meta($stay_guest_id, 'staylodgic_full_name', true);
+                $this->customerEmail = get_post_meta($stay_guest_id, 'staylodgic_email_address', true);
             }
         } else {
             echo '<p>' . __('No reservation found for Booking Number:', 'staylodgic') . ' ' . esc_html($booking_number) . '</p>';
@@ -373,10 +373,10 @@ class Invoicing
             $this->totalAmount = $totalAmount;
 
             // Fetch guest details
-            $guestID = $reservations_instance->get_guest_id_for_reservation($booking_number);
-            if ($guestID) {
-                $this->customerName  = get_post_meta($guestID, 'staylodgic_full_name', true);
-                $this->customerEmail = get_post_meta($guestID, 'staylodgic_email_address', true);
+            $stay_guest_id = $reservations_instance->get_guest_id_for_reservation($booking_number);
+            if ($stay_guest_id) {
+                $this->customerName  = get_post_meta($stay_guest_id, 'staylodgic_full_name', true);
+                $this->customerEmail = get_post_meta($stay_guest_id, 'staylodgic_email_address', true);
             }
         } else {
             echo '<p>' . __('No reservation found for Booking Number:', 'staylodgic') . ' ' . esc_html($booking_number) . '</p>';

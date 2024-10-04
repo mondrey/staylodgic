@@ -5,7 +5,7 @@ namespace Staylodgic;
 class AvailablityCalendar extends AvailablityCalendarBase
 {
 
-    public function __construct($startDate = null, $stay_end_date = null, $cachedData = null, $calendarData = null, $reservation_tabs = null, $usingCache = false, $availConfirmedOnly = false)
+    public function __construct($startDate = null, $stay_end_date = null, $cached_data = null, $calendarData = null, $reservation_tabs = null, $usingCache = false, $availConfirmedOnly = false)
     {
         parent::__construct($startDate, $stay_end_date, $calendarData, $reservation_tabs, $availConfirmedOnly);
 
@@ -398,7 +398,7 @@ class AvailablityCalendar extends AvailablityCalendarBase
             $cache_instance = new \Staylodgic\Cache($roomID, $startDateString, $endDateString);
             // $cache_instance->deleteCache();
             $transient_key   = $cache_instance->generateRoomCacheKey();
-            $cached_calendar = $cache_instance->getCache($transient_key);
+            $cached_calendar = $cache_instance->get_cache($transient_key);
 
             $room_reservations_instance = new \Staylodgic\Reservations($dateString = false, $roomID);
 
@@ -407,7 +407,7 @@ class AvailablityCalendar extends AvailablityCalendarBase
 
             $use_cache = true;
             $this->usingCache = false;
-            $this->cachedData = array();
+            $this->cached_data = array();
             $this->calendarData = array();
 
 
@@ -449,11 +449,11 @@ class AvailablityCalendar extends AvailablityCalendarBase
                 }
             }
 
-            if ($cache_instance->hasCache($transient_key) && true == $cache_instance->isCacheAllowed() && true == $use_cache) {
+            if ($cache_instance->has_cache($transient_key) && true == $cache_instance->isCacheAllowed() && true == $use_cache) {
                 
                 if (isset($cached_calendar)) {
 
-                    $this->cachedData = $cached_calendar;
+                    $this->cached_data = $cached_calendar;
 
                     $this->usingCache = true;
                 }
@@ -510,11 +510,11 @@ class AvailablityCalendar extends AvailablityCalendarBase
                     $this->calendarData['cellData'][$dateString]['occupancy_status_class'] = $occupancy_status_class;
                     $this->calendarData['cellData'][$dateString]['create_reservation_tag'] = $create_reservation_tag;
                 } else {
-                    $reservation_data = $this->cachedData['cellData'][$dateString]['reservation_data'];
-                    $remaining_rooms = $this->cachedData['cellData'][$dateString]['remaining_rooms'];
-                    $room_rate = $this->cachedData['cellData'][$dateString]['room_rate'];
-                    $occupancy_status_class = $this->cachedData['cellData'][$dateString]['occupancy_status_class'];
-                    $create_reservation_tag = $this->cachedData['cellData'][$dateString]['create_reservation_tag'];
+                    $reservation_data = $this->cached_data['cellData'][$dateString]['reservation_data'];
+                    $remaining_rooms = $this->cached_data['cellData'][$dateString]['remaining_rooms'];
+                    $room_rate = $this->cached_data['cellData'][$dateString]['room_rate'];
+                    $occupancy_status_class = $this->cached_data['cellData'][$dateString]['occupancy_status_class'];
+                    $create_reservation_tag = $this->cached_data['cellData'][$dateString]['create_reservation_tag'];
                 }
 
                 $room_output .= '<td class="calendarCell ' . esc_attr($this->startOfMonthCSSTag($dateString)) . ' ' . esc_attr($occupancy_status_class) . '">';
@@ -777,10 +777,10 @@ class AvailablityCalendar extends AvailablityCalendarBase
             $hasConflict = false; // Flag to track if there is a conflict
             // Iterate through the existing array
             foreach ($this->reservation_tabs as $value) {
-                $checkoutDate = $value['checkout'];
+                $stay_checkout_date = $value['checkout'];
 
                 // Compare the new checkin date with existing checkout dates
-                if ($newCheckin <= $checkoutDate) {
+                if ($newCheckin <= $stay_checkout_date) {
                     $hasConflict = true;
                     break; // Stop iterating if a conflict is found
                 }
@@ -816,9 +816,9 @@ class AvailablityCalendar extends AvailablityCalendarBase
                 $recordCount = 0;
 
                 foreach ($this->reservation_tabs as $value) {
-                    $checkoutDate = $value['checkout'];
+                    $stay_checkout_date = $value['checkout'];
 
-                    if ($checkoutDate > $givenDate) {
+                    if ($stay_checkout_date > $givenDate) {
                         $recordCount++;
                     }
                 }
@@ -889,16 +889,16 @@ class AvailablityCalendar extends AvailablityCalendarBase
 
                 $this->calendarData['tabsData'][$reservation_id]['reservation_edit_link'] = $reservation_edit_link;
             } else {
-                $booking_number        = $this->cachedData['tabsData'][$reservation_id][$current_day]['get_booking_number'];
-                $guest_name            = $this->cachedData['tabsData'][$reservation_id][$current_day]['getReservationGuestName'];
-                $reserved_days         = $this->cachedData['tabsData'][$reservation_id][$current_day]['countReservationDays'];
-                $checkin               = $this->cachedData['tabsData'][$reservation_id][$current_day]['get_checkin_date'];
-                $checkout              = $this->cachedData['tabsData'][$reservation_id][$current_day]['getCheckoutDate'];
-                $reservation_status    = $this->cachedData['tabsData'][$reservation_id][$current_day]['get_reservation_status'];
-                $reservation_substatus = $this->cachedData['tabsData'][$reservation_id][$current_day]['get_reservation_sub_status'];
-                $booking_channel       = $this->cachedData['tabsData'][$reservation_id][$current_day]['getReservationChannel'];
+                $booking_number        = $this->cached_data['tabsData'][$reservation_id][$current_day]['get_booking_number'];
+                $guest_name            = $this->cached_data['tabsData'][$reservation_id][$current_day]['getReservationGuestName'];
+                $reserved_days         = $this->cached_data['tabsData'][$reservation_id][$current_day]['countReservationDays'];
+                $checkin               = $this->cached_data['tabsData'][$reservation_id][$current_day]['get_checkin_date'];
+                $checkout              = $this->cached_data['tabsData'][$reservation_id][$current_day]['getCheckoutDate'];
+                $reservation_status    = $this->cached_data['tabsData'][$reservation_id][$current_day]['get_reservation_status'];
+                $reservation_substatus = $this->cached_data['tabsData'][$reservation_id][$current_day]['get_reservation_sub_status'];
+                $booking_channel       = $this->cached_data['tabsData'][$reservation_id][$current_day]['getReservationChannel'];
 
-                $reservation_edit_link = $this->cachedData['tabsData'][$reservation_id]['reservation_edit_link'];
+                $reservation_edit_link = $this->cached_data['tabsData'][$reservation_id]['reservation_edit_link'];
             }
 
             $row++;

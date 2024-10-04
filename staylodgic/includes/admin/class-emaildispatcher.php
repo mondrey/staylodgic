@@ -123,7 +123,7 @@ class EmailDispatcher
         $emailMessage .= '<p><strong>' . __('Meal Plan:', 'staylodgic') . '</strong> ' . esc_html($booking_details['mealplan']) . '</p>';
         $emailMessage .= '<p><strong>' . __('Included Meal Plans:', 'staylodgic') . '</strong> ' . esc_html($booking_details['included_mealplan']) . '</p>';
         $emailMessage .= '<p><strong>' . __('Check-in Date:', 'staylodgic') . '</strong> ' . esc_html($booking_details['stay_checkin_date']) . '</p>';
-        $emailMessage .= '<p><strong>' . __('Check-out Date:', 'staylodgic') . '</strong> ' . esc_html($booking_details['checkoutDate']) . '</p>';
+        $emailMessage .= '<p><strong>' . __('Check-out Date:', 'staylodgic') . '</strong> ' . esc_html($booking_details['stay_checkout_date']) . '</p>';
         $emailMessage .= '<p><strong>' . __('Adults:', 'staylodgic') . '</strong> ' . esc_html($booking_details['stay_adult_guests']) . '</p>';
         $emailMessage .= '<p><strong>' . __('Children:', 'staylodgic') . '</strong> ' . esc_html($booking_details['stay_children_guests']) . '</p>';
         $emailMessage .= '<p><strong>' . __('Subtotal:', 'staylodgic') . '</strong> ' . $booking_details['subtotal'] . '</p>';
