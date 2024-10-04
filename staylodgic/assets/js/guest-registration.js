@@ -27,7 +27,7 @@
 				return; // Do not proceed to AJAX if validation fails
 			}
     
-            var formData = {};
+            var form_data = {};
             var guestId = $(this).data('guest'); // Fetch the guest ID from the button
 
             $('form#guestregistration input, form#guestregistration select').each(function() {
@@ -45,7 +45,7 @@
                     value = $(this).val();
                 }
             
-                formData[id] = {
+                form_data[id] = {
                     value: value, // Will be true or false for checkboxes, and the actual value for other inputs/selects
                     type: type, // Now 'select' for <select> elements, correct type for inputs, or 'undefined' for other cases
                     label: label
@@ -61,7 +61,7 @@
             var ajaxData = {
                 nonce: frontendAjax.nonce,
                 action: 'save_guestregistration_data',
-                booking_data: formData,
+                booking_data: form_data,
                 signature_data: signatureData,
                 post_id: frontendAjax.post_id,
             };

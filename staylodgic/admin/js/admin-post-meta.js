@@ -24,7 +24,7 @@ jQuery(document).ready(function ($) {
 	$(document).on("click", ".create-guest-registration", function (e) {
 		e.preventDefault(); // Prevent default anchor action
 
-		var bookingNumber = $(this).data("bookingnumber"); // Get the booking number from the button's data attribute
+		var stay_booking_number = $(this).data("bookingnumber"); // Get the booking number from the button's data attribute
 
 		// AJAX call to the back-end
 		$.ajax({
@@ -32,7 +32,7 @@ jQuery(document).ready(function ($) {
 			type: "POST",
 			data: {
 				action: "create_guest_registration", // The action hook name
-				bookingNumber: bookingNumber, // Pass the booking number to the back-end
+				stay_booking_number: stay_booking_number, // Pass the booking number to the back-end
 				nonce: staylodgic_admin_vars.nonce,
 			},
 			success: function (response) {
@@ -219,8 +219,8 @@ jQuery(document).ready(function ($) {
 			children = 0;
 		}
 
-		var totalGuests = parseInt(adults) + parseInt(children);
-		console.log("Total guests " + totalGuests);
+		var stay_total_guests = parseInt(adults) + parseInt(children);
+		console.log("Total guests " + stay_total_guests);
 		var postID = $('input[name="post_ID"]').val();
 
 		// Make an Ajax request to fetch the room names
@@ -233,7 +233,7 @@ jQuery(document).ready(function ($) {
 				nonce: staylodgic_admin_vars.nonce,
 				subtotal: subtotal_for_tax,
 				staynights: totalStayNights,
-				total_guests: totalGuests,
+				total_guests: stay_total_guests,
 			},
 			success: function (response) {
 				console.log(response);
@@ -291,7 +291,7 @@ jQuery(document).ready(function ($) {
 
 	$("#staylodgic_payment_booking_id").on("select2:select", function (e) {
 		// Get the selected booking number
-		var bookingNumber = $(this).val();
+		var stay_booking_number = $(this).val();
 
 		// Make an Ajax request to fetch the room names
 		$.ajax({
@@ -299,7 +299,7 @@ jQuery(document).ready(function ($) {
 			type: "POST",
 			data: {
 				action: "get_room_names", // Custom Ajax action
-				booking_number: bookingNumber, // Pass the selected booking number as data
+				booking_number: stay_booking_number, // Pass the selected booking number as data
 				nonce: staylodgic_admin_vars.nonce,
 			},
 			success: function (response) {

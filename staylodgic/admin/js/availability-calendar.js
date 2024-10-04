@@ -284,25 +284,25 @@
 						// Option updated successfully
 						// Update the calendar without reloading the page
 						if (!window.isMobile()) {
-							var currentDate = fp.selectedDates[0];
+							var stay_current_date = fp.selectedDates[0];
 						} else {
 							var currentDateVal =
 								$(".availabilitycalendar").val() + "-01";
-							var currentDate = new Date(currentDateVal);
+							var stay_current_date = new Date(currentDateVal);
 						}
 
 						var startDate = new Date(
-							currentDate.getFullYear(),
-							currentDate.getMonth(),
+							stay_current_date.getFullYear(),
+							stay_current_date.getMonth(),
 							1
 						);
-						var endDate = new Date(
-							currentDate.getFullYear(),
-							currentDate.getMonth() + 1,
+						var stay_end_date = new Date(
+							stay_current_date.getFullYear(),
+							stay_current_date.getMonth() + 1,
 							5
 						);
 
-						debouncedCalendarUpdate([startDate, endDate]);
+						debouncedCalendarUpdate([startDate, stay_end_date]);
 					} else {
 						// Handle failure
 						console.error("Failed to update option");
@@ -357,26 +357,26 @@
 						save_button.find(".spinner-border").css("opacity", "0");
 						save_button.prop("disabled", false);
 						// Update the calendar without reloading the page
-						// var currentDate = fp.selectedDates[0];
+						// var stay_current_date = fp.selectedDates[0];
 						if (!window.isMobile()) {
-							var currentDate = fp.selectedDates[0];
+							var stay_current_date = fp.selectedDates[0];
 						} else {
 							var currentDateVal =
 								$(".availabilitycalendar").val() + "-01";
-							var currentDate = new Date(currentDateVal);
+							var stay_current_date = new Date(currentDateVal);
 						}
 
 						var startDate = new Date(
-							currentDate.getFullYear(),
-							currentDate.getMonth(),
+							stay_current_date.getFullYear(),
+							stay_current_date.getMonth(),
 							1
 						);
-						var endDate = new Date(
-							currentDate.getFullYear(),
-							currentDate.getMonth() + 1,
+						var stay_end_date = new Date(
+							stay_current_date.getFullYear(),
+							stay_current_date.getMonth() + 1,
 							5
 						);
-						debouncedCalendarUpdate([startDate, endDate]);
+						debouncedCalendarUpdate([startDate, stay_end_date]);
 
 						showToast("rateToast");
 					} else {
@@ -514,26 +514,26 @@
 						save_button.find(".spinner-border").css("opacity", "0");
 						save_button.prop("disabled", false);
 						// Update the calendar without reloading the page
-						// var currentDate = fp.selectedDates[0];
+						// var stay_current_date = fp.selectedDates[0];
 						if (!window.isMobile()) {
-							var currentDate = fp.selectedDates[0];
+							var stay_current_date = fp.selectedDates[0];
 						} else {
 							var currentDateVal =
 								$(".availabilitycalendar").val() + "-01";
-							var currentDate = new Date(currentDateVal);
+							var stay_current_date = new Date(currentDateVal);
 						}
 
 						var startDate = new Date(
-							currentDate.getFullYear(),
-							currentDate.getMonth(),
+							stay_current_date.getFullYear(),
+							stay_current_date.getMonth(),
 							1
 						);
-						var endDate = new Date(
-							currentDate.getFullYear(),
-							currentDate.getMonth() + 1,
+						var stay_end_date = new Date(
+							stay_current_date.getFullYear(),
+							stay_current_date.getMonth() + 1,
 							5
 						);
-						debouncedCalendarUpdate([startDate, endDate]);
+						debouncedCalendarUpdate([startDate, stay_end_date]);
 
 						showToast("quantityToast");
 					} else {
@@ -922,7 +922,7 @@
 
 			// Extract the start and end date from the data attributes
 			var startDate = calendarTable.data("calstart");
-			var endDate = calendarTable.data("calend");
+			var stay_end_date = calendarTable.data("calend");
 
 			var debouncedCalendarUpdate = _.debounce(updateCalendarData, 500); // Wait for 300ms of inactivity
 
@@ -955,14 +955,14 @@
 								);
 
 								// Create the end date (5th of the next month)
-								var endDate = new Date(
+								var stay_end_date = new Date(
 									selectedYear,
 									selectedMonth + 1,
 									5
 								);
 
 								// Update the calendar data with the constructed range
-								updateCalendarData([startDate, endDate]);
+								updateCalendarData([startDate, stay_end_date]);
 							}
 						},
 					});
@@ -972,9 +972,9 @@
 			// For Desktop specific
 			function shiftDates(buttonId, months) {
 				$(buttonId).click(function () {
-					var currentDate = fp.selectedDates[0];
-					var newMonth = currentDate.getMonth() + months;
-					var newYear = currentDate.getFullYear();
+					var stay_current_date = fp.selectedDates[0];
+					var newMonth = stay_current_date.getMonth() + months;
+					var newYear = stay_current_date.getFullYear();
 
 					if (newMonth < 0) {
 						newMonth = 11;
@@ -1034,7 +1034,7 @@
 				shiftDates('#nextmonth:not(".disabled")', 1);
 
 				// Call the initialize function with the initial dates
-				initializeFlatpickr(startDate, endDate);
+				initializeFlatpickr(startDate, stay_end_date);
 			} else {
 				shiftDatesMobile('#prevmonth:not(".disabled")', -1);
 				shiftDatesMobile('#nextmonth:not(".disabled")', 1);
@@ -1052,13 +1052,13 @@
 				$(document).on("change", ".availabilitycalendar", function () {
 					var dateValue = $(this).val() + "-01";
 					var startDate = new Date(dateValue);
-					var endDate = new Date(
+					var stay_end_date = new Date(
 						startDate.getFullYear(),
 						startDate.getMonth() + 1,
 						0
 					); // Last day of the selected month
 					// Call the debounced update function
-					debouncedCalendarUpdate([startDate, endDate]);
+					debouncedCalendarUpdate([startDate, stay_end_date]);
 				});
 			}
 
@@ -1120,13 +1120,13 @@
 						createFromDate,
 						"Y-m-d"
 					);
-					var endDate = flatpickr.parseDate(createToDate, "Y-m-d");
+					var stay_end_date = flatpickr.parseDate(createToDate, "Y-m-d");
 
 					// Set the dates in the flatpickr instance
-					flatpickrInstance.setDate([startDate, endDate]);
+					flatpickrInstance.setDate([startDate, stay_end_date]);
 
 					// Manually trigger the handleDateChange function
-					handleDateChange([startDate, endDate], flatpickrInstance);
+					handleDateChange([startDate, stay_end_date], flatpickrInstance);
 
 					// Show the room-related input fields
 					room_related_input_fields.show();

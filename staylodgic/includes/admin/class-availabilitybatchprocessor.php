@@ -517,10 +517,10 @@ class AvailabilityBatchProcessor extends BatchProcessorBase
     public function filterFutureDates($remainingQuantityArray)
     {
         $filteredArray = [];
-        $currentDate = date('Y-m-d');
+        $stay_current_date = date('Y-m-d');
 
         foreach ($remainingQuantityArray as $date => $quantity) {
-            if ($date >= $currentDate) {
+            if ($date >= $stay_current_date) {
                 $filteredArray[$date] = $quantity;
             }
         }

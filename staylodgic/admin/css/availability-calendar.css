@@ -468,7 +468,7 @@ ul.existing-customer li {
 /* Booking Button */
 #invoiceActivityDetails,
 #invoiceDetails,
-#bookingDetails,
+#booking_details,
 #bookingSearch {
 	background: #000;
 	color: #fff;
@@ -485,7 +485,7 @@ ul.existing-customer li {
 
 #invoiceActivityDetails:hover,
 #invoiceDetails:hover,
-#bookingDetails:hover,
+#booking_details:hover,
 #bookingSearch:hover {
 	/* Styles for when the button is hovered */
 	background-color: #012aff;
@@ -494,7 +494,7 @@ ul.existing-customer li {
 
 #invoiceActivityDetails:active,
 #invoiceDetails:active,
-#bookingDetails:active,
+#booking_details:active,
 #bookingSearch:active {
 	/* Styles for when the button is clicked/active */
 	background-color: #012aff;

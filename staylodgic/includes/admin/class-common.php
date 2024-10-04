@@ -51,11 +51,11 @@ class Common
 	}
 		
 	/**
-	 * Method generateUUID
+	 * Method generate_uuid
 	 *
 	 * @return void
 	 */
-	public static function generateUUID() {
+	public static function generate_uuid() {
 		// Generate a version 4 UUID
 		return sprintf('%04x%04x-%04x-4%03x-%04x-%04x%04x%04x',
 			// 32 bits for "time_low"
@@ -103,37 +103,37 @@ class Common
 		if (count($dateRangeArray) < 2 && !empty($dateRangeArray[0])) {
 			// Use the single date as both start and end date
 			$startDate = $dateRangeArray[0];
-			$endDate   = $startDate;
+			$stay_end_date   = $startDate;
 		} elseif (count($dateRangeArray) < 2 && empty($dateRangeArray[0])) {
 			// Return null if dateRange is invalid
 			return null;
 		} else {
 			$startDate = $dateRangeArray[0];
-			$endDate   = $dateRangeArray[1];
+			$stay_end_date   = $dateRangeArray[1];
 		}
 
 		// If the end date is empty, set it to the start date
-		if (empty($endDate)) {
-			$endDate = $startDate;
+		if (empty($stay_end_date)) {
+			$stay_end_date = $startDate;
 		}
 
 		// Return start and end date as an array
-		return array('startDate' => $startDate, 'endDate' => $endDate);
+		return array('startDate' => $startDate, 'stay_end_date' => $stay_end_date);
 	}
 	
 	/**
 	 * Method countDays_BetweenDates
 	 *
 	 * @param $startDate
-	 * @param $endDate
+	 * @param $stay_end_date
 	 *
 	 * @return void
 	 */
-	public static function countDays_BetweenDates($startDate, $endDate)
+	public static function countDays_BetweenDates($startDate, $stay_end_date)
 	{
 		// Create DateTime objects for the start and end dates
 		$startDateTime = new \DateTime($startDate);
-		$endDateTime   = new \DateTime($endDate);
+		$endDateTime   = new \DateTime($stay_end_date);
 
 		// Calculate the difference between the two dates
 		$interval = $endDateTime->diff($startDateTime);
@@ -149,20 +149,20 @@ class Common
 	 * Method Function to create an array of dates between two dates	
 	 *
 	 * @param $startDate
-	 * @param $endDate
+	 * @param $stay_end_date
 	 *
 	 * @return void
 	 */
-	public static function create_inBetween_DateRange_Array($startDate, $endDate)
+	public static function create_inBetween_DateRange_Array($startDate, $stay_end_date)
 	{
 		$dateRangeArray = array();
 
-		$currentDate = strtotime($startDate);
-		$endDate     = strtotime($endDate);
+		$stay_current_date = strtotime($startDate);
+		$stay_end_date     = strtotime($stay_end_date);
 
-		while ($currentDate <= $endDate) {
-			$dateRangeArray[] = date('Y-m-d', $currentDate);
-			$currentDate      = strtotime('+1 day', $currentDate);
+		while ($stay_current_date <= $stay_end_date) {
+			$dateRangeArray[] = date('Y-m-d', $stay_current_date);
+			$stay_current_date      = strtotime('+1 day', $stay_current_date);
 		}
 
 		return $dateRangeArray;

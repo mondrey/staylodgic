@@ -7,7 +7,7 @@ class Data
     public function __construct()
     {
         // Hook into the save_post action
-        add_action('save_post', array($this, 'updateReservationsArray_On_Save'), 13, 3);
+        add_action('save_post', array($this, 'update_reservations_array_on_save'), 13, 3);
         add_action('save_post', array($this, 'createActivitiesCustomer_On_Save'), 13, 3);
         // Hook into the wp_trash_post action
         add_action('wp_trash_post', array($this, 'removeReservation_From_Array'));
@@ -296,7 +296,7 @@ class Data
      *
      * @return void
      */
-    public function updateReservationsArray_On_Save($post_id, $post, $update)
+    public function update_reservations_array_on_save($post_id, $post, $update)
     {
 
         // error_log("is here " . $post_id);
@@ -318,7 +318,7 @@ class Data
         self::removeReservationID_From_All_Rooms($post_id); // Remove the reservation from all rooms
 
         $reservation_instance = new \Staylodgic\Reservations();
-        if ($reservation_instance->isConfirmed_Reservation($post_id)) {
+        if ($reservation_instance->is_confirmed_reservation($post_id)) {
             // Add reservation to the new room type
             self::updateReservationsArray_On_Change($room_type, $checkin_date, $checkout_date, $post_id);
         }

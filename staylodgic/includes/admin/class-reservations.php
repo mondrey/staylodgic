@@ -48,7 +48,7 @@ class Reservations
 
         if ( ! $reservationQuery->have_posts() ) {
             $reservation_instance = new \Staylodgic\Activity();
-            $reservationQuery     = $reservation_instance->getReservationforActivity($booking_number);
+            $reservationQuery     = $reservation_instance->get_reservation_for_activity($booking_number);
 
             $activityFound = true;
         }
@@ -75,14 +75,14 @@ class Reservations
                 if ( $activityFound ) {
                     echo "<p>Activity Date: " . esc_html(get_post_meta($reservationID, 'staylodgic_checkin_date', true)) . "</p>";
 
-                    $guestID = self::getGuest_id_forActivity($booking_number);
+                    $guestID = self::get_guest_id_for_activity($booking_number);
                     
                 } else {
                     echo "<p>Check-in Date: " . esc_html(get_post_meta($reservationID, 'staylodgic_checkin_date', true)) . "</p>";
                     echo "<p>Check-out Date: " . esc_html(get_post_meta($reservationID, 'staylodgic_checkout_date', true)) . "</p>";
                     echo "<p class='reservation-details-status-outer ".esc_attr( $reservation_details_status )."'>Status: <span class='reservation-details-status'>" . esc_html( $reservation_details_status ) . "</span></p>";
 
-                    $guestID = self::getGuest_id_forReservation($booking_number);
+                    $guestID = self::get_guest_id_for_reservation($booking_number);
                 }
                 
                 // Add other reservation details as needed
@@ -186,13 +186,13 @@ class Reservations
     }
     
     /**
-     * Method getGuest_id_forActivity
+     * Method get_guest_id_for_activity
      *
      * @param $booking_number
      *
      * @return void
      */
-    public function getGuest_id_forActivity($booking_number)
+    public function get_guest_id_for_activity($booking_number)
     {
         $args = array(
             'post_type'      => 'slgc_activityres',
@@ -217,13 +217,13 @@ class Reservations
     }
     
     /**
-     * Method getGuest_id_forReservation
+     * Method get_guest_id_for_reservation
      *
      * @param $booking_number
      *
      * @return void
      */
-    public function getGuest_id_forReservation($booking_number)
+    public function get_guest_id_for_reservation($booking_number)
     {
         $args = array(
             'post_type'      => 'slgc_reservations',
@@ -364,20 +364,20 @@ class Reservations
      * Method getRoomReservationsForDateRange
      *
      * @param $startDate
-     * @param $endDate
+     * @param $stay_end_date
      * @param $roomID
      *
      * @return void
      */
-    public function getRoomReservationsForDateRange( $startDate, $endDate, $roomID )
+    public function getRoomReservationsForDateRange( $startDate, $stay_end_date, $roomID )
     {
 
-        $query          = $this->getReservationsForRoom( $startDate, $endDate, $reservation_status = 'confirmed', $reservation_substatus = false, $roomID );
+        $query          = $this->getReservationsForRoom( $startDate, $stay_end_date, $reservation_status = 'confirmed', $reservation_substatus = false, $roomID );
         $reserved_rooms = 0;
 
         $reserved_array = array();
 
-        $dateRange = \Staylodgic\Common::create_inBetween_DateRange_Array($startDate, $endDate);
+        $dateRange = \Staylodgic\Common::create_inBetween_DateRange_Array($startDate, $stay_end_date);
         
         // Set all as zero
         foreach ($dateRange as $date) {
@@ -767,13 +767,13 @@ class Reservations
     }
     
     /**
-     * Method getNumberOfAdultsForReservation
+     * Method get_number_of_adults_for_reservation
      *
      * @param $reservation_id $reservation_id [explicite description]
      *
      * @return void
      */
-    public function getNumberOfAdultsForReservation( $reservation_id = false )
+    public function get_number_of_adults_for_reservation( $reservation_id = false )
     {
 
         if (false !== $reservation_id) {
@@ -790,13 +790,13 @@ class Reservations
     }
 
     /**
-     * Method getNumberOfChildrenForReservation
+     * Method get_number_of_children_for_reservation
      *
      * @param $reservation_id $reservation_id [explicite description]
      *
      * @return void
      */
-    public function getNumberOfChildrenForReservation( $reservation_id = false )
+    public function get_number_of_children_for_reservation( $reservation_id = false )
     {
 
         if (false !== $reservation_id) {
@@ -812,31 +812,31 @@ class Reservations
     }
         
     /**
-     * Method getTotalOccupantsForReservation
+     * Method get_total_occupants_for_reservation
      *
      * @param $reservation_id $reservation_id [explicite description]
      *
      * @return void
      */
-    public function getTotalOccupantsForReservation( $reservation_id = false )
+    public function get_total_occupants_for_reservation( $reservation_id = false )
     {
 
         if (false !== $reservation_id) {
             $this->reservation_id = $reservation_id;
         }
 
-        $number_of_adults = $this->getNumberOfAdultsForReservation();
-        $number_of_children = $this->getNumberOfChildrenForReservation();
+        $number_of_adults = $this->get_number_of_adults_for_reservation();
+        $number_of_children = $this->get_number_of_children_for_reservation();
 
         return intval( $number_of_adults ) + intval( $number_of_children );
     }
     
     /**
-     * Method getBookingDetailsPageLinkForGuest
+     * Method get_booking_details_page_link_for_guest
      *
      * @return void
      */
-    public function getBookingDetailsPageLinkForGuest()
+    public function get_booking_details_page_link_for_guest()
     {
         // Get the booking number from the reservation post meta
         $booking_page_link = home_url('/booking-details/');
@@ -845,11 +845,11 @@ class Reservations
     }
     
     /**
-     * Method getBookingNumber
+     * Method get_booking_number
      *
      * @return void
      */
-    public function getBookingNumber()
+    public function get_booking_number()
     {
         // Get the booking number from the reservation post meta
         $booking_number = get_post_meta($this->reservation_id, 'staylodgic_booking_number', true);
@@ -873,7 +873,7 @@ class Reservations
     {
         // Get the booking number from the reservation post meta
         if (!$booking_number) {
-            $booking_number = $this->getBookingNumber();
+            $booking_number = $this->get_booking_number();
         }
 
         if (!$booking_number) {
@@ -997,13 +997,13 @@ class Reservations
     }
     
     /**
-     * Method getCheckinDate
+     * Method get_checkin_date
      *
      * @param $reservation_id $reservation_id [explicite description]
      *
      * @return void
      */
-    public function getCheckinDate($reservation_id = false)
+    public function get_checkin_date($reservation_id = false)
     {
 
         if (!$reservation_id) {
@@ -1035,13 +1035,13 @@ class Reservations
     }
     
     /**
-     * Method getReservationStatus
+     * Method get_reservation_status
      *
      * @param $reservation_id $reservation_id [explicite description]
      *
      * @return void
      */
-    public function getReservationStatus($reservation_id = false)
+    public function get_reservation_status($reservation_id = false)
     {
 
         if (!$reservation_id) {
@@ -1054,13 +1054,13 @@ class Reservations
     }
        
     /**
-     * Method getReservationSubStatus
+     * Method get_reservation_sub_status
      *
      * @param $reservation_id $reservation_id [explicite description]
      *
      * @return void
      */
-    public function getReservationSubStatus($reservation_id = false)
+    public function get_reservation_sub_status($reservation_id = false)
     {
 
         if (!$reservation_id) {
@@ -1179,13 +1179,13 @@ class Reservations
     }
     
     /**
-     * Method getCustomerEditLinkForReservation
+     * Method get_customer_edit_link_for_reservation
      *
      * @param $reservation_id $reservation_id [explicite description]
      *
      * @return void
      */
-    public function getCustomerEditLinkForReservation($reservation_id = false)
+    public function get_customer_edit_link_for_reservation($reservation_id = false)
     {
 
         if (!$reservation_id) {
@@ -1450,13 +1450,13 @@ class Reservations
     }
     
     /**
-     * Method isConfirmed_Reservation
+     * Method is_confirmed_reservation
      *
      * @param $reservation_id $reservation_id [explicite description]
      *
      * @return void
      */
-    public function isConfirmed_Reservation($reservation_id)
+    public function is_confirmed_reservation($reservation_id)
     {
 
         if (!$reservation_id) {
@@ -1549,7 +1549,7 @@ class Reservations
             $dateString = $this->date;
         }
 
-        $currentDate = strtotime($dateString);
+        $stay_current_date = strtotime($dateString);
         $start       = false;
 
         $reservation_checkin  = '';
@@ -1588,11 +1588,11 @@ class Reservations
 
                 if ($post_room_id == $room_id) {
                     // Check if the current date falls within the reservation period
-                    if ($currentDate >= $reservationStartDate && $currentDate < $reservationEndDate) {
+                    if ($stay_current_date >= $reservationStartDate && $stay_current_date < $reservationEndDate) {
                         // Check if the reservation spans the specified number of days
                         $reservationDuration = floor(($reservationEndDate - $reservationStartDate) / (60 * 60 * 24)) + 1;
                         if ($numberOfDays > 0) {
-                            if ($currentDate == $reservationStartDate) {
+                            if ($stay_current_date == $reservationStartDate) {
                                 $start = 'yes';
                             } else {
                                 $start = 'no';
@@ -1618,13 +1618,13 @@ class Reservations
     }
     
     /**
-     * Method getReservation_Customer_ID
+     * Method get_reservation_customer_id
      *
      * @param $reservation_id $reservation_id [explicite description]
      *
      * @return void
      */
-    public function getReservation_Customer_ID($reservation_id = false)
+    public function get_reservation_customer_id($reservation_id = false)
     {
 
         if (!$reservation_id) {
@@ -1639,19 +1639,19 @@ class Reservations
         }
 
         // Query the customer post with the matching booking number
-        $customer_id = $this->getGuest_id_forReservation($booking_number);
+        $customer_id = $this->get_guest_id_for_reservation($booking_number);
         // No matching customer found
         return $customer_id;
     }
     
     /**
-     * Method haveCustomer
+     * Method have_customer
      *
      * @param $reservation_id $reservation_id [explicite description]
      *
      * @return void
      */
-    public function haveCustomer($reservation_id)
+    public function have_customer($reservation_id)
     {
 
         if (!$reservation_id) {

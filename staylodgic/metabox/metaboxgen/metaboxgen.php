@@ -453,7 +453,7 @@ function staylodgic_generate_metaboxes($meta_data, $post_id)
 
                     $the_post_id = $field['page_id'];
                     $activity = new Staylodgic\Activity();
-                    echo $activity->getActivities($the_post_id);
+                    echo $activity->get_activities($the_post_id);
 
                     break;
 
@@ -470,7 +470,7 @@ function staylodgic_generate_metaboxes($meta_data, $post_id)
                     // error_log ( $field['page_id'], $text_value );
                     if (isset($text_value) && '' !== $text_value) {
                         $activity = new Staylodgic\Activity();
-                        $ticket = $activity->displayTicket($field['page_id'], $text_value);
+                        $ticket = $activity->display_ticket($field['page_id'], $text_value);
 
                         echo $ticket;
                         echo '<div class="ticket-save-pdf-button">';
@@ -1212,8 +1212,8 @@ function staylodgic_generate_metaboxes($meta_data, $post_id)
                     $bookings = $reservation_instance->getEditLinksForReservations($reservation_array);
 
                     $activity_instance = new \Staylodgic\Activity();
-                    $activity_array = \Staylodgic\Activity::getActivityIDsForCustomer($field['customer_id']);
-                    $activities = $activity_instance->getEditLinksForActivity($activity_array);
+                    $activity_array = \Staylodgic\Activity::get_activity_ids_for_customer($field['customer_id']);
+                    $activities = $activity_instance->get_edit_links_for_activity($activity_array);
 
                     if ( '<ul></ul>' != $bookings ) {
                         echo '<h4 class="metabox-bookings-found">Bookings</h4>';
@@ -1244,7 +1244,7 @@ function staylodgic_generate_metaboxes($meta_data, $post_id)
                     } else {
                         $reservation_instance = new \Staylodgic\Reservations();
                     }
-                    $customer_post_id     = $reservation_instance->getReservation_Customer_ID($field['id']);
+                    $customer_post_id     = $reservation_instance->get_reservation_customer_id($field['id']);
                     $customer_post_edit   = get_edit_post_link($customer_post_id);
                     echo '<a class="button button-primary button-large customer-edit-button" href="' . esc_url($customer_post_edit) . '">' . __('Edit Customer', 'staylodgic') . '</a><span class="customer-choice-inbetween"></span><a class="choice-customer-existing">' . __('or choose an existing customer', 'staylodgic') . '</a>';
                     $customer_data = \Staylodgic\Data::getCustomer_MetaData($customer_array, $customer_post_id);
@@ -1255,7 +1255,7 @@ function staylodgic_generate_metaboxes($meta_data, $post_id)
                 case 'reservation_registration':
 
                     $reservation_instance = new \Staylodgic\Reservations($date = false, $room_id = false, $reservation_id = get_the_id());
-                    $bookingnumber = $reservation_instance->getBookingNumber();
+                    $bookingnumber = $reservation_instance->get_booking_number();
 
                     if ($bookingnumber) {
                         $registry_instance = new \Staylodgic\GuestRegistry();

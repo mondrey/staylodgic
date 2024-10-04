@@ -412,8 +412,8 @@
 						if (cancelledReservations.length > 0) {
 							// Display the list of future cancelled reservations
 							var resultList = $('<ol>');
-							$.each(cancelledReservations, function(index, bookingNumber) {
-							var listItem = $('<li>').text(bookingNumber);
+							$.each(cancelledReservations, function(index, stay_booking_number) {
+							var listItem = $('<li>').text(stay_booking_number);
 							resultList.append(listItem);
 							});
 							$('#result-missing-bookings').html('<p>Future Cancelled Reservations:</p>').append(resultList);

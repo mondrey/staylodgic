@@ -5,30 +5,30 @@ namespace Staylodgic;
 class Booking
 {
 
-    protected $checkinDate;
+    protected $stay_checkin_date;
     protected $checkoutDate;
     protected $staynights;
-    protected $adultGuests;
-    protected $childrenGuests;
-    protected $totalGuests;
+    protected $stay_adult_guests;
+    protected $stay_children_guests;
+    protected $stay_total_guests;
     protected $totalChargeableGuests;
     protected $roomArray;
     protected $ratesArray;
     protected $canAccomodate;
-    protected $bookingNumber;
+    protected $stay_booking_number;
     protected $children_age;
     protected $bookingSearchResults;
     protected $discountLabel;
 
     public function __construct(
-        $bookingNumber = null,
-        $checkinDate = null,
+        $stay_booking_number = null,
+        $stay_checkin_date = null,
         $checkoutDate = null,
         $staynights = null,
-        $adultGuests = null,
-        $childrenGuests = null,
+        $stay_adult_guests = null,
+        $stay_children_guests = null,
         $children_age = null,
-        $totalGuests = null,
+        $stay_total_guests = null,
         $totalChargeableGuests = null,
         $roomArray = null,
         $ratesArray = null,
@@ -36,12 +36,12 @@ class Booking
         $bookingSearchResults = null,
         $discountLabel = null
     ) {
-        $this->checkinDate           = $checkinDate;
+        $this->stay_checkin_date           = $stay_checkin_date;
         $this->checkoutDate          = $checkoutDate;
         $this->staynights            = $staynights;
-        $this->adultGuests           = $adultGuests;
-        $this->childrenGuests        = $childrenGuests;
-        $this->totalGuests           = $totalGuests;
+        $this->stay_adult_guests           = $stay_adult_guests;
+        $this->stay_children_guests        = $stay_children_guests;
+        $this->stay_total_guests           = $stay_total_guests;
         $this->totalChargeableGuests = $totalChargeableGuests;
         $this->children_age          = $children_age;
         $this->roomArray             = $roomArray;
@@ -49,7 +49,7 @@ class Booking
         $this->canAccomodate         = $canAccomodate;
         $this->bookingSearchResults  = $bookingSearchResults;
         $this->discountLabel         = $discountLabel;
-        $this->bookingNumber         = uniqid();
+        $this->stay_booking_number         = uniqid();
 
         add_shortcode('hotel_booking_search', array($this, 'hotelBooking_SearchForm'));
         add_shortcode('hotel_booking_details', array($this, 'hotelBooking_Details'));
@@ -85,14 +85,14 @@ class Booking
     ) {
         // Get the data sent via AJAX
 
-        $roomName = \Staylodgic\Rooms::getRoomName_FromID($room_id);
+        $stay_room_name = \Staylodgic\Rooms::get_room_name_from_id($room_id);
 
         $booking_results = staylodgic_get_booking_transient($bookingnumber);
 
         // Return a response (you can modify this as needed)
         $response = array(
             'success' => true,
-            'message' => 'Data: ' . $roomName . ',received successfully.',
+            'message' => 'Data: ' . $stay_room_name . ',received successfully.',
         );
 
         if (is_array($booking_results)) {
@@ -151,7 +151,7 @@ class Booking
 
         if (is_array($booking_results)) {
 
-            $html = self::bookingSummary(
+            $html = self::booking_summary(
                 $bookingnumber,
                 $booking_results['choice']['room_id'],
                 $booking_results[$room_id]['roomtitle'],
@@ -231,11 +231,11 @@ class Booking
     }
     
     /**
-     * Method bookingSummary
+     * Method booking_summary
      *
      * @return void
      */
-    public function bookingSummary(
+    public function booking_summary(
         $bookingnumber = null,
         $room_id = null,
         $room_name = null,
@@ -307,7 +307,7 @@ class Booking
 
             $tax_instance = new \Staylodgic\Tax('room');
             $totalprice = $tax_instance->apply_tax($subtotalprice, $staynights, $totalguests, $output = 'html');
-            foreach ($totalprice['details'] as $totalID => $totalvalue) {
+            foreach ($totalprice['details'] as $total_id => $totalvalue) {
                 $html .= '<div class="tax-summary tax-summary-details">' . wp_kses($totalvalue, staylodgic_get_allowed_tags()) . '</div>';
             }
 
@@ -335,21 +335,21 @@ class Booking
     public function hotelBooking_SearchForm()
     {
         // Generate unique booking number
-        staylodgic_set_booking_transient('1', $this->bookingNumber);
+        staylodgic_set_booking_transient('1', $this->stay_booking_number);
         ob_start();
         $searchbox_nonce       = wp_create_nonce('staylodgic-searchbox-nonce');
-        $availabilityDateArray = array();
+        $availability_date_array = array();
 
         // Calculate current date
-        $currentDate = current_time('Y-m-d');
+        $stay_current_date = current_time('Y-m-d');
         // Calculate end date as 3 months from the current date
-        $endDate = date('Y-m-d', strtotime($currentDate . ' +1 month'));
+        $stay_end_date = date('Y-m-d', strtotime($stay_current_date . ' +1 month'));
 
         $fullybooked_dates = array();
         $display_fullbooked_status = false;
         if (true === $display_fullbooked_status) {
             $reservations_instance = new \Staylodgic\Reservations();
-            $fullybooked_dates     = $reservations_instance->daysFullyBooked_For_DateRange($currentDate, $endDate);
+            $fullybooked_dates     = $reservations_instance->daysFullyBooked_For_DateRange($stay_current_date, $stay_end_date);
         }
 ?>
         <div class="staylodgic-content">
@@ -435,7 +435,7 @@ class Booking
                                 <label for="booking_number" class="control-label"><?php _e('Booking No.', 'staylodgic'); ?></label>
                             </div>
                         </div>
-                        <div data-request="bookingdetails" id="bookingDetails" class="form-search-button"><?php _e('Search', 'staylodgic'); ?></div>
+                        <div data-request="bookingdetails" id="booking_details" class="form-search-button"><?php _e('Search', 'staylodgic'); ?></div>
                     </div>
                 </div>
 
@@ -451,17 +451,17 @@ class Booking
     /**
      * Method alternative_BookingDates
      *
-     * @param $checkinDate $checkinDate
+     * @param $stay_checkin_date $stay_checkin_date
      * @param $checkoutDate $checkoutDate
      * @param $maxOccpuants $maxOccpuants
      *
      * @return void
      */
-    public function alternative_BookingDates($checkinDate, $checkoutDate, $maxOccpuants)
+    public function alternative_BookingDates($stay_checkin_date, $checkoutDate, $maxOccpuants)
     {
 
         // Perform the greedy search by adjusting the check-in and check-out dates
-        $newCheckinDate  = new \DateTime($checkinDate);
+        $newCheckinDate  = new \DateTime($stay_checkin_date);
         $newCheckoutDate = new \DateTime($checkoutDate);
 
         $reservation_instance = new \Staylodgic\Reservations();
@@ -622,9 +622,9 @@ class Booking
 
         $number_of_guests = intval($number_of_adults) + intval($number_of_children);
 
-        $this->adultGuests           = $number_of_adults;
-        $this->childrenGuests        = $number_of_children;
-        $this->totalGuests           = $number_of_guests;
+        $this->stay_adult_guests           = $number_of_adults;
+        $this->stay_children_guests        = $number_of_children;
+        $this->stay_total_guests           = $number_of_guests;
         $this->totalChargeableGuests = $number_of_guests - $freeStayChildCount;
 
         if (isset($_POST['room_type'])) {
@@ -633,15 +633,15 @@ class Booking
 
         $chosenDate = \Staylodgic\Common::splitDateRange($reservation_date);
 
-        $checkinDate  = '';
+        $stay_checkin_date  = '';
         $checkoutDate = '';
 
         if (isset($chosenDate['startDate'])) {
-            $checkinDate     = $chosenDate['startDate'];
+            $stay_checkin_date     = $chosenDate['startDate'];
             $checkinDate_obj = new \DateTime($chosenDate['startDate']);
         }
-        if (isset($chosenDate['endDate'])) {
-            $checkoutDate     = $chosenDate['endDate'];
+        if (isset($chosenDate['stay_end_date'])) {
+            $checkoutDate     = $chosenDate['stay_end_date'];
             $checkoutDate_obj = new \DateTime($checkoutDate);
 
             $realCheckoutDate     = date('Y-m-d', strtotime($checkoutDate . ' +1 day'));
@@ -651,25 +651,25 @@ class Booking
         // Calculate the number of nights
         $staynights = $checkinDate_obj->diff($realCheckoutDate_obj)->days;
 
-        $this->checkinDate  = $checkinDate;
+        $this->stay_checkin_date  = $stay_checkin_date;
         $this->checkoutDate = $realCheckoutDate;
         $this->staynights   = $staynights;
 
         $this->bookingSearchResults                       = array();
-        $this->bookingSearchResults['bookingnumber']    = $this->bookingNumber;
-        $this->bookingSearchResults['checkin']          = $this->checkinDate;
+        $this->bookingSearchResults['bookingnumber']    = $this->stay_booking_number;
+        $this->bookingSearchResults['checkin']          = $this->stay_checkin_date;
         $this->bookingSearchResults['checkout']         = $this->checkoutDate;
         $this->bookingSearchResults['staynights']       = $this->staynights;
-        $this->bookingSearchResults['adults']           = $this->adultGuests;
-        $this->bookingSearchResults['children']         = $this->childrenGuests;
+        $this->bookingSearchResults['adults']           = $this->stay_adult_guests;
+        $this->bookingSearchResults['children']         = $this->stay_children_guests;
         $this->bookingSearchResults['children_age']     = $this->children_age;
-        $this->bookingSearchResults['totalguest']       = $this->totalGuests;
+        $this->bookingSearchResults['totalguest']       = $this->stay_total_guests;
         $this->bookingSearchResults['chargeableguests'] = $this->totalChargeableGuests;
 
         $room_instance = new \Staylodgic\Rooms();
 
         // Get a combined array of rooms and rates which are available for the dates.
-        $combo_array = $room_instance->getAvailable_Rooms_Rates_Occupants_For_DateRange($this->checkinDate, $checkoutDate);
+        $combo_array = $room_instance->getAvailable_Rooms_Rates_Occupants_For_DateRange($this->stay_checkin_date, $checkoutDate);
 
         $this->roomArray     = $combo_array['rooms'];
         $this->ratesArray    = $combo_array['rates'];
@@ -681,7 +681,7 @@ class Booking
 
         if (count($combo_array['rooms']) == 0) {
 
-            $roomAvailability = self::alternative_BookingDates($checkinDate, $checkoutDate, $number_of_guests);
+            $roomAvailability = self::alternative_BookingDates($stay_checkin_date, $checkoutDate, $number_of_guests);
         }
 
         $list = self::list_Rooms_And_Quantities();
@@ -691,7 +691,7 @@ class Booking
             echo '<form action="" method="post" id="hotel-room-listing" class="needs-validation" novalidate>';
             $roomlistingbox = wp_create_nonce('staylodgic-roomlistingbox-nonce');
             echo '<input type="hidden" name="staylodgic_roomlistingbox_nonce" value="' . esc_attr($roomlistingbox) . '" />';
-            echo '<div id="reservation-data" data-bookingnumber="' . esc_attr($this->bookingNumber) . '" data-children="' . esc_attr($this->childrenGuests) . '" data-adults="' . esc_attr($this->adultGuests) . '" data-guests="' . esc_attr($this->totalGuests) . '" data-checkin="' . esc_attr($this->checkinDate) . '" data-checkout="' . esc_attr($this->checkoutDate) . '">';
+            echo '<div id="reservation-data" data-bookingnumber="' . esc_attr($this->stay_booking_number) . '" data-children="' . esc_attr($this->stay_children_guests) . '" data-adults="' . esc_attr($this->stay_adult_guests) . '" data-guests="' . esc_attr($this->stay_total_guests) . '" data-checkin="' . esc_attr($this->stay_checkin_date) . '" data-checkout="' . esc_attr($this->checkoutDate) . '">';
             echo $list;
             echo '</div>';
         } else {
@@ -700,7 +700,7 @@ class Booking
             echo '<div class="no-rooms-description">' . __('Please choose a different range.', 'staylodgic') . '</div>';
             echo '</div>';
         }
-        echo self::register_Guest_Form();
+        echo self::register_guest_form();
         echo '</form>';
         $output                       = ob_get_clean();
         $response['booking_data']   = $combo_array;
@@ -737,16 +737,16 @@ class Booking
     {
 
         $status = true;
-        if ($this->canAccomodate[$room_id]['guests'] < $this->totalGuests) {
+        if ($this->canAccomodate[$room_id]['guests'] < $this->stay_total_guests) {
             // Cannot accomodate number of guests
             $status = false;
         }
 
-        if ($this->canAccomodate[$room_id]['adults'] < $this->adultGuests) {
+        if ($this->canAccomodate[$room_id]['adults'] < $this->stay_adult_guests) {
             // Cannot accomodate number of adults
             $status = false;
         }
-        if ($this->canAccomodate[$room_id]['children'] < $this->childrenGuests) {
+        if ($this->canAccomodate[$room_id]['children'] < $this->stay_children_guests) {
             // Cannot accomodate number of children
             $status = false;
         }
@@ -838,7 +838,7 @@ class Booking
                 $html .= '</div>';
                 $html .= '<div class="room-details-column room-details-second-column">';
 
-                $html .= \Staylodgic\Common::generatePersonIcons($this->adultGuests, $this->childrenGuests);
+                $html .= \Staylodgic\Common::generatePersonIcons($this->stay_adult_guests, $this->stay_children_guests);
 
                 $html .= '<div class="checkin-staydate-wrap">';
 
@@ -879,7 +879,7 @@ class Booking
             }
 
             $html .= '<div class="stay-summary-wrap">';
-            $html .= '<div class="checkin-summary">Check-in: ' . staylodgic_readable_date($this->checkinDate) . '</div>';
+            $html .= '<div class="checkin-summary">Check-in: ' . staylodgic_readable_date($this->stay_checkin_date) . '</div>';
             $html .= '<div class="checkout-summary">Check-out: ' . staylodgic_readable_date($this->checkoutDate) . '</div>';
             $html .= '<div class="staynight-summary">Nights: ' . esc_attr($this->staynights) . '</div>';
             $html .= '</div>';
@@ -887,7 +887,7 @@ class Booking
             $html .= '</div>';
             $html .= '</div>';
 
-            staylodgic_set_booking_transient($this->bookingSearchResults, $this->bookingNumber);
+            staylodgic_set_booking_transient($this->bookingSearchResults, $this->stay_booking_number);
         }
 
         return $html;
@@ -918,15 +918,15 @@ class Booking
     /**
      * Calculates long-stay discount.
      *
-     * @param string $checkinDate      The check-in date.
+     * @param string $stay_checkin_date      The check-in date.
      * @param string $checkoutDate     The check-out date.
      * @param int    $longStayWindow   The number of days defining the long-stay window.
      * @param float  $longStayDiscount The percentage discount to apply for long stays.
      * @return float                   Calculated discount percentage or zero if not applicable.
      */
-    public function calculateLongStayDiscount($checkinDate, $checkoutDate, $longStayWindow, $longStayDiscount)
+    public function calculateLongStayDiscount($stay_checkin_date, $checkoutDate, $longStayWindow, $longStayDiscount)
     {
-        $checkinDateTime  = new \DateTime($checkinDate);
+        $checkinDateTime  = new \DateTime($stay_checkin_date);
         $checkoutDateTime = new \DateTime($checkoutDate);
 
         $interval = $checkinDateTime->diff($checkoutDateTime);
@@ -943,17 +943,17 @@ class Booking
     /**
      * Calculates early booking discount.
      *
-     * @param string $checkinDate          The check-in date.
+     * @param string $stay_checkin_date          The check-in date.
      * @param int    $earlyBookingWindow   The number of days defining the early booking window.
      * @param float  $earlyBookingDiscount The percentage discount to apply.
      * @return float                       Calculated discount percentage or zero if not applicable.
      */
-    public function calculateEarlyBookingDiscount($checkinDate, $earlyBookingWindow, $earlyBookingDiscount)
+    public function calculateEarlyBookingDiscount($stay_checkin_date, $earlyBookingWindow, $earlyBookingDiscount)
     {
-        $currentDate     = new \DateTime(); // Current date
-        $checkinDateTime = new \DateTime($checkinDate); // Check-in date
+        $stay_current_date     = new \DateTime(); // Current date
+        $checkinDateTime = new \DateTime($stay_checkin_date); // Check-in date
 
-        $interval         = $currentDate->diff($checkinDateTime);
+        $interval         = $stay_current_date->diff($checkinDateTime);
         $daysUntilCheckin = (int) $interval->format('%a'); // Difference in days
 
         // Check if the booking is made sufficiently in advance
@@ -967,17 +967,17 @@ class Booking
     /**
      * Calculates last-minute discount.
      *
-     * @param string $checkinDate          The check-in date.
+     * @param string $stay_checkin_date          The check-in date.
      * @param int    $lastMinuteWindow     The number of days defining the last-minute window.
      * @param float  $lastMinuteDiscount   The percentage discount to apply.
      * @return float                       Calculated discount percentage or zero if not applicable.
      */
-    public function calculateLastMinuteDiscount($checkinDate, $lastMinuteWindow, $lastMinuteDiscount)
+    public function calculateLastMinuteDiscount($stay_checkin_date, $lastMinuteWindow, $lastMinuteDiscount)
     {
-        $currentDate     = new \DateTime(); // Current date
-        $checkinDateTime = new \DateTime($checkinDate); // Check-in date
+        $stay_current_date     = new \DateTime(); // Current date
+        $checkinDateTime = new \DateTime($stay_checkin_date); // Check-in date
 
-        $interval         = $currentDate->diff($checkinDateTime);
+        $interval         = $stay_current_date->diff($checkinDateTime);
         $daysUntilCheckin = (int) $interval->format('%a'); // Difference in days
 
         // Check if the booking is within the last-minute window
@@ -992,12 +992,12 @@ class Booking
      * Calculates the highest applicable discount among last-minute, early booking, and long-stay,
      * and identifies the type of discount.
      *
-     * @param string $checkinDate        The check-in date.
+     * @param string $stay_checkin_date        The check-in date.
      * @param string $checkoutDate       The check-out date.
      * @param array  $discountParameters Parameters for each discount type.
      * @return array                     An array with the highest discount value and its type.
      */
-    public function calculateHighestDiscount($checkinDate, $checkoutDate)
+    public function calculateHighestDiscount($stay_checkin_date, $checkoutDate)
     {
         $discountParameters = array();
         $discountLabel = '';
@@ -1038,7 +1038,7 @@ class Booking
         // Calculate discounts if parameters are set
         if (isset($discountParameters['lastminute'])) {
             $lastMinuteDiscount = $this->calculateLastMinuteDiscount(
-                $checkinDate,
+                $stay_checkin_date,
                 $discountParameters['lastminute']['window'],
                 $discountParameters['lastminute']['discount']
             );
@@ -1046,7 +1046,7 @@ class Booking
 
         if (isset($discountParameters['earlybooking'])) {
             $earlyBookingDiscount = $this->calculateEarlyBookingDiscount(
-                $checkinDate,
+                $stay_checkin_date,
                 $discountParameters['earlybooking']['window'],
                 $discountParameters['earlybooking']['discount']
             );
@@ -1054,7 +1054,7 @@ class Booking
 
         if (isset($discountParameters['longstay'])) {
             $longStayDiscount = $this->calculateLongStayDiscount(
-                $checkinDate,
+                $stay_checkin_date,
                 $checkoutDate,
                 $discountParameters['longstay']['window'],
                 $discountParameters['longstay']['discount']
@@ -1092,10 +1092,10 @@ class Booking
         $total_roomrate = 0;
         $html           = '';
 
-        $checkinDate = $this->findCheckinDate($room_id);
+        $stay_checkin_date = $this->findCheckinDate($room_id);
         $checkoutDate = $this->findCheckoutDate($room_id);
 
-        $highestDiscountInfo = $this->calculateHighestDiscount($checkinDate, $checkoutDate);
+        $highestDiscountInfo = $this->calculateHighestDiscount($stay_checkin_date, $checkoutDate);
         $highestDiscountValue = $highestDiscountInfo['discountValue'];
         $highestDiscountType = $highestDiscountInfo['discountType'];
         $highestDiscountLabel = $highestDiscountInfo['discountLabel'];
@@ -1382,13 +1382,13 @@ class Booking
     }
     
     /**
-     * Method bookingDataFields
+     * Method booking_data_fields
      *
      * @return void
      */
-    public function bookingDataFields()
+    public function booking_data_fields()
     {
-        $dataFields = [
+        $data_fields = [
             'full_name'      => __('Full Name', 'staylodgic'),
             'passport'       => __('Passport No', 'staylodgic'),
             'email_address'  => __('Email Address', 'staylodgic'),
@@ -1402,28 +1402,28 @@ class Booking
             'guest_consent'  => __('By clicking "Book this Room" you agree to our terms and conditions and privacy policy.', 'staylodgic'),
         ];
 
-        return $dataFields;
+        return $data_fields;
     }
     
     /**
-     * Method register_Guest_Form
+     * Method register_guest_form
      *
      * @return void
      */
-    public function register_Guest_Form()
+    public function register_guest_form()
     {
         $country_options = staylodgic_country_list("select", "");
 
         $html = '<div class="registration-column registration-column-two" id="booking-summary">';
-        $html .= self::bookingSummary(
+        $html .= self::booking_summary(
             $bookingnumber = '',
             $room_id = '',
             $booking_results[$room_id]['roomtitle'] = '',
-            $this->checkinDate,
+            $this->stay_checkin_date,
             $this->checkoutDate,
             $this->staynights,
-            $this->adultGuests,
-            $this->childrenGuests,
+            $this->stay_adult_guests,
+            $this->stay_children_guests,
             $bedlayout = '',
             $mealplan = '',
             $choice = '',
@@ -1432,9 +1432,9 @@ class Booking
         );
         $html .= '</div>';
 
-        $bookingsuccess = self::booking_Successful();
+        $bookingsuccess = self::booking_successful();
 
-        $formInputs = self::bookingDataFields();
+        $form_inputs = self::booking_data_fields();
 
         $form_html = '
         <div class="registration_form_outer registration_request">
@@ -1445,39 +1445,39 @@ class Booking
                         <h3>' . __('Registration', 'staylodgic') . '</h3>
                         <div class="form-group form-floating">
                             <input placeholder="' . esc_attr__('Full Name', 'staylodgic') . '" type="text" class="form-control" id="full_name" name="full_name" required>
-                            <label for="full_name" class="control-label">' . esc_html($formInputs['full_name']) . '</label>
+                            <label for="full_name" class="control-label">' . esc_html($form_inputs['full_name']) . '</label>
                         </div>
                         <div class="form-group form-floating">
                             <input placeholder="' . esc_attr__('Passport No.', 'staylodgic') . '" type="text" class="form-control" id="passport" name="passport" required>
-                            <label for="passport" class="control-label">' . esc_html($formInputs['passport']) . '</label>
+                            <label for="passport" class="control-label">' . esc_html($form_inputs['passport']) . '</label>
                         </div>
                         <div class="form-group form-floating">
                             <input placeholder="' . esc_attr__('Email Address', 'staylodgic') . '" type="email" class="form-control" id="email_address" name="email_address" required>
-                            <label for="email_address" class="control-label">' . esc_html($formInputs['email_address']) . '</label>
+                            <label for="email_address" class="control-label">' . esc_html($form_inputs['email_address']) . '</label>
                         </div>
                         <div class="form-group form-floating">
                             <input placeholder="' . esc_attr__('Phone Number', 'staylodgic') . '" type="tel" class="form-control" id="phone_number" name="phone_number" required>
-                            <label for="phone_number" class="control-label">' . esc_html($formInputs['phone_number']) . '</label>
+                            <label for="phone_number" class="control-label">' . esc_html($form_inputs['phone_number']) . '</label>
                         </div>
                         <div class="form-group form-floating">
                             <input placeholder="' . esc_attr__('Street Address', 'staylodgic') . '" type="text" class="form-control" id="street_address" name="street_address">
-                            <label for="street_address" class="control-label">' . esc_html($formInputs['street_address']) . '</label>
+                            <label for="street_address" class="control-label">' . esc_html($form_inputs['street_address']) . '</label>
                         </div>
                         <div class="form-group form-floating">
                             <input placeholder="' . esc_attr__('City', 'staylodgic') . '" type="text" class="form-control" id="city" name="city">
-                            <label for="city" class="control-label">' . esc_html($formInputs['city']) . '</label>
+                            <label for="city" class="control-label">' . esc_html($form_inputs['city']) . '</label>
                         </div>
                         <div class="row">
                             <div class="col">
                                 <div class="form-group form-floating">
                                     <input placeholder="' . esc_attr__('State', 'staylodgic') . '" type="text" class="form-control" id="state" name="state">
-                                    <label for="state" class="control-label">' . esc_html($formInputs['state']) . '</label>
+                                    <label for="state" class="control-label">' . esc_html($form_inputs['state']) . '</label>
                                 </div>
                             </div>
                             <div class="col">
                                 <div class="form-group form-floating">
                                     <input placeholder="' . esc_attr__('Zip Code', 'staylodgic') . '" type="text" class="form-control" id="zip_code" name="zip_code">
-                                    <label for="zip_code" class="control-label">' . esc_html($formInputs['zip_code']) . '</label>
+                                    <label for="zip_code" class="control-label">' . esc_html($form_inputs['zip_code']) . '</label>
                                 </div>
                             </div>
                         </div>
@@ -1485,15 +1485,15 @@ class Booking
                             <select required class="form-control" id="country" name="country" >
                             ' . $country_options . '
                             </select>
-                            <label for="country" class="control-label">' . esc_html($formInputs['country']) . '</label>
+                            <label for="country" class="control-label">' . esc_html($form_inputs['country']) . '</label>
                         </div>
                         <div class="form-group form-floating">
                             <textarea class="form-control" id="guest_comment" name="guest_comment"></textarea>
-                            <label for="guest_comment" class="control-label">' . esc_html($formInputs['guest_comment']) . '</label>
+                            <label for="guest_comment" class="control-label">' . esc_html($form_inputs['guest_comment']) . '</label>
                         </div>
                         <div class="checkbox guest-consent-checkbox">
                             <label for="guest_consent">
-                                <input type="checkbox" class="form-check-input" id="guest_consent" name="guest_consent" required /><span class="consent-notice">' . esc_html__($formInputs['guest_consent'], 'staylodgic') . '</span>
+                                <input type="checkbox" class="form-check-input" id="guest_consent" name="guest_consent" required /><span class="consent-notice">' . esc_html__($form_inputs['guest_consent'], 'staylodgic') . '</span>
                                 <div class="invalid-feedback">
                                     ' . __('Consent is required for booking.', 'staylodgic') . '
                                 </div>
@@ -1509,14 +1509,14 @@ class Booking
     }
     
     /**
-     * Method booking_Successful
+     * Method booking_successful
      *
      * @return void
      */
-    public function booking_Successful()
+    public function booking_successful()
     {
         $reservation_instance = new \Staylodgic\Reservations();
-        $booking_page_link    = $reservation_instance->getBookingDetailsPageLinkForGuest();
+        $booking_page_link    = $reservation_instance->get_booking_details_page_link_for_guest();
 
         $success_html = '
         <div class="registration_form_outer registration_successful">
@@ -1528,7 +1528,7 @@ class Booking
                             ' . esc_html__('Hi,', 'staylodgic') . '
                         </p>
                         <p>
-                            ' . esc_html__('Your booking number is:', 'staylodgic') . ' <span class="booking-number">' . esc_html($this->bookingNumber) . '</span>
+                            ' . esc_html__('Your booking number is:', 'staylodgic') . ' <span class="booking-number">' . esc_html($this->stay_booking_number) . '</span>
                         </p>
                         <p>
                             ' . esc_html__('Please contact us to cancel, modify or if there\'s any questions regarding the booking.', 'staylodgic') . '
@@ -1848,81 +1848,81 @@ class Booking
     }
     
     /**
-     * Method buildReservationArray
+     * Method build_reservation_array
      *
      * @param $booking_data $booking_data
      *
      * @return void
      */
-    public function buildReservationArray($booking_data)
+    public function build_reservation_array($booking_data)
     {
-        $reservationArray = [];
+        $stay_reservation_array = [];
 
         if (array_key_exists('bookingnumber', $booking_data)) {
-            $reservationArray['bookingnumber'] = $booking_data['bookingnumber'];
+            $stay_reservation_array['bookingnumber'] = $booking_data['bookingnumber'];
         }
         if (array_key_exists('checkin', $booking_data)) {
-            $reservationArray['checkin'] = $booking_data['checkin'];
+            $stay_reservation_array['checkin'] = $booking_data['checkin'];
         }
         if (array_key_exists('checkout', $booking_data)) {
-            $reservationArray['checkout'] = $booking_data['checkout'];
+            $stay_reservation_array['checkout'] = $booking_data['checkout'];
         }
         if (array_key_exists('staynights', $booking_data)) {
-            $reservationArray['staynights'] = $booking_data['staynights'];
+            $stay_reservation_array['staynights'] = $booking_data['staynights'];
         }
         if (array_key_exists('adults', $booking_data)) {
-            $reservationArray['adults'] = $booking_data['adults'];
+            $stay_reservation_array['adults'] = $booking_data['adults'];
         }
         if (array_key_exists('children', $booking_data)) {
-            $reservationArray['children'] = $booking_data['children'];
+            $stay_reservation_array['children'] = $booking_data['children'];
         }
         if (array_key_exists('children_age', $booking_data)) {
-            $reservationArray['children_age'] = $booking_data['children_age'];
+            $stay_reservation_array['children_age'] = $booking_data['children_age'];
         }
         if (array_key_exists('totalguest', $booking_data)) {
-            $reservationArray['totalguest'] = $booking_data['totalguest'];
+            $stay_reservation_array['totalguest'] = $booking_data['totalguest'];
         }
         if (array_key_exists('chargeableguests', $booking_data)) {
-            $reservationArray['chargeableguests'] = $booking_data['chargeableguests'];
+            $stay_reservation_array['chargeableguests'] = $booking_data['chargeableguests'];
         }
         if (array_key_exists('room_id', $booking_data['choice'])) {
-            $reservationArray['room_id']   = $booking_data['choice']['room_id'];
-            $reservationArray['room_data'] = $booking_data[$booking_data['choice']['room_id']];
+            $stay_reservation_array['room_id']   = $booking_data['choice']['room_id'];
+            $stay_reservation_array['room_data'] = $booking_data[$booking_data['choice']['room_id']];
         }
         if (array_key_exists('bedlayout', $booking_data['choice'])) {
-            $reservationArray['bedlayout'] = $booking_data['choice']['bedlayout'];
+            $stay_reservation_array['bedlayout'] = $booking_data['choice']['bedlayout'];
         }
         if (array_key_exists('mealplan', $booking_data['choice'])) {
-            $reservationArray['mealplan'] = $booking_data['choice']['mealplan'];
+            $stay_reservation_array['mealplan'] = $booking_data['choice']['mealplan'];
         }
         if (array_key_exists('mealplan_price', $booking_data['choice'])) {
-            $reservationArray['mealplan_price'] = $booking_data['choice']['mealplan_price'];
+            $stay_reservation_array['mealplan_price'] = $booking_data['choice']['mealplan_price'];
         }
         if (array_key_exists('mealplan_price', $booking_data['choice'])) {
-            $reservationArray['mealplan_price'] = $booking_data['choice']['mealplan_price'];
+            $stay_reservation_array['mealplan_price'] = $booking_data['choice']['mealplan_price'];
         }
         if (array_key_exists('mealplan_price', $booking_data['choice'])) {
-            $reservationArray['mealplan_price'] = $booking_data['choice']['mealplan_price'];
+            $stay_reservation_array['mealplan_price'] = $booking_data['choice']['mealplan_price'];
         }
 
         $currency = staylodgic_get_option('currency');
         if (isset($currency)) {
-            $reservationArray['currency'] = $currency;
+            $stay_reservation_array['currency'] = $currency;
         }
 
         $tax_instance = new \Staylodgic\Tax('room');
 
-        $subtotalprice                  = intval($reservationArray['room_data']['totalroomrate']) + intval($reservationArray['mealplan_price']);
-        $reservationArray['tax']      = $tax_instance->apply_tax($subtotalprice, $reservationArray['staynights'], $reservationArray['totalguest'], $output = 'data');
-        $reservationArray['tax_html'] = $tax_instance->apply_tax($subtotalprice, $reservationArray['staynights'], $reservationArray['totalguest'], $output = 'html');
+        $subtotalprice                  = intval($stay_reservation_array['room_data']['totalroomrate']) + intval($stay_reservation_array['mealplan_price']);
+        $stay_reservation_array['tax']      = $tax_instance->apply_tax($subtotalprice, $stay_reservation_array['staynights'], $stay_reservation_array['totalguest'], $output = 'data');
+        $stay_reservation_array['tax_html'] = $tax_instance->apply_tax($subtotalprice, $stay_reservation_array['staynights'], $stay_reservation_array['totalguest'], $output = 'html');
 
-        $ratepernight                       = intval($subtotalprice) / intval($reservationArray['staynights']);
+        $ratepernight                       = intval($subtotalprice) / intval($stay_reservation_array['staynights']);
         $ratepernight_rounded               = round($ratepernight, 2);
-        $reservationArray['ratepernight'] = $ratepernight_rounded;
-        $reservationArray['subtotal']     = round($subtotalprice, 2);
-        $reservationArray['total']        = $reservationArray['tax']['total'];
+        $stay_reservation_array['ratepernight'] = $ratepernight_rounded;
+        $stay_reservation_array['subtotal']     = round($subtotalprice, 2);
+        $stay_reservation_array['total']        = $stay_reservation_array['tax']['total'];
 
-        return $reservationArray;
+        return $stay_reservation_array;
     }
 
     /**
@@ -1933,9 +1933,9 @@ class Booking
     public function bookRooms()
     {
 
-        $serializedData = $_POST['bookingdata'];
+        $serialized_data = $_POST['bookingdata'];
         // Parse the serialized data into an associative array
-        parse_str($serializedData, $formData);
+        parse_str($serialized_data, $form_data);
 
         // Verify the nonce
         if (!isset($_POST['staylodgic_roomlistingbox_nonce']) || !check_admin_referer('staylodgic-roomlistingbox-nonce', 'staylodgic_roomlistingbox_nonce')) {
@@ -1972,19 +1972,19 @@ class Booking
         $adults                     = $booking_data['adults'];
         $children                   = $booking_data['children'];
 
-        $reservationData = self::buildReservationArray($booking_data);
+        $stay_reservation_data = self::build_reservation_array($booking_data);
 
-        $reservationData['customer']['full_name']      = $full_name;
-        $reservationData['customer']['passport']       = $passport;
-        $reservationData['customer']['email_address']  = $email_address;
-        $reservationData['customer']['phone_number']   = $phone_number;
-        $reservationData['customer']['street_address'] = $street_address;
-        $reservationData['customer']['city']           = $city;
-        $reservationData['customer']['state']          = $state;
-        $reservationData['customer']['zip_code']       = $zip_code;
-        $reservationData['customer']['country']        = $country;
-        $reservationData['customer']['guest_comment']  = $guest_comment;
-        $reservationData['customer']['guest_consent']  = $guest_consent;
+        $stay_reservation_data['customer']['full_name']      = $full_name;
+        $stay_reservation_data['customer']['passport']       = $passport;
+        $stay_reservation_data['customer']['email_address']  = $email_address;
+        $stay_reservation_data['customer']['phone_number']   = $phone_number;
+        $stay_reservation_data['customer']['street_address'] = $street_address;
+        $stay_reservation_data['customer']['city']           = $city;
+        $stay_reservation_data['customer']['state']          = $state;
+        $stay_reservation_data['customer']['zip_code']       = $zip_code;
+        $stay_reservation_data['customer']['country']        = $country;
+        $stay_reservation_data['customer']['guest_comment']  = $guest_comment;
+        $stay_reservation_data['customer']['guest_consent']  = $guest_consent;
 
         // Check if number of people can be occupied by room
         $can_accomodate = self::canAccomodate_to_rooms($rooms, $adults, $children);
@@ -2020,14 +2020,14 @@ class Booking
             return;
         }
 
-        $checkin  = $reservationData['checkin'];
-        $checkout = $reservationData['checkout'];
-        $room_id  = $reservationData['room_id'];
+        $checkin  = $stay_reservation_data['checkin'];
+        $checkout = $stay_reservation_data['checkout'];
+        $room_id  = $stay_reservation_data['room_id'];
 
         $children_array             = array();
-        $children_array['number'] = $reservationData['children'];
+        $children_array['number'] = $stay_reservation_data['children'];
 
-        foreach ($reservationData['children_age'] as $key => $value) {
+        foreach ($stay_reservation_data['children_age'] as $key => $value) {
             $children_array['age'][] = $value;
         }
 
@@ -2036,7 +2036,7 @@ class Booking
         if (staylodgic_has_tax()) {
             $tax_status = 'enabled';
             $tax_instance = new \Staylodgic\Tax('room');
-            $tax_html   = $tax_instance->tax_summary($reservationData['tax_html']['details']);
+            $tax_html   = $tax_instance->tax_summary($stay_reservation_data['tax_html']['details']);
         }
 
         $new_bookingstatus = staylodgic_get_option('new_bookingstatus');
@@ -2048,7 +2048,7 @@ class Booking
             $new_bookingsubstatus = 'onhold';
         }
 
-        $reservation_booking_uid = \Staylodgic\Common::generateUUID();
+        $reservation_booking_uid = \Staylodgic\Common::generate_uuid();
 
         $signature = md5('staylodgic_booking_system');
 
@@ -2073,20 +2073,20 @@ class Booking
                 'staylodgic_checkout_date'                  => $checkout,
                 'staylodgic_tax'                            => $tax_status,
                 'staylodgic_tax_html_data'                  => $tax_html,
-                'staylodgic_tax_data'                       => $reservationData['tax'],
-                'staylodgic_reservation_room_bedlayout'     => $reservationData['bedlayout'],
-                'staylodgic_reservation_room_mealplan'      => $reservationData['mealplan'],
-                'staylodgic_reservation_room_adults'        => $reservationData['adults'],
+                'staylodgic_tax_data'                       => $stay_reservation_data['tax'],
+                'staylodgic_reservation_room_bedlayout'     => $stay_reservation_data['bedlayout'],
+                'staylodgic_reservation_room_mealplan'      => $stay_reservation_data['mealplan'],
+                'staylodgic_reservation_room_adults'        => $stay_reservation_data['adults'],
                 'staylodgic_reservation_room_children'      => $children_array,
-                'staylodgic_reservation_rate_per_night'     => $reservationData['ratepernight'],
-                'staylodgic_reservation_subtotal_room_cost' => $reservationData['subtotal'],
-                'staylodgic_reservation_total_room_cost'    => $reservationData['total'],
+                'staylodgic_reservation_rate_per_night'     => $stay_reservation_data['ratepernight'],
+                'staylodgic_reservation_subtotal_room_cost' => $stay_reservation_data['subtotal'],
+                'staylodgic_reservation_total_room_cost'    => $stay_reservation_data['total'],
                 'staylodgic_booking_number'                 => $booking_number,
                 'staylodgic_booking_uid'                    => $reservation_booking_uid,
                 'staylodgic_customer_id'                    => $customer_post_id,
                 'staylodgic_sync_status'                    => $sync_status,
                 'staylodgic_ics_signature'                  => $signature,
-                'staylodgic_booking_data'                   => $reservationData,
+                'staylodgic_booking_data'                   => $stay_reservation_data,
                 'staylodgic_booking_channel'                => $booking_channel,
             ),
         );
@@ -2097,34 +2097,34 @@ class Booking
         if ($reservation_post_id) {
             // Successfully created a reservation post
             $data_instance = new \Staylodgic\Data();
-            $data_instance->updateReservationsArray_On_Save($reservation_post_id, get_post($reservation_post_id), true);
+            $data_instance->update_reservations_array_on_save($reservation_post_id, get_post($reservation_post_id), true);
 
-            $roomName = \Staylodgic\Rooms::getRoomName_FromID($room_id);
+            $stay_room_name = \Staylodgic\Rooms::get_room_name_from_id($room_id);
 
             $email_tax_html = false;
             if ( 'enabled' == $tax_status) {
-                $email_tax_html = $reservationData['tax_html']['details'];
+                $email_tax_html = $stay_reservation_data['tax_html']['details'];
             }
 
-            $included_mealplans = $this->getIncludedMealPlanKeysFromData( $reservationData['room_data'] , true );
+            $included_mealplans = $this->getIncludedMealPlanKeysFromData( $stay_reservation_data['room_data'] , true );
 
-            $bookingDetails = [
+            $booking_details = [
                 'guestName'      => $full_name,
-                'bookingNumber'  => $booking_number,
-                'roomTitle'      => $roomName,
+                'stay_booking_number'  => $booking_number,
+                'roomTitle'      => $stay_room_name,
                 'included_mealplan'      => $included_mealplans,
-                'mealplan'      => $this->getMealPlanLabel($reservationData['mealplan']),
-                'checkinDate'    => $checkin,
+                'mealplan'      => $this->getMealPlanLabel($stay_reservation_data['mealplan']),
+                'stay_checkin_date'    => $checkin,
                 'checkoutDate'   => $checkout,
-                'adultGuests'    => $reservationData['adults'],
-                'childrenGuests' => $reservationData['children'],
-                'subtotal' => staylodgic_price( $reservationData['subtotal'] ),
+                'stay_adult_guests'    => $stay_reservation_data['adults'],
+                'stay_children_guests' => $stay_reservation_data['children'],
+                'subtotal' => staylodgic_price( $stay_reservation_data['subtotal'] ),
                 'tax' => $email_tax_html,
-                'totalCost'      => $reservationData['total'],
+                'totalCost'      => $stay_reservation_data['total'],
             ];
 
             $email = new EmailDispatcher($email_address, 'Room Booking Confirmation for: ' . $booking_number);
-            $email->setHTMLContent()->setBookingConfirmationTemplate($bookingDetails);
+            $email->set_html_content()->setBookingConfirmationTemplate($booking_details);
 
             if ($email->send()) {
                 // Sent successfully code here

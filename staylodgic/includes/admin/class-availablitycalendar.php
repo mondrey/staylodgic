@@ -5,9 +5,9 @@ namespace Staylodgic;
 class AvailablityCalendar extends AvailablityCalendarBase
 {
 
-    public function __construct($startDate = null, $endDate = null, $cachedData = null, $calendarData = null, $reservation_tabs = null, $usingCache = false, $availConfirmedOnly = false)
+    public function __construct($startDate = null, $stay_end_date = null, $cachedData = null, $calendarData = null, $reservation_tabs = null, $usingCache = false, $availConfirmedOnly = false)
     {
-        parent::__construct($startDate, $endDate, $calendarData, $reservation_tabs, $availConfirmedOnly);
+        parent::__construct($startDate, $stay_end_date, $calendarData, $reservation_tabs, $availConfirmedOnly);
 
         // WordPress AJAX action hook
         add_action('wp_ajax_get_Selected_Range_AvailabilityCalendar', array($this, 'get_Selected_Range_AvailabilityCalendar'));
@@ -108,12 +108,12 @@ class AvailablityCalendar extends AvailablityCalendarBase
      * Method fetchOccupancy_Percentage_For_Calendar_Range
      *
      * @param $startDate $startDate
-     * @param $endDate $endDate
+     * @param $stay_end_date $stay_end_date
      * @param $onlyFullOccupancy $onlyFullOccupancy
      *
      * @return void
      */
-    public function fetchOccupancy_Percentage_For_Calendar_Range($startDate = false, $endDate = false, $onlyFullOccupancy = false)
+    public function fetchOccupancy_Percentage_For_Calendar_Range($startDate = false, $stay_end_date = false, $onlyFullOccupancy = false)
     {
         // Perform necessary security checks or validation here
 
@@ -121,25 +121,25 @@ class AvailablityCalendar extends AvailablityCalendarBase
         $isAjaxRequest = isset($_POST['start']) && isset($_POST['end']);
 
         // Calculate current date
-        $currentDate = current_time('Y-m-d');
+        $stay_current_date = current_time('Y-m-d');
 
         // Calculate end date as 90 days from the current date
-        $endDate = date('Y-m-d', strtotime($currentDate . ' +90 days'));
+        $stay_end_date = date('Y-m-d', strtotime($stay_current_date . ' +90 days'));
 
         if (!$startDate) {
             // Use the current date as the start date
-            $startDate = $currentDate;
+            $startDate = $stay_current_date;
         }
 
         // Retrieve start and end dates from the AJAX request if not provided
         if ($isAjaxRequest) {
             $startDate = sanitize_text_field($_POST['start']);
-            $endDate   = sanitize_text_field($_POST['end']);
+            $stay_end_date   = sanitize_text_field($_POST['end']);
         }
 
-        if (isset($startDate) && isset($endDate)) {
+        if (isset($startDate) && isset($stay_end_date)) {
 
-            $dates = \Staylodgic\Common::getDates_Between($startDate, $endDate);
+            $dates = \Staylodgic\Common::getDates_Between($startDate, $stay_end_date);
 
             $occupancy_data = array();
 
@@ -356,22 +356,22 @@ class AvailablityCalendar extends AvailablityCalendarBase
      * Method getAvailabilityCalendar
      *
      * @param $startDate $startDate
-     * @param $endDate $endDate
+     * @param $stay_end_date $stay_end_date
      *
      * @return void
      */
-    public function getAvailabilityCalendar($startDate = false, $endDate = false)
+    public function getAvailabilityCalendar($startDate = false, $stay_end_date = false)
     {
 
         if (!$startDate) {
             $startDate = $this->startDate;
-            $endDate   = $this->endDate;
+            $stay_end_date   = $this->stay_end_date;
         } else {
             $startDate = new \DateTime($startDate);
-            $endDate   = new \DateTime($endDate);
+            $stay_end_date   = new \DateTime($stay_end_date);
         }
 
-        $dates = $this->getDates($startDate, $endDate);
+        $dates = $this->getDates($startDate, $stay_end_date);
         $today = $this->today;
 
         if ($startDate instanceof \DateTime) {
@@ -380,10 +380,10 @@ class AvailablityCalendar extends AvailablityCalendarBase
             $startDateString = $startDate;
         }
 
-        if ($endDate instanceof \DateTime) {
-            $endDateString = $endDate->format('Y-m-d');
+        if ($stay_end_date instanceof \DateTime) {
+            $endDateString = $stay_end_date->format('Y-m-d');
         } else {
-            $endDateString = $endDate;
+            $endDateString = $stay_end_date;
         }
 
         $table_start = '<table id="calendarTable" data-calstart="' . esc_attr($startDateString) . '" data-calend="' . esc_attr($endDateString) . '">';
@@ -393,7 +393,7 @@ class AvailablityCalendar extends AvailablityCalendarBase
         $room_output    = '';
         $all_room_output  = '';
 
-        foreach ($this->roomlist as $roomID => $roomName) :
+        foreach ($this->roomlist as $roomID => $stay_room_name) :
 
             $cache_instance = new \Staylodgic\Cache($roomID, $startDateString, $endDateString);
             // $cache_instance->deleteCache();
@@ -465,7 +465,7 @@ class AvailablityCalendar extends AvailablityCalendarBase
 
             $room_output = '<tr class="calendarRow calendar-room-row" data-id="' . esc_attr($roomID) . '">';
             $room_output .= '<td class="calendarCell rowHeader">';
-            $room_output .= esc_html($roomName);
+            $room_output .= esc_html($stay_room_name);
 
             $room_output .= $this->generateRoomWarnings($roomID);
 
@@ -571,7 +571,7 @@ class AvailablityCalendar extends AvailablityCalendarBase
         endforeach;
 
         $stats_row = '<tr class="calendarRow">';
-        $stats_row .= self::displayOccupancy_TableDataBlock($startDate, $endDate);
+        $stats_row .= self::displayOccupancy_TableDataBlock($startDate, $stay_end_date);
         $stats_row .= self::displayOccupancyRange_TableDataBlock($dates);
         $stats_row .= '</tr>';
         $stats_row .= '<tr class="calendarRow">';
@@ -590,15 +590,15 @@ class AvailablityCalendar extends AvailablityCalendarBase
      * Method displayOccupancy_TableDataBlock
      *
      * @param $startDate $startDate
-     * @param $endDate $endDate
+     * @param $stay_end_date $stay_end_date
      *
      * @return void
      */
-    private function displayOccupancy_TableDataBlock($startDate = false, $endDate = false)
+    private function displayOccupancy_TableDataBlock($startDate = false, $stay_end_date = false)
     {
         if (!$startDate) {
             $startDate = $this->startDate;
-            $endDate   = $this->endDate;
+            $stay_end_date   = $this->stay_end_date;
         }
 
         if ($startDate instanceof \DateTime) {
@@ -607,13 +607,13 @@ class AvailablityCalendar extends AvailablityCalendarBase
             $startDateString = $startDate;
         }
 
-        if ($endDate instanceof \DateTime) {
-            $endDate->modify('-5 days');
-            $endDateString = $endDate->format('Y-m-d');
+        if ($stay_end_date instanceof \DateTime) {
+            $stay_end_date->modify('-5 days');
+            $endDateString = $stay_end_date->format('Y-m-d');
         } else {
-            $endDate = new \DateTime($endDate);
-            $endDate->modify('-5 days');
-            $endDateString = $endDate->format('Y-m-d');
+            $stay_end_date = new \DateTime($stay_end_date);
+            $stay_end_date->modify('-5 days');
+            $endDateString = $stay_end_date->format('Y-m-d');
         }
 
         $occupancy_percent = esc_html($this->calculateOccupancyTotalForRange($startDateString, $endDateString));
@@ -867,35 +867,35 @@ class AvailablityCalendar extends AvailablityCalendarBase
 
             if (!$this->usingCache) {
                 $reservation_instance  = new \Staylodgic\Reservations($date = false, $room_id = false, $reservation_id = $reservation['id']);
-                $booking_number        = $reservation_instance->getBookingNumber();
+                $booking_number        = $reservation_instance->get_booking_number();
                 $guest_name            = $reservation_instance->getReservationGuestName();
                 $reserved_days         = $reservation_instance->countReservationDays();
-                $checkin               = $reservation_instance->getCheckinDate();
+                $checkin               = $reservation_instance->get_checkin_date();
                 $checkout              = $reservation_instance->getCheckoutDate();
-                $reservation_status    = $reservation_instance->getReservationStatus();
-                $reservation_substatus = $reservation_instance->getReservationSubStatus();
+                $reservation_status    = $reservation_instance->get_reservation_status();
+                $reservation_substatus = $reservation_instance->get_reservation_sub_status();
                 $booking_channel       = $reservation_instance->getReservationChannel();
 
                 $reservation_edit_link = get_edit_post_link($reservation['id']);
 
-                $this->calendarData['tabsData'][$reservation_id][$current_day]['getBookingNumber'] = $booking_number;
+                $this->calendarData['tabsData'][$reservation_id][$current_day]['get_booking_number'] = $booking_number;
                 $this->calendarData['tabsData'][$reservation_id][$current_day]['getReservationGuestName'] = $guest_name;
                 $this->calendarData['tabsData'][$reservation_id][$current_day]['countReservationDays'] = $reserved_days;
-                $this->calendarData['tabsData'][$reservation_id][$current_day]['getCheckinDate'] = $checkin;
+                $this->calendarData['tabsData'][$reservation_id][$current_day]['get_checkin_date'] = $checkin;
                 $this->calendarData['tabsData'][$reservation_id][$current_day]['getCheckoutDate'] = $checkout;
-                $this->calendarData['tabsData'][$reservation_id][$current_day]['getReservationStatus'] = $reservation_status;
-                $this->calendarData['tabsData'][$reservation_id][$current_day]['getReservationSubStatus'] = $reservation_substatus;
+                $this->calendarData['tabsData'][$reservation_id][$current_day]['get_reservation_status'] = $reservation_status;
+                $this->calendarData['tabsData'][$reservation_id][$current_day]['get_reservation_sub_status'] = $reservation_substatus;
                 $this->calendarData['tabsData'][$reservation_id][$current_day]['getReservationChannel'] = $booking_channel;
 
                 $this->calendarData['tabsData'][$reservation_id]['reservation_edit_link'] = $reservation_edit_link;
             } else {
-                $booking_number        = $this->cachedData['tabsData'][$reservation_id][$current_day]['getBookingNumber'];
+                $booking_number        = $this->cachedData['tabsData'][$reservation_id][$current_day]['get_booking_number'];
                 $guest_name            = $this->cachedData['tabsData'][$reservation_id][$current_day]['getReservationGuestName'];
                 $reserved_days         = $this->cachedData['tabsData'][$reservation_id][$current_day]['countReservationDays'];
-                $checkin               = $this->cachedData['tabsData'][$reservation_id][$current_day]['getCheckinDate'];
+                $checkin               = $this->cachedData['tabsData'][$reservation_id][$current_day]['get_checkin_date'];
                 $checkout              = $this->cachedData['tabsData'][$reservation_id][$current_day]['getCheckoutDate'];
-                $reservation_status    = $this->cachedData['tabsData'][$reservation_id][$current_day]['getReservationStatus'];
-                $reservation_substatus = $this->cachedData['tabsData'][$reservation_id][$current_day]['getReservationSubStatus'];
+                $reservation_status    = $this->cachedData['tabsData'][$reservation_id][$current_day]['get_reservation_status'];
+                $reservation_substatus = $this->cachedData['tabsData'][$reservation_id][$current_day]['get_reservation_sub_status'];
                 $booking_channel       = $this->cachedData['tabsData'][$reservation_id][$current_day]['getReservationChannel'];
 
                 $reservation_edit_link = $this->cachedData['tabsData'][$reservation_id]['reservation_edit_link'];

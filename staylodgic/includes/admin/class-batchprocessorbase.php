@@ -147,8 +147,8 @@ class BatchProcessorBase
                 // Extract check-in and check-out dates from the description
                 if ($key === 'CHECKIN') {
                     // Extract date portion and remove time
-                    $checkinDate            = date('Y-m-d', strtotime($value));
-                    $eventData['CHECKIN'] = $checkinDate;
+                    $stay_checkin_date            = date('Y-m-d', strtotime($value));
+                    $eventData['CHECKIN'] = $stay_checkin_date;
                 } elseif ($key === 'CHECKOUT') {
                     // Extract date portion and remove time
                     $checkoutDate            = date('Y-m-d', strtotime($value));

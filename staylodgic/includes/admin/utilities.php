@@ -562,37 +562,37 @@ function staylodgic_get_mealplan_labels($mealtype)
 /**
  * Method staylodgic_delete_booking_transient
  *
- * @param $bookingNumber $bookingNumber [explicite description]
+ * @param $stay_booking_number $stay_booking_number [explicite description]
  *
  * @return void
  */
-function staylodgic_delete_booking_transient($bookingNumber)
+function staylodgic_delete_booking_transient($stay_booking_number)
 {
-    delete_transient($bookingNumber);
+    delete_transient($stay_booking_number);
 }
 /**
  * Method staylodgic_set_booking_transient
  *
  * @param $data $data [explicite description]
- * @param $bookingNumber $bookingNumber [explicite description]
+ * @param $stay_booking_number $stay_booking_number [explicite description]
  *
  * @return void
  */
-function staylodgic_set_booking_transient($data, $bookingNumber)
+function staylodgic_set_booking_transient($data, $stay_booking_number)
 {
 	
-    set_transient($bookingNumber, $data, 20 * MINUTE_IN_SECONDS);
+    set_transient($stay_booking_number, $data, 20 * MINUTE_IN_SECONDS);
 }
 /**
  * Method staylodgic_get_booking_transient
  *
- * @param $bookingNumber $bookingNumber [explicite description]
+ * @param $stay_booking_number $stay_booking_number [explicite description]
  *
  * @return void
  */
-function staylodgic_get_booking_transient($bookingNumber = null)
+function staylodgic_get_booking_transient($stay_booking_number = null)
 {
-    return get_transient($bookingNumber);
+    return get_transient($stay_booking_number);
 }
 /**
  * Method staylodgic_get_allowed_tags

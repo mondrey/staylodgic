@@ -20,11 +20,11 @@ class EmailDispatcher
     }
 
     /**
-     * Method setHTMLContent
+     * Method set_html_content
      *
      * @return void
      */
-    public function setHTMLContent()
+    public function set_html_content()
     {
         $this->headers[] = 'Content-Type: text/html; charset=UTF-8';
         return $this;
@@ -103,33 +103,33 @@ class EmailDispatcher
     /**
      * Method setBookingConfirmationTemplate
      *
-     * @param $bookingDetails
+     * @param $booking_details
      *
      * @return void
      */
-    public function setBookingConfirmationTemplate($bookingDetails)
+    public function setBookingConfirmationTemplate($booking_details)
     {
 
-        $total_price = staylodgic_price($bookingDetails['totalCost']);
+        $total_price = staylodgic_price($booking_details['totalCost']);
         $property_emailfooter = staylodgic_get_option('property_emailfooter');
         $property_emailfooter_formatted = nl2br($property_emailfooter);
 
-        $emailMessage  = '<h1>' . __('Thank you for your reservation', 'staylodgic') . ', ' . esc_html($bookingDetails['guestName']) . '</h1>';
+        $emailMessage  = '<h1>' . __('Thank you for your reservation', 'staylodgic') . ', ' . esc_html($booking_details['guestName']) . '</h1>';
         $emailMessage .= '<p>' . __('We have recieved your booking.', 'staylodgic') . '</p>';
         $emailMessage .= '<h2>' . __('Booking Details', 'staylodgic') . '</h2>';
-        $emailMessage .= '<p><strong>' . __('Booking Number:', 'staylodgic') . '</strong> ' . esc_html($bookingDetails['bookingNumber']) . '</p>';
-        $emailMessage .= '<p><strong>' . __('Name:', 'staylodgic') . '</strong> ' . esc_html($bookingDetails['guestName']) . '</p>';
-        $emailMessage .= '<p><strong>' . __('Room:', 'staylodgic') . '</strong> ' . esc_html($bookingDetails['roomTitle']) . '</p>';
-        $emailMessage .= '<p><strong>' . __('Meal Plan:', 'staylodgic') . '</strong> ' . esc_html($bookingDetails['mealplan']) . '</p>';
-        $emailMessage .= '<p><strong>' . __('Included Meal Plans:', 'staylodgic') . '</strong> ' . esc_html($bookingDetails['included_mealplan']) . '</p>';
-        $emailMessage .= '<p><strong>' . __('Check-in Date:', 'staylodgic') . '</strong> ' . esc_html($bookingDetails['checkinDate']) . '</p>';
-        $emailMessage .= '<p><strong>' . __('Check-out Date:', 'staylodgic') . '</strong> ' . esc_html($bookingDetails['checkoutDate']) . '</p>';
-        $emailMessage .= '<p><strong>' . __('Adults:', 'staylodgic') . '</strong> ' . esc_html($bookingDetails['adultGuests']) . '</p>';
-        $emailMessage .= '<p><strong>' . __('Children:', 'staylodgic') . '</strong> ' . esc_html($bookingDetails['childrenGuests']) . '</p>';
-        $emailMessage .= '<p><strong>' . __('Subtotal:', 'staylodgic') . '</strong> ' . $bookingDetails['subtotal'] . '</p>';
-        if ($bookingDetails['tax']) {
+        $emailMessage .= '<p><strong>' . __('Booking Number:', 'staylodgic') . '</strong> ' . esc_html($booking_details['stay_booking_number']) . '</p>';
+        $emailMessage .= '<p><strong>' . __('Name:', 'staylodgic') . '</strong> ' . esc_html($booking_details['guestName']) . '</p>';
+        $emailMessage .= '<p><strong>' . __('Room:', 'staylodgic') . '</strong> ' . esc_html($booking_details['roomTitle']) . '</p>';
+        $emailMessage .= '<p><strong>' . __('Meal Plan:', 'staylodgic') . '</strong> ' . esc_html($booking_details['mealplan']) . '</p>';
+        $emailMessage .= '<p><strong>' . __('Included Meal Plans:', 'staylodgic') . '</strong> ' . esc_html($booking_details['included_mealplan']) . '</p>';
+        $emailMessage .= '<p><strong>' . __('Check-in Date:', 'staylodgic') . '</strong> ' . esc_html($booking_details['stay_checkin_date']) . '</p>';
+        $emailMessage .= '<p><strong>' . __('Check-out Date:', 'staylodgic') . '</strong> ' . esc_html($booking_details['checkoutDate']) . '</p>';
+        $emailMessage .= '<p><strong>' . __('Adults:', 'staylodgic') . '</strong> ' . esc_html($booking_details['stay_adult_guests']) . '</p>';
+        $emailMessage .= '<p><strong>' . __('Children:', 'staylodgic') . '</strong> ' . esc_html($booking_details['stay_children_guests']) . '</p>';
+        $emailMessage .= '<p><strong>' . __('Subtotal:', 'staylodgic') . '</strong> ' . $booking_details['subtotal'] . '</p>';
+        if ($booking_details['tax']) {
             $emailMessage .= '<p><strong>' . __('Tax:', 'staylodgic') . '</strong></p>';
-            foreach ($bookingDetails['tax'] as $totalID => $totalvalue) {
+            foreach ($booking_details['tax'] as $total_id => $totalvalue) {
                 $emailMessage .= '<p>' . wp_kses($totalvalue, staylodgic_get_allowed_tags()) . '</p>';
             }
         }
@@ -143,32 +143,32 @@ class EmailDispatcher
     }
 
     /**
-     * Method setActivityConfirmationTemplate
+     * Method set_activity_confirmation_template
      *
-     * @param $bookingDetails
+     * @param $booking_details
      *
      * @return void
      */
-    public function setActivityConfirmationTemplate($bookingDetails)
+    public function set_activity_confirmation_template($booking_details)
     {
 
-        $total_price = staylodgic_price($bookingDetails['totalCost']);
+        $total_price = staylodgic_price($booking_details['totalCost']);
         $activity_emailfooter = staylodgic_get_option('activity_property_emailfooter');
         $activity_emailfooter_formatted = nl2br($activity_emailfooter);
 
-        $emailMessage  = '<h1>' . __('Thank you for your reservation', 'staylodgic') . ', ' . esc_html($bookingDetails['guestName']) . '</h1>';
+        $emailMessage  = '<h1>' . __('Thank you for your reservation', 'staylodgic') . ', ' . esc_html($booking_details['guestName']) . '</h1>';
         $emailMessage .= '<p>' . __('We have recieved your booking.', 'staylodgic') . '</p>';
         $emailMessage .= '<h2>' . __('Booking Details', 'staylodgic') . '</h2>';
-        $emailMessage .= '<p><strong>' . __('Booking Number:', 'staylodgic') . '</strong> ' . esc_html($bookingDetails['bookingNumber']) . '</p>';
-        $emailMessage .= '<p><strong>' . __('Name:', 'staylodgic') . '</strong> ' . esc_html($bookingDetails['guestName']) . '</p>';
-        $emailMessage .= '<p><strong>' . __('Activity Name:', 'staylodgic') . '</strong> ' . esc_html($bookingDetails['roomTitle']) . '</p>';
-        $emailMessage .= '<p><strong>' . __('Activity Date:', 'staylodgic') . '</strong> ' . esc_html($bookingDetails['checkinDate']) . '</p>';
-        $emailMessage .= '<p><strong>' . __('Adults:', 'staylodgic') . '</strong> ' . esc_html($bookingDetails['adultGuests']) . '</p>';
-        $emailMessage .= '<p><strong>' . __('Children:', 'staylodgic') . '</strong> ' . esc_html($bookingDetails['childrenGuests']) . '</p>';
-        $emailMessage .= '<p><strong>' . __('Subtotal:', 'staylodgic') . '</strong> ' . $bookingDetails['subtotal'] . '</p>';
-        if ($bookingDetails['tax']) {
+        $emailMessage .= '<p><strong>' . __('Booking Number:', 'staylodgic') . '</strong> ' . esc_html($booking_details['stay_booking_number']) . '</p>';
+        $emailMessage .= '<p><strong>' . __('Name:', 'staylodgic') . '</strong> ' . esc_html($booking_details['guestName']) . '</p>';
+        $emailMessage .= '<p><strong>' . __('Activity Name:', 'staylodgic') . '</strong> ' . esc_html($booking_details['roomTitle']) . '</p>';
+        $emailMessage .= '<p><strong>' . __('Activity Date:', 'staylodgic') . '</strong> ' . esc_html($booking_details['stay_checkin_date']) . '</p>';
+        $emailMessage .= '<p><strong>' . __('Adults:', 'staylodgic') . '</strong> ' . esc_html($booking_details['stay_adult_guests']) . '</p>';
+        $emailMessage .= '<p><strong>' . __('Children:', 'staylodgic') . '</strong> ' . esc_html($booking_details['stay_children_guests']) . '</p>';
+        $emailMessage .= '<p><strong>' . __('Subtotal:', 'staylodgic') . '</strong> ' . $booking_details['subtotal'] . '</p>';
+        if ($booking_details['tax']) {
             $emailMessage .= '<p><strong>' . __('Tax:', 'staylodgic') . '</strong></p>';
-            foreach ($bookingDetails['tax'] as $totalID => $totalvalue) {
+            foreach ($booking_details['tax'] as $total_id => $totalvalue) {
                 $emailMessage .= '<p>' . wp_kses($totalvalue, staylodgic_get_allowed_tags()) . '</p>';
             }
         }

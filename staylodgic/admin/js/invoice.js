@@ -3,10 +3,10 @@
 
 		$('#invoiceActivityDetails').on('click', function(e) {
 			e.preventDefault();
-			var bookingNumber = $('#booking_number').val();
+			var stay_booking_number = $('#booking_number').val();
 			var staylodgic_bookingdetails_nonce = $('input[name="staylodgic_bookingdetails_nonce"]').val();
 
-			if (!bookingNumber) {
+			if (!stay_booking_number) {
 				alert('Please enter a booking number.');
 				return;
 			}
@@ -17,7 +17,7 @@
 				dataType: 'html', // Change dataType to html
 				data: {
 					action: 'getInvoiceActivityDetails',
-					booking_number: bookingNumber,
+					booking_number: stay_booking_number,
 					staylodgic_bookingdetails_nonce: staylodgic_bookingdetails_nonce
 				},
 				success: function(response) {
@@ -36,10 +36,10 @@
 		$('#invoiceDetails').on('click', function(e) {
 			e.preventDefault();
 	
-			var bookingNumber = $('#booking_number').val();
+			var stay_booking_number = $('#booking_number').val();
 			var staylodgic_bookingdetails_nonce = $('input[name="staylodgic_bookingdetails_nonce"]').val();
 
-			if (!bookingNumber) {
+			if (!stay_booking_number) {
 				alert('Please enter a booking number.');
 				return;
 			}
@@ -50,7 +50,7 @@
 				dataType: 'html', // Change dataType to html
 				data: {
 					action: 'getInvoiceBookingDetails',
-					booking_number: bookingNumber,
+					booking_number: stay_booking_number,
 					staylodgic_bookingdetails_nonce: staylodgic_bookingdetails_nonce
 				},
 				success: function(response) {
@@ -70,7 +70,7 @@
 			e.preventDefault();
 			// Convert HTML to Canvas
 			var postid = $(this).data('postid'); // Get the booking number from the button's data-id attribute
-			var bookingNumber = $(this).data('bookingnumber'); // Get the booking number from the button's data-id attribute
+			var stay_booking_number = $(this).data('bookingnumber'); // Get the booking number from the button's data-id attribute
 			var bookingFile = $(this).data('file'); // Get the booking number from the button's data-id attribute
 			// Target the specific invoice container matching the booking number
 			html2canvas(document.querySelector('.ticket-container-outer'), { scale: 2 }).then(canvas => {
@@ -102,10 +102,10 @@
 		$(document).on('click', '#save-pdf-invoice-button', function(e) {
 			e.preventDefault();
 			// Convert HTML to Canvas
-			var bookingNumber = $(this).data('id'); // Get the booking number from the button's data-id attribute
+			var stay_booking_number = $(this).data('id'); // Get the booking number from the button's data-id attribute
 			var bookingFile = $(this).data('file'); // Get the booking number from the button's data-id attribute
 			// Target the specific invoice container matching the booking number
-			html2canvas(document.querySelector('.invoice-container[data-bookingnumber="' + bookingNumber + '"]'), { scale: 2 }).then(canvas => {
+			html2canvas(document.querySelector('.invoice-container[data-bookingnumber="' + stay_booking_number + '"]'), { scale: 2 }).then(canvas => {
 				// Canvas dimensions
 				const canvasWidth = canvas.width;
 				const canvasHeight = canvas.height;
@@ -134,11 +134,11 @@
 
 		$(document).on('click', '.print-invoice-button', function(e) {
 			e.preventDefault();
-			var bookingNumber = $(this).data('id'); // Get the booking number from the button's data-id attribute
+			var stay_booking_number = $(this).data('id'); // Get the booking number from the button's data-id attribute
 			var bookingTitle = $(this).data('title'); // Get the booking title from the button's data-title attribute
 		
 			// Find the invoice container that matches the booking number
-			var invoiceContent = $('.invoice-container[data-bookingnumber="' + bookingNumber + '"]').html();
+			var invoiceContent = $('.invoice-container[data-bookingnumber="' + stay_booking_number + '"]').html();
 		
 			// Create a new window or tab for printing
 			var printWindow = window.open('', '_blank', 'width=800,height=600');

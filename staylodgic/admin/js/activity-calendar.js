@@ -97,8 +97,8 @@
 				children = 0;
 			}
 	
-			var totalGuests = parseInt( adults ) + parseInt( children );
-			console.log('Total guests ' + totalGuests);
+			var stay_total_guests = parseInt( adults ) + parseInt( children );
+			console.log('Total guests ' + stay_total_guests);
 			var postID = $('input[name="post_ID"]').val();
 		
 			// Make an Ajax request to fetch the room names
@@ -111,7 +111,7 @@
 				nonce: staylodgic_admin_vars.nonce,
 				subtotal: subtotal_for_tax,
 				staynights: totalStayNights,
-				total_guests: totalGuests,
+				total_guests: stay_total_guests,
 				tax_type: 'activities'
 			  },
 			  success: function(response) {

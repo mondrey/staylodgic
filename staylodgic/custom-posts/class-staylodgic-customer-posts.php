@@ -52,10 +52,10 @@ class Staylodgic_Customer_Posts
                 $post_type = get_post_type(get_the_ID());
 
                 $reservation_instance = new \Staylodgic\Activity();
-                $reservation_array = \Staylodgic\Activity::getActivityIDsForCustomer($customer_post_id);
+                $reservation_array = \Staylodgic\Activity::get_activity_ids_for_customer($customer_post_id);
                 if (is_array($reservation_array) && !empty($reservation_array)) {
                     echo '<i class="fas fa-umbrella-beach"></i>';
-                    $editlinks = $reservation_instance->getEditLinksForActivity($reservation_array);
+                    $editlinks = $reservation_instance->get_edit_links_for_activity($reservation_array);
                     echo wp_kses($editlinks, staylodgic_get_allowed_tags());
                 }
 

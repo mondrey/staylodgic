@@ -7,9 +7,9 @@ class Invoicing
 
     private $reservationID;
     private $bookingStatus;
-    private $bookingNumber;
+    private $stay_booking_number;
     private $numberDays;
-    private $hotelLogo;
+    private $hotel_logo;
     private $hotelName;
     private $hotelHeader;
     private $hotelAddress;
@@ -31,9 +31,9 @@ class Invoicing
     public function __construct(
         $reservationID = null,
         $bookingStatus = null,
-        $bookingNumber = null,
+        $stay_booking_number = null,
         $numberDays = null,
-        $hotelLogo = null,
+        $hotel_logo = null,
         $hotelName = null,
         $hotelHeader = null,
         $hotelAddress = null,
@@ -54,9 +54,9 @@ class Invoicing
     ) {
         $this->reservationID    = $reservationID;
         $this->bookingStatus    = $bookingStatus;
-        $this->bookingNumber    = $bookingNumber;
+        $this->stay_booking_number    = $stay_booking_number;
         $this->numberDays    = $numberDays;
-        $this->hotelLogo        = $hotelLogo;
+        $this->hotel_logo        = $hotel_logo;
         $this->hotelName        = $hotelName;
         $this->hotelHeader      = $hotelHeader;
         $this->hotelAddress     = $hotelAddress;
@@ -162,7 +162,7 @@ class Invoicing
 
         // Fetch reservation details
         $reservations_instance = new \Staylodgic\Activity();
-        $reservationID         = $reservations_instance->getActivityIDforBooking($booking_number);
+        $reservationID         = $reservations_instance->get_activity_id_for_booking($booking_number);
 
         $reservations_instance = new \Staylodgic\Activity($date = false, $activity_id = false, $reservationID);
         // Verify the nonce
@@ -187,10 +187,10 @@ class Invoicing
         $this->hotelAddress = $property_address;
         $this->hotelHeader  = $property_header;
         $this->hotelFooter  = $property_footer;
-        $this->hotelLogo    = $property_logo_id ? wp_get_attachment_image_url($property_logo_id, 'full') : '';
+        $this->hotel_logo    = $property_logo_id ? wp_get_attachment_image_url($property_logo_id, 'full') : '';
 
         if ($reservationID) {
-            $this->bookingNumber = $booking_number;
+            $this->stay_booking_number = $booking_number;
             $this->checkInDate   = get_post_meta($reservationID, 'staylodgic_checkin_date', true);
 
             $adults = get_post_meta($reservationID, 'staylodgic_reservation_activity_adults', true);
@@ -200,20 +200,20 @@ class Invoicing
             
             $this->numberofAdults   = $adults;
 
-            $totalGuests            = intval($adults);
+            $stay_total_guests            = intval($adults);
 
             if (isset($children['number'])) {
                 $this->numberofChildren = $children['number'];
-                $totalGuests            += intval($children['number']);
+                $stay_total_guests            += intval($children['number']);
             }
 
-            $this->numberOfGuests   = $totalGuests;
+            $this->numberOfGuests   = $stay_total_guests;
 
             $this->bookingStatus = __('Booking Pending', 'staylodgic');
-            if ($reservations_instance->isConfirmed_Reservation($reservationID)) {
+            if ($reservations_instance->is_confirmed_reservation($reservationID)) {
                 $this->bookingStatus = __('Booking Confirmed', 'staylodgic');
             }
-            $this->roomType = $reservations_instance->getActivityNameForReservation($reservationID);
+            $this->roomType = $reservations_instance->get_activity_name_for_reservation($reservationID);
             // Add other reservation details as needed
 
             $taxStatus = get_post_meta($reservationID, 'staylodgic_tax', true);
@@ -242,7 +242,7 @@ class Invoicing
             $this->totalAmount = $totalAmount;
 
             // Fetch guest details
-            $guestID = $reservations_instance->getGuest_id_forReservation($booking_number);
+            $guestID = $reservations_instance->get_guest_id_for_reservation($booking_number);
             if ($guestID) {
                 $this->customerName  = get_post_meta($guestID, 'staylodgic_full_name', true);
                 $this->customerEmail = get_post_meta($guestID, 'staylodgic_email_address', true);
@@ -254,9 +254,9 @@ class Invoicing
         $informationSheet = $this->invoiceActivityTemplate(
             $this->reservationID,
             $this->bookingStatus,
-            $this->bookingNumber,
+            $this->stay_booking_number,
             $this->numberDays,
-            $this->hotelLogo,
+            $this->hotel_logo,
             $this->hotelName,
             $this->hotelHeader,
             $this->hotelAddress,
@@ -316,10 +316,10 @@ class Invoicing
         $this->hotelAddress = $property_address;
         $this->hotelHeader  = $property_header;
         $this->hotelFooter  = $property_footer;
-        $this->hotelLogo    = $property_logo_id ? wp_get_attachment_image_url($property_logo_id, 'full') : '';
+        $this->hotel_logo    = $property_logo_id ? wp_get_attachment_image_url($property_logo_id, 'full') : '';
 
         if ($reservationID) {
-            $this->bookingNumber = $booking_number;
+            $this->stay_booking_number = $booking_number;
             $this->checkInDate   = get_post_meta($reservationID, 'staylodgic_checkin_date', true);
             $this->checkOutDate  = get_post_meta($reservationID, 'staylodgic_checkout_date', true);
 
@@ -330,17 +330,17 @@ class Invoicing
             
             $this->numberofAdults   = $adults;
 
-            $totalGuests            = intval($adults);
+            $stay_total_guests            = intval($adults);
 
             if (isset($children['number'])) {
                 $this->numberofChildren = $children['number'];
-                $totalGuests            += intval($children['number']);
+                $stay_total_guests            += intval($children['number']);
             }
 
-            $this->numberOfGuests   = $totalGuests;
+            $this->numberOfGuests   = $stay_total_guests;
 
             $this->bookingStatus = __('Booking Pending', 'staylodgic');
-            if ($reservations_instance->isConfirmed_Reservation($reservationID)) {
+            if ($reservations_instance->is_confirmed_reservation($reservationID)) {
                 $this->bookingStatus = __('Booking Confirmed', 'staylodgic');
             }
             $this->roomType = $reservations_instance->getRoomNameForReservation($reservationID);
@@ -373,7 +373,7 @@ class Invoicing
             $this->totalAmount = $totalAmount;
 
             // Fetch guest details
-            $guestID = $reservations_instance->getGuest_id_forReservation($booking_number);
+            $guestID = $reservations_instance->get_guest_id_for_reservation($booking_number);
             if ($guestID) {
                 $this->customerName  = get_post_meta($guestID, 'staylodgic_full_name', true);
                 $this->customerEmail = get_post_meta($guestID, 'staylodgic_email_address', true);
@@ -385,9 +385,9 @@ class Invoicing
         $informationSheet = $this->invoiceTemplate(
             $this->reservationID,
             $this->bookingStatus,
-            $this->bookingNumber,
+            $this->stay_booking_number,
             $this->numberDays,
-            $this->hotelLogo,
+            $this->hotel_logo,
             $this->hotelName,
             $this->hotelHeader,
             $this->hotelAddress,
@@ -486,9 +486,9 @@ class Invoicing
     public function invoiceActivityTemplate(
         $reservationID,
         $bookingStatus,
-        $bookingNumber,
+        $stay_booking_number,
         $numberDays,
-        $hotelLogo,
+        $hotel_logo,
         $hotelName,
         $hotelHeader,
         $hotelAddress,
@@ -508,24 +508,24 @@ class Invoicing
         $hotelFooter
     ) {
         $activity_property_logo_width  = staylodgic_get_option('activity_property_logo_width');
-        $currentDate = date('F jS, Y'); // Outputs: January 1st, 2024
+        $stay_current_date = date('F jS, Y'); // Outputs: January 1st, 2024
         ob_start();
     ?>
         <div class="invoice-container-buttons">
-            <button data-title="Guest Registration <?php echo esc_attr($bookingNumber); ?>" data-id="<?php echo esc_attr($bookingNumber); ?>" id="print-invoice-button" class="button button-secondary paper-document-button print-invoice-button"><?php echo __('Print Invoice', 'staylodgic'); ?></button>
-            <button data-file="registration-<?php echo esc_attr($bookingNumber); ?>" data-id="<?php echo esc_attr($bookingNumber); ?>" id="save-pdf-invoice-button" class="button button-secondary paper-document-button save-pdf-invoice-button"><?php echo __('Save PDF', 'staylodgic'); ?></button>
+            <button data-title="Guest Registration <?php echo esc_attr($stay_booking_number); ?>" data-id="<?php echo esc_attr($stay_booking_number); ?>" id="print-invoice-button" class="button button-secondary paper-document-button print-invoice-button"><?php echo __('Print Invoice', 'staylodgic'); ?></button>
+            <button data-file="registration-<?php echo esc_attr($stay_booking_number); ?>" data-id="<?php echo esc_attr($stay_booking_number); ?>" id="save-pdf-invoice-button" class="button button-secondary paper-document-button save-pdf-invoice-button"><?php echo __('Save PDF', 'staylodgic'); ?></button>
         </div>
         <div class="invoice-container-outer">
-            <div class="invoice-container" data-bookingnumber="<?php echo esc_attr($bookingNumber); ?>">
+            <div class="invoice-container" data-bookingnumber="<?php echo esc_attr($stay_booking_number); ?>">
                 <div class="invoice-container-inner">
                     <div id="invoice-hotel-header">
                         <section id="invoice-hotel-logo">
-                            <img class="invoice-logo" src="<?php echo esc_url($hotelLogo); ?>" width="<?php echo esc_attr($activity_property_logo_width) . 'px'; ?>" height="auto" />
+                            <img class="invoice-logo" src="<?php echo esc_url($hotel_logo); ?>" width="<?php echo esc_attr($activity_property_logo_width) . 'px'; ?>" height="auto" />
                         </section>
                         <section id="invoice-info">
                             <p><?php echo esc_html($hotelHeader); ?></p>
-                            <p><?php echo __('Invoice No:', 'staylodgic'); ?> <?php echo esc_html($bookingNumber . '-' . $reservationID); ?></p>
-                            <p><?php echo __('Invoice Date:', 'staylodgic'); ?> <?php echo esc_html($currentDate); ?></p>
+                            <p><?php echo __('Invoice No:', 'staylodgic'); ?> <?php echo esc_html($stay_booking_number . '-' . $reservationID); ?></p>
+                            <p><?php echo __('Invoice Date:', 'staylodgic'); ?> <?php echo esc_html($stay_current_date); ?></p>
                             <p class="invoice-booking-status"><?php echo esc_html($bookingStatus); ?></p>
                         </section>
                     </div>
@@ -544,7 +544,7 @@ class Invoicing
 
                         <section id="invoice-booking-details">
                             <h2><?php echo __('Activity Booking Details', 'staylodgic'); ?></h2>
-                            <p><span><?php echo __('Booking No:', 'staylodgic'); ?></span><?php echo esc_html($bookingNumber); ?></p>
+                            <p><span><?php echo __('Booking No:', 'staylodgic'); ?></span><?php echo esc_html($stay_booking_number); ?></p>
                             <p><span><?php echo __('Activity Date:', 'staylodgic'); ?></span><?php echo esc_html($checkInDate); ?></p>
                             <p><span><?php echo __('Activity Type:', 'staylodgic'); ?></span><?php echo esc_html($roomType); ?></p>
                             <p><span><?php echo __('Adults:', 'staylodgic'); ?></span><?php echo esc_html($numberofAdults); ?></p>
@@ -562,7 +562,7 @@ class Invoicing
                             <p class="nightly-rate-info"><span class="nightly-rate"><?php echo staylodgic_price($roomPrice); ?></span><span class="nights"> x <?php echo esc_html($numberDays); ?> <?php echo __('Per Person', 'staylodgic'); ?></span></p>
                             <?php
                             $reservations_instance = new \Staylodgic\Activity();
-                            $reservationID         = $reservations_instance->getActivityIDforBooking($bookingNumber);
+                            $reservationID         = $reservations_instance->get_activity_id_for_booking($stay_booking_number);
                             $taxStatus             = get_post_meta($reservationID, 'staylodgic_tax', true);
                             if ('enabled' == $taxStatus) {
                             ?>
@@ -601,9 +601,9 @@ class Invoicing
     public function invoiceTemplate(
         $reservationID,
         $bookingStatus,
-        $bookingNumber,
+        $stay_booking_number,
         $numberDays,
-        $hotelLogo,
+        $hotel_logo,
         $hotelName,
         $hotelHeader,
         $hotelAddress,
@@ -624,24 +624,24 @@ class Invoicing
     ) {
 
         $property_logo_width  = staylodgic_get_option('property_logo_width');
-        $currentDate = date('F jS, Y'); // Outputs: January 1st, 2024
+        $stay_current_date = date('F jS, Y'); // Outputs: January 1st, 2024
         ob_start();
     ?>
         <div class="invoice-container-buttons">
-            <button data-title="Guest Registration <?php echo esc_attr($bookingNumber); ?>" data-id="<?php echo esc_attr($bookingNumber); ?>" id="print-invoice-button" class="button button-secondary paper-document-button print-invoice-button"><?php echo __('Print Invoice', 'staylodgic'); ?></button>
-            <button data-file="registration-<?php echo esc_attr($bookingNumber); ?>" data-id="<?php echo esc_attr($bookingNumber); ?>" id="save-pdf-invoice-button" class="button button-secondary paper-document-button save-pdf-invoice-button"><?php echo __('Save PDF', 'staylodgic'); ?></button>
+            <button data-title="Guest Registration <?php echo esc_attr($stay_booking_number); ?>" data-id="<?php echo esc_attr($stay_booking_number); ?>" id="print-invoice-button" class="button button-secondary paper-document-button print-invoice-button"><?php echo __('Print Invoice', 'staylodgic'); ?></button>
+            <button data-file="registration-<?php echo esc_attr($stay_booking_number); ?>" data-id="<?php echo esc_attr($stay_booking_number); ?>" id="save-pdf-invoice-button" class="button button-secondary paper-document-button save-pdf-invoice-button"><?php echo __('Save PDF', 'staylodgic'); ?></button>
         </div>
         <div class="invoice-container-outer">
-            <div class="invoice-container" data-bookingnumber="<?php echo esc_attr($bookingNumber); ?>">
+            <div class="invoice-container" data-bookingnumber="<?php echo esc_attr($stay_booking_number); ?>">
                 <div class="invoice-container-inner">
                     <div id="invoice-hotel-header">
                         <section id="invoice-hotel-logo">
-                            <img class="invoice-logo" src="<?php echo esc_url($hotelLogo); ?>" width="<?php echo esc_attr($property_logo_width) . 'px'; ?>" height="auto" />
+                            <img class="invoice-logo" src="<?php echo esc_url($hotel_logo); ?>" width="<?php echo esc_attr($property_logo_width) . 'px'; ?>" height="auto" />
                         </section>
                         <section id="invoice-info">
                             <p><?php echo $hotelHeader; ?></p>
-                            <p><?php echo __('Invoice No:', 'staylodgic'); ?> <?php echo esc_html($bookingNumber . '-' . $reservationID); ?></p>
-                            <p><?php echo __('Invoice Date:', 'staylodgic'); ?> <?php echo esc_html($currentDate); ?></p>
+                            <p><?php echo __('Invoice No:', 'staylodgic'); ?> <?php echo esc_html($stay_booking_number . '-' . $reservationID); ?></p>
+                            <p><?php echo __('Invoice Date:', 'staylodgic'); ?> <?php echo esc_html($stay_current_date); ?></p>
                             <p class="invoice-booking-status"><?php echo esc_html($bookingStatus); ?></p>
                         </section>
                     </div>
@@ -660,7 +660,7 @@ class Invoicing
 
                         <section id="invoice-booking-details">
                             <h2><?php echo __('Booking Details', 'staylodgic'); ?></h2>
-                            <p><span><?php echo __('Booking No:', 'staylodgic'); ?></span><?php echo esc_html($bookingNumber); ?></p>
+                            <p><span><?php echo __('Booking No:', 'staylodgic'); ?></span><?php echo esc_html($stay_booking_number); ?></p>
                             <p><span><?php echo __('Check-in Date:', 'staylodgic'); ?></span><?php echo esc_html($checkInDate); ?></p>
                             <p><span><?php echo __('Check-out Date:', 'staylodgic'); ?></span><?php echo esc_html($checkOutDate); ?></p>
                             <p><span><?php echo __('Room Type:', 'staylodgic'); ?></span><?php echo esc_html($roomType); ?></p>
@@ -679,7 +679,7 @@ class Invoicing
                             <p class="nightly-rate-info"><span class="nightly-rate"><?php echo staylodgic_price($roomPrice); ?></span><span class="nights"> x <?php echo esc_html($numberDays); ?> <?php echo __('Nights', 'staylodgic'); ?></span></p>
                             <?php
                             $reservations_instance = new \Staylodgic\Reservations();
-                            $reservationID         = $reservations_instance->getReservationIDforBooking($bookingNumber);
+                            $reservationID         = $reservations_instance->getReservationIDforBooking($stay_booking_number);
                             $taxStatus             = get_post_meta($reservationID, 'staylodgic_tax', true);
                             if ('enabled' == $taxStatus) {
                             ?>

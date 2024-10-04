@@ -278,7 +278,7 @@ function staylodgic_activityres_metadata()
     );
 
     $reservation_instance = new \Staylodgic\Activity();
-    if (!$reservation_instance->haveCustomer($reservation_id)) {
+    if (!$reservation_instance->have_customer($reservation_id)) {
         $activityres_box[ 'fields' ] = array_merge($activityres_box[ 'fields' ], $customer);
     } else {
         $activityres_box[ 'fields' ] = array_merge($activityres_box[ 'fields' ], $customer_datafetch);

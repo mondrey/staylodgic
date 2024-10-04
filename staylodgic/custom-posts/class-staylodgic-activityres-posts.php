@@ -55,12 +55,12 @@ class staylodgic_ActivityReservation_Posts
             $full_image_url = $full_image_url[0];
         }
 
-        $reservation_instance = new \Staylodgic\Activity($bookingNumber = null, $reservation_id = $post->ID);
-        $bookingnumber = $reservation_instance->getBookingNumber();
+        $reservation_instance = new \Staylodgic\Activity($stay_booking_number = null, $reservation_id = $post->ID);
+        $bookingnumber = $reservation_instance->get_booking_number();
 
         switch ($columns) {
             case "reservation_customer":
-                $customer_name = $reservation_instance->getCustomerEditLinkForReservation();
+                $customer_name = $reservation_instance->get_customer_edit_link_for_reservation();
                 if (null !== $customer_name) {
                     echo wp_kses($customer_name, staylodgic_get_allowed_tags());
                 }
@@ -69,20 +69,20 @@ class staylodgic_ActivityReservation_Posts
                 echo esc_attr($bookingnumber);
                 break;
             case "reservation_checkin":
-                $reservation_checkin       = $reservation_instance->getCheckinDate();
+                $reservation_checkin       = $reservation_instance->get_checkin_date();
                 echo '<p class="post-status-reservation-date post-status-reservation-date-checkin"><i class="fa-solid fa-arrow-right"></i> ' . esc_attr(staylodgic_formatDate($reservation_checkin)) . '</p>';
 
                 break;
             case "reservation_status":
-                $reservation_status = $reservation_instance->getReservationStatus();
+                $reservation_status = $reservation_instance->get_reservation_status();
                 echo esc_attr(ucfirst($reservation_status));
                 break;
             case "reservation_substatus":
-                $reservation_substatus = $reservation_instance->getReservationSubStatus();
+                $reservation_substatus = $reservation_instance->get_reservation_sub_status();
                 echo esc_attr(ucfirst($reservation_substatus));
                 break;
             case "reservation_activitiy":
-                $activity_title = $reservation_instance->getNameForActivity();
+                $activity_title = $reservation_instance->get_name_for_activity();
                 echo esc_html($activity_title);
                 break;
         }

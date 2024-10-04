@@ -13,15 +13,15 @@
 
 		$(document).on("click", Lightbox.defaultSelector, Lightbox.initialize);
 
-		$("#bookingDetails").on("click", function (e) {
+		$("#booking_details").on("click", function (e) {
 			e.preventDefault();
 
-			var bookingNumber = $("#booking_number").val();
-			if (!bookingNumber) {
+			var stay_booking_number = $("#booking_number").val();
+			if (!stay_booking_number) {
 				return;
 			}
 
-			$("#bookingDetails").addClass("booking-disabled");
+			$("#booking_details").addClass("booking-disabled");
 
 			// Retrieve the booking number
 			var staylodgic_bookingdetails_nonce = $(
@@ -30,7 +30,7 @@
 
 			var requestType = $(this).data("request");
 
-			// console.log(bookingNumber);
+			// console.log(stay_booking_number);
 			// console.log(frontendAjax.ajaxurl);
 			// Check if the booking number is entered
 
@@ -42,7 +42,7 @@
 					dataType: "html",
 					data: {
 						action: "requestRegistrationDetails", // Replace with your actual action hook
-						booking_number: bookingNumber,
+						booking_number: stay_booking_number,
 						staylodgic_bookingdetails_nonce:
 							staylodgic_bookingdetails_nonce,
 					},
@@ -52,7 +52,7 @@
 						console.log(details);
 						$("#guestregistration-details-ajax").html(response);
 
-						$("#bookingDetails").removeClass("booking-disabled");
+						$("#booking_details").removeClass("booking-disabled");
 					},
 					error: function (jqXHR, textStatus, errorThrown) {
 						console.error(
@@ -75,7 +75,7 @@
 					dataType: "html",
 					data: {
 						action: "getBookingDetails", // Replace with your actual action hook
-						booking_number: bookingNumber,
+						booking_number: stay_booking_number,
 						staylodgic_bookingdetails_nonce:
 							staylodgic_bookingdetails_nonce,
 					},
@@ -405,9 +405,9 @@
 			$("#bookingSearch").trigger("click");
 		});
 
-		function calculateDaysBetweenDates(startDate, endDate) {
+		function calculateDaysBetweenDates(startDate, stay_end_date) {
 			var start = new Date(startDate);
-			var end = new Date(endDate);
+			var end = new Date(stay_end_date);
 			var timeDiff = Math.abs(end.getTime() - start.getTime());
 			var days = Math.ceil(timeDiff / (1000 * 3600 * 24));
 			return days;
@@ -652,23 +652,23 @@
 
 				if (dates.length === 2) {
 					// Parse the second date and subtract one day
-					var endDate = new Date(dates[1]);
-					endDate.setDate(endDate.getDate() - 1);
+					var stay_end_date = new Date(dates[1]);
+					stay_end_date.setDate(stay_end_date.getDate() - 1);
 
 					// Format the date back into a string in the format "YYYY-MM-DD"
 					var formattedEndDate =
-						endDate.getFullYear() +
+						stay_end_date.getFullYear() +
 						"-" +
-						("0" + (endDate.getMonth() + 1)).slice(-2) +
+						("0" + (stay_end_date.getMonth() + 1)).slice(-2) +
 						"-" +
-						("0" + endDate.getDate()).slice(-2);
+						("0" + stay_end_date.getDate()).slice(-2);
 
 					// Combine the first date and the adjusted second date
 					var reservationDate = dates[0] + " to " + formattedEndDate;
 
 					console.log(reservationDate); // Output the combined dates
 
-					var bookingNumber = $("#booking-number").val();
+					var stay_booking_number = $("#booking-number").val();
 					var numberOfAdults = $("#number-of-adults").val();
 					var numberOfChildren = $("#number-of-children").val();
 					var staylodgic_searchbox_nonce = $(
@@ -689,7 +689,7 @@
 						type: "POST",
 						data: {
 							action: "booking_BookingSearch", // the PHP function to trigger
-							booking_number: bookingNumber,
+							booking_number: stay_booking_number,
 							reservation_date: reservationDate,
 							number_of_adults: numberOfAdults,
 							number_of_children: numberOfChildren,
@@ -712,7 +712,7 @@
 								var storeData = []; // Create a new empty array
 								storeData = parsedResponse.booking_data;
 								sessionStorage.setItem(
-									bookingNumber,
+									stay_booking_number,
 									JSON.stringify(storeData)
 								);
 								$("#available-list-ajax").html(
@@ -885,7 +885,7 @@
 			);
 
 			var dataToSend = {
-				action: "process_SelectedActivity",
+				action: "process_selected_activity",
 				bookingnumber: bookingnumber,
 				activity_id: activityId,
 				activity_date: activityDate,
@@ -944,7 +944,7 @@
 
 				reservationDate = $("#activity-reservation-date").val();
 
-				var bookingNumber = $("#booking-number").val();
+				var stay_booking_number = $("#booking-number").val();
 				var numberOfAdults = $("#number-of-adults").val();
 				var numberOfChildren = $("#number-of-children").val();
 				var staylodgic_searchbox_nonce = $(
@@ -1037,7 +1037,7 @@
 				url: frontendAjax.ajaxurl, // the localized URL
 				type: "POST",
 				data: {
-					action: "bookActivity",
+					action: "book_activity",
 					bookingdata: registration_data,
 					booking_number: data_booking_number,
 					full_name: data_full_name,

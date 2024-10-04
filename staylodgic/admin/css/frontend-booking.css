@@ -643,7 +643,7 @@ a.book-button:hover:active,
 	margin-bottom: 10px;
 }
 
-#bookingDetails,
+#booking_details,
 .form-search-button {
 	background: #000;
 	color: #fff;
@@ -658,20 +658,20 @@ a.book-button:hover:active,
 	font-weight: 600;
 	transition: 0.4s background-color;
 }
-#bookingDetails.booking-disabled,
+#booking_details.booking-disabled,
 .form-search-button.booking-disabled {
 	background: #e4e4e4;
 	pointer-events: none;
 }
 
-#bookingDetails:hover,
+#booking_details:hover,
 .form-search-button:hover {
 	/* Styles for when the button is hovered */
 	background-color: #012aff;
 	/* Example hover background color */
 }
 
-#bookingDetails:active,
+#booking_details:active,
 .form-search-button:active {
 	/* Styles for when the button is clicked/active */
 	background-color: #012aff;

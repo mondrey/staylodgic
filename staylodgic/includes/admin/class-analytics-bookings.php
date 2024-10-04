@@ -324,12 +324,12 @@ class AnalyticsBookings
         if ($booking_number) {
             // Fetch guest details
             $reservation_instance = new \Staylodgic\Reservations();
-            $guestID              = $reservation_instance->getGuest_id_forReservation($booking_number);
+            $guestID              = $reservation_instance->get_guest_id_for_reservation($booking_number);
             if ($guestID) {
                 $name = esc_html(get_post_meta($guestID, 'staylodgic_full_name', true));
 
                 // Generate a UUID using the static method from the Common class
-                $uuid = \Staylodgic\Common::generateUUID();
+                $uuid = \Staylodgic\Common::generate_uuid();
 
                 // Use the combination of guestID and UUID as the key
                 $uniqueKey = $guestID . '-' . $uuid;
@@ -550,9 +550,9 @@ class AnalyticsBookings
                         $checkin  = get_post_meta(get_the_ID(), 'staylodgic_checkin_date', true);
                         $checkout = get_post_meta(get_the_ID(), 'staylodgic_checkout_date', true);
                         if ($checkin && $checkout) {
-                            $checkinDate  = new \DateTime($checkin);
+                            $stay_checkin_date  = new \DateTime($checkin);
                             $checkoutDate = new \DateTime($checkout);
-                            $nights       = $checkoutDate->diff($checkinDate)->days;
+                            $nights       = $checkoutDate->diff($stay_checkin_date)->days;
                             $totalNights += $nights;
                         }
                     }
@@ -879,9 +879,9 @@ class AnalyticsBookings
                         $reservations_instance = new \Staylodgic\Reservations();
                         $reservation_id        = $reservations_instance->getReservationIDforBooking($booking['booking_number']);
 
-                        $checkinDate  = new \DateTime($booking['checkin']);
+                        $stay_checkin_date  = new \DateTime($booking['checkin']);
                         $checkoutDate = new \DateTime($booking['checkout']);
-                        $nights       = $checkoutDate->diff($checkinDate)->days;
+                        $nights       = $checkoutDate->diff($stay_checkin_date)->days;
 
                         $guestListHtml .= '<tr>';
                         $guestListHtml .= '<th scope="row">';
@@ -903,8 +903,8 @@ class AnalyticsBookings
                         $guestListHtml .= '</td>';
                         $guestListHtml .= '<td scope="row">';
 
-                        $adults = $reservations_instance->getNumberOfAdultsForReservation($reservation_id);
-                        $children = $reservations_instance->getNumberOfChildrenForReservation($reservation_id);
+                        $adults = $reservations_instance->get_number_of_adults_for_reservation($reservation_id);
+                        $children = $reservations_instance->get_number_of_children_for_reservation($reservation_id);
                         $guestListHtml .= $adults;
                         ' + ' . $children;
                         if (0 < $children) {

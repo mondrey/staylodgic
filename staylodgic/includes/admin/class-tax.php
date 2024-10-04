@@ -60,7 +60,7 @@ class Tax
             // Sanitize and retrieve the input data
             $subtotal    = sanitize_text_field($_POST[ 'subtotal' ]);
             $staynights  = sanitize_text_field($_POST[ 'staynights' ]);
-            $totalGuests = sanitize_text_field($_POST[ 'total_guests' ]);
+            $stay_total_guests = sanitize_text_field($_POST[ 'total_guests' ]);
             $the_post_id = sanitize_text_field($_POST[ 'post_id' ]);
 
             $tax_type = 'room';
@@ -80,8 +80,8 @@ class Tax
             } else {
                 $tax_instance = new \Staylodgic\Tax('room');
             }
-            $tax_data     = $tax_instance->apply_tax($subtotal, $staynights, $totalGuests, $output = 'data');
-            $tax          = $tax_instance->apply_tax($subtotal, $staynights, $totalGuests, $output = 'html');
+            $tax_data     = $tax_instance->apply_tax($subtotal, $staynights, $stay_total_guests, $output = 'data');
+            $tax          = $tax_instance->apply_tax($subtotal, $staynights, $stay_total_guests, $output = 'html');
 
             if ($tax) {
 
@@ -117,7 +117,7 @@ class Tax
     public function tax_summary($tax)
     {
         $html = '<div class="input-tax-summary-wrap-inner">';
-        foreach ($tax as $totalID => $totalvalue) {
+        foreach ($tax as $total_id => $totalvalue) {
             $html .= '<div class="tax-summary tax-summary-details">' . $totalvalue . '</div>';
         }
         $html .= '</div>';

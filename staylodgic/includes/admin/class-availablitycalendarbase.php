@@ -5,7 +5,7 @@ class AvailablityCalendarBase
 {
     protected $today;
     protected $weekAgo;
-    protected $endDate;
+    protected $stay_end_date;
     protected $rooms;
     protected $roomlist;
     protected $startDate;
@@ -15,10 +15,10 @@ class AvailablityCalendarBase
     protected $cachedData;
     protected $availConfirmedOnly;
 
-    public function __construct($startDate = null, $endDate = null)
+    public function __construct($startDate = null, $stay_end_date = null)
     {
         $this->setStartDate($startDate);
-        $this->setEndDate($endDate);
+        $this->setEndDate($stay_end_date);
         $this->getToday();
         $this->usingCache = false;
     }
@@ -50,33 +50,33 @@ class AvailablityCalendarBase
     /**
      * Method setEndDate
      *
-     * @param $endDate $endDate
+     * @param $stay_end_date $stay_end_date
      *
      * @return void
      */
-    public function setEndDate($endDate)
+    public function setEndDate($stay_end_date)
     {
-        // Set endDate to the 5th of the next month
-        $this->endDate = date('Y-m-05', strtotime('+1 month'));
+        // Set stay_end_date to the 5th of the next month
+        $this->stay_end_date = date('Y-m-05', strtotime('+1 month'));
     }
         
     /**
      * Method setNumDays
      *
      * @param $startDate $startDate
-     * @param $endDate $endDate
+     * @param $stay_end_date $stay_end_date
      *
      * @return void
      */
-    public function setNumDays($startDate = false, $endDate = false)
+    public function setNumDays($startDate = false, $stay_end_date = false)
     {
 
         if (!$startDate) {
             $start_Date = new \DateTime($this->startDate);
-            $end_Date   = new \DateTime($this->endDate);
+            $end_Date   = new \DateTime($this->stay_end_date);
         } else {
             $start_Date = $startDate instanceof \DateTime ? $startDate : new \DateTime($startDate);
-            $end_Date   = $endDate instanceof \DateTime ? $endDate : new \DateTime($endDate);
+            $end_Date   = $stay_end_date instanceof \DateTime ? $stay_end_date : new \DateTime($stay_end_date);
         }
 
         $numDays = $start_Date->diff($end_Date)->days + 1;
@@ -88,32 +88,32 @@ class AvailablityCalendarBase
      * Method getDates
      *
      * @param $startDate $startDate
-     * @param $endDate $endDate
+     * @param $stay_end_date $stay_end_date
      *
      * @return void
      */
-    public function getDates($startDate = false, $endDate = false)
+    public function getDates($startDate = false, $stay_end_date = false)
     {
 
         if (!$startDate) {
             $start_date = new \DateTime($this->startDate);
-            $end_date   = new \DateTime($this->endDate);
+            $end_date   = new \DateTime($this->stay_end_date);
         } else {
             $start_date = $startDate;
-            $end_date   = $endDate;
+            $end_date   = $stay_end_date;
         }
 
-        $number_of_days = self::setNumDays( $startDate, $endDate);
+        $number_of_days = self::setNumDays( $startDate, $stay_end_date);
 
         $dates = [];
         for ($day = 0; $day < $number_of_days; $day++) {
             if ($startDate instanceof \DateTime) {
-                $currentDate = clone $startDate;
+                $stay_current_date = clone $startDate;
             } else {
-                $currentDate = new \DateTime($startDate);
+                $stay_current_date = new \DateTime($startDate);
             }
-            $currentDate->add(new \DateInterval("P{$day}D"));
-            $dates[] = $currentDate;
+            $stay_current_date->add(new \DateInterval("P{$day}D"));
+            $dates[] = $stay_current_date;
         }
         return $dates;
     }
@@ -129,18 +129,18 @@ class AvailablityCalendarBase
     public function calculateOccupancyTotalForRange($startDateString, $endDateString)
     {
         $startDate   = new \DateTime($startDateString);
-        $endDate     = new \DateTime($endDateString);
-        $currentDate = clone $startDate;
+        $stay_end_date     = new \DateTime($endDateString);
+        $stay_current_date = clone $startDate;
 
         $totalOccupancyPercentage = 0;
         $daysCount                = 0;
 
-        while ($currentDate <= $endDate) {
-            $currentDateString         = $currentDate->format('Y-m-d');
+        while ($stay_current_date <= $stay_end_date) {
+            $currentDateString         = $stay_current_date->format('Y-m-d');
             $occupancyPercentage       = $this->calculateOccupancyForDate($currentDateString);
             $totalOccupancyPercentage += $occupancyPercentage;
             $daysCount++;
-            $currentDate->modify('+1 day');
+            $stay_current_date->modify('+1 day');
         }
 
         if ($daysCount > 0) {
@@ -161,7 +161,7 @@ class AvailablityCalendarBase
      */
     public function calculateAdrForDate($currentdateString)
     {
-        $currentDate       = new \DateTime($currentdateString);
+        $stay_current_date       = new \DateTime($currentdateString);
         $totalRoomRevenue  = 0;
         $numberOfRoomsSold = 0;
 
@@ -177,11 +177,11 @@ class AvailablityCalendarBase
                 $reservationEndDate   = new \DateTime($reservationEndDate);
 
                   // Check if the current date falls within the reservation period
-                if ($currentDate >= $reservationStartDate && $currentDate < $reservationEndDate) {
+                if ($stay_current_date >= $reservationStartDate && $stay_current_date < $reservationEndDate) {
                     $roomID = get_post_meta(get_the_ID(), 'staylodgic_room_id', true);
 
                       // Get the room rate for the current date
-                    $roomRate = \Staylodgic\Rates::getRoomRateByDate($roomID, $currentDate->format('Y-m-d'));
+                    $roomRate = \Staylodgic\Rates::getRoomRateByDate($roomID, $stay_current_date->format('Y-m-d'));
 
                     $totalRoomRevenue += $roomRate;
                     $numberOfRoomsSold++;

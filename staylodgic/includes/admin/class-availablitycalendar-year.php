@@ -5,9 +5,9 @@ namespace Staylodgic;
 class AvailablityCalendarYear extends AvailablityCalendarBase
 {
 
-    public function __construct($startDate = null, $endDate = null)
+    public function __construct($startDate = null, $stay_end_date = null)
     {
-        parent::__construct($startDate, $endDate);
+        parent::__construct($startDate, $stay_end_date);
 
         add_action('admin_menu', array($this, 'AvailablityCalendarYearDisplay'));
     }

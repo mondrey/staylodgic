@@ -149,13 +149,13 @@ class Rooms
     }
     
     /**
-     * Method getRoomName_FromID
+     * Method get_room_name_from_id
      *
      * @param $room_id $room_id [explicite description]
      *
      * @return void
      */
-    public static function getRoomName_FromID($room_id)
+    public static function get_room_name_from_id($room_id)
     {
         $room_post = get_post($room_id);
         if ($room_post) {
@@ -500,7 +500,7 @@ class Rooms
         if (count($dateRangeArray) < 2 && !empty($dateRangeArray[0])) {
             // Use the single date as both start and end date
             $startDate = $dateRangeArray[0];
-            $endDate = $startDate;
+            $stay_end_date = $startDate;
         } elseif (count($dateRangeArray) < 2 && empty($dateRangeArray[0])) {
             // Return an error response if dateRange is invalid
             $response = array(
@@ -514,15 +514,15 @@ class Rooms
             return;
         } else {
             $startDate = $dateRangeArray[0];
-            $endDate = $dateRangeArray[1];
+            $stay_end_date = $dateRangeArray[1];
         }
 
         // If the end date is empty, set it to the start date
-        if (empty($endDate)) {
-            $endDate = $startDate;
+        if (empty($stay_end_date)) {
+            $stay_end_date = $startDate;
         }
 
-        $numberOfDaysInSelection = \Staylodgic\Common::countDays_BetweenDates($startDate, $endDate);
+        $numberOfDaysInSelection = \Staylodgic\Common::countDays_BetweenDates($startDate, $stay_end_date);
 
         if ($numberOfDaysInSelection > 64) {
             // Return an error response if dateRange is invalid
@@ -546,10 +546,10 @@ class Rooms
         }
 
         // Generate an array of dates between the start and end dates
-        $dateRange = \Staylodgic\Common::create_inBetween_DateRange_Array($startDate, $endDate);
+        $dateRange = \Staylodgic\Common::create_inBetween_DateRange_Array($startDate, $stay_end_date);
 
         $reservation_instance = new \Staylodgic\Reservations();
-        $reserved_array = $reservation_instance->getRoomReservationsForDateRange($startDate, $endDate, $postID);
+        $reserved_array = $reservation_instance->getRoomReservationsForDateRange($startDate, $stay_end_date, $postID);
 
 
         $room_data = get_post_custom($postID);
@@ -692,7 +692,7 @@ class Rooms
         if (count($dateRangeArray) < 2 && !empty($dateRangeArray[0])) {
             // Use the single date as both start and end date
             $startDate = $dateRangeArray[0];
-            $endDate = $startDate;
+            $stay_end_date = $startDate;
         } elseif (count($dateRangeArray) < 2 && empty($dateRangeArray[0])) {
             // Return an error response if dateRange is invalid
             $response = array(
@@ -705,15 +705,15 @@ class Rooms
             return;
         } else {
             $startDate = $dateRangeArray[0];
-            $endDate = $dateRangeArray[1];
+            $stay_end_date = $dateRangeArray[1];
         }
 
         // If the end date is empty, set it to the start date
-        if (empty($endDate)) {
-            $endDate = $startDate;
+        if (empty($stay_end_date)) {
+            $stay_end_date = $startDate;
         }
 
-        $numberOfDaysInSelection = \Staylodgic\Common::countDays_BetweenDates($startDate, $endDate);
+        $numberOfDaysInSelection = \Staylodgic\Common::countDays_BetweenDates($startDate, $stay_end_date);
 
         if ($numberOfDaysInSelection > 64) {
             // Return an error response if dateRange is invalid
@@ -736,7 +736,7 @@ class Rooms
         }
 
         // Generate an array of dates between the start and end dates
-        $dateRange = \Staylodgic\Common::create_inBetween_DateRange_Array($startDate, $endDate);
+        $dateRange = \Staylodgic\Common::create_inBetween_DateRange_Array($startDate, $stay_end_date);
 
         // Update the quantity values for the specified date range
         foreach ($dateRange as $date) {

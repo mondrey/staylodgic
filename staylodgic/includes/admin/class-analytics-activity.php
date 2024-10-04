@@ -45,7 +45,7 @@ class ActivityAnalytics
      */
     public function loadActivities()
     {
-        if (!\Staylodgic\Activity::hasActivities()) {
+        if (!\Staylodgic\Activity::has_activities()) {
             return;
         }
 
@@ -108,7 +108,7 @@ class ActivityAnalytics
 
         echo '<div class="staylodgic_analytics_wrap">';
 
-        if (!\Staylodgic\Activity::hasActivities()) {
+        if (!\Staylodgic\Activity::has_activities()) {
             echo '<h1>' . __('No Activities Found', 'staylodgic') . '</h1>';
             echo '<p>' . __('Please configure atleast 1 activity from Activities section', 'staylodgic') . '</p>';
             return;
@@ -338,12 +338,12 @@ class ActivityAnalytics
         if ($booking_number) {
             // Fetch guest details
             $reservation_instance = new \Staylodgic\Activity();
-            $guestID              = $reservation_instance->getGuest_id_forReservation($booking_number);
+            $guestID              = $reservation_instance->get_guest_id_for_reservation($booking_number);
             if ($guestID) {
                 $name = esc_html(get_post_meta($guestID, 'staylodgic_full_name', true));
 
                 // Generate a UUID using the static method from the Common class
-                $uuid = \Staylodgic\Common::generateUUID();
+                $uuid = \Staylodgic\Common::generate_uuid();
 
                 // Use the combination of guestID and UUID as the key
                 $uniqueKey = $guestID . '-' . $uuid;
@@ -782,11 +782,11 @@ class ActivityAnalytics
                         $count++;
 
                         $reservations_instance = new \Staylodgic\Activity();
-                        $reservation_id        = $reservations_instance->getActivityIDforBooking($booking['booking_number']);
+                        $reservation_id        = $reservations_instance->get_activity_id_for_booking($booking['booking_number']);
 
-                        $checkinDate  = new \DateTime($booking['checkin']);
+                        $stay_checkin_date  = new \DateTime($booking['checkin']);
                         $checkoutDate = new \DateTime($booking['checkout']);
-                        $nights       = $checkoutDate->diff($checkinDate)->days;
+                        $nights       = $checkoutDate->diff($stay_checkin_date)->days;
 
                         $guestListHtml .= '<tr>';
                         $guestListHtml .= '<th class="number-column" scope="row">' . esc_html($count) . '</th>';
@@ -800,19 +800,19 @@ class ActivityAnalytics
                         $guestListHtml .= '</td>';
                         $guestListHtml .= '<td scope="row">';
 
-                        $room_name = $reservations_instance->getActivityNameForReservation($reservation_id);
+                        $room_name = $reservations_instance->get_activity_name_for_reservation($reservation_id);
 
                         $guestListHtml .= $room_name;
                         $guestListHtml .= '</td>';
                         $guestListHtml .= '<td scope="row">';
 
-                        $guestListHtml .= $reservations_instance->getActivityTime($reservation_id);
+                        $guestListHtml .= $reservations_instance->get_activity_time($reservation_id);
 
                         $guestListHtml .= '</td>';
                         $guestListHtml .= '<td scope="row">';
 
-                        $adults = $reservations_instance->getNumberOfAdultsForReservation($reservation_id);
-                        $children = $reservations_instance->getNumberOfChildrenForReservation($reservation_id);
+                        $adults = $reservations_instance->get_number_of_adults_for_reservation($reservation_id);
+                        $children = $reservations_instance->get_number_of_children_for_reservation($reservation_id);
 
                         $guestListHtml .= \Staylodgic\Common::generatePersonIcons($adults, $children);
 

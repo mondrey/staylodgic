@@ -69,11 +69,11 @@ class staylodgic_Reservation_Posts
         }
 
         $reservation_instance = new \Staylodgic\Reservations($date = false, $room_id = false, $reservation_id = $post->ID);
-        $bookingnumber = $reservation_instance->getBookingNumber();
+        $bookingnumber = $reservation_instance->get_booking_number();
 
         switch ($columns) {
             case "reservation_customer":
-                $customer_name = $reservation_instance->getCustomerEditLinkForReservation();
+                $customer_name = $reservation_instance->get_customer_edit_link_for_reservation();
                 if (null !== $customer_name) {
                     echo wp_kses($customer_name, staylodgic_get_allowed_tags());
                 }
@@ -82,7 +82,7 @@ class staylodgic_Reservation_Posts
                 echo esc_attr($bookingnumber);
                 break;
             case "reservation_checkinout":
-                $reservation_checkin       = $reservation_instance->getCheckinDate();
+                $reservation_checkin       = $reservation_instance->get_checkin_date();
                 $reservation_checkout      = $reservation_instance->getCheckoutDate();
                 $reservation_staying       = $reservation_instance->isGuestCurrentlyStaying();
                 $reservation_todaycheckin  = $reservation_instance->isGuestCheckingInToday();
@@ -113,11 +113,11 @@ class staylodgic_Reservation_Posts
                 echo esc_attr($reservation_nights);
                 break;
             case "reservation_status":
-                $reservation_status = $reservation_instance->getReservationStatus();
+                $reservation_status = $reservation_instance->get_reservation_status();
                 echo esc_attr(ucfirst($reservation_status));
                 break;
             case "reservation_substatus":
-                $reservation_substatus = $reservation_instance->getReservationSubStatus();
+                $reservation_substatus = $reservation_instance->get_reservation_sub_status();
                 echo esc_attr(ucfirst($reservation_substatus));
                 break;
             case "reservation_room":

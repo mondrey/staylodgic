@@ -312,7 +312,7 @@ function staylodgic_reservations_metadata()
     );
 
     $reservation_instance = new \Staylodgic\Reservations();
-    if (!$reservation_instance->haveCustomer($reservation_id)) {
+    if (!$reservation_instance->have_customer($reservation_id)) {
         $reservations_box[ 'fields' ] = array_merge($reservations_box[ 'fields' ], $customer_existing);
         $reservations_box[ 'fields' ] = array_merge($reservations_box[ 'fields' ], $customer);
     } else {
@@ -324,7 +324,7 @@ function staylodgic_reservations_metadata()
 function staylodgic_customer_select_choices( $reservation_id ) {
 
     $reservation_instance = new \Staylodgic\Reservations();
-    if (!$reservation_instance->haveCustomer($reservation_id)) {
+    if (!$reservation_instance->have_customer($reservation_id)) {
         $choices = array(
             'new'      => esc_attr__('Create new from this post', 'staylodgic'),
             'existing' => esc_attr__('Choose existing', 'staylodgic'),

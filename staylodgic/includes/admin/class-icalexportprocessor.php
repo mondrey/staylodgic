@@ -289,8 +289,8 @@ class IcalExportProcessor
             $booking_number = get_post_meta($reservation->ID, 'staylodgic_booking_number', true) ?: '-';
             $reservation_status = get_post_meta($reservation->ID, 'staylodgic_reservation_status', true) ?: '-';
             $room_name = $reservation_instance->getRoomNameForReservation($reservation->ID);
-            $adults_number = $reservation_instance->getNumberOfAdultsForReservation($reservation->ID);
-            $children_number = $reservation_instance->getNumberOfChildrenForReservation($reservation->ID);
+            $adults_number = $reservation_instance->get_number_of_adults_for_reservation($reservation->ID);
+            $children_number = $reservation_instance->get_number_of_children_for_reservation($reservation->ID);
 
             $csv_data .= "$booking_number,$room_name,$adults_number,$children_number,$checkin_date,$checkout_date,$reservation_status\r\n";
         }
