@@ -291,7 +291,7 @@
 							var stay_current_date = new Date(currentDateVal);
 						}
 
-						var startDate = new Date(
+						var stay_start_date = new Date(
 							stay_current_date.getFullYear(),
 							stay_current_date.getMonth(),
 							1
@@ -302,7 +302,7 @@
 							5
 						);
 
-						debouncedCalendarUpdate([startDate, stay_end_date]);
+						debouncedCalendarUpdate([stay_start_date, stay_end_date]);
 					} else {
 						// Handle failure
 						console.error("Failed to update option");
@@ -366,7 +366,7 @@
 							var stay_current_date = new Date(currentDateVal);
 						}
 
-						var startDate = new Date(
+						var stay_start_date = new Date(
 							stay_current_date.getFullYear(),
 							stay_current_date.getMonth(),
 							1
@@ -376,7 +376,7 @@
 							stay_current_date.getMonth() + 1,
 							5
 						);
-						debouncedCalendarUpdate([startDate, stay_end_date]);
+						debouncedCalendarUpdate([stay_start_date, stay_end_date]);
 
 						showToast("rateToast");
 					} else {
@@ -523,7 +523,7 @@
 							var stay_current_date = new Date(currentDateVal);
 						}
 
-						var startDate = new Date(
+						var stay_start_date = new Date(
 							stay_current_date.getFullYear(),
 							stay_current_date.getMonth(),
 							1
@@ -533,7 +533,7 @@
 							stay_current_date.getMonth() + 1,
 							5
 						);
-						debouncedCalendarUpdate([startDate, stay_end_date]);
+						debouncedCalendarUpdate([stay_start_date, stay_end_date]);
 
 						showToast("quantityToast");
 					} else {
@@ -596,7 +596,7 @@
 						url: ajaxurl,
 						data: {
 							action: "generate_BedMetabox",
-							roomID: selectedValue,
+							the_room_id: selectedValue,
 							fieldID: bedLayoutField,
 							metaValue: bedMetaValue,
 							nonce: staylodgic_admin_vars.nonce,
@@ -921,7 +921,7 @@
 			var calendarTable = $("#calendarTable");
 
 			// Extract the start and end date from the data attributes
-			var startDate = calendarTable.data("calstart");
+			var stay_start_date = calendarTable.data("calstart");
 			var stay_end_date = calendarTable.data("calend");
 
 			var debouncedCalendarUpdate = _.debounce(updateCalendarData, 500); // Wait for 300ms of inactivity
@@ -948,7 +948,7 @@
 									selectedDates[0].getFullYear();
 
 								// Create the start date (1st of the selected month)
-								var startDate = new Date(
+								var stay_start_date = new Date(
 									selectedYear,
 									selectedMonth,
 									1
@@ -962,7 +962,7 @@
 								);
 
 								// Update the calendar data with the constructed range
-								updateCalendarData([startDate, stay_end_date]);
+								updateCalendarData([stay_start_date, stay_end_date]);
 							}
 						},
 					});
@@ -1001,10 +1001,10 @@
 			function shiftDatesMobile(buttonId, months) {
 				$(buttonId).click(function () {
 					var dateValue = $(".availabilitycalendar").val() + "-01";
-					var startDate = new Date(dateValue);
+					var stay_start_date = new Date(dateValue);
 
-					var newMonth = startDate.getMonth() + months;
-					var newYear = startDate.getFullYear();
+					var newMonth = stay_start_date.getMonth() + months;
+					var newYear = stay_start_date.getFullYear();
 
 					// Handle month underflow and overflow
 					if (newMonth < 0) {
@@ -1034,12 +1034,12 @@
 				shiftDates('#nextmonth:not(".disabled")', 1);
 
 				// Call the initialize function with the initial dates
-				initializeFlatpickr(startDate, stay_end_date);
+				initializeFlatpickr(stay_start_date, stay_end_date);
 			} else {
 				shiftDatesMobile('#prevmonth:not(".disabled")', -1);
 				shiftDatesMobile('#nextmonth:not(".disabled")', 1);
 
-				var dateObject = new Date(startDate);
+				var dateObject = new Date(stay_start_date);
 				var selectedMonth = dateObject.getMonth() + 1; // getMonth() is 0-indexed, add 1 for the correct month
 				var selectedYear = dateObject.getFullYear();
 				var formattedMonth =
@@ -1051,14 +1051,14 @@
 				// Event handler for when the availability calendar changes
 				$(document).on("change", ".availabilitycalendar", function () {
 					var dateValue = $(this).val() + "-01";
-					var startDate = new Date(dateValue);
+					var stay_start_date = new Date(dateValue);
 					var stay_end_date = new Date(
-						startDate.getFullYear(),
-						startDate.getMonth() + 1,
+						stay_start_date.getFullYear(),
+						stay_start_date.getMonth() + 1,
 						0
 					); // Last day of the selected month
 					// Call the debounced update function
-					debouncedCalendarUpdate([startDate, stay_end_date]);
+					debouncedCalendarUpdate([stay_start_date, stay_end_date]);
 				});
 			}
 
@@ -1112,21 +1112,21 @@
 				var urlParams = new URLSearchParams(window.location.search);
 				var createFromDate = urlParams.get("createfromdate");
 				var createToDate = urlParams.get("createtodate");
-				var roomID = urlParams.get("roomID");
+				var the_room_id = urlParams.get("the_room_id");
 
 				if (createFromDate && createToDate) {
 					// Parse the dates
-					var startDate = flatpickr.parseDate(
+					var stay_start_date = flatpickr.parseDate(
 						createFromDate,
 						"Y-m-d"
 					);
 					var stay_end_date = flatpickr.parseDate(createToDate, "Y-m-d");
 
 					// Set the dates in the flatpickr instance
-					flatpickrInstance.setDate([startDate, stay_end_date]);
+					flatpickrInstance.setDate([stay_start_date, stay_end_date]);
 
 					// Manually trigger the handleDateChange function
-					handleDateChange([startDate, stay_end_date], flatpickrInstance);
+					handleDateChange([stay_start_date, stay_end_date], flatpickrInstance);
 
 					// Show the room-related input fields
 					room_related_input_fields.show();
@@ -1134,7 +1134,7 @@
 					// Enable the select input and set the selected option
 					$("#staylodgic_room_id")
 						.prop("disabled", false)
-						.val(roomID)
+						.val(the_room_id)
 						.trigger("change.select2");
 				} else if ("" == $(".reservation").val()) {
 					room_related_input_fields.hide();

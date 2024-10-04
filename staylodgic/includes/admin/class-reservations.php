@@ -363,21 +363,21 @@ class Reservations
     /**
      * Method getRoomReservationsForDateRange
      *
-     * @param $startDate
+     * @param $stay_start_date
      * @param $stay_end_date
-     * @param $roomID
+     * @param $the_room_id
      *
      * @return void
      */
-    public function getRoomReservationsForDateRange( $startDate, $stay_end_date, $roomID )
+    public function getRoomReservationsForDateRange( $stay_start_date, $stay_end_date, $the_room_id )
     {
 
-        $query          = $this->getReservationsForRoom( $startDate, $stay_end_date, $reservation_status = 'confirmed', $reservation_substatus = false, $roomID );
+        $query          = $this->getReservationsForRoom( $stay_start_date, $stay_end_date, $reservation_status = 'confirmed', $reservation_substatus = false, $the_room_id );
         $reserved_rooms = 0;
 
         $reserved_array = array();
 
-        $dateRange = \Staylodgic\Common::create_inBetween_DateRange_Array($startDate, $stay_end_date);
+        $dateRange = \Staylodgic\Common::create_inBetween_DateRange_Array($stay_start_date, $stay_end_date);
         
         // Set all as zero
         foreach ($dateRange as $date) {
@@ -613,7 +613,7 @@ class Reservations
      * @param int $room_id The ID of the room.
      * @return int The number of remaining rooms.
      */
-    public function getDirectRemainingRoomCount($date = false, $room_id = false) {
+    public function get_direct_remaining_room_count($date = false, $room_id = false) {
 
         if (!$room_id) {
             $room_id = $this->room_id;
@@ -1582,23 +1582,23 @@ class Reservations
                     $checkout = $custom[ 'staylodgic_checkout_date' ][ 0 ];
                 }
 
-                $reservationStartDate = strtotime($checkin);
-                $reservationEndDate   = strtotime($checkout);
-                $numberOfDays         = floor(($reservationEndDate - $reservationStartDate) / (60 * 60 * 24)) + 1;
+                $reservation_start_date = strtotime($checkin);
+                $reservation_end_date   = strtotime($checkout);
+                $numberOfDays         = floor(($reservation_end_date - $reservation_start_date) / (60 * 60 * 24)) + 1;
 
                 if ($post_room_id == $room_id) {
                     // Check if the current date falls within the reservation period
-                    if ($stay_current_date >= $reservationStartDate && $stay_current_date < $reservationEndDate) {
+                    if ($stay_current_date >= $reservation_start_date && $stay_current_date < $reservation_end_date) {
                         // Check if the reservation spans the specified number of days
-                        $reservationDuration = floor(($reservationEndDate - $reservationStartDate) / (60 * 60 * 24)) + 1;
+                        $reservationDuration = floor(($reservation_end_date - $reservation_start_date) / (60 * 60 * 24)) + 1;
                         if ($numberOfDays > 0) {
-                            if ($stay_current_date == $reservationStartDate) {
+                            if ($stay_current_date == $reservation_start_date) {
                                 $start = 'yes';
                             } else {
                                 $start = 'no';
                             }
                             $reservation_data[ 'id' ]      = $reservation_id;
-                            $reservation_data[ 'checkin' ] = $reservationStartDate;
+                            $reservation_data[ 'checkin' ] = $reservation_start_date;
                             $reservation_data[ 'start' ]   = $start;
                             $reserved_data[  ]             = $reservation_data; // Date is part of a reservation for the specified number of days
                             $found                         = true;

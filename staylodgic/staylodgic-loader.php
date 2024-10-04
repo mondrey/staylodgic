@@ -165,9 +165,9 @@ class Staylodgic_Init
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-batch-processor-base.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-icalexportprocessor.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-availability-batch-processor.php';
-        require_once plugin_dir_path(__FILE__) . 'includes/admin/class-availablitycalendarbase.php';
-        require_once plugin_dir_path(__FILE__) . 'includes/admin/class-availablitycalendar.php';
-        require_once plugin_dir_path(__FILE__) . 'includes/admin/class-availablitycalendar-year.php';
+        require_once plugin_dir_path(__FILE__) . 'includes/admin/class-availablity-calendar-base.php';
+        require_once plugin_dir_path(__FILE__) . 'includes/admin/class-availablity-calendar.php';
+        require_once plugin_dir_path(__FILE__) . 'includes/admin/class-availablity-calendar-year.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-cache.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-rooms.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-rates.php';

@@ -102,37 +102,37 @@ class Common
 
 		if (count($dateRangeArray) < 2 && !empty($dateRangeArray[0])) {
 			// Use the single date as both start and end date
-			$startDate = $dateRangeArray[0];
-			$stay_end_date   = $startDate;
+			$stay_start_date = $dateRangeArray[0];
+			$stay_end_date   = $stay_start_date;
 		} elseif (count($dateRangeArray) < 2 && empty($dateRangeArray[0])) {
 			// Return null if dateRange is invalid
 			return null;
 		} else {
-			$startDate = $dateRangeArray[0];
+			$stay_start_date = $dateRangeArray[0];
 			$stay_end_date   = $dateRangeArray[1];
 		}
 
 		// If the end date is empty, set it to the start date
 		if (empty($stay_end_date)) {
-			$stay_end_date = $startDate;
+			$stay_end_date = $stay_start_date;
 		}
 
 		// Return start and end date as an array
-		return array('startDate' => $startDate, 'stay_end_date' => $stay_end_date);
+		return array('stay_start_date' => $stay_start_date, 'stay_end_date' => $stay_end_date);
 	}
 	
 	/**
 	 * Method countDays_BetweenDates
 	 *
-	 * @param $startDate
+	 * @param $stay_start_date
 	 * @param $stay_end_date
 	 *
 	 * @return void
 	 */
-	public static function countDays_BetweenDates($startDate, $stay_end_date)
+	public static function countDays_BetweenDates($stay_start_date, $stay_end_date)
 	{
 		// Create DateTime objects for the start and end dates
-		$startDateTime = new \DateTime($startDate);
+		$startDateTime = new \DateTime($stay_start_date);
 		$endDateTime   = new \DateTime($stay_end_date);
 
 		// Calculate the difference between the two dates
@@ -148,16 +148,16 @@ class Common
 	/**
 	 * Method Function to create an array of dates between two dates	
 	 *
-	 * @param $startDate
+	 * @param $stay_start_date
 	 * @param $stay_end_date
 	 *
 	 * @return void
 	 */
-	public static function create_inBetween_DateRange_Array($startDate, $stay_end_date)
+	public static function create_inBetween_DateRange_Array($stay_start_date, $stay_end_date)
 	{
 		$dateRangeArray = array();
 
-		$stay_current_date = strtotime($startDate);
+		$stay_current_date = strtotime($stay_start_date);
 		$stay_end_date     = strtotime($stay_end_date);
 
 		while ($stay_current_date <= $stay_end_date) {

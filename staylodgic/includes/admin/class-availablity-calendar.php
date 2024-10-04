@@ -2,12 +2,12 @@
 
 namespace Staylodgic;
 
-class AvailablityCalendar extends AvailablityCalendarBase
+class Availablity_Calendar extends Availablity_Calendar_Base
 {
 
-    public function __construct($startDate = null, $stay_end_date = null, $cached_data = null, $calendarData = null, $reservation_tabs = null, $usingCache = false, $availConfirmedOnly = false)
+    public function __construct($stay_start_date = null, $stay_end_date = null, $cached_data = null, $calendar_data = null, $reservation_tabs = null, $using_cache = false, $avail_confirmed_only = false)
     {
-        parent::__construct($startDate, $stay_end_date, $calendarData, $reservation_tabs, $availConfirmedOnly);
+        parent::__construct($stay_start_date, $stay_end_date, $calendar_data, $reservation_tabs, $avail_confirmed_only);
 
         // WordPress AJAX action hook
         add_action('wp_ajax_get_Selected_Range_AvailabilityCalendar', array($this, 'get_Selected_Range_AvailabilityCalendar'));
@@ -27,14 +27,14 @@ class AvailablityCalendar extends AvailablityCalendarBase
     /**
      * Method generateRoomWarnings
      *
-     * @param $roomID $roomID
+     * @param $the_room_id $the_room_id
      *
      * @return void
      */
-    public function generateRoomWarnings($roomID) {
+    public function generateRoomWarnings($the_room_id) {
         $room_output = '';
 
-        $total_rooms = get_post_meta($roomID, 'staylodgic_max_rooms_of_type', true);
+        $total_rooms = get_post_meta($the_room_id, 'staylodgic_max_rooms_of_type', true);
         if ('' == $total_rooms) {
             $room_output .= '<div class="availability-warning"><p class="availability-room-warning-notice"><i class="fa-solid fa-triangle-exclamation"></i> ' . __('Max room undefined', 'staylodgic') . '</p></div>';
         }
@@ -42,7 +42,7 @@ class AvailablityCalendar extends AvailablityCalendarBase
             $room_output .= '<div class="availability-warning"><p class="availability-room-warning-notice"><i class="fa-solid fa-triangle-exclamation"></i> ' . __('Max room is zero', 'staylodgic') . '</p></div>';
         }
 
-        $base_rate = get_post_meta($roomID, 'staylodgic_base_rate', true);
+        $base_rate = get_post_meta($the_room_id, 'staylodgic_base_rate', true);
         if ('' == $base_rate) {
             $room_output .= '<div class="availability-warning"><p class="availability-room-warning-notice"><i class="fa-solid fa-triangle-exclamation"></i> ' . __('Base rate undefined', 'staylodgic') . '</p></div>';
         }
@@ -50,7 +50,7 @@ class AvailablityCalendar extends AvailablityCalendarBase
             $room_output .= '<div class="availability-warning"><p class="availability-room-warning-notice"><i class="fa-solid fa-triangle-exclamation"></i> ' . __('Base rate is zero', 'staylodgic') . '</p></div>';
         }
 
-        $max_guests = get_post_meta($roomID, 'staylodgic_max_guests', true);
+        $max_guests = get_post_meta($the_room_id, 'staylodgic_max_guests', true);
         if ('' == $max_guests) {
             $room_output .= '<div class="availability-warning"><p class="availability-room-warning-notice"><i class="fa-solid fa-triangle-exclamation"></i> ' . __('Max guest number undefined', 'staylodgic') . '</p></div>';
         }
@@ -58,12 +58,12 @@ class AvailablityCalendar extends AvailablityCalendarBase
             $room_output .= '<div class="availability-warning"><p class="availability-room-warning-notice"><i class="fa-solid fa-triangle-exclamation"></i> ' . __('Max guest number is zero', 'staylodgic') . '</p></div>';
         }
 
-        $bedsetup = get_post_meta($roomID, 'staylodgic_alt_bedsetup', true);
+        $bedsetup = get_post_meta($the_room_id, 'staylodgic_alt_bedsetup', true);
         if (!is_array($bedsetup) || !isset($bedsetup)) {
             $room_output .= '<div class="availability-warning"><p class="availability-room-warning-notice"><i class="fa-solid fa-triangle-exclamation"></i> ' . __('Beds undefined', 'staylodgic') . '</p></div>';
         }
 
-        $image_id  = get_post_thumbnail_id($roomID);
+        $image_id  = get_post_thumbnail_id($the_room_id);
         if (!$image_id) {
             $room_output .= '<div class="availability-warning"><p class="availability-room-warning-notice"><i class="fa-solid fa-triangle-exclamation"></i> ' . __('No featured image', 'staylodgic') . '</p></div>';
         }
@@ -107,13 +107,13 @@ class AvailablityCalendar extends AvailablityCalendarBase
     /**
      * Method fetchOccupancy_Percentage_For_Calendar_Range
      *
-     * @param $startDate $startDate
+     * @param $stay_start_date $stay_start_date
      * @param $stay_end_date $stay_end_date
      * @param $onlyFullOccupancy $onlyFullOccupancy
      *
      * @return void
      */
-    public function fetchOccupancy_Percentage_For_Calendar_Range($startDate = false, $stay_end_date = false, $onlyFullOccupancy = false)
+    public function fetchOccupancy_Percentage_For_Calendar_Range($stay_start_date = false, $stay_end_date = false, $onlyFullOccupancy = false)
     {
         // Perform necessary security checks or validation here
 
@@ -126,33 +126,33 @@ class AvailablityCalendar extends AvailablityCalendarBase
         // Calculate end date as 90 days from the current date
         $stay_end_date = date('Y-m-d', strtotime($stay_current_date . ' +90 days'));
 
-        if (!$startDate) {
+        if (!$stay_start_date) {
             // Use the current date as the start date
-            $startDate = $stay_current_date;
+            $stay_start_date = $stay_current_date;
         }
 
         // Retrieve start and end dates from the AJAX request if not provided
         if ($isAjaxRequest) {
-            $startDate = sanitize_text_field($_POST['start']);
+            $stay_start_date = sanitize_text_field($_POST['start']);
             $stay_end_date   = sanitize_text_field($_POST['end']);
         }
 
-        if (isset($startDate) && isset($stay_end_date)) {
+        if (isset($stay_start_date) && isset($stay_end_date)) {
 
-            $dates = \Staylodgic\Common::getDates_Between($startDate, $stay_end_date);
+            $dates = \Staylodgic\Common::getDates_Between($stay_start_date, $stay_end_date);
 
             $occupancy_data = array();
 
             foreach ($dates as $date) :
                 $occupancydate       = $date;
-                $occupancyPercentage = $this->calculateOccupancyForDate($occupancydate);
+                $occupancy_percentage = $this->calculate_occupancy_for_date($occupancydate);
 
                 // Check if only full occupancy dates should be included
-                if ($onlyFullOccupancy && $occupancyPercentage < 100) {
+                if ($onlyFullOccupancy && $occupancy_percentage < 100) {
                     continue; // Skip this date if not full occupancy
                 }
 
-                $occupancy_data[$occupancydate] = $occupancyPercentage;
+                $occupancy_data[$occupancydate] = $occupancy_percentage;
             endforeach;
 
             // Send occupancy data as JSON response if it's an AJAX request
@@ -216,17 +216,17 @@ class AvailablityCalendar extends AvailablityCalendarBase
      */
     public function getDisplayConfirmedStatus()
     {
-        $this->availConfirmedOnly = get_option('staylodgic_availsettings_confirmed_only');
+        $this->avail_confirmed_only = get_option('staylodgic_availsettings_confirmed_only');
 
         // Check if the option is not found and set it to '1'
-        if ($this->availConfirmedOnly === false) {
+        if ($this->avail_confirmed_only === false) {
             update_option('staylodgic_availsettings_confirmed_only', true);
-            $this->availConfirmedOnly = true;
+            $this->avail_confirmed_only = true;
         }
 
         $confirmed_status = '';
 
-        return $this->availConfirmedOnly;
+        return $this->avail_confirmed_only;
     }
 
     /**
@@ -355,60 +355,60 @@ class AvailablityCalendar extends AvailablityCalendarBase
     /**
      * Method getAvailabilityCalendar
      *
-     * @param $startDate $startDate
+     * @param $stay_start_date $stay_start_date
      * @param $stay_end_date $stay_end_date
      *
      * @return void
      */
-    public function getAvailabilityCalendar($startDate = false, $stay_end_date = false)
+    public function getAvailabilityCalendar($stay_start_date = false, $stay_end_date = false)
     {
 
-        if (!$startDate) {
-            $startDate = $this->startDate;
+        if (!$stay_start_date) {
+            $stay_start_date = $this->stay_start_date;
             $stay_end_date   = $this->stay_end_date;
         } else {
-            $startDate = new \DateTime($startDate);
+            $stay_start_date = new \DateTime($stay_start_date);
             $stay_end_date   = new \DateTime($stay_end_date);
         }
 
-        $dates = $this->getDates($startDate, $stay_end_date);
+        $dates = $this->get_dates($stay_start_date, $stay_end_date);
         $today = $this->today;
 
-        if ($startDate instanceof \DateTime) {
-            $startDateString = $startDate->format('Y-m-d');
+        if ($stay_start_date instanceof \DateTime) {
+            $start_date_string = $stay_start_date->format('Y-m-d');
         } else {
-            $startDateString = $startDate;
+            $start_date_string = $stay_start_date;
         }
 
         if ($stay_end_date instanceof \DateTime) {
-            $endDateString = $stay_end_date->format('Y-m-d');
+            $end_date_string = $stay_end_date->format('Y-m-d');
         } else {
-            $endDateString = $stay_end_date;
+            $end_date_string = $stay_end_date;
         }
 
-        $table_start = '<table id="calendarTable" data-calstart="' . esc_attr($startDateString) . '" data-calend="' . esc_attr($endDateString) . '">';
+        $table_start = '<table id="calendarTable" data-calstart="' . esc_attr($start_date_string) . '" data-calend="' . esc_attr($end_date_string) . '">';
 
         $this->roomlist = \Staylodgic\Rooms::getRoomList();
 
         $room_output    = '';
         $all_room_output  = '';
 
-        foreach ($this->roomlist as $roomID => $stay_room_name) :
+        foreach ($this->roomlist as $the_room_id => $stay_room_name) :
 
-            $cache_instance = new \Staylodgic\Cache($roomID, $startDateString, $endDateString);
+            $cache_instance = new \Staylodgic\Cache($the_room_id, $start_date_string, $end_date_string);
             // $cache_instance->deleteCache();
             $transient_key   = $cache_instance->generateRoomCacheKey();
             $cached_calendar = $cache_instance->get_cache($transient_key);
 
-            $room_reservations_instance = new \Staylodgic\Reservations($stay_date_string = false, $roomID);
+            $room_reservations_instance = new \Staylodgic\Reservations($stay_date_string = false, $the_room_id);
 
-            // $room_reservations_instance->cleanup_Reservations_Array( $roomID );
+            // $room_reservations_instance->cleanup_Reservations_Array( $the_room_id );
             $room_reservations_instance->calculate_and_update_remaining_room_counts_for_all_dates();
 
             $use_cache = true;
-            $this->usingCache = false;
+            $this->using_cache = false;
             $this->cached_data = array();
-            $this->calendarData = array();
+            $this->calendar_data = array();
 
 
             if (isset($cached_calendar['qty_rates'])) {
@@ -418,9 +418,9 @@ class AvailablityCalendar extends AvailablityCalendarBase
 
                     $stay_date_string       = $date->format('Y-m-d');
 
-                    $reservation_instance = new \Staylodgic\Reservations($stay_date_string, $roomID);
+                    $reservation_instance = new \Staylodgic\Reservations($stay_date_string, $the_room_id);
                     $remaining_rooms = $reservation_instance->remainingRooms_For_Day();
-                    $room_rate              = \Staylodgic\Rates::getRoomRateByDate($roomID, $stay_date_string);
+                    $room_rate              = \Staylodgic\Rates::get_room_rate_by_date($the_room_id, $stay_date_string);
 
                     if (0 == $remaining_rooms) {
                         $room_was_opened = $reservation_instance->wasRoom_Ever_Opened();
@@ -455,7 +455,7 @@ class AvailablityCalendar extends AvailablityCalendarBase
 
                     $this->cached_data = $cached_calendar;
 
-                    $this->usingCache = true;
+                    $this->using_cache = true;
                 }
             }
 
@@ -463,17 +463,17 @@ class AvailablityCalendar extends AvailablityCalendarBase
             $cache_qty_rate = array();
             $cache_output   = array();
 
-            $room_output = '<tr class="calendarRow calendar-room-row" data-id="' . esc_attr($roomID) . '">';
+            $room_output = '<tr class="calendarRow calendar-room-row" data-id="' . esc_attr($the_room_id) . '">';
             $room_output .= '<td class="calendarCell rowHeader">';
             $room_output .= esc_html($stay_room_name);
 
-            $room_output .= $this->generateRoomWarnings($roomID);
+            $room_output .= $this->generateRoomWarnings($the_room_id);
 
             $room_output .= '</td>';
 
-            if (!$this->usingCache) {
-                $reservation_instance = new \Staylodgic\Reservations(false, $roomID);
-                $reservations = $reservation_instance->getReservationsForRoom($startDateString, $endDateString, false, false, $roomID);
+            if (!$this->using_cache) {
+                $reservation_instance = new \Staylodgic\Reservations(false, $the_room_id);
+                $reservations = $reservation_instance->getReservationsForRoom($start_date_string, $end_date_string, false, false, $the_room_id);
             }
 
             foreach ($dates as $date) :
@@ -482,8 +482,8 @@ class AvailablityCalendar extends AvailablityCalendarBase
 
                 $create_reservation_tag = true;
 
-                if (!$this->usingCache) {
-                    $reservation_instance = new \Staylodgic\Reservations($stay_date_string, $roomID);
+                if (!$this->using_cache) {
+                    $reservation_instance = new \Staylodgic\Reservations($stay_date_string, $the_room_id);
                     $reservation_data     = $reservation_instance->buildReservationsDataForRoomForDay($reservations, false, false, false, false);
 
                     $remaining_rooms = $reservation_instance->remainingRooms_For_Day();
@@ -496,7 +496,7 @@ class AvailablityCalendar extends AvailablityCalendarBase
                         $create_reservation_tag = false;
                     }
 
-                    $room_rate              = \Staylodgic\Rates::getRoomRateByDate($roomID, $stay_date_string);
+                    $room_rate              = \Staylodgic\Rates::get_room_rate_by_date($the_room_id, $stay_date_string);
                     $occupancy_status_class = "";
                     if ($reservation_instance->isRoom_For_Day_Fullybooked()) {
                         $occupancy_status_class = "fully-booked";
@@ -504,11 +504,11 @@ class AvailablityCalendar extends AvailablityCalendarBase
                         $occupancy_status_class = "room-available";
                     }
 
-                    $this->calendarData['cellData'][$stay_date_string]['reservation_data'] = $reservation_data;
-                    $this->calendarData['cellData'][$stay_date_string]['remaining_rooms'] = $remaining_rooms;
-                    $this->calendarData['cellData'][$stay_date_string]['room_rate'] = $room_rate;
-                    $this->calendarData['cellData'][$stay_date_string]['occupancy_status_class'] = $occupancy_status_class;
-                    $this->calendarData['cellData'][$stay_date_string]['create_reservation_tag'] = $create_reservation_tag;
+                    $this->calendar_data['cellData'][$stay_date_string]['reservation_data'] = $reservation_data;
+                    $this->calendar_data['cellData'][$stay_date_string]['remaining_rooms'] = $remaining_rooms;
+                    $this->calendar_data['cellData'][$stay_date_string]['room_rate'] = $room_rate;
+                    $this->calendar_data['cellData'][$stay_date_string]['occupancy_status_class'] = $occupancy_status_class;
+                    $this->calendar_data['cellData'][$stay_date_string]['create_reservation_tag'] = $create_reservation_tag;
                 } else {
                     $reservation_data = $this->cached_data['cellData'][$stay_date_string]['reservation_data'];
                     $remaining_rooms = $this->cached_data['cellData'][$stay_date_string]['remaining_rooms'];
@@ -521,13 +521,13 @@ class AvailablityCalendar extends AvailablityCalendarBase
 
                 $room_output .= '<div class="calendar-info-wrap">';
                 $room_output .= '<div class="calendar-info">';
-                $room_output .= '<a data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Quantity" href="#" class="quantity-link" data-remaining="' . esc_attr($remaining_rooms) . '" data-date="' . esc_attr($stay_date_string) . '" data-room="' . esc_attr($roomID) . '">' . esc_html($remaining_rooms) . '</a>';
+                $room_output .= '<a data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Quantity" href="#" class="quantity-link" data-remaining="' . esc_attr($remaining_rooms) . '" data-date="' . esc_attr($stay_date_string) . '" data-room="' . esc_attr($the_room_id) . '">' . esc_html($remaining_rooms) . '</a>';
 
                 if (!empty($room_rate) && isset($room_rate) && $room_rate > 0) {
-                    $room_output .= '<a data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Rate" class="roomrate-link" href="#" data-rate="' . esc_attr($room_rate) . '" data-date="' . esc_attr($stay_date_string) . '" data-room="' . esc_attr($roomID) . '">' . esc_html($room_rate) . '</a>';
+                    $room_output .= '<a data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Rate" class="roomrate-link" href="#" data-rate="' . esc_attr($room_rate) . '" data-date="' . esc_attr($stay_date_string) . '" data-room="' . esc_attr($the_room_id) . '">' . esc_html($room_rate) . '</a>';
                 }
 
-                if (!$this->usingCache) {
+                if (!$this->using_cache) {
                     $cache_qty_rate[$stay_date_string]['qty'] = $remaining_rooms;
                     $cache_qty_rate[$stay_date_string]['rate'] = $room_rate;
                 }
@@ -540,7 +540,7 @@ class AvailablityCalendar extends AvailablityCalendarBase
                     $createEndDate = new \DateTime($stay_date_string);
                     $createEndDate->modify('+1 day');
                     $createOneDayAhead = $createEndDate->format('Y-m-d');
-                    $new_post_link = admin_url('post-new.php?post_type=slgc_reservations&createfromdate=' . esc_attr($stay_date_string) . '&createtodate=' . esc_attr($createOneDayAhead) . '&roomID=' . esc_attr($roomID));
+                    $new_post_link = admin_url('post-new.php?post_type=slgc_reservations&createfromdate=' . esc_attr($stay_date_string) . '&createtodate=' . esc_attr($createOneDayAhead) . '&the_room_id=' . esc_attr($the_room_id));
                     $room_output .= '<div class="cal-create-reservation"><a data-bs-delay="0" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="New Booking" href="' . esc_url($new_post_link) . '">+</a></div>';
                 }
 
@@ -548,7 +548,7 @@ class AvailablityCalendar extends AvailablityCalendarBase
                 if ($reservation_data) {
                     $reservation_module = array();
                     //echo staylodgic_generate_reserved_tab( $reservation_data, $reservation_tabs );
-                    $reservation_module = $this->ReservedTab($reservation_data, $stay_date_string, $startDateString);
+                    $reservation_module = $this->ReservedTab($reservation_data, $stay_date_string, $start_date_string);
                     $room_output .= $reservation_module['tab'];
                     // $this->reservation_tabs = $reservation_module[ 'checkout' ];
                     //print_r( $reservation_tabs );
@@ -559,25 +559,25 @@ class AvailablityCalendar extends AvailablityCalendarBase
             endforeach;
             $room_output .= '</tr>';
 
-            $this->calendarData['qty_rates'] = $cache_qty_rate;
+            $this->calendar_data['qty_rates'] = $cache_qty_rate;
 
             $all_room_output .= $room_output;
 
-            if (!$this->usingCache) {
+            if (!$this->using_cache) {
 
-                $cache_instance->setCache($transient_key, $this->calendarData);
+                $cache_instance->setCache($transient_key, $this->calendar_data);
             }
 
         endforeach;
 
         $stats_row = '<tr class="calendarRow">';
-        $stats_row .= self::displayOccupancy_TableDataBlock($startDate, $stay_end_date);
+        $stats_row .= self::displayOccupancy_TableDataBlock($stay_start_date, $stay_end_date);
         $stats_row .= self::displayOccupancyRange_TableDataBlock($dates);
         $stats_row .= '</tr>';
         $stats_row .= '<tr class="calendarRow">';
         $stats_row .= '<td class="calendarCell rowHeader"></td>';
-        $numDays = $this->setNumDays($startDateString, $endDateString);
-        $stats_row .= self::displayDate_TableDataBlock($dates, $numDays);
+        $stay_num_days = $this->set_num_days($start_date_string, $end_date_string);
+        $stats_row .= self::displayDate_TableDataBlock($dates, $stay_num_days);
         $stats_row .= '</tr>';
 
         $table_end = '</table>';
@@ -589,34 +589,34 @@ class AvailablityCalendar extends AvailablityCalendarBase
     /**
      * Method displayOccupancy_TableDataBlock
      *
-     * @param $startDate $startDate
+     * @param $stay_start_date $stay_start_date
      * @param $stay_end_date $stay_end_date
      *
      * @return void
      */
-    private function displayOccupancy_TableDataBlock($startDate = false, $stay_end_date = false)
+    private function displayOccupancy_TableDataBlock($stay_start_date = false, $stay_end_date = false)
     {
-        if (!$startDate) {
-            $startDate = $this->startDate;
+        if (!$stay_start_date) {
+            $stay_start_date = $this->stay_start_date;
             $stay_end_date   = $this->stay_end_date;
         }
 
-        if ($startDate instanceof \DateTime) {
-            $startDateString = $startDate->format('Y-m-d');
+        if ($stay_start_date instanceof \DateTime) {
+            $start_date_string = $stay_start_date->format('Y-m-d');
         } else {
-            $startDateString = $startDate;
+            $start_date_string = $stay_start_date;
         }
 
         if ($stay_end_date instanceof \DateTime) {
             $stay_end_date->modify('-5 days');
-            $endDateString = $stay_end_date->format('Y-m-d');
+            $end_date_string = $stay_end_date->format('Y-m-d');
         } else {
             $stay_end_date = new \DateTime($stay_end_date);
             $stay_end_date->modify('-5 days');
-            $endDateString = $stay_end_date->format('Y-m-d');
+            $end_date_string = $stay_end_date->format('Y-m-d');
         }
 
-        $occupancy_percent = esc_html($this->calculateOccupancyTotalForRange($startDateString, $endDateString));
+        $occupancy_percent = esc_html($this->calculate_occupancy_total_for_range($start_date_string, $end_date_string));
 
         $output = '<td class="calendarCell rowHeader">';
         $output .= '<div data-occupancypercent="' . esc_attr($occupancy_percent) . '" class="occupancyStats-wrap occupancy-percentage">';
@@ -691,7 +691,7 @@ class AvailablityCalendar extends AvailablityCalendarBase
             $number_of_columns++;
             $occupancydate = $date->format('Y-m-d');
 
-            $remaining_rooms = $this->calculateRemainingRoomsForDate($occupancydate);
+            $remaining_rooms = $this->calculate_remaining_rooms_for_date($occupancydate);
 
             $output .= '<td data-roomsremaining="' . esc_attr($remaining_rooms) . '" class="calendarCell monthHeader occupancy-stats occupancy-percent-' . esc_attr($remaining_rooms) . ' ' . esc_attr($this->todayCSSTag($occupancydate)) . ' ' . esc_attr($this->startOfMonthCSSTag($occupancydate)) . '">';
             $output .= '<div class="occupancyStats-wrap">';
@@ -715,19 +715,19 @@ class AvailablityCalendar extends AvailablityCalendarBase
      * Method displayDate_TableDataBlock
      *
      * @param $dates $dates
-     * @param $numDays $numDays
+     * @param $stay_num_days $stay_num_days
      *
      * @return void
      */
-    private function displayDate_TableDataBlock($dates = false, $numDays = false)
+    private function displayDate_TableDataBlock($dates = false, $stay_num_days = false)
     {
         
         $today             = $this->today;
         $number_of_columns = 0;
-        if (!$numDays) {
-            $markNumDays = $this->numDays + 1;
+        if (!$stay_num_days) {
+            $markNumDays = $this->stay_num_days + 1;
         } else {
-            $markNumDays = $numDays + 1;
+            $markNumDays = $stay_num_days + 1;
         }
 
         $output = '';
@@ -865,7 +865,7 @@ class AvailablityCalendar extends AvailablityCalendarBase
             $guest_name            = '';
             $reservation_id        = $reservation['id'];
 
-            if (!$this->usingCache) {
+            if (!$this->using_cache) {
                 $reservation_instance  = new \Staylodgic\Reservations($date = false, $room_id = false, $reservation_id = $reservation['id']);
                 $booking_number        = $reservation_instance->get_booking_number();
                 $guest_name            = $reservation_instance->getReservationGuestName();
@@ -878,16 +878,16 @@ class AvailablityCalendar extends AvailablityCalendarBase
 
                 $reservation_edit_link = get_edit_post_link($reservation['id']);
 
-                $this->calendarData['tabsData'][$reservation_id][$current_day]['get_booking_number'] = $booking_number;
-                $this->calendarData['tabsData'][$reservation_id][$current_day]['getReservationGuestName'] = $guest_name;
-                $this->calendarData['tabsData'][$reservation_id][$current_day]['countReservationDays'] = $reserved_days;
-                $this->calendarData['tabsData'][$reservation_id][$current_day]['get_checkin_date'] = $checkin;
-                $this->calendarData['tabsData'][$reservation_id][$current_day]['getCheckoutDate'] = $checkout;
-                $this->calendarData['tabsData'][$reservation_id][$current_day]['get_reservation_status'] = $reservation_status;
-                $this->calendarData['tabsData'][$reservation_id][$current_day]['get_reservation_sub_status'] = $reservation_substatus;
-                $this->calendarData['tabsData'][$reservation_id][$current_day]['getReservationChannel'] = $booking_channel;
+                $this->calendar_data['tabsData'][$reservation_id][$current_day]['get_booking_number'] = $booking_number;
+                $this->calendar_data['tabsData'][$reservation_id][$current_day]['getReservationGuestName'] = $guest_name;
+                $this->calendar_data['tabsData'][$reservation_id][$current_day]['countReservationDays'] = $reserved_days;
+                $this->calendar_data['tabsData'][$reservation_id][$current_day]['get_checkin_date'] = $checkin;
+                $this->calendar_data['tabsData'][$reservation_id][$current_day]['getCheckoutDate'] = $checkout;
+                $this->calendar_data['tabsData'][$reservation_id][$current_day]['get_reservation_status'] = $reservation_status;
+                $this->calendar_data['tabsData'][$reservation_id][$current_day]['get_reservation_sub_status'] = $reservation_substatus;
+                $this->calendar_data['tabsData'][$reservation_id][$current_day]['getReservationChannel'] = $booking_channel;
 
-                $this->calendarData['tabsData'][$reservation_id]['reservation_edit_link'] = $reservation_edit_link;
+                $this->calendar_data['tabsData'][$reservation_id]['reservation_edit_link'] = $reservation_edit_link;
             } else {
                 $booking_number        = $this->cached_data['tabsData'][$reservation_id][$current_day]['get_booking_number'];
                 $guest_name            = $this->cached_data['tabsData'][$reservation_id][$current_day]['getReservationGuestName'];
@@ -903,10 +903,10 @@ class AvailablityCalendar extends AvailablityCalendarBase
 
             $row++;
 
-            if ('cancelled' == $reservation_status && $this->availConfirmedOnly) {
+            if ('cancelled' == $reservation_status && $this->avail_confirmed_only) {
                 continue;
             }
-            if ('pending' == $reservation_status && $this->availConfirmedOnly) {
+            if ('pending' == $reservation_status && $this->avail_confirmed_only) {
                 continue;
             }
 
@@ -962,4 +962,4 @@ class AvailablityCalendar extends AvailablityCalendarBase
     }
 }
 
-$instance = new \Staylodgic\AvailablityCalendar();
+$instance = new \Staylodgic\Availablity_Calendar();

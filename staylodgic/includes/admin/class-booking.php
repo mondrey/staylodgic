@@ -636,9 +636,9 @@ class Booking
         $stay_checkin_date  = '';
         $stay_checkout_date = '';
 
-        if (isset($chosenDate['startDate'])) {
-            $stay_checkin_date     = $chosenDate['startDate'];
-            $checkinDate_obj = new \DateTime($chosenDate['startDate']);
+        if (isset($chosenDate['stay_start_date'])) {
+            $stay_checkin_date     = $chosenDate['stay_start_date'];
+            $checkinDate_obj = new \DateTime($chosenDate['stay_start_date']);
         }
         if (isset($chosenDate['stay_end_date'])) {
             $stay_checkout_date     = $chosenDate['stay_end_date'];
@@ -1210,8 +1210,8 @@ class Booking
             wp_die();
         }
 
-        if (isset($_POST['roomID'])) {
-            $room_id = $_POST['roomID'];
+        if (isset($_POST['the_room_id'])) {
+            $room_id = $_POST['the_room_id'];
         }
         if (isset($_POST['fieldID'])) {
             $meta_field = $_POST['fieldID'];

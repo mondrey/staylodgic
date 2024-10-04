@@ -2,12 +2,12 @@
 
 namespace Staylodgic;
 
-class AvailablityCalendarYear extends AvailablityCalendarBase
+class Availablity_Calendar_Year extends Availablity_Calendar_Base
 {
 
-    public function __construct($startDate = null, $stay_end_date = null)
+    public function __construct($stay_start_date = null, $stay_end_date = null)
     {
-        parent::__construct($startDate, $stay_end_date);
+        parent::__construct($stay_start_date, $stay_end_date);
 
         add_action('admin_menu', array($this, 'AvailablityCalendarYearDisplay'));
     }
@@ -137,4 +137,4 @@ class AvailablityCalendarYear extends AvailablityCalendarBase
     }
 }
 
-$instance = new \Staylodgic\AvailablityCalendarYear();
+$instance = new \Staylodgic\Availablity_Calendar_Year();

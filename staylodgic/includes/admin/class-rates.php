@@ -5,14 +5,14 @@ namespace Staylodgic;
 class Rates {
 
 	/**
-	 * Method getRoomRateByDate
+	 * Method get_room_rate_by_date
 	 *
-	 * @param $roomID
+	 * @param $the_room_id
 	 * @param $date
 	 *
 	 * @return void
 	 */
-	public static function getRoomRateByDate( $room_id, $date ) {
+	public static function get_room_rate_by_date( $room_id, $date ) {
 		// Get the room rate array from the post meta data.
 		$room_rate_array = get_post_meta( $room_id, 'staylodgic_roomrate_array', true );
 

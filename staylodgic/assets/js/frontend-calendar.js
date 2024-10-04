@@ -405,8 +405,8 @@
 			$("#bookingSearch").trigger("click");
 		});
 
-		function calculateDaysBetweenDates(startDate, stay_end_date) {
-			var start = new Date(startDate);
+		function calculateDaysBetweenDates(stay_start_date, stay_end_date) {
+			var start = new Date(stay_start_date);
 			var end = new Date(stay_end_date);
 			var timeDiff = Math.abs(end.getTime() - start.getTime());
 			var days = Math.ceil(timeDiff / (1000 * 3600 * 24));

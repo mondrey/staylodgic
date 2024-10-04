@@ -5,7 +5,7 @@
 		var processedEvents = []; // Array to store all processed events
 		var tbody; // Variable to store the reference to the tbody element
 
-		var roomID;
+		var the_room_id;
 		var icsURL;
 		var icsID;
 		var total_process = 0;
@@ -35,7 +35,7 @@
 			$(".process-ical-availability-sync").prop("disabled", false);
 			$(".ical-close-button").prop("disabled", false);
 			
-			roomID = $(this).data('room-id');
+			the_room_id = $(this).data('room-id');
 			icsURL = $(this).data('ics-url');
 			icsID = $(this).data('ics-id');
 		});
@@ -178,7 +178,7 @@
 				url: ajaxurl,
 				data: {
 					action: 'process_event_batch', // This should match the action hook in your functions.php file
-					room_id: roomID,
+					room_id: the_room_id,
 					ics_url: icsURL,
 					nonce: staylodgic_admin_vars.nonce
 				},
@@ -250,7 +250,7 @@
 				url: ajaxurl,
 				data: {
 					action: 'process_event_batch', // This should match the action hook in your functions.php file
-					room_id: roomID,
+					room_id: the_room_id,
 					ics_url: icsURL,
 					nonce: staylodgic_admin_vars.nonce
 				},
@@ -323,7 +323,7 @@
 				url: ajaxurl,
 				data: {
 					action: 'insert_events_batch', // This should match the action hook in your functions.php file
-					room_id: roomID,
+					room_id: the_room_id,
 					ics_url: icsURL,
 					ics_id: icsID,
 					processedEvents: eventsBatch // Pass the processed events batch to the server
@@ -401,7 +401,7 @@
 					action: 'find_future_cancelled_reservations',
 					processedEvents: originalProcessedEvents, // Convert to JSON string
 					signature_id: signature, // Pass the signature in the AJAX request
-					room_id: roomID,
+					room_id: the_room_id,
 					ics_id: icsID,
 				},
 				success: function(response) {
