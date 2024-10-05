@@ -8,15 +8,15 @@ class Availablity_Calendar_Year extends Availablity_Calendar_Base {
 	public function __construct( $stay_start_date = null, $stay_end_date = null ) {
 		parent::__construct( $stay_start_date, $stay_end_date );
 
-		add_action( 'admin_menu', array( $this, 'AvailablityCalendarYearDisplay' ) );
+		add_action( 'admin_menu', array( $this, 'availablity_calendar_year_display' ) );
 	}
 
 	/**
-	 * Method AvailablityCalendarYearDisplay Add the Availability menu item to the admin menu
+	 * Method availablity_calendar_year_display Add the Availability menu item to the admin menu
 	 *
 	 * @return void
 	 */
-	public function AvailablityCalendarYearDisplay() {
+	public function availablity_calendar_year_display() {
 		// Add the Availability submenu item under the parent menu
 		add_submenu_page(
 			'slgc-dashboard',
@@ -24,21 +24,21 @@ class Availablity_Calendar_Year extends Availablity_Calendar_Base {
 			__( 'Annual Availability', 'staylodgic' ),
 			'edit_posts',
 			'slgc-availability-yearly',
-			array( $this, 'room_Reservation_Plugin_Display_Availability_Calendar_Yearly' )
+			array( $this, 'room_reservation_plugin_display_availability_calendar_yearly' )
 		);
 	}
 
 	/**
-	 * Method room_Reservation_Plugin_Display_Availability_Calendar_Yearly
+	 * Method room_reservation_plugin_display_availability_calendar_yearly
 	 *
 	 * @return void
 	 */
-	public function room_Reservation_Plugin_Display_Availability_Calendar_Yearly() {
+	public function room_reservation_plugin_display_availability_calendar_yearly() {
 		// Output the HTML for the Availability page
 		?>
 		<div class="wrap">
 			<?php
-			if ( ! \Staylodgic\Rooms::hasRooms() ) {
+			if ( ! \Staylodgic\Rooms::has_rooms() ) {
 				echo '<h1>' . __( 'No Rooms Found', 'staylodgic' ) . '</h1>';
 				return;
 			} else {

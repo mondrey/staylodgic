@@ -344,7 +344,7 @@ class Invoicing
                 $this->bookingStatus = __('Booking Confirmed', 'staylodgic');
             }
             $this->roomType = $reservations_instance->get_room_name_for_reservation($reservationID);
-            $this->numberDays = $reservations_instance->countReservationDays($reservationID);
+            $this->numberDays = $reservations_instance->count_reservation_days($reservationID);
             // Add other reservation details as needed
 
             $taxStatus = get_post_meta($reservationID, 'staylodgic_tax', true);

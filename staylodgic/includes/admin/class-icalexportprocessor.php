@@ -244,7 +244,7 @@ class IcalExportProcessor
     public function download_reservations_ical($room_id)
     {
         $reservation_instance = new \Staylodgic\Reservations($stay_date_string = '', $room_id);
-        $reservations_query = $reservation_instance->getReservationsForRoom(false, false, false, false, $room_id);
+        $reservations_query = $reservation_instance->get_reservations_for_room(false, false, false, false, $room_id);
 
         // Extract post objects from WP_Query
         $reservations = $reservations_query->posts;
@@ -277,7 +277,7 @@ class IcalExportProcessor
 
         // Initialize Reservations instance with start date and end date
         $reservation_instance = new \Staylodgic\Reservations($start_date, $room_id);
-        $reservations_query = $reservation_instance->getReservationsForRoom($start_date, $end_date, false, false, $room_id);
+        $reservations_query = $reservation_instance->get_reservations_for_room($start_date, $end_date, false, false, $room_id);
 
         // Extract post objects from WP_Query
         $reservations = $reservations_query->posts;
@@ -317,7 +317,7 @@ class IcalExportProcessor
 
             // Initialize Reservations instance with start date and end date
             $reservation_instance = new \Staylodgic\Reservations($start_date);
-            $reservations_query = $reservation_instance->getReservationsForRoom($start_date, $end_date, $reservation_status = 'confirmed', false, $room->ID);
+            $reservations_query = $reservation_instance->get_reservations_for_room($start_date, $end_date, $reservation_status = 'confirmed', false, $room->ID);
 
             // Extract post objects from WP_Query
             $reservations = $reservations_query->posts;

@@ -101,13 +101,13 @@ class Cache
     }
     
     /**
-     * Method deleteCache
+     * Method delete_cache
      *
      * @param $transient_key
      *
      * @return void
      */
-    public function deleteCache( $transient_key = false ) {
+    public function delete_cache( $transient_key = false ) {
 
         if (!$transient_key) {
             $transient_key = $this->transient_key;
@@ -220,11 +220,11 @@ class Cache
     }
     
     /**
-     * Method isCacheAllowed
+     * Method is_cache_allowed
      *
      * @return void
      */
-    public function isCacheAllowed()
+    public function is_cache_allowed()
     {
 
         return true;

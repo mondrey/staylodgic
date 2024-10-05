@@ -83,7 +83,7 @@ class staylodgic_Reservation_Posts
                 break;
             case "reservation_checkinout":
                 $reservation_checkin       = $reservation_instance->get_checkin_date();
-                $reservation_checkout      = $reservation_instance->getCheckoutDate();
+                $reservation_checkout      = $reservation_instance->get_checkout_date();
                 $reservation_staying       = $reservation_instance->isGuestCurrentlyStaying();
                 $reservation_todaycheckin  = $reservation_instance->isGuestCheckingInToday();
                 $reservation_todaycheckout = $reservation_instance->isGuestCheckingOutToday();
@@ -109,7 +109,7 @@ class staylodgic_Reservation_Posts
                 }
                 break;
             case "reservation_nights":
-                $reservation_nights = $reservation_instance->countReservationDays();
+                $reservation_nights = $reservation_instance->count_reservation_days();
                 echo esc_attr($reservation_nights);
                 break;
             case "reservation_status":

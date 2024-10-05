@@ -129,11 +129,11 @@ class Modals
 	}
 	
 	/**
-	 * Method quanityModal
+	 * Method quanity_modal
 	 *
 	 * @return void
 	 */
-	public static function quanityModal()
+	public static function quanity_modal()
 	{
 	?>
 		<!-- Bootstrap Modal -->
@@ -185,11 +185,11 @@ class Modals
 	}
 	
 	/**
-	 * Method ratesModal
+	 * Method rates_modal
 	 *
 	 * @return void
 	 */
-	public static function ratesModal()
+	public static function rates_modal()
 	{
 	?>
 		<!-- Bootstrap Modal -->

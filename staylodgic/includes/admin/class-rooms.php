@@ -17,11 +17,11 @@ class Rooms
     }
     
     /**
-     * Method hasRooms
+     * Method has_rooms
      *
      * @return void
      */
-    public static function hasRooms()
+    public static function has_rooms()
     {
         $args = array(
             'post_type'      => 'slgc_room',
@@ -522,7 +522,7 @@ class Rooms
             $stay_end_date = $stay_start_date;
         }
 
-        $numberOfDaysInSelection = \Staylodgic\Common::countDays_BetweenDates($stay_start_date, $stay_end_date);
+        $numberOfDaysInSelection = \Staylodgic\Common::count_days_between_dates($stay_start_date, $stay_end_date);
 
         if ($numberOfDaysInSelection > 64) {
             // Return an error response if dateRange is invalid
@@ -713,7 +713,7 @@ class Rooms
             $stay_end_date = $stay_start_date;
         }
 
-        $numberOfDaysInSelection = \Staylodgic\Common::countDays_BetweenDates($stay_start_date, $stay_end_date);
+        $numberOfDaysInSelection = \Staylodgic\Common::count_days_between_dates($stay_start_date, $stay_end_date);
 
         if ($numberOfDaysInSelection > 64) {
             // Return an error response if dateRange is invalid

@@ -273,7 +273,7 @@
 				type: "POST",
 				url: ajaxurl,
 				data: {
-					action: "update_availDisplayConfirmedStatus",
+					action: "update_avail_display_confirmed_status",
 					confirmed_only: confirmedOnly,
 					staylodgic_availabilitycalendar_nonce:
 						staylodgic_availabilitycalendar_nonce,
@@ -1083,7 +1083,7 @@
 					type: "POST",
 					url: ajaxurl,
 					data: {
-						action: "get_Selected_Range_AvailabilityCalendar",
+						action: "get_selected_range_availability_calendar",
 						start_date: start_date,
 						end_date: end_date,
 						staylodgic_availabilitycalendar_nonce:

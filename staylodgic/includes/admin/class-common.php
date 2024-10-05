@@ -122,14 +122,14 @@ class Common
 	}
 	
 	/**
-	 * Method countDays_BetweenDates
+	 * Method count_days_between_dates
 	 *
 	 * @param $stay_start_date
 	 * @param $stay_end_date
 	 *
 	 * @return void
 	 */
-	public static function countDays_BetweenDates($stay_start_date, $stay_end_date)
+	public static function count_days_between_dates($stay_start_date, $stay_end_date)
 	{
 		// Create DateTime objects for the start and end dates
 		$startDateTime = new \DateTime($stay_start_date);
@@ -139,10 +139,10 @@ class Common
 		$interval = $endDateTime->diff($startDateTime);
 
 		// Extract the number of days from the interval
-		$daysBetween = $interval->days;
+		$days_between = $interval->days;
 
 		// Return the result
-		return $daysBetween;
+		return $days_between;
 	}
 
 	/**

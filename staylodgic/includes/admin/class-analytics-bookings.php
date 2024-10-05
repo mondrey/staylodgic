@@ -67,7 +67,7 @@ class Analytics_Bookings {
 
 		echo '<div class="staylodgic_analytics_wrap">';
 
-		if ( \Staylodgic\Rooms::hasRooms() ) {
+		if ( \Staylodgic\Rooms::has_rooms() ) {
 			// Add the logo image below the heading
 			echo '<div class="staylodgic-overview-heading">';
 			echo '<h1>' . __( 'Bookings Overview', 'staylodgic' ) . '</h1>';

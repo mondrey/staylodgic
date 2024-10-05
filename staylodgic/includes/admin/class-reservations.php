@@ -287,7 +287,7 @@ class Reservations
     }
     
     /**
-     * Method getReservationsForRoom
+     * Method get_reservations_for_room
      *
      * @param $checkin_date
      * @param $checkout_date
@@ -297,7 +297,7 @@ class Reservations
      *
      * @return void
      */
-    public function getReservationsForRoom( $checkin_date = false, $checkout_date = false, $reservation_status = false, $reservation_substatus = false, $room_id = false ) {
+    public function get_reservations_for_room( $checkin_date = false, $checkout_date = false, $reservation_status = false, $reservation_substatus = false, $room_id = false ) {
 
         if (!$room_id) {
             $room_id = $this->room_id;
@@ -372,7 +372,7 @@ class Reservations
     public function getRoomReservationsForDateRange( $stay_start_date, $stay_end_date, $the_room_id )
     {
 
-        $query          = $this->getReservationsForRoom( $stay_start_date, $stay_end_date, $reservation_status = 'confirmed', $reservation_substatus = false, $the_room_id );
+        $query          = $this->get_reservations_for_room( $stay_start_date, $stay_end_date, $reservation_status = 'confirmed', $reservation_substatus = false, $the_room_id );
         $reserved_rooms = 0;
 
         $reserved_array = array();
@@ -423,7 +423,7 @@ class Reservations
     public function calculateReservedRooms()
     {
 
-        $query          = $this->getReservationsForRoom();
+        $query          = $this->get_reservations_for_room();
         $reserved_rooms = 0;
 
         if ($query->have_posts()) {
@@ -751,7 +751,7 @@ class Reservations
                         continue;
                     }
 
-                    $checkout = $this->getCheckoutDate($reservation_id);
+                    $checkout = $this->get_checkout_date($reservation_id);
                     if ($day < $checkout) {
                         $occupied_count++;
                     }
@@ -863,13 +863,13 @@ class Reservations
     }
     
     /**
-     * Method getReservationGuestName
+     * Method get_reservation_guest_name
      *
      * @param $booking_number $booking_number [explicite description]
      *
      * @return void
      */
-    public function getReservationGuestName( $booking_number = false )
+    public function get_reservation_guest_name( $booking_number = false )
     {
         // Get the booking number from the reservation post meta
         if (!$booking_number) {
@@ -956,11 +956,11 @@ class Reservations
     }
     
     /**
-     * Method countReservationDays
+     * Method count_reservation_days
      *
      * @return void
      */
-    public function countReservationDays()
+    public function count_reservation_days()
     {
 
         $reservation_post_id = $this->reservation_id;
@@ -978,13 +978,13 @@ class Reservations
     }
     
     /**
-     * Method getReservationChannel
+     * Method get_reservation_channel
      *
      * @param $reservation_id $reservation_id [explicite description]
      *
      * @return void
      */
-    public function getReservationChannel($reservation_id = false)
+    public function get_reservation_channel($reservation_id = false)
     {
 
         if (!$reservation_id) {
@@ -1016,13 +1016,13 @@ class Reservations
     }
     
     /**
-     * Method getCheckoutDate
+     * Method get_checkout_date
      *
      * @param $reservation_id $reservation_id [explicite description]
      *
      * @return void
      */
-    public function getCheckoutDate($reservation_id = false)
+    public function get_checkout_date($reservation_id = false)
     {
 
         if (!$reservation_id) {
@@ -1242,7 +1242,7 @@ class Reservations
     }
     
     /**
-     * Method isRoom_For_Day_Fullybooked
+     * Method is_room_for_the_day_fullybooked
      *
      * @param $stay_room_id $stay_room_id [explicite description]
      * @param $stay_date_string $stay_date_string [explicite description]
@@ -1250,7 +1250,7 @@ class Reservations
      *
      * @return void
      */
-    public function isRoom_For_Day_Fullybooked($stay_room_id = false, $stay_date_string = false, $excluded_reservation_id = null)
+    public function is_room_for_the_day_fullybooked($stay_room_id = false, $stay_date_string = false, $excluded_reservation_id = null)
     {
 
         if (!$stay_room_id) {
@@ -1350,7 +1350,7 @@ class Reservations
                 $adjusted_date_string = $adjusted_date->format("Y-m-d");
 
                 $reservation_instance = new \Staylodgic\Reservations( $date_string, $room->ID );
-                $remaining_rooms      = $reservation_instance->remainingRooms_For_Day();
+                $remaining_rooms      = $reservation_instance->remaining_rooms_for_day();
                 
                 $dailyRoomAvailability[$date_string] += $remaining_rooms;
             }
@@ -1394,7 +1394,7 @@ class Reservations
             foreach ($daterange as $date) {
                 $date_string = $date->format("Y-m-d");
                 // Check if the room is fully booked for the given date
-                if (!$this->isRoom_For_Day_Fullybooked($room->ID, $date_string, $reservationid = false)) {
+                if (!$this->is_room_for_the_day_fullybooked($room->ID, $date_string, $reservationid = false)) {
                     // If the room is fully booked for any of the dates in the range, return true
                     $room_availablity[$room->ID][$date_string] = '1';
                     $count++;
@@ -1439,7 +1439,7 @@ class Reservations
 
         foreach ($daterange as $date) {
             // Check if the room is fully booked for the given date
-            if ($this->isRoom_For_Day_Fullybooked($stay_room_id, $date->format("Y-m-d"), $reservationid)) {
+            if ($this->is_room_for_the_day_fullybooked($stay_room_id, $date->format("Y-m-d"), $reservationid)) {
                 // If the room is fully booked for any of the dates in the range, return true
                 return true;
             }
@@ -1481,7 +1481,7 @@ class Reservations
      *
      * @return void
      */
-    public function wasRoom_Ever_Opened($stay_date_string = false, $room_id = false)
+    public function was_room_ever_opened($stay_date_string = false, $room_id = false)
     {
 
         if (!$room_id) {
@@ -1496,7 +1496,7 @@ class Reservations
     }
     
     /**
-     * Method remainingRooms_For_Day
+     * Method remaining_rooms_for_day
      *
      * @param $stay_date_string $stay_date_string [explicite description]
      * @param $room_id $room_id [explicite description]
@@ -1504,7 +1504,7 @@ class Reservations
      *
      * @return void
      */
-    public function remainingRooms_For_Day($stay_date_string = false, $room_id = false, $excluded_reservation_id = false)
+    public function remaining_rooms_for_day($stay_date_string = false, $room_id = false, $excluded_reservation_id = false)
     {
 
         if (!$room_id) {
@@ -1539,7 +1539,7 @@ class Reservations
      *
      * @return void
      */
-    public function buildReservationsDataForRoomForDay( $reservations, $reservation_status = false, $reservation_substatus = false, $stay_date_string = false, $room_id = false)
+    public function build_reservations_data_for_room_for_day( $reservations, $reservation_status = false, $reservation_substatus = false, $stay_date_string = false, $room_id = false)
     {
 
         if (!$room_id) {
