@@ -41,7 +41,7 @@ class Availablity_Calendar_Base {
 	 */
 	public function set_start_date( $stay_start_date ) {
 		// Set stay_start_date to the 1st of the current month
-		$this->stay_start_date = date( 'Y-m-01' );
+		$this->stay_start_date = gmdate( 'Y-m-01' );
 	}
 
 	/**
@@ -53,7 +53,7 @@ class Availablity_Calendar_Base {
 	 */
 	public function set_end_date( $stay_end_date ) {
 		// Set stay_end_date to the 5th of the next month
-		$this->stay_end_date = date( 'Y-m-05', strtotime( '+1 month' ) );
+		$this->stay_end_date = gmdate( 'Y-m-05', strtotime( '+1 month' ) );
 	}
 
 	/**

@@ -16,13 +16,13 @@ class Analytics_Bookings {
 	private $display_dayafter;
 
 	public function __construct( $booking_id, $info = 'today', $type = 'bar', $data = array(), $options = array(), $guests = array(), $bookings = array() ) {
-		$this->booking_id       = $booking_id;
-		$this->info     = $info;
-		$this->type     = $type;
-		$this->data     = $data;
-		$this->options  = $options;
-		$this->guests   = $guests;
-		$this->bookings = $bookings;
+		$this->booking_id = $booking_id;
+		$this->info       = $info;
+		$this->type       = $type;
+		$this->data       = $data;
+		$this->options    = $options;
+		$this->guests     = $guests;
+		$this->bookings   = $bookings;
 
 		$this->display_today    = '<span class="display-stat-date">' . esc_html( gmdate( 'M jS' ) ) . '</span>';
 		$this->display_tomorrow = '<span class="display-stat-date">' . esc_html( gmdate( 'M jS', strtotime( '+1 day' ) ) ) . '</span>';
@@ -500,7 +500,7 @@ class Analytics_Bookings {
 	 */
 	private function get_past_twelve_months_adr_data() {
 		$labels             = array();
-		$adr_data            = array();
+		$adr_data           = array();
 		$stay_current_month = gmdate( 'Y-m' );
 
 		$cache = new \Staylodgic\Cache();
@@ -540,7 +540,7 @@ class Analytics_Bookings {
 				);
 
 				$total_revenue = 0;
-				$total_nights   = 0;
+				$total_nights  = 0;
 				if ( $revenue_query->have_posts() ) {
 					while ( $revenue_query->have_posts() ) {
 						$revenue_query->the_post();
@@ -552,7 +552,7 @@ class Analytics_Bookings {
 							$stay_checkin_date  = new \DateTime( $checkin );
 							$stay_checkout_date = new \DateTime( $checkout );
 							$nights             = $stay_checkout_date->diff( $stay_checkin_date )->days;
-							$total_nights       += $nights;
+							$total_nights      += $nights;
 						}
 					}
 				}
@@ -921,7 +921,7 @@ class Analytics_Bookings {
 						$guest_list_html .= '<td scope="row">';
 
 						$registry_instance = new \Staylodgic\GuestRegistry();
-						$res_reg_ids         = $registry_instance->fetch_res_reg_ids_by_booking_number( $booking['booking_number'] );
+						$res_reg_ids       = $registry_instance->fetch_res_reg_ids_by_booking_number( $booking['booking_number'] );
 						if ( isset( $res_reg_ids ) && is_array( $res_reg_ids ) ) {
 							$guest_list_html .= $registry_instance->output_registration_and_occupancy( $res_reg_ids['reservationID'], $res_reg_ids['guestRegisterID'], 'default' );
 							$guest_list_html .= '<div class="booking-dashboard registration">';
@@ -999,4 +999,4 @@ class Analytics_Bookings {
 }
 
 $booking_id = false;
-$analytics = new \Staylodgic\Analytics_Bookings( $booking_id );
+$analytics  = new \Staylodgic\Analytics_Bookings( $booking_id );
