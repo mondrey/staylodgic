@@ -533,7 +533,7 @@ class OptionsPanel
                 'updated'
             );
 
-            \Staylodgic\Cache::clearAllCache();
+            \Staylodgic\Cache::clear_all_cache();
 
             $this->create_initial_pages();
         }

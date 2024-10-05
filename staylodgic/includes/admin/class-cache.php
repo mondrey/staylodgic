@@ -1,177 +1,176 @@
 <?php
 namespace Staylodgic;
 
-class Cache
-{
+class Cache {
 
-    private $start_date;
-    private $end_date;
-    private $room_id;
-    private $transient_key;
-    private $contents;
 
-    /**
-     * Summary of __construct
-     * @param mixed $date
-     * @param mixed $room_id
-     * @param mixed $reservation_id
-     * @param mixed $reservation_id_excluded
-     */
-    public function __construct($room_id = false, $start_date = false, $end_date = false, $transient_key = false, $contents = false)
-    {
-        $this->start_date    = $start_date;
-        $this->end_date      = $end_date;
-        $this->room_id       = $room_id;
-        $this->transient_key = $transient_key;
-        $this->contents      = $contents;
+	private $start_date;
+	private $end_date;
+	private $room_id;
+	private $transient_key;
+	private $contents;
 
-    }
- 
-    /**
-     * Method Deletes all cache entries and the cache index.
-     *
-     * @return void
-     */
-    public static function clearAllCache() {
-        $cacheIndexKey = 'staylodgic_avail_calendar_index';
-        $cacheIndex = get_transient($cacheIndexKey);
+	/**
+	 * Summary of __construct
+	 * @param mixed $date
+	 * @param mixed $room_id
+	 * @param mixed $reservation_id
+	 * @param mixed $reservation_id_excluded
+	 */
+	public function __construct( $room_id = false, $start_date = false, $end_date = false, $transient_key = false, $contents = false ) {
+		$this->start_date    = $start_date;
+		$this->end_date      = $end_date;
+		$this->room_id       = $room_id;
+		$this->transient_key = $transient_key;
+		$this->contents      = $contents;
+	}
 
-        if (is_array($cacheIndex)) {
-            foreach ($cacheIndex as $transientKey => $details) {
-                // Delete each transient in the index
-                delete_transient($transientKey);
-            }
-        }
+	/**
+	 * Method Deletes all cache entries and the cache index.
+	 *
+	 * @return void
+	 */
+	public static function clear_all_cache() {
+		$cache_index_key = 'staylodgic_avail_calendar_index';
+		$cache_index     = get_transient( $cache_index_key );
 
-        // Clear the cache index
-        delete_transient($cacheIndexKey);
-    }
-    
-    /**
-     * Method updateCacheIndex
-     *
-     * @param $transient_key
-     *
-     * @return void
-     */
-    private function updateCacheIndex( $transient_key = false ) {
+		if ( is_array( $cache_index ) ) {
+			foreach ( $cache_index as $cache_transient_key => $details ) {
+				// Delete each transient in the index
+				delete_transient( $cache_transient_key );
+			}
+		}
 
-        if (!$transient_key) {
-            $transient_key = $this->transient_key;
-        }
+		// Clear the cache index
+		delete_transient( $cache_index_key );
+	}
 
-        $cacheIndexKey = 'staylodgic_avail_calendar_index';
-        $cacheIndex = get_transient($cacheIndexKey) ?: [];
+	/**
+	 * Method update_cache_index
+	 *
+	 * @param $transient_key
+	 *
+	 * @return void
+	 */
+	private function update_cache_index( $transient_key = false ) {
 
-        $cacheIndex[$transient_key] = [
-            'room_id' => $this->room_id,
-            'start_date' => $this->start_date,
-            'end_date' => $this->end_date
-        ];
+		if ( ! $transient_key ) {
+			$transient_key = $this->transient_key;
+		}
 
-        set_transient($cacheIndexKey, $cacheIndex, 0); // No expiration
-    }
-    
-    /**
-     * Method generate_analytics_cache_key
-     *
-     * @param $key
-     *
-     * @return void
-     */
-    public function generate_analytics_cache_key( $key )
-    {
-        
-        $transient_key = 'staylodgic_analytics_' . md5($key);
+		$cache_index_key = 'staylodgic_avail_calendar_index';
+		$cache_index     = get_transient( $cache_index_key );
 
-        return $transient_key;
-    }
-    
-    /**
-     * Method generateRoomCacheKey
-     *
-     * @return void
-     */
-    public function generateRoomCacheKey()
-    {
-        
-        $transient_key = 'staylodgic_avail_calendar_' . md5($this->room_id . '_' . $this->start_date . '_' . $this->end_date);
+		if ( ! $cache_index ) {
+			$cache_index = array();
+		}
 
-        return $transient_key;
-    }
-    
-    /**
-     * Method delete_cache
-     *
-     * @param $transient_key
-     *
-     * @return void
-     */
-    public function delete_cache( $transient_key = false ) {
+		$cache_index[ $transient_key ] = array(
+			'room_id'    => $this->room_id,
+			'start_date' => $this->start_date,
+			'end_date'   => $this->end_date,
+		);
 
-        if (!$transient_key) {
-            $transient_key = $this->transient_key;
-        }
-        // Generate the transient key in the same way it was generated when set
-        $transient_key = $this->generateRoomCacheKey();
-        
-        // Use delete_transient to remove it
-        delete_transient($transient_key);
-        $this->deleteCacheIndexEntry();
-    }
-    
-    /**
-     * Method deleteCacheIndexEntry
-     *
-     * @return void
-     */
-    private function deleteCacheIndexEntry() {
-        $cacheIndexKey = 'staylodgic_avail_calendar_index';
-        $cacheIndex = get_transient($cacheIndexKey);
+		set_transient( $cache_index_key, $cache_index, 0 ); // No expiration
+	}
 
-        if (isset($cacheIndex[$this->transient_key])) {
-            unset($cacheIndex[$this->transient_key]);
-            set_transient($cacheIndexKey, $cacheIndex, 0); // Update the index without the deleted entry
-        }
-    }
-    
-    /**
-     * Method invalidateCachesByRoomAndDate
-     *
-     * @param $room_id
-     * @param $affectedStartDate
-     * @param $affectedEndDate
-     *
-     * @return void
-     */
-    public static function invalidateCachesByRoomAndDate($room_id, $affectedStartDate, $affectedEndDate) {
-        $cacheIndexKey = 'staylodgic_avail_calendar_index';
-        $cacheIndex = get_transient($cacheIndexKey);
+	/**
+	 * Method generate_analytics_cache_key
+	 *
+	 * @param $key
+	 *
+	 * @return void
+	 */
+	public function generate_analytics_cache_key( $key ) {
 
-        if ( isset( $cacheIndex ) && is_array( $cacheIndex ) ) {
-    
-            foreach ($cacheIndex as $transientKey => $details) {
-                if ($details['room_id'] == $room_id && 
-                    ($affectedStartDate <= $details['end_date'] && $affectedEndDate >= $details['start_date'])) {
-                    delete_transient($transientKey);
-                    unset($cacheIndex[$transientKey]);
-                }
-            }
-    
-            set_transient($cacheIndexKey, $cacheIndex, 0);
-        }
-    }
-    
-    /**
-     * Method setCache
-     *
-     * @param $transient_key
-     * @param $contents
-     *
-     * @return void
-     */
-    public function setCache($transient_key = false, $contents = false)
-    {
+		$transient_key = 'staylodgic_analytics_' . md5( $key );
+
+		return $transient_key;
+	}
+
+	/**
+	 * Method generate_room_cache_key
+	 *
+	 * @return void
+	 */
+	public function generate_room_cache_key() {
+
+		$transient_key = 'staylodgic_avail_calendar_' . md5( $this->room_id . '_' . $this->start_date . '_' . $this->end_date );
+
+		return $transient_key;
+	}
+
+	/**
+	 * Method delete_cache
+	 *
+	 * @param $transient_key
+	 *
+	 * @return void
+	 */
+	public function delete_cache( $transient_key = false ) {
+
+		if ( ! $transient_key ) {
+			$transient_key = $this->transient_key;
+		}
+		// Generate the transient key in the same way it was generated when set
+		$transient_key = $this->generate_room_cache_key();
+
+		// Use delete_transient to remove it
+		delete_transient( $transient_key );
+		$this->delete_cache_index_entry();
+	}
+
+	/**
+	 * Method delete_cache_index_entry
+	 *
+	 * @return void
+	 */
+	private function delete_cache_index_entry() {
+		$cache_index_key = 'staylodgic_avail_calendar_index';
+		$cache_index     = get_transient( $cache_index_key );
+
+		if ( isset( $cache_index[ $this->transient_key ] ) ) {
+			unset( $cache_index[ $this->transient_key ] );
+			set_transient( $cache_index_key, $cache_index, 0 ); // Update the index without the deleted entry
+		}
+	}
+
+	/**
+	 * Method invalidate_caches_by_room_and_date
+	 *
+	 * @param $room_id
+	 * @param $affected_start_date
+	 * @param $affected_end_date
+	 *
+	 * @return void
+	 */
+	public static function invalidate_caches_by_room_and_date( $room_id, $affected_start_date, $affected_end_date ) {
+		$cache_index_key = 'staylodgic_avail_calendar_index';
+		$cache_index     = get_transient( $cache_index_key );
+
+		if ( isset( $cache_index ) && is_array( $cache_index ) ) {
+
+			foreach ( $cache_index as $cache_transient_key => $details ) {
+				if ( $details['room_id'] == $room_id &&
+					( $affected_start_date <= $details['end_date'] && $affected_end_date >= $details['start_date'] ) ) {
+					delete_transient( $cache_transient_key );
+					unset( $cache_index[ $cache_transient_key ] );
+				}
+			}
+
+			set_transient( $cache_index_key, $cache_index, 0 );
+		}
+	}
+
+	/**
+	 * Method set_cache
+	 *
+	 * @param $transient_key
+	 * @param $contents
+	 *
+	 * @return void
+	 */
+	public function set_cache( $transient_key = false, $contents = false ) {
 
 		if ( ! $transient_key ) {
 			$transient_key = $this->transient_key;
@@ -180,57 +179,52 @@ class Cache
 			$contents = $this->contents;
 		}
 
-        set_transient($transient_key, $contents, 12 * HOUR_IN_SECONDS);
-        $this->updateCacheIndex( $transient_key );
-    }
-    
-    /**
-     * Method get_cache
-     *
-     * @param $transient_key
-     *
-     * @return void
-     */
-    public function get_cache($transient_key = false)
-    {
+		set_transient( $transient_key, $contents, 12 * HOUR_IN_SECONDS );
+		$this->update_cache_index( $transient_key );
+	}
 
-        if (!$transient_key) {
-            $transient_key = $this->transient_key;
-        }
-        $cached_calendar = get_transient($transient_key);
+	/**
+	 * Method get_cache
+	 *
+	 * @param $transient_key
+	 *
+	 * @return void
+	 */
+	public function get_cache( $transient_key = false ) {
 
-        return $cached_calendar;
-    }
-    
-    /**
-     * Method has_cache
-     *
-     * @param $transient_key
-     *
-     * @return void
-     */
-    public function has_cache($transient_key = false)
-    {
+		if ( ! $transient_key ) {
+			$transient_key = $this->transient_key;
+		}
+		$cached_calendar = get_transient( $transient_key );
 
-        if (false !== $this->get_cache($transient_key)) {
-            return true;
-        }
+		return $cached_calendar;
+	}
 
-        return false;
-    }
-    
-    /**
-     * Method is_cache_allowed
-     *
-     * @return void
-     */
-    public function is_cache_allowed()
-    {
+	/**
+	 * Method has_cache
+	 *
+	 * @param $transient_key
+	 *
+	 * @return void
+	 */
+	public function has_cache( $transient_key = false ) {
 
-        return true;
+		if ( false !== $this->get_cache( $transient_key ) ) {
+			return true;
+		}
 
-    }
+		return false;
+	}
 
+	/**
+	 * Method is_cache_allowed
+	 *
+	 * @return void
+	 */
+	public function is_cache_allowed() {
+
+		return true;
+	}
 }
 
 $instance = new \Staylodgic\Cache();

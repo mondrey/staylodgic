@@ -1582,7 +1582,7 @@ function staylodgic_preProcess($post_id, $post, $update)
 
     error_log('-------- removeCache staylodgic_preProcess ---------');
     error_log($checkin . ' ++++ ' . $checkout);
-    \Staylodgic\Cache::invalidateCachesByRoomAndDate($room_id, $checkin, $checkout);
+    \Staylodgic\Cache::invalidate_caches_by_room_and_date($room_id, $checkin, $checkout);
 
     // Perform actions or operations based on the meta value.
     // For example:
@@ -1608,7 +1608,7 @@ function staylodgic_postProcess($post_id, $post, $update)
 
     error_log('-------- removeCache staylodgic_postProcess ---------');
     error_log($checkin . ' ++++ ' . $checkout);
-    \Staylodgic\Cache::invalidateCachesByRoomAndDate($room_id, $checkin, $checkout);
+    \Staylodgic\Cache::invalidate_caches_by_room_and_date($room_id, $checkin, $checkout);
 
     // Perform actions or operations based on the meta value.
     // For example:

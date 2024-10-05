@@ -549,7 +549,7 @@ class Analytics_Activity {
 
 				// Cache the data if it's not the current month
 				if ( $month !== $stay_current_month ) {
-					$cache->setCache( $cache_key, $total_revenue );
+					$cache->set_cache( $cache_key, $total_revenue );
 				}
 			}
 
@@ -654,7 +654,7 @@ class Analytics_Activity {
 						'confirmed' => $confirmed_query->found_posts,
 						'cancelled' => $cancelled_query->found_posts,
 					);
-					$cache->setCache( $cache_key, $cache_data );
+					$cache->set_cache( $cache_key, $cache_data );
 				}
 			}
 		}

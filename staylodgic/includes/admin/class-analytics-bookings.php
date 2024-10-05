@@ -562,7 +562,7 @@ class Analytics_Bookings {
 
 				// Cache the data if it's not the current month
 				if ( $month !== $stay_current_month ) {
-					$cache->setCache( $cache_key, $adr );
+					$cache->set_cache( $cache_key, $adr );
 				}
 			}
 
@@ -643,7 +643,7 @@ class Analytics_Bookings {
 
 				// Cache the data if it's not the current month
 				if ( $month != $stay_current_month ) {
-					$cache->setCache( $cache_key, $total_revenue );
+					$cache->set_cache( $cache_key, $total_revenue );
 				}
 			}
 
@@ -749,7 +749,7 @@ class Analytics_Bookings {
 						'cancelled' => $cancelled_query->found_posts,
 					);
 
-					$cache->setCache( $cache_key, $cache_data );
+					$cache->set_cache( $cache_key, $cache_data );
 				}
 			}
 		}

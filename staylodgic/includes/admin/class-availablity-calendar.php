@@ -387,7 +387,7 @@ class Availablity_Calendar extends Availablity_Calendar_Base {
 
 			$cache_instance = new \Staylodgic\Cache( $the_room_id, $start_date_string, $end_date_string );
 
-			$transient_key   = $cache_instance->generateRoomCacheKey();
+			$transient_key   = $cache_instance->generate_room_cache_key();
 			$cached_calendar = $cache_instance->get_cache( $transient_key );
 
 			$room_reservations_instance = new \Staylodgic\Reservations( $stay_date_string = false, $the_room_id );
@@ -549,7 +549,7 @@ class Availablity_Calendar extends Availablity_Calendar_Base {
 
 			if ( ! $this->using_cache ) {
 
-				$cache_instance->setCache( $transient_key, $this->calendar_data );
+				$cache_instance->set_cache( $transient_key, $this->calendar_data );
 			}
 
 		endforeach;
