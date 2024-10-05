@@ -2,7 +2,7 @@
 	$(document).ready(function () {
 		var fileSignature = [];
 		var originalProcessedEvents = [];
-		var processedEvents = []; // Array to store all processed events
+		var processed_events = []; // Array to store all processed events
 		var tbody; // Variable to store the reference to the tbody element
 
 		var the_room_id;
@@ -185,7 +185,7 @@
 				success: function(response) {
 					if(response.success) {
 						originalProcessedEvents = JSON.parse(JSON.stringify(response.data.processed)); // Create a deep copy of the original processed events
-						processedEvents = response.data.processed;
+						processed_events = response.data.processed;
 						var transientUsed = response.data.transient_used;
 						
 						// Create the table
@@ -206,7 +206,7 @@
 						table.append(tbody);
 						$('#result').empty().append(table);
 
-						total_process = processedEvents.length;
+						total_process = processed_events.length;
 
 						segment_complete = 0;
 						totalSuccess = 0;
@@ -219,7 +219,7 @@
 						// }
 
 						// Start processing events in batches
-						processEventsBatch(processedEvents);
+						processEventsBatch(processed_events);
 					} else {
 						// Display the custom error message from the server
 						var errorMessage = 'Error processing events.';
@@ -257,7 +257,7 @@
 				success: function(response) {
 					if(response.success) {
 						originalProcessedEvents = JSON.parse(JSON.stringify(response.data.processed)); // Create a deep copy of the original processed events
-						processedEvents = response.data.processed;
+						processed_events = response.data.processed;
 						var transientUsed = response.data.transient_used;
 						
 						// Create the table
@@ -278,7 +278,7 @@
 						table.append(tbody);
 						$('#result').empty().append(table);
 
-						total_process = processedEvents.length;
+						total_process = processed_events.length;
 
 						segment_complete = 0;
 						totalSuccess = 0;
@@ -291,7 +291,7 @@
 						// }
 
 						// Start processing events in batches
-						processEventsBatch(processedEvents);
+						processEventsBatch(processed_events);
 					} else {
 						// Display the custom error message from the server
 						var errorMessage = 'Error processing events.';
@@ -326,7 +326,7 @@
 					room_id: the_room_id,
 					ics_url: icsURL,
 					ics_id: icsID,
-					processedEvents: eventsBatch // Pass the processed events batch to the server
+					processed_events: eventsBatch // Pass the processed events batch to the server
 				},
 				success: function(response) {
 					if (response.success) {
@@ -367,7 +367,7 @@
 								processEventsBatch(events);
 							}, 1000);
 						} else {
-							console.log('processedEvents');
+							console.log('processed_events');
 							$('#ical-sync-progress').removeClass('progress-bar-animated');
 							$(".ical-close-button").prop("disabled", false);
 							console.log(fileSignature);
@@ -399,7 +399,7 @@
 				url: ajaxurl,
 				data: {
 					action: 'find_future_cancelled_reservations',
-					processedEvents: originalProcessedEvents, // Convert to JSON string
+					processed_events: originalProcessedEvents, // Convert to JSON string
 					signature_id: signature, // Pass the signature in the AJAX request
 					room_id: the_room_id,
 					ics_id: icsID,
