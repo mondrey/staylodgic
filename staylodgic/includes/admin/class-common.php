@@ -25,14 +25,14 @@ class Common
 	}
 		
 	/**
-	 * Method generatePersonIcons
+	 * Method generate_person_icons
 	 *
 	 * @param $adults $adults
 	 * @param $children $children
 	 *
 	 * @return void
 	 */
-	public static function generatePersonIcons( $adults = 0, $children = 0 ) {
+	public static function generate_person_icons( $adults = 0, $children = 0 ) {
 
 		$html = '';
 

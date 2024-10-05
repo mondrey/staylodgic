@@ -221,14 +221,14 @@ class Rooms
     }
     
     /**
-     * Method getAvailable_Rooms_Rates_Occupants_For_DateRange
+     * Method get_available_rooms_rates_occupants_for_date_range
      *
      * @param $checkin_date $checkin_date [explicite description]
      * @param $checkout_date $checkout_date [explicite description]
      *
      * @return void
      */
-    public function getAvailable_Rooms_Rates_Occupants_For_DateRange($checkin_date, $checkout_date)
+    public function get_available_rooms_rates_occupants_for_date_range($checkin_date, $checkout_date)
     {
         $combo_array = array();
         $available_rooms = array();
@@ -247,7 +247,7 @@ class Rooms
                 
                 $available_roomrates[$room->ID] = self::getRoom_RATE_For_DateRange($room->ID, $checkin_date, $checkout_date);
                 // Get room occupany max numbers
-                $can_accomodate[$room->ID] = self::getMax_room_occupants($room->ID);
+                $can_accomodate[$room->ID] = self::get_max_room_occupants($room->ID);
                 
             }
         }
@@ -299,13 +299,13 @@ class Rooms
     }
     
     /**
-     * Method getMax_room_occupants
+     * Method get_max_room_occupants
      *
      * @param $room_id $room_id [explicite description]
      *
      * @return void
      */
-    public function getMax_room_occupants($room_id)
+    public function get_max_room_occupants($room_id)
     {
 
         $max_children   = '999';

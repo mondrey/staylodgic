@@ -818,7 +818,7 @@ class Analytics_Activity {
 						$adults   = $reservations_instance->get_number_of_adults_for_reservation( $reservation_id );
 						$children = $reservations_instance->get_number_of_children_for_reservation( $reservation_id );
 
-						$guest_list_html .= \Staylodgic\Common::generatePersonIcons( $adults, $children );
+						$guest_list_html .= \Staylodgic\Common::generate_person_icons( $adults, $children );
 
 						$guest_list_html .= '</td>';
 

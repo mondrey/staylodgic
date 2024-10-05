@@ -905,7 +905,7 @@ class Analytics_Bookings {
 						$bedlayout = get_post_meta( $reservation_id, 'staylodgic_reservation_room_bedlayout', true );
 
 						$guest_list_html .= $room_name;
-						$guest_list_html .= '<div class="booking-dashboard bed-layout">' . staylodgic_get_AllBedLayouts( $bedlayout ) . '</div>';
+						$guest_list_html .= '<div class="booking-dashboard bed-layout">' . staylodgic_get_all_bed_layouts( $bedlayout ) . '</div>';
 						$guest_list_html .= '</td>';
 						$guest_list_html .= '<td scope="row">';
 

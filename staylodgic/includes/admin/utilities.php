@@ -350,18 +350,18 @@ function staylodgic_get_new_booking_statuses()
     return $bookingStatuses;
 }
 /**
- * Method staylodgic_get_AllBedLayouts
+ * Method staylodgic_get_all_bed_layouts
  *
  * @param $bedNames $bedNames [explicite description]
  *
  * @return void
  */
-function staylodgic_get_AllBedLayouts($bedNames)
+function staylodgic_get_all_bed_layouts($bedNames)
 {
 	$html           = '';
 	$bedNames_array = explode(' ', $bedNames);
-	foreach ($bedNames_array as $key => $bedName) {
-		$html .= staylodgic_get_BedLayout($bedName, $key);
+	foreach ($bedNames_array as $key => $bed_name) {
+		$html .= staylodgic_get_BedLayout($bed_name, $key);
 	}
 
 	return $html;
@@ -369,32 +369,32 @@ function staylodgic_get_AllBedLayouts($bedNames)
 /**
  * Method staylodgic_get_BedLayout
  *
- * @param $bedName $bedName [explicite description]
- * @param $bedFieldID $bedFieldID [explicite description]
+ * @param $bed_name $bed_name [explicite description]
+ * @param $bed_field_id $bed_field_id [explicite description]
  *
  * @return void
  */
-function staylodgic_get_BedLayout($bedName, $bedFieldID = null)
+function staylodgic_get_BedLayout($bed_name, $bed_field_id = null)
 {
 
-    switch ($bedName) {
+    switch ($bed_name) {
         case 'fullbed':
-            $html = '<div class="guest-bed guest-bed-' . sanitize_title($bedName) . '"></div>';
+            $html = '<div class="guest-bed guest-bed-' . sanitize_title($bed_name) . '"></div>';
             break;
         case 'queenbed':
-            $html = '<div class="guest-bed guest-bed-' . sanitize_title($bedName) . '"></div>';
+            $html = '<div class="guest-bed guest-bed-' . sanitize_title($bed_name) . '"></div>';
             break;
         case 'kingbed':
-            $html = '<div class="guest-bed guest-bed-' . sanitize_title($bedName) . '"></div>';
+            $html = '<div class="guest-bed guest-bed-' . sanitize_title($bed_name) . '"></div>';
             break;
         case 'sofabed':
-            $html = '<div class="guest-bed guest-bed-' . sanitize_title($bedName) . '"></div>';
+            $html = '<div class="guest-bed guest-bed-' . sanitize_title($bed_name) . '"></div>';
             break;
         case 'bunkbed':
-            $html = '<div class="guest-bed guest-bed-' . sanitize_title($bedName) . '"></div>';
+            $html = '<div class="guest-bed guest-bed-' . sanitize_title($bed_name) . '"></div>';
             break;
         case 'twinbed':
-            $html = '<div class="guest-bed type-twinbed-twinbed-' . $bedFieldID . ' guest-bed-' . $bedName . '"></div>';
+            $html = '<div class="guest-bed type-twinbed-twinbed-' . $bed_field_id . ' guest-bed-' . $bed_name . '"></div>';
             break;
     }
 

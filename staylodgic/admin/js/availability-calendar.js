@@ -595,7 +595,7 @@
 						type: "POST",
 						url: ajaxurl,
 						data: {
-							action: "generate_BedMetabox",
+							action: "generate_bed_metabox",
 							the_room_id: selectedValue,
 							fieldID: bedLayoutField,
 							metaValue: bedMetaValue,

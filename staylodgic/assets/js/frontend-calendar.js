@@ -108,7 +108,7 @@
 			var roomPriceTotal = roomOccupiedGroup
 				.find(".room-price-total")
 				.data("roomprice");
-			var bedLayout = $(
+			var stay_bed_layout = $(
 				"input[name='room[" + stay_room_id + "][bedlayout]']:checked"
 			).val();
 			var mealPlanInput = $(
@@ -124,11 +124,11 @@
 			console.log("Got:" + bookingnumber);
 
 			var dataToSend = {
-				action: "process_RoomPrice",
+				action: "process_room_price",
 				booking_number: bookingnumber,
 				room_id: stay_room_id,
 				room_price: roomPriceTotal,
-				bed_layout: bedLayout,
+				bed_layout: stay_bed_layout,
 				meal_plan: mealPlan,
 				meal_plan_price: mealPlanPrice,
 				staylodgic_searchbox_nonce: staylodgic_searchbox_nonce,
@@ -199,7 +199,7 @@
 			var roomPriceTotal = roomOccupiedGroup
 				.find(".room-price-total")
 				.data("roomprice");
-			var bedLayout = $(
+			var stay_bed_layout = $(
 				"input[name='room[" + stay_room_id + "][bedlayout]']:checked"
 			).val();
 			var mealPlanInput = $(
@@ -212,11 +212,11 @@
 			console.log(mealPlanPrice);
 
 			var dataToSend = {
-				action: "process_SelectedRoom",
+				action: "process_selected_room",
 				bookingnumber: bookingnumber,
 				room_id: stay_room_id,
 				room_price: roomPriceTotal,
-				bed_layout: bedLayout,
+				bed_layout: stay_bed_layout,
 				meal_plan: mealPlan,
 				meal_plan_price: mealPlanPrice,
 				staylodgic_roomlistingbox_nonce:
@@ -688,7 +688,7 @@
 						url: frontendAjax.ajaxurl, // the localized URL
 						type: "POST",
 						data: {
-							action: "booking_BookingSearch", // the PHP function to trigger
+							action: "booking_booking_search", // the PHP function to trigger
 							booking_number: stay_booking_number,
 							reservation_date: reservationDate,
 							number_of_adults: numberOfAdults,
@@ -797,7 +797,7 @@
 				url: frontendAjax.ajaxurl, // the localized URL
 				type: "POST",
 				data: {
-					action: "bookRooms",
+					action: "book_rooms",
 					bookingdata: registration_data,
 					booking_number: data_booking_number,
 					full_name: data_full_name,

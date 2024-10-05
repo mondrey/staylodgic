@@ -101,16 +101,16 @@ class EmailDispatcher
     }
 
     /**
-     * Method setBookingConfirmationTemplate
+     * Method set_booking_confirmation_template
      *
      * @param $booking_details
      *
      * @return void
      */
-    public function setBookingConfirmationTemplate($booking_details)
+    public function set_booking_confirmation_template($booking_details)
     {
 
-        $total_price = staylodgic_price($booking_details['totalCost']);
+        $total_price = staylodgic_price($booking_details['stay_total_cost']);
         $property_emailfooter = staylodgic_get_option('property_emailfooter');
         $property_emailfooter_formatted = nl2br($property_emailfooter);
 
@@ -152,7 +152,7 @@ class EmailDispatcher
     public function set_activity_confirmation_template($booking_details)
     {
 
-        $total_price = staylodgic_price($booking_details['totalCost']);
+        $total_price = staylodgic_price($booking_details['stay_total_cost']);
         $activity_emailfooter = staylodgic_get_option('activity_property_emailfooter');
         $activity_emailfooter_formatted = nl2br($activity_emailfooter);
 

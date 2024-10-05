@@ -1312,14 +1312,14 @@ class Reservations
     }
     
     /**
-     * Method daysFullyBooked_For_DateRange
+     * Method days_fully_booked_for_date_range
      *
      * @param $checkin_date $checkin_date [explicite description]
      * @param $checkout_date $checkout_date [explicite description]
      *
      * @return void
      */
-    public function daysFullyBooked_For_DateRange($checkin_date = false, $checkout_date = false)
+    public function days_fully_booked_for_date_range($checkin_date = false, $checkout_date = false)
     {
         // Initialize the date range
         $start     = new \DateTime($checkin_date);
@@ -1368,7 +1368,7 @@ class Reservations
     }    
     
     /**
-     * Method Availability_of_Rooms_For_DateRange
+     * Method availability_of_rooms_for_date_range
      *
      * @param $checkin_date $checkin_date [explicite description]
      * @param $checkout_date $checkout_date [explicite description]
@@ -1376,7 +1376,7 @@ class Reservations
      *
      * @return void
      */
-    public function Availability_of_Rooms_For_DateRange($checkin_date = false, $checkout_date = false, $limit = 10)
+    public function availability_of_rooms_for_date_range($checkin_date = false, $checkout_date = false, $limit = 10)
     {
         // get the date range
         $start     = new \DateTime($checkin_date);

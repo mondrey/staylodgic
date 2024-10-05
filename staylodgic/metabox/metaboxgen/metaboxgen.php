@@ -1034,17 +1034,17 @@ function staylodgic_generate_metaboxes($meta_data, $post_id)
 
                 case 'mealplan_included':
 
-                    $mealPlans = staylodgic_get_option('mealplan');
+                    $meal_plans = staylodgic_get_option('mealplan');
 
-                    if (is_array($mealPlans) && count($mealPlans) > 0) {
-                        $includedMealPlans = array();
-                        $optionalMealPlans = array();
+                    if (is_array($meal_plans) && count($meal_plans) > 0) {
+                        $included_meal_plans = array();
+                        $optional_meal_plans = array();
 
-                        foreach ($mealPlans as $id => $plan) {
+                        foreach ($meal_plans as $id => $plan) {
                             if ($plan['choice'] === 'included') {
-                                $includedMealPlans[$id] = $plan;
+                                $included_meal_plans[$id] = $plan;
                             } elseif ($plan['choice'] === 'optional') {
-                                $optionalMealPlans[$id] = $plan;
+                                $optional_meal_plans[$id] = $plan;
                             }
                         }
 
@@ -1052,8 +1052,8 @@ function staylodgic_generate_metaboxes($meta_data, $post_id)
                         $html_input = '';
 
                         echo '<div class="room-included-meals">';
-                        if (is_array($includedMealPlans) && count($includedMealPlans) > 0) {
-                            foreach ($includedMealPlans as $id => $plan) {
+                        if (is_array($included_meal_plans) && count($included_meal_plans) > 0) {
+                            foreach ($included_meal_plans as $id => $plan) {
                                 if (isset($plan['mealtype'])) {
                                     $html_input .= staylodgic_get_mealplan_labels($plan['mealtype']) . __(' included. ', 'staylodgic');
                                 }
@@ -1075,7 +1075,7 @@ function staylodgic_generate_metaboxes($meta_data, $post_id)
                     $room_id = get_post_meta($the_post_id, 'staylodgic_room_id', true);
 
                     $booking_instance = new \Staylodgic\Booking();
-                    $bedlayoutInputs     = $booking_instance->generate_BedMetabox($room_id, $field['id'], $meta);
+                    $bedlayoutInputs     = $booking_instance->generate_bed_metabox($room_id, $field['id'], $meta);
 
                     echo '<div id="metabox-bedlayout" data-field="' . esc_attr($field['id']) . '" data-metavalue="' . esc_attr($meta) . '">';
                     echo $bedlayoutInputs;
@@ -1085,24 +1085,24 @@ function staylodgic_generate_metaboxes($meta_data, $post_id)
 
                 case 'mealplan':
 
-                    $mealPlans = staylodgic_get_option('mealplan');
+                    $meal_plans = staylodgic_get_option('mealplan');
 
-                    if (is_array($mealPlans) && count($mealPlans) > 0) {
-                        $includedMealPlans = array();
-                        $optionalMealPlans = array();
+                    if (is_array($meal_plans) && count($meal_plans) > 0) {
+                        $included_meal_plans = array();
+                        $optional_meal_plans = array();
 
-                        foreach ($mealPlans as $id => $plan) {
+                        foreach ($meal_plans as $id => $plan) {
                             if ($plan['choice'] === 'included') {
-                                $includedMealPlans[$id] = $plan;
+                                $included_meal_plans[$id] = $plan;
                             } elseif ($plan['choice'] === 'optional') {
-                                $optionalMealPlans[$id] = $plan;
+                                $optional_meal_plans[$id] = $plan;
                             }
                         }
 
                         $html = '';
                         echo '<div class="selectbox-type-selector"><select class="chosen-select-metabox" name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '">';
                         echo '<option value="none"', $meta == 'none' ? ' selected' : '', '>None</option>';
-                        foreach ($optionalMealPlans as $key => $option) {
+                        foreach ($optional_meal_plans as $key => $option) {
                             echo '<option value="' . esc_attr($option['mealtype']) . '"', $meta == $option['mealtype'] ? ' selected' : '', '>' . staylodgic_get_mealplan_labels($option['mealtype']) . '</option>';
                         }
                         echo '</select></div>';

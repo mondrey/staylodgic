@@ -930,7 +930,7 @@ class Activity {
 
 		$html .= '<div class="main-summary-wrap">';
 
-		$html .= \Staylodgic\Common::generatePersonIcons( $adults, $children );
+		$html .= \Staylodgic\Common::generate_person_icons( $adults, $children );
 
 		$html .= '</div>';
 
@@ -1226,7 +1226,7 @@ class Activity {
 		$display_fullbooked_status = false;
 		if ( true === $display_fullbooked_status ) {
 			$reservations_instance = new \Staylodgic\Reservations();
-			$fullybooked_dates     = $reservations_instance->daysFullyBooked_For_DateRange( $stay_current_date, $stay_end_date );
+			$fullybooked_dates     = $reservations_instance->days_fully_booked_for_date_range( $stay_current_date, $stay_end_date );
 		}
 		?>
 		<div class="staylodgic-content staylodgic-activity-booking">
@@ -1813,7 +1813,7 @@ class Activity {
 				'stay_children_guests' => $stay_reservation_data['children'],
 				'subtotal'             => staylodgic_price( $stay_reservation_data['subtotal'] ),
 				'tax'                  => $email_tax_html,
-				'totalCost'            => $stay_reservation_data['total'],
+				'stay_total_cost'            => $stay_reservation_data['total'],
 			);
 
 			$email = new EmailDispatcher( $email_address, __( 'Booking Confirmation for: ', 'staylodgic' ) . $booking_number );
