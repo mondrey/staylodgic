@@ -1816,7 +1816,7 @@ class Activity {
 				'stay_total_cost'            => $stay_reservation_data['total'],
 			);
 
-			$email = new EmailDispatcher( $email_address, __( 'Booking Confirmation for: ', 'staylodgic' ) . $booking_number );
+			$email = new Email_Dispatcher( $email_address, __( 'Booking Confirmation for: ', 'staylodgic' ) . $booking_number );
 			$email->set_html_content()->set_activity_confirmation_template( $booking_details );
 
 			if ( $email->send() ) {

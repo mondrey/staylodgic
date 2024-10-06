@@ -540,7 +540,7 @@ class GuestRegistry
                     $email_address = staylodgic_getLoggedInUserEmail();
                     $page_title = get_the_title($post_id);
 
-                    $email = new EmailDispatcher($email_address, 'Online Check-in: ' . $page_title);
+                    $email = new Email_Dispatcher($email_address, 'Online Check-in: ' . $page_title);
                     $email->set_html_content()->set_registration_template($booking_data, $post_id);
         
                     if ($email->send( $cc = false )) {
@@ -643,7 +643,7 @@ class GuestRegistry
                 $saved_shortcode = get_option('staylodgic_guestregistry_shortcode', '');
 
                 if ('' == $saved_shortcode) {
-                    $formGenInstance = new \Staylodgic\FormGenerator();
+                    $formGenInstance = new \Staylodgic\Form_Generator();
                     $saved_shortcode = $formGenInstance->defaultShortcodes();
                 }
 

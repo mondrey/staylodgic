@@ -2,7 +2,7 @@
 
 namespace Staylodgic;
 
-class FormGenerator {
+class Form_Generator {
 
 
 	// Constructor
@@ -14,26 +14,26 @@ class FormGenerator {
 	/**
 	 * Method Function to render an input element
 	 *
-	 * @param $inputObject
+	 * @param $input_object
 	 *
 	 * @return void
 	 */
-	private function renderInput( $inputObject ) {
+	private function render_input( $input_object ) {
 		// Check for required attributes
-		if ( ! isset( $inputObject->type ) || ! isset( $inputObject->id ) ) {
+		if ( ! isset( $input_object->type ) || ! isset( $input_object->id ) ) {
 			throw new \Exception( 'Input type and ID are required.' );
 		}
 
 		$predefined     = false;
 		$signature_data = '';
-		$type           = esc_attr( $inputObject->type );
-		$id             = esc_attr( $inputObject->id );
-		$name           = esc_attr( $inputObject->name ?? $id );
-		$class          = esc_attr( $inputObject->class ?? 'form-control' );
-		$value          = esc_attr( $inputObject->value ?? '' );
-		$placeholder    = esc_attr( $inputObject->placeholder ?? '' );
-		$label          = isset( $inputObject->label ) ? esc_html( $inputObject->label ) : null;
-		$required       = isset( $inputObject->required ) && $inputObject->required === 'true' ? 'required' : '';
+		$type           = esc_attr( $input_object->type );
+		$id             = esc_attr( $input_object->id );
+		$name           = esc_attr( $input_object->name ?? $id );
+		$class          = esc_attr( $input_object->class ?? 'form-control' );
+		$value          = esc_attr( $input_object->value ?? '' );
+		$placeholder    = esc_attr( $input_object->placeholder ?? '' );
+		$label          = isset( $input_object->label ) ? esc_html( $input_object->label ) : null;
+		$required       = isset( $input_object->required ) && $input_object->required === 'true' ? 'required' : '';
 
 		// Check if 'guest' parameter is present in the URL
 		if ( current_user_can( 'edit_posts' ) && isset( $_GET['guest'] ) && ! empty( $_GET['guest'] ) ) {
@@ -47,7 +47,7 @@ class FormGenerator {
 				if ( isset( $registration_data[ $guest ][ $id ]['value'] ) ) {
 					$value = $registration_data[ $guest ][ $id ]['value'];
 					if ( 'checkbox' == $type && 'true' == $value ) {
-						$inputObject->checked = true;
+						$input_object->checked = true;
 					}
 				}
 				$registration_id = $registration_data[ $guest ]['registration_id'];
@@ -98,14 +98,14 @@ class FormGenerator {
 				break;
 			case 'checkbox':
 				// Checkbox inputs
-				$checked = isset( $inputObject->checked ) && $inputObject->checked ? 'checked' : '';
+				$checked = isset( $input_object->checked ) && $input_object->checked ? 'checked' : '';
 				echo "<input data-label='" . esc_attr( $label ) . "' data-id='" . esc_attr( $id ) . "' type='checkbox' id='" . esc_attr( $id ) . "' name='" . esc_attr( $name ) . "' class='form-check-input' value='" . esc_attr( $value ) . "' " . esc_attr( $checked ) . '>';
 				$label_class = 'form-check-label';
 				break;
 			case 'button':
 			case 'submit':
 				// Button types (button and submit)
-				$value                = esc_attr( $inputObject->value ?? 'Button' );
+				$value                = esc_attr( $input_object->value ?? 'Button' );
 				$predefined_data_attr = '';
 				if ( $predefined ) {
 					$predefined_data_attr = 'data-guest=' . $guest;
@@ -113,10 +113,10 @@ class FormGenerator {
 				echo '<button ' . esc_attr( $predefined_data_attr ) . " type='" . esc_attr( $type ) . "' id='" . esc_attr( $id ) . "' name='" . esc_attr( $name ) . "' class='" . esc_attr( $class ) . "'>" . esc_html( $value ) . '</button>';
 				break;
 			case 'select':
-				if ( 'countries' == $inputObject->target ) {
+				if ( 'countries' == $input_object->target ) {
 					$options = staylodgic_country_list( 'select', '' );
 				} else {
-					$options = $this->parseSelectOptions( $inputObject->options ?? '' );
+					$options = $this->parseSelectOptions( $input_object->options ?? '' );
 				}
 				$countries = staylodgic_country_list( 'select-alt', '' );
 				$options   = $this->parseSelectOptions( $countries );
@@ -221,9 +221,9 @@ class FormGenerator {
 		);
 
 		// Convert the array to an object
-		$inputObject = (object) $attributes;
+		$input_object = (object) $attributes;
 
-		return $this->renderInput( $inputObject );
+		return $this->render_input( $input_object );
 	}
 
 	/**
@@ -261,4 +261,4 @@ class FormGenerator {
 }
 
 // Instantiate the class
-new \Staylodgic\FormGenerator();
+new \Staylodgic\Form_Generator();

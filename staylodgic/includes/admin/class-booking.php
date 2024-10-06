@@ -2107,7 +2107,7 @@ class Booking {
 				'stay_total_cost'      => $stay_reservation_data['total'],
 			);
 
-			$email = new EmailDispatcher( $email_address, 'Room Booking Confirmation for: ' . $booking_number );
+			$email = new Email_Dispatcher( $email_address, 'Room Booking Confirmation for: ' . $booking_number );
 			$email->set_html_content()->set_booking_confirmation_template( $booking_details );
 
 			if ( $email->send() ) {
