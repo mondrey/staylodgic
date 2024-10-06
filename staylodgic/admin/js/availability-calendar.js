@@ -179,38 +179,70 @@
 				var $input = $button
 					.closest(".export-ical-wrap")
 					.find(".urlField"); // Find the corresponding input
-
-				// Copy text to clipboard
-				navigator.clipboard
-					.writeText($input.val())
-					.then(function () {
-						const tooltip = bootstrap.Tooltip.getInstance(
-							$button[0]
-						); // Ensure to use DOM element when calling getInstance
-
-						if (tooltip) {
-							// Update tooltip content
-							tooltip.setContent({ ".tooltip-inner": "Copied!" });
-							tooltip.show(); // Make sure to show the tooltip if it's not already visible
-
-							// Reset the tooltip title after 2 seconds
-							setTimeout(function () {
-								if (tooltip) {
-									tooltip.setContent({
-										".tooltip-inner": "Copy to clipboard",
-									});
-									tooltip.hide(); // Optionally hide the tooltip
-								}
-							}, 2000);
+		
+				// Check if the clipboard API is available
+				if (navigator.clipboard) {
+					// Copy text to clipboard using Clipboard API
+					navigator.clipboard
+						.writeText($input.val())
+						.then(function () {
+							const tooltip = bootstrap.Tooltip.getInstance($button[0]);
+		
+							if (tooltip) {
+								tooltip.setContent({ ".tooltip-inner": "Copied!" });
+								tooltip.show();
+		
+								// Reset tooltip title after 2 seconds
+								setTimeout(function () {
+									if (tooltip) {
+										tooltip.setContent({
+											".tooltip-inner": "Copy to clipboard",
+										});
+										tooltip.hide();
+									}
+								}, 2000);
+							}
+						})
+						.catch(function (error) {
+							console.error("Error copying text: ", error);
+						});
+				} else {
+					// Fallback if clipboard API is not available
+					$input.select(); // Select the text in the input
+					try {
+						// Use document.execCommand for older browsers
+						var successful = document.execCommand("copy");
+						if (successful) {
+							const tooltip = bootstrap.Tooltip.getInstance(
+								$button[0]
+							); // Ensure to use DOM element when calling getInstance
+	
+							if (tooltip) {
+								// Update tooltip content
+								tooltip.setContent({ ".tooltip-inner": "Copied!" });
+								tooltip.show(); // Make sure to show the tooltip if it's not already visible
+	
+								// Reset the tooltip title after 2 seconds
+								setTimeout(function () {
+									if (tooltip) {
+										tooltip.setContent({
+											".tooltip-inner": "Copy to clipboard",
+										});
+										tooltip.hide(); // Optionally hide the tooltip
+									}
+								}, 2000);
+							}
+						} else {
+							alert("Failed to copy. Please try manually.");
 						}
-					})
-					.catch(function (error) {
-						console.error("Error copying text: ", error);
-						// Optionally notify user that copy didn't work
-					});
+					} catch (err) {
+						console.error("Error copying text: ", err);
+						alert("Error copying text. Please try manually.");
+					}
+				}
 			});
 		}
-
+		
 		// Initially initialize tooltips
 		if (!window.isMobile()) {
 			initializeTooltips();
