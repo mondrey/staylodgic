@@ -631,7 +631,7 @@ class Booking {
 			$room_type = $_POST['room_type'];
 		}
 
-		$chosen_date = \Staylodgic\Common::splitDateRange( $reservation_date );
+		$chosen_date = \Staylodgic\Common::split_date_range( $reservation_date );
 
 		$stay_checkin_date  = '';
 		$stay_checkout_date = '';

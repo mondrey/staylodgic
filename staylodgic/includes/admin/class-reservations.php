@@ -377,10 +377,10 @@ class Reservations
 
         $reserved_array = array();
 
-        $dateRange = \Staylodgic\Common::create_inBetween_DateRange_Array($stay_start_date, $stay_end_date);
+        $date_range = \Staylodgic\Common::create_in_between_date_range_array($stay_start_date, $stay_end_date);
         
         // Set all as zero
-        foreach ($dateRange as $date) {
+        foreach ($date_range as $date) {
             $reserved_array[$date] = 0;
         }
 
@@ -395,7 +395,7 @@ class Reservations
                     $checkin       = $custom[ 'staylodgic_checkin_date' ][ 0 ];
                     $checkout      = $custom[ 'staylodgic_checkout_date' ][ 0 ];
 
-                    foreach ($dateRange as $date) {
+                    foreach ($date_range as $date) {
                         $reserved_rooms = 0;
                         if ( isset( $reserved_array[$date] )) {
                             $reserved_rooms = $reserved_array[$date];

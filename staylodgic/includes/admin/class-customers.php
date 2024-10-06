@@ -17,7 +17,7 @@ class Customers
         $html = '<ul class="existing-customer">';
         foreach ($array as $key => $value) {
             if ('Country' == $key) {
-                $value = \Staylodgic\Common::countryCodeToEmoji($value) . ' ' . staylodgic_country_list('display', $value);
+                $value = \Staylodgic\Common::country_code_to_emoji($value) . ' ' . staylodgic_country_list('display', $value);
             }
             $html .= '<li><strong>' . esc_html($key) . ':</strong> ' . esc_html($value) . '</li>';
         }

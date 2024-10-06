@@ -136,7 +136,7 @@ class Availablity_Calendar extends Availablity_Calendar_Base {
 
 		if ( isset( $stay_start_date ) && isset( $stay_end_date ) ) {
 
-			$dates = \Staylodgic\Common::getDates_Between( $stay_start_date, $stay_end_date );
+			$dates = \Staylodgic\Common::get_dates_between( $stay_start_date, $stay_end_date );
 
 			$occupancy_data = array();
 

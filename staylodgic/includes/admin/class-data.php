@@ -84,7 +84,7 @@ class Data
         $customer_id = get_post_meta($post_id, 'staylodgic_customer_id', true);
         // error_log("checking customer post: " . $customer_id . '||' . $post_id . '||' . $full_name);
 
-        if (\Staylodgic\Common::isCustomer_valid_post($existing_customer)) {
+        if (\Staylodgic\Common::is_customer_valid_post($existing_customer)) {
             if ('existing' == $customer_choice) {
 
                 // error_log("Updating: " . $existing_customer . '||' . $booking_number);
@@ -98,7 +98,7 @@ class Data
             return; // Exit the function if the post is being trashed
         }
 
-        if (!\Staylodgic\Common::isCustomer_valid_post($customer_id)) {
+        if (!\Staylodgic\Common::is_customer_valid_post($customer_id)) {
             if ('existing' !== $customer_choice) {
                 // error_log("Customer does not exist: " . $customer_id . '||' . $full_name);
                 // Create new customer from the filled inputs in reservation
@@ -121,7 +121,7 @@ class Data
 
         error_log("It is here " . $post_id);
 
-        if (!\Staylodgic\Common::isActivities_valid_post($post_id, $post)) {
+        if (!\Staylodgic\Common::is_activities_valid_post($post_id, $post)) {
             return;
         }
 
@@ -301,7 +301,7 @@ class Data
 
         // error_log("is here " . $post_id);
 
-        if (!\Staylodgic\Common::isReservation_valid_post($post_id, $post)) {
+        if (!\Staylodgic\Common::is_reservation_valid_post($post_id, $post)) {
             return;
         }
 
@@ -358,8 +358,8 @@ class Data
         $previous_checkout_date = date('Y-m-d', strtotime($previous_checkout_date . ' -1 day'));
         $adjusted_checkout_date = date('Y-m-d', strtotime($checkout_date . ' -1 day'));
 
-        $previous_dates = \Staylodgic\Common::getDates_Between($previous_checkin_date, $previous_checkout_date);
-        $updated_dates  = \Staylodgic\Common::getDates_Between($checkin_date, $adjusted_checkout_date);
+        $previous_dates = \Staylodgic\Common::get_dates_between($previous_checkin_date, $previous_checkout_date);
+        $updated_dates  = \Staylodgic\Common::get_dates_between($checkin_date, $adjusted_checkout_date);
 
         $reservations_array = self::removeDates_From_ReservationsArray($previous_dates, $reservation_post_id, $reservations_array);
         $reservations_array = self::addDates_To_ReservationsArray($updated_dates, $reservation_post_id, $reservations_array);

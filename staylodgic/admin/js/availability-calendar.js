@@ -317,7 +317,7 @@
 
 		// Handle click event on the "Save changes" button
 		$("#rates-modal .save-changes").click(function () {
-			var dateRange = $(
+			var date_range = $(
 				'#rates-modal input[name="modaldatepicker"]'
 			).val();
 			var rate = $('#rates-modal input[name="rate"]').val();
@@ -331,7 +331,7 @@
 				'input[name="staylodgic_availabilitycalendar_nonce"]'
 			).val();
 
-			console.log(ajaxurl, dateRange, rate, postID);
+			console.log(ajaxurl, date_range, rate, postID);
 
 			// Perform AJAX request
 			$.ajax({
@@ -340,7 +340,7 @@
 				data: {
 					action: "update_RoomRate",
 					postID: postID,
-					dateRange: dateRange,
+					date_range: date_range,
 					rate: rate,
 					staylodgic_availabilitycalendar_nonce:
 						staylodgic_availabilitycalendar_nonce,
@@ -476,7 +476,7 @@
 
 		// Handle click event on the "Save changes" button
 		$("#quantity-modal .save-changes").click(function () {
-			var dateRange = $(
+			var date_range = $(
 				'#quantity-modal input[name="modaldatepicker"]'
 			).val();
 			var quantity = $('#quantity-modal input[name="quantity"]').val();
@@ -490,7 +490,7 @@
 				'input[name="staylodgic_availabilitycalendar_nonce"]'
 			).val();
 
-			console.log(ajaxurl, dateRange, quantity, postID);
+			console.log(ajaxurl, date_range, quantity, postID);
 
 			// Perform AJAX request
 			$.ajax({
@@ -499,7 +499,7 @@
 				data: {
 					action: "update_RoomAvailability",
 					postID: postID,
-					dateRange: dateRange,
+					date_range: date_range,
 					quantity: quantity,
 					staylodgic_availabilitycalendar_nonce:
 						staylodgic_availabilitycalendar_nonce,
