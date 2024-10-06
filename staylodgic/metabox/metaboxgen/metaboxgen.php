@@ -1249,7 +1249,7 @@ function staylodgic_generate_metaboxes($meta_data, $post_id)
                     echo '<a class="button button-primary button-large customer-edit-button" href="' . esc_url($customer_post_edit) . '">' . __('Edit Customer', 'staylodgic') . '</a><span class="customer-choice-inbetween"></span><a class="choice-customer-existing">' . __('or choose an existing customer', 'staylodgic') . '</a>';
                     $customer_data = \Staylodgic\Data::getCustomer_MetaData($customer_array, $customer_post_id);
 
-                    echo \Staylodgic\Customers::generateCustomerHtmlList($customer_data);
+                    echo \Staylodgic\Customers::generate_customer_html_list($customer_data);
 
                     break;
                 case 'reservation_registration':

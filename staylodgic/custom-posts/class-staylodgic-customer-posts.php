@@ -45,7 +45,7 @@ class Staylodgic_Customer_Posts
 
         switch ($columns) {
             case "customer_booking":
-                echo esc_attr($customer_instance->generateCustomerBookingNumbers($customer_post_id));
+                echo esc_attr($customer_instance->generate_customer_booking_numbers($customer_post_id));
                 break;
             case "customer_reservations":
 
@@ -69,7 +69,7 @@ class Staylodgic_Customer_Posts
 
                 break;
             case "customer_rooms":
-                $customer_room = $customer_instance->generateCustomerRooms($customer_post_id);
+                $customer_room = $customer_instance->generate_customer_rooms($customer_post_id);
                 if (isset($customer_room)) {
                     echo wp_kses($customer_room, staylodgic_get_allowed_tags());
                 }
