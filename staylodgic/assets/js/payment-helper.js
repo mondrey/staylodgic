@@ -25,7 +25,7 @@
 				url: frontendAjax.ajaxurl, // the localized URL
 				type: 'POST',
 				data: {
-					action: 'processReservationPayment',
+					action: 'process_reservation_payment',
 					total: total,
 					booking_number: booking_number,
 					nonce: staylodgic_admin_vars.nonce
