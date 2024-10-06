@@ -382,7 +382,11 @@ class GuestRegistry
                 // Add Edit and Delete buttons
                 echo '<div class="invoice-buttons-container">';
                 echo '<div class="invoice-container-buttons">';
-                echo '<a href="' . esc_url($edit_url) . '" target="_blank" class="button button-secondary registration-button edit-registration" data-guest-id="' . esc_attr($guest_id) . '">' . __('Edit', 'staylodgic') . '</a>';
+                // Generate a nonce for the edit action
+                $nonce_url = wp_nonce_url( $edit_url, 'edit_registration_' . $guest_id );
+
+                // Output the link with the nonce
+                echo '<a href="' . esc_url( $nonce_url ) . '" target="_blank" class="button button-secondary registration-button edit-registration" data-guest-id="' . esc_attr( $guest_id ) . '">' . __('Edit', 'staylodgic') . '</a>';
                 // Inside your PHP loop where you're echoing out the delete buttons
                 ob_start();
 ?>
@@ -644,7 +648,7 @@ class GuestRegistry
 
                 if ('' == $saved_shortcode) {
                     $formGenInstance = new \Staylodgic\Form_Generator();
-                    $saved_shortcode = $formGenInstance->defaultShortcodes();
+                    $saved_shortcode = $formGenInstance->default_shortcodes();
                 }
 
                 $saved_shortcode = stripslashes($saved_shortcode);

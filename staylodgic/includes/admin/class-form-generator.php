@@ -8,7 +8,7 @@ class Form_Generator {
 	// Constructor
 	public function __construct() {
 		// Register shortcodes
-		$this->registerShortcodes();
+		$this->register_shortcodes();
 	}
 
 	/**
@@ -19,12 +19,23 @@ class Form_Generator {
 	 * @return void
 	 */
 	private function render_input( $input_object ) {
+
+		if ( ! isset( $_GET['_wpnonce'] ) || ! check_admin_referer( 'edit_registration_' . $_GET['guest'] ) ) {
+			wp_die( esc_html__( 'Invalid nonce. Please try again.', 'staylodgic' ) );
+			return; // If used inside a function, this will stop further execution
+		}
+
+		// Valid nonce; proceed with action
+
 		// Check for required attributes
 		if ( ! isset( $input_object->type ) || ! isset( $input_object->id ) ) {
 			throw new \Exception( 'Input type and ID are required.' );
 		}
 
-		$predefined     = false;
+		$predefined = false;
+		$required   = '';
+		$label      = null;
+
 		$signature_data = '';
 		$type           = esc_attr( $input_object->type );
 		$id             = esc_attr( $input_object->id );
@@ -32,8 +43,13 @@ class Form_Generator {
 		$class          = esc_attr( $input_object->class ?? 'form-control' );
 		$value          = esc_attr( $input_object->value ?? '' );
 		$placeholder    = esc_attr( $input_object->placeholder ?? '' );
-		$label          = isset( $input_object->label ) ? esc_html( $input_object->label ) : null;
-		$required       = isset( $input_object->required ) && $input_object->required === 'true' ? 'required' : '';
+
+		if ( isset( $input_object->label ) ) {
+			$label = esc_html( $input_object->label );
+		}
+		if ( isset( $input_object->required ) && true === $input_object->required ) {
+			$required = 'required';
+		}
 
 		// Check if 'guest' parameter is present in the URL
 		if ( current_user_can( 'edit_posts' ) && isset( $_GET['guest'] ) && ! empty( $_GET['guest'] ) ) {
@@ -46,7 +62,7 @@ class Form_Generator {
 				$predefined = true;
 				if ( isset( $registration_data[ $guest ][ $id ]['value'] ) ) {
 					$value = $registration_data[ $guest ][ $id ]['value'];
-					if ( 'checkbox' == $type && 'true' == $value ) {
+					if ( 'checkbox' === $type && 'true' === $value ) {
 						$input_object->checked = true;
 					}
 				}
@@ -63,10 +79,10 @@ class Form_Generator {
 
 		$label_class = 'control-label';
 		$form_class  = 'form-floating';
-		if ( 'checkbox' == $type ) {
+		if ( 'checkbox' === $type ) {
 			$form_class = 'form-check';
 		}
-		echo '<div class="form-group ' . $form_class . '" needs-validation>';
+		echo '<div class="form-group ' . esc_attr( $form_class ) . '" needs-validation>';
 		switch ( $type ) {
 			case 'text':
 			case 'number':
@@ -113,18 +129,21 @@ class Form_Generator {
 				echo '<button ' . esc_attr( $predefined_data_attr ) . " type='" . esc_attr( $type ) . "' id='" . esc_attr( $id ) . "' name='" . esc_attr( $name ) . "' class='" . esc_attr( $class ) . "'>" . esc_html( $value ) . '</button>';
 				break;
 			case 'select':
-				if ( 'countries' == $input_object->target ) {
+				if ( 'countries' === $input_object->target ) {
 					$options = staylodgic_country_list( 'select', '' );
 				} else {
-					$options = $this->parseSelectOptions( $input_object->options ?? '' );
+					$options = $this->parse_select_options( $input_object->options ?? '' );
 				}
 				$countries = staylodgic_country_list( 'select-alt', '' );
-				$options   = $this->parseSelectOptions( $countries );
+				$options   = $this->parse_select_options( $countries );
 
 				echo "<select data-label='" . esc_attr( $label ) . "' data-id='" . esc_attr( $id ) . "' id='" . esc_attr( $id ) . "' name='" . esc_attr( $name ) . "' class='form-select' aria-label='Default select'>";
-				foreach ( $options as $optionValue => $optionLabel ) {
-					$selected = $optionValue == $value ? 'selected' : '';
-					echo "<option value='" . esc_attr( $optionValue ) . "' " . esc_attr( $selected ) . '>' . esc_html( $optionLabel ) . '</option>';
+				foreach ( $options as $option_value => $option_label ) {
+					$selected = '';
+					if ( $option_value === $value ) {
+						$selected = 'selected';
+					}
+					echo "<option value='" . esc_attr( $option_value ) . "' " . esc_attr( $selected ) . '>' . esc_html( $option_label ) . '</option>';
 				}
 				echo '</select>';
 
@@ -147,14 +166,14 @@ class Form_Generator {
 	/**
 	 * Method Helper function to parse select options
 	 *
-	 * @param $optionsString
+	 * @param $options_string
 	 *
 	 * @return void
 	 */
-	private function parseSelectOptions( $optionsString ) {
-		$options      = array();
-		$optionsPairs = explode( ',', $optionsString );
-		foreach ( $optionsPairs as $pair ) {
+	private function parse_select_options( $options_string ) {
+		$options       = array();
+		$options_pairs = explode( ',', $options_string );
+		foreach ( $options_pairs as $pair ) {
 			list($value, $label) = array_map( 'trim', explode( ':', $pair ) );
 			$options[ $value ]   = $label;
 		}
@@ -168,7 +187,7 @@ class Form_Generator {
 	 *
 	 * @return void
 	 */
-	public function shortcodeFormStart( $atts ) {
+	public function shortcode_form_start( $atts ) {
 		$attributes = shortcode_atts(
 			array(
 				'action' => '',
@@ -192,7 +211,7 @@ class Form_Generator {
 	 *
 	 * @return void
 	 */
-	public function shortcodeFormEnd() {
+	public function shortcode_form_end() {
 		return '</form>';
 	}
 
@@ -203,7 +222,7 @@ class Form_Generator {
 	 *
 	 * @return void
 	 */
-	public function shortcodeInput( $atts ) {
+	public function shortcode_input( $atts ) {
 		$attributes = shortcode_atts(
 			array(
 				'type'        => 'text',
@@ -231,18 +250,18 @@ class Form_Generator {
 	 *
 	 * @return void
 	 */
-	private function registerShortcodes() {
-		add_shortcode( 'form_start', array( $this, 'shortcodeFormStart' ) );
-		add_shortcode( 'form_end', array( $this, 'shortcodeFormEnd' ) );
-		add_shortcode( 'form_input', array( $this, 'shortcodeInput' ) );
+	private function register_shortcodes() {
+		add_shortcode( 'form_start', array( $this, 'shortcode_form_start' ) );
+		add_shortcode( 'form_end', array( $this, 'shortcode_form_end' ) );
+		add_shortcode( 'form_input', array( $this, 'shortcode_input' ) );
 	}
 
 	/**
-	 * Method defaultShortcodes
+	 * Method default_shortcodes
 	 *
 	 * @return void
 	 */
-	public function defaultShortcodes() {
+	public function default_shortcodes() {
 		$shortcodes = '';
 
 		$shortcodes .= "[form_input type=\"text\" id=\"bookingnumber\" label=\"Booking number\" required=\"true\"]\n";

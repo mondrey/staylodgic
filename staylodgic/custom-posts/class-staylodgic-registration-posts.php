@@ -97,7 +97,7 @@ class Staylodgic_GuestRegistration_Posts
 
         if ('' == $saved_shortcode) {
             $formGenInstance = new \Staylodgic\Form_Generator();
-            $saved_shortcode = $formGenInstance->defaultShortcodes();
+            $saved_shortcode = $formGenInstance->default_shortcodes();
         }
 
         $saved_shortcode = stripslashes($saved_shortcode);
