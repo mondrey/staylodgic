@@ -2,7 +2,7 @@
 
 namespace Staylodgic;
 
-class OptionsPanel {
+class Options_Panel {
 
 
 	/**
@@ -1580,4 +1580,4 @@ $panel_settings = array(
 	),
 );
 
-new \Staylodgic\OptionsPanel( $panel_args, $panel_settings );
+new \Staylodgic\Options_Panel( $panel_args, $panel_settings );
