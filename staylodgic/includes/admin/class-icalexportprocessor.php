@@ -330,7 +330,7 @@ class IcalExportProcessor
                 $booking_channel     = get_post_meta($reservation->ID, 'staylodgic_booking_channel', true) ?: '-';
                 $room_name          = $reservation_instance->get_room_name_for_reservation($reservation->ID);
 
-                $registry_instance = new \Staylodgic\GuestRegistry();
+                $registry_instance = new \Staylodgic\Guest_Registry();
                 $res_reg_ids         = $registry_instance->fetch_res_reg_ids_by_booking_number($booking_number);
 
                 if (isset($res_reg_ids) && is_array($res_reg_ids)) {

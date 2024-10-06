@@ -412,7 +412,7 @@ function staylodgic_generate_metaboxes($meta_data, $post_id)
 
                 case 'staylodgic_registration_data':
 
-                    $registration_instance = new \Staylodgic\GuestRegistry();
+                    $registration_instance = new \Staylodgic\Guest_Registry();
                     $registration_instance->display_registration();
 
                     break;
@@ -502,7 +502,7 @@ function staylodgic_generate_metaboxes($meta_data, $post_id)
                     echo '<input type="text" class="' . $class . '" name="', esc_attr($field['id']), '" id="', esc_attr($field['id']), '" value="' . esc_attr($text_value) . '" size="30" />';
 
                     if ($text_value) {
-                        $registry_instance = new \Staylodgic\GuestRegistry();
+                        $registry_instance = new \Staylodgic\Guest_Registry();
                         $res_reg_ids =  $registry_instance->fetch_res_reg_ids_by_booking_number($text_value);
                         if (isset($res_reg_ids['stay_reservation_id']) && $res_reg_ids['guest_register_id']) {
                             echo $registry_instance->output_registration_and_occupancy($res_reg_ids['stay_reservation_id'], $res_reg_ids['guest_register_id'], 'text');
@@ -1258,7 +1258,7 @@ function staylodgic_generate_metaboxes($meta_data, $post_id)
                     $bookingnumber = $reservation_instance->get_booking_number();
 
                     if ($bookingnumber) {
-                        $registry_instance = new \Staylodgic\GuestRegistry();
+                        $registry_instance = new \Staylodgic\Guest_Registry();
                         $res_reg_ids =  $registry_instance->fetch_res_reg_ids_by_booking_number($bookingnumber);
                         if (isset($res_reg_ids['guest_register_id'])) {
                             echo $registry_instance->output_registration_and_occupancy($res_reg_ids['stay_reservation_id'], $res_reg_ids['guest_register_id'], 'text');

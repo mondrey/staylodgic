@@ -180,7 +180,7 @@ class Staylodgic_Init
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-booking.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-email-dispatcher.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-invoicing.php';
-        require_once plugin_dir_path(__FILE__) . 'includes/admin/class-guestregistry.php';
+        require_once plugin_dir_path(__FILE__) . 'includes/admin/class-guest-registry.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-form-generator.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-tax.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/utilities.php';

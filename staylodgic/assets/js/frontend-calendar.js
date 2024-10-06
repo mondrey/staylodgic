@@ -41,7 +41,7 @@
 					type: "POST",
 					dataType: "html",
 					data: {
-						action: "requestRegistrationDetails", // Replace with your actual action hook
+						action: "request_registration_details", // Replace with your actual action hook
 						booking_number: stay_booking_number,
 						staylodgic_bookingdetails_nonce:
 							staylodgic_bookingdetails_nonce,

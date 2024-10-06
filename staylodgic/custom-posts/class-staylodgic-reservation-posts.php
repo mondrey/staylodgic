@@ -101,7 +101,7 @@ class staylodgic_Reservation_Posts
 
                 break;
             case "reservation_registered":
-                $registry_instance = new \Staylodgic\GuestRegistry();
+                $registry_instance = new \Staylodgic\Guest_Registry();
                 $res_reg_ids =  $registry_instance->fetch_res_reg_ids_by_booking_number($bookingnumber);
                 if ($res_reg_ids) {
                     $registration_occupancy = $registry_instance->output_registration_and_occupancy($res_reg_ids['stay_reservation_id'], $res_reg_ids['guest_register_id'], 'icons');

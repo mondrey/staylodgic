@@ -77,7 +77,7 @@ class Email_Dispatcher {
 			$post_edit_link         = get_edit_post_link( $registration_post_id );
 			$registry_bookingnumber = get_post_meta( $registration_post_id, 'staylodgic_registry_bookingnumber', true );
 
-			$guest_registry = new GuestRegistry();
+			$guest_registry = new Guest_Registry();
 			$res_reg_ids    = $guest_registry->fetch_res_reg_ids_by_booking_number( $registry_bookingnumber );
 
 			$stay_reservation_id = $res_reg_ids['stay_reservation_id'];

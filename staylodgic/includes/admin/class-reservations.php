@@ -44,11 +44,11 @@ class Reservations
         $activityFound = false;
 
         // Fetch reservation details
-        $reservationQuery = self::getReservationforBooking($booking_number);
+        $stay_reservation_query = self::get_reservationfor_booking($booking_number);
 
-        if ( ! $reservationQuery->have_posts() ) {
+        if ( ! $stay_reservation_query->have_posts() ) {
             $reservation_instance = new \Staylodgic\Activity();
-            $reservationQuery     = $reservation_instance->get_reservation_for_activity($booking_number);
+            $stay_reservation_query     = $reservation_instance->get_reservation_for_activity($booking_number);
 
             $activityFound = true;
         }
@@ -63,10 +63,10 @@ class Reservations
     
         ob_start(); // Start output buffering
         echo "<div class='element-container-group'>";
-        if ($reservationQuery->have_posts()) {
+        if ($stay_reservation_query->have_posts()) {
             echo "<div class='reservation-details'>";
-            while ($reservationQuery->have_posts()) {
-                $reservationQuery->the_post();
+            while ($stay_reservation_query->have_posts()) {
+                $stay_reservation_query->the_post();
                 $stay_reservation_id = get_the_ID();
     
                 $reservation_details_status = get_post_meta($stay_reservation_id, 'staylodgic_reservation_status', true);
@@ -105,8 +105,8 @@ class Reservations
         }
         echo "</div>";
 
-        $informationSheet = ob_get_clean(); // Get the buffer content and clean the buffer
-        echo $informationSheet; // Encode the HTML content as JSON
+        $information_sheet = ob_get_clean(); // Get the buffer content and clean the buffer
+        echo $information_sheet; // Encode the HTML content as JSON
         wp_die(); // Terminate and return a proper response
     }
     
@@ -133,13 +133,13 @@ class Reservations
     }
     
     /**
-     * Method getReservationforBooking
+     * Method get_reservationfor_booking
      *
      * @param $booking_number
      *
      * @return void
      */
-    public static function getReservationforBooking($booking_number)
+    public static function get_reservationfor_booking($booking_number)
     {
         $args = array(
             'post_type'      => 'slgc_reservations',
@@ -1082,7 +1082,7 @@ class Reservations
     public static function getRoomIDsForBooking_number($booking_number)
     {
 
-        $rooms_query = self::getReservationforBooking($booking_number);
+        $rooms_query = self::get_reservationfor_booking($booking_number);
         $room_names  = array();
 
         if ($rooms_query->have_posts()) {

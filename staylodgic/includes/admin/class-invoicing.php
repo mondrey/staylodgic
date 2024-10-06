@@ -10,10 +10,10 @@ class Invoicing
     private $stay_booking_number;
     private $numberDays;
     private $hotel_logo;
-    private $hotelName;
-    private $hotelHeader;
-    private $hotelAddress;
-    private $hotelPhone;
+    private $hotel_name;
+    private $hotel_header;
+    private $hotel_address;
+    private $hotel_phone;
     private $customerName;
     private $customerEmail;
     private $checkInDate;
@@ -26,7 +26,7 @@ class Invoicing
     private $subTotal;
     private $taxesAndFees;
     private $totalAmount;
-    private $hotelFooter;
+    private $hotel_footer;
 
     public function __construct(
         $stay_reservation_id = null,
@@ -34,10 +34,10 @@ class Invoicing
         $stay_booking_number = null,
         $numberDays = null,
         $hotel_logo = null,
-        $hotelName = null,
-        $hotelHeader = null,
-        $hotelAddress = null,
-        $hotelPhone = null,
+        $hotel_name = null,
+        $hotel_header = null,
+        $hotel_address = null,
+        $hotel_phone = null,
         $customerName = null,
         $customerEmail = null,
         $checkInDate = null,
@@ -50,17 +50,17 @@ class Invoicing
         $subTotal = null,
         $taxesAndFees = null,
         $totalAmount = null,
-        $hotelFooter = null
+        $hotel_footer = null
     ) {
         $this->stay_reservation_id    = $stay_reservation_id;
         $this->bookingStatus    = $bookingStatus;
         $this->stay_booking_number    = $stay_booking_number;
         $this->numberDays    = $numberDays;
         $this->hotel_logo        = $hotel_logo;
-        $this->hotelName        = $hotelName;
-        $this->hotelHeader      = $hotelHeader;
-        $this->hotelAddress     = $hotelAddress;
-        $this->hotelPhone       = $hotelPhone;
+        $this->hotel_name        = $hotel_name;
+        $this->hotel_header      = $hotel_header;
+        $this->hotel_address     = $hotel_address;
+        $this->hotel_phone       = $hotel_phone;
         $this->customerName     = $customerName;
         $this->customerEmail    = $customerEmail;
         $this->checkInDate      = $checkInDate;
@@ -73,7 +73,7 @@ class Invoicing
         $this->roomPrice        = $subTotal;
         $this->taxesAndFees     = $taxesAndFees;
         $this->totalAmount      = $totalAmount;
-        $this->hotelFooter      = $hotelFooter;
+        $this->hotel_footer      = $hotel_footer;
 
         add_action('admin_menu', array($this, 'add_invoicing_admin_menu')); // This now points to the add_admin_menu function
         add_action('admin_menu', array($this, 'add_activity_invoicing_admin_menu')); // This now points to the add_admin_menu function
@@ -182,11 +182,11 @@ class Invoicing
         $property_footer  = staylodgic_get_option('activity_property_footer');
 
         $this->stay_reservation_id    = $stay_reservation_id;
-        $this->hotelName    = $property_name;
-        $this->hotelPhone   = $property_phone;
-        $this->hotelAddress = $property_address;
-        $this->hotelHeader  = $property_header;
-        $this->hotelFooter  = $property_footer;
+        $this->hotel_name    = $property_name;
+        $this->hotel_phone   = $property_phone;
+        $this->hotel_address = $property_address;
+        $this->hotel_header  = $property_header;
+        $this->hotel_footer  = $property_footer;
         $this->hotel_logo    = $property_logo_id ? wp_get_attachment_image_url($property_logo_id, 'full') : '';
 
         if ($stay_reservation_id) {
@@ -251,16 +251,16 @@ class Invoicing
             echo '<p>' . __('No reservation found for Booking Number:', 'staylodgic') . ' ' . esc_html($booking_number) . '</p>';
         }
 
-        $informationSheet = $this->invoiceActivityTemplate(
+        $information_sheet = $this->invoiceActivityTemplate(
             $this->stay_reservation_id,
             $this->bookingStatus,
             $this->stay_booking_number,
             $this->numberDays,
             $this->hotel_logo,
-            $this->hotelName,
-            $this->hotelHeader,
-            $this->hotelAddress,
-            $this->hotelPhone,
+            $this->hotel_name,
+            $this->hotel_header,
+            $this->hotel_address,
+            $this->hotel_phone,
             $this->customerName,
             $this->customerEmail,
             $this->checkInDate,
@@ -273,9 +273,9 @@ class Invoicing
             $this->subTotal,
             $this->taxesAndFees,
             $this->totalAmount,
-            $this->hotelFooter
+            $this->hotel_footer
         );
-        echo $informationSheet; // Encode the HTML content as JSON
+        echo $information_sheet; // Encode the HTML content as JSON
         wp_die(); // Terminate and return a proper response
     }
     
@@ -311,11 +311,11 @@ class Invoicing
         $property_footer  = staylodgic_get_option('property_footer');
 
         $this->stay_reservation_id    = $stay_reservation_id;
-        $this->hotelName    = $property_name;
-        $this->hotelPhone   = $property_phone;
-        $this->hotelAddress = $property_address;
-        $this->hotelHeader  = $property_header;
-        $this->hotelFooter  = $property_footer;
+        $this->hotel_name    = $property_name;
+        $this->hotel_phone   = $property_phone;
+        $this->hotel_address = $property_address;
+        $this->hotel_header  = $property_header;
+        $this->hotel_footer  = $property_footer;
         $this->hotel_logo    = $property_logo_id ? wp_get_attachment_image_url($property_logo_id, 'full') : '';
 
         if ($stay_reservation_id) {
@@ -382,16 +382,16 @@ class Invoicing
             echo '<p>' . __('No reservation found for Booking Number:', 'staylodgic') . ' ' . esc_html($booking_number) . '</p>';
         }
 
-        $informationSheet = $this->invoiceTemplate(
+        $information_sheet = $this->invoiceTemplate(
             $this->stay_reservation_id,
             $this->bookingStatus,
             $this->stay_booking_number,
             $this->numberDays,
             $this->hotel_logo,
-            $this->hotelName,
-            $this->hotelHeader,
-            $this->hotelAddress,
-            $this->hotelPhone,
+            $this->hotel_name,
+            $this->hotel_header,
+            $this->hotel_address,
+            $this->hotel_phone,
             $this->customerName,
             $this->customerEmail,
             $this->checkInDate,
@@ -404,9 +404,9 @@ class Invoicing
             $this->subTotal,
             $this->taxesAndFees,
             $this->totalAmount,
-            $this->hotelFooter
+            $this->hotel_footer
         );
-        echo $informationSheet; // Encode the HTML content as JSON
+        echo $information_sheet; // Encode the HTML content as JSON
         wp_die(); // Terminate and return a proper response
     }
     
@@ -489,10 +489,10 @@ class Invoicing
         $stay_booking_number,
         $numberDays,
         $hotel_logo,
-        $hotelName,
-        $hotelHeader,
-        $hotelAddress,
-        $hotelPhone,
+        $hotel_name,
+        $hotel_header,
+        $hotel_address,
+        $hotel_phone,
         $customerName,
         $customerEmail,
         $checkInDate,
@@ -505,7 +505,7 @@ class Invoicing
         $subTotal,
         $taxesAndFees,
         $totalAmount,
-        $hotelFooter
+        $hotel_footer
     ) {
         $activity_property_logo_width  = staylodgic_get_option('activity_property_logo_width');
         $stay_current_date = date('F jS, Y'); // Outputs: January 1st, 2024
@@ -523,16 +523,16 @@ class Invoicing
                             <img class="invoice-logo" src="<?php echo esc_url($hotel_logo); ?>" width="<?php echo esc_attr($activity_property_logo_width) . 'px'; ?>" height="auto" />
                         </section>
                         <section id="invoice-info">
-                            <p><?php echo esc_html($hotelHeader); ?></p>
+                            <p><?php echo esc_html($hotel_header); ?></p>
                             <p><?php echo __('Invoice No:', 'staylodgic'); ?> <?php echo esc_html($stay_booking_number . '-' . $stay_reservation_id); ?></p>
                             <p><?php echo __('Invoice Date:', 'staylodgic'); ?> <?php echo esc_html($stay_current_date); ?></p>
                             <p class="invoice-booking-status"><?php echo esc_html($bookingStatus); ?></p>
                         </section>
                     </div>
                     <section id="invoice-hotel-info">
-                        <p><strong><?php echo esc_html($hotelName); ?></strong></p>
-                        <p><?php echo esc_html($hotelAddress); ?></p>
-                        <p><?php echo esc_html($hotelPhone); ?></p>
+                        <p><strong><?php echo esc_html($hotel_name); ?></strong></p>
+                        <p><?php echo esc_html($hotel_address); ?></p>
+                        <p><?php echo esc_html($hotel_phone); ?></p>
                     </section>
                     <section id="invoice-customer-info">
                         <h2><?php echo __('Bill to:', 'staylodgic'); ?></h2>
@@ -585,7 +585,7 @@ class Invoicing
 
                 </div>
                 <footer>
-                    <div class="invoice-footer"><?php echo esc_html($hotelFooter); ?></div>
+                    <div class="invoice-footer"><?php echo esc_html($hotel_footer); ?></div>
                 </footer>
             </div>
         </div>
@@ -604,10 +604,10 @@ class Invoicing
         $stay_booking_number,
         $numberDays,
         $hotel_logo,
-        $hotelName,
-        $hotelHeader,
-        $hotelAddress,
-        $hotelPhone,
+        $hotel_name,
+        $hotel_header,
+        $hotel_address,
+        $hotel_phone,
         $customerName,
         $customerEmail,
         $checkInDate,
@@ -620,7 +620,7 @@ class Invoicing
         $subTotal,
         $taxesAndFees,
         $totalAmount,
-        $hotelFooter
+        $hotel_footer
     ) {
 
         $property_logo_width  = staylodgic_get_option('property_logo_width');
@@ -639,16 +639,16 @@ class Invoicing
                             <img class="invoice-logo" src="<?php echo esc_url($hotel_logo); ?>" width="<?php echo esc_attr($property_logo_width) . 'px'; ?>" height="auto" />
                         </section>
                         <section id="invoice-info">
-                            <p><?php echo $hotelHeader; ?></p>
+                            <p><?php echo $hotel_header; ?></p>
                             <p><?php echo __('Invoice No:', 'staylodgic'); ?> <?php echo esc_html($stay_booking_number . '-' . $stay_reservation_id); ?></p>
                             <p><?php echo __('Invoice Date:', 'staylodgic'); ?> <?php echo esc_html($stay_current_date); ?></p>
                             <p class="invoice-booking-status"><?php echo esc_html($bookingStatus); ?></p>
                         </section>
                     </div>
                     <section id="invoice-hotel-info">
-                        <p><strong><?php echo esc_html($hotelName); ?></strong></p>
-                        <p><?php echo esc_html($hotelAddress); ?></p>
-                        <p><?php echo esc_html($hotelPhone); ?></p>
+                        <p><strong><?php echo esc_html($hotel_name); ?></strong></p>
+                        <p><?php echo esc_html($hotel_address); ?></p>
+                        <p><?php echo esc_html($hotel_phone); ?></p>
                     </section>
                     <section id="invoice-customer-info">
                         <h2><?php echo __('Bill to:', 'staylodgic'); ?></h2>
@@ -702,7 +702,7 @@ class Invoicing
 
                 </div>
                 <footer>
-                    <div class="invoice-footer"><?php echo esc_html($hotelFooter); ?></div>
+                    <div class="invoice-footer"><?php echo esc_html($hotel_footer); ?></div>
                 </footer>
             </div>
         </div>

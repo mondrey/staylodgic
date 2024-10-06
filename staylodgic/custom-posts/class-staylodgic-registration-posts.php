@@ -96,8 +96,8 @@ class Staylodgic_GuestRegistration_Posts
         $saved_shortcode = get_option('staylodgic_guestregistry_shortcode', '');
 
         if ('' == $saved_shortcode) {
-            $formGenInstance = new \Staylodgic\Form_Generator();
-            $saved_shortcode = $formGenInstance->default_shortcodes();
+            $form_gen_instance = new \Staylodgic\Form_Generator();
+            $saved_shortcode = $form_gen_instance->default_shortcodes();
         }
 
         $saved_shortcode = stripslashes($saved_shortcode);

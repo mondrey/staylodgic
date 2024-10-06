@@ -920,7 +920,7 @@ class Analytics_Bookings {
 						$guest_list_html .= '</td>';
 						$guest_list_html .= '<td scope="row">';
 
-						$registry_instance = new \Staylodgic\GuestRegistry();
+						$registry_instance = new \Staylodgic\Guest_Registry();
 						$res_reg_ids       = $registry_instance->fetch_res_reg_ids_by_booking_number( $booking['booking_number'] );
 						if ( isset( $res_reg_ids ) && is_array( $res_reg_ids ) ) {
 							$guest_list_html .= $registry_instance->output_registration_and_occupancy( $res_reg_ids['stay_reservation_id'], $res_reg_ids['guest_register_id'], 'default' );
