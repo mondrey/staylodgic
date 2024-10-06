@@ -244,7 +244,7 @@ class Availablity_Calendar extends Availablity_Calendar_Base {
 
 				echo '<h1>' . __( 'Availability Calendar', 'staylodgic' ) . '</h1>';
 			}
-			echo \Staylodgic\Modals::rateQtyToasts();
+			echo \Staylodgic\Modals::rate_qty_toasts();
 
 			$confirmed_status = '';
 			if ( $this->get_display_confirmed_status() ) {

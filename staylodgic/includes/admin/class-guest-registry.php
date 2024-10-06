@@ -541,7 +541,9 @@ class Guest_Registry {
 					$email = new Email_Dispatcher( $email_address, 'Online Check-in: ' . $page_title );
 					$email->set_html_content()->set_registration_template( $booking_data, $post_id );
 
-					if ( $email->send( $cc = false ) ) {
+					$cc = false;
+
+					if ( $email->send( $cc ) ) {
 						// Confirmation email sent successfully to the guest
 					} else {
 						// Failed to send the confirmation email
