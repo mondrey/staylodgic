@@ -21,18 +21,18 @@ class Rates {
 			return $room_rate_array[ $date ];
 		}
 
-		$rate = self::getRoomTypeBaseRate( $room_id );
+		$rate = self::get_room_type_base_rate( $room_id );
 		return $rate;
 	}
 
 	/**
-	 * Method getRoomTypeBaseRate
+	 * Method get_room_type_base_rate
 	 *
 	 * @param $room_id
 	 *
 	 * @return void
 	 */
-	public static function getRoomTypeBaseRate( $room_id ) {
+	public static function get_room_type_base_rate( $room_id ) {
 		$custom = get_post_custom( $room_id );
 		if ( isset( $custom['staylodgic_base_rate'][0] ) ) {
 			$base_rate = $custom['staylodgic_base_rate'][0];
