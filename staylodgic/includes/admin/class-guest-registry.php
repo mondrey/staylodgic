@@ -601,12 +601,13 @@ class Guest_Registry {
 	public function get_guest_post_permalink() {
 
 		// Verify the nonce
-		if ( ! isset( $_POST['nonce'] ) ) {
-			wp_send_json_error( array( 'message' => 'Failed' ) );
+		if ( ! isset( $_POST['nonce'] ) || ! check_ajax_referer( 'staylodgic-nonce-admin', 'nonce', false ) ) {
+			wp_send_json_error( array( 'message' => 'Invalid nonce.' ) );
 			return;
 		}
 
 		$post_id = isset( $_POST['post_id'] ) ? intval( $_POST['post_id'] ) : 0;
+
 		if ( $post_id ) {
 			$permalink = get_permalink( $post_id );
 			wp_send_json_success( $permalink );

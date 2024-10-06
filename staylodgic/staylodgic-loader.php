@@ -163,7 +163,7 @@ class Staylodgic_Init
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-analytics-activity.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-welcomescreen.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-batch-processor-base.php';
-        require_once plugin_dir_path(__FILE__) . 'includes/admin/class-icalexportprocessor.php';
+        require_once plugin_dir_path(__FILE__) . 'includes/admin/class-ical-export-processor.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-availability-batch-processor.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-availablity-calendar-base.php';
         require_once plugin_dir_path(__FILE__) . 'includes/admin/class-availablity-calendar.php';
