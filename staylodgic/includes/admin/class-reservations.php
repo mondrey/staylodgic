@@ -512,7 +512,7 @@ class Reservations
         }
 
         // Retrieve the reservations for the room for all dates
-        $reservations_array = $this->getReservations_Array($room_id);
+        $reservations_array = $this->get_reservations_array($room_id);
         if (!is_array($reservations_array)) {
             $reservations_array = [];
         }
@@ -563,7 +563,7 @@ class Reservations
         $total_rooms = isset($quantity_array[$date]) ? $quantity_array[$date] : 0;
 
         // Retrieve the reservations for the room on the given date
-        $reservations_array = $this->getReservations_Array($room_id);
+        $reservations_array = $this->get_reservations_array($room_id);
         
         $reserved_rooms = isset($reservations_array[$date]) ? count($reservations_array[$date]) : 0;
 
@@ -675,14 +675,14 @@ class Reservations
 
     
     /**
-     * Method updateRemainingRoomCount
+     * Method update_remaining_room_count
      *
      * @param $room_id $room_id [explicite description]
      *
      * @return void
      */
-    public function updateRemainingRoomCount($room_id) {
-        $reservations_array = $this->getReservations_Array($room_id);
+    public function update_remaining_room_count($room_id) {
+        $reservations_array = $this->get_reservations_array($room_id);
         $quantity_array = get_post_meta($room_id, 'staylodgic_quantity_array', true);
         
         // Initialize remaining rooms count
@@ -1688,7 +1688,7 @@ class Reservations
      *
      * @return void
      */
-    public function getReservations_Array($room_id)
+    public function get_reservations_array($room_id)
     {
 
         if (!$room_id) {
