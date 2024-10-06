@@ -331,32 +331,32 @@
 			const nightsSpan = document.querySelector("#nights-display span");
 
 			if (selectedDates.length === 1) {
-				let checkInDate = selectedDates[0];
+				let got_checkin_date = selectedDates[0];
 
-				let checkOutDate = new Date(checkInDate);
-				checkOutDate.setDate(checkOutDate.getDate() + 1);
-				let lastNightDate = new Date(checkOutDate);
+				let got_checkout_date = new Date(got_checkin_date);
+				got_checkout_date.setDate(got_checkout_date.getDate() + 1);
+				let lastNightDate = new Date(got_checkout_date);
 				lastNightDate.setDate(lastNightDate.getDate() - 1); // Calculate last night
 
 				checkInSpan.textContent =
-					formatDateToLocale(checkInDate) +
+					formatDateToLocale(got_checkin_date) +
 					" to " +
-					formatDateToLocale(checkOutDate);
+					formatDateToLocale(got_checkout_date);
 
 				nightsSpan.textContent = "1";
 			} else if (selectedDates.length === 2) {
-				let checkInDate = selectedDates[0];
-				let checkOutDate = new Date(selectedDates[1]);
-				let lastNightDate = new Date(checkOutDate);
-				checkOutDate.setDate(checkOutDate.getDate()); // Increment checkout date
-				lastNightDate.setDate(checkOutDate.getDate() - 1); // Increment checkout date
+				let got_checkin_date = selectedDates[0];
+				let got_checkout_date = new Date(selectedDates[1]);
+				let lastNightDate = new Date(got_checkout_date);
+				got_checkout_date.setDate(got_checkout_date.getDate()); // Increment checkout date
+				lastNightDate.setDate(got_checkout_date.getDate() - 1); // Increment checkout date
 				const nights =
-					(checkOutDate - checkInDate) / (1000 * 60 * 60 * 24);
+					(got_checkout_date - got_checkin_date) / (1000 * 60 * 60 * 24);
 
 				checkInSpan.textContent =
-					formatDateToLocale(checkInDate) +
+					formatDateToLocale(got_checkin_date) +
 					" to " +
-					formatDateToLocale(checkOutDate);
+					formatDateToLocale(got_checkout_date);
 
 				nightsSpan.textContent = nights.toString();
 			}
@@ -383,22 +383,22 @@
 			var checkOutDateStr = $(this).data("check-out");
 
 			// Convert the date strings to Date objects
-			var checkInDate = new Date(checkInDateStr);
+			var got_checkin_date = new Date(checkInDateStr);
 			var stayLastDate = new Date(stayLastDateStr);
-			var checkOutDate = new Date(checkOutDateStr);
-			console.log(" the new checkout " + checkOutDate);
+			var got_checkout_date = new Date(checkOutDateStr);
+			console.log(" the new checkout " + got_checkout_date);
 			// Update the flatpickr input value with the selected date range
 			// Update the flatpickr input value with the selected date range
 			flatpickrInstance.input.value =
 				checkInDateStr + " to " + checkOutDateStr;
 
 			// Set the selected dates using setDate method
-			flatpickrInstance.setDate([checkInDate, checkOutDate]);
+			flatpickrInstance.setDate([got_checkin_date, got_checkout_date]);
 
-			updateSelectedDates(checkInDate, checkOutDate);
+			updateSelectedDates(got_checkin_date, got_checkout_date);
 			var selectedDates = []; // Correct array declaration
-			selectedDates[0] = checkInDate;
-			selectedDates[1] = checkOutDate;
+			selectedDates[0] = got_checkin_date;
+			selectedDates[1] = got_checkout_date;
 			// updateInfoDisplay(selectedDates); // Call the function with the array
 
 			// Trigger click on the bookingSearch button
@@ -626,7 +626,7 @@
 			var inputVal = $("#reservation-date").val();
 			var dates = inputVal.split(" to ");
 
-			var checkInDate, checkOutDate;
+			var got_checkin_date, got_checkout_date;
 			var reservationDate;
 
 			console.log(inputVal);
@@ -634,11 +634,11 @@
 				console.log("One");
 				// Only one date in input field, get date from #check-in-display
 				// var checkInDateStr = $('#check-in-display span').text();
-				// checkInDate = new Date(checkInDateStr);
-				// checkOutDate = new Date(checkInDateStr); // Use the same date for check-out
-				// updateSelectedDates(checkInDate, checkOutDate);
-				// var formattedCheckIn = formatDateToYYYYMMDD(checkInDate);
-				// var formattedCheckOut = formatDateToYYYYMMDD(checkOutDate);
+				// got_checkin_date = new Date(checkInDateStr);
+				// got_checkout_date = new Date(checkInDateStr); // Use the same date for check-out
+				// updateSelectedDates(got_checkin_date, got_checkout_date);
+				// var formattedCheckIn = formatDateToYYYYMMDD(got_checkin_date);
+				// var formattedCheckOut = formatDateToYYYYMMDD(got_checkout_date);
 				// reservationDate = formattedCheckIn + ' to ' + formattedCheckOut;
 				// console.log( reservationDate );
 				$("#bookingSearch").removeClass("booking-disabled");
@@ -930,16 +930,16 @@
 				console.log("One");
 				// Only one date in input field, get date from #check-in-display
 				// var checkInDateStr = $('#check-in-display span').text();
-				// checkInDate = new Date(checkInDateStr);
-				// checkOutDate = new Date(checkInDateStr); // Use the same date for check-out
-				// updateSelectedDates(checkInDate, checkOutDate);
-				// var formattedCheckIn = formatDateToYYYYMMDD(checkInDate);
-				// var formattedCheckOut = formatDateToYYYYMMDD(checkOutDate);
+				// got_checkin_date = new Date(checkInDateStr);
+				// got_checkout_date = new Date(checkInDateStr); // Use the same date for check-out
+				// updateSelectedDates(got_checkin_date, got_checkout_date);
+				// var formattedCheckIn = formatDateToYYYYMMDD(got_checkin_date);
+				// var formattedCheckOut = formatDateToYYYYMMDD(got_checkout_date);
 				// reservationDate = formattedCheckIn + ' to ' + formattedCheckOut;
 				// console.log( reservationDate );
 				$("#activitySearch").removeClass("booking-disabled");
 			} else {
-				var checkInDate, checkOutDate;
+				var got_checkin_date, got_checkout_date;
 				var reservationDate;
 
 				reservationDate = $("#activity-reservation-date").val();

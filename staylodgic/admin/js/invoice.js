@@ -16,7 +16,7 @@
 				type: 'POST',
 				dataType: 'html', // Change dataType to html
 				data: {
-					action: 'getInvoiceActivityDetails',
+					action: 'get_invoice_activity_details',
 					booking_number: stay_booking_number,
 					staylodgic_bookingdetails_nonce: staylodgic_bookingdetails_nonce
 				},
@@ -49,7 +49,7 @@
 				type: 'POST',
 				dataType: 'html', // Change dataType to html
 				data: {
-					action: 'getInvoiceBookingDetails',
+					action: 'get_invoice_booking_details',
 					booking_number: stay_booking_number,
 					staylodgic_bookingdetails_nonce: staylodgic_bookingdetails_nonce
 				},
