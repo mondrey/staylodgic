@@ -763,8 +763,8 @@
 				if (selectedDates.length > 1) {
 					checkout = selectedDates[1];
 				}
-				let reservationID = staylodgic_admin_vars.post_id;
-				console.log(reservationID);
+				let stay_reservation_id = staylodgic_admin_vars.post_id;
+				console.log(stay_reservation_id);
 				const roomNights = checkout
 					? Math.ceil((checkout - checkin) / (1000 * 60 * 60 * 24))
 					: 0;
@@ -810,7 +810,7 @@
 				if (checkin && checkout) {
 					var data = {
 						action: "get_AvailableRooms",
-						reservationid: reservationID,
+						reservationid: stay_reservation_id,
 						checkin: new Date(checkin - checkinOffset)
 							.toISOString()
 							.split("T")[0],

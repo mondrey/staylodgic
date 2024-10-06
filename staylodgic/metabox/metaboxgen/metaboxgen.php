@@ -504,14 +504,14 @@ function staylodgic_generate_metaboxes($meta_data, $post_id)
                     if ($text_value) {
                         $registry_instance = new \Staylodgic\GuestRegistry();
                         $res_reg_ids =  $registry_instance->fetch_res_reg_ids_by_booking_number($text_value);
-                        if (isset($res_reg_ids['reservationID']) && $res_reg_ids['guestRegisterID']) {
-                            echo $registry_instance->output_registration_and_occupancy($res_reg_ids['reservationID'], $res_reg_ids['guestRegisterID'], 'text');
+                        if (isset($res_reg_ids['stay_reservation_id']) && $res_reg_ids['guest_register_id']) {
+                            echo $registry_instance->output_registration_and_occupancy($res_reg_ids['stay_reservation_id'], $res_reg_ids['guest_register_id'], 'text');
                         } else {
                             echo '<div class="registration-notice booking-number-not-found">';
                             echo __('Booking number not found.', 'staylodgic');
                             echo '</div>';
                         }
-                        //echo $registry_instance->output_registration_and_occupancy($res_reg_ids['reservationID'], $res_reg_ids['guestRegisterID'], 'icons');
+                        //echo $registry_instance->output_registration_and_occupancy($res_reg_ids['stay_reservation_id'], $res_reg_ids['guest_register_id'], 'icons');
                     }
 
                     break;
@@ -1260,10 +1260,10 @@ function staylodgic_generate_metaboxes($meta_data, $post_id)
                     if ($bookingnumber) {
                         $registry_instance = new \Staylodgic\GuestRegistry();
                         $res_reg_ids =  $registry_instance->fetch_res_reg_ids_by_booking_number($bookingnumber);
-                        if (isset($res_reg_ids['guestRegisterID'])) {
-                            echo $registry_instance->output_registration_and_occupancy($res_reg_ids['reservationID'], $res_reg_ids['guestRegisterID'], 'text');
-                            echo $registry_instance->output_registration_and_occupancy($res_reg_ids['reservationID'], $res_reg_ids['guestRegisterID'], 'icons');
-                            $guestregistration_post_edit   = get_edit_post_link($res_reg_ids['guestRegisterID']);
+                        if (isset($res_reg_ids['guest_register_id'])) {
+                            echo $registry_instance->output_registration_and_occupancy($res_reg_ids['stay_reservation_id'], $res_reg_ids['guest_register_id'], 'text');
+                            echo $registry_instance->output_registration_and_occupancy($res_reg_ids['stay_reservation_id'], $res_reg_ids['guest_register_id'], 'icons');
+                            $guestregistration_post_edit   = get_edit_post_link($res_reg_ids['guest_register_id']);
                             echo '<a class="button button-primary button-large" href="' . $guestregistration_post_edit . '">Edit Guest Registration</a>';
                         } else {
                             echo '<a data-bookingnumber="' . $bookingnumber . '" class="create-guest-registration button button-primary button-large" href="#">Create Guest Registration</a>';

@@ -923,10 +923,10 @@ class Analytics_Bookings {
 						$registry_instance = new \Staylodgic\GuestRegistry();
 						$res_reg_ids       = $registry_instance->fetch_res_reg_ids_by_booking_number( $booking['booking_number'] );
 						if ( isset( $res_reg_ids ) && is_array( $res_reg_ids ) ) {
-							$guest_list_html .= $registry_instance->output_registration_and_occupancy( $res_reg_ids['reservationID'], $res_reg_ids['guestRegisterID'], 'default' );
+							$guest_list_html .= $registry_instance->output_registration_and_occupancy( $res_reg_ids['stay_reservation_id'], $res_reg_ids['guest_register_id'], 'default' );
 							$guest_list_html .= '<div class="booking-dashboard registration">';
-							$guest_list_html .= '<a title="View Registrations" href="' . get_edit_post_link( $res_reg_ids['reservationID'] ) . '"><i class="fa-solid fa-pen-to-square"></i></a>';
-							$guest_list_html .= '<a title="Registration Link" href="' . get_permalink( $res_reg_ids['guestRegisterID'] ) . '"><i class="fa-regular fa-id-card"></i></a>';
+							$guest_list_html .= '<a title="View Registrations" href="' . get_edit_post_link( $res_reg_ids['stay_reservation_id'] ) . '"><i class="fa-solid fa-pen-to-square"></i></a>';
+							$guest_list_html .= '<a title="Registration Link" href="' . get_permalink( $res_reg_ids['guest_register_id'] ) . '"><i class="fa-regular fa-id-card"></i></a>';
 							$guest_list_html .= '</div>';
 						}
 						$guest_list_html .= '</td>';

@@ -335,8 +335,8 @@ class IcalExportProcessor
 
                 if (isset($res_reg_ids) && is_array($res_reg_ids)) {
 
-                    $registerID = $res_reg_ids['guestRegisterID'];
-                    $registration_data = get_post_meta($registerID, 'staylodgic_registration_data', true);
+                    $register_id = $res_reg_ids['guest_register_id'];
+                    $registration_data = get_post_meta($register_id, 'staylodgic_registration_data', true);
 
                     if (is_array($registration_data) && !empty($registration_data)) {
                         foreach ($registration_data as $guest_id => $guest_data) {

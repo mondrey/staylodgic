@@ -272,32 +272,32 @@ function staylodgic_sync_intervals() {
  */
 function staylodgic_formatDate($stay_date_string, $formatChoice = 'monthshort_first')
 {
-	$formattedDate = '';
+	$formatted_date = '';
 	$dateTime = new DateTime($stay_date_string);
 
 	switch ($formatChoice) {
 		case 'default':
-			$formattedDate = $dateTime->format('Y-m-d');
+			$formatted_date = $dateTime->format('Y-m-d');
 			break;
 		case 'short':
-			$formattedDate = $dateTime->format('M d, Y');
+			$formatted_date = $dateTime->format('M d, Y');
 			break;
 		case 'long':
-			$formattedDate = $dateTime->format('F d, Y');
+			$formatted_date = $dateTime->format('F d, Y');
 			break;
 		case 'monthshort_first':
-			$formattedDate = $dateTime->format('M jS, Y');
+			$formatted_date = $dateTime->format('M jS, Y');
 			break;
 		case 'monthshort_after':
-			$formattedDate = $dateTime->format('jS M, Y');
+			$formatted_date = $dateTime->format('jS M, Y');
 			break;
 		// Add more format choices as needed
 		default:
-			$formattedDate = $dateTime->format('Y-m-d');
+			$formatted_date = $dateTime->format('Y-m-d');
 			break;
 	}
 
-	return $formattedDate;
+	return $formatted_date;
 }
 /**
  * Method staylodgic_get_booking_substatuses
@@ -436,9 +436,9 @@ function staylodgic_format_value($value)
  */
 function staylodgic_readable_date($originalDate)
 {
-    $formattedDate = date("F jS, Y", strtotime($originalDate));
+    $formatted_date = date("F jS, Y", strtotime($originalDate));
 
-    return $formattedDate;
+    return $formatted_date;
 }
 
 /**

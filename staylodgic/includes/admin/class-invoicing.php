@@ -5,7 +5,7 @@ namespace Staylodgic;
 class Invoicing
 {
 
-    private $reservationID;
+    private $stay_reservation_id;
     private $bookingStatus;
     private $stay_booking_number;
     private $numberDays;
@@ -29,7 +29,7 @@ class Invoicing
     private $hotelFooter;
 
     public function __construct(
-        $reservationID = null,
+        $stay_reservation_id = null,
         $bookingStatus = null,
         $stay_booking_number = null,
         $numberDays = null,
@@ -52,7 +52,7 @@ class Invoicing
         $totalAmount = null,
         $hotelFooter = null
     ) {
-        $this->reservationID    = $reservationID;
+        $this->stay_reservation_id    = $stay_reservation_id;
         $this->bookingStatus    = $bookingStatus;
         $this->stay_booking_number    = $stay_booking_number;
         $this->numberDays    = $numberDays;
@@ -162,9 +162,9 @@ class Invoicing
 
         // Fetch reservation details
         $reservations_instance = new \Staylodgic\Activity();
-        $reservationID         = $reservations_instance->get_activity_id_for_booking($booking_number);
+        $stay_reservation_id         = $reservations_instance->get_activity_id_for_booking($booking_number);
 
-        $reservations_instance = new \Staylodgic\Activity($date = false, $activity_id = false, $reservationID);
+        $reservations_instance = new \Staylodgic\Activity($date = false, $activity_id = false, $stay_reservation_id);
         // Verify the nonce
         if (!isset($_POST['staylodgic_bookingdetails_nonce']) || !check_admin_referer('staylodgic-bookingdetails-nonce', 'staylodgic_bookingdetails_nonce')) {
             // Nonce verification failed; handle the error or reject the request
@@ -181,7 +181,7 @@ class Invoicing
         $property_header  = staylodgic_get_option('activity_property_header');
         $property_footer  = staylodgic_get_option('activity_property_footer');
 
-        $this->reservationID    = $reservationID;
+        $this->stay_reservation_id    = $stay_reservation_id;
         $this->hotelName    = $property_name;
         $this->hotelPhone   = $property_phone;
         $this->hotelAddress = $property_address;
@@ -189,14 +189,14 @@ class Invoicing
         $this->hotelFooter  = $property_footer;
         $this->hotel_logo    = $property_logo_id ? wp_get_attachment_image_url($property_logo_id, 'full') : '';
 
-        if ($reservationID) {
+        if ($stay_reservation_id) {
             $this->stay_booking_number = $booking_number;
-            $this->checkInDate   = get_post_meta($reservationID, 'staylodgic_checkin_date', true);
+            $this->checkInDate   = get_post_meta($stay_reservation_id, 'staylodgic_checkin_date', true);
 
-            $adults = get_post_meta($reservationID, 'staylodgic_reservation_activity_adults', true);
+            $adults = get_post_meta($stay_reservation_id, 'staylodgic_reservation_activity_adults', true);
 
             $children = array();
-            $children = get_post_meta($reservationID, 'staylodgic_reservation_activity_children', true);
+            $children = get_post_meta($stay_reservation_id, 'staylodgic_reservation_activity_children', true);
             
             $this->numberofAdults   = $adults;
 
@@ -210,15 +210,15 @@ class Invoicing
             $this->numberOfGuests   = $stay_total_guests;
 
             $this->bookingStatus = __('Booking Pending', 'staylodgic');
-            if ($reservations_instance->is_confirmed_reservation($reservationID)) {
+            if ($reservations_instance->is_confirmed_reservation($stay_reservation_id)) {
                 $this->bookingStatus = __('Booking Confirmed', 'staylodgic');
             }
-            $this->roomType = $reservations_instance->get_activity_name_for_reservation($reservationID);
+            $this->roomType = $reservations_instance->get_activity_name_for_reservation($stay_reservation_id);
             // Add other reservation details as needed
 
-            $taxStatus = get_post_meta($reservationID, 'staylodgic_tax', true);
-            $taxHTML   = get_post_meta($reservationID, 'staylodgic_tax_html_data', true);
-            $taxData   = get_post_meta($reservationID, 'staylodgic_tax_data', true);
+            $taxStatus = get_post_meta($stay_reservation_id, 'staylodgic_tax', true);
+            $taxHTML   = get_post_meta($stay_reservation_id, 'staylodgic_tax_html_data', true);
+            $taxData   = get_post_meta($stay_reservation_id, 'staylodgic_tax_data', true);
 
             $tax_summary = '<div id="input-tax-summary">';
             $tax_summary .= '<div class="input-tax-summary-wrap">';
@@ -233,9 +233,9 @@ class Invoicing
 
             $this->taxesAndFees = $tax_summary;
 
-            $ratePerPerson = get_post_meta($reservationID, 'staylodgic_reservation_rate_per_person', true);
-            $subTotal     = get_post_meta($reservationID, 'staylodgic_reservation_subtotal_activity_cost', true);
-            $totalAmount  = get_post_meta($reservationID, 'staylodgic_reservation_total_room_cost', true);
+            $ratePerPerson = get_post_meta($stay_reservation_id, 'staylodgic_reservation_rate_per_person', true);
+            $subTotal     = get_post_meta($stay_reservation_id, 'staylodgic_reservation_subtotal_activity_cost', true);
+            $totalAmount  = get_post_meta($stay_reservation_id, 'staylodgic_reservation_total_room_cost', true);
 
             $this->roomPrice   = $ratePerPerson;
             $this->subTotal    = $subTotal;
@@ -252,7 +252,7 @@ class Invoicing
         }
 
         $informationSheet = $this->invoiceActivityTemplate(
-            $this->reservationID,
+            $this->stay_reservation_id,
             $this->bookingStatus,
             $this->stay_booking_number,
             $this->numberDays,
@@ -291,9 +291,9 @@ class Invoicing
 
         // Fetch reservation details
         $reservations_instance = new \Staylodgic\Reservations();
-        $reservationID         = $reservations_instance->get_reservation_id_for_booking($booking_number);
+        $stay_reservation_id         = $reservations_instance->get_reservation_id_for_booking($booking_number);
 
-        $reservations_instance = new \Staylodgic\Reservations($date = false, $room_id = false, $reservationID);
+        $reservations_instance = new \Staylodgic\Reservations($date = false, $room_id = false, $stay_reservation_id);
         // Verify the nonce
         if (!isset($_POST['staylodgic_bookingdetails_nonce']) || !check_admin_referer('staylodgic-bookingdetails-nonce', 'staylodgic_bookingdetails_nonce')) {
             // Nonce verification failed; handle the error or reject the request
@@ -310,7 +310,7 @@ class Invoicing
         $property_header  = staylodgic_get_option('property_header');
         $property_footer  = staylodgic_get_option('property_footer');
 
-        $this->reservationID    = $reservationID;
+        $this->stay_reservation_id    = $stay_reservation_id;
         $this->hotelName    = $property_name;
         $this->hotelPhone   = $property_phone;
         $this->hotelAddress = $property_address;
@@ -318,15 +318,15 @@ class Invoicing
         $this->hotelFooter  = $property_footer;
         $this->hotel_logo    = $property_logo_id ? wp_get_attachment_image_url($property_logo_id, 'full') : '';
 
-        if ($reservationID) {
+        if ($stay_reservation_id) {
             $this->stay_booking_number = $booking_number;
-            $this->checkInDate   = get_post_meta($reservationID, 'staylodgic_checkin_date', true);
-            $this->checkOutDate  = get_post_meta($reservationID, 'staylodgic_checkout_date', true);
+            $this->checkInDate   = get_post_meta($stay_reservation_id, 'staylodgic_checkin_date', true);
+            $this->checkOutDate  = get_post_meta($stay_reservation_id, 'staylodgic_checkout_date', true);
 
-            $adults = get_post_meta($reservationID, 'staylodgic_reservation_room_adults', true);
+            $adults = get_post_meta($stay_reservation_id, 'staylodgic_reservation_room_adults', true);
 
             $children = array();
-            $children = get_post_meta($reservationID, 'staylodgic_reservation_room_children', true);
+            $children = get_post_meta($stay_reservation_id, 'staylodgic_reservation_room_children', true);
             
             $this->numberofAdults   = $adults;
 
@@ -340,16 +340,16 @@ class Invoicing
             $this->numberOfGuests   = $stay_total_guests;
 
             $this->bookingStatus = __('Booking Pending', 'staylodgic');
-            if ($reservations_instance->is_confirmed_reservation($reservationID)) {
+            if ($reservations_instance->is_confirmed_reservation($stay_reservation_id)) {
                 $this->bookingStatus = __('Booking Confirmed', 'staylodgic');
             }
-            $this->roomType = $reservations_instance->get_room_name_for_reservation($reservationID);
-            $this->numberDays = $reservations_instance->count_reservation_days($reservationID);
+            $this->roomType = $reservations_instance->get_room_name_for_reservation($stay_reservation_id);
+            $this->numberDays = $reservations_instance->count_reservation_days($stay_reservation_id);
             // Add other reservation details as needed
 
-            $taxStatus = get_post_meta($reservationID, 'staylodgic_tax', true);
-            $taxHTML   = get_post_meta($reservationID, 'staylodgic_tax_html_data', true);
-            $taxData   = get_post_meta($reservationID, 'staylodgic_tax_data', true);
+            $taxStatus = get_post_meta($stay_reservation_id, 'staylodgic_tax', true);
+            $taxHTML   = get_post_meta($stay_reservation_id, 'staylodgic_tax_html_data', true);
+            $taxData   = get_post_meta($stay_reservation_id, 'staylodgic_tax_data', true);
 
             $tax_summary = '<div id="input-tax-summary">';
             $tax_summary .= '<div class="input-tax-summary-wrap">';
@@ -364,9 +364,9 @@ class Invoicing
 
             $this->taxesAndFees = $tax_summary;
 
-            $ratePerNight = get_post_meta($reservationID, 'staylodgic_reservation_rate_per_night', true);
-            $subTotal     = get_post_meta($reservationID, 'staylodgic_reservation_subtotal_room_cost', true);
-            $totalAmount  = get_post_meta($reservationID, 'staylodgic_reservation_total_room_cost', true);
+            $ratePerNight = get_post_meta($stay_reservation_id, 'staylodgic_reservation_rate_per_night', true);
+            $subTotal     = get_post_meta($stay_reservation_id, 'staylodgic_reservation_subtotal_room_cost', true);
+            $totalAmount  = get_post_meta($stay_reservation_id, 'staylodgic_reservation_total_room_cost', true);
 
             $this->roomPrice   = $ratePerNight;
             $this->subTotal    = $subTotal;
@@ -383,7 +383,7 @@ class Invoicing
         }
 
         $informationSheet = $this->invoiceTemplate(
-            $this->reservationID,
+            $this->stay_reservation_id,
             $this->bookingStatus,
             $this->stay_booking_number,
             $this->numberDays,
@@ -484,7 +484,7 @@ class Invoicing
      * @return void
      */
     public function invoiceActivityTemplate(
-        $reservationID,
+        $stay_reservation_id,
         $bookingStatus,
         $stay_booking_number,
         $numberDays,
@@ -524,7 +524,7 @@ class Invoicing
                         </section>
                         <section id="invoice-info">
                             <p><?php echo esc_html($hotelHeader); ?></p>
-                            <p><?php echo __('Invoice No:', 'staylodgic'); ?> <?php echo esc_html($stay_booking_number . '-' . $reservationID); ?></p>
+                            <p><?php echo __('Invoice No:', 'staylodgic'); ?> <?php echo esc_html($stay_booking_number . '-' . $stay_reservation_id); ?></p>
                             <p><?php echo __('Invoice Date:', 'staylodgic'); ?> <?php echo esc_html($stay_current_date); ?></p>
                             <p class="invoice-booking-status"><?php echo esc_html($bookingStatus); ?></p>
                         </section>
@@ -562,8 +562,8 @@ class Invoicing
                             <p class="nightly-rate-info"><span class="nightly-rate"><?php echo staylodgic_price($roomPrice); ?></span><span class="nights"> x <?php echo esc_html($numberDays); ?> <?php echo __('Per Person', 'staylodgic'); ?></span></p>
                             <?php
                             $reservations_instance = new \Staylodgic\Activity();
-                            $reservationID         = $reservations_instance->get_activity_id_for_booking($stay_booking_number);
-                            $taxStatus             = get_post_meta($reservationID, 'staylodgic_tax', true);
+                            $stay_reservation_id         = $reservations_instance->get_activity_id_for_booking($stay_booking_number);
+                            $taxStatus             = get_post_meta($stay_reservation_id, 'staylodgic_tax', true);
                             if ('enabled' == $taxStatus) {
                             ?>
                                 <div class="subtotal-info">
@@ -599,7 +599,7 @@ class Invoicing
      * @return void
      */
     public function invoiceTemplate(
-        $reservationID,
+        $stay_reservation_id,
         $bookingStatus,
         $stay_booking_number,
         $numberDays,
@@ -640,7 +640,7 @@ class Invoicing
                         </section>
                         <section id="invoice-info">
                             <p><?php echo $hotelHeader; ?></p>
-                            <p><?php echo __('Invoice No:', 'staylodgic'); ?> <?php echo esc_html($stay_booking_number . '-' . $reservationID); ?></p>
+                            <p><?php echo __('Invoice No:', 'staylodgic'); ?> <?php echo esc_html($stay_booking_number . '-' . $stay_reservation_id); ?></p>
                             <p><?php echo __('Invoice Date:', 'staylodgic'); ?> <?php echo esc_html($stay_current_date); ?></p>
                             <p class="invoice-booking-status"><?php echo esc_html($bookingStatus); ?></p>
                         </section>
@@ -679,8 +679,8 @@ class Invoicing
                             <p class="nightly-rate-info"><span class="nightly-rate"><?php echo staylodgic_price($roomPrice); ?></span><span class="nights"> x <?php echo esc_html($numberDays); ?> <?php echo __('Nights', 'staylodgic'); ?></span></p>
                             <?php
                             $reservations_instance = new \Staylodgic\Reservations();
-                            $reservationID         = $reservations_instance->get_reservation_id_for_booking($stay_booking_number);
-                            $taxStatus             = get_post_meta($reservationID, 'staylodgic_tax', true);
+                            $stay_reservation_id         = $reservations_instance->get_reservation_id_for_booking($stay_booking_number);
+                            $taxStatus             = get_post_meta($stay_reservation_id, 'staylodgic_tax', true);
                             if ('enabled' == $taxStatus) {
                             ?>
                                 <div class="subtotal-info">

@@ -67,19 +67,19 @@ class Reservations
             echo "<div class='reservation-details'>";
             while ($reservationQuery->have_posts()) {
                 $reservationQuery->the_post();
-                $reservationID = get_the_ID();
+                $stay_reservation_id = get_the_ID();
     
-                $reservation_details_status = get_post_meta($reservationID, 'staylodgic_reservation_status', true);
+                $reservation_details_status = get_post_meta($stay_reservation_id, 'staylodgic_reservation_status', true);
                 // Display reservation details
                 echo "<h3>Reservation ID: " . esc_html($booking_number) . "</h3>";
                 if ( $activityFound ) {
-                    echo "<p>Activity Date: " . esc_html(get_post_meta($reservationID, 'staylodgic_checkin_date', true)) . "</p>";
+                    echo "<p>Activity Date: " . esc_html(get_post_meta($stay_reservation_id, 'staylodgic_checkin_date', true)) . "</p>";
 
                     $stay_guest_id = self::get_guest_id_for_activity($booking_number);
                     
                 } else {
-                    echo "<p>Check-in Date: " . esc_html(get_post_meta($reservationID, 'staylodgic_checkin_date', true)) . "</p>";
-                    echo "<p>Check-out Date: " . esc_html(get_post_meta($reservationID, 'staylodgic_checkout_date', true)) . "</p>";
+                    echo "<p>Check-in Date: " . esc_html(get_post_meta($stay_reservation_id, 'staylodgic_checkin_date', true)) . "</p>";
+                    echo "<p>Check-out Date: " . esc_html(get_post_meta($stay_reservation_id, 'staylodgic_checkout_date', true)) . "</p>";
                     echo "<p class='reservation-details-status-outer ".esc_attr( $reservation_details_status )."'>Status: <span class='reservation-details-status'>" . esc_html( $reservation_details_status ) . "</span></p>";
 
                     $stay_guest_id = self::get_guest_id_for_reservation($booking_number);

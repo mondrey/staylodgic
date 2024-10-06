@@ -7,7 +7,7 @@ class GuestRegistry
 
     protected $stay_booking_number;
     private static $idLabelMap = [];
-    private $reservationID;
+    private $stay_reservation_id;
     private $hotelName;
     private $hotelPhone;
     private $hotelAddress;
@@ -17,7 +17,7 @@ class GuestRegistry
 
     public function __construct(
         $stay_booking_number = null,
-        $reservationID = null,
+        $stay_reservation_id = null,
         $hotelName = null,
         $hotelPhone = null,
         $hotelAddress = null,
@@ -120,11 +120,11 @@ class GuestRegistry
 
     /**
      * Fetches the reservation and guest register post IDs based on a supplied booking number.
-     * Returns an associative array with 'reservationID' and 'guestRegisterID' if both are found,
+     * Returns an associative array with 'stay_reservation_id' and 'guest_register_id' if both are found,
      * otherwise returns false.
      *
      * @param string $stay_booking_number The booking number to search for.
-     * @return array|bool An associative array with 'reservationID' and 'guestRegisterID', or false if not both found.
+     * @return array|bool An associative array with 'stay_reservation_id' and 'guest_register_id', or false if not both found.
      */
     public function fetch_res_reg_ids_by_booking_number($stay_booking_number)
     {
@@ -158,8 +158,8 @@ class GuestRegistry
         // Check if both posts are found
         if ($reservationQuery->have_posts() && $guestRegisterQuery->have_posts()) {
             $result = array(
-                'reservationID'   => $reservationQuery->posts[0]->ID,
-                'guestRegisterID' => $guestRegisterQuery->posts[0]->ID,
+                'stay_reservation_id'   => $reservationQuery->posts[0]->ID,
+                'guest_register_id' => $guestRegisterQuery->posts[0]->ID,
             );
             return $result;
         } else {
@@ -183,12 +183,12 @@ class GuestRegistry
 
         $res_reg_ids = $this->fetch_res_reg_ids_by_booking_number($stay_booking_number);
 
-        $reservationID = $res_reg_ids['reservationID'];
-        $registerID = $res_reg_ids['guestRegisterID'];
+        $stay_reservation_id = $res_reg_ids['stay_reservation_id'];
+        $register_id = $res_reg_ids['guest_register_id'];
 
         $reservation_instance = new \Staylodgic\Reservations();
 
-        $stay_checkin_date = $reservation_instance->get_checkin_date($reservationID);
+        $stay_checkin_date = $reservation_instance->get_checkin_date($stay_reservation_id);
         // Convert check-in date to DateTime object
         $checkinDateObj = new \DateTime($stay_checkin_date);
 
@@ -212,10 +212,10 @@ class GuestRegistry
         }
 
         // Get total occupants for the reservation
-        $reservation_occupants = $reservation_instance->get_total_occupants_for_reservation($reservationID);
+        $reservation_occupants = $reservation_instance->get_total_occupants_for_reservation($stay_reservation_id);
 
         // Get registered guest count
-        $registeredGuestCount = $this->getRegisteredGuestCount($registerID);
+        $registeredGuestCount = $this->getRegisteredGuestCount($register_id);
 
         if ((intval($reservation_occupants) + 2) < $registeredGuestCount) {
             $allow = false;
@@ -237,19 +237,19 @@ class GuestRegistry
     /**
      * Outputs the final registered and occupancy numbers for a given reservation in either text, fraction, or icons format.
      *
-     * @param int $reservationID The ID of the reservation.
-     * @param int $registerID The ID used for registering.
+     * @param int $stay_reservation_id The ID of the reservation.
+     * @param int $register_id The ID used for registering.
      * @param string $outputFormat Specifies the output format: 'text', 'fraction', or 'icons'.
      */
-    public function output_registration_and_occupancy($reservationID, $registerID, $outputFormat = 'text')
+    public function output_registration_and_occupancy($stay_reservation_id, $register_id, $outputFormat = 'text')
     {
         $reservation_instance = new \Staylodgic\Reservations();
 
         // Get total occupants for the reservation
-        $reservation_occupants = $reservation_instance->get_total_occupants_for_reservation($reservationID);
+        $reservation_occupants = $reservation_instance->get_total_occupants_for_reservation($stay_reservation_id);
 
         // Get registered guest count
-        $registeredGuestCount = $this->getRegisteredGuestCount($registerID);
+        $registeredGuestCount = $this->getRegisteredGuestCount($register_id);
 
         $registration_output = '';
 
@@ -272,7 +272,7 @@ class GuestRegistry
             $registration_output .= '<span class="registration-label">';
             $registration_output .= 'Registered: ' . esc_html($registeredGuestCount) . '/' . esc_html($reservation_occupants) . ' ';
             $registration_output .= '</span>';
-            $registration_output .= '<a title="' . __('View Registrations', 'staylodgic') . '" href="' . esc_url(get_edit_post_link($registerID)) . '">';
+            $registration_output .= '<a title="' . __('View Registrations', 'staylodgic') . '" href="' . esc_url(get_edit_post_link($register_id)) . '">';
             $registration_output .= '<i class="fa-solid fa-pen-to-square"></i>';
             $registration_output .= '</a>';
             $registration_output .= '</div>';
@@ -427,8 +427,8 @@ class GuestRegistry
                                         }
                                         if ($info_value['type'] == 'datetime-local') {
                                             $date = new \DateTime($info_value['value']);
-                                            $formattedDate = $date->format('l, F j, Y g:i A');
-                                            $info_value['value'] = $formattedDate;
+                                            $formatted_date = $date->format('l, F j, Y g:i A');
+                                            $info_value['value'] = $formatted_date;
                                         }
 
                                         echo '<p class="type-container" data-type="' . esc_attr($info_value['type']) . '" data-id="' . esc_attr($info_key) . '"><strong><span class="registration-label">' . esc_html($info_value['label']) . ':</span></strong> <span class="registration-data">' . esc_html($info_value['value']) . '</span></p>';
@@ -541,7 +541,7 @@ class GuestRegistry
                     $page_title = get_the_title($post_id);
 
                     $email = new EmailDispatcher($email_address, 'Online Check-in: ' . $page_title);
-                    $email->set_html_content()->setRegistrationTemplate($booking_data, $post_id);
+                    $email->set_html_content()->set_registration_template($booking_data, $post_id);
         
                     if ($email->send( $cc = false )) {
                         // echo 'Confirmation email sent successfully to the guest.';
@@ -759,12 +759,12 @@ class GuestRegistry
             echo "<div class='reservation-details'>";
             while ($reservationQuery->have_posts()) {
                 $reservationQuery->the_post();
-                $reservationID = get_the_ID();
+                $stay_reservation_id = get_the_ID();
 
                 // Display reservation details
-                echo "<h3>Reservation ID: " . esc_html($reservationID) . "</h3>";
-                echo "<p>Check-in Date: " . esc_html(get_post_meta($reservationID, 'staylodgic_checkin_date', true)) . "</p>";
-                echo "<p>Check-out Date: " . esc_html(get_post_meta($reservationID, 'staylodgic_checkout_date', true)) . "</p>";
+                echo "<h3>Reservation ID: " . esc_html($stay_reservation_id) . "</h3>";
+                echo "<p>Check-in Date: " . esc_html(get_post_meta($stay_reservation_id, 'staylodgic_checkin_date', true)) . "</p>";
+                echo "<p>Check-out Date: " . esc_html(get_post_meta($stay_reservation_id, 'staylodgic_checkout_date', true)) . "</p>";
                 // Add other reservation details as needed
             }
             echo "</div>";
@@ -781,7 +781,7 @@ class GuestRegistry
             $registry_instance = new \Staylodgic\GuestRegistry();
             $res_reg_ids =  $registry_instance->fetch_res_reg_ids_by_booking_number($booking_number);
             if ($res_reg_ids) {
-                $guest_registration_url = get_permalink($res_reg_ids['guestRegisterID']);
+                $guest_registration_url = get_permalink($res_reg_ids['guest_register_id']);
                 echo '<a href="' . esc_url($guest_registration_url) . '" class="book-button button-inline">' . __('Proceed to register', 'staylodgic') . '</a>';
             }
             // Add other guest details as needed
