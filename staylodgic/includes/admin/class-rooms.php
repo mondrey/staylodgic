@@ -74,14 +74,14 @@ class Rooms
     }
     
     /**
-     * Method is_channel_room_booked
+     * Method isChannelRoomBooked
      *
      * @param $room_id $room_id [explicite description]
      * @param $stay_date_string $stay_date_string [explicite description]
      *
      * @return void
      */
-    public static function is_channel_room_booked($room_id, $stay_date_string)
+    public static function isChannelRoomBooked($room_id, $stay_date_string)
     {
         $channel_array = get_post_meta($room_id, 'staylodgic_channel_quantity_array', true);
 
@@ -125,17 +125,17 @@ class Rooms
     }
     
     /**
-     * Method get_max_quantity_for_room
+     * Method getMaxQuantityForRoom
      *
      * @param $room_id $room_id [explicite description]
      * @param $stay_date_string $stay_date_string [explicite description]
      *
      * @return void
      */
-    public static function get_max_quantity_for_room($room_id, $stay_date_string)
+    public static function getMaxQuantityForRoom($room_id, $stay_date_string)
     {
 
-        if (self::is_channel_room_booked($room_id, $stay_date_string)) {
+        if (self::isChannelRoomBooked($room_id, $stay_date_string)) {
             return '0';
         }
         $stay_quantity_array = get_post_meta($room_id, 'staylodgic_quantity_array', true);
@@ -397,9 +397,9 @@ class Rooms
     {
 
         $reservation_instance = new \Staylodgic\Reservations($stay_date_string, $stay_room_id, $reservation_id = false, $excluded_reservation_id);
-        $reserved_room_count = $reservation_instance->count_reservations_for_day();
+        $reserved_room_count = $reservation_instance->countReservationsForDay();
 
-        $max_count = \Staylodgic\Rooms::get_max_quantity_for_room($stay_room_id, $stay_date_string);
+        $max_count = \Staylodgic\Rooms::getMaxQuantityForRoom($stay_room_id, $stay_date_string);
         $avaiblable_count = $max_count - $reserved_room_count;
         if (empty($avaiblable_count) || !isset($avaiblable_count)) {
             $avaiblable_count = 0;
@@ -549,7 +549,7 @@ class Rooms
         $date_range = \Staylodgic\Common::create_in_between_date_range_array($stay_start_date, $stay_end_date);
 
         $reservation_instance = new \Staylodgic\Reservations();
-        $reserved_array = $reservation_instance->get_room_reservations_for_date_range($stay_start_date, $stay_end_date, $postID);
+        $reserved_array = $reservation_instance->getRoomReservationsForDateRange($stay_start_date, $stay_end_date, $postID);
 
 
         $room_data = get_post_custom($postID);
@@ -562,7 +562,7 @@ class Rooms
         foreach ($date_range as $date) {
 
             $reservation_instance = new \Staylodgic\Reservations($date, $postID);
-            //$reserved_rooms = $reservation_instance->calculate_reserved_rooms();
+            //$reserved_rooms = $reservation_instance->calculateReservedRooms();
             $reserved_rooms = $reserved_array[$date];
             $final_quantity = $quantity + $reserved_rooms;
 

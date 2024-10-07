@@ -841,7 +841,7 @@
 
 				if (checkin && checkout) {
 					var data = {
-						action: "get_available_rooms",
+						action: "get_AvailableRooms",
 						reservationid: stay_reservation_id,
 						checkin: new Date(checkin - checkinOffset)
 							.toISOString()
@@ -849,7 +849,6 @@
 						checkout: new Date(checkout - checkoutOffset)
 							.toISOString()
 							.split("T")[0],
-						nonce: staylodgic_admin_vars.nonce // Include the nonce in the AJAX request
 					};
 
 					jQuery.post(ajaxurl, data, function (response) {
