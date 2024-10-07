@@ -378,7 +378,7 @@ class Availablity_Calendar extends Availablity_Calendar_Base {
 
 		$table_start = '<table id="calendarTable" data-calstart="' . esc_attr( $start_date_string ) . '" data-calend="' . esc_attr( $end_date_string ) . '">';
 
-		$this->roomlist = \Staylodgic\Rooms::get_room_list();
+		$this->roomlist = \Staylodgic\Rooms::getRoomList();
 
 		$room_output     = '';
 		$all_room_output = '';

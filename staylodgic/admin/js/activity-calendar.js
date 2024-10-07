@@ -99,7 +99,7 @@
 	
 			var stay_total_guests = parseInt( adults ) + parseInt( children );
 			console.log('Total guests ' + stay_total_guests);
-			var stay_post_id = $('input[name="post_ID"]').val();
+			var postID = $('input[name="post_ID"]').val();
 		
 			// Make an Ajax request to fetch the room names
 			$.ajax({
@@ -107,7 +107,7 @@
 			  type: 'POST',
 			  data: {
 				action: 'generateTax', // Custom Ajax action
-				post_id: stay_post_id,
+				post_id: postID,
 				nonce: staylodgic_admin_vars.nonce,
 				subtotal: subtotal_for_tax,
 				staynights: totalStayNights,
@@ -131,7 +131,7 @@
 		$('#activity-tax-exclude').on('click', function(e) {
 			// Get the selected booking number
 			var subtotal_for_tax= $('[data-priceof="activitysubtotal"]').val();
-			var stay_post_id = $('input[name="post_ID"]').val();
+			var postID = $('input[name="post_ID"]').val();
 		
 			// Make an Ajax request to fetch the room names
 			$.ajax({
@@ -139,7 +139,7 @@
 			  type: 'POST',
 			  data: {
 				action: 'excludeTax', // Custom Ajax action
-				post_id: stay_post_id,
+				post_id: postID,
 				subtotal: subtotal_for_tax,
 				nonce: staylodgic_admin_vars.nonce
 			  },
