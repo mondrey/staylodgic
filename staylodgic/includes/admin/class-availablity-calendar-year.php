@@ -111,7 +111,7 @@ class Availablity_Calendar_Year extends Availablity_Calendar_Base {
 			// Check if the day is fully booked
 			$date                 = sprintf( '%d-%02d-%02d', $year, $month, $day );
 			$reservation_instance = new \Staylodgic\Reservations();
-			$the_remaining_rooms  = $reservation_instance->getTotalRemainingForAllRoomsOnDate( $date );
+			$the_remaining_rooms  = $reservation_instance->get_total_remaining_for_all_rooms_on_date( $date );
 			$class                = ''; // Initialize the variable with an empty string
 
 			if ( 0 === $the_remaining_rooms ) {
