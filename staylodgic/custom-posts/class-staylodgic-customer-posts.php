@@ -60,10 +60,10 @@ class Staylodgic_Customer_Posts
                 }
 
                 $reservation_instance = new \Staylodgic\Reservations();
-                $reservation_array = \Staylodgic\Reservations::get_reservation_ids_for_customer($customer_post_id);
+                $reservation_array = \Staylodgic\Reservations::getReservationIDsForCustomer($customer_post_id);
                 if (is_array($reservation_array) && !empty($reservation_array)) {
                     echo '<i class="fas fa-bed"></i>';
-                    $editlinks = $reservation_instance->get_edit_links_for_reservations($reservation_array);
+                    $editlinks = $reservation_instance->getEditLinksForReservations($reservation_array);
                     echo wp_kses($editlinks, staylodgic_get_allowed_tags());
                 }
 
