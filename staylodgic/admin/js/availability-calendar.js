@@ -353,7 +353,7 @@
 				'#rates-modal input[name="modaldatepicker"]'
 			).val();
 			var rate = $('#rates-modal input[name="rate"]').val();
-			var postID = $('#rates-modal select[name="room"]').val();
+			var stay_post_id = $('#rates-modal select[name="room"]').val();
 
 			var save_button = $("#rates-modal .save-changes");
 			save_button.find(".spinner-border").css("opacity", "1");
@@ -363,15 +363,15 @@
 				'input[name="staylodgic_availabilitycalendar_nonce"]'
 			).val();
 
-			console.log(ajaxurl, date_range, rate, postID);
+			console.log(ajaxurl, date_range, rate, stay_post_id);
 
 			// Perform AJAX request
 			$.ajax({
 				type: "POST",
 				url: ajaxurl,
 				data: {
-					action: "update_RoomRate",
-					postID: postID,
+					action: "update_room_rate",
+					stay_post_id: stay_post_id,
 					date_range: date_range,
 					rate: rate,
 					staylodgic_availabilitycalendar_nonce:
@@ -512,7 +512,7 @@
 				'#quantity-modal input[name="modaldatepicker"]'
 			).val();
 			var quantity = $('#quantity-modal input[name="quantity"]').val();
-			var postID = $('#quantity-modal select[name="room"]').val();
+			var stay_post_id = $('#quantity-modal select[name="room"]').val();
 
 			var save_button = $("#quantity-modal .save-changes");
 			save_button.find(".spinner-border").css("opacity", "1");
@@ -522,15 +522,15 @@
 				'input[name="staylodgic_availabilitycalendar_nonce"]'
 			).val();
 
-			console.log(ajaxurl, date_range, quantity, postID);
+			console.log(ajaxurl, date_range, quantity, stay_post_id);
 
 			// Perform AJAX request
 			$.ajax({
 				type: "POST",
 				url: ajaxurl,
 				data: {
-					action: "update_RoomAvailability",
-					postID: postID,
+					action: "update_room_availability",
+					stay_post_id: stay_post_id,
 					date_range: date_range,
 					quantity: quantity,
 					staylodgic_availabilitycalendar_nonce:
