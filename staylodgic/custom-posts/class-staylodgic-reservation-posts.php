@@ -84,9 +84,9 @@ class staylodgic_Reservation_Posts
             case "reservation_checkinout":
                 $reservation_checkin       = $reservation_instance->get_checkin_date();
                 $reservation_checkout      = $reservation_instance->get_checkout_date();
-                $reservation_staying       = $reservation_instance->isGuestCurrentlyStaying();
-                $reservation_todaycheckin  = $reservation_instance->isGuestCheckingInToday();
-                $reservation_todaycheckout = $reservation_instance->isGuestCheckingOutToday();
+                $reservation_staying       = $reservation_instance->is_guest_currently_staying();
+                $reservation_todaycheckin  = $reservation_instance->is_guest_checking_in_today();
+                $reservation_todaycheckout = $reservation_instance->is_guest_checking_out_today();
                 if ($reservation_staying) {
                     if ($reservation_todaycheckin) {
                         echo '<p class="post-status-reservation post-status-reservation-checkin">' . __('Check-in', 'staylodgic') . '</p>';
@@ -121,7 +121,7 @@ class staylodgic_Reservation_Posts
                 echo esc_attr(ucfirst($reservation_substatus));
                 break;
             case "reservation_room":
-                $room_title = $reservation_instance->getRoomTitleForReservation();
+                $room_title = $reservation_instance->get_room_title_for_reservation();
                 echo esc_html($room_title);
                 break;
             case "mreservation_section":

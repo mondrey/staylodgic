@@ -74,7 +74,7 @@
 					type: "POST",
 					dataType: "html",
 					data: {
-						action: "getBookingDetails", // Replace with your actual action hook
+						action: "get_booking_details", // Replace with your actual action hook
 						booking_number: stay_booking_number,
 						staylodgic_bookingdetails_nonce:
 							staylodgic_bookingdetails_nonce,

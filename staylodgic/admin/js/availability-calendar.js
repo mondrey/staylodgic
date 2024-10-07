@@ -841,7 +841,7 @@
 
 				if (checkin && checkout) {
 					var data = {
-						action: "get_AvailableRooms",
+						action: "get_available_rooms",
 						reservationid: stay_reservation_id,
 						checkin: new Date(checkin - checkinOffset)
 							.toISOString()
@@ -849,6 +849,7 @@
 						checkout: new Date(checkout - checkoutOffset)
 							.toISOString()
 							.split("T")[0],
+						nonce: staylodgic_admin_vars.nonce // Include the nonce in the AJAX request
 					};
 
 					jQuery.post(ajaxurl, data, function (response) {
@@ -901,8 +902,8 @@
 					handleDateChange(selectedDates, instance); // Call the handleDateChange function manually
 					// calculate room nights and display reservation details for existing reservation
 					var dateRangeInput = instance.input;
-					var dateRangeValue = dateRangeInput.value;
-					var dateRangeParts = dateRangeValue.split(" to ");
+					var date_range_value = dateRangeInput.value;
+					var dateRangeParts = date_range_value.split(" to ");
 					var checkin = new Date(dateRangeParts[0]);
 					var checkout = new Date(dateRangeParts[1]);
 					var roomNights =
