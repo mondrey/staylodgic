@@ -594,7 +594,7 @@ class Activity {
 						$remaining_spots_compare = $remaining_spots;
 						$existing_found          = false;
 
-						if ( $existing_activity_id == $post_id && $time == $existing_activity_time ) {
+						if ( $existing_activity_id === $post_id && $time === $existing_activity_time ) {
 
 							$reserved_for_guests    = $this->get_activity_reservation_numbers( $the_post_id );
 							$existing_spots_for_day = $reserved_for_guests['total'];
@@ -1223,7 +1223,7 @@ class Activity {
 		$stay_end_date = gmdate( 'Y-m-d', strtotime( $stay_current_date . ' +1 month' ) );
 
 		$fullybooked_dates         = array();
-		$display_fullbooked_status = false;
+		$display_fullbooked_status = false; // Disabled
 		if ( true === $display_fullbooked_status ) {
 			$reservations_instance = new \Staylodgic\Reservations();
 			$fullybooked_dates     = $reservations_instance->days_fully_booked_for_date_range( $stay_current_date, $stay_end_date );
@@ -1492,7 +1492,7 @@ class Activity {
 						$remaining_spots_compare = $remaining_spots;
 						$existing_found          = false;
 
-						if ( $existing_activity_id == $post_id && $time == $existing_activity_time ) {
+						if ( $existing_activity_id === $post_id && $time === $existing_activity_time ) {
 
 							$reserved_for_guests    = $this->get_activity_reservation_numbers( $the_post_id );
 							$existing_spots_for_day = $reserved_for_guests['total'];
@@ -1813,16 +1813,16 @@ class Activity {
 				'stay_children_guests' => $stay_reservation_data['children'],
 				'subtotal'             => staylodgic_price( $stay_reservation_data['subtotal'] ),
 				'tax'                  => $email_tax_html,
-				'stay_total_cost'            => $stay_reservation_data['total'],
+				'stay_total_cost'      => $stay_reservation_data['total'],
 			);
 
 			$email = new Email_Dispatcher( $email_address, __( 'Booking Confirmation for: ', 'staylodgic' ) . $booking_number );
 			$email->set_html_content()->set_activity_confirmation_template( $booking_details );
 
 			if ( $email->send() ) {
-				// echo 'Confirmation email sent successfully to the guest.';
+				// Confirmation email sent successfully to the guest
 			} else {
-				// echo 'Failed to send the confirmation email.';
+				// Failed to send the confirmation email
 			}
 		} else {
 			// Handle error

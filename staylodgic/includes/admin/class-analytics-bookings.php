@@ -74,7 +74,7 @@ class Analytics_Bookings {
 			echo '</div>';
 		} else {
 			echo '<h1>' . __( 'No Rooms Found', 'staylodgic' ) . '</h1>';
-			echo __( '<p>Please configure atleast 1 Room from Rooms section</p>', 'staylodgic' );
+			echo '<p>' . __( 'Please configure atleast 1 Room from Rooms section', 'staylodgic' ) . '</p>';
 			return;
 		}
 
@@ -277,11 +277,11 @@ class Analytics_Bookings {
 				$checkout       = get_post_meta( get_the_ID(), 'staylodgic_checkout_date', true );
 
 				if ( 'confirmed' === $status ) {
-					if ( $checkin == $dayafter ) {
+					if ( $checkin === $dayafter ) {
 						++$checkin_count;
 						$this->add_guest( $booking_number, 'dayafter', 'checkin', $checkin, $checkout );
 					}
-					if ( $checkout == $dayafter ) {
+					if ( $checkout === $dayafter ) {
 						++$checkout_count;
 						$this->add_guest( $booking_number, 'dayafter', 'checkout', $checkin, $checkout );
 					}
@@ -385,11 +385,11 @@ class Analytics_Bookings {
 				$checkout       = get_post_meta( get_the_ID(), 'staylodgic_checkout_date', true );
 
 				if ( 'confirmed' === $status ) {
-					if ( $checkin == $tomorrow ) {
+					if ( $checkin === $tomorrow ) {
 						++$checkin_count;
 						$this->add_guest( $booking_number, 'tomorrow', 'checkin', $checkin, $checkout );
 					}
-					if ( $checkout == $tomorrow ) {
+					if ( $checkout === $tomorrow ) {
 						++$checkout_count;
 						$this->add_guest( $booking_number, 'tomorrow', 'checkout', $checkin, $checkout );
 					}
@@ -465,11 +465,11 @@ class Analytics_Bookings {
 				$checkout       = get_post_meta( get_the_ID(), 'staylodgic_checkout_date', true );
 
 				if ( 'confirmed' === $status ) {
-					if ( $checkin == $today ) {
+					if ( $checkin === $today ) {
 						++$checkin_count;
 						$this->add_guest( $booking_number, 'today', 'checkin', $checkin, $checkout );
 					}
-					if ( $checkout == $today ) {
+					if ( $checkout === $today ) {
 						++$checkout_count;
 						$this->add_guest( $booking_number, 'today', 'checkout', $checkin, $checkout );
 					}
@@ -642,7 +642,7 @@ class Analytics_Bookings {
 				wp_reset_postdata();
 
 				// Cache the data if it's not the current month
-				if ( $month != $stay_current_month ) {
+				if ( $month !== $stay_current_month ) {
 					$cache->set_cache( $cache_key, $total_revenue );
 				}
 			}
@@ -824,11 +824,11 @@ class Analytics_Bookings {
 
 			$guest_list_html .= '<div class="staylodgic_analytics_table_wrap staylodgic-analytics-' . esc_attr( $day ) . '">';
 			// Add a heading for the day
-			if ( 'today' == $day ) {
+			if ( 'today' === $day ) {
 				$guest_list_html .= '<h2 class="staylodgic_analytics_subheading staylodgic_dayis_' . esc_attr( $day ) . '">' . __( 'Today', 'staylodgic' ) . ' ' . $this->display_today . '</h2>';
-			} elseif ( 'tomorrow' == $day ) {
+			} elseif ( 'tomorrow' === $day ) {
 				$guest_list_html .= '<h2 class="staylodgic_analytics_subheading staylodgic_dayis_' . esc_attr( $day ) . '">' . __( 'Tomorrow', 'staylodgic' ) . ' ' . $this->display_tomorrow . '</h2>';
-			} elseif ( 'dayafter' == $day ) {
+			} elseif ( 'dayafter' === $day ) {
 				$guest_list_html .= '<h2 class="staylodgic_analytics_subheading staylodgic_dayis_' . esc_attr( $day ) . '">' . __( 'Day After', 'staylodgic' ) . ' ' . $this->display_dayafter . '</h2>';
 			} else {
 				$guest_list_html .= '<h2 class="staylodgic_analytics_subheading staylodgic_dayis_' . esc_attr( $day ) . '">' . esc_html( ucfirst( $day ) ) . '</h2>';
@@ -839,7 +839,7 @@ class Analytics_Bookings {
 				$statuses,
 				function ( $a, $b ) {
 					$order = array( 'checkin', 'staying', 'checkout' ); // Define your custom order
-					return array_search( $a, $order ) - array_search( $b, $order );
+					return array_search( $a, $order, true ) - array_search( $b, $order, true );
 				}
 			);
 

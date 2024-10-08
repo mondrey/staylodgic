@@ -744,7 +744,7 @@ class Analytics_Activity {
 				$statuses,
 				function ( $a, $b ) {
 					$order = array( 'checkin', 'staying', 'checkout' ); // Define your custom order
-					return array_search( $a, $order ) - array_search( $b, $order );
+					return array_search( $a, $order, true ) - array_search( $b, $order, true );
 				}
 			);
 
