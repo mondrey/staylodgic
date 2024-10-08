@@ -284,7 +284,7 @@ class Analytics_Activity {
 				$checkin        = get_post_meta( get_the_ID(), 'staylodgic_reservation_checkin', true );
 
 				if ( 'confirmed' === $status ) {
-					if ( $checkin == $dayafter ) {
+					if ( $checkin === $dayafter ) {
 
 						// Increment the count for the activity_id
 						if ( ! isset( $this->activity_labels[ $activity_id ][ $dayafter ] ) ) {
@@ -387,7 +387,7 @@ class Analytics_Activity {
 				$checkout       = get_post_meta( get_the_ID(), 'staylodgic_checkout_date', true );
 
 				if ( 'confirmed' === $status ) {
-					if ( $checkin == $tomorrow ) {
+					if ( $checkin === $tomorrow ) {
 
 						// Increment the count for the activity_id
 						if ( ! isset( $this->activity_labels[ $activity_id ][ $tomorrow ] ) ) {
@@ -457,7 +457,7 @@ class Analytics_Activity {
 				$checkout       = get_post_meta( get_the_ID(), 'staylodgic_checkout_date', true );
 
 				if ( 'confirmed' === $status ) {
-					if ( $checkin == $today ) {
+					if ( $checkin === $today ) {
 
 						// Increment the count for the activity_id
 						if ( ! isset( $this->activity_labels[ $activity_id ][ $today ] ) ) {
@@ -729,11 +729,12 @@ class Analytics_Activity {
 
 			$guest_list_html .= '<div class="staylodgic_analytics_table_wrap">';
 			// Add a heading for the day
+
 			if ( 'today' === $day ) {
 				$guest_list_html .= '<h2 class="staylodgic_analytics_subheading staylodgic_dayis_' . $day . '">' . __( 'Today', 'staylodgic' ) . ' ' . wp_kses( $this->display_today, staylodgic_get_allowed_tags() ) . '</h2>';
-			} elseif ( 'tomorrow' == $day ) {
+			} elseif ( 'tomorrow' === $day ) {
 				$guest_list_html .= '<h2 class="staylodgic_analytics_subheading staylodgic_dayis_' . $day . '">' . __( 'Tomorrow', 'staylodgic' ) . ' ' . wp_kses( $this->display_tomorrow, staylodgic_get_allowed_tags() ) . '</h2>';
-			} elseif ( 'dayafter' == $day ) {
+			} elseif ( 'dayafter' === $day ) {
 				$guest_list_html .= '<h2 class="staylodgic_analytics_subheading staylodgic_dayis_' . $day . '">' . __( 'Day After', 'staylodgic' ) . ' ' . wp_kses( $this->display_dayafter, staylodgic_get_allowed_tags() ) . '</h2>';
 			} else {
 				$guest_list_html .= '<h2 class="staylodgic_analytics_subheading staylodgic_dayis_' . $day . '">' . esc_html( ucfirst( $day ) ) . '</h2>';

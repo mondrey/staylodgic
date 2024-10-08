@@ -1208,8 +1208,8 @@ function staylodgic_generate_metaboxes($meta_data, $post_id)
                 case 'reservation_for_customer':
 
                     $reservation_instance = new \Staylodgic\Reservations();
-                    $reservation_array = \Staylodgic\Reservations::getReservationIDsForCustomer($field['customer_id']);
-                    $bookings = $reservation_instance->getEditLinksForReservations($reservation_array);
+                    $reservation_array = \Staylodgic\Reservations::get_reservation_ids_for_customer($field['customer_id']);
+                    $bookings = $reservation_instance->get_edit_links_for_reservations($reservation_array);
 
                     $activity_instance = new \Staylodgic\Activity();
                     $activity_array = \Staylodgic\Activity::get_activity_ids_for_customer($field['customer_id']);

@@ -157,7 +157,7 @@ class Availablity_Calendar_Base {
 		$total_room_revenue   = 0;
 		$number_of_rooms_sold = 0;
 
-		$confirmed_reservations = \Staylodgic\Reservations::getConfirmedReservations();
+		$confirmed_reservations = \Staylodgic\Reservations::get_confirmed_reservations();
 
 		if ( $confirmed_reservations->have_posts() ) {
 			while ( $confirmed_reservations->have_posts() ) {
