@@ -594,7 +594,7 @@ class Activity {
 						$remaining_spots_compare = $remaining_spots;
 						$existing_found          = false;
 
-						if ( $existing_activity_id === $post_id && $time === $existing_activity_time ) {
+						if ( (int) $existing_activity_id === (int) $post_id && (int) $time === (int) $existing_activity_time ) {
 
 							$reserved_for_guests    = $this->get_activity_reservation_numbers( $the_post_id );
 							$existing_spots_for_day = $reserved_for_guests['total'];
@@ -605,7 +605,7 @@ class Activity {
 
 						$active_class = 'time-disabled';
 
-						if ( $this->stay_total_guests <= $remaining_spots_compare && 0 !== $remaining_spots ) {
+						if ( (int) $this->stay_total_guests <= (int) $remaining_spots_compare && 0 !== (int) $remaining_spots ) {
 							$active_class = 'time-active';
 							if ( $existing_found ) {
 								$active_class .= ' time-choice';
@@ -1224,6 +1224,7 @@ class Activity {
 
 		$fullybooked_dates         = array();
 		$display_fullbooked_status = false; // Disabled
+
 		if ( true === $display_fullbooked_status ) {
 			$reservations_instance = new \Staylodgic\Reservations();
 			$fullybooked_dates     = $reservations_instance->days_fully_booked_for_date_range( $stay_current_date, $stay_end_date );
@@ -1492,7 +1493,7 @@ class Activity {
 						$remaining_spots_compare = $remaining_spots;
 						$existing_found          = false;
 
-						if ( $existing_activity_id === $post_id && $time === $existing_activity_time ) {
+						if ( (int) $existing_activity_id === (int) $post_id && (int) $time === (int) $existing_activity_time ) {
 
 							$reserved_for_guests    = $this->get_activity_reservation_numbers( $the_post_id );
 							$existing_spots_for_day = $reserved_for_guests['total'];
@@ -1503,7 +1504,7 @@ class Activity {
 
 						$active_class = 'time-disabled';
 
-						if ( $total_people <= $remaining_spots_compare && 0 !== $remaining_spots && '' !== $time ) {
+						if ( (int) $total_people <= (int) $remaining_spots_compare && 0 !== (int) $remaining_spots && '' !== (int) $time ) {
 							$active_class = 'time-active';
 							if ( $existing_found ) {
 								$active_class .= ' time-choice';

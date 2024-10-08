@@ -101,8 +101,10 @@ class Availablity_Calendar_Year extends Availablity_Calendar_Base {
 			echo '<td></td>';
 		}
 
-		for ( $day = 1; $day <= gmdate( 't', $first_day_of_month ); $day++ ) {
-			if ( $day_of_week == 7 ) {
+		$days_in_month = gmdate( 't', $first_day_of_month ); // Store function result
+		for ( $day = 1; $day <= $days_in_month; $day++ ) {
+
+			if ( 7 === (int) $day_of_week ) {
 				// Start a new row for each week
 				echo '</tr><tr>';
 				$day_of_week = 0;
@@ -114,7 +116,7 @@ class Availablity_Calendar_Year extends Availablity_Calendar_Base {
 			$the_remaining_rooms  = $reservation_instance->get_total_remaining_for_all_rooms_on_date( $date );
 			$class                = ''; // Initialize the variable with an empty string
 
-			if ( 0 === $the_remaining_rooms ) {
+			if ( 0 === (int) $the_remaining_rooms ) {
 				$class = ' fully-booked';
 			} else {
 				$class = '';

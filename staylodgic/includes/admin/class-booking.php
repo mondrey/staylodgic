@@ -479,7 +479,7 @@ class Booking {
 
 			// Get the first and last keys of the inner arrays
 			foreach ( $sub_array as $inner_array ) {
-				$keys     = array_keys( $inner_array );
+				$keys      = array_keys( $inner_array );
 				$first_key = $keys[0];
 				$last_key  = end( $keys );
 
@@ -512,7 +512,7 @@ class Booking {
 				$staylast    = $sub_array['check-out'];
 
 				// Check if the current check-in and checkout dates have already been processed
-				if ( in_array( array( $checkin_alt, $staylast ), $processed_dates ) ) {
+				if ( in_array( array( $checkin_alt, $staylast ), $processed_dates, true ) ) {
 					continue; // Skip processing identical dates
 				}
 
@@ -679,7 +679,7 @@ class Booking {
 
 		$requested_room_availability = false;
 
-		if ( count( $combo_array['rooms'] ) == 0 ) {
+		if ( count( $combo_array['rooms'] ) === 0 ) {
 
 			$requested_room_availability = self::alternative_booking_dates( $stay_checkin_date, $stay_checkout_date, $number_of_guests );
 		}
@@ -706,7 +706,7 @@ class Booking {
 		$response['booking_data']   = $combo_array;
 		$response['roomlist']       = $output;
 		$response['alt_recommends'] = $requested_room_availability;
-		echo json_encode( $response, JSON_UNESCAPED_SLASHES );
+		echo wp_json_encode( $response, JSON_UNESCAPED_SLASHES );
 		die();
 	}
 
@@ -893,14 +893,14 @@ class Booking {
 	/**
 	 * Method display_booking_per_day
 	 *
-	 * @param $ratesArray_date $ratesArray_date
+	 * @param $rates_array_date $rates_array_date
 	 *
 	 * @return void
 	 */
-	public function display_booking_per_day( $ratesArray_date ) {
+	public function display_booking_per_day( $rates_array_date ) {
 		$total_roomrate = 0;
 		$html           = '';
-		foreach ( $ratesArray_date as $staydate => $roomrate ) {
+		foreach ( $rates_array_date as $staydate => $roomrate ) {
 			$html .= '<div class="checkin-staydate"><span class="number-of-rooms"></span>' . esc_html( $staydate ) . ' - ' . staylodgic_price( $roomrate ) . '</div>';
 
 			$roomrate = self::apply_price_per_person( $roomrate );
@@ -1059,11 +1059,11 @@ class Booking {
 		$highest_discount = max( $last_minute_discount, $early_booking_discount, $long_stay_discount );
 		$discount_type    = '';
 
-		if ( $highest_discount === $last_minute_discount && isset( $discount_parameters['lastminute'] ) ) {
+		if ( (int) $highest_discount === (int) $last_minute_discount && isset( $discount_parameters['lastminute'] ) ) {
 			$discount_type = 'lastminute';
-		} elseif ( $highest_discount === $early_booking_discount && isset( $discount_parameters['earlybooking'] ) ) {
+		} elseif ( (int) $highest_discount === (int) $early_booking_discount && isset( $discount_parameters['earlybooking'] ) ) {
 			$discount_type = 'earlybooking';
-		} elseif ( $highest_discount === $long_stay_discount && isset( $discount_parameters['longstay'] ) ) {
+		} elseif ( (int) $highest_discount === (int) $long_stay_discount && isset( $discount_parameters['longstay'] ) ) {
 			$discount_type = 'longstay';
 		}
 
@@ -1096,7 +1096,7 @@ class Booking {
 		$highest_discount_value = $highest_discount_info['discountValue'];
 		$highest_discount_type  = $highest_discount_info['discount_type'];
 		$highest_discount_label = $highest_discount_info['discount_label'];
-		// Use $highest_discount_value and $highest_discount_type as needed
+
 		if ( $highest_discount_value > 0 ) {
 			$this->booking_search_results[ $room_id ]['discountlabel'] = $highest_discount_label;
 		}
@@ -1170,17 +1170,17 @@ class Booking {
 		$per_person_pricing = staylodgic_get_option( 'perpersonpricing' );
 		if ( isset( $per_person_pricing ) && is_array( $per_person_pricing ) ) {
 			foreach ( $per_person_pricing as $pricing ) {
-				if ( $this->total_chargeable_guests == $pricing['people'] ) {
-					if ( $pricing['type'] === 'percentage' && $pricing['total'] === 'decrease' ) {
+				if ( $this->total_chargeable_guests === $pricing['people'] ) {
+					if ( 'percentage' === $pricing['type'] && 'decrease' === $pricing['total'] ) {
 						// Decrease the rate by the given percentage
 						$roomrate -= ( $roomrate * $pricing['number'] / 100 );
-					} elseif ( $pricing['type'] === 'fixed' && $pricing['total'] === 'increase' ) {
+					} elseif ( 'fixed' === $pricing['type'] && 'increase' === $pricing['total'] ) {
 						// Increase the rate by the fixed amount
 						$roomrate += $pricing['number'];
-					} elseif ( $pricing['type'] === 'percentage' && $pricing['total'] === 'increase' ) {
+					} elseif ( 'percentage' === $pricing['type'] && 'increase' === $pricing['total'] ) {
 						// Increase the rate by the given percentage
 						$roomrate += ( $roomrate * $pricing['number'] / 100 );
-					} elseif ( $pricing['type'] === 'fixed' && $pricing['total'] === 'decrease' ) {
+					} elseif ( 'fixed' === $pricing['type'] && 'decrease' === $pricing['total'] ) {
 						// Decrease the rate by the fixed amount
 						$roomrate -= $pricing['number'];
 					}
@@ -1402,21 +1402,31 @@ class Booking {
 	public function register_guest_form() {
 		$country_options = staylodgic_country_list( 'select', '' );
 
-		$html              = '<div class="registration-column registration-column-two" id="booking-summary">';
-		$html             .= self::booking_summary(
-			$bookingnumber = '',
-			$room_id       = '',
-			$booking_results[ $room_id ]['roomtitle'] = '',
+		$html = '<div class="registration-column registration-column-two" id="booking-summary">';
+
+		$bookingnumber = '';
+		$room_id       = '';
+		$roomtitle     = $booking_results[ $room_id ]['roomtitle'] = '';
+		$bedlayout     = '';
+		$mealplan      = '';
+		$choice        = '';
+		$perdayprice   = '';
+		$total         = '';
+
+		$html .= self::booking_summary(
+			$bookingnumber,
+			$room_id,
+			$roomtitle,
 			$this->stay_checkin_date,
 			$this->stay_checkout_date,
 			$this->staynights,
 			$this->stay_adult_guests,
 			$this->stay_children_guests,
-			$bedlayout                                = '',
-			$mealplan                                 = '',
-			$choice                                   = '',
-			$perdayprice                              = '',
-			$total                                    = ''
+			$bedlayout,
+			$mealplan,
+			$choice,
+			$perdayprice,
+			$total
 		);
 		$html .= '</div>';
 
@@ -1565,7 +1575,7 @@ class Booking {
 			$included_meal_plans = array_filter(
 				$room_data['meal_plan'],
 				function ( $value ) {
-					return $value === 'included';
+					return 'included' === $value;
 				}
 			);
 
@@ -1710,7 +1720,7 @@ class Booking {
 			}
 			if ( isset( $room_data['staylodgic_max_adult_limit_status'][0] ) ) {
 				$adult_limit_status = $room_data['staylodgic_max_adult_limit_status'][0];
-				if ( '1' == $adult_limit_status ) {
+				if ( '1' === $adult_limit_status ) {
 					$max_adults = $room_data['staylodgic_max_adults'][0];
 					$max_adults = $max_adults * $room_qty;
 				} else {
@@ -1719,7 +1729,7 @@ class Booking {
 			}
 			if ( isset( $room_data['staylodgic_max_children_limit_status'][0] ) ) {
 				$children_limit_status = $room_data['staylodgic_max_children_limit_status'][0];
-				if ( '1' == $children_limit_status ) {
+				if ( '1' === $children_limit_status ) {
 					$max_children = $room_data['staylodgic_max_children'][0];
 					$max_children = $max_children * $room_qty;
 				} else {

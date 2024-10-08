@@ -86,7 +86,7 @@ class Availablity_Calendar extends Availablity_Calendar_Base {
 		// Check if the confirmed_only value is set
 		if ( isset( $_POST['confirmed_only'] ) ) {
 
-			if ( 0 == $_POST['confirmed_only'] ) {
+			if ( 0 === (int) $_POST['confirmed_only'] ) {
 				// Update the option based on the switch value
 				update_option( 'staylodgic_availsettings_confirmed_only', 0 );
 			} else {
@@ -113,6 +113,13 @@ class Availablity_Calendar extends Availablity_Calendar_Base {
 	 */
 	public function fetch_occupancy_percentage_for_calendar_range( $stay_start_date = false, $stay_end_date = false, $only_full_occupancy = false ) {
 		// Perform necessary security checks or validation here
+
+		// Verify the nonce
+		if ( ! isset( $_POST['staylodgic_availabilitycalendar_nonce'] ) || ! check_admin_referer( 'staylodgic-availabilitycalendar-nonce', 'staylodgic_availabilitycalendar_nonce' ) ) {
+			// Nonce verification failed; handle the error or reject the request
+			wp_send_json_error( array( 'message' => 'Failed' ) );
+			return;
+		}
 
 		// Check if AJAX POST values are set
 		$is_ajax_request = isset( $_POST['start'] ) && isset( $_POST['end'] );
@@ -212,7 +219,7 @@ class Availablity_Calendar extends Availablity_Calendar_Base {
 		$this->avail_confirmed_only = get_option( 'staylodgic_availsettings_confirmed_only' );
 
 		// Check if the option is not found and set it to '1'
-		if ( $this->avail_confirmed_only === false ) {
+		if ( false === $this->avail_confirmed_only ) {
 			update_option( 'staylodgic_availsettings_confirmed_only', true );
 			$this->avail_confirmed_only = true;
 		}
@@ -410,7 +417,7 @@ class Availablity_Calendar extends Availablity_Calendar_Base {
 					$remaining_rooms      = $reservation_instance->remaining_rooms_for_day();
 					$room_rate            = \Staylodgic\Rates::get_room_rate_by_date( $the_room_id, $stay_date_string );
 
-					if ( 0 == $remaining_rooms ) {
+					if ( 0 === (int) $remaining_rooms ) {
 						$room_was_opened = $reservation_instance->was_room_ever_opened();
 						if ( false === $room_was_opened ) {
 							$remaining_rooms = '/';
@@ -419,13 +426,13 @@ class Availablity_Calendar extends Availablity_Calendar_Base {
 
 					if ( isset( $cached_qty_rates[ $stay_date_string ] ) ) {
 
-						if ( $remaining_rooms !== $cached_qty_rates[ $stay_date_string ]['qty'] ) {
+						if ( (int) $remaining_rooms !== (int) $cached_qty_rates[ $stay_date_string ]['qty'] ) {
 
 							$use_cache = false;
 							$cache_instance->delete_cache( $transient_key );
 							break; // Exit the loop
 						}
-						if ( $room_rate !== $cached_qty_rates[ $stay_date_string ]['rate'] ) {
+						if ( (int) $room_rate !== (int) $cached_qty_rates[ $stay_date_string ]['rate'] ) {
 
 							$use_cache = false;
 							$cache_instance->delete_cache( $transient_key );
@@ -435,7 +442,7 @@ class Availablity_Calendar extends Availablity_Calendar_Base {
 				}
 			}
 
-			if ( $cache_instance->has_cache( $transient_key ) && true == $cache_instance->is_cache_allowed() && true == $use_cache ) {
+			if ( $cache_instance->has_cache( $transient_key ) && true === $cache_instance->is_cache_allowed() && true === $use_cache ) {
 
 				if ( isset( $cached_calendar ) ) {
 
@@ -474,7 +481,7 @@ class Availablity_Calendar extends Availablity_Calendar_Base {
 
 					$remaining_rooms = $reservation_instance->remaining_rooms_for_day();
 
-					if ( 0 === $remaining_rooms ) {
+					if ( 0 === (int) $remaining_rooms ) {
 						$room_was_opened = $reservation_instance->was_room_ever_opened();
 						if ( false === $room_was_opened ) {
 							$remaining_rooms = '/';
@@ -548,7 +555,6 @@ class Availablity_Calendar extends Availablity_Calendar_Base {
 			$all_room_output .= $room_output;
 
 			if ( ! $this->using_cache ) {
-
 				$cache_instance->set_cache( $transient_key, $this->calendar_data );
 			}
 
@@ -627,7 +633,7 @@ class Availablity_Calendar extends Availablity_Calendar_Base {
 	 */
 	public function today_css_tag( $occupancydate ) {
 		$today_status_class = '';
-		if ( $occupancydate == $this->today ) {
+		if ( $occupancydate === $this->today ) {
 			$today_status_class = 'is-today';
 		}
 		return $today_status_class;
@@ -641,19 +647,19 @@ class Availablity_Calendar extends Availablity_Calendar_Base {
 	 * @return void
 	 */
 	public function start_of_month_css_tag( $occupancydate ) {
-		$startOfMonth_class = '';
+		$start_of_month_class = '';
 
-		$yearMonth = substr( $occupancydate, 0, 7 ); // This gives 'YYYY-MM'
+		$year_month = substr( $occupancydate, 0, 7 ); // This gives 'YYYY-MM'
 
 		// Create the first day of the month string for the given date
-		$firstDayOfOccupancyMonth = $yearMonth . '-01';
+		$first_day_of_occupancy_month = $year_month . '-01';
 
 		// Compare the provided date with the first day of its month
-		if ( $occupancydate == $firstDayOfOccupancyMonth ) {
-			$startOfMonth_class = 'start-of-month';
+		if ( $occupancydate === $first_day_of_occupancy_month ) {
+			$start_of_month_class = 'start-of-month';
 		}
 
-		return $startOfMonth_class;
+		return $start_of_month_class;
 	}
 
 	/**
@@ -704,9 +710,9 @@ class Availablity_Calendar extends Availablity_Calendar_Base {
 		$today             = $this->today;
 		$number_of_columns = 0;
 		if ( ! $stay_num_days ) {
-			$markNumDays = $this->stay_num_days + 1;
+			$mark_num_days = $this->stay_num_days + 1;
 		} else {
-			$markNumDays = $stay_num_days + 1;
+			$mark_num_days = $stay_num_days + 1;
 		}
 
 		$output = '';
@@ -715,11 +721,11 @@ class Availablity_Calendar extends Availablity_Calendar_Base {
 			++$number_of_columns;
 			$month        = $date->format( 'M' );
 			$column_class = '';
-			if ( $number_of_columns < $markNumDays ) {
+			if ( $number_of_columns < $mark_num_days ) {
 				$column_class = 'rangeSelected';
 			}
 			$occupancydate = $date->format( 'Y-m-d' );
-			if ( $occupancydate == $today ) {
+			if ( $occupancydate === $today ) {
 				$month = 'Today';
 			}
 			$output .= '<td class="calendarCell monthHeader ' . esc_attr( $this->today_css_tag( $occupancydate ) ) . ' ' . esc_attr( $this->start_of_month_css_tag( $occupancydate ) ) . ' ' . esc_attr( $column_class ) . '">';
@@ -781,8 +787,9 @@ class Availablity_Calendar extends Availablity_Calendar_Base {
 			sort( $room_numbers );
 
 			if ( ! empty( $room_numbers ) ) {
-				for ( $i = 1; $i <= max( $room_numbers ); $i++ ) {
-					if ( ! in_array( $i, $room_numbers ) ) {
+				$max_room_number = max( $room_numbers ); // Store the result of max() in a variable
+				for ( $i = 1; $i <= $max_room_number; $i++ ) {
+					if ( ! in_array( $i, $room_numbers, true ) ) {
 						$missing_number = $i;
 						break;
 					}
@@ -846,7 +853,12 @@ class Availablity_Calendar extends Availablity_Calendar_Base {
 			$reservation_id     = $reservation['id'];
 
 			if ( ! $this->using_cache ) {
-				$reservation_instance  = new \Staylodgic\Reservations( $date = false, $room_id = false, $reservation_id = $reservation['id'] );
+
+				$date           = false;
+				$room_id        = false;
+				$reservation_id = $reservation['id'];
+
+				$reservation_instance  = new \Staylodgic\Reservations( $date, $room_id, $reservation_id );
 				$booking_number        = $reservation_instance->get_booking_number();
 				$guest_name            = $reservation_instance->get_reservation_guest_name();
 				$reserved_days         = $reservation_instance->count_reservation_days();
@@ -897,14 +909,14 @@ class Availablity_Calendar extends Availablity_Calendar_Base {
 			}
 
 			$display_info = $guest_name;
-			if ( $reservation['start'] != 'no' ) {
+			if ( 'no' !== $reservation['start'] ) {
 				$start_date = new \DateTime();
 				$start_date->setTimestamp( $reservation['checkin'] );
 				$start_date_display = $start_date->format( 'M j, Y' );
 				$width              = ( 80 * ( $reserved_days ) ) - 3;
 				$tab[ $room ]       = '<a class="reservation-tab-is-' . esc_attr( $reservation_status ) . ' ' . esc_attr( $reservation_substatus ) . ' reservation-tab-id-' . esc_attr( $reservation_id ) . ' reservation-edit-link" href="' . esc_attr( $reservation_edit_link ) . '"><div class="reserved-tab-wrap reserved-tab-with-info reservation-' . esc_attr( $reservation_status ) . ' reservation-substatus-' . esc_attr( $reservation_substatus ) . '" data-reservationstatus="' . esc_attr( $reservation_status ) . '" data-guest="' . esc_attr( $guest_name ) . '" data-room="' . esc_attr( $room ) . '" data-row="' . esc_attr( $row ) . '" data-bookingnumber="' . esc_attr( $booking_number ) . '" data-reservationid="' . $reservation['id'] . '" data-checkin="' . esc_attr( $checkin ) . '" data-checkout="' . esc_attr( $checkout ) . '"><div class="reserved-tab reserved-tab-days-' . esc_attr( $reserved_days ) . '"><div data-tabwidth="' . esc_attr( $width ) . '" class="reserved-tab-inner"><div class="ota-sign"></div><div class="guest-name">' . esc_html( $display_info ) . '<span>' . esc_html( $booking_channel ) . '</span></div></div></div></div></a>';
 				$display            = true;
-			} elseif ( $current_day != $checkout ) {
+			} elseif ( $current_day !== $checkout ) {
 					// Get the checkin day for this as it's in the past of start of the availblablity calendar.
 					// So this tab is happening from the past and needs to be labled athough an extention.
 					$check_in_date_past = new \DateTime();
@@ -915,7 +927,7 @@ class Availablity_Calendar extends Availablity_Calendar_Base {
 
 					$width = ( 80 * ( $reserved_days - $days_between ) ) - 3;
 
-				if ( $check_in_date_past < $calendar_start && $calendar_start == $current_day ) {
+				if ( $check_in_date_past < $calendar_start && $calendar_start === $current_day ) {
 					$tab[ $room ] = '<a class="reservation-tab-is-' . esc_attr( $reservation_status ) . ' ' . esc_attr( $reservation_substatus ) . ' reservation-tab-id-' . esc_attr( $reservation_id ) . ' reservation-edit-link" href="' . esc_attr( $reservation_edit_link ) . '"><div class="reserved-tab-wrap reserved-tab-with-info reserved-from-past reservation-' . esc_attr( $reservation_status ) . '" data-reservationstatus="' . esc_attr( $reservation_status ) . '" data-guest="' . esc_attr( $guest_name ) . '" data-room="' . esc_attr( $room ) . '" data-row="' . esc_attr( $row ) . '" data-bookingnumber="' . esc_attr( $booking_number ) . '" data-reservationid="' . esc_attr( $reservation['id'] ) . '" data-checkin="' . esc_attr( $checkin ) . '" data-checkout="' . esc_attr( $checkout ) . '"><div class="reserved-tab reserved-tab-days-' . esc_attr( $reserved_days ) . '"><div data-tabwidth="' . esc_attr( $width ) . '" class="reserved-tab-inner"><div class="ota-sign"></div><div class="guest-name">' . esc_html( $display_info ) . '<span>' . esc_html( $booking_channel ) . '</span></div></div></div></div></a>';
 				} else {
 					$tab[ $room ] = '<div class="reservation-tab-is-' . esc_attr( $reservation_status ) . ' ' . esc_attr( $reservation_substatus ) . ' reservation-tab-id-' . esc_attr( $reservation_id ) . ' reserved-tab-wrap reserved-extended reservation-' . esc_attr( $reservation_status ) . ' reservation-substatus-' . esc_attr( $reservation_substatus ) . '" data-reservationstatus="' . esc_attr( $reservation_status ) . '" data-room="' . esc_attr( $room ) . '" data-row="' . esc_attr( $row ) . '" data-reservationid="' . esc_attr( $reservation['id'] ) . '" data-checkin="' . esc_attr( $checkin ) . '" data-checkout="' . esc_attr( $checkout ) . '"><div class="reserved-tab"></div></div>';
