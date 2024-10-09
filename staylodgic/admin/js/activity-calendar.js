@@ -106,7 +106,7 @@
 			  url: ajaxurl, // WordPress Ajax URL
 			  type: 'POST',
 			  data: {
-				action: 'generateTax', // Custom Ajax action
+				action: 'generate_tax', // Custom Ajax action
 				post_id: stay_post_id,
 				nonce: staylodgic_admin_vars.nonce,
 				subtotal: subtotal_for_tax,
@@ -138,7 +138,7 @@
 			  url: ajaxurl, // WordPress Ajax URL
 			  type: 'POST',
 			  data: {
-				action: 'excludeTax', // Custom Ajax action
+				action: 'exclude_tax', // Custom Ajax action
 				post_id: stay_post_id,
 				subtotal: subtotal_for_tax,
 				nonce: staylodgic_admin_vars.nonce
