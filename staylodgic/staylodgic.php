@@ -9,12 +9,12 @@
  * Text Domain: staylodgic
  */
 
-if (!defined('ABSPATH')) {
-    exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
 }
 // Exit if accessed directly
 
-define('Staylodgic_Blocks__FILE__', __FILE__);
+define( 'Staylodgic_Blocks__FILE__', __FILE__ );
 
 add_filter( 'show_admin_bar', '__return_false' );
 
@@ -22,11 +22,9 @@ add_filter( 'show_admin_bar', '__return_false' );
  * Load Staylodgic
  * @since 1.0.0
  */
-function staylodgic_load()
-{
-    // Load localization file
-    load_plugin_textdomain('staylodgic');
-    require __DIR__ . '/staylodgic-loader.php';
-
+function staylodgic_load() {
+	// Load localization file
+	load_plugin_textdomain( 'staylodgic' );
+	require __DIR__ . '/staylodgic-loader.php';
 }
-add_action('plugins_loaded', 'staylodgic_load');
+add_action( 'plugins_loaded', 'staylodgic_load' );
