@@ -1,5 +1,5 @@
 <?php
-class staylodgic_Reservation_Posts {
+class Staylodgic_Reservation_Posts {
 
 
 	public function __construct() {
@@ -9,26 +9,6 @@ class staylodgic_Reservation_Posts {
 		add_filter( 'manage_slgc_reservations_posts_custom_column', array( $this, 'slgc_reservations_custom_columns' ) );
 
 		add_filter( 'manage_edit-slgc_reservations_sortable_columns', array( $this, 'slgc_reservations_sortable_columns' ) );
-
-		add_action( 'pre_get_posts', array( $this, 'slgc_reservations_orderby' ) );
-	}
-
-	/**
-	 * Reservation post columns
-	 *
-	 * @return void
-	 */
-	public function slgc_reservations_orderby( $query ) {
-		if ( ! is_admin() || ! $query->is_main_query() ) {
-			return;
-		}
-
-		$orderby = $query->get( 'orderby' );
-
-		if ( 'reservation_checkinout' == $orderby ) {
-			$query->set( 'meta_key', 'staylodgic_checkin_date' );
-			$query->set( 'orderby', 'meta_value' );
-		}
 	}
 
 
@@ -63,7 +43,10 @@ class staylodgic_Reservation_Posts {
 			$full_image_url = $full_image_url[0];
 		}
 
-		$reservation_instance = new \Staylodgic\Reservations( $date = false, $room_id = false, $reservation_id = $post->ID );
+		$date                 = false;
+		$room_id              = false;
+		$reservation_id       = $post->ID;
+		$reservation_instance = new \Staylodgic\Reservations( $date, $room_id, $reservation_id );
 		$bookingnumber        = $reservation_instance->get_booking_number();
 
 		switch ( $columns ) {
@@ -84,11 +67,11 @@ class staylodgic_Reservation_Posts {
 				$reservation_todaycheckout = $reservation_instance->is_guest_checking_out_today();
 				if ( $reservation_staying ) {
 					if ( $reservation_todaycheckin ) {
-						echo '<p class="post-status-reservation post-status-reservation-checkin">' . __( 'Check-in', 'staylodgic' ) . '</p>';
+						echo '<p class="post-status-reservation post-status-reservation-checkin">' . esc_html__( 'Check-in', 'staylodgic' ) . '</p>';
 					} elseif ( $reservation_todaycheckout ) {
-						echo '<p class="post-status-reservation post-status-reservation-checkout">' . __( 'Check-out', 'staylodgic' ) . '</p>';
+						echo '<p class="post-status-reservation post-status-reservation-checkout">' . esc_html__( 'Check-out', 'staylodgic' ) . '</p>';
 					} else {
-						echo '<p class="post-status-reservation post-status-reservation-staying">' . __( 'Staying', 'staylodgic' ) . '</p>';
+						echo '<p class="post-status-reservation post-status-reservation-staying">' . esc_html__( 'Staying', 'staylodgic' ) . '</p>';
 					}
 				}
 				echo '<p class="post-status-reservation-date post-status-reservation-date-checkin"><i class="fa-solid fa-arrow-right"></i> ' . esc_attr( staylodgic_formatDate( $reservation_checkin ) ) . '</p>';
@@ -184,4 +167,4 @@ class staylodgic_Reservation_Posts {
 		);
 	}
 }
-$staylodgic_kbase_post_type = new staylodgic_Reservation_Posts();
+$staylodgic_kbase_post_type = new Staylodgic_Reservation_Posts();

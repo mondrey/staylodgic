@@ -1,10 +1,12 @@
 <?php
-class Staylodgic_GuestRegistration_Posts {
-
+class Staylodgic_Registration_Posts {
 
 	public function __construct() {
 		add_action( 'init', array( $this, 'init' ) );
 		add_action( 'admin_menu', array( $this, 'add_guest_registration_submenu_page' ) );
+
+		// Add an action for saving the form data.
+		add_action( 'admin_post_staylodgic_save_guestregistry', array( $this, 'save_guestregistry_shortcode' ) );
 	}
 
 	/**
@@ -13,7 +15,6 @@ class Staylodgic_GuestRegistration_Posts {
 	 * @return void
 	 */
 	public function init() {
-
 		$args = array(
 			'labels'             => array(
 				'name'          => __( 'Guest Registrations', 'staylodgic' ),
@@ -33,15 +34,13 @@ class Staylodgic_GuestRegistration_Posts {
 			'hierarchical'       => false,
 			'has_archive'        => true,
 			'menu_position'      => 38,
-			'menu_icon'          => 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NDAgNTEyIj48IS0tIUZvbnQgQXdlc29tZSBGcmVlIDYuNS4yIGJ5IEBmb250YXdlc29tZSAtIGh0dHBzOi8vZm9udGF3ZXNvbWUuY29tIExpY2Vuc2UgLSBodHRwczovL2ZvbnRhd2Vzb21lLmNvbS9saWNlbnNlL2ZyZWUgQ29weXJpZ2h0IDIwMjQgRm9udGljb25zLCBJbmMuLS0+PHBhdGggZmlsbD0iIzYzRTZCRSIgZD0iTTIyNCAyNTZBMTI4IDEyOCAwIDEgMCAyMjQgMGExMjggMTI4IDAgMSAwIDAgMjU2em0tNDUuNyA0OEM3OS44IDMwNCAwIDM4My44IDAgNDgyLjNDMCA0OTguNyAxMy4zIDUxMiAyOS43IDUxMkgzMjIuOGMtMy4xLTguOC0zLjctMTguNC0xLjQtMjcuOGwxNS02MC4xYzIuOC0xMS4zIDguNi0yMS41IDE2LjgtMjkuN2w0MC4zLTQwLjNjLTMyLjEtMzEtNzUuNy01MC4xLTEyMy45LTUwLjFIMTc4LjN6bTQzNS41LTY4LjNjLTE1LjYtMTUuNi00MC45LTE1LjYtNTYuNiAwbC0yOS40IDI5LjQgNzEgNzEgMjkuNC0yOS40YzE1LjYtMTUuNiAxNS42LTQwLjkgMC01Ni42bC0xNC40LTE0LjR6TTM3NS45IDQxN2MtNC4xIDQuMS03IDkuMi04LjQgMTQuOWwtMTUgNjAuMWMtMS40IDUuNSAuMiAxMS4yIDQuMiAxNS4yczkuNyA1LjYgMTUuMiA0LjJsNjAuMS0xNWM1LjYtMS40IDEwLjgtNC4zIDE0LjktOC40TDU3Ni4xIDM1OC43bC03MS03MUwzNzUuOSA0MTd6Ii8+PC9zdmc+',
+			'menu_icon'          => 'data:image/svg+xml;base64,...',
 			'rewrite'            => array( 'slug' => 'registrations' ),
 			'supports'           => array( 'title', 'author', 'thumbnail' ),
 		);
 
 		register_post_type( 'slgc_guestregistry', $args );
-		/*
-		 * Add Taxonomy
-		 */
+
 		register_taxonomy(
 			'slgc_guestregistrycat',
 			array( 'slgc_guestregistry' ),
@@ -80,22 +79,20 @@ class Staylodgic_GuestRegistration_Posts {
 		);
 	}
 
+	/**
+	 * Displays the submenu page.
+	 */
 	public function submenu_page_callback() {
+
 		// Check if user has the required capability
 		if ( ! current_user_can( 'edit_posts' ) ) {
 			return;
 		}
 
-		// Check if data has been saved
-		if ( isset( $_POST['staylodgic_guestregistry_shortcode'] ) ) {
-			$shortcode_data = sanitize_textarea_field( $_POST['staylodgic_guestregistry_shortcode'] );
-			update_option( 'staylodgic_guestregistry_shortcode', $shortcode_data );
-		}
-
 		// Retrieve saved data
 		$saved_shortcode = get_option( 'staylodgic_guestregistry_shortcode', '' );
 
-		if ( '' == $saved_shortcode ) {
+		if ( '' === $saved_shortcode ) {
 			$form_gen_instance = new \Staylodgic\Form_Generator();
 			$saved_shortcode   = $form_gen_instance->default_shortcodes();
 		}
@@ -104,12 +101,50 @@ class Staylodgic_GuestRegistration_Posts {
 
 		// HTML for the submenu page
 		echo '<div class="wrap">';
-		echo '<h1>' . __( 'Guest Registration Fields', 'staylodgic' ) . '</h1>';
-		echo '<form method="post">';
+		echo '<h1>' . esc_html__( 'Guest Registration Fields', 'staylodgic' ) . '</h1>';
+		echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '">';
+		wp_nonce_field( 'staylodgic_guestregistry_save_shortcode', 'staylodgic_guestregistry_nonce' );
+		echo '<input type="hidden" name="action" value="staylodgic_save_guestregistry">';
 		echo '<textarea name="staylodgic_guestregistry_shortcode" style="width:100%;height:200px;">' . esc_textarea( $saved_shortcode ) . '</textarea>';
 		echo '<br><input type="submit" value="Save" class="button button-primary">';
 		echo '</form>';
 		echo '</div>';
 	}
+
+	/**
+	 * Handles saving the shortcode.
+	 *
+	 * @return void
+	 */
+	public function save_guestregistry_shortcode() {
+
+		// Check the nonce for security
+		if ( ! isset( $_POST['staylodgic_guestregistry_nonce'] ) || ! check_admin_referer( 'staylodgic_guestregistry_save_shortcode', 'staylodgic_guestregistry_nonce' ) ) {
+			wp_die( esc_html__( 'Nonce verification failed', 'staylodgic' ) );
+		}
+
+		// Check if user has the required capability
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			wp_die( esc_html__( 'Permission denied', 'staylodgic' ) );
+		}
+
+		// Check if data has been submitted
+		if ( isset( $_POST['staylodgic_guestregistry_shortcode'] ) ) {
+			$shortcode_data = sanitize_textarea_field( $_POST['staylodgic_guestregistry_shortcode'] );
+			update_option( 'staylodgic_guestregistry_shortcode', $shortcode_data );
+		}
+
+		// Redirect back to the settings page
+		wp_safe_redirect(
+			add_query_arg(
+				array(
+					'page'    => 'slgc_guestregistry_shortcodes',
+					'updated' => 'true',
+				),
+				admin_url( 'edit.php?post_type=slgc_guestregistry' )
+			)
+		);
+		exit;
+	}
 }
-$staylodgic_kbase_post_type = new Staylodgic_GuestRegistration_Posts();
+$staylodgic_registration_post_type = new Staylodgic_Registration_Posts();

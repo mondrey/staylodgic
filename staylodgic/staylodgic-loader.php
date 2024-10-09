@@ -133,7 +133,7 @@ class Staylodgic_Init {
 		require_once plugin_dir_path( __FILE__ ) . '/custom-posts/class-staylodgic-registration-posts.php';
 		require_once plugin_dir_path( __FILE__ ) . '/custom-posts/class-staylodgic-room-posts.php';
 		require_once plugin_dir_path( __FILE__ ) . '/custom-posts/class-staylodgic-activity-posts.php';
-		require_once plugin_dir_path( __FILE__ ) . '/custom-posts/class-staylodgic-activityres-posts.php';
+		require_once plugin_dir_path( __FILE__ ) . '/custom-posts/class-staylodgic-activity-reservation-posts.php';
 	}
 
 	/**

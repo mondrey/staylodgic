@@ -1,18 +1,22 @@
 <?php
-class staylodgic_Room_Posts {
+class Staylodgic_Room_Posts {
 
 
 	public function __construct() {
 		add_action( 'init', array( $this, 'init' ) );
-		add_action( 'admin_init', array( $this, 'sort_admin_init' ) );
 		add_action( 'admin_menu', array( $this, 'staylodgic_enable_room_sort' ) );
 		add_action( 'wp_ajax_room_sort', array( $this, 'staylodgic_save_room_order' ) );
 
+		// Hook into `current_screen` to check which admin page is being viewed
+		add_action( 'current_screen', array( $this, 'check_current_screen_for_room_posts' ) );
+		add_action( 'current_screen', array( $this, 'sort_admin_init' ) );
+	}
+
+	public function check_current_screen_for_room_posts() {
 		if ( is_admin() ) {
-			if ( isset( $_GET['page'] ) ) {
-				if ( $_GET['page'] == 'class-staylodgic-room-posts.php' ) {
-					add_filter( 'posts_orderby', array( $this, 'staylodgic_room_orderby' ) );
-				}
+			$screen = get_current_screen();
+			if ( 'toplevel_page_class-staylodgic-room-posts' === $screen && $screen->id ) {
+				add_filter( 'posts_orderby', array( $this, 'staylodgic_room_orderby' ) );
 			}
 		}
 	}
@@ -23,8 +27,16 @@ class staylodgic_Room_Posts {
 	 * @return void
 	 */
 	public function staylodgic_enable_room_sort() {
-		add_submenu_page( 'edit.php?post_type=slgc_room', 'Sort rooms', 'Sort Rooms', 'edit_posts', basename( __FILE__ ), array( $this, 'staylodgic_sort_room' ) );
+		add_submenu_page(
+			'edit.php?post_type=slgc_room',
+			'Sort rooms',
+			'Sort Rooms',
+			'edit_posts',
+			'staylodgic-sort-rooms', // Use a unique and meaningful slug
+			array( $this, 'staylodgic_sort_room' )
+		);
 	}
+
 	public function staylodgic_room_orderby( $orderby ) {
 		global $wpdb;
 		$orderby = "{$wpdb->posts}.menu_order, {$wpdb->posts}.post_date DESC";
@@ -34,9 +46,9 @@ class staylodgic_Room_Posts {
 		$room = new WP_Query( 'post_type=slgc_room&posts_per_page=-1&orderby=menu_order&order=ASC' );
 		?>
 		<div class="wrap">
-			<h2><?php _e( 'Sort room', 'staylodgic' ); ?> <img src="<?php echo esc_url( home_url() . '/wp-admin/images/loading.gif' ); ?>" id="loading-animation" /></h2>
+			<h2><?php esc_html_e( 'Sort room', 'staylodgic' ); ?> <img src="<?php echo esc_url( home_url() . '/wp-admin/images/loading.gif' ); ?>" id="loading-animation" /></h2>
 			<div class="description">
-				<?php _e( 'Drag and Drop the slides to order them', 'staylodgic' ); ?>
+				<?php esc_html_e( 'Drag and Drop the slides to order them', 'staylodgic' ); ?>
 			</div>
 			<ul id="portfolio-list">
 				<?php
@@ -160,19 +172,17 @@ class staylodgic_Room_Posts {
 	 */
 	public function sort_admin_init() {
 		if ( is_admin() ) {
-			if ( 'edit.php' == basename( $_SERVER['PHP_SELF'] ) ) {
+			// Load only if in a Post or Page Manager
+			if ( 'edit.php' === basename( $_SERVER['PHP_SELF'] ) ) {
 				wp_enqueue_script( 'jquery-ui-sortable' );
-				wp_enqueue_script( 'thickbox' );
-				wp_enqueue_style( 'thickbox' );
-				wp_enqueue_style( 'mtheme-room-sorter-CSS', plugin_dir_url( __FILE__ ) . 'css/style.css', false, '1.0', 'all' );
-				if ( isset( $_GET['page'] ) ) {
-					if ( $_GET['page'] == 'class-staylodgic-room-posts.php' ) {
-						wp_enqueue_script( 'post-sorter-JS', plugin_dir_url( __FILE__ ) . 'js/post-sorter.js', array( 'jquery' ), '1.1' );
-					}
+				wp_enqueue_style( 'mtheme-activity-sorter-CSS', plugin_dir_url( __FILE__ ) . 'css/style.css', false, '1.0', 'all' );
+				$screen = get_current_screen();
+				if ( 'slgc_room_page_staylodgic-sort-rooms' === $screen->id ) {
+					wp_enqueue_script( 'post-sorter-JS', plugin_dir_url( __FILE__ ) . 'js/post-sorter.js', array( 'jquery' ), '1.1', true );
 				}
 			}
 		}
 	}
 }
-$staylodgic_room_post_type = new staylodgic_Room_Posts();
+$staylodgic_room_post_type = new Staylodgic_Room_Posts();
 ?>
