@@ -529,7 +529,7 @@ function staylodgic_generate_metaboxes($meta_data, $post_id)
                     break;
 
                 case 'currencyarray':
-                    $dateTime = date("Y-m-d H:i:s");
+                    $date_time = date("Y-m-d H:i:s");
                     $text_value = $meta ? $meta : $field['std'];
                     if (isset($field['datatype'])) {
                         $priceof = 'data-priceof="' . $field['datatype'] . '"';
@@ -538,7 +538,7 @@ function staylodgic_generate_metaboxes($meta_data, $post_id)
                     if (isset($field['inputis'])) {
                         $readonly = ' readonly';
                     }
-                    echo '<input type="number" ' . $priceof . $readonly . ' data-currencyformat="2" class="' . $class . ' currency-input" min="0" step="0.01" name="staylodgic_reservation_room_paid[' . $dateTime . ']" id="', esc_attr($field['id']), '" value="" size="30" />';
+                    echo '<input type="number" ' . $priceof . $readonly . ' data-currencyformat="2" class="' . $class . ' currency-input" min="0" step="0.01" name="staylodgic_reservation_room_paid[' . $date_time . ']" id="', esc_attr($field['id']), '" value="" size="30" />';
                     echo "<ul>";
 
                     $payments = get_post_meta(get_the_id(), 'staylodgic_reservation_room_paid', true);

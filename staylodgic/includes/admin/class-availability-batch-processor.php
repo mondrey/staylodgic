@@ -373,7 +373,7 @@ class Availability_Batch_Processor extends Batch_Processor_Base {
 								$sync_time = $room_channel_availability['stats'][ $key ]['synctime'];
 								$timezone  = staylodgic_get_option( 'timezone' );
 
-								$adjusted_values = staylodgic_applyTimezoneToDateAndTime( $sync_date, $sync_time, $timezone );
+								$adjusted_values = staylodgic_apply_timezone_to_date_and_time( $sync_date, $sync_time, $timezone );
 
 								echo '<div class="availability-sync-stats">';
 								echo '<span>' . __( 'Last sync: ', 'staylodgic' ) . esc_html( $adjusted_values['adjustedDate'] ) . '</span>';

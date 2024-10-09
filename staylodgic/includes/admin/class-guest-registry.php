@@ -535,7 +535,7 @@ class Guest_Registry {
 					$registration_data[ $registration_id ] = $booking_data;
 					update_post_meta( $post_id, 'staylodgic_registration_data', $registration_data );
 
-					$email_address = staylodgic_getLoggedInUserEmail();
+					$email_address = staylodgic_get_loggedin_user_email();
 					$page_title    = get_the_title( $post_id );
 
 					$email = new Email_Dispatcher( $email_address, 'Online Check-in: ' . $page_title );

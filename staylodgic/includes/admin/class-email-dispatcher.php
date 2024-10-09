@@ -183,7 +183,7 @@ class Email_Dispatcher {
 	public function send( $cc = true ) {
 		if ( $cc ) {
 
-			$cc_email = staylodgic_getLoggedInUserEmail();
+			$cc_email = staylodgic_get_loggedin_user_email();
 			if ( $cc_email ) {
 				$this->headers[] = 'Cc: ' . $cc_email;
 			}
