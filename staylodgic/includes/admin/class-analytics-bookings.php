@@ -70,17 +70,18 @@ class Analytics_Bookings {
 		if ( \Staylodgic\Rooms::has_rooms() ) {
 			// Add the logo image below the heading
 			echo '<div class="staylodgic-overview-heading">';
-			echo '<h1>' . __( 'Bookings Overview', 'staylodgic' ) . '</h1>';
+			echo '<h1>' . esc_html__( 'Bookings Overview', 'staylodgic' ) . '</h1>';
 			echo '</div>';
 		} else {
-			echo '<h1>' . __( 'No Rooms Found', 'staylodgic' ) . '</h1>';
-			echo '<p>' . __( 'Please configure atleast 1 Room from Rooms section', 'staylodgic' ) . '</p>';
+			echo '<h1>' . esc_html__( 'No Rooms Found', 'staylodgic' ) . '</h1>';
+			echo '<p>' . esc_html__( 'Please configure atleast 1 Room from Rooms section', 'staylodgic' ) . '</p>';
 			return;
 		}
 
 		// Create an instance of the ChartGenerator class
-		$analytics = new \Staylodgic\Analytics_Bookings( $booking_id = false );
-		echo $analytics->display_stats();
+		$booking_id = false;
+		$analytics  = new \Staylodgic\Analytics_Bookings( $booking_id );
+		echo wp_kses( $analytics->display_stats(), staylodgic_get_allowed_tags() );
 
 		echo '</div>';
 	}

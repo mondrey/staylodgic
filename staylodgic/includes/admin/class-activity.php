@@ -466,7 +466,7 @@ class Activity {
 
 		// Call the method and capture the output
 		ob_start();
-		echo $this->display_activity_frontend_schedules_with_availability(
+		$this->display_activity_frontend_schedules_with_availability(
 			$selected_date,
 			$the_post_id,
 			$total_people,
@@ -535,13 +535,13 @@ class Activity {
 		);
 		$activities = new \WP_Query( $args );
 
-		$html           = '<form action="" method="post" id="hotel-acitivity-listing" class="needs-validation" novalidate>';
+		echo '<form action="" method="post" id="hotel-acitivity-listing" class="needs-validation" novalidate>';
 		$roomlistingbox = wp_create_nonce( 'staylodgic-roomlistingbox-nonce' );
-		$html          .= '<input type="hidden" name="staylodgic_roomlistingbox_nonce" value="' . esc_attr( $roomlistingbox ) . '" />';
+		echo '<input type="hidden" name="staylodgic_roomlistingbox_nonce" value="' . esc_attr( $roomlistingbox ) . '" />';
 
-		$html .= '<div id="activity-data" data-bookingnumber="' . esc_attr( $this->stay_booking_number ) . '" data-children="' . esc_attr( $this->stay_children_guests ) . '" data-adults="' . esc_attr( $this->stay_adult_guests ) . '" data-guests="' . esc_attr( $this->stay_total_guests ) . '" data-checkin="' . esc_attr( $this->stay_checkin_date ) . '">';
+		echo '<div id="activity-data" data-bookingnumber="' . esc_attr( $this->stay_booking_number ) . '" data-children="' . esc_attr( $this->stay_children_guests ) . '" data-adults="' . esc_attr( $this->stay_adult_guests ) . '" data-guests="' . esc_attr( $this->stay_total_guests ) . '" data-checkin="' . esc_attr( $this->stay_checkin_date ) . '">';
 		// Start the container div
-		$html .= '<div class="activity-schedules-container">';
+		echo '<div class="activity-schedules-container">';
 
 		// Loop through each activity post
 		if ( $activities->have_posts() ) {
@@ -557,7 +557,7 @@ class Activity {
 				}
 
 				// Display the activity identifier (e.g., post title)
-				$html .= '<div class="activity-schedule room-occupied-group" id="activity-schedule-' . esc_attr( $post_id ) . '">';
+				echo '<div class="activity-schedule room-occupied-group" id="activity-schedule-' . esc_attr( $post_id ) . '">';
 
 				if ( null !== get_post_meta( $post_id, 'staylodgic_activity_desc', true ) ) {
 					$activity_desc = get_post_meta( $post_id, 'staylodgic_activity_desc', true );
@@ -567,25 +567,25 @@ class Activity {
 					$activity_image = staylodgic_featured_image_link( $post_id );
 				}
 
-				$html             .= '<div class="activity-column-one">';
-				$image_id          = get_post_thumbnail_id( $post_id );
-				$fullimage_url     = wp_get_attachment_image_url( $image_id, 'staylodgic-full' );
-				$image_url         = wp_get_attachment_image_url( $image_id, 'staylodgic-large-square' );
-				$html             .= '<a href="' . esc_url( $fullimage_url ) . '" data-toggle="lightbox" data-gallery="lightbox-gallery-' . esc_attr( $post_id ) . '">';
-				$html             .= '<img class="lightbox-trigger activity-summary-image" data-image="' . esc_url( $fullimage_url ) . '" src="' . esc_url( $fullimage_url ) . '" alt="Activity">';
-				$html             .= '</a>';
+				echo '<div class="activity-column-one">';
+				$image_id      = get_post_thumbnail_id( $post_id );
+				$fullimage_url = wp_get_attachment_image_url( $image_id, 'staylodgic-full' );
+				$image_url     = wp_get_attachment_image_url( $image_id, 'staylodgic-large-square' );
+				echo '<a href="' . esc_url( $fullimage_url ) . '" data-toggle="lightbox" data-gallery="lightbox-gallery-' . esc_attr( $post_id ) . '">';
+				echo '<img class="lightbox-trigger activity-summary-image" data-image="' . esc_url( $fullimage_url ) . '" src="' . esc_url( $fullimage_url ) . '" alt="Activity">';
+				echo '</a>';
 				$supported_gallery = staylodgic_output_custom_image_links( $post_id );
 				if ( $supported_gallery ) {
-					$html .= staylodgic_output_custom_image_links( $post_id );
+					echo wp_kses( $supported_gallery, staylodgic_get_allowed_tags() );
 				}
-				$html .= '</div>';
-				$html .= '<div class="activity-column-two">';
-				$html .= '<h4 class="activity-title">' . get_the_title() . '</h4>';
-				$html .= '<div class="activity-desc entry-content">' . wp_kses_post( $activity_desc ) . '</div>';
+				echo '</div>';
+				echo '<div class="activity-column-two">';
+				echo '<h4 class="activity-title">' . esc_html( get_the_title() ) . '</h4>';
+				echo '<div class="activity-desc entry-content">' . wp_kses_post( $activity_desc ) . '</div>';
 
 				// Display the time slots for the day of the week that matches the selected date
 				if ( ! empty( $activity_schedule ) && isset( $activity_schedule[ $day_of_week ] ) ) {
-					$html .= '<div class="day-schedule">';
+					echo '<div class="day-schedule">';
 					foreach ( $activity_schedule[ $day_of_week ] as $index => $time ) {
 						// Calculate remaining spots for this time slot
 
@@ -617,31 +617,29 @@ class Activity {
 						if ( '' !== $time ) {
 							$total_rate                                  = intval( $activity_rate * $this->stay_total_guests );
 							$this->activities_array[ $post_id ][ $time ] = $total_rate;
-							$html                                       .= '<span class="time-slot ' . esc_attr( $active_class ) . '" id="time-slot-' . esc_attr( $time_index ) . '" data-activity="' . esc_attr( $post_id ) . '" data-time="' . esc_attr( $time ) . '"><span class="activity-time-slot"><i class="fa-regular fa-clock"></i> ' . esc_attr( $time ) . '</span><span class="time-slots-remaining">( ' . esc_attr( $remaining_spots ) . ' of ' . esc_attr( $max_guests ) . ' remaining )</span><div class="activity-rate" data-activityprice="' . esc_attr( $total_rate ) . '">' . wp_kses_post( staylodgic_price( $total_rate ) ) . '</div></span> ';
+							echo '<span class="time-slot ' . esc_attr( $active_class ) . '" id="time-slot-' . esc_attr( $time_index ) . '" data-activity="' . esc_attr( $post_id ) . '" data-time="' . esc_attr( $time ) . '"><span class="activity-time-slot"><i class="fa-regular fa-clock"></i> ' . esc_attr( $time ) . '</span><span class="time-slots-remaining">( ' . esc_attr( $remaining_spots ) . ' of ' . esc_attr( $max_guests ) . ' remaining )</span><div class="activity-rate" data-activityprice="' . esc_attr( $total_rate ) . '">' . wp_kses_post( staylodgic_price( $total_rate ) ) . '</div></span> ';
 						} else {
-							$html .= '<span class="time-slot-unavailable time-slot ' . esc_attr( $active_class ) . '" id="time-slot-' . esc_attr( $time_index ) . '" data-activity="' . esc_attr( $post_id ) . '" data-time="' . esc_attr( $time ) . '"><span class="activity-time-slot">Unavailable</span></span> ';
+							echo '<span class="time-slot-unavailable time-slot ' . esc_attr( $active_class ) . '" id="time-slot-' . esc_attr( $time_index ) . '" data-activity="' . esc_attr( $post_id ) . '" data-time="' . esc_attr( $time ) . '"><span class="activity-time-slot">Unavailable</span></span> ';
 						}
 					}
-					$html .= '</div>';
+					echo '</div>';
 				}
-				$html .= '</div>';
+				echo '</div>';
 
-				$html .= '</div>'; // Close the activity-schedule div
+				echo '</div>'; // Close the activity-schedule div
 			}
 		}
 
 		// Close the container div
-		$html .= '</div>';
-		$html .= '</div>';
-		$html .= $this->register_guest_form();
-		$html .= '</form>';
+		echo '</div>';
+		echo '</div>';
+		$this->register_guest_form();
+		echo '</form>';
 
 		staylodgic_set_booking_transient( $this->activities_array, $this->stay_booking_number );
 		$activities_data = staylodgic_get_booking_transient( $this->stay_booking_number );
 		// Reset post data
 		wp_reset_postdata();
-
-		return $html;
 	}
 
 	/**
@@ -776,31 +774,38 @@ class Activity {
 	public function register_guest_form() {
 		$country_options = staylodgic_country_list( 'select', '' );
 
-		$html              = '<div class="registration-column registration-column-two" id="booking-summary">';
-		$html             .= self::booking_summary(
-			$bookingnumber = '',
-			$activity_id   = '',
-			$booking_results[ $activity_id ]['roomtitle'] = '',
+		$html          = '<div class="registration-column registration-column-two" id="booking-summary">';
+		$bookingnumber = '';
+		$activity_id   = '';
+		$perdayprice   = '';
+		$total         = '';
+		$booking_results[ $activity_id ]['roomtitle'] = '';
+
+		$roomtitle = $booking_results[ $activity_id ]['roomtitle'];
+		$html     .= self::booking_summary(
+			$bookingnumber,
+			$activity_id,
+			$roomtitle,
 			$this->stay_checkin_date,
 			$this->staynights,
 			$this->stay_adult_guests,
 			$this->stay_children_guests,
-			$perdayprice                                  = '',
-			$total                                        = ''
+			$perdayprice,
+			$total
 		);
-		$html .= '</div>';
+		$html     .= '</div>';
 
 		$bookingsuccess = self::booking_successful();
 
 		$form_inputs = self::booking_data_fields();
 
-		$form_html = '
+		echo '
 		<div class="registration_form_outer registration_request">
 			<div class="registration_form_wrap">
 				<div class="registration_form">
 					<div class="registration-column registration-column-one registration_form_inputs">
-						<div class="booking-backto-activitychoice"><div class="booking-backto-roomchoice-inner"><i class="fa-solid fa-arrow-left"></i> ' . __( 'Back', 'staylodgic' ) . '</div></div>
-						<h3>' . __( 'Registration', 'staylodgic' ) . '</h3>
+						<div class="booking-backto-activitychoice"><div class="booking-backto-roomchoice-inner"><i class="fa-solid fa-arrow-left"></i> ' . esc_html__( 'Back', 'staylodgic' ) . '</div></div>
+						<h3>' . esc_html__( 'Registration', 'staylodgic' ) . '</h3>
 						<div class="form-group form-floating">
 							<input placeholder="' . esc_attr__( 'Full Name', 'staylodgic' ) . '" type="text" class="form-control" id="full_name" name="full_name" required>
 							<label for="full_name" class="control-label">' . esc_html( $form_inputs['full_name'] ) . '</label>
@@ -841,7 +846,7 @@ class Activity {
 						</div>
 						<div class="form-group form-floating">
 							<select required class="form-control" id="country" name="country" >
-							' . $country_options . '
+							' . wp_kses( $country_options, staylodgic_get_allowed_tags() ) . '
 							</select>
 							<label for="country" class="control-label">' . esc_html( $form_inputs['country'] ) . '</label>
 						</div>
@@ -853,17 +858,15 @@ class Activity {
 							<label for="guest_consent">
 								<input type="checkbox" class="form-check-input" id="guest_consent" name="guest_consent" required /><span class="consent-notice">' . esc_html( $form_inputs['guest_consent'] ) . '</span>
 								<div class="invalid-feedback">
-									' . __( 'Consent is required for booking.', 'staylodgic' ) . '
+									' . esc_html__( 'Consent is required for booking.', 'staylodgic' ) . '
 								</div>
 							</label>
 						</div>
 					</div>
-					' . $html . '
+					' . wp_kses( $html, staylodgic_get_allowed_tags() ) . '
 				</div>
 			</div>
 		</div>';
-
-		return $form_html . $bookingsuccess;
 	}
 
 	/**
@@ -876,7 +879,7 @@ class Activity {
 		$reservation_instance = new \Staylodgic\Reservations();
 		$booking_page_link    = $reservation_instance->get_booking_details_page_link_for_guest();
 
-		$success_html = '
+		echo '
 		<div class="registration_form_outer registration_successful">
 			<div class="registration_form_wrap">
 				<div class="registration_form">
@@ -900,8 +903,6 @@ class Activity {
 				</div>
 			</div>
 		</div>';
-
-		return $success_html;
 	}
 
 	/**

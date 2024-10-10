@@ -146,13 +146,13 @@ class Availablity_Calendar_Base {
 	}
 
 	/**
-	 * Method calculateAdrForDate
+	 * Method calculate_adr_for_date
 	 *
 	 * @param $currentdate_string $currentdate_string
 	 *
 	 * @return void
 	 */
-	public function calculateAdrForDate( $currentdate_string ) {
+	public function calculate_adr_for_date( $currentdate_string ) {
 		$stay_current_date    = new \DateTime( $currentdate_string );
 		$total_room_revenue   = 0;
 		$number_of_rooms_sold = 0;

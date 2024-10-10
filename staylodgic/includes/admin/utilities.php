@@ -586,23 +586,41 @@ function staylodgic_get_booking_transient( $stay_booking_number = null ) {
  */
 function staylodgic_get_allowed_tags() {
 	$structure_allowed_tags = array(
-		'caption'    => array(),
+		'canvas'     => array(
+			'id'           => array(),
+			'class'        => array(),
+			'data-type'    => array(),
+			'data-data'    => array(),
+			'data-options' => array(),
+		),
+		'option'     => array(
+			'value'    => array(),
+			'selected' => array(),
+			'disabled' => array(),
+		),
 		'col'        => array(
 			'span' => true,
 		),
 		'colgroup'   => array(
 			'span' => true,
 		),
-		'table'      => array(),
-		'tbody'      => array(),
+		'table'      => array(
+			'class'             => array(),
+			'data-export-title' => array(),
+		),
+		'tbody'      => array(
+			'class' => array(),
+		),
 		'td'         => array(
 			'class'   => true,
 			'colspan' => true,
 			'headers' => true,
 			'rowspan' => true,
+			'scope'   => array(),
 		),
 		'tfoot'      => array(),
 		'th'         => array(
+			'class'   => array(),
 			'abbr'    => true,
 			'colspan' => true,
 			'headers' => true,
@@ -612,13 +630,15 @@ function staylodgic_get_allowed_tags() {
 		'thead'      => array(),
 		'tr'         => array(),
 		'a'          => array(
-			'id'     => true,
-			'class'  => true,
-			'href'   => true,
-			'rel'    => true,
-			'rev'    => true,
-			'name'   => true,
-			'target' => true,
+			'id'           => true,
+			'data-gallery' => array(),
+			'data-toggle'  => array(),
+			'class'        => true,
+			'href'         => array(),
+			'rel'          => true,
+			'rev'          => true,
+			'name'         => true,
+			'target'       => true,
 		),
 		'form'       => array(
 			'class'          => true,
@@ -665,7 +685,6 @@ function staylodgic_get_allowed_tags() {
 		),
 		'g'          => array(
 			'fill'              => true,
-			'stroke'            => true,
 			'stroke'            => true,
 			'stroke-linejoin'   => true,
 			'stroke-miterlimit' => true,
@@ -747,7 +766,7 @@ function staylodgic_get_allowed_tags() {
 		),
 		'i'          => array(
 			'id'    => true,
-			'class' => true,
+			'class' => array(),
 		),
 		'img'        => array(
 			'id'          => true,
@@ -793,12 +812,14 @@ function staylodgic_get_allowed_tags() {
 			'cite' => true,
 		),
 		'span'       => array(
-			'dir'      => true,
-			'id'       => true,
-			'class'    => true,
-			'align'    => true,
-			'lang'     => true,
-			'xml:lang' => true,
+			'dir'           => true,
+			'id'            => true,
+			'class'         => true,
+			'align'         => true,
+			'lang'          => true,
+			'xml:lang'      => true,
+			'data-price'    => array(),
+			'data-currency' => array(),
 		),
 		'small'      => array(),
 		'strike'     => array(),

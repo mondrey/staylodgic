@@ -327,19 +327,19 @@ class Availability_Batch_Processor extends Batch_Processor_Base {
 		echo '<div class="expor-import-calendar">';
 		echo '<div class="main-sync-form-wrap">';
 		echo '<div id="sync-form">';
-		echo '<h1>' . __( 'Sync Your Calendar', 'staylodgic' ) . '</h1>';
-		echo '<p>' . __( 'Keep your bookings up-to-date. Connect your iCalendar feeds to synchronize your booking availability with your StayLodgic calendar. Simply enter the URLs for the calendars you wish to sync below.', 'staylodgic' ) . '</p>';
+		echo '<h1>' . esc_html__( 'Sync Your Calendar', 'staylodgic' ) . '</h1>';
+		echo '<p>' . esc_html__( 'Keep your bookings up-to-date. Connect your iCalendar feeds to synchronize your booking availability with your StayLodgic calendar. Simply enter the URLs for the calendars you wish to sync below.', 'staylodgic' ) . '</p>';
 		echo '<div class="how-to-admin">';
-		echo '<h2>' . __( 'How to Sync:', 'staylodgic' ) . '</h2>';
+		echo '<h2>' . esc_html__( 'How to Sync:', 'staylodgic' ) . '</h2>';
 		echo '<ol>';
-		echo '<li>' . __( 'Find your iCalendar URL from the external booking platform or calendar service.', 'staylodgic' ) . '</li>';
-		echo '<li>' . __( 'Enter the iCalendar URL in the input field below.', 'staylodgic' ) . '</li>';
-		echo '<li>' . __( 'Set a label for your reference.', 'staylodgic' ) . '</li>';
+		echo '<li>' . esc_html__( 'Find your iCalendar URL from the external booking platform or calendar service.', 'staylodgic' ) . '</li>';
+		echo '<li>' . esc_html__( 'Enter the iCalendar URL in the input field below.', 'staylodgic' ) . '</li>';
+		echo '<li>' . esc_html__( 'Set a label for your reference.', 'staylodgic' ) . '</li>';
 		echo '</ol>';
 		echo '</div>';
 
 		echo "<form id='room_ical_form' method='post'>";
-		echo '<input type="hidden" name="ical_form_nonce" value="' . wp_create_nonce( 'ical_form_nonce' ) . '">';
+		echo '<input type="hidden" name="ical_form_nonce" value="' . esc_attr( wp_create_nonce( 'ical_form_nonce' ) ) . '">';
 
 		$rooms = Rooms::query_rooms();
 		foreach ( $rooms as $room ) {
@@ -358,9 +358,9 @@ class Availability_Batch_Processor extends Batch_Processor_Base {
 
 					echo '<div class="room_ical_link_group input-group">';
 					echo '<input readonly hidden type="text" name="room_ical_links_id[]" value="' . esc_attr( $ical_link['ical_id'] ) . '">';
-					echo '<span class="input-group-text">' . __( 'url', 'staylodgic' ) . '</span>';
+					echo '<span class="input-group-text">' . esc_html__( 'url', 'staylodgic' ) . '</span>';
 					echo '<input readonly class="form-control" type="url" name="room_ical_links_url[]" value="' . esc_attr( $ical_link['ical_url'] ) . '">';
-					echo '<span class="input-group-text">' . __( 'Label', 'staylodgic' ) . '</span>';
+					echo '<span class="input-group-text">' . esc_html__( 'Label', 'staylodgic' ) . '</span>';
 					echo '<input readonly class="form-control" type="text" name="room_ical_links_comment[]" value="' . esc_attr( $ical_link['ical_comment'] ) . '">';
 					echo '<button type="button" class="unlock_button btn btn-warning"><i class="fas fa-lock"></i></button>'; // Unlock button
 					echo '</div>';
@@ -376,11 +376,11 @@ class Availability_Batch_Processor extends Batch_Processor_Base {
 								$adjusted_values = staylodgic_apply_timezone_to_date_and_time( $sync_date, $sync_time, $timezone );
 
 								echo '<div class="availability-sync-stats">';
-								echo '<span>' . __( 'Last sync: ', 'staylodgic' ) . esc_html( $adjusted_values['adjustedDate'] ) . '</span>';
-								echo '<span>' . __( 'Time: ', 'staylodgic' ) . esc_html( $adjusted_values['adjustedTime'] ) . '</span>';
-								echo '<span>' . __( 'Processed in ( seconds ): ', 'staylodgic' ) . esc_html( $room_channel_availability['stats'][ $key ]['syncprocessing_time'] ) . '</span>';
+								echo '<span>' . esc_html__( 'Last sync: ', 'staylodgic' ) . esc_html( $adjusted_values['adjustedDate'] ) . '</span>';
+								echo '<span>' . esc_html__( 'Time: ', 'staylodgic' ) . esc_html( $adjusted_values['adjustedTime'] ) . '</span>';
+								echo '<span>' . esc_html__( 'Processed in ( seconds ): ', 'staylodgic' ) . esc_html( $room_channel_availability['stats'][ $key ]['syncprocessing_time'] ) . '</span>';
 								if ( ! $room_channel_availability['stats'][ $key ]['file_ok'] ) {
-									echo '<span class="file-error">' . __( 'File error', 'staylodgic' ) . '</span>';
+									echo '<span class="file-error">' . esc_html__( 'File error', 'staylodgic' ) . '</span>';
 								}
 								echo '</div>';
 								break;
@@ -390,18 +390,18 @@ class Availability_Batch_Processor extends Batch_Processor_Base {
 				}
 			} else {
 				echo '<div class="room_ical_link_group input-group">';
-				echo '<span class="input-group-text">' . __( 'url', 'staylodgic' ) . '</span>';
+				echo '<span class="input-group-text">' . esc_html__( 'url', 'staylodgic' ) . '</span>';
 				echo '<input aria-label="url" class="form-control" type="url" name="room_ical_links_url[]">';
-				echo '<span class="input-group-text">' . __( 'Label', 'staylodgic' ) . '</span>';
+				echo '<span class="input-group-text">' . esc_html__( 'Label', 'staylodgic' ) . '</span>';
 				echo '<input aria-label="Label" class="form-control" type="text" name="room_ical_links_comment[]">';
 				echo '</div>';
 			}
-			echo '<button type="button" class="add_more_ical button button-secondary button-small">' . __( 'Add more', 'staylodgic' ) . '</button>';
+			echo '<button type="button" class="add_more_ical button button-secondary button-small">' . esc_html__( 'Add more', 'staylodgic' ) . '</button>';
 			echo '</div>';
 		}
 		echo '<button data-type="sync-availability" class="btn btn-primary" type="button" id="save_all_ical_rooms">';
 		echo '<span class="spinner-zone spinner-border-sm" aria-hidden="true"></span>';
-		echo '<span role="status"> ' . __( 'Save All', 'staylodgic' ) . '</span>';
+		echo '<span role="status"> ' . esc_html__( 'Save All', 'staylodgic' ) . '</span>';
 		echo '</button>';
 		echo '</form>';
 		echo '</div>';
@@ -435,13 +435,13 @@ class Availability_Batch_Processor extends Batch_Processor_Base {
 		// The HTML content of your 'Import iCal' page goes here
 		echo '<div class="expor-import-calendar main-sync-form-wrap">';
 		echo '<div id="export-import-form">';
-		echo '<h1>' . __( 'iCal Feeds', 'staylodgic' ) . '</h1>';
-		echo '<p>' . __( 'Synchronize availability for your rooms with other softwares using iCal feeds.', 'staylodgic' ) . '</p>';
+		echo '<h1>' . esc_html__( 'iCal Feeds', 'staylodgic' ) . '</h1>';
+		echo '<p>' . esc_html__( 'Synchronize availability for your rooms with other softwares using iCal feeds.', 'staylodgic' ) . '</p>';
 		echo '<div class="how-to-admin">';
-		echo '<h2>' . __( 'How to:', 'staylodgic' ) . '</h2>';
+		echo '<h2>' . esc_html__( 'How to:', 'staylodgic' ) . '</h2>';
 		echo '<ol>';
-		echo '<li>' . __( 'Copy the url for the room.', 'staylodgic' ) . '</li>';
-		echo '<li>' . __( 'Enter it to the software which is compatible with iCal feeds for availability.', 'staylodgic' ) . '</li>';
+		echo '<li>' . esc_html__( 'Copy the url for the room.', 'staylodgic' ) . '</li>';
+		echo '<li>' . esc_html__( 'Enter it to the software which is compatible with iCal feeds for availability.', 'staylodgic' ) . '</li>';
 		echo '</ol>';
 		echo '</div>';
 
@@ -462,7 +462,7 @@ class Availability_Batch_Processor extends Batch_Processor_Base {
 			// Page content
 			echo "<div class='export-ical-wrap input-group'>";
 			echo "<input class='form-control urlField' type='text' value='" . esc_url( $export_url ) . "' readonly>";
-			echo '<div class="btn btn-outline-secondary copy-url-button" data-bs-delay="0" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="' . __( 'Copy to clipboard', 'staylodgic' ) . '"><i class="fa-solid fa-copy"></i></div>';
+			echo '<div class="btn btn-outline-secondary copy-url-button" data-bs-delay="0" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="' . esc_html__( 'Copy to clipboard', 'staylodgic' ) . '"><i class="fa-solid fa-copy"></i></div>';
 			echo '</div>';
 
 			echo '</div>';
@@ -512,7 +512,7 @@ class Availability_Batch_Processor extends Batch_Processor_Base {
 	 */
 	public function filterFutureDates( $remaining_quantity_array ) {
 		$filtered_array    = array();
-		$stay_current_date = date( 'Y-m-d' );
+		$stay_current_date = gmdate( 'Y-m-d' );
 
 		foreach ( $remaining_quantity_array as $date => $quantity ) {
 			if ( $date >= $stay_current_date ) {
@@ -555,7 +555,7 @@ class Availability_Batch_Processor extends Batch_Processor_Base {
 
 		// Iterate over the quantity array
 		foreach ( $stay_quantity_array as $date => $quantity ) {
-			if ( $quantity == 0 ) {
+			if ( 0 === (int) $quantity ) {
 				// Format the date for ICS
 				$ics_date     = new \DateTime( $date );
 				$ics_date_str = $ics_date->format( 'Ymd' );
@@ -571,10 +571,10 @@ class Availability_Batch_Processor extends Batch_Processor_Base {
 				$ics_content .= "BEGIN:VEVENT\r\n";
 				$ics_content .= 'UID:' . uniqid() . "@staylodgic\r\n";
 				$ics_content .= 'DTSTAMP:' . gmdate( 'Ymd' ) . 'T' . gmdate( 'His' ) . "Z\r\n";
-				$ics_content .= 'DTSTART;VALUE=DATE:' . $ics_date_str . "\r\n";
-				$ics_content .= 'DTEND;VALUE=DATE:' . $ics_end_date_str . "\r\n";
+				$ics_content .= 'DTSTART;VALUE=DATE:' . esc_html( $ics_date_str ) . "\r\n";
+				$ics_content .= 'DTEND;VALUE=DATE:' . esc_html( $ics_end_date_str ) . "\r\n";
 				$ics_content .= "SUMMARY:Unavailable\r\n";
-				$ics_content .= 'DESCRIPTION:Unavailable on ' . $ics_readable_date . "\r\n";
+				$ics_content .= 'DESCRIPTION:Unavailable on ' . esc_html( $ics_readable_date ) . "\r\n";
 				$ics_content .= "STATUS:CONFIRMED\r\n";
 				$ics_content .= "END:VEVENT\r\n";
 			}
@@ -589,7 +589,7 @@ class Availability_Batch_Processor extends Batch_Processor_Base {
 		} else {
 			// Set headers for .ics file download for user requests
 			header( 'Content-Type: text/calendar; charset=utf-8' );
-			header( 'Content-Disposition: attachment; filename="room-' . $stay_room_id . '-availability.ics"' );
+			header( 'Content-Disposition: attachment; filename="room-' . esc_attr( $stay_room_id ) . '-availability.ics"' );
 			echo $ics_content;
 		}
 	}

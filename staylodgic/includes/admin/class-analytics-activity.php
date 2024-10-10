@@ -117,8 +117,9 @@ class Analytics_Activity {
 			echo '</div>';
 
 			// Create an instance of the ChartGenerator class
-			$analytics = new \Staylodgic\Analytics_Activity( $activity_id = false );
-			echo $analytics->display_stats();
+			$activity_id = false;
+			$analytics   = new \Staylodgic\Analytics_Activity( $activity_id );
+			echo wp_kses( $analytics->display_stats(), staylodgic_get_allowed_tags() );
 		}
 
 		echo '</div>';

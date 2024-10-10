@@ -612,7 +612,7 @@ function staylodgic_country_list( $output_type = 'select', $selected = '' ) {
 		'ZW' => 'Zimbabwe',
 	);
 	$country_list = false;
-	if ( $output_type == 'select' ) {
+	if ( $output_type === 'select' ) {
 		$country_list  = '';
 		$country_list .= '<option selected disabled value="">Choose a country</option>';
 		foreach ( $countries as $key => $option ) {
@@ -624,7 +624,7 @@ function staylodgic_country_list( $output_type = 'select', $selected = '' ) {
 			$country_list .= '<option value="' . esc_attr( $key ) . '" ' . $country_selected . '>' . esc_attr( $option ) . '</option>';
 		}
 	}
-	if ( $output_type == 'select-alt' ) {
+	if ( $output_type === 'select-alt' ) {
 		$country_list = '';
 		$count        = 0;
 		foreach ( $countries as $key => $option ) {
@@ -636,12 +636,12 @@ function staylodgic_country_list( $output_type = 'select', $selected = '' ) {
 		}
 	}
 
-	if ( $output_type == 'select-array' ) {
+	if ( $output_type === 'select-array' ) {
 		$country_list = array();
 		$countries    = array_merge( array( 'none' => 'Choose a country' ), $countries );
 		$country_list = $countries;
 	}
-	if ( $output_type == 'display' ) {
+	if ( $output_type === 'display' ) {
 		if ( array_key_exists( $selected, $countries ) ) {
 			$country_list = $countries[ $selected ];
 		}
