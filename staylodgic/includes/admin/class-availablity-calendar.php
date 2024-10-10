@@ -199,10 +199,10 @@ class Availablity_Calendar extends Availablity_Calendar_Base {
 		// Output the HTML for the Availability page
 		?>
 		<div class="wrap">
-			<h1><?php _e( 'Availability Calendar', 'staylodgic' ); ?></h1>
+			<h1><?php esc_html_e( 'Availability Calendar', 'staylodgic' ); ?></h1>
 			<?php
 			if ( ! \Staylodgic\Rooms::has_rooms() ) {
-				echo '<h1>' . __( 'No Rooms Found', 'staylodgic' ) . '</h1>';
+				echo '<h1>' . esc_html__( 'No Rooms Found', 'staylodgic' ) . '</h1>';
 				return;
 			}
 			?>
@@ -245,13 +245,15 @@ class Availablity_Calendar extends Availablity_Calendar_Base {
 		<div class="wrap">
 			<?php
 			if ( ! \Staylodgic\Rooms::has_rooms() ) {
-				echo '<h1>' . __( 'No Rooms Found', 'staylodgic' ) . '</h1>';
+				echo '<h1>' . esc_html__( 'No Rooms Found', 'staylodgic' ) . '</h1>';
 				return;
 			} else {
 
-				echo '<h1>' . __( 'Availability Calendar', 'staylodgic' ) . '</h1>';
+				echo '<h1>' . esc_html__( 'Availability Calendar', 'staylodgic' ) . '</h1>';
 			}
-			echo \Staylodgic\Modals::rate_qty_toasts();
+			$rate_qty_toasts = \Staylodgic\Modals::rate_qty_toasts();
+
+			echo wp_kses( $rate_qty_toasts, staylodgic_get_allowed_tags() );
 
 			$confirmed_status = '';
 			if ( $this->get_display_confirmed_status() ) {
@@ -283,15 +285,15 @@ class Availablity_Calendar extends Availablity_Calendar_Base {
 						<div data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Next Month" class="calendar-nav-buttons" id="nextmonth"><i class="fa-solid fa-arrow-right"></i></div>
 					</li>
 					<li class="nav-item nav-item-seperator">
-						<div class="calendar-nav-buttons calendar-text-button" id="quantity-modal-link" data-bs-toggle="modal" data-bs-target="#quantity-modal"><i class="fas fa-hashtag"></i><?php _e( 'Quanity', 'staylodgic' ); ?></div>
+						<div class="calendar-nav-buttons calendar-text-button" id="quantity-modal-link" data-bs-toggle="modal" data-bs-target="#quantity-modal"><i class="fas fa-hashtag"></i><?php esc_html_e( 'Quanity', 'staylodgic' ); ?></div>
 					</li>
 					<li class="nav-item">
-						<div class="calendar-nav-buttons calendar-text-button" id="rates-modal-link" data-bs-toggle="modal" data-bs-target="#rates-modal"><i class="fas fa-dollar-sign"></i><?php _e( 'Rate', 'staylodgic' ); ?></div>
+						<div class="calendar-nav-buttons calendar-text-button" id="rates-modal-link" data-bs-toggle="modal" data-bs-target="#rates-modal"><i class="fas fa-dollar-sign"></i><?php esc_html_e( 'Rate', 'staylodgic' ); ?></div>
 					</li>
 					<li class="nav-item nav-item-seperator">
 						<div class="form-check form-switch">
 							<input class="form-check-input" type="checkbox" role="switch" id="calendar-booking-status" <?php echo esc_attr( $confirmed_status ); ?>>
-							<label class="form-check-label" for="calendar-booking-status"><?php _e( 'Display Confirmed', 'staylodgic' ); ?></label>
+							<label class="form-check-label" for="calendar-booking-status"><?php esc_html_e( 'Display Confirmed', 'staylodgic' ); ?></label>
 						</div>
 					</li>
 				</ul>
@@ -301,7 +303,6 @@ class Availablity_Calendar extends Availablity_Calendar_Base {
 			<div id="calendar">
 				<?php
 				$calendar = $this->get_availability_calendar();
-
 				echo $calendar;
 				?>
 			</div>

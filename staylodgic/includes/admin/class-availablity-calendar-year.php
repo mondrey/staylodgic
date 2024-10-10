@@ -39,11 +39,11 @@ class Availablity_Calendar_Year extends Availablity_Calendar_Base {
 		<div class="wrap">
 			<?php
 			if ( ! \Staylodgic\Rooms::has_rooms() ) {
-				echo '<h1>' . __( 'No Rooms Found', 'staylodgic' ) . '</h1>';
+				echo '<h1>' . esc_html__( 'No Rooms Found', 'staylodgic' ) . '</h1>';
 				return;
 			} else {
 
-				echo '<h1>' . __( '12 Months Availability Overview', 'staylodgic' ) . '</h1>';
+				echo '<h1>' . esc_html__( '12 Months Availability Overview', 'staylodgic' ) . '</h1>';
 			}
 
 			echo '<div class="calendars-container">';

@@ -585,12 +585,12 @@ class Availability_Batch_Processor extends Batch_Processor_Base {
 
 		if ( 'server' === $mode ) {
 			// Output the .ics content directly for server-to-server requests
-			echo $ics_content;
+			echo esc_html( $ics_content );
 		} else {
 			// Set headers for .ics file download for user requests
 			header( 'Content-Type: text/calendar; charset=utf-8' );
 			header( 'Content-Disposition: attachment; filename="room-' . esc_attr( $stay_room_id ) . '-availability.ics"' );
-			echo $ics_content;
+			echo esc_html( $ics_content );
 		}
 	}
 }
