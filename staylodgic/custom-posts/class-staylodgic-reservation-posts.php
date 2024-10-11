@@ -74,8 +74,8 @@ class Staylodgic_Reservation_Posts {
 						echo '<p class="post-status-reservation post-status-reservation-staying">' . esc_html__( 'Staying', 'staylodgic' ) . '</p>';
 					}
 				}
-				echo '<p class="post-status-reservation-date post-status-reservation-date-checkin"><i class="fa-solid fa-arrow-right"></i> ' . esc_attr( staylodgic_formatDate( $reservation_checkin ) ) . '</p>';
-				echo '<p class="post-status-reservation-date post-status-reservation-date-checkout"><i class="fa-solid fa-arrow-left"></i> ' . esc_attr( staylodgic_formatDate( $reservation_checkout ) ) . '</p>';
+				echo '<p class="post-status-reservation-date post-status-reservation-date-checkin"><i class="fa-solid fa-arrow-right"></i> ' . esc_attr( staylodgic_format_date( $reservation_checkin ) ) . '</p>';
+				echo '<p class="post-status-reservation-date post-status-reservation-date-checkout"><i class="fa-solid fa-arrow-left"></i> ' . esc_attr( staylodgic_format_date( $reservation_checkout ) ) . '</p>';
 
 				break;
 			case 'reservation_registered':

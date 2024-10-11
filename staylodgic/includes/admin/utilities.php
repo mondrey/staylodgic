@@ -77,10 +77,10 @@ function staylodgic_get_template_pages() {
  * @return void
  */
 function staylodgic_random_color_hex() {
-	// Generate a random RGB color
-	$red   = mt_rand( 0, 255 );
-	$green = mt_rand( 0, 255 );
-	$blue  = mt_rand( 0, 255 );
+
+	$red   = wp_rand( 0, 255 );
+	$green = wp_rand( 0, 255 );
+	$blue  = wp_rand( 0, 255 );
 
 	// Convert RGB to hex
 	$hex = sprintf( '#%02x%02x%02x', $red, $green, $blue );
@@ -135,10 +135,20 @@ function staylodgic_apply_timezone_to_date_and_time( $date, $time, $timezone ) {
 			throw new Exception( 'Invalid timezone format' );
 		}
 
-		$sign              = $matches[1];
-		$hours             = (int) $matches[2];
-		$minutes           = (int) $matches[3];
-		$offset_in_seconds = ( $hours * 3600 + $minutes * 60 ) * ( $sign === '+' ? 1 : -1 );
+		$sign    = $matches[1];
+		$hours   = (int) $matches[2];
+		$minutes = (int) $matches[3];
+		// Calculate the total number of seconds from hours and minutes
+		$total_seconds = ( $hours * 3600 ) + ( $minutes * 60 );
+
+		// Determine the sign multiplier based on the value of $sign
+		$multiplier = -1; // Default to negative
+		if ( '+' === $sign ) {
+			$multiplier = 1; // Change to positive if $sign is '+'
+		}
+
+		// Calculate the final offset in seconds
+		$offset_in_seconds = $total_seconds * $multiplier;
 
 		// Combine date and time and create DateTime object
 		$date_time = new DateTime( $date . ' ' . $time );
@@ -158,11 +168,11 @@ function staylodgic_apply_timezone_to_date_and_time( $date, $time, $timezone ) {
 }
 
 /**
- * Method staylodgic_get_GmtTimezoneChoices
+ * Method staylodgic_get_gmt_timezone_choices
  *
  * @return void
  */
-function staylodgic_get_GmtTimezoneChoices() {
+function staylodgic_get_gmt_timezone_choices() {
 	$timezones = array();
 
 	// Start from GMT-12:00 to GMT+14:00
@@ -267,14 +277,14 @@ function staylodgic_sync_intervals() {
 	return $sync_intervals;
 }
 /**
- * Method staylodgic_formatDate
+ * Method staylodgic_format_date
  *
  * @param $stay_date_string $stay_date_string [explicite description]
  * @param $format_choice $format_choice [explicite description]
  *
  * @return void
  */
-function staylodgic_formatDate( $stay_date_string, $format_choice = 'monthshort_first' ) {
+function staylodgic_format_date( $stay_date_string, $format_choice = 'monthshort_first' ) {
 	$formatted_date = '';
 	$date_time      = new DateTime( $stay_date_string );
 
@@ -360,20 +370,20 @@ function staylodgic_get_all_bed_layouts( $bed_names ) {
 	$html            = '';
 	$bed_names_array = explode( ' ', $bed_names );
 	foreach ( $bed_names_array as $key => $bed_name ) {
-		$html .= staylodgic_get_BedLayout( $bed_name, $key );
+		$html .= staylodgic_get_bed_layout( $bed_name, $key );
 	}
 
 	return $html;
 }
 /**
- * Method staylodgic_get_BedLayout
+ * Method staylodgic_get_bed_layout
  *
  * @param $bed_name $bed_name [explicite description]
  * @param $bed_field_id $bed_field_id [explicite description]
  *
  * @return void
  */
-function staylodgic_get_BedLayout( $bed_name, $bed_field_id = null ) {
+function staylodgic_get_bed_layout( $bed_name, $bed_field_id = null ) {
 
 	switch ( $bed_name ) {
 		case 'fullbed':
@@ -414,7 +424,7 @@ function staylodgic_format_value( $value ) {
 			$formatted_elements .= '<li><strong>' . $key . ':</strong> ' . staylodgic_format_value( $item ) . '</li>';
 		}
 		$formatted_end = '</ul>';
-		if ( '' == $formatted_elements ) {
+		if ( '' === $formatted_elements ) {
 			return false;
 		} else {
 			return $formatted_start . $formatted_elements . $formatted_end;
@@ -431,7 +441,7 @@ function staylodgic_format_value( $value ) {
  * @return void
  */
 function staylodgic_readable_date( $original_date ) {
-	$formatted_date = date( 'F jS, Y', strtotime( $original_date ) );
+	$formatted_date = gmdate( 'F jS, Y', strtotime( $original_date ) );
 
 	return $formatted_date;
 }
@@ -444,15 +454,14 @@ function staylodgic_readable_date( $original_date ) {
  *
  * @return void
  */
-function staylodgic_get_option( $option, $default = '' ) {
+function staylodgic_get_option( $option, $default_value = '' ) {
 	$settings = get_option( 'staylodgic_settings' );
 
 	if ( is_array( $settings ) && isset( $settings[ $option ] ) ) {
-		//error_log( print_r($settings, true) );
 		return $settings[ $option ];
 	}
 
-	return $default;
+	return $default_value;
 }
 
 /**
@@ -472,16 +481,16 @@ function staylodgic_price( $original_price ) {
 	// Format the price using number_format
 	$price = number_format( $original_price, $number_of_decimals, $decimal_seperator, $thousand_seperator );
 
-	if ( '' == $price ) {
+	if ( '' === $price ) {
 		$price = $original_price;
 	}
 
 	$formatted_price = '<span class="formatted-price" date-price="' . esc_attr( $price ) . '" date-currency="' . esc_attr( $currency ) . '">';
 	// Adjust the position of the currency symbol
-	if ( $currency_position === 'left' ) {
-		$formatted_price .= '<span class="currency">' . $currency . '</span>' . ' ' . '<span class="price">' . $price . '</span>';
+	if ( 'left' === $currency_position ) {
+		$formatted_price .= '<span class="currency">' . $currency . '</span> <span class="price">' . $price . '</span>';
 	} else {
-		$formatted_price .= '<span class="price">' . $price . '</span>' . ' ' . '<span class="currency">' . $currency . '</span>';
+		$formatted_price .= '<span class="price">' . $price . '</span> <span class="currency">' . $currency . '</span>';
 	}
 	$formatted_price .= '</span>';
 
@@ -511,8 +520,8 @@ function staylodgic_reverse_percentage( $total, $percentages ) {
  */
 function staylodgic_has_tax() {
 
-	$taxFlag = staylodgic_get_option( 'enable_taxes' );
-	return $taxFlag;
+	$tax_flag = staylodgic_get_option( 'enable_taxes' );
+	return $tax_flag;
 }
 /**
  * Method staylodgic_has_activity_tax
@@ -521,8 +530,8 @@ function staylodgic_has_tax() {
  */
 function staylodgic_has_activity_tax() {
 
-	$taxFlag = staylodgic_get_option( 'enable_activitytaxes' );
-	return $taxFlag;
+	$tax_flag = staylodgic_get_option( 'enable_activitytaxes' );
+	return $tax_flag;
 }
 
 /**
@@ -579,69 +588,165 @@ function staylodgic_set_booking_transient( $data, $stay_booking_number ) {
 function staylodgic_get_booking_transient( $stay_booking_number = null ) {
 	return get_transient( $stay_booking_number );
 }
+function staylodgic_get_form_allowed_tags() {
+	$allowed_html = array(
+		'html'     => array(),
+		'body'     => array(),
+		'div'      => array(
+			'class' => array(),
+			'id'    => array(),
+		),
+		'i'        => array(
+			'class' => array(),
+		),
+		'h3'       => array(),
+		'input'    => array(
+			'placeholder' => array(),
+			'type'        => array(),
+			'class'       => array(),
+			'id'          => array(),
+			'name'        => array(),
+			'required'    => array(),
+		),
+		'label'    => array(
+			'for'   => array(),
+			'class' => array(),
+		),
+		'select'   => array(
+			'required' => array(),
+			'class'    => array(),
+			'id'       => array(),
+			'name'     => array(),
+		),
+		'option'   => array(
+			'selected' => array(),
+			'disabled' => array(),
+			'value'    => array(),
+		),
+		'textarea' => array(
+			'class' => array(),
+			'id'    => array(),
+			'name'  => array(),
+		),
+		'span'     => array(
+			'class' => array(),
+		),
+		'p'        => array(),
+		'a'        => array(
+			'href' => array(),
+		),
+	);
+
+	return $allowed_html;
+}
+function staylodgic_get_booking_allowed_tags() {
+	$allowed_html = array(
+		'html'  => array(),
+		'body'  => array(),
+		'div'   => array(
+			'class'               => array(),
+			'data-adults'         => array(),
+			'data-children'       => array(),
+			'data-guests'         => array(),
+			'data-room-id'        => array(),
+			'data-roomprice'      => array(),
+			'for'                 => array(),
+			'data-room-button-id' => array(),
+		),
+		'a'     => array(
+			'href'         => array(),
+			'data-toggle'  => array(),
+			'data-gallery' => array(),
+			'class'        => array(),
+		),
+		'img'   => array(
+			'class'      => array(),
+			'data-image' => array(),
+			'src'        => array(),
+			'alt'        => array(),
+		),
+		'span'  => array(
+			'class'         => array(),
+			'date-price'    => array(),
+			'date-currency' => array(),
+		),
+		'i'     => array(
+			'class'       => array(),
+			'aria-hidden' => array(),
+		),
+		'h2'    => array(),
+		'label' => array(
+			'for' => array(),
+		),
+		'input' => array(
+			'hidden'           => array(),
+			'type'             => array(),
+			'name'             => array(),
+			'value'            => array(),
+			'class'            => array(),
+			'data-type'        => array(),
+			'data-roominputid' => array(),
+			'data-roomqty'     => array(),
+			'id'               => array(),
+			'min'              => array(),
+			'max'              => array(),
+			'checked'          => array(),
+			'data-mealprice'   => array(),
+		),
+	);
+
+	return $allowed_html;
+}
 function staylodgic_get_calendar_allowed_tags() {
-	$allowed = array(
-		'div'    => array(
-			'id'                     => array(),
+	$allowed_html = array(
+		'html'  => array(),
+		'body'  => array(),
+		'table' => array(
+			'id'            => array(),
+			'data-calstart' => array(),
+			'data-calend'   => array(),
+		),
+		'tr'    => array(
+			'class'   => array(),
+			'data-id' => array(),
+		),
+		'td'    => array(
+			'class'               => array(),
+			'data-roomsremaining' => array(),
+		),
+		'div'   => array(
+			'data-occupancypercent'  => array(),
 			'class'                  => array(),
-			'data-bs-toggle'         => array(),
-			'data-bs-placement'      => array(),
-			'data-bs-title'          => array(),
-			'data-date'              => array(),
-			'data-room'              => array(),
+			'data-day'               => array(),
 			'data-reservationstatus' => array(),
 			'data-guest'             => array(),
+			'data-room'              => array(),
 			'data-row'               => array(),
 			'data-bookingnumber'     => array(),
 			'data-reservationid'     => array(),
 			'data-checkin'           => array(),
 			'data-checkout'          => array(),
-			'style'                  => array(),
+			'data-tabwidth'          => array(),
 		),
-		'span'   => array(
+		'span'  => array(
 			'class' => array(),
 		),
-		'a'      => array(
-			'href'              => array(),
-			'class'             => array(),
+		'br'    => array(),
+		'a'     => array(
 			'data-bs-toggle'    => array(),
 			'data-bs-placement' => array(),
 			'data-bs-title'     => array(),
+			'href'              => array(),
+			'class'             => array(),
+			'data-remaining'    => array(),
 			'data-date'         => array(),
 			'data-room'         => array(),
 			'data-rate'         => array(),
-			'style'             => array(),
-		),
-		'button' => array(
-			'type'            => array(),
-			'class'           => array(),
-			'data-bs-dismiss' => array(),
-			'aria-label'      => array(),
-		),
-		'strong' => array(),
-		'small'  => array(
-			'class' => array(),
-		),
-		'td'     => array(
-			'class'               => array(),
-			'data-roomsremaining' => array(),
-			'style'               => array(),
-		),
-		'i'      => array(
-			'class' => array(),
-		),
-		'table'  => array(
-			'id'            => array(),
-			'data-calstart' => array(),
-			'data-calend'   => array(),
-		),
-		'tr'     => array(
-			'class'   => array(),
-			'data-id' => array(),
+			'data-bs-delay'     => array(),
 		),
 	);
 
-	return $allowed;
+	return $allowed_html;
 }
 /**
  * Method staylodgic_get_allowed_tags

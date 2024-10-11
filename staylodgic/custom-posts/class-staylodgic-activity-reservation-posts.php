@@ -55,7 +55,7 @@ class Staylodgic_Activity_Reservation_Posts {
 				break;
 			case 'reservation_checkin':
 				$reservation_checkin = $reservation_instance->get_checkin_date();
-				echo '<p class="post-status-reservation-date post-status-reservation-date-checkin"><i class="fa-solid fa-arrow-right"></i> ' . esc_attr( staylodgic_formatDate( $reservation_checkin ) ) . '</p>';
+				echo '<p class="post-status-reservation-date post-status-reservation-date-checkin"><i class="fa-solid fa-arrow-right"></i> ' . esc_attr( staylodgic_format_date( $reservation_checkin ) ) . '</p>';
 
 				break;
 			case 'reservation_status':

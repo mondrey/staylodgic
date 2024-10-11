@@ -303,7 +303,7 @@ class Availablity_Calendar extends Availablity_Calendar_Base {
 			<div id="calendar">
 				<?php
 				$calendar = $this->get_availability_calendar();
-				echo $calendar;
+				echo wp_kses( $calendar, staylodgic_get_calendar_allowed_tags() );
 				?>
 			</div>
 		</div>
@@ -343,9 +343,10 @@ class Availablity_Calendar extends Availablity_Calendar_Base {
 		$this->get_display_confirmed_status();
 
 		ob_start();
-		echo $this->get_availability_calendar( $start_date, $end_date );
+		$calendar_range = $this->get_availability_calendar( $start_date, $end_date );
+		echo wp_kses( $calendar_range, staylodgic_get_calendar_allowed_tags() );
 		$output = ob_get_clean();
-		echo $output;
+		echo wp_kses( $output, staylodgic_get_calendar_allowed_tags() );
 
 		// end execution
 		wp_die();

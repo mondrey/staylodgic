@@ -353,7 +353,7 @@ class Booking {
 				<div class="front-booking-search">
 					<div class="front-booking-calendar-wrap">
 						<div class="front-booking-calendar-icon"><i class="fa-solid fa-calendar-days"></i></div>
-						<div class="front-booking-calendar-date"><?php _e( 'Choose stay dates', 'staylodgic' ); ?></div>
+						<div class="front-booking-calendar-date"><?php esc_html_e( 'Choose stay dates', 'staylodgic' ); ?></div>
 					</div>
 					<div class="front-booking-guests-wrap">
 						<div class="front-booking-guests-container"> <!-- New container -->
@@ -364,7 +364,7 @@ class Booking {
 								<div class="front-booking-guest-child-icon"><span class="guest-child-svg"></span><span class="front-booking-adult-child-value">0</span></div>
 							</div>
 						</div>
-						<div id="bookingSearch" class="form-search-button"><?php _e( 'Search', 'staylodgic' ); ?></div>
+						<div id="bookingSearch" class="form-search-button"><?php esc_html_e( 'Search', 'staylodgic' ); ?></div>
 					</div>
 				</div>
 
@@ -378,12 +378,12 @@ class Booking {
 					// Escape the encoded dates for output
 					$escaped_dates = htmlspecialchars( $encoded_dates, ENT_QUOTES, 'UTF-8' );
 					?>
-					<input data-booked="<?php echo $escaped_dates; ?>" type="date" id="reservation-date" name="reservation_date">
+					<input data-booked="<?php echo esc_attr( $escaped_dates ); ?>" type="date" id="reservation-date" name="reservation_date">
 				</div>
 				<div class="staylodgic_reservation_room_guests_wrap">
 					<div id="staylodgic_reservation_room_adults_wrap" class="number-input occupant-adult occupants-range">
 						<div class="column-one">
-							<label for="number-of-adults"><?php _e( 'Adults', 'staylodgic' ); ?></label>
+							<label for="number-of-adults"><?php esc_html_e( 'Adults', 'staylodgic' ); ?></label>
 						</div>
 						<div class="column-two">
 							<span class="minus-btn">-</span>
@@ -393,7 +393,7 @@ class Booking {
 					</div>
 					<div id="staylodgic_reservation_room_children_wrap" class="number-input occupant-child occupants-range">
 						<div class="column-one">
-							<label for="number-of-adults"><?php _e( 'Children', 'staylodgic' ); ?></label>
+							<label for="number-of-adults"><?php esc_html_e( 'Children', 'staylodgic' ); ?></label>
 						</div>
 						<div class="column-two">
 							<span class="minus-btn">-</span>
@@ -433,11 +433,11 @@ class Booking {
 						<div class="front-booking-number-container">
 							<div class="form-group form-floating form-floating-booking-number form-bookingnumber-request">
 								<input type="hidden" name="staylodgic_bookingdetails_nonce" value="<?php echo esc_attr( $staylodgic_bookingdetails_nonce ); ?>" />
-								<input placeholder="<?php _e( 'Booking No.', 'staylodgic' ); ?>" type="text" class="form-control" id="booking_number" name="booking_number" required>
-								<label for="booking_number" class="control-label"><?php _e( 'Booking No.', 'staylodgic' ); ?></label>
+								<input placeholder="<?php esc_html_e( 'Booking No.', 'staylodgic' ); ?>" type="text" class="form-control" id="booking_number" name="booking_number" required>
+								<label for="booking_number" class="control-label"><?php esc_html_e( 'Booking No.', 'staylodgic' ); ?></label>
 							</div>
 						</div>
-						<div data-request="bookingdetails" id="booking_details" class="form-search-button"><?php _e( 'Search', 'staylodgic' ); ?></div>
+						<div data-request="bookingdetails" id="booking_details" class="form-search-button"><?php esc_html_e( 'Search', 'staylodgic' ); ?></div>
 					</div>
 				</div>
 
@@ -560,9 +560,9 @@ class Booking {
 		$output = rtrim( $output, ', ' );
 
 		if ( '' !== $output ) {
-			$output_text = '<div class="recommended-alt-title"><i class="fas fa-calendar-times"></i>' . __( 'Rooms unavailable', 'staylodgic' ) . '</div><div class="recommended-alt-description">' . __( 'Following range from your selection is avaiable.', 'staylodgic' ) . '</div>';
+			$output_text = '<div class="recommended-alt-title"><i class="fas fa-calendar-times"></i>' . esc_html__( 'Rooms unavailable', 'staylodgic' ) . '</div><div class="recommended-alt-description">' . esc_html__( 'Following range from your selection is avaiable.', 'staylodgic' ) . '</div>';
 		} else {
-			$output_text = '<div class="recommended-alt-title"><i class="fas fa-calendar-times"></i>' . __( 'Rooms unavailable', 'staylodgic' ) . '</div><div class="recommended-alt-description">' . __( 'No rooms found within your selection.', 'staylodgic' ) . '</div>';
+			$output_text = '<div class="recommended-alt-title"><i class="fas fa-calendar-times"></i>' . esc_html__( 'Rooms unavailable', 'staylodgic' ) . '</div><div class="recommended-alt-description">' . esc_html__( 'No rooms found within your selection.', 'staylodgic' ) . '</div>';
 		}
 		// Print the output
 		$room_availability = '<div class="recommended-dates-wrap">' . $output_text . $output . '</div>';
@@ -692,15 +692,17 @@ class Booking {
 			$roomlistingbox = wp_create_nonce( 'staylodgic-roomlistingbox-nonce' );
 			echo '<input type="hidden" name="staylodgic_roomlistingbox_nonce" value="' . esc_attr( $roomlistingbox ) . '" />';
 			echo '<div id="reservation-data" data-bookingnumber="' . esc_attr( $this->stay_booking_number ) . '" data-children="' . esc_attr( $this->stay_children_guests ) . '" data-adults="' . esc_attr( $this->stay_adult_guests ) . '" data-guests="' . esc_attr( $this->stay_total_guests ) . '" data-checkin="' . esc_attr( $this->stay_checkin_date ) . '" data-checkout="' . esc_attr( $this->stay_checkout_date ) . '">';
-			echo $list;
+			echo wp_kses( $list, staylodgic_get_booking_allowed_tags() );
 			echo '</div>';
 		} else {
 			echo '<div class="no-rooms-found">';
-			echo '<div class="no-rooms-title">' . __( 'Rooms unavailable for choice', 'staylodgic' ) . '</div>';
-			echo '<div class="no-rooms-description">' . __( 'Please choose a different range.', 'staylodgic' ) . '</div>';
+			echo '<div class="no-rooms-title">' . esc_html__( 'Rooms unavailable for choice', 'staylodgic' ) . '</div>';
+			echo '<div class="no-rooms-description">' . esc_html__( 'Please choose a different range.', 'staylodgic' ) . '</div>';
 			echo '</div>';
 		}
-		echo self::register_guest_form();
+		$booking_guest_form = self::register_guest_form();
+		echo wp_kses( $booking_guest_form, staylodgic_get_form_allowed_tags() );
+
 		echo '</form>';
 		$output                     = ob_get_clean();
 		$response['booking_data']   = $combo_array;
@@ -865,7 +867,7 @@ class Booking {
 				$html .= '</div>';
 
 				$html .= '<div class="room-button-wrap">';
-				$html .= '<div data-room-button-id="' . esc_attr( $id ) . '" class="choose-room-button book-button">' . __( 'Choose this room', 'staylodgic' ) . '</div>';
+				$html .= '<div data-room-button-id="' . esc_attr( $id ) . '" class="choose-room-button book-button">' . esc_html__( 'Choose this room', 'staylodgic' ) . '</div>';
 				$html .= '</div>';
 
 				$html .= '</div>';
@@ -1279,7 +1281,7 @@ class Booking {
 
 					$bed_qty = $stay_room_data['bednumber'][ $bed_field_id ];
 					for ( $i = 0; $i < $bed_qty; $i++ ) {
-						$html .= staylodgic_get_BedLayout( $bed_name, $bed_field_id . '-' . $i );
+						$html .= staylodgic_get_bed_layout( $bed_name, $bed_field_id . '-' . $i );
 					}
 				}
 				$html .= '</div>';
@@ -1346,7 +1348,7 @@ class Booking {
 
 					$bed_qty = $stay_room_data['bednumber'][ $bed_field_id ];
 					for ( $i = 0; $i < $bed_qty; $i++ ) {
-						$html .= staylodgic_get_BedLayout( $bed_name, $bed_field_id . '-' . $i );
+						$html .= staylodgic_get_bed_layout( $bed_name, $bed_field_id . '-' . $i );
 					}
 				}
 				$html .= '</div>';

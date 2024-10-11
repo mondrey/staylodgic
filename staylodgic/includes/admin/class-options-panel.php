@@ -1469,7 +1469,7 @@ $panel_settings = array(
 		'type'        => 'select',
 		'inputwidth'  => '250',
 		'description' => 'Select your time zone relative to GMT.',
-		'choices'     => staylodgic_get_GmtTimezoneChoices(),
+		'choices'     => staylodgic_get_gmt_timezone_choices(),
 		'tab'         => 'general',
 	),
 	'sync_interval'                 => array(

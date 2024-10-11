@@ -151,7 +151,8 @@ class Cache {
 		if ( isset( $cache_index ) && is_array( $cache_index ) ) {
 
 			foreach ( $cache_index as $cache_transient_key => $details ) {
-				if ( $details['room_id'] == $room_id &&
+
+				if ( (int) $details['room_id'] === (int) $room_id &&
 					( $affected_start_date <= $details['end_date'] && $affected_end_date >= $details['start_date'] ) ) {
 					delete_transient( $cache_transient_key );
 					unset( $cache_index[ $cache_transient_key ] );
