@@ -1317,16 +1317,15 @@ class Activity {
 				// Create an instance of the Activity class
 				$reserved_for_guests    = $this->get_activity_reservation_numbers( $the_post_id );
 				$existing_spots_for_day = $reserved_for_guests['total'];
-				$activities            .= '<div class="activity-schedules-container-wrap">';
+				echo '<div class="activity-schedules-container-wrap">';
 				$this->display_activity_schedules_with_availability( $activity_date, $the_post_id, $existing_spots_for_day ); // Today's date
-				$activities .= '</div>';
+				echo '</div>';
 			} else {
 				// Handle the case where $activity_date is not a valid date
-				$activities .= '<div class="activity-schedules-container-wrap"></div>';
+				echo '<div class="activity-schedules-container-wrap"></div>';
 			}
 		}
 
-		return $activities;
 	}
 
 	/**

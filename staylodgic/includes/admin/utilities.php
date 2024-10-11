@@ -588,6 +588,70 @@ function staylodgic_set_booking_transient( $data, $stay_booking_number ) {
 function staylodgic_get_booking_transient( $stay_booking_number = null ) {
 	return get_transient( $stay_booking_number );
 }
+function staylodgic_get_bedlayout_allowed_tags() {
+
+	$allowed_html = array(
+		'html'  => array(),
+		'body'  => array(),
+		'label' => array(
+			'for' => array(),
+		),
+		'input' => array(
+			'type'  => array(),
+			'id'    => array(),
+			'name'  => array(),
+			'value' => array(),
+		),
+		'span'  => array(
+			'class' => array(),
+		),
+		'div'   => array(
+			'class' => array(),
+		),
+	);
+
+	return $allowed_html;
+}
+function staylodgic_get_price_allowed_tags() {
+	$allowed_html = array(
+		'span' => array(
+			'class'         => array(),
+			'date-price'    => array(),
+			'date-currency' => array(),
+		),
+	);
+
+	return $allowed_html;
+}
+function staylodgic_get_ticket_allowed_tags() {
+	$allowed_html = array(
+		'html' => array(),
+		'body' => array(),
+		'div'  => array(
+			'class'              => array(),
+			'data-file'          => array(),
+			'data-postid'        => array(),
+			'id'                 => array(),
+			'data-bookingnumber' => array(),
+			'style'              => array(),
+			'data-qrcode'        => array(),
+		),
+		'p'    => array(
+			'class' => array(),
+		),
+		'h1'   => array(),
+		'i'    => array(
+			'class' => array(),
+		),
+		'span' => array(
+			'class'         => array(),
+			'date-price'    => array(),
+			'date-currency' => array(),
+		),
+	);
+
+	return $allowed_html;
+}
 function staylodgic_get_form_allowed_tags() {
 	$allowed_html = array(
 		'html'     => array(),

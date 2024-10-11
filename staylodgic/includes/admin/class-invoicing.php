@@ -211,15 +211,15 @@ class Invoicing {
 			$this->stay_room_type = $reservations_instance->get_activity_name_for_reservation( $stay_reservation_id );
 			// Add other reservation details as needed
 
-			$taxStatus = get_post_meta( $stay_reservation_id, 'staylodgic_tax', true );
-			$taxHTML   = get_post_meta( $stay_reservation_id, 'staylodgic_tax_html_data', true );
-			$taxData   = get_post_meta( $stay_reservation_id, 'staylodgic_tax_data', true );
+			$tax_gen_status = get_post_meta( $stay_reservation_id, 'staylodgic_tax', true );
+			$tax_gen_html   = get_post_meta( $stay_reservation_id, 'staylodgic_tax_html_data', true );
+			$tax_gen_data   = get_post_meta( $stay_reservation_id, 'staylodgic_tax_data', true );
 
 			$tax_summary  = '<div id="input-tax-summary">';
 			$tax_summary .= '<div class="input-tax-summary-wrap">';
-			if ( 'enabled' == $taxStatus ) {
+			if ( 'enabled' == $tax_gen_status ) {
 				$tax_summary .= '<div class="input-tax-summary-wrap-inner">';
-				$tax_summary .= $taxHTML;
+				$tax_summary .= $tax_gen_html;
 
 				$tax_summary .= '</div>';
 			}
@@ -341,15 +341,15 @@ class Invoicing {
 			$this->number_days    = $reservations_instance->count_reservation_days( $stay_reservation_id );
 			// Add other reservation details as needed
 
-			$taxStatus = get_post_meta( $stay_reservation_id, 'staylodgic_tax', true );
-			$taxHTML   = get_post_meta( $stay_reservation_id, 'staylodgic_tax_html_data', true );
-			$taxData   = get_post_meta( $stay_reservation_id, 'staylodgic_tax_data', true );
+			$tax_gen_status = get_post_meta( $stay_reservation_id, 'staylodgic_tax', true );
+			$tax_gen_html   = get_post_meta( $stay_reservation_id, 'staylodgic_tax_html_data', true );
+			$tax_gen_data   = get_post_meta( $stay_reservation_id, 'staylodgic_tax_data', true );
 
 			$tax_summary  = '<div id="input-tax-summary">';
 			$tax_summary .= '<div class="input-tax-summary-wrap">';
-			if ( 'enabled' == $taxStatus ) {
+			if ( 'enabled' == $tax_gen_status ) {
 				$tax_summary .= '<div class="input-tax-summary-wrap-inner">';
-				$tax_summary .= $taxHTML;
+				$tax_summary .= $tax_gen_html;
 
 				$tax_summary .= '</div>';
 			}
@@ -555,8 +555,8 @@ class Invoicing {
 							<?php
 							$reservations_instance = new \Staylodgic\Activity();
 							$stay_reservation_id   = $reservations_instance->get_activity_id_for_booking( $stay_booking_number );
-							$taxStatus             = get_post_meta( $stay_reservation_id, 'staylodgic_tax', true );
-							if ( 'enabled' == $taxStatus ) {
+							$tax_gen_status             = get_post_meta( $stay_reservation_id, 'staylodgic_tax', true );
+							if ( 'enabled' == $tax_gen_status ) {
 								?>
 								<div class="subtotal-info">
 									<p class="subtotal"><?php echo __( 'Sub Total:', 'staylodgic' ); ?></p>
@@ -672,8 +672,8 @@ class Invoicing {
 							<?php
 							$reservations_instance = new \Staylodgic\Reservations();
 							$stay_reservation_id   = $reservations_instance->get_reservation_id_for_booking( $stay_booking_number );
-							$taxStatus             = get_post_meta( $stay_reservation_id, 'staylodgic_tax', true );
-							if ( 'enabled' == $taxStatus ) {
+							$tax_gen_status             = get_post_meta( $stay_reservation_id, 'staylodgic_tax', true );
+							if ( 'enabled' == $tax_gen_status ) {
 								?>
 								<div class="subtotal-info">
 									<p class="subtotal"><?php echo __( 'Sub Total:', 'staylodgic' ); ?></p>
