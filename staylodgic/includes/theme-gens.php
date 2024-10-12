@@ -8,7 +8,7 @@
  *
  * @return string html_output
  */
-function staylodgic_string_to_html_spans( $input_string, $class ) {
+function staylodgic_string_to_html_spans( $input_string, $css_class ) {
 	// Split the input string by commas
 	$pieces = explode( ',', $input_string );
 
@@ -21,7 +21,7 @@ function staylodgic_string_to_html_spans( $input_string, $class ) {
 		$piece = trim( $piece );
 
 		// Add the piece wrapped in a <span> tag to the HTML output
-		$html_output .= '<span class="' . $class . '"><span class="facility"><i class="fa-solid fa-check"></i>' . $piece . '</span></span> ';
+		$html_output .= '<span class="' . $css_class . '"><span class="facility"><i class="fa-solid fa-check"></i>' . $piece . '</span></span> ';
 	}
 
 	// Remove the trailing comma and space
@@ -52,36 +52,17 @@ function staylodgic_featured_image_link( $the_image_id ) {
 	return $image_url;
 }
 /**
- * Gwt list of revolution slider slides
- *
- * @return string staylodgic_revslides
- */
-function staylodgic_rev_slider_selectors() {
-	$staylodgic_revslides                         = array();
-	$staylodgic_revslides['mtheme-none-selected'] = 'Not Selected';
-	if ( function_exists( 'rev_slider_shortcode' ) ) {
-
-		$query_sliders = array();
-		if ( class_exists( 'RevSlider' ) ) {
-			$slider     = new RevSlider();
-			$objSliders = $slider->get_sliders();
-
-			if ( isset( $objSliders ) ) {
-				foreach ( $objSliders as $sliders ) {
-					$staylodgic_revslides[ $sliders->alias ] = $sliders->alias;
-				}
-			}
-		}
-	}
-	return $staylodgic_revslides;
-}
-/**
  * Generate a list of existing menus
  *
  * @return string menu_select
  */
 function staylodgic_generate_menulist() {
-	$menus       = get_terms( 'nav_menu', array( 'hide_empty' => false ) );
+	$menus       = get_terms(
+		array(
+			'taxonomy'   => 'nav_menu',
+			'hide_empty' => false,
+		)
+	);
 	$menu_select = false;
 	if ( isset( $menus ) ) {
 		$menu_select            = array();
@@ -202,32 +183,6 @@ function staylodgic_get_select_target_options( $type ) {
 				'sofabed'  => esc_html__( 'Sofa bed', 'superlens' ),
 			);
 			break;
-		case 'backgroundslideshow_choices':
-			$list_options = array(
-				'options_slideshow' => esc_html__( 'Customizer Set Slideshow Images', 'superlens' ),
-				'image_attachments' => esc_html__( 'Slideshow using Image Attachments', 'superlens' ),
-				'none'              => esc_html__( 'none', 'superlens' ),
-			);
-			break;
-		case 'portfolio_category':
-			$the_list = get_categories( 'taxonomy=worktypes&title_li=' );
-			foreach ( $the_list as $key => $list ) {
-				$list_options[ $list->slug ] = $list->name;
-			}
-			array_unshift( $list_options, 'All the items' );
-			break;
-		case 'client_names':
-			// Pull all the Featured into an array
-			$featured_pages       = get_posts( 'post_type=clients&orderby=title&numberposts=-1&order=ASC' );
-			$list_options['none'] = 'Not Selected';
-			if ( $featured_pages ) {
-				foreach ( $featured_pages as $key => $list ) {
-					$list_options[ $list->ID ] = $list->post_title;
-				}
-			} else {
-				$list_options[0] = 'Clients not found.';
-			}
-			break;
 		case 'booking_numbers':
 			// Get all reservation posts
 			$reservation_args = array(
@@ -289,66 +244,6 @@ function staylodgic_get_select_target_options( $type ) {
 				}
 			} else {
 				$list_options[0] = 'Customers not found.';
-			}
-			break;
-		case 'fullscreen_slideshow_posts':
-			// Pull all the Featured into an array
-			$featured_pages       = get_posts( 'post_type=fullscreen&orderby=title&numberposts=-1&order=ASC' );
-			$list_options['none'] = 'Not Selected';
-			if ( $featured_pages ) {
-				foreach ( $featured_pages as $key => $list ) {
-					$custom = get_post_custom( $list->ID );
-					if ( isset( $custom['staylodgic_fullscreen_type'][0] ) ) {
-						$slideshow_type = $custom['staylodgic_fullscreen_type'][0];
-					} else {
-						$slideshow_type = '';
-					}
-					if ( $slideshow_type != 'video' && $slideshow_type != '' && $slideshow_type != 'photowall' && $slideshow_type != 'revslider' ) {
-						$list_options[ $list->ID ] = $list->post_title;
-					}
-				}
-			} else {
-				$list_options[0] = 'Featured pages not found.';
-			}
-			break;
-		case 'fullscreen_video_bg':
-			// Pull all the Featured into an array
-			$featured_pages       = get_posts( 'post_type=fullscreen&orderby=title&numberposts=-1&order=ASC' );
-			$list_options['none'] = 'Not Selected';
-			if ( $featured_pages ) {
-				foreach ( $featured_pages as $key => $list ) {
-					$custom = get_post_custom( $list->ID );
-					if ( isset( $custom['staylodgic_fullscreen_type'][0] ) ) {
-						$slideshow_type = $custom['staylodgic_fullscreen_type'][0];
-					} else {
-						$slideshow_type = '';
-					}
-					if ( $slideshow_type == 'video' ) {
-						if ( isset( $custom['staylodgic_html5_mp4'][0] ) || isset( $custom['staylodgic_youtubevideo'][0] ) ) {
-							$list_options[ $list->ID ] = $list->post_title;
-						}
-					}
-				}
-			} else {
-				$list_options[0] = 'Featured pages not found.';
-			}
-			break;
-		case 'fullscreen_posts':
-			// Pull all the Featured into an array
-			$featured_pages       = get_posts( 'post_type=fullscreen&orderby=title&numberposts=-1&order=ASC' );
-			$list_options['none'] = 'Not Selected';
-			if ( $featured_pages ) {
-				foreach ( $featured_pages as $key => $list ) {
-					$custom = get_post_custom( $list->ID );
-					if ( isset( $custom['staylodgic_fullscreen_type'][0] ) ) {
-						$slideshow_type = $custom['staylodgic_fullscreen_type'][0];
-					} else {
-						$slideshow_type = '';
-					}
-					$list_options[ $list->ID ] = $list->post_title;
-				}
-			} else {
-				$list_options[0] = 'Featured pages not found.';
 			}
 			break;
 	}
@@ -612,11 +507,11 @@ function staylodgic_country_list( $output_type = 'select', $selected = '' ) {
 		'ZW' => 'Zimbabwe',
 	);
 	$country_list = false;
-	if ( $output_type === 'select' ) {
+	if ( 'select' === $output_type ) {
 		$country_list  = '';
 		$country_list .= '<option selected disabled value="">Choose a country</option>';
 		foreach ( $countries as $key => $option ) {
-			if ( $selected == $key ) {
+			if ( $selected === $key ) {
 				$country_selected = 'selected="selected"';
 			} else {
 				$country_selected = '';
@@ -624,7 +519,7 @@ function staylodgic_country_list( $output_type = 'select', $selected = '' ) {
 			$country_list .= '<option value="' . esc_attr( $key ) . '" ' . $country_selected . '>' . esc_attr( $option ) . '</option>';
 		}
 	}
-	if ( $output_type === 'select-alt' ) {
+	if ( 'select-alt' === $output_type ) {
 		$country_list = '';
 		$count        = 0;
 		foreach ( $countries as $key => $option ) {
@@ -636,12 +531,12 @@ function staylodgic_country_list( $output_type = 'select', $selected = '' ) {
 		}
 	}
 
-	if ( $output_type === 'select-array' ) {
+	if ( 'select-array' === $output_type ) {
 		$country_list = array();
 		$countries    = array_merge( array( 'none' => 'Choose a country' ), $countries );
 		$country_list = $countries;
 	}
-	if ( $output_type === 'display' ) {
+	if ( 'display' === $output_type ) {
 		if ( array_key_exists( $selected, $countries ) ) {
 			$country_list = $countries[ $selected ];
 		}
@@ -770,13 +665,13 @@ function staylodgic_get_max_sidebars() {
  *
  * @return array
  */
-function staylodgic_get_option_data( $name, $default = false ) {
+function staylodgic_get_option_data( $name, $default_value = false ) {
 
 	$opt_value = get_theme_mod( $name );
-	if ( isset( $opt_value ) && $opt_value != '' ) {
+	if ( isset( $opt_value ) && '' !== $opt_value ) {
 		return $opt_value;
 	}
-	return $default;
+	return $default_value;
 }
 
 /**

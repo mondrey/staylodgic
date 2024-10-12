@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 // Exit if accessed directly
 
-define( 'Staylodgic_Blocks__FILE__', __FILE__ );
+define( 'STAYLODGIC_BLOCKS__FILE__', __FILE__ );
 
 add_filter( 'show_admin_bar', '__return_false' );
 

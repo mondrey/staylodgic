@@ -1325,7 +1325,6 @@ class Activity {
 				echo '<div class="activity-schedules-container-wrap"></div>';
 			}
 		}
-
 	}
 
 	/**
