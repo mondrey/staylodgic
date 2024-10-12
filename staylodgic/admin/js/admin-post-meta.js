@@ -408,7 +408,7 @@ jQuery(document).ready(function ($) {
 
 	$(document).on("click", "#add-bed-setup-button", function () {
 		// Generate a unique identifier based on the current date and time
-		const uniqueID =
+		const unique_id =
 			new Date().getTime() + Math.floor(Math.random() * 1000);
 
 		// Create a container for the new bed setup using jQuery
@@ -416,7 +416,7 @@ jQuery(document).ready(function ($) {
 			"bed-setup-dynamic-container"
 		);
 		// Set the data attribute on the container
-		container.attr("data-unique-id", uniqueID);
+		container.attr("data-unique-id", unique_id);
 
 		// Set the HTML code for the new bed setup
 		container.html($("#bed_setup_container").html());
@@ -457,29 +457,29 @@ jQuery(document).ready(function ($) {
 		newSection.attr("id", newBedlayoutBoxId);
 		newSection.find("input").attr("id", newInputId);
 
-		var uniqueID = bedlayoutWrap
+		var unique_id = bedlayoutWrap
 			.parent(".bed-setup-dynamic-container")
 			.data("unique-id");
-		console.log(uniqueID);
+		console.log(unique_id);
 
 		// Reset the input field value in the cloned section
 		newSection.find("input").val("");
 		newSection.find("select,input").prop("disabled", false);
 
-		// Update the name attribute for select input (bedtype) with the generated uniqueID
+		// Update the name attribute for select input (bedtype) with the generated unique_id
 		newSection
 			.find("select")
 			.attr(
 				"name",
-				"staylodgic_alt_bedsetup[" + uniqueID + "][bedtype][]"
+				"staylodgic_alt_bedsetup[" + unique_id + "][bedtype][]"
 			);
 
-		// Update the name attribute for input (bednumber) with the generated uniqueID
+		// Update the name attribute for input (bednumber) with the generated unique_id
 		newSection
 			.find("input")
 			.attr(
 				"name",
-				"staylodgic_alt_bedsetup[" + uniqueID + "][bednumber][]"
+				"staylodgic_alt_bedsetup[" + unique_id + "][bednumber][]"
 			);
 
 		// Add a remove button to the cloned section

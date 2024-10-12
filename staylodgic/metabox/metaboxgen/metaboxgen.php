@@ -299,8 +299,6 @@ function staylodgic_generate_metaboxes( $meta_data, $post_id ) {
 					$text_value = $meta ? $meta : $field['std'];
 					echo '<input type="hidden" class="' . esc_attr( $class ) . '" name="', esc_attr( $field['id'] ), '" id="', esc_attr( $field['id'] ), '" value="' . esc_attr( $text_value ) . '" size="30" />';
 
-					// error_log ( '------- Display ticket off view display ------' );
-					// error_log ( $field['page_id'], $text_value );
 					if ( isset( $text_value ) && '' !== $text_value ) {
 						$activity = new Staylodgic\Activity();
 						$ticket   = $activity->display_ticket( $field['page_id'], $text_value );
@@ -430,10 +428,10 @@ function staylodgic_generate_metaboxes( $meta_data, $post_id ) {
 
 					if ( isset( $data ) && is_array( $data ) ) {
 						$repeat_count = 0;
-						foreach ( $data as $uniqueID => $values ) {
-							echo '<div class="bed-setup-dynamic-container" data-unique-id="' . esc_attr( $uniqueID ) . '">';
+						foreach ( $data as $unique_id => $values ) {
+							echo '<div class="bed-setup-dynamic-container" data-unique-id="' . esc_attr( $unique_id ) . '">';
 							echo '<h3>Bed Layout</h3>';
-							echo '<div class="bedlayout-wrap" data-repeat="staylodgic_alt_bedsetup_${uniqueID}">';
+							echo '<div class="bedlayout-wrap" data-repeat="staylodgic_alt_bedsetup_${unique_id}">';
 							echo '<div class="bedlayout">';
 							if ( isset( $values['bedtype'] ) && isset( $values['bednumber'] ) ) {
 								foreach ( $values['bedtype'] as $index => $bedtype ) {
@@ -445,18 +443,18 @@ function staylodgic_generate_metaboxes( $meta_data, $post_id ) {
 										$class      = '';
 										$field_id   = 'field_id'; // Replace with your actual field ID
 
-										echo '<div class="bedlayout-box" id="bedlayout-box-' . esc_attr( $uniqueID ) . '">';
-										echo '<div class="selectbox-type-selector"><select class="bedtype-select" name="staylodgic_alt_bedsetup[' . esc_attr( $uniqueID ) . '][bedtype][]" id="bed_type_' . esc_attr( $field_id ) . '_' . esc_attr( $repeat_count ) . '">';
+										echo '<div class="bedlayout-box" id="bedlayout-box-' . esc_attr( $unique_id ) . '">';
+										echo '<div class="selectbox-type-selector"><select class="bedtype-select" name="staylodgic_alt_bedsetup[' . esc_attr( $unique_id ) . '][bedtype][]" id="bed_type_' . esc_attr( $field_id ) . '_' . esc_attr( $repeat_count ) . '">';
 
 										foreach ( $field['options'] as $key => $option ) {
-											if ( $key == '0' ) {
+											if ( 0 === (int) $key ) {
 												$key = __( 'All the items', 'staylodgic' );
 											}
-											echo '<option value="' . esc_attr( $key ) . '"', $bedtype == $key ? ' selected' : '', '>', esc_attr( $option ), '</option>';
+											echo '<option value="' . esc_attr( $key ) . '"', $bedtype === $key ? ' selected' : '', '>', esc_attr( $option ), '</option>';
 										}
 
 										echo '</select>';
-										echo ' X <input placeholder="0" min="0" type="number" name="staylodgic_alt_bedsetup[' . esc_attr( $uniqueID ) . '][bednumber][]" value="' . esc_attr( $bednumber ) . '" id="bed_number' . esc_attr( $repeat_count ) . '" />';
+										echo ' X <input placeholder="0" min="0" type="number" name="staylodgic_alt_bedsetup[' . esc_attr( $unique_id ) . '][bednumber][]" value="' . esc_attr( $bednumber ) . '" id="bed_number' . esc_attr( $repeat_count ) . '" />';
 
 										echo '<div class="remove-bedlayout">Remove</div>';
 										echo '</div>';
@@ -475,12 +473,12 @@ function staylodgic_generate_metaboxes( $meta_data, $post_id ) {
 
 					echo '
                         <div id="bed_setup_container" class="bed-setup-container-template">
-                        <div class="metabox_label"><label for="staylodgic_alt_bedsetup_${uniqueID}"></label></div>
-                        <div id="staylodgic_alt_bedsetup_${uniqueID}-section-title" class="sectiontitle clearfix">Set single or multiple beds</div>
-                        <div class="bedlayout-wrap" data-repeat="staylodgic_alt_bedsetup_${uniqueID}">
+                        <div class="metabox_label"><label for="staylodgic_alt_bedsetup_${unique_id}"></label></div>
+                        <div id="staylodgic_alt_bedsetup_${unique_id}-section-title" class="sectiontitle clearfix">Set single or multiple beds</div>
+                        <div class="bedlayout-wrap" data-repeat="staylodgic_alt_bedsetup_${unique_id}">
                         <div class="bedlayout">
                             <div class="bedlayout-box" id="bedlayout-box">
-                                <select disabled class="bedtype-select" name="staylodgic_alt_bedsetup[${uniqueID}][bedtype][]" id="bed_type_staylodgic_alt_bedsetup_${uniqueID}_0">
+                                <select disabled class="bedtype-select" name="staylodgic_alt_bedsetup[${unique_id}][bedtype][]" id="bed_type_staylodgic_alt_bedsetup_${unique_id}_0">
                                 <option value="twinbed">Twin bed</option>
                                 <option value="fullbed">Full bed</option>
                                 <option value="queenbed">Queen bed</option>
@@ -488,7 +486,7 @@ function staylodgic_generate_metaboxes( $meta_data, $post_id ) {
                                 <option value="bunkbed">Bunk bed</option>
                                 <option value="sofabed">Sofa bed</option>
                                 </select> X
-                                <input disabled placeholder="0" type="number" min="0" name="staylodgic_alt_bedsetup[${uniqueID}][bednumber][]" value="" id="bed_number${uniqueID}_0">
+                                <input disabled placeholder="0" type="number" min="0" name="staylodgic_alt_bedsetup[${unique_id}][bednumber][]" value="" id="bed_number${unique_id}_0">
                             </div>
                         </div>
                         <span class="add-bedlayout-box">Add beds</span>
@@ -511,7 +509,7 @@ function staylodgic_generate_metaboxes( $meta_data, $post_id ) {
 					$found_data   = false;
 					if ( isset( $meta ) && is_array( $meta ) ) {
 						foreach ( $meta['bedtype'] as $value ) {
-							if ( isset( $value ) && $value != '' ) {
+							if ( isset( $value ) && '' !== $value ) {
 								$found_data = true;
 								$age        = '';
 								if ( isset( $meta['bedtype'][ $repeat_count ] ) ) {
@@ -527,10 +525,10 @@ function staylodgic_generate_metaboxes( $meta_data, $post_id ) {
 								echo '<div class="bedlayout-box" id="bedlayout-box">';
 								echo '<div class="selectbox-type-selector"><select class="chosen-select-metabox bedtype-select" name="', esc_attr( $field['id'] ) . '[bedtype][]" id="bed_type_' . esc_attr( $field['id'] ) . '_' . esc_attr( $repeat_count ) . '">';
 								foreach ( $field['options'] as $key => $option ) {
-									if ( $key == '0' ) {
+									if ( 0 === (int) $key ) {
 										$key = __( 'All the items', 'staylodgic' );
 									}
-									echo '<option value="' . esc_attr( $key ) . '"', $bedtype == $key ? ' selected' : '', '>', esc_attr( $option ), '</option>';
+									echo '<option value="' . esc_attr( $key ) . '"', $bedtype === $key ? ' selected' : '', '>', esc_attr( $option ), '</option>';
 								}
 								echo '</select>';
 								echo ' X <input placeholder="0" min="0" type="number" name="' . esc_attr( $field['id'] ) . '[bednumber][]" value="' . esc_attr( $bednumber ) . '" id="bed_number' . esc_attr( $repeat_count ) . '" /></div>';
@@ -549,10 +547,10 @@ function staylodgic_generate_metaboxes( $meta_data, $post_id ) {
 						echo '<div class="bedlayout-box" id="bedlayout-box">';
 						echo '<div class="selectbox-type-selector"><select class="chosen-select-metabox" name="', esc_attr( $field['id'] ) . '[bedtype][]" id="bed_type_' . esc_attr( $field['id'] ) . '_0">';
 						foreach ( $field['options'] as $key => $option ) {
-							if ( $key == '0' ) {
+							if ( 0 === (int) $key ) {
 								$key = __( 'All the items', 'staylodgic' );
 							}
-							echo '<option value="' . esc_attr( $key ) . '"', $meta == $key ? ' selected' : '', '>', esc_attr( $option ), '</option>';
+							echo '<option value="' . esc_attr( $key ) . '"', $meta === $key ? ' selected' : '', '>', esc_attr( $option ), '</option>';
 						}
 						echo '</select>';
 						echo ' X <input placeholder="How many" min="0" type="number" name="' . esc_attr( $field['id'] ) . '[bednumber][]" value="" id="bed_number0" /></div>';
@@ -577,7 +575,7 @@ function staylodgic_generate_metaboxes( $meta_data, $post_id ) {
 					if ( isset( $meta ) && is_array( $meta ) ) {
 						if ( isset( $meta['taxnumber'] ) ) {
 							foreach ( $meta['taxnumber'] as $value ) {
-								if ( isset( $value ) && $value != '' ) {
+								if ( isset( $value ) && '' !== $value ) {
 									$found_data = true;
 
 									$age = '';
@@ -594,13 +592,13 @@ function staylodgic_generate_metaboxes( $meta_data, $post_id ) {
 									echo '<div class="taxlayout-box" id="taxlayout-box">';
 									echo '<input placeholder="Label" type="text" name="' . esc_attr( $field['id'] ) . '[taxlabel][]" value="' . esc_attr( $taxlabel ) . '" id="tax_label' . esc_attr( $repeat_count ) . '" />';
 									echo '<div class="selectbox-type-selector">';
-									if ( isset( $field['choice'] ) && '' == $field['choice'] ) {
+									if ( isset( $field['choice'] ) && '' === $field['choice'] ) {
 										echo '<select class="chosen-select-metabox taxtype-select" name="', esc_attr( $field['id'] ) . '[taxtype][]" id="tax_type_' . esc_attr( $field['id'] ) . '_' . esc_attr( $repeat_count ) . '">';
 										foreach ( $field['options'] as $key => $option ) {
-											if ( $key == '0' ) {
+											if ( '0' === $key ) {
 												$key = __( 'All the items', 'staylodgic' );
 											}
-											echo '<option value="' . esc_attr( $key ) . '"', $taxtype == $key ? ' selected' : '', '>', esc_attr( $option ), '</option>';
+											echo '<option value="' . esc_attr( $key ) . '"', $taxtype === $key ? ' selected' : '', '>', esc_attr( $option ), '</option>';
 										}
 										echo '</select> X ';
 									}
@@ -618,10 +616,10 @@ function staylodgic_generate_metaboxes( $meta_data, $post_id ) {
 						echo '<div class="taxlayout-box" id="taxlayout-box">';
 						echo '<input placeholder="Label" type="text" name="' . esc_attr( $field['id'] ) . '[taxlabel][]" value="" id="tax_label0" />';
 						echo '<div class="selectbox-type-selector">';
-						if ( isset( $field['choice'] ) && '' == $field['choice'] ) {
+						if ( isset( $field['choice'] ) && '' === $field['choice'] ) {
 							echo '<select class="chosen-select-metabox" name="', esc_attr( $field['id'] ) . '[taxtype][]" id="tax_type_' . esc_attr( $field['id'] ) . '_0">';
 							foreach ( $field['options'] as $key => $option ) {
-								echo '<option value="' . esc_attr( $key ) . '"', $meta == $key ? ' selected' : '', '>', esc_attr( $option ), '</option>';
+								echo '<option value="' . esc_attr( $key ) . '"', $meta === $key ? ' selected' : '', '>', esc_attr( $option ), '</option>';
 							}
 
 							echo '</select> X ';
@@ -644,7 +642,7 @@ function staylodgic_generate_metaboxes( $meta_data, $post_id ) {
 					$found_data   = false;
 					if ( isset( $meta ) && is_array( $meta ) ) {
 						foreach ( $meta['age'] as $value ) {
-							if ( isset( $value ) && $value != '' ) {
+							if ( isset( $value ) && '' !== $value ) {
 								$found_data = true;
 								$age        = '';
 								if ( isset( $meta['age'][ $repeat_count ] ) ) {
@@ -736,12 +734,12 @@ function staylodgic_generate_metaboxes( $meta_data, $post_id ) {
 					break;
 				case 'activity_reservation':
 					$text_value = $meta ? $meta : $field['std'];
-					echo '<input data-postid="' . esc_attr(get_the_id()) . '" type="text" class="' . esc_attr( $class ) . ' activity-reservation" name="', esc_attr( $field['id'] ), '" id="', esc_attr( $field['id'] ), '" value="' . esc_attr( $text_value ) . '" size="30" />';
+					echo '<input data-postid="' . esc_attr( get_the_id() ) . '" type="text" class="' . esc_attr( $class ) . ' activity-reservation" name="', esc_attr( $field['id'] ), '" id="', esc_attr( $field['id'] ), '" value="' . esc_attr( $text_value ) . '" size="30" />';
 					echo '<div id="activity-reservation-details"></div>';
 					break;
 				case 'reservation':
 					$text_value = $meta ? $meta : $field['std'];
-					echo '<input data-postid="' . esc_attr(get_the_id()) . '" type="text" class="' . esc_attr( $class ) . ' reservation" data-enable-time="true" name="', esc_attr( $field['id'] ), '" id="', esc_attr( $field['id'] ), '" value="' . esc_attr( $text_value ) . '" size="30" />';
+					echo '<input data-postid="' . esc_attr( get_the_id() ) . '" type="text" class="' . esc_attr( $class ) . ' reservation" data-enable-time="true" name="', esc_attr( $field['id'] ), '" id="', esc_attr( $field['id'] ), '" value="' . esc_attr( $text_value ) . '" size="30" />';
 					echo '<div id="reservation-details"></div>';
 					break;
 				case 'textarea':
@@ -766,7 +764,7 @@ function staylodgic_generate_metaboxes( $meta_data, $post_id ) {
 					}
 					echo '<div class="selectbox-type-selector"><select class="chosen-select-metabox choice-', esc_attr( $field['id'] ), '" name="', esc_attr( $field['id'] ), '" id="', esc_attr( $field['id'] ), '">';
 					foreach ( $field['options'] as $key => $option ) {
-						if ( $key == '0' ) {
+						if ( '0' === $key ) {
 							$key = __( 'All the items', 'staylodgic' );
 						}
 						echo '<option value="' . esc_attr( $key ) . '"', $meta === $key ? ' selected' : '', '>', esc_attr( $option ), '</option>';
@@ -818,9 +816,9 @@ function staylodgic_generate_metaboxes( $meta_data, $post_id ) {
 						$optional_meal_plans = array();
 
 						foreach ( $meal_plans as $id => $plan ) {
-							if ( $plan['choice'] === 'included' ) {
+							if ( 'included' === $plan['choice'] ) {
 								$included_meal_plans[ $id ] = $plan;
-							} elseif ( $plan['choice'] === 'optional' ) {
+							} elseif ( 'optional' === $plan['choice'] ) {
 								$optional_meal_plans[ $id ] = $plan;
 							}
 						}
@@ -866,9 +864,9 @@ function staylodgic_generate_metaboxes( $meta_data, $post_id ) {
 						$optional_meal_plans = array();
 
 						foreach ( $meal_plans as $id => $plan ) {
-							if ( $plan['choice'] === 'included' ) {
+							if ( 'included' === $plan['choice'] ) {
 								$included_meal_plans[ $id ] = $plan;
-							} elseif ( $plan['choice'] === 'optional' ) {
+							} elseif ( 'optional' === $plan['choice'] ) {
 								$optional_meal_plans[ $id ] = $plan;
 							}
 						}
@@ -890,7 +888,7 @@ function staylodgic_generate_metaboxes( $meta_data, $post_id ) {
 					}
 					echo '<div class="selectbox-type-selector"><select class="chosen-select-metabox" name="', esc_attr( $field['id'] ), '" id="', esc_attr( $field['id'] ), '">';
 					foreach ( $field['options'] as $key => $option ) {
-						if ( $key == '0' ) {
+						if ( '0' === $key ) {
 							$key = __( 'All the items', 'staylodgic' );
 						}
 						echo '<option value="' . esc_attr( $key ) . '"', $meta === $key ? ' selected' : '', '>', esc_attr( $option ), '</option>';
@@ -911,20 +909,20 @@ function staylodgic_generate_metaboxes( $meta_data, $post_id ) {
 					$room_occupant_data = array();
 
 					if ( isset( $field['datafrom'] ) ) {
-						if ( 'roomtype' == $field['datafrom'] ) {
+						if ( 'roomtype' === $field['datafrom'] ) {
 							$room = get_posts( 'post_type=slgc_room&numberposts=-1&order=ASC' );
 							if ( $room ) {
 								foreach ( $room as $key => $list ) {
 									$custom = get_post_custom( $list->ID );
 									if ( isset( $custom['staylodgic_max_adult_limit_status'][0] ) ) {
 										$adult_limit_status = $custom['staylodgic_max_adult_limit_status'][0];
-										if ( '1' == $adult_limit_status ) {
+										if ( '1' === $adult_limit_status ) {
 											$max_adults = $custom['staylodgic_max_adults'][0];
 										}
 									}
 									if ( isset( $custom['staylodgic_max_children_limit_status'][0] ) ) {
 										$children_limit_status = $custom['staylodgic_max_children_limit_status'][0];
-										if ( '1' == $children_limit_status ) {
+										if ( '1' === $children_limit_status ) {
 											$max_children = $custom['staylodgic_max_children'][0];
 										}
 									}
@@ -985,20 +983,20 @@ function staylodgic_generate_metaboxes( $meta_data, $post_id ) {
 					$activity_array    = \Staylodgic\Activity::get_activity_ids_for_customer( $field['customer_id'] );
 					$activities        = $activity_instance->get_edit_links_for_activity( $activity_array );
 
-					if ( '<ul></ul>' != $bookings ) {
+					if ( '<ul></ul>' !== $bookings ) {
 						echo '<h4 class="metabox-bookings-found">Bookings</h4>';
-						echo $bookings;
+						echo wp_kses( $bookings, staylodgic_get_guest_activities_allowed_tags() );
 					}
-					if ( '<ul></ul>' != $activities ) {
+					if ( '<ul></ul>' !== $activities ) {
 						echo '<h4 class="metabox-bookings-found">Activities</h4>';
-						echo $activities;
+						echo wp_kses( $activities, staylodgic_get_guest_activities_allowed_tags() );
 					}
 
-					if ( '<ul></ul>' == $bookings ) {
+					if ( '<ul></ul>' === $bookings ) {
 						echo '<div class="metabox-no-bookings-found">No Bookings found</div>';
 						echo '<br/>';
 					}
-					if ( '<ul></ul>' == $activities ) {
+					if ( '<ul></ul>' === $activities ) {
 						echo '<div class="metabox-no-bookings-found">No Activities found</div>';
 					}
 					break;
@@ -1008,17 +1006,19 @@ function staylodgic_generate_metaboxes( $meta_data, $post_id ) {
 
 					$post_type = get_post_type( $field['id'] );
 
-					if ( 'slgc_activityres' == $post_type ) {
+					if ( 'slgc_activityres' === $post_type ) {
 						$reservation_instance = new \Staylodgic\Activity();
 					} else {
 						$reservation_instance = new \Staylodgic\Reservations();
 					}
 					$customer_post_id   = $reservation_instance->get_reservation_customer_id( $field['id'] );
 					$customer_post_edit = get_edit_post_link( $customer_post_id );
-					echo '<a class="button button-primary button-large customer-edit-button" href="' . esc_url( $customer_post_edit ) . '">' . __( 'Edit Customer', 'staylodgic' ) . '</a><span class="customer-choice-inbetween"></span><a class="choice-customer-existing">' . __( 'or choose an existing customer', 'staylodgic' ) . '</a>';
+					echo '<a class="button button-primary button-large customer-edit-button" href="' . esc_url( $customer_post_edit ) . '">' . esc_html__( 'Edit Customer', 'staylodgic' ) . '</a><span class="customer-choice-inbetween"></span><a class="choice-customer-existing">' . esc_html__( 'or choose an existing customer', 'staylodgic' ) . '</a>';
 					$customer_data = \Staylodgic\Data::get_customer_meta_data( $customer_array, $customer_post_id );
 
-					echo \Staylodgic\Customers::generate_customer_html_list( $customer_data );
+					$customer_data_list = \Staylodgic\Customers::generate_customer_html_list( $customer_data );
+
+					echo wp_kses( $customer_data_list, staylodgic_get_guest_activities_allowed_tags() );
 
 					break;
 				case 'reservation_registration':
@@ -1029,12 +1029,16 @@ function staylodgic_generate_metaboxes( $meta_data, $post_id ) {
 						$registry_instance = new \Staylodgic\Guest_Registry();
 						$res_reg_ids       = $registry_instance->fetch_res_reg_ids_by_booking_number( $bookingnumber );
 						if ( isset( $res_reg_ids['guest_register_id'] ) ) {
-							echo $registry_instance->output_registration_and_occupancy( $res_reg_ids['stay_reservation_id'], $res_reg_ids['guest_register_id'], 'text' );
-							echo $registry_instance->output_registration_and_occupancy( $res_reg_ids['stay_reservation_id'], $res_reg_ids['guest_register_id'], 'icons' );
+							$registration_and_occupancy_text  = $registry_instance->output_registration_and_occupancy( $res_reg_ids['stay_reservation_id'], $res_reg_ids['guest_register_id'], 'text' );
+							$registration_and_occupancy_icons = $registry_instance->output_registration_and_occupancy( $res_reg_ids['stay_reservation_id'], $res_reg_ids['guest_register_id'], 'icons' );
+
+							echo wp_kses( $registration_and_occupancy_text, staylodgic_get_guest_activities_allowed_tags() );
+							echo wp_kses( $registration_and_occupancy_icons, staylodgic_get_guest_activities_allowed_tags() );
+
 							$guestregistration_post_edit = get_edit_post_link( $res_reg_ids['guest_register_id'] );
-							echo '<a class="button button-primary button-large" href="' . $guestregistration_post_edit . '">Edit Guest Registration</a>';
+							echo '<a class="button button-primary button-large" href="' . esc_url( $guestregistration_post_edit ) . '">Edit Guest Registration</a>';
 						} else {
-							echo '<a data-bookingnumber="' . $bookingnumber . '" class="create-guest-registration button button-primary button-large" href="#">Create Guest Registration</a>';
+							echo '<a data-bookingnumber="' . esc_attr( $bookingnumber ) . '" class="create-guest-registration button button-primary button-large" href="#">Create Guest Registration</a>';
 						}
 					}
 					break;
@@ -1045,7 +1049,7 @@ function staylodgic_generate_metaboxes( $meta_data, $post_id ) {
 					$room_occupant_data = array();
 
 					if ( isset( $field['datafrom'] ) ) {
-						if ( 'roomtype' == $field['datafrom'] ) {
+						if ( 'roomtype' === $field['datafrom'] ) {
 
 							$room = get_posts( 'post_type=slgc_room&numberposts=-1&order=ASC' );
 							if ( $room ) {
@@ -1056,13 +1060,13 @@ function staylodgic_generate_metaboxes( $meta_data, $post_id ) {
 									$custom       = get_post_custom( $list->ID );
 									if ( isset( $custom['staylodgic_max_adult_limit_status'][0] ) ) {
 										$adult_limit_status = $custom['staylodgic_max_adult_limit_status'][0];
-										if ( '1' == $adult_limit_status ) {
+										if ( '1' === $adult_limit_status ) {
 											$max_adults = $custom['staylodgic_max_adults'][0];
 										}
 									}
 									if ( isset( $custom['staylodgic_max_children_limit_status'][0] ) ) {
 										$children_limit_status = $custom['staylodgic_max_children_limit_status'][0];
-										if ( '1' == $children_limit_status ) {
+										if ( '1' === $children_limit_status ) {
 											$max_children = $custom['staylodgic_max_children'][0];
 										}
 									}
@@ -1077,22 +1081,21 @@ function staylodgic_generate_metaboxes( $meta_data, $post_id ) {
 						}
 					}
 
-					$json_occupants = json_encode( $room_occupant_data );
+					$json_occupants = wp_json_encode( $room_occupant_data );
 
-					if ( ! isset( $meta ) || $meta == '' ) {
-						if ( $meta == 0 ) {
+					if ( ! isset( $meta ) || '' === $meta ) {
+						if ( 0 === (int) $meta ) {
 							$meta = '0';
 						} else {
 							$meta = $field['std'];
 						}
 					}
-					echo "<div id='" . esc_attr( $field['id'] ) . "_wrap' class='number-input occupant-" . $field['occupant'] . " occupants-range' data-room='0' data-occupant='" . $field['occupant'] . "' min='" . $field['min'] . "' max='" . $field['min'] . "' data-occupants='" . $json_occupants . "' >";
+					echo "<div id='" . esc_attr( $field['id'] ) . "_wrap' class='number-input occupant-" . esc_attr( $field['occupant'] ) . " occupants-range' data-room='0' data-occupant='" . esc_attr( $field['occupant'] ) . "' min='" . esc_attr( $field['min'] ) . "' max='" . esc_attr( $field['min'] ) . "' data-occupants='" . esc_attr( $json_occupants ) . "' >";
 					echo '<span class="minus-btn">-</span>';
 
+					echo '<input data-guest="' . esc_attr( $field['occupant'] ) . '" ';
 					$child_age_input = '';
-					if ( 'child' == $field['occupant'] ) {
-						error_log( '----- Number of Children ' );
-						error_log( print_r( $meta, 1 ) );
+					if ( 'child' === $field['occupant'] ) {
 						if ( isset( $meta['number'] ) ) {
 							$meta_value = $meta['number'];
 						} else {
@@ -1100,23 +1103,23 @@ function staylodgic_generate_metaboxes( $meta_data, $post_id ) {
 						}
 						$name_property = $field['id'] . '[number]';
 
-						$child_age_input = 'data-childageinput="' . $field['id'] . '[age][]"';
+						echo 'data-childageinput="' . esc_attr( $field['id'] ) . '[age][]"';
 					} else {
 						$meta_value    = $meta;
 						$name_property = $field['id'];
 					}
-					echo '<input data-guest="' . $field['occupant'] . '" ' . $child_age_input . ' data-guestmax="0" data-adultmax="0" data-childmax="0" id="' . esc_attr( $field['id'] ) . '" value="' . esc_attr( $meta_value ) . '" name="' . $name_property . '" type="text" class="number-value" readonly>';
+					echo ' data-guestmax="0" data-adultmax="0" data-childmax="0" id="' . esc_attr( $field['id'] ) . '" value="' . esc_attr( $meta_value ) . '" name="' . esc_attr( $name_property ) . '" type="text" class="number-value" readonly>';
 					echo '<span class="plus-btn">+</span>';
 					echo '</div>';
-					echo '<div class="occupant-' . $field['occupant'] . '-notify notify-number-over-max">Exceeds maximum</div>';
-					if ( 'child' == $field['occupant'] ) {
+					echo '<div class="occupant-' . esc_attr( $field['occupant'] ) . '-notify notify-number-over-max">Exceeds maximum</div>';
+					if ( 'child' === $field['occupant'] ) {
 						echo '<div class="child-number-max-notice">Maximum occupancy: <span class="child-number-max"></span></div>';
 						echo '<div class="combined-child-number-max-notice">Combined occupancy: <span class="combined-child-number-max"></span></div>';
 						echo '<div id="guest-age">';
 						if ( isset( $meta['number'] ) ) {
 							for ( $i = 0; $i < $meta['number']; $i++ ) {
 								$age = isset( $meta['age'][ $i ] ) ? $meta['age'][ $i ] : '';
-								echo "<input name='" . $field['id'] . "[age][]' type='number' data-counter='" . $i . "' value='" . $age . "' placeholder='Enter age'>";
+								echo "<input name='" . esc_attr( $field['id'] ) . "[age][]' type='number' data-counter='" . esc_attr( $i ) . "' value='" . esc_html( $age ) . "' placeholder='Enter age'>";
 							}
 						}
 						echo '</div>';
@@ -1136,8 +1139,8 @@ function staylodgic_generate_metaboxes( $meta_data, $post_id ) {
 						echo '<div id="' . esc_attr( $field['id'] ) . '_slider"></div>';
 						echo '<div class="ranger-bar">';
 					}
-					if ( ! isset( $meta ) || $meta == '' ) {
-						if ( $meta == 0 ) {
+					if ( ! isset( $meta ) || '' === $meta ) {
+						if ( 0 === (int) $meta ) {
 							$meta = '0';
 						} else {
 							$meta = $field['std'];
@@ -1170,7 +1173,7 @@ function staylodgic_generate_metaboxes( $meta_data, $post_id ) {
 
 				case 'radio':
 					foreach ( $field['options'] as $option ) {
-						echo '<input type="radio" name="', esc_attr( $field['id'] ), '" value="', esc_attr( $option ), '"', $meta == $option ? ' checked="checked"' : '', ' />', $option;
+						echo '<input type="radio" name="', esc_attr( $field['id'] ), '" value="', esc_attr( $option ), '"', $meta === $option ? ' checked="checked"' : '', ' />', esc_html( $option );
 					}
 					break;
 
@@ -1179,13 +1182,13 @@ function staylodgic_generate_metaboxes( $meta_data, $post_id ) {
 					foreach ( $field['options'] as $key => $option ) {
 						$selected = '';
 						$checked  = '';
-						if ( $meta == '' ) {
+						if ( '' === $meta ) {
 							if ( isset( $field['std'] ) ) {
 								$meta = $field['std'];
 							}
 						}
-						if ( $meta != '' ) {
-							if ( $meta == $key ) {
+						if ( '' !== $meta ) {
+							if ( $meta === $key ) {
 								$selected = ' of-radio-img-selected';
 								$checked  = ' checked="checked"';
 							}
@@ -1203,20 +1206,20 @@ function staylodgic_generate_metaboxes( $meta_data, $post_id ) {
 		}
 
 		$notice_class = '';
-		if ( isset( $field['type'] ) && $field['type'] == 'notice' ) {
+		if ( isset( $field['type'] ) && 'notice' === $field['type'] ) {
 			$notice_class = ' big-notice';
 		}
 		if ( isset( $field['desc'] ) && '' !== $field['desc'] ) {
 			echo '<div class="metabox-description' . esc_attr( $notice_class ) . '">', esc_html( $field['desc'] ), '</div>';
 		}
 
-		if ( isset( $field['datatype'] ) && 'roomsubtotal' == $field['datatype'] ) {
-			echo '<br/><span id="reservation-tax-generate" class="button button-primary button-small">' . __( 'Generate Total', 'staylodgic' ) . '</span>&nbsp;';
-			echo '<span id="reservation-tax-exclude" class="button button-secondary button-small">' . __( 'Exclude Tax', 'staylodgic' ) . '</span><br/><br/>';
+		if ( isset( $field['datatype'] ) && 'roomsubtotal' === $field['datatype'] ) {
+			echo '<br/><span id="reservation-tax-generate" class="button button-primary button-small">' . esc_html__( 'Generate Total', 'staylodgic' ) . '</span>&nbsp;';
+			echo '<span id="reservation-tax-exclude" class="button button-secondary button-small">' . esc_html__( 'Exclude Tax', 'staylodgic' ) . '</span><br/><br/>';
 		}
-		if ( isset( $field['datatype'] ) && 'activitysubtotal' == $field['datatype'] ) {
-			echo '<br/><span id="activity-tax-generate" class="button button-primary button-small">' . __( 'Generate Total', 'staylodgic' ) . '</span>&nbsp;';
-			echo '<span id="activity-tax-exclude" class="button button-secondary button-small">' . __( 'Exclude Tax', 'staylodgic' ) . '</span><br/><br/>';
+		if ( isset( $field['datatype'] ) && 'activitysubtotal' === $field['datatype'] ) {
+			echo '<br/><span id="activity-tax-generate" class="button button-primary button-small">' . esc_html__( 'Generate Total', 'staylodgic' ) . '</span>&nbsp;';
+			echo '<span id="activity-tax-exclude" class="button button-secondary button-small">' . esc_html__( 'Exclude Tax', 'staylodgic' ) . '</span><br/><br/>';
 		}
 		echo '</div>';
 	}
@@ -1228,36 +1231,6 @@ function staylodgic_generate_metaboxes( $meta_data, $post_id ) {
 	echo '</div>';
 }
 
-/**
- * Save image ids
- */
-function staylodgic_save_proofing_images() {
-
-	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
-		return;
-	}
-
-	if ( ! isset( $_POST['ids'] ) || ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'staylodgic-nonce-admin' ) ) {
-		return;
-	}
-
-	if ( ! current_user_can( 'edit_posts' ) ) {
-		return;
-	}
-
-	$ids = strip_tags( rtrim( $_POST['ids'], ',' ) );
-	update_post_meta( $_POST['post_id'], 'staylodgic_proofing_image_ids', $ids );
-
-	// update thumbs
-	$thumbs        = explode( ',', $ids );
-	$thumbs_output = '';
-	foreach ( $thumbs as $thumb ) {
-		echo '<li>' . wp_get_attachment_image( $thumb, 'thumbnail' ) . '</li>';
-	}
-
-	die();
-}
-add_action( 'wp_ajax_staylodgic_save_proofing_images', 'staylodgic_save_proofing_images' );
 
 /**
  * Save image ids
@@ -1276,7 +1249,7 @@ function staylodgic_save_images() {
 		return;
 	}
 
-	$ids = strip_tags( rtrim( $_POST['ids'], ',' ) );
+	$ids = wp_strip_all_tags( rtrim( $_POST['ids'], ',' ) );
 	update_post_meta( $_POST['post_id'], 'staylodgic_image_ids', $ids );
 
 	// update thumbs
@@ -1306,7 +1279,7 @@ function staylodgic_multo_gallery_save_images() {
 		return;
 	}
 
-	$ids       = strip_tags( rtrim( $_POST['ids'], ',' ) );
+	$ids       = wp_strip_all_tags( rtrim( $_POST['ids'], ',' ) );
 	$galleryid = $_POST['gallerysetid'];
 	update_post_meta( $_POST['post_id'], $galleryid, $ids );
 
@@ -1323,18 +1296,18 @@ function staylodgic_multo_gallery_save_images() {
 }
 add_action( 'wp_ajax_staylodgic_multo_gallery_save_images', 'staylodgic_multo_gallery_save_images' );
 // Save data from meta box
-add_action( 'save_post', 'staylodgic_preProcess', 5, 3 );
+add_action( 'save_post', 'staylodgic_pre_process', 5, 3 );
 add_action( 'save_post', 'staylodgic_checkdata' );
-add_action( 'save_post', 'staylodgic_postProcess', 15, 3 );
+add_action( 'save_post', 'staylodgic_post_process', 15, 3 );
 
-function staylodgic_preProcess( $post_id, $post, $update ) {
+function staylodgic_pre_process( $post_id, $post, $update ) {
 	// Check if this is a revision or auto-save.
 	if ( wp_is_post_revision( $post_id ) || ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) ) {
 		return;
 	}
 
 	// Ensure the action is only run for the 'slgc_reservations' custom post type.
-	if ( $post->post_type != 'slgc_reservations' ) {
+	if ( 'slgc_reservations' !== $post->post_type ) {
 		return;
 	}
 
@@ -1351,14 +1324,14 @@ function staylodgic_preProcess( $post_id, $post, $update ) {
 	// For example:
 	// update_post_meta($post_id, 'another_meta_key', $new_meta_value);
 }
-function staylodgic_postProcess( $post_id, $post, $update ) {
+function staylodgic_post_process( $post_id, $post, $update ) {
 	// Check if this is a revision or auto-save.
 	if ( wp_is_post_revision( $post_id ) || ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) ) {
 		return;
 	}
 
 	// Ensure the action is only run for the 'slgc_reservations' custom post type.
-	if ( $post->post_type != 'slgc_reservations' ) {
+	if ( 'slgc_reservations' !== $post->post_type ) {
 		return;
 	}
 
@@ -1368,13 +1341,7 @@ function staylodgic_postProcess( $post_id, $post, $update ) {
 	$checkout = get_post_meta( $post_id, 'staylodgic_checkout_date', true );
 	$room_id  = get_post_meta( $post_id, 'staylodgic_room_id', true );
 
-	error_log( '-------- removeCache staylodgic_postProcess ---------' );
-	error_log( $checkin . ' ++++ ' . $checkout );
 	\Staylodgic\Cache::invalidate_caches_by_room_and_date( $room_id, $checkin, $checkout );
-
-	// Perform actions or operations based on the meta value.
-	// For example:
-	// update_post_meta($post_id, 'another_meta_key', $new_meta_value);
 }
 
 // Hook the function to 'save_post' action.
@@ -1393,7 +1360,7 @@ function staylodgic_checkdata( $post_id ) {
 	}
 	// check permissions
 	if ( isset( $_POST['post_type'] ) ) {
-		if ( 'page' == $_POST['post_type'] ) {
+		if ( 'page' === $_POST['post_type'] ) {
 			if ( ! current_user_can( 'edit_page', $post_id ) ) {
 				return $post_id;
 			}
@@ -1406,10 +1373,6 @@ function staylodgic_checkdata( $post_id ) {
 		$staylodgic_post_type_got = get_post_type( $post_id );
 
 		switch ( $staylodgic_post_type_got ) {
-				// case 'page':
-				//     $staylodgic_common_page_box = staylodgic_page_metadata();
-				//     staylodgic_savedata($staylodgic_common_page_box, $post_id);
-				//     break;
 			case 'slgc_room':
 				$staylodgic_room_box = staylodgic_room_metadata();
 				staylodgic_savedata( $staylodgic_room_box, $post_id );
@@ -1444,32 +1407,36 @@ function staylodgic_checkdata( $post_id ) {
 
 function staylodgic_savedata( $staylodgic_metaboxdata, $post_id ) {
 
-	//error_log('------ Reservation Metabox-------');
-	// error_log( print_r( $_POST, 1) );
-	// delete_post_meta($post_id, 'staylodgic_change_log');
+	// verify nonce
+	if ( isset( $_POST['staylodgic_meta_box_nonce'] ) ) {
+		if ( ! wp_verify_nonce( $_POST['staylodgic_meta_box_nonce'], 'metabox-nonce' ) ) {
+			return $post_id;
+		}
+	}
+
 	if ( is_array( $staylodgic_metaboxdata['fields'] ) ) {
 		foreach ( $staylodgic_metaboxdata['fields'] as $field ) {
 			$field_id = $field['id'];
 			$old      = get_post_meta( $post_id, $field_id, true );
 			$new      = isset( $_POST[ $field_id ] ) ? $_POST[ $field_id ] : '';
 
-			if ( 'staylodgic_reservation_room_paid' == $field_id ) {
+			if ( 'staylodgic_reservation_room_paid' === $field_id ) {
 				// Get the first element of the array
-				$firstElement = reset( $new );
+				$first_element = reset( $new );
 				// Check if the first element is empty
-				if ( empty( $firstElement ) ) {
+				if ( empty( $first_element ) ) {
 					// Remove the first element
 					array_shift( $new );
 
 					foreach ( $new as $record ) {
-						if ( ! in_array( $record, $old ) ) {
-							// Record is missing from $old, add it to the missingRecords array
-							$missingRecords[] = $record;
+						if ( ! in_array( $record, $old, true ) ) {
+							// Record is missing from $old, add it to the missing_records array
+							$missing_records[] = $record;
 						}
 					}
 
-					if ( empty( $missingRecords ) ) {
-						// echo "No records missing in the new array.";
+					if ( empty( $missing_records ) ) {
+						// No records missing in the new array
 					} else {
 						$new = '';
 						$old = '';
@@ -1484,7 +1451,7 @@ function staylodgic_savedata( $staylodgic_metaboxdata, $post_id ) {
 				}
 				// Create a log entry with timestamp, field ID, old value, and new value
 
-				if ( '' == $field['name'] ) {
+				if ( '' === $field['name'] ) {
 					$storage_name = $field['desc'];
 				} else {
 					$storage_name = $field['name'];

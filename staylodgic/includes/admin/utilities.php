@@ -588,6 +588,34 @@ function staylodgic_set_booking_transient( $data, $stay_booking_number ) {
 function staylodgic_get_booking_transient( $stay_booking_number = null ) {
 	return get_transient( $stay_booking_number );
 }
+function staylodgic_get_guest_activities_allowed_tags() {
+
+	$allowed_html = array(
+		'html'   => array(),
+		'body'   => array(),
+		'ul'     => array(),
+		'li'     => array(),
+		'p'      => array(),
+		'a'      => array(
+			'href'  => array(),
+			'title' => array(),
+		),
+		'br'     => array(),
+		'small'  => array(),
+		'strong' => array(),
+		'div'    => array(
+			'class' => array(),
+		),
+		'span'   => array(
+			'class' => array(),
+		),
+		'i'      => array(
+			'class' => array(),
+		),
+	);
+
+	return $allowed_html;
+}
 function staylodgic_get_bedlayout_allowed_tags() {
 
 	$allowed_html = array(
