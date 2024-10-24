@@ -12,17 +12,17 @@
 		var segment_complete = 0;
 		var totalSuccess = 0;
 
-		$('.room_ical_links_wrapper').on('click', '.sync_button', function(e) {
+		$('.room_ical_links_wrapper').on('click', '.sync_button', function (e) {
 			e.preventDefault();
 
 			var sync_type = $(this).data('type');
 
-			if ( 'sync-booking' == sync_type ) {
+			if ('sync-booking' == sync_type) {
 				$('#sync-booking-popup').modal('show');
 				$(".button-spinner-support").removeClass('spinner-border');
 			}
-			
-			if ( 'sync-availability' == sync_type ) {
+
+			if ('sync-availability' == sync_type) {
 				$('#sync-availability-popup').modal('show');
 				$(".button-spinner-support").removeClass('spinner-border');
 			}
@@ -34,7 +34,7 @@
 			$(".process-ical-booking-sync").prop("disabled", false);
 			$(".process-ical-availability-sync").prop("disabled", false);
 			$(".ical-close-button").prop("disabled", false);
-			
+
 			the_room_id = $(this).data('room-id');
 			icsURL = $(this).data('ics-url');
 			icsID = $(this).data('ics-id');
@@ -57,11 +57,11 @@
 				});
 			}
 		}
-		
+
 		// Call exporterFlatpickr with the current month as the initial date
 		exporterFlatpickr("today");
 
-		$('.download_registrations_export_ical').on('click', function() {
+		$('.download_registrations_export_ical').on('click', function () {
 
 			$('.exporter_calendar-error-wrap').hide();
 
@@ -71,7 +71,7 @@
 			button.prop("disabled", true);
 
 			var selectedMonth = $(".exporter_calendar").val(); // Get the selected month from the input field
-			console.log( selectedMonth );
+			console.log(selectedMonth);
 			$.ajax({
 				url: ajaxurl,
 				type: 'POST',
@@ -83,7 +83,7 @@
 				xhrFields: {
 					responseType: 'blob' // Expecting a Blob response
 				},
-				success: function(data, status, xhr) {
+				success: function (data, status, xhr) {
 					// Check if data is undefined or the Blob is empty
 					if (!data || data.size === 0) {
 						alert('No registration data available for download for the selected month.');
@@ -114,18 +114,18 @@
 						}
 					}
 				},
-				error: function(xhr, status, error) {
+				error: function (xhr, status, error) {
 					console.error("Error: " + error + ", Status: " + status);
 					alert('Failed to download registration details. Please try again.');
-			
+
 					button.prop("disabled", false);
 					button.find('.spinner-zone').removeClass('spinner-border');
 				}
 			});
-			
+
 		});
 
-		$('.download_export_ical').on('click', function() {
+		$('.download_export_ical').on('click', function () {
 
 			var button = $(this);
 
@@ -134,7 +134,7 @@
 
 			var stay_room_id = $(this).data('room-id');
 			var selectedMonth = $(".exporter_calendar").val(); // Get the selected month from the input field
-			console.log( selectedMonth );
+			console.log(selectedMonth);
 			$.ajax({
 				url: ajaxurl,
 				type: 'POST',
@@ -147,7 +147,7 @@
 				xhrFields: {
 					responseType: 'blob'
 				},
-				success: function(data, status, xhr) {
+				success: function (data, status, xhr) {
 					var a = document.createElement('a');
 					var url = window.URL.createObjectURL(data);
 					a.href = url;
@@ -162,9 +162,9 @@
 				}
 			});
 		});
-		
-		
-		$('#sync-booking-popup').on('click', '.process-ical-availability-sync', function(e) {
+
+
+		$('#sync-booking-popup').on('click', '.process-ical-availability-sync', function (e) {
 			e.preventDefault();
 
 			$(".sync_button").prop("disabled", true);
@@ -182,12 +182,12 @@
 					ics_url: icsURL,
 					nonce: staylodgic_admin_vars.nonce
 				},
-				success: function(response) {
-					if(response.success) {
+				success: function (response) {
+					if (response.success) {
 						originalProcessedEvents = JSON.parse(JSON.stringify(response.data.processed)); // Create a deep copy of the original processed events
 						processed_events = response.data.processed;
 						var transientUsed = response.data.transient_used;
-						
+
 						// Create the table
 						var table = $('<table>');
 						var thead = $('<thead>');
@@ -230,13 +230,13 @@
 						$(".ical-close-button").prop("disabled", false);
 					}
 				},
-				error: function(xhr, status, error) {
+				error: function (xhr, status, error) {
 					$('#result').html('<p class="notice-heading">An error occurred while processing events: ' + error + '</p>');
 					$(".ical-close-button").prop("disabled", false);
 				}
 			});
 		});
-		$('#sync-booking-popup').on('click', '.process-ical-booking-sync', function(e) {
+		$('#sync-booking-popup').on('click', '.process-ical-booking-sync', function (e) {
 			e.preventDefault();
 
 			$(".sync_button").prop("disabled", true);
@@ -254,12 +254,12 @@
 					ics_url: icsURL,
 					nonce: staylodgic_admin_vars.nonce
 				},
-				success: function(response) {
-					if(response.success) {
+				success: function (response) {
+					if (response.success) {
 						originalProcessedEvents = JSON.parse(JSON.stringify(response.data.processed)); // Create a deep copy of the original processed events
 						processed_events = response.data.processed;
 						var transientUsed = response.data.transient_used;
-						
+
 						// Create the table
 						var table = $('<table>');
 						var thead = $('<thead>');
@@ -305,7 +305,7 @@
 						$(".button-spinner-support").removeClass('spinner-border');
 					}
 				},
-				error: function(xhr, status, error) {
+				error: function (xhr, status, error) {
 					$('#result').html('<p class="notice-heading">An error occurred while processing events: ' + error + '</p>');
 					$(".ical-close-button").prop("disabled", false);
 				}
@@ -328,14 +328,14 @@
 					ics_id: icsID,
 					processed_events: eventsBatch // Pass the processed events batch to the server
 				},
-				success: function(response) {
+				success: function (response) {
 					if (response.success) {
 						var successCount = response.data.successCount;
 						var skippedCount = response.data.skippedCount;
 						//var skippedCount = response.data.icsID;
 
 						// Display the successfully inserted reservation posts
-						$.each(eventsBatch, function(index, event) {
+						$.each(eventsBatch, function (index, event) {
 							fileSignature = event.SIGNATURE;
 							if (index < successCount) {
 								var row = $('<tr>');
@@ -352,7 +352,7 @@
 
 						totalSuccess = totalSuccess + successCount;
 
-						segment_complete = ( totalSuccess * 100 ) / total_process;
+						segment_complete = (totalSuccess * 100) / total_process;
 						// Use jQuery to select the progress bar and update its attributes and styles
 						$('#ical-sync-progress').addClass('progress-bar-animated');
 						$('#ical-sync-progress').attr('aria-valuenow', segment_complete).css('width', segment_complete + '%');
@@ -363,7 +363,7 @@
 						// Check if there are more events to process
 						if (events.length > 0) {
 							// Process the next batch of events after a short delay (e.g., 1 second)
-							setTimeout(function() {
+							setTimeout(function () {
 								processEventsBatch(events);
 							}, 1000);
 						} else {
@@ -378,13 +378,13 @@
 						$('#result-notice').append('<p>Error inserting reservation posts.</p>');
 					}
 				},
-				error: function(xhr, status, error) {
+				error: function (xhr, status, error) {
 					$('#result-notice').append('<p>An error occurred while inserting reservation posts: ' + error + '</p>');
 
 					// Check if there are more events to process
 					if (events.length > 0) {
 						// Process the next batch of events after a short delay (e.g., 1 second)
-						setTimeout(function() {
+						setTimeout(function () {
 							processEventsBatch(events);
 						}, 1000);
 					}
@@ -393,7 +393,7 @@
 		}
 
 		// Function to trigger AJAX call for finding future cancelled reservations
-		function findFutureCancelledReservations( signature ) {
+		function findFutureCancelledReservations(signature) {
 			$.ajax({
 				type: 'POST',
 				url: ajaxurl,
@@ -404,7 +404,7 @@
 					room_id: the_room_id,
 					ics_id: icsID,
 				},
-				success: function(response) {
+				success: function (response) {
 
 
 					if (response.success) {
@@ -412,9 +412,9 @@
 						if (cancelledReservations.length > 0) {
 							// Display the list of future cancelled reservations
 							var resultList = $('<ol>');
-							$.each(cancelledReservations, function(index, stay_booking_number) {
-							var listItem = $('<li>').text(stay_booking_number);
-							resultList.append(listItem);
+							$.each(cancelledReservations, function (index, stay_booking_number) {
+								var listItem = $('<li>').text(stay_booking_number);
+								resultList.append(listItem);
 							});
 							$('#result-missing-bookings').html('<p>Future Cancelled Reservations:</p>').append(resultList);
 						} else {
@@ -429,7 +429,7 @@
 					$(".sync_button").prop("disabled", false);
 					$(".button-spinner-support").removeClass('spinner-border');
 				},
-				error: function(xhr, status, error) {
+				error: function (xhr, status, error) {
 					// Handle error
 					$('#result-notice').append('<p>Error occurred while retrieving future cancelled reservations.</p>');
 
@@ -441,7 +441,7 @@
 			});
 		}
 
-		$('.room_ical_links_wrapper .add_more_ical').click(function(){
+		$('.room_ical_links_wrapper .add_more_ical').click(function () {
 			var group = '<div class="room_ical_link_group input-group">';
 			group += '<span class="input-group-text">url</span>';
 			group += '<input aria-label="url" type="url" class="form-control" name="room_ical_links_url[]">';
@@ -449,14 +449,14 @@
 			group += '<input aria-label="label" type="text" class="form-control" name="room_ical_links_comment[]">';
 			group += '<button type="button" class="remove_ical_group btn btn-danger"><i class="fa-solid fa-xmark"></i></button>';
 			group += '</div>';
-		
+
 			$(this).before(group);
 		});
 
-		$('.room_ical_links_wrapper').on('click', '.unlock_button', function() {
+		$('.room_ical_links_wrapper').on('click', '.unlock_button', function () {
 			var group = $(this).closest('.room_ical_link_group');
 			var inputs = group.find('input');
-		
+
 			if (inputs.prop('readonly')) {
 				inputs.prop('readonly', false);
 				$(this).html('<i class="fas fa-unlock"></i>');
@@ -465,14 +465,14 @@
 				$(this).html('<i class="fas fa-lock"></i>');
 			}
 		});
-		  
-		
+
+
 		// Event delegation is used here to make sure dynamically added buttons also get this event
-		$('.room_ical_links_wrapper').on('click', '.remove_ical_group', function(){
+		$('.room_ical_links_wrapper').on('click', '.remove_ical_group', function () {
 			$(this).parent('.room_ical_link_group').remove();
 		});
-		
-		$('#save_all_ical_rooms').click(function(e){
+
+		$('#save_all_ical_rooms').click(function (e) {
 			e.preventDefault();
 			var room_ids = [];
 			var room_links_id = [];
@@ -481,18 +481,18 @@
 
 			$("#save_all_ical_rooms").find('.spinner-zone').addClass('spinner-border');
 			$("#save_all_ical_rooms").prop("disabled", true);
-		
+
 			// Get the nonce value from the form
 			var nonce = $('input[name="ical_form_nonce"]').val();
-			
+
 			var sync_type = $(this).data('type');
-			
-			$('.room_ical_links_wrapper').each(function(){
+
+			$('.room_ical_links_wrapper').each(function () {
 				var room_id = $(this).data('room-id');
-				
+
 				room_ids.push(room_id);
-			
-				var room_links_group = $(this).find('.room_ical_link_group').map(function(){
+
+				var room_links_group = $(this).find('.room_ical_link_group').map(function () {
 					var id = $(this).find('input[name="room_ical_links_id[]"]').val();
 					var url = $(this).find('input[name="room_ical_links_url[]"]').val();
 					var comment = $(this).find('input[name="room_ical_links_comment[]"]').val();
@@ -502,23 +502,23 @@
 						comment: comment
 					};
 				}).get();
-			
+
 				// Filter out any URLs that are not valid.
-				room_links_group = room_links_group.filter(function(link) {
+				room_links_group = room_links_group.filter(function (link) {
 					try {
 						new URL(link.url);
 						return true;
 					} catch (_) {
-						return false;  
+						return false;
 					}
 				});
-			
+
 				room_links_id.push(room_links_group.map(link => link.id));
 				room_links_url.push(room_links_group.map(link => link.url));
 				room_links_comment.push(room_links_group.map(link => link.comment));
 			});
 
-			if ( 'sync-booking' == sync_type ) {
+			if ('sync-booking' == sync_type) {
 				var dataToSend = {
 					action: 'save_ical_booking_meta',
 					room_ids: room_ids,
@@ -528,7 +528,7 @@
 					ical_form_nonce: nonce  // Send the nonce
 				};
 			}
-			if ( 'sync-availability' == sync_type ) {
+			if ('sync-availability' == sync_type) {
 				var dataToSend = {
 					action: 'save_ical_availability_meta',
 					room_ids: room_ids,
@@ -543,8 +543,8 @@
 				type: 'POST',
 				url: ajaxurl,
 				data: dataToSend
-			}).done(function(response){
-				if(response.success) {
+			}).done(function (response) {
+				if (response.success) {
 					// The success message from server is in response.data
 					// var success_message = response.data;
 					location.reload();
@@ -554,13 +554,13 @@
 				}
 				$("#save_all_ical_rooms").prop("disabled", false);
 				$("#save_all_ical_rooms").find('.spinner-zone').removeClass('spinner-border');
-			}).fail(function(jqXHR, textStatus, errorThrown){
+			}).fail(function (jqXHR, textStatus, errorThrown) {
 				console.log("Request failed: " + textStatus);
 				console.log("Error: " + errorThrown);
 				console.log(jqXHR);
 			});
-		
-		});		
+
+		});
 
 	});
 })(jQuery);

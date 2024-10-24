@@ -107,7 +107,7 @@ class Staylodgic_Activity_Reservation_Posts {
 			'hierarchical'       => false,
 			'has_archive'        => true,
 			'menu_position'      => 40,
-			'menu_icon'          => 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1NzYgNTEyIj48IS0tIUZvbnQgQXdlc29tZSBGcmVlIDYuNS4yIGJ5IEBmb250YXdlc29tZSAtIGh0dHBzOi8vZm9udGF3ZXNvbWUuY29tIExpY2Vuc2UgLSBodHRwczovL2ZvbnRhd2Vzb21lLmNvbS9saWNlbnNlL2ZyZWUgQ29weXJpZ2h0IDIwMjQgRm9udGljb25zLCBJbmMuLS0+PHBhdGggZmlsbD0iIzYzRTZCRSIgZD0iTTY0IDY0QzI4LjcgNjQgMCA5Mi43IDAgMTI4djY0YzAgOC44IDcuNCAxNS43IDE1LjcgMTguNkMzNC41IDIxNy4xIDQ4IDIzNSA0OCAyNTZzLTEzLjUgMzguOS0zMi4zIDQ1LjRDNy40IDMwNC4zIDAgMzExLjIgMCAzMjB2NjRjMCAzNS4zIDI4LjcgNjQgNjQgNjRINTEyYzM1LjMgMCA2NC0yOC43IDY0LTY0VjMyMGMwLTguOC03LjQtMTUuNy0xNS43LTE4LjZDNTQxLjUgMjk0LjkgNTI4IDI3NyA1MjggMjU2czEzLjUtMzguOSAzMi4zLTQ1LjRjOC4zLTIuOSAxNS43LTkuOCAxNS43LTE4LjZWMTI4YzAtMzUuMy0yOC43LTY0LTY0LTY0SDY0em02NCAxMTJsMCAxNjBjMCA4LjggNy4yIDE2IDE2IDE2SDQzMmM4LjggMCAxNi03LjIgMTYtMTZWMTc2YzAtOC44LTcuMi0xNi0xNi0xNkgxNDRjLTguOCAwLTE2IDcuMi0xNiAxNnpNOTYgMTYwYzAtMTcuNyAxNC4zLTMyIDMyLTMySDQ0OGMxNy43IDAgMzIgMTQuMyAzMiAzMlYzNTJjMCAxNy43LTE0LjMgMzItMzIgMzJIMTI4Yy0xNy43IDAtMzItMTQuMy0zMi0zMlYxNjB6Ii8+PC9zdmc+',
+			'menu_icon'          => 'dashicons-tickets-alt',
 			'rewrite'            => array( 'slug' => 'activityreservations' ),
 			'supports'           => array( 'title', 'author', 'thumbnail' ),
 		);

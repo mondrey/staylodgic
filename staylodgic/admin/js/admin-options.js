@@ -43,8 +43,8 @@ jQuery(document).ready(function ($) {
 					$(button)
 						.html(
 							'<img src="' +
-								attachment.url +
-								'" style="max-height:100px;display:block;">'
+							attachment.url +
+							'" style="max-height:100px;display:block;">'
 						)
 						.next()
 						.val(attachment.id)
@@ -85,17 +85,17 @@ jQuery(document).ready(function ($) {
 	// }
 
 	$(".staylodgic-tabs a.nav-tab").on("click", function (event) {
-		
+
 		const target = $(this);
 		const targetTab = $(target).attr("data-tab");
-		
+
 		if (!$(target).closest(".staylodgic-tabs a.nav-tab").length) {
 			return;
 		}
 		event.preventDefault();
 		$(".staylodgic-tabs a.nav-tab").removeClass("nav-tab-active");
 		$(target).addClass("nav-tab-active");
-		
+
 		if (typeof targetTab !== "undefined") {
 			const heading = $(target).attr("data-heading");
 			$(".section_heading").html(heading);

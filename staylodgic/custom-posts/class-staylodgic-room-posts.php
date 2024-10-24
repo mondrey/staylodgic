@@ -145,7 +145,7 @@ class Staylodgic_Room_Posts {
 			'hierarchical'       => false,
 			'has_archive'        => true,
 			'menu_position'      => 35,
-			'menu_icon'          => 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NDAgNTEyIj48IS0tIUZvbnQgQXdlc29tZSBGcmVlIDYuNS4yIGJ5IEBmb250YXdlc29tZSAtIGh0dHBzOi8vZm9udGF3ZXNvbWUuY29tIExpY2Vuc2UgLSBodHRwczovL2ZvbnRhd2Vzb21lLmNvbS9saWNlbnNlL2ZyZWUgQ29weXJpZ2h0IDIwMjQgRm9udGljb25zLCBJbmMuLS0+PHBhdGggZmlsbD0iIzYzRTZCRSIgZD0iTTMyIDMyYzE3LjcgMCAzMiAxNC4zIDMyIDMyVjMyMEgyODhWMTYwYzAtMTcuNyAxNC4zLTMyIDMyLTMySDU0NGM1MyAwIDk2IDQzIDk2IDk2VjQ0OGMwIDE3LjctMTQuMyAzMi0zMiAzMnMtMzItMTQuMy0zMi0zMlY0MTZIMzUyIDMyMCA2NHYzMmMwIDE3LjctMTQuMyAzMi0zMiAzMnMtMzItMTQuMy0zMi0zMlY2NEMwIDQ2LjMgMTQuMyAzMiAzMiAzMnptMTQ0IDk2YTgwIDgwIDAgMSAxIDAgMTYwIDgwIDgwIDAgMSAxIDAtMTYweiIvPjwvc3ZnPg==',
+			'menu_icon'          => 'dashicons-superhero-alt',
 			'rewrite'            => array( 'slug' => 'rooms' ),
 			'supports'           => array( 'title', 'author', 'thumbnail' ),
 		);

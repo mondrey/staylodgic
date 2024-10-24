@@ -34,7 +34,7 @@ class Staylodgic_Registration_Posts {
 			'hierarchical'       => false,
 			'has_archive'        => true,
 			'menu_position'      => 38,
-			'menu_icon'          => 'data:image/svg+xml;base64,...',
+			'menu_icon'          => 'dashicons-book-alt',
 			'rewrite'            => array( 'slug' => 'registrations' ),
 			'supports'           => array( 'title', 'author', 'thumbnail' ),
 		);

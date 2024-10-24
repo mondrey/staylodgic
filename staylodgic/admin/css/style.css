@@ -34,6 +34,7 @@
 
 .staylodgic_admin_sort_image {
 	border: 1px double #444;
+	border-radius: 10px;
 	-moz-border-radius: 10px;
 	-webkit-border-radius: 10px;
 }
@@ -66,7 +67,7 @@
 	cursor: move;
 
 	border: 1px solid #ddd;
-	border-raidus: 10px;
+	border-radius: 10px;
 	-moz-border-radius: 10px;
 	-webkit-border-radius: 10px;
 }
@@ -98,7 +99,7 @@
 	cursor: move;
 
 	border: 1px solid #ddd;
-	border-raidus: 10px;
+	border-radius: 10px;
 	-moz-border-radius: 10px;
 	-webkit-border-radius: 10px;
 }
@@ -465,6 +466,7 @@
 	position: relative;
 	text-align: left;
 }
+
 .ranger-min-max-wrap-outer {
 	width: 60%;
 }
@@ -616,8 +618,6 @@
 .metaboxtype_seperator.metabox-fields {
 	padding-bottom: 10px;
 }
-
-.is_title {}
 
 .is_subtitle {
 	padding-top: 5px;
@@ -1105,15 +1105,15 @@
 }
 
 .time-input-wrapper {
-    display: flex;
-    align-items: center;
-    margin-bottom: 5px;
+	display: flex;
+	align-items: center;
+	margin-bottom: 5px;
 }
 
 .remove-time-input {
-    margin-left: 10px;
-    cursor: pointer;
-    color: red;
+	margin-left: 10px;
+	cursor: pointer;
+	color: red;
 }
 
 
@@ -1124,37 +1124,44 @@
 	display: inline-block;
 	border-radius: 10px;
 
-	-webkit-transition:  border-color 0.2s ease-in-out, opacity 0.2s ease-in-out, background-color 0.2s ease-in-out;
-	-moz-transition:  border-color 0.2s ease-in-out, opacity 0.2s ease-in-out, background-color 0.2s ease-in-out;
-	-o-transition:  border-color 0.2s ease-in-out, opacity 0.2s ease-in-out, background-color 0.2s ease-in-out;
-	transition:  border-color 0.2s ease-in-out, opacity 0.2s ease-in-out, background-color 0.2s ease-in-out;
+	-webkit-transition: border-color 0.2s ease-in-out, opacity 0.2s ease-in-out, background-color 0.2s ease-in-out;
+	-moz-transition: border-color 0.2s ease-in-out, opacity 0.2s ease-in-out, background-color 0.2s ease-in-out;
+	-o-transition: border-color 0.2s ease-in-out, opacity 0.2s ease-in-out, background-color 0.2s ease-in-out;
+	transition: border-color 0.2s ease-in-out, opacity 0.2s ease-in-out, background-color 0.2s ease-in-out;
 }
+
 .day-schedule .time-slot:hover {
-	cursor:pointer;
+	cursor: pointer;
 	border-color: #d00;
 }
+
 .day-schedule .time-slot.time-disabled {
 	opacity: 0.2;
 	cursor: default;
 }
+
 .day-schedule .time-slot span {
 	font-size: 11px;
 	display: block;
 }
+
 .day-schedule .time-slot .activity-time-slot {
 	font-size: 16px;
 	font-weight: 600;
 }
+
 .day-schedule .time-slot .time-slots-remaining {
 	font-size: 11px;
 	display: block;
 	color: #808080;
 	letter-spacing: 0.5px;
 }
+
 .day-schedule .time-slot.time-choice {
 	border-color: #d00;
 	background-color: #d00;
 }
+
 .day-schedule .time-slot.time-choice .activity-time-slot,
 .day-schedule .time-slot.time-choice .time-slots-remaining {
 	color: #fff;
@@ -1165,18 +1172,22 @@
 	border-top: 1px solid rgba(0, 0, 0, 0.14);
 	padding-top: 20px;
 }
+
 .activity-schedules-container.ajax-processing {
 	opacity: 0.4;
 	pointer-events: none;
 }
+
 .activity-schedules-container.ajax-processing .spinner {
 	visibility: visible;
 }
+
 .activity-schedules-container .spinner {
 	position: absolute;
 	top: 20px;
 	left: 50%;
 }
+
 .activity-schedules-container {
 	position: relative;
 }
@@ -1202,88 +1213,90 @@
 
 /* TICKET */
 .staylodgic-ticket-wrap {
-    display: flex;
-    border: 2px solid #000;
-    border-radius: 10px;
-    overflow: hidden;
-    background-color: #f9f9f9;
-    margin-bottom: 10px;
-    min-height: 120px; /* Adjust the height as needed */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    position: relative;
+	display: flex;
+	border: 2px solid #000;
+	border-radius: 10px;
+	overflow: hidden;
+	background-color: #f9f9f9;
+	margin-bottom: 10px;
+	min-height: 120px;
+	/* Adjust the height as needed */
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	position: relative;
 }
 
 .staylodgic-ticket-first-half,
 .staylodgic-ticket-second-half {
-    flex: 1;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+	flex: 1;
+	padding: 20px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
 }
 
 .staylodgic-ticket-first-half {
-    border-right: 2px dashed #000;
-    background-color: #fff;
-	background-image: radial-gradient( circle 489px at 49.3% 46.6%,  rgba(255,214,126,1) 0%, rgba(253,200,0,1) 100.2% );
+	border-right: 2px dashed #000;
+	background-color: #fff;
+	background-image: radial-gradient(circle 489px at 49.3% 46.6%, rgba(255, 214, 126, 1) 0%, rgba(253, 200, 0, 1) 100.2%);
 }
 
 .staylodgic-ticket-second-half {
-    background-image: linear-gradient( 174.2deg,  rgba(255,244,228,1) 7.1%, rgba(240,246,238,1) 67.4% );
+	background-image: linear-gradient(174.2deg, rgba(255, 244, 228, 1) 7.1%, rgba(240, 246, 238, 1) 67.4%);
 }
 
 .staylodgic-ticket-event {
-    font-size: 22px;
-    font-weight: 500;
-    color: #333;
+	font-size: 22px;
+	font-weight: 500;
+	color: #333;
 }
 
 .staylodgic-ticket-total {
-    font-size: 16px;
-    margin-top: 10px;
-    color: #666;
+	font-size: 16px;
+	margin-top: 10px;
+	color: #666;
 }
 
 .staylodgic-ticket-second-half {
-    font-size: 24px;
-    font-weight: 600;
-    color: #333;
+	font-size: 24px;
+	font-weight: 600;
+	color: #333;
 }
 
 /* Adding a notch to the ticket */
 .staylodgic-ticket-wrap:before,
 .staylodgic-ticket-wrap:after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 20px;
-    height: 20px;
-    background-color: #2854d7;
-    border-radius: 50%;
-    z-index: 1;
+	content: '';
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	width: 20px;
+	height: 20px;
+	background-color: #2854d7;
+	border-radius: 50%;
+	z-index: 1;
 }
 
 .staylodgic-ticket-wrap:before {
-    left: -10px;
-    border: 2px solid #2854d7;
-    border-right: 0;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
+	left: -10px;
+	border: 2px solid #2854d7;
+	border-right: 0;
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
 }
 
 .staylodgic-ticket-wrap:after {
-    right: -10px;
-    border: 2px solid #2854d7;
-    border-left: 0;
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
+	right: -10px;
+	border: 2px solid #2854d7;
+	border-left: 0;
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
 }
 
 .staylodgic-ticket-date {
 	font-size: 14px;
 	font-weight: 300;
 }
+
 .staylodgic-ticket-price {
 	font-weight: 100;
 }
@@ -1292,18 +1305,18 @@
 
 
 .ticket {
-    width: 285px;
-    background-color: #fff;
-    border-radius: 15px;
-    overflow: hidden;
-    font-family: 'Arial', sans-serif;
+	width: 285px;
+	background-color: #fff;
+	border-radius: 15px;
+	overflow: hidden;
+	font-family: 'Arial', sans-serif;
 }
 
 .ticket-header {
-	background-image: linear-gradient( 110.3deg,  rgba(73,93,109,1) 4.3%, rgba(49,55,82,1) 96.7% );
-    color: #fff;
-    padding: 16px;
-    text-align: center;
+	background-image: linear-gradient(110.3deg, rgba(73, 93, 109, 1) 4.3%, rgba(49, 55, 82, 1) 96.7%);
+	color: #fff;
+	padding: 16px;
+	text-align: center;
 }
 
 .ticket-header h1 {
@@ -1316,77 +1329,82 @@
 }
 
 .ticket-header p {
-    margin: 0;
+	margin: 0;
 }
 
 .ticket-image img {
-    width: 100%;
-    display: block;
+	width: 100%;
+	display: block;
 }
 
 .ticket-info {
-    padding: 16px;
-    text-align: center;
-	background-image: radial-gradient( circle 1224px at 10.6% 8.8%,  rgba(255,255,255,1) 0%, rgba(153,202,251,1) 100.2% );
-    color: #000;
+	padding: 16px;
+	text-align: center;
+	background-image: radial-gradient(circle 1224px at 10.6% 8.8%, rgba(255, 255, 255, 1) 0%, rgba(153, 202, 251, 1) 100.2%);
+	color: #000;
 }
 
 .ticket-barcode {
-    padding: 8px;
-    text-align: center;
-    background-color: #fff;
+	padding: 8px;
+	text-align: center;
+	background-color: #fff;
 }
 
 .ticket-barcode img {
-    width: 80%;
+	width: 80%;
 }
 
 .ticket {
-    position: relative;
-    width: 285px;
-    background-color: #fff;
-    border-radius: 15px;
-    overflow: hidden;
-    font-family: 'Arial', sans-serif;
-    /* Add more styles here */
+	position: relative;
+	width: 285px;
+	background-color: #fff;
+	border-radius: 15px;
+	overflow: hidden;
+	font-family: 'Arial', sans-serif;
+	/* Add more styles here */
 }
+
 .ticket p {
 	margin: 0;
 }
+
 p.ticket-break {
 	background: #fff3;
 	height: 1px;
 	margin-top: 12px;
 }
+
 .ticket-image {
 	overflow: hidden;
 	height: 182px;
 }
+
 /* Other styles remain the same */
 
 /* Add pseudo-elements for the slots */
 .ticket-info {
 	position: relative;
 }
+
 .ticket-info::before,
 .ticket-info::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    transform: translateY(-50%);
-    width: 20px;
-    height: 20px;
-    background-color: #fff;
-    border-radius: 50%;
-    z-index: 1;
+	content: '';
+	position: absolute;
+	top: 0;
+	transform: translateY(-50%);
+	width: 20px;
+	height: 20px;
+	background-color: #fff;
+	border-radius: 50%;
+	z-index: 1;
 }
 
 .ticket-info::before {
-    left: -10px;
+	left: -10px;
 }
 
 .ticket-info::after {
-    right: -10px;
+	right: -10px;
 }
 
 /* Style the button to match the ticket */
@@ -1394,7 +1412,7 @@ p.ticket-break {
 	display: block;
 	width: 100%;
 	padding: 12px 0;
-	background-image: linear-gradient( 109.6deg,  rgba(255,174,0,1) 11.2%, rgba(255,0,0,1) 100.2% );
+	background-image: linear-gradient(109.6deg, rgba(255, 174, 0, 1) 11.2%, rgba(255, 0, 0, 1) 100.2%);
 	color: #fff;
 	border: none;
 	cursor: pointer;
@@ -1413,106 +1431,125 @@ p.ticket-break {
 	justify-content: center;
 	align-items: center;
 	/* Set a specific height and width if desired, or use the default size of the QR code */
-	height: 150px; /* Example height - adjust as necessary */
-	width: 100%;  /* Example width - adjust as necessary */
+	height: 150px;
+	/* Example height - adjust as necessary */
+	width: 100%;
+	/* Example width - adjust as necessary */
 	padding-top: 30px;
-  }
+}
 
-  #ticketqrcode img {
+#ticketqrcode img {
 	position: relative;
 	top: -14px;
 }
-  
+
 .ticket-date {
 	font-size: 10px;
 	letter-spacing: 2px;
 	text-transform: uppercase;
 	color: #ffffffa3;
 }
+
 .ticket-name {
 	font-size: 18px;
 	font-weight: 100;
 }
+
 .ticket-price {
 	font-weight: 600;
 	font-size: 18px;
 }
+
 .ticket-company,
 .ticket-phone,
 .ticket-address {
 	font-size: 9px;
 	letter-spacing: 1px;
 	text-transform: uppercase;
-  }
+}
+
 .ticket-company {
 	font-weight: 900;
 	font-size: 11px;
-  }
+}
 
-  .ticket-container-outer {
+.ticket-container-outer {
 	padding: 20px 20px 20px 20px;
 	margin: 0 auto;
 	display: inline-block;
 	margin-left: -20px;
-  }
+}
 
 .metabox_existing_customers {
 	display: none;
 }
+
 .metaboxtype_select.customer_choice {
 	display: none;
 }
+
 .choice-customer-existing {
 	position: relative;
 	top: 6px;
-	color:#2271b1;
+	color: #2271b1;
 	border-bottom: 2px solid #2271b1;
 	padding-bottom: 3px;
 	text-decoration: none;
 }
+
 .choice-customer-existing:hover {
-	color:#082f4f;
+	color: #082f4f;
 	border-bottom: 2px solid #082f4f;
 	cursor: pointer;
 }
+
 ul.existing-customer {
 	padding: 20px 0;
 }
+
 .customer-choice-inbetween {
 	margin-right: 10px;
 }
+
 .metabox_existing_customers {
 	padding: 40px;
 	background: #ffffe6;
 }
+
 .metabox-fields.registration-field input {
 	width: 100%;
 }
+
 .metabox-fields.registration-field {
 	display: inline-block;
-	width: calc( 50% - 60px);
+	width: calc(50% - 60px);
 	padding-right: 0;
 }
 
 .reservation-details {
 	margin-bottom: 15px;
 }
+
 .reservation-details .registered-occupants {
 	padding-bottom: 10px;
 }
+
 .metaboxtype_reservation_registration .reservation-details {
 	width: 200px;
 	background: #f5f3f3;
 	padding: 10px 14px;
 }
+
 .settings-change-log ol,
 .settings-change-log ul {
 	margin: 0;
 	padding: 0;
 }
+
 .settings-change-log ul {
 	padding-top: 10px;
 }
+
 .settings-change-log {
 	column-count: 3;
 	column-gap: 50px;
@@ -1528,10 +1565,12 @@ ul.existing-customer {
 .time-inputs input {
 	width: 100px;
 }
+
 .add-time-input:hover {
 	background: #113461;
 	cursor: pointer;
 }
+
 .add-time-input {
 	transition: background-color 0.2s ease-in-out;
 	padding: 4px 10px 3px;
@@ -1543,6 +1582,7 @@ ul.existing-customer {
 	margin-bottom: 19px;
 	color: #fff;
 }
+
 .time-inputs input {
 	width: 100px;
 	margin: 5px 5px 1px 0;
@@ -1554,6 +1594,7 @@ ul.existing-customer {
 	margin-bottom: 5px;
 	background: #f2f2f2;
 }
+
 .bedlayout-box {
 	margin-bottom: 10px;
 }
@@ -1562,6 +1603,7 @@ ul.existing-customer {
 .metabox-wrapper input {
 	max-width: 100%;
 }
+
 .bedlayout-box input[type="number"] {
 	width: 60px;
 }
@@ -1583,9 +1625,11 @@ ul.existing-customer {
 	display: inline-block;
 	font-size: 12px;
 }
+
 .metabox-bookings-found {
 	margin-bottom: 14px;
 }
+
 .metaboxtype_reservation_for_customer ul li {
 	background: #f5f5f5;
 	display: inline-block;

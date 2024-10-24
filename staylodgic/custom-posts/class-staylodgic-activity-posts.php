@@ -147,7 +147,7 @@ class Staylodgic_Activity_Posts {
 			'hierarchical'       => false,
 			'has_archive'        => true,
 			'menu_position'      => 39,
-			'menu_icon'          => 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48IS0tIUZvbnQgQXdlc29tZSBGcmVlIDYuNS4yIGJ5IEBmb250YXdlc29tZSAtIGh0dHBzOi8vZm9udGF3ZXNvbWUuY29tIExpY2Vuc2UgLSBodHRwczovL2ZvbnRhd2Vzb21lLmNvbS9saWNlbnNlL2ZyZWUgQ29weXJpZ2h0IDIwMjQgRm9udGljb25zLCBJbmMuLS0+PHBhdGggZmlsbD0iIzYzRTZCRSIgZD0iTTIyNCAzMkg2NEM0Ni4zIDMyIDMyIDQ2LjMgMzIgNjR2NjRjMCAxNy43IDE0LjMgMzIgMzIgMzJINDQxLjRjNC4yIDAgOC4zLTEuNyAxMS4zLTQuN2w0OC00OGM2LjItNi4yIDYuMi0xNi40IDAtMjIuNmwtNDgtNDhjLTMtMy03LjEtNC43LTExLjMtNC43SDI4OGMwLTE3LjctMTQuMy0zMi0zMi0zMnMtMzIgMTQuMy0zMiAzMnpNNDgwIDI1NmMwLTE3LjctMTQuMy0zMi0zMi0zMkgyODhWMTkySDIyNHYzMkg3MC42Yy00LjIgMC04LjMgMS43LTExLjMgNC43bC00OCA0OGMtNi4yIDYuMi02LjIgMTYuNCAwIDIyLjZsNDggNDhjMyAzIDcuMSA0LjcgMTEuMyA0LjdINDQ4YzE3LjcgMCAzMi0xNC4zIDMyLTMyVjI1NnpNMjg4IDQ4MFYzODRIMjI0djk2YzAgMTcuNyAxNC4zIDMyIDMyIDMyczMyLTE0LjMgMzItMzJ6Ii8+PC9zdmc+',
+			'menu_icon'          => 'dashicons-location-alt',
 			'rewrite'            => array( 'slug' => 'activities' ),
 			'supports'           => array( 'title', 'author', 'thumbnail' ),
 		);

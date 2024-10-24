@@ -1,17 +1,14 @@
-@media only screen and (max-width: 1280px) {
-}
+@media only screen and (max-width: 1280px) {}
 
 /* #Tablet (Landscape)
 ================================================== */
 
-@media only screen and (max-width: 1024px) {
-}
+@media only screen and (max-width: 1024px) {}
 
 /* #Tablet (Portrait)
 ================================================== */
 /* Note: Design for a width of 768px */
-@media only screen and (min-width: 768px) and (max-width: 959px) {
-}
+@media only screen and (min-width: 768px) and (max-width: 959px) {}
 
 /*  #Mobile (Portrait)
 ================================================== */
@@ -22,60 +19,75 @@
 		color: #000;
 		margin-left: 3px;
 	}
+
 	.front-booking-calendar-date {
 		font-size: 12px;
 		letter-spacing: 0.4px;
 		font-weight: 400;
 		line-height: 1.2;
 	}
+
 	.element-container-group,
 	.room-occupied-group {
 		padding: 20px;
 	}
+
 	.room-details-row .room-details-column:first-child {
 		padding-right: 0;
 	}
+
 	.room-details-row {
 		flex-direction: column;
 	}
+
 	.room-details-image img {
 		width: 100%;
 	}
+
 	.room-details-column {
 		width: 100%;
 	}
+
 	.room-details-second-column {
 		margin-top: 30px;
 		border-top: 3px solid #dfdfdf;
 		padding-top: 30px;
 	}
 
-    .registration_form {
-        flex-direction: column;
-    }
-    .registration-column.registration-column-one {
-        width: 100%;
-        padding: 30px 20px;
-    }
-    .registration-column.registration-column-two {
-        width: 100%;
-    }
-    #booking-summary-wrap {
-        padding: 20px;
-    }
-    .front-booking-guests-wrap {
-        padding-left: 20px;
-    }
-    .date-front-calendar-nights-block {
-        display: block;
-    }
-    .stay-summary-wrap {
-        border-bottom: 0;
-        padding-bottom: 0;
-    }
+	.registration_form {
+		flex-direction: column;
+	}
+
+	.registration-column.registration-column-one {
+		width: 100%;
+		padding: 30px 20px;
+	}
+
+	.registration-column.registration-column-two {
+		width: 100%;
+	}
+
+	#booking-summary-wrap {
+		padding: 20px;
+	}
+
+	.front-booking-guests-wrap {
+		padding-left: 20px;
+	}
+
+	.date-front-calendar-nights-block {
+		display: block;
+	}
+
+	.stay-summary-wrap {
+		border-bottom: 0;
+		padding-bottom: 0;
+	}
+
 	.activity-schedule {
 		flex-direction: column;
 	}
+
 	.activity-column-one {
 		padding: 0 0 20px 0;
 	}
@@ -91,60 +103,75 @@
 		color: #000;
 		margin-left: 3px;
 	}
+
 	.front-booking-calendar-date {
 		font-size: 12px;
 		letter-spacing: 0.4px;
 		font-weight: 400;
 		line-height: 1.2;
 	}
+
 	.element-container-group,
 	.room-occupied-group {
 		padding: 20px;
 	}
+
 	.room-details-row .room-details-column:first-child {
 		padding-right: 0;
 	}
+
 	.room-details-row {
 		flex-direction: column;
 	}
+
 	.room-details-image img {
 		width: 100%;
 	}
+
 	.room-details-column {
 		width: 100%;
 	}
+
 	.room-details-second-column {
 		margin-top: 30px;
 		border-top: 3px solid #dfdfdf;
 		padding-top: 30px;
 	}
 
-    .registration_form {
-        flex-direction: column;
-    }
-    .registration-column.registration-column-one {
-        width: 100%;
-        padding: 30px 20px;
-    }
-    .registration-column.registration-column-two {
-        width: 100%;
-    }
-    #booking-summary-wrap {
-        padding: 20px;
-    }
-    .front-booking-guests-wrap {
-        padding-left: 20px;
-    }
-    .date-front-calendar-nights-block {
-        display: block;
-    }
-    .stay-summary-wrap {
-        border-bottom: 0;
-        padding-bottom: 0;
-    }
+	.registration_form {
+		flex-direction: column;
+	}
+
+	.registration-column.registration-column-one {
+		width: 100%;
+		padding: 30px 20px;
+	}
+
+	.registration-column.registration-column-two {
+		width: 100%;
+	}
+
+	#booking-summary-wrap {
+		padding: 20px;
+	}
+
+	.front-booking-guests-wrap {
+		padding-left: 20px;
+	}
+
+	.date-front-calendar-nights-block {
+		display: block;
+	}
+
+	.stay-summary-wrap {
+		border-bottom: 0;
+		padding-bottom: 0;
+	}
+
 	.activity-schedule {
 		flex-direction: column;
 	}
+
 	.activity-column-one {
 		padding: 0 0 20px 0;
 	}

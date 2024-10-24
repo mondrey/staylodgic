@@ -1,12 +1,13 @@
 .staylodgic-tab-item {
 	display: none;
 }
+
 .staylodgic-tab-item {
 	background-color: #fff;
 	border-bottom: 1px solid #f0f0f0;
 	padding-bottom: 10px;
 	margin-bottom: 10px;
-  }
+}
 
 #sortable {
 	list-style-type: none;
@@ -97,11 +98,13 @@
 	box-shadow: none;
 	outline: 0;
 }
+
 .staylodgic-tabs .nav-tab i,
 .staylodgic-tabs .nav-tab:focus i {
 	text-decoration: none;
 	border: 0;
 }
+
 .staylodgic-tabs .nav-tab i {
 	width: 18px;
 }
@@ -158,13 +161,13 @@
 }
 
 /* On mouse-over, add a grey background color */
-.staylodgic-checkbox-container:hover input ~ .checkmark {
+.staylodgic-checkbox-container:hover input~.checkmark {
 	background-color: #dbf7ff;
 	border-color: #dbf7ff;
 }
 
 /* When the checkbox is checked, add a blue background */
-.staylodgic-checkbox-container input:checked ~ .checkmark {
+.staylodgic-checkbox-container input:checked~.checkmark {
 	background-color: #2196f3;
 	border-color: #2196f3;
 }
@@ -177,7 +180,7 @@
 }
 
 /* Show the checkmark when checked */
-.staylodgic-checkbox-container input:checked ~ .checkmark:after {
+.staylodgic-checkbox-container input:checked~.checkmark:after {
 	display: block;
 }
 
@@ -201,12 +204,15 @@
 .main-sync-form-wrap p {
 	font-size: 8px;
 }
+
 .main-sync-form-wrap p.notice-heading {
 	font-size: 12px;
 }
+
 .main-sync-form-wrap th {
 	font-size: 11px;
 }
+
 .staylodgic-tabform-wrapper .nav-tab-wrapper.staylodgic-tabs {
 	padding-top: 0;
 }
@@ -233,6 +239,7 @@
 	box-sizing: border-box;
 	padding: 40px;
 }
+
 .import-file-upload-section {
 	margin-bottom: 20px;
 }
@@ -240,10 +247,12 @@
 .discount-input-outer {
 	position: relative;
 }
+
 .discount-display-label {
 	position: absolute;
 	top: -10px;
 }
+
 .discount-display-label {
 	position: absolute;
 	top: -23px;
@@ -268,6 +277,7 @@
 	text-decoration: none;
 	cursor: pointer;
 }
+
 .staylodgic-modal-content textarea {
 	width: 100%;
 	padding: 20px;
@@ -281,7 +291,7 @@
 	display: flex;
 	background: #fff;
 	margin-top: 10px;
-	min-height: calc( 100vh - 130px );
+	min-height: calc(100vh - 130px);
 }
 
 /* Style for the tabs */
@@ -308,10 +318,7 @@
 }
 
 /* Style for the active tab */
-.staylodgic-tabform-wrapper
-	.nav-tab-active
-	.staylodgic-tabform-wrapper
-	.nav-tab:hover {
+.staylodgic-tabform-wrapper .nav-tab-active .staylodgic-tabform-wrapper .nav-tab:hover {
 	background: none;
 	border: 0;
 }
@@ -323,22 +330,30 @@
 }
 
 .staylodgic-tab-heading {
-	margin: 30px 0 5px; /* Add space above the heading */
-	padding-left: 0; /* Align with the tabs */
-	font-size: 22px; /* Adjust the font size */
+	margin: 30px 0 5px;
+	/* Add space above the heading */
+	padding-left: 0;
+	/* Align with the tabs */
+	font-size: 22px;
+	/* Adjust the font size */
 	font-weight: 200;
-	color: #fff; /* Adjust the text color */
-	padding-bottom: 5px; /* Add space below the heading */
+	color: #fff;
+	/* Adjust the text color */
+	padding-bottom: 5px;
+	/* Add space below the heading */
 }
+
 .repeatable {
 	position: relative;
 	background: #f5f5f5;
 	margin-bottom: 5px;
 	padding: 28px 10px 5px 6px;
 }
+
 .input-label-outer {
 	position: relative;
 }
+
 .input-label-inner {
 	position: absolute;
 	top: -21px;
@@ -349,23 +364,28 @@
 	letter-spacing: 0.5px;
 	left: 2px;
 }
+
 .staylodgic-options-form .dashicons.drag-handle {
 	position: absolute;
 	left: -26px;
 	top: calc(50% - 10px);
 }
+
 .staylodgic-options-form .remove-set-button {
 	position: absolute;
 	right: -26px;
 	top: calc(50% - 8px);
 }
+
 .staylodgic-tab-item .fa-solid.fa-sort:hover {
 	cursor: grab;
 }
+
 .staylodgic-options-form .remove-set-button {
 	cursor: pointer;
 	color: #ff0000;
 }
+
 .staylodgic-tab-item input[type="number"],
 .input-label-outer input[type="number"] {
 	width: 95px;
@@ -391,6 +411,7 @@
 	border-radius: 6px;
 	transition: 0.3s border-color, 0.3s background-color;
 }
+
 .staylodgic-tab-item input[type="checkbox"]:focus,
 .staylodgic-tab-item input[type="color"]:focus,
 .staylodgic-tab-item input[type="date"]:focus,
@@ -441,6 +462,7 @@ h1.options-heading {
 	font-size: 30px;
 	font-weight: 600;
 }
+
 h1.options-heading span {
 	font-weight: 300;
 }
@@ -450,7 +472,8 @@ h1.options-heading span {
 }
 
 .import-export-section {
-	display: none; /* Initial state set via CSS for cleaner loading */
+	display: none;
+	/* Initial state set via CSS for cleaner loading */
 }
 
 .export-import-form {
@@ -467,6 +490,7 @@ h1.options-heading span {
 	opacity: 0.8;
 	transition: color 0.3s;
 }
+
 .toggle-section:hover {
 	opacity: 1;
 }
@@ -476,6 +500,7 @@ h1.options-heading span {
 	padding-bottom: 10px;
 	border-bottom: 1px solid #e6e6e6;
 }
+
 .staylodgic-tab-item label {
 	font-size: 13px;
 	font-weight: 300;
@@ -483,10 +508,12 @@ h1.options-heading span {
 	color: #8f8c8c;
 	letter-spacing: 0.2px;
 }
+
 .staylodgic-tab-item input,
 .staylodgic-tab-item textarea {
 	font-size: 14px;
 }
+
 .staylodgic-tab-item.staylodgic-tab-item--discounts input {
 	margin-bottom: 7px;
 }

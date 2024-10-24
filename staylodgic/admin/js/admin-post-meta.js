@@ -13,8 +13,8 @@ jQuery(document).ready(function ($) {
 			var daySchedule = $(this).closest(".day-schedule");
 			var newTimeInput = $(
 				'<input type="time" name="staylodgic_activity_schedule[' +
-					daySchedule.attr("id").replace("day_schedule_", "") +
-					'][]" value="">'
+				daySchedule.attr("id").replace("day_schedule_", "") +
+				'][]" value="">'
 			);
 			daySchedule.find(".time-inputs").append(newTimeInput);
 		});
@@ -278,8 +278,8 @@ jQuery(document).ready(function ($) {
 				$(".input-tax-summary-wrap-inner").remove();
 				$("#input-tax-summary").html(
 					'<div class="input-tax-summary-wrap-inner">' +
-						response +
-						"</div>"
+					response +
+					"</div>"
 				);
 			},
 			error: function (xhr, status, error) {
@@ -383,10 +383,10 @@ jQuery(document).ready(function ($) {
 		}
 		var box_html = $(
 			'<div id="text-box" class="text-box" id="text-box"><input placeholder="Age" type="text" name="' +
-				repeat_id +
-				'[age][]" value="" id="box_age' +
-				n +
-				'" /><a href="#" class="remove-box">Remove</a></div>'
+			repeat_id +
+			'[age][]" value="" id="box_age' +
+			n +
+			'" /><a href="#" class="remove-box">Remove</a></div>'
 		);
 		box_html.hide();
 		$(".movethis-wrap .text-box:last").after(box_html);
@@ -589,10 +589,10 @@ jQuery(document).ready(function ($) {
 
 				$("head").append(
 					'<link href="https://fonts.googleapis.com/css?family=' +
-						the_font +
-						'" rel="stylesheet" class="' +
-						_linkclass +
-						'">'
+					the_font +
+					'" rel="stylesheet" class="' +
+					_linkclass +
+					'">'
 				);
 
 				$("." + _previewer).css(

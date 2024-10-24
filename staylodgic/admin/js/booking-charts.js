@@ -3,8 +3,8 @@
         let delayed;
 
         // Initialize Intersection Observer
-        var observer = new IntersectionObserver(function(entries) {
-            entries.forEach(function(entry) {
+        var observer = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
                 if (entry.isIntersecting) {
                     var canvas = entry.target;
                     var ctx = canvas.getContext('2d');
@@ -34,7 +34,7 @@
                     // Check if data and datasets are defined
                     if (data && data.datasets) {
                         // Check if the dataset requires a gradient
-                        data.datasets.forEach(function(dataset) {
+                        data.datasets.forEach(function (dataset) {
                             if (dataset.useGradient) {
                                 var gradient = ctx.createLinearGradient(0, 0, 0, 400);
                                 gradient.addColorStop(0, dataset.gradientStart);
@@ -60,12 +60,12 @@
         }, { threshold: 0.1 });
 
         // Observe each canvas element
-        $('canvas.staylodgic-chart[data-type]').each(function() {
+        $('canvas.staylodgic-chart[data-type]').each(function () {
             observer.observe(this);
         });
 
         // DataTables initialization code remains unchanged
-        $('.staylodgic_analytics_table').each(function() {
+        $('.staylodgic_analytics_table').each(function () {
             var exportTitle = $(this).data('export-title');
             $(this).DataTable({
                 responsive: true,
@@ -85,7 +85,7 @@
                     'print'
                 ]
             });
-        });      
-        
+        });
+
     });
 })(jQuery);

@@ -1,5 +1,5 @@
 @media only screen and (max-width: 1280px) {
-    
+
     .metabox-column {
         float: none;
         width: 100%;
@@ -9,6 +9,7 @@
         width: 100%;
         margin: 0 0 10px;
     }
+
     .staylodgic-overview-heading {
         margin-top: 10px;
     }
@@ -20,7 +21,7 @@
 
     #container,
     .calendar-controls-wrap {
-        width: calc( 100% - 10px );
+        width: calc(100% - 10px);
     }
 
     .metabox-fields.is-a-group,
@@ -31,9 +32,11 @@
     .metaboxtype_range {
         max-width: 100%;
     }
+
     .settings-change-log {
         column-count: 2;
     }
+
     #portfolio-list li {
         width: calc(100% - 20px);
     }
@@ -52,7 +55,7 @@
     .admin-horizontal-list {
         display: flow-root;
     }
-    
+
 }
 
 /* #Tablet (Landscape)
@@ -63,8 +66,9 @@
     .admin-column2 {
         display: none;
     }
+
     .admin-container {
-        height: calc( 100vh - 80px );
+        height: calc(100vh - 80px);
         width: 100%;
     }
 
@@ -74,20 +78,25 @@
     }
 
     .content-container {
-        flex-direction: column; /* Stacks the content vertically */
+        flex-direction: column;
+        /* Stacks the content vertically */
     }
 
     .left-columns {
-        flex-direction: column; /* Stacks the left columns vertically */
+        flex-direction: column;
+        /* Stacks the left columns vertically */
     }
 
     .left-column {
-        padding-right: 0; /* Removes spacing between columns on small screens */
-        padding-bottom: 20px; /* Adds spacing between stacked columns */
+        padding-right: 0;
+        /* Removes spacing between columns on small screens */
+        padding-bottom: 20px;
+        /* Adds spacing between stacked columns */
     }
 
     .right-column {
-        order: -1; /* Optionally moves the right column above the left columns */
+        order: -1;
+        /* Optionally moves the right column above the left columns */
     }
 
     .admin-page-wrapper {
@@ -98,25 +107,30 @@
     .calendarRow .rowHeader {
         width: 130px;
     }
+
     .occupancy-total .occupancy-total-stats {
         font-size: 14px;
         font-weight: 400;
     }
+
     .occupancy-total .occupancy-percent-symbol {
         margin-right: 0;
         display: block;
     }
+
     .calendar-room-row .calendarCell.rowHeader {
         font-size: 13px;
         font-weight: 400;
     }
+
     .calendar-controls-wrap ul {
         padding-left: 13px;
     }
+
     .nav-item.nav-item-seperator {
         margin-left: 7px;
     }
-    
+
 }
 
 /* #Tablet (Portrait)
@@ -127,8 +141,9 @@
     .admin-column2 {
         display: none;
     }
+
     .admin-container {
-        height: calc( 100vh - 80px );
+        height: calc(100vh - 80px);
         width: 100%;
     }
 
@@ -138,27 +153,32 @@
     }
 
     .content-container {
-        flex-direction: column; /* Stacks the content vertically */
+        flex-direction: column;
+        /* Stacks the content vertically */
     }
 
     .left-columns {
-        flex-direction: column; /* Stacks the left columns vertically */
+        flex-direction: column;
+        /* Stacks the left columns vertically */
     }
 
     .left-column {
-        padding-right: 0; /* Removes spacing between columns on small screens */
-        padding-bottom: 20px; /* Adds spacing between stacked columns */
+        padding-right: 0;
+        /* Removes spacing between columns on small screens */
+        padding-bottom: 20px;
+        /* Adds spacing between stacked columns */
     }
 
     .right-column {
-        order: -1; /* Optionally moves the right column above the left columns */
+        order: -1;
+        /* Optionally moves the right column above the left columns */
     }
 
     .admin-page-wrapper {
         align-items: flex-start;
         height: auto;
     }
-    
+
 }
 
 /*  #Mobile (Portrait)
@@ -169,31 +189,37 @@
     .admin-column2 {
         display: none;
     }
+
     .admin-container {
-        height: calc( 100vh - 80px );
+        height: calc(100vh - 80px);
         width: 100%;
     }
-    
+
     .metabox-column {
         float: none;
         width: 100%;
     }
 
     .content-container {
-        flex-direction: column; /* Stacks the content vertically */
+        flex-direction: column;
+        /* Stacks the content vertically */
     }
 
     .left-columns {
-        flex-direction: column; /* Stacks the left columns vertically */
+        flex-direction: column;
+        /* Stacks the left columns vertically */
     }
 
     .left-column {
-        padding-right: 0; /* Removes spacing between columns on small screens */
-        padding-bottom: 20px; /* Adds spacing between stacked columns */
+        padding-right: 0;
+        /* Removes spacing between columns on small screens */
+        padding-bottom: 20px;
+        /* Adds spacing between stacked columns */
     }
 
     .right-column {
-        order: -1; /* Optionally moves the right column above the left columns */
+        order: -1;
+        /* Optionally moves the right column above the left columns */
     }
 
     .admin-page-wrapper {
@@ -207,18 +233,22 @@
         margin: 0;
         padding: 10px;
     }
+
     .overview_page_slgc-activity-dashboard.auto-fold #wpcontent,
     .toplevel_page_slgc-dashboard.auto-fold #wpcontent {
         position: relative;
         margin-left: 0;
         padding-left: 0;
-      }
+    }
+
     .staylodgic_anaytlics_module {
         padding: 15px 5px 0;
     }
+
     .staylodgic_anaytlics_row_one {
         padding: 20px 0;
     }
+
     .staylodgic_analytics_chart,
     .staylodgic_analytics_table_wrap {
         margin-bottom: 50px;
@@ -229,6 +259,7 @@
     .staylodgic_table.sub-heading {
         margin-top: 3px;
     }
+
     .ranger-min-max-wrap-outer {
         width: 90%;
     }
@@ -236,14 +267,17 @@
     .staylodgic-tabs {
         margin-right: 0;
     }
+
     .staylodgic-options-form {
         padding-right: 15px;
     }
+
     .staylodgic_page_slgc-settings-panel.auto-fold #wpcontent {
-        padding-left:0;
+        padding-left: 0;
     }
+
     .staylodgic_page_slgc-settings-panel .wrap {
-        margin-right:0;
+        margin-right: 0;
     }
 
     #repeatable-activitytax-container input,
@@ -259,20 +293,24 @@
         padding: 0 8px;
         font-size: 15px;
     }
+
     #repeatable-activitytax-container,
     #repeatable-tax-container,
     #repeatable-perperson-container,
     #repeatable-mealplan-container {
         width: calc(100% - 25px);
     }
+
     .input-label-inner {
         top: -3px;
     }
+
     h1.options-heading {
         font-size: 22px;
         font-weight: 600;
         margin-left: 12px;
     }
+
     .export-import-form {
         display: none;
     }
@@ -282,13 +320,16 @@
         padding-right: 15px;
         width: 15px;
     }
+
     .menu-closed .options-menu-link-text {
         opacity: 0;
     }
+
     .menu-closed .staylodgic-tab-heading {
         opacity: 0;
         height: 10px;
     }
+
     .menu-closed .section_heading .options-menu-link-text {
         opacity: 1;
     }
@@ -298,11 +339,13 @@
         display: block;
         padding-top: 15px;
     }
+
     .discount-display-label {
         top: 1px;
     }
+
     .metabox-fields.registration-field {
-        width: calc( 100% - 30px);
+        width: calc(100% - 30px);
     }
 
 }
@@ -316,8 +359,9 @@
     .admin-column2 {
         display: none;
     }
+
     .admin-container {
-        height: calc( 100vh - 80px );
+        height: calc(100vh - 80px);
         width: 100%;
     }
 
@@ -327,20 +371,25 @@
     }
 
     .content-container {
-        flex-direction: column; /* Stacks the content vertically */
+        flex-direction: column;
+        /* Stacks the content vertically */
     }
 
     .left-columns {
-        flex-direction: column; /* Stacks the left columns vertically */
+        flex-direction: column;
+        /* Stacks the left columns vertically */
     }
 
     .left-column {
-        padding-right: 0; /* Removes spacing between columns on small screens */
-        padding-bottom: 20px; /* Adds spacing between stacked columns */
+        padding-right: 0;
+        /* Removes spacing between columns on small screens */
+        padding-bottom: 20px;
+        /* Adds spacing between stacked columns */
     }
 
     .right-column {
-        order: -1; /* Optionally moves the right column above the left columns */
+        order: -1;
+        /* Optionally moves the right column above the left columns */
     }
 
     .admin-page-wrapper {
@@ -355,18 +404,22 @@
         margin: 0;
         padding: 10px;
     }
+
     .overview_page_slgc-activity-dashboard.auto-fold #wpcontent,
     .toplevel_page_slgc-dashboard.auto-fold #wpcontent {
         position: relative;
         margin-left: 0;
         padding-left: 0;
-      }
+    }
+
     .staylodgic_anaytlics_module {
         padding: 15px 5px 0;
     }
+
     .staylodgic_anaytlics_row_one {
         padding: 20px 0;
     }
+
     .staylodgic_analytics_chart,
     .staylodgic_analytics_table_wrap {
         margin-bottom: 50px;
@@ -385,14 +438,17 @@
     .staylodgic-tabs {
         margin-right: 0;
     }
+
     .staylodgic-options-form {
         padding-right: 15px;
     }
+
     .staylodgic_page_slgc-settings-panel.auto-fold #wpcontent {
-        padding-left:0;
+        padding-left: 0;
     }
+
     .staylodgic_page_slgc-settings-panel .wrap {
-        margin-right:0;
+        margin-right: 0;
     }
 
     #repeatable-activitytax-container input,
@@ -408,20 +464,24 @@
         padding: 0 8px;
         font-size: 15px;
     }
+
     #repeatable-activitytax-container,
     #repeatable-tax-container,
     #repeatable-perperson-container,
     #repeatable-mealplan-container {
         width: calc(100% - 25px);
     }
+
     .input-label-inner {
         top: -3px;
     }
+
     h1.options-heading {
         font-size: 22px;
         font-weight: 600;
         margin-left: 12px;
     }
+
     .export-import-form {
         display: none;
     }
@@ -431,18 +491,22 @@
         padding-right: 15px;
         width: 15px;
     }
+
     .menu-closed .options-menu-link-text {
         opacity: 0;
     }
+
     .menu-closed .staylodgic-tab-heading {
         opacity: 0;
         height: 10px;
     }
+
     .menu-closed .section_heading .options-menu-link-text {
         opacity: 1;
     }
+
     .metabox-fields.registration-field {
-        width: calc( 100% - 30px);
+        width: calc(100% - 30px);
     }
 
 }

@@ -179,7 +179,7 @@
 				var $input = $button
 					.closest(".export-ical-wrap")
 					.find(".urlField"); // Find the corresponding input
-		
+
 				// Check if the clipboard API is available
 				if (navigator.clipboard) {
 					// Copy text to clipboard using Clipboard API
@@ -187,11 +187,11 @@
 						.writeText($input.val())
 						.then(function () {
 							const tooltip = bootstrap.Tooltip.getInstance($button[0]);
-		
+
 							if (tooltip) {
 								tooltip.setContent({ ".tooltip-inner": "Copied!" });
 								tooltip.show();
-		
+
 								// Reset tooltip title after 2 seconds
 								setTimeout(function () {
 									if (tooltip) {
@@ -216,12 +216,12 @@
 							const tooltip = bootstrap.Tooltip.getInstance(
 								$button[0]
 							); // Ensure to use DOM element when calling getInstance
-	
+
 							if (tooltip) {
 								// Update tooltip content
 								tooltip.setContent({ ".tooltip-inner": "Copied!" });
 								tooltip.show(); // Make sure to show the tooltip if it's not already visible
-	
+
 								// Reset the tooltip title after 2 seconds
 								setTimeout(function () {
 									if (tooltip) {
@@ -242,7 +242,7 @@
 				}
 			});
 		}
-		
+
 		// Initially initialize tooltips
 		if (!window.isMobile()) {
 			initializeTooltips();
@@ -582,7 +582,7 @@
 							response.success === false &&
 							response.data.data.code === "106"
 						) {
-							console.log( response.data.data.message );
+							console.log(response.data.data.message);
 							// Handle the specific case where code is '106'
 							showToast(
 								"quantityToastFail",
@@ -807,11 +807,10 @@
 				if (checkin && checkout) {
 					reservationDetails.innerHTML = `
 					<p class="reservation-post-checkin-date">Checkin: ${checkin.toLocaleDateString()}</p>
-					${
-						checkout
+					${checkout
 							? `<p class="reservation-post-checkout-date">Checkout: ${checkout.toLocaleDateString()}</p>`
 							: ""
-					}
+						}
 					<p data-numberofnights="${roomNights}" class="reservation-post-numberof-nights">Room nights: ${roomNights}</p>
 					`;
 				}
@@ -849,7 +848,7 @@
 						checkout: new Date(checkout - checkoutOffset)
 							.toISOString()
 							.split("T")[0],
-							nonce: staylodgic_admin_vars.nonce // Include the nonce in the AJAX request
+						nonce: staylodgic_admin_vars.nonce // Include the nonce in the AJAX request
 					};
 
 					jQuery.post(ajaxurl, data, function (response) {
@@ -870,9 +869,8 @@
 							room_related_input_fields.show();
 							$.each(available_rooms, function (key, value) {
 								if (value) {
-									let optionElement = `<option value="${key}" ${
-										key === selectedValue ? "selected" : ""
-									}>${value}</option>`;
+									let optionElement = `<option value="${key}" ${key === selectedValue ? "selected" : ""
+										}>${value}</option>`;
 									selectElement.append(optionElement);
 								}
 							});

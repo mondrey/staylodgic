@@ -1,44 +1,16 @@
-.wp-admin #adminmenu,
-.wp-admin #adminmenuback,
-.wp-admin #adminmenuwrap {
-	background-color: #351508;
-}
-.wp-admin #adminmenu .wp-submenu {
-	background-color: #44300a;	
-}
-.wp-admin #adminmenu .wp-submenu a:focus,
-.wp-admin #adminmenu .wp-submenu a:hover,
-.wp-admin #adminmenu a:hover,
-.wp-admin #adminmenu li.menu-top > a:focus {
-	color: #fff;
-}
-.wp-admin #adminmenu li.menu-top:hover,
-.wp-admin #adminmenu li.opensub > a.menu-top,
-.wp-admin #adminmenu li > a.menu-top:focus {
-	background-color: #590e3f;
-	color: #fff;
-}
-#toplevel_page_slgc-dashboard,
-#toplevel_page_staylodgic-settings,
-#menu-posts-slgc_room,
-#menu-posts-slgc_reservations,
-#menu-posts-slgc_customers,
-#menu-posts-slgc_guestregistry,
-#menu-posts-slgc_activity,
-#menu-posts-slgc_activityres {
-
-}
-
 .welcome-user-icon i {
 	font-size: 55px;
 }
+
 .welcome-text {
 	max-width: 360px;
 }
+
 .welcome-text p {
 	font-size: 15px;
 	font-weight: 300;
 }
+
 .welcome-text p.main-greet {
 	font-weight: 400;
 }
@@ -47,6 +19,7 @@
 	background: #fbfbfb;
 	padding-bottom: 50px;
 }
+
 .logo-staylodgic {
 	background: url('../../assets/images/staylodgic-logo-white.png');
 	height: 80px;
@@ -54,6 +27,7 @@
 	background-size: contain;
 	background-repeat: no-repeat;
 }
+
 .logo-staylodgic-alt {
 	background: url('../../assets/images/staylodgic-logo-black.png');
 	height: 80px;
@@ -61,6 +35,7 @@
 	background-size: contain;
 	background-repeat: no-repeat;
 }
+
 #toplevel_page_slgc-dashboard .wp-menu-image.svg,
 #toplevel_page_staylodgic-settings .wp-menu-image.svg,
 #menu-posts-slgc_room .wp-menu-image.svg,
@@ -75,9 +50,11 @@
 .toplevel_page_staylodgic-settings #wpcontent {
 	padding-left: 0;
 }
+
 .toplevel_page_staylodgic-settings #wpbody-content {
 	padding-bottom: 0;
 }
+
 .toplevel_page_staylodgic-settings #wpwrap {
 	background: #fff;
 }
@@ -89,22 +66,27 @@
 }
 
 .left-columns {
-	flex: 3; /* Allocates double the space compared to right column */
+	flex: 3;
+	/* Allocates double the space compared to right column */
 	display: flex;
 }
+
 .left-column {
 	flex: 1;
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
 	text-align: left;
-	padding-right: 20px; /* Adds spacing between columns */
+	padding-right: 20px;
+	/* Adds spacing between columns */
 }
+
 .right-column {
 	flex: 1;
 	display: flex;
 	justify-content: center;
-	align-items: center; /* Centers the SVG vertically in the column */
+	align-items: center;
+	/* Centers the SVG vertically in the column */
 }
 
 .admin-page-two-wrapper {
@@ -125,9 +107,11 @@
 	line-height: 1.4;
 	color: #fff;
 }
+
 .admin-page-header h1 .the-dot {
 	color: #ff0000;
 }
+
 .admin-page-header h2 {
 	font-size: 18px;
 	font-weight: 400;
@@ -135,6 +119,7 @@
 	line-height: 1.1;
 	color: #ffffff85;
 }
+
 .admin-page-wrapper h4,
 .admin-page-two-wrapper h4 {
 	font-size: 20px;
@@ -154,13 +139,13 @@
 
 .admin-container {
 	display: flex;
-	height: calc( 100vh - 30px);
+	height: calc(100vh - 30px);
 	width: calc(100vw - 160px);
 }
 
 .admin-column {
-	flex: 1; /* This ensures each column takes up half the container width */
-	overflow: hidden; /* Prevents any overflow from the columns themselves */
+	flex: 1;
+	overflow: hidden;
 }
 
 .admin-column1 {
@@ -175,11 +160,12 @@
 .admin-horizontal-list {
 	list-style: none;
 	padding: 0;
-	margin: 0; /* Ensures no default margin affects your layout */
+	margin: 0;
 	display: flex;
 	gap: 10px;
 	margin-top: 40px;
 }
+
 .admin-horizontal-list li a {
 	color: #fff;
 	text-decoration: none;
@@ -187,17 +173,21 @@
 	-moz-transition: opacity 0.2s;
 	-webkit-transition: opacity 0.2s;
 }
+
 .admin-horizontal-list li a:hover {
 	opacity: 0.8;
 }
+
 .admin-horizontal-list li {
 	padding: 0 20px 20px 0;
 	color: #fff;
 	font-size: 17px;
 }
+
 .admin-column.admin-column1 {
 	position: relative;
 }
+
 .admin-column.admin-column1::after {
 	position: absolute;
 	top: 0;
@@ -208,6 +198,7 @@
 	z-index: 1;
 	content: " ";
 }
+
 .section-main {
 	position: relative;
 	z-index: 2;
@@ -218,17 +209,21 @@
 	margin-bottom: 11px;
 	font-size: 18px;
 }
+
 .section-features h1 {
 	font-size: 32px;
 	font-weight: 300;
 	margin-bottom: 40px;
 }
+
 .guided-tour-link-wrap {
 	margin-top: 34px;
 }
+
 .view-all-features {
 	margin-top: 20px;
 }
+
 .view-all-features {
 	display: inline-block;
 	border: 1px solid #000;
@@ -240,11 +235,13 @@
 	-webkit-transition: background-color 0.2s;
 	-o-transition: background-color 0.2s;
 }
+
 .view-all-features:hover {
 	background-color: #000;
-	color:#fff;
+	color: #fff;
 	cursor: pointer;
 }
+
 .view-help-guide {
 	display: inline-block;
 	border: 1px solid #0d0dfd;
@@ -258,23 +255,26 @@
 	background: #0d0dfd;
 	color: #fff;
 	text-decoration: none;
-	transition: opacity 0.3s,background-color 0.2s;
-	-moz-transition: opacity 0.3s,background-color 0.2s;
-	-webkit-transition: opacity 0.3s,background-color 0.2s;
+	transition: opacity 0.3s, background-color 0.2s;
+	-moz-transition: opacity 0.3s, background-color 0.2s;
+	-webkit-transition: opacity 0.3s, background-color 0.2s;
 }
+
 .view-help-guide:active,
 .view-help-guide:focus,
 .view-help-guide:hover {
 	box-shadow: none;
 	background: #ff0000;
 	border-color: #ff0000;
-	color:#fff;
+	color: #fff;
 	cursor: pointer;
 }
+
 .guided-tour-link-wrap div.guided-tour-heading {
 	color: #000;
 	font-size: 20px;
 }
+
 div .guided-tour-link {
 	position: relative;
 	left: -43px;
@@ -287,28 +287,30 @@ div .guided-tour-link {
 	-moz-transition: color 0.2s, border-color 0.2s;
 	-webkit-transition: color 0.2s, border-color 0.2s;
 }
+
 .guided-tour-link:hover {
 	cursor: pointer;
 }
+
 .guided-tour-link:hover i {
 	color: #ff0000;
 	border-color: #ff0000;
 }
 
 .admin-column2 {
-    display: flex;
-    flex-direction: column;
-    justify-content: center; 
-    align-items: center;   
-    height: 100vh;
-    overflow-y: auto;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+	overflow-y: auto;
 }
 
 .section-features {
-    width: 100%;
-    max-width: 600px;
-    padding: 20px 50px;    
-    box-sizing: border-box;
+	width: 100%;
+	max-width: 600px;
+	padding: 20px 50px;
+	box-sizing: border-box;
 	color: #000;
 }
 
@@ -316,6 +318,7 @@ div .guided-tour-link {
 	padding-top: 100px;
 	padding-bottom: 50px;
 }
+
 .admin-page-two-wrapper {
 	padding-bottom: 50px;
 }
@@ -323,13 +326,16 @@ div .guided-tour-link {
 .guided-tour-link-wrap {
 	font-weight: 400;
 }
+
 .guided-tour-link-wrap div {
 	margin-bottom: 20px;
 	color: #0010ff;
 }
+
 .guided-tour-link-wrap div.guided-tour-last-link {
 	margin-bottom: 0;
 }
+
 .guided-tour-link-wrap i {
 	height: 30px;
 	width: 30px;
