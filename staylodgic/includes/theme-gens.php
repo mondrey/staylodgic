@@ -175,12 +175,12 @@ function staylodgic_get_select_target_options( $type ) {
 			break;
 		case 'bedsetup':
 			$list_options = array(
-				'twinbed'  => esc_html__( 'Twin bed', 'superlens' ),
-				'fullbed'  => esc_html__( 'Full bed', 'superlens' ),
-				'queenbed' => esc_html__( 'Queen bed', 'superlens' ),
-				'kingbed'  => esc_html__( 'King bed', 'superlens' ),
-				'bunkbed'  => esc_html__( 'Bunk bed', 'superlens' ),
-				'sofabed'  => esc_html__( 'Sofa bed', 'superlens' ),
+				'twinbed'  => esc_html__( 'Twin bed', 'staylodgic' ),
+				'fullbed'  => esc_html__( 'Full bed', 'staylodgic' ),
+				'queenbed' => esc_html__( 'Queen bed', 'staylodgic' ),
+				'kingbed'  => esc_html__( 'King bed', 'staylodgic' ),
+				'bunkbed'  => esc_html__( 'Bunk bed', 'staylodgic' ),
+				'sofabed'  => esc_html__( 'Sofa bed', 'staylodgic' ),
 			);
 			break;
 		case 'booking_numbers':

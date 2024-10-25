@@ -194,18 +194,24 @@ class Options_Panel {
 			wp_verify_nonce( $_POST['import_settings_nonce_field'], 'import_settings_nonce' )
 		) {
 
-			if ( isset( $_POST['action'] ) && $_POST['action'] === 'import_settings' && isset( $_FILES['import_settings_file'] ) ) {
+			if ( isset( $_POST['action'] ) && 'import_settings' === $_POST['action'] && isset( $_FILES['import_settings_file'] ) ) {
 
 				$file = $_FILES['import_settings_file'];
 				// Ensure the file was uploaded without errors
-				if ( $file['error'] === UPLOAD_ERR_OK && $file['type'] === 'application/json' ) {
+				if ( UPLOAD_ERR_OK === $file['error'] && 'application/json' === $file['type'] ) {
 					// Read the file and decode the JSON data
-					$json_data   = file_get_contents( $file['tmp_name'] );
-					$import_data = json_decode( $json_data, true );
+					global $wp_filesystem;
+					if ( ! function_exists( 'WP_Filesystem' ) ) {
+						require_once ABSPATH . 'wp-admin/includes/file.php';
+					}
 
-					// Log the import data
-					error_log( '---------- IMPORT DATA ----------' );
-					error_log( print_r( $import_data, true ) );
+					WP_Filesystem();
+
+					$json_data = '';
+					if ( is_readable( $file['tmp_name'] ) ) {
+						$json_data = $wp_filesystem->get_contents( $file['tmp_name'] );
+					}
+					$import_data = json_decode( $json_data, true );
 
 					// Validate the decoded data. This depends on your settings structure.
 					// Here, we assume $import_data is an associative array matching your options structure.
@@ -213,23 +219,30 @@ class Options_Panel {
 						// Iterate through each setting to validate and sanitize it
 						$sanitized_data = array();
 						foreach ( $import_data as $key => $value ) {
-							if ( isset( $this->settings[ $key ] ) && $this->settings[ $key ]['type'] == 'checkbox' ) {
+							if ( isset( $this->settings[ $key ] ) && 'checkbox' === $this->settings[ $key ]['type'] ) {
 								// Convert "1" to "on" for checkboxes
-								$sanitized_data[ $key ] = ( $value == '1' ) ? 'on' : ''; // Convert 1 to 'on', anything else to '' (unchecked)
+								// Check if the value is equal to '1'
+								if ( '1' === $value ) {
+									// If the value is '1', set the sanitized data key to 'on'
+									$sanitized_data[ $key ] = 'on';
+								} else {
+									// If the value is not '1', set the sanitized data key to an empty string
+									$sanitized_data[ $key ] = '';
+								}
 							} elseif ( is_array( $value ) ) {
 								// The value is an array, handle each element according to its expected type
-								foreach ( $value as $subKey => $subValue ) {
-									if ( is_array( $subValue ) ) {
-										// If the subValue is also an array, apply further sanitization as needed
-										// This example assumes subValue might be a structured array needing detailed sanitization
-										foreach ( $subValue as $fieldKey => $fieldValue ) {
-											// Apply sanitization based on fieldKey or expected data type
+								foreach ( $value as $import_sub_key => $import_sub_value ) {
+									if ( is_array( $import_sub_value ) ) {
+										// If the import_sub_value is also an array, apply further sanitization as needed
+										// This example assumes import_sub_value might be a structured array needing detailed sanitization
+										foreach ( $import_sub_value as $field_key => $field_value ) {
+											// Apply sanitization based on field_key or expected data type
 											// This is a placeholder for actual sanitization logic
-											$sanitized_data[ $key ][ $subKey ][ $fieldKey ] = sanitize_text_field( $fieldValue );
+											$sanitized_data[ $key ][ $import_sub_key ][ $field_key ] = sanitize_text_field( $field_value );
 										}
 									} else {
 										// For simple nested arrays, directly apply a generic sanitization
-										$sanitized_data[ $key ][ $subKey ] = sanitize_text_field( $subValue );
+										$sanitized_data[ $key ][ $import_sub_key ] = sanitize_text_field( $import_sub_value );
 									}
 								}
 							} else {
@@ -238,17 +251,24 @@ class Options_Panel {
 							}
 						}
 
-						error_log( '---------- Santized DATA ----------' );
-						error_log( print_r( $sanitized_data, true ) );
-
 						// Update the settings in the database
 						update_option( 'staylodgic_settings', $sanitized_data );
 
 						// Optionally, add a message to show success or redirect back to the settings page
-						add_settings_error( 'staylodgic_settings', 'settings_updated', 'Settings imported successfully.', 'updated' );
+						add_settings_error(
+							$this->option_name . '_mesages',
+							$this->option_name . '_message',
+							esc_html__( 'Settings imported successfully.', 'staylodgic' ),
+							'updated'
+						);
 					} else {
 						// Handle error in case JSON is invalid
-						add_settings_error( 'staylodgic_settings', 'settings_error', 'Invalid JSON data provided.', 'error' );
+						add_settings_error(
+							$this->option_name . '_mesages',
+							$this->option_name . '_message',
+							esc_html__( 'Invalid JSON data provided.', 'staylodgic' ),
+							'error'
+						);
 					}
 				}
 			}
@@ -288,15 +308,17 @@ class Options_Panel {
 	 * @return void
 	 */
 	public function export_settings() {
-		if ( isset( $_POST['action'] ) && $_POST['action'] === 'export_settings' ) {
+		if ( isset( $_POST['action'] ) && 'export_settings' === $_POST['action'] ) {
 			// Security check, for example, check user permissions and nonces
-
+			if ( ! current_user_can( 'manage_options' ) || ! check_admin_referer( 'export_settings_nonce', 'export_settings_nonce_field' ) ) {
+				wp_die( esc_html__( 'You do not have permission to export settings.', 'staylodgic' ) );
+			}
 			// Fetch all settings
 			$option_name = 'staylodgic_settings'; // Replace with your actual option name
 			$settings    = get_option( $option_name );
 
 			// Encode settings to JSON
-			$json_settings = json_encode( $settings );
+			$json_settings = wp_json_encode( $settings );
 
 			// Set headers to force download
 			header( 'Content-Type: application/json' );
@@ -304,8 +326,8 @@ class Options_Panel {
 			header( 'Pragma: no-cache' );
 			header( 'Expires: 0' );
 
-			// Serve the file
-			echo $json_settings;
+			// Escape JSON output with wp_kses_post
+			echo wp_kses_post( $json_settings );
 			exit;
 		}
 	}
@@ -372,7 +394,7 @@ class Options_Panel {
 				// List of keys that use the same sanitization function
 				$discount_keys = array( 'discount_lastminute', 'discount_earlybooking', 'discount_longstay' );
 
-				if ( in_array( $key, $discount_keys ) ) {
+				if ( in_array( $key, $discount_keys, true ) ) {
 					$new_values[ $key ] = $this->sanitize_discount_fileds( $values[ $key ] );
 				} else {
 					// Handle other fields as before
@@ -423,35 +445,25 @@ class Options_Panel {
 		switch ( $field_type ) {
 			case 'select':
 				return array( $this, 'sanitize_select_field' );
-				break;
 			case 'number':
 				return 'sanitize_text_field';
-				break;
 			case 'textarea':
 				return 'wp_kses_post';
-				break;
 			case 'checkbox':
 				return array( $this, 'sanitize_checkbox_field' );
-				break;
 			case 'repeatable_tax':
 				return array( $this, 'sanitize_tax_field' );
-				break;
 			case 'activity_repeatable_tax':
 				return array( $this, 'sanitize_tax_field' );
-				break;
 			case 'repeatable_perperson':
 				return array( $this, 'sanitize_tax_field' );
-				break;
 			case 'repeatable_mealplan':
 				return array( $this, 'sanitize_tax_field' );
-				break;
 			case 'media_upload':
 				return 'absint';
-				break;
 			default:
 			case 'text':
 				return 'sanitize_text_field';
-				break;
 		}
 	}
 
@@ -514,7 +526,12 @@ class Options_Panel {
 	 */
 	public function render_options_page() {
 		if ( ! current_user_can( $this->user_capability ) ) {
-			wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'staylodgic' ) );
+		}
+
+		// Verify the nonce if the form is submitted
+		if ( isset( $_POST['option_page'] ) && $_POST['option_page'] === $this->option_group_name ) {
+			check_admin_referer( 'options.php' );
 		}
 
 		if ( isset( $_GET['settings-updated'] ) ) {
@@ -534,7 +551,7 @@ class Options_Panel {
 
 		?>
 		<div class="wrap">
-			<h1 class="options-heading"><span>Hotel Settings</span></h1>
+			<h1 class="options-heading"><span><?php esc_html_e( 'Hotel Settings', 'staylodgic' ); ?></span></h1>
 			<div class="staylodgic-tabform-wrapper menu-closed">
 				<?php $this->render_tabs(); ?>
 				<div class="staylodgic-tab-content active" id="tab-property">
@@ -549,12 +566,14 @@ class Options_Panel {
 				</div>
 			</div>
 			<?php
+			$export_nonce = esc_attr( wp_create_nonce( 'export_settings_nonce' ) );
 			// Add an export button
 			echo '<form class="export-import-form" method="post">';
 			echo '<div class="toggle-section">';
 			echo '<div id="toggle-button"><i class="fa-solid fa-wrench"></i></div>';
 			echo '</div>';
 			echo '<div class="import-export-section" style="display: none;">';
+			echo '<input type="hidden" name="export_settings_nonce_field" value="' . esc_attr( $export_nonce ) . '">';
 			echo '<input type="hidden" name="action" value="export_settings" />';
 			echo '<input type="submit" name="submit" id="submit" class="button button-primary" value="Export Settings">';
 			echo '<button type="button" id="import-settings-button" class="button button-secondary">Import Settings</button>';
@@ -562,13 +581,14 @@ class Options_Panel {
 			echo '</form>';
 			?>
 			<?php
+			$nonce = esc_attr( wp_create_nonce( 'import_settings_nonce' ) );
 			// Modal structure
 			echo '<div id="import-settings-modal" class="staylodgic-modal" style="display:none;">
         <div class="staylodgic-modal-content">
             <span class="staylodgic-close">&times;</span>
             <form id="import-settings-form" method="post" enctype="multipart/form-data">
             <div class="import-file-upload-section">
-                ' . wp_nonce_field( 'import_settings_nonce', 'import_settings_nonce_field', true, false ) . '
+                <input type="hidden" name="import_settings_nonce_field" value="' . esc_attr( $nonce ) . '">
                 <input type="file" name="import_settings_file" accept=".json">
                 <input type="hidden" name="action" value="import_settings">
             </div>
@@ -598,14 +618,15 @@ class Options_Panel {
 				<?php
 				$first_tab = true;
 				// Example heading for a group of tabs
-				echo '<h3 class="staylodgic-tab-heading">General Settings</h3>';
+				echo '<h3 class="staylodgic-tab-heading">' . esc_html__( 'General Settings', 'staylodgic' ) . '</h3>';
 				foreach ( $tabs as $id => $label ) {
 					// Example condition to add a heading before a specific tab
-					if ( $id === 'general' ) {
-						echo '<h3 class="staylodgic-tab-heading">Hotel Settings</h3>';
+					if ( 'general' === $id ) {
+						echo '<h3 class="staylodgic-tab-heading">' . esc_html__( 'Hotel Settings', 'staylodgic' ) . '</h3>';
 					}
+					$tab_section = ucfirst( $label );
 					?>
-					<a href="#" data-heading="<?php echo esc_attr( $label ); ?>" data-tab="<?php echo esc_attr( $id ); ?>" class="nav-tab<?php echo ( $first_tab ) ? ' nav-tab-active' : ''; ?>"><?php echo ucfirst( $label ); ?></a>
+					<a href="#" data-heading="<?php echo esc_attr( $label ); ?>" data-tab="<?php echo esc_attr( $id ); ?>" class="nav-tab<?php echo ( $first_tab ) ? ' nav-tab-active' : ''; ?>"><?php echo wp_kses( $tab_section, staylodgic_get_allowed_tags() ); ?></a>
 					<?php
 					$first_tab = false;
 				}
@@ -644,24 +665,27 @@ class Options_Panel {
 	public function render_media_upload_field( $args ) {
 		$option_name = $args['label_for'];
 		$value       = $this->get_option_value( $option_name );
-		$image       = 'Upload image';
-		$image_size  = 'full'; // it should be thumbnail, medium or large
-		$display     = 'none'; // display state of the "Remove image" button
+		$image       = esc_html__( 'Upload image', 'staylodgic' ); // Escape the static text for internationalization
+		$image_size  = 'full'; // it should be thumbnail, medium, or large
+		$display     = 'none'; // Display state of the "Remove image" button
+
+		echo '<div class="options-image-display">
+				<a href="#" class="upload_image_button button">';
 
 		if ( $value ) {
 			$image_attributes = wp_get_attachment_image_src( $value, $image_size );
 			if ( $image_attributes ) {
-				$image   = '<img src="' . esc_url( $image_attributes[0] ) . '" style="max-height:100px;display:block;" />';
+				// Use esc_url for the image source URL and output the HTML image tag safely
+				echo '<img src="' . esc_url( $image_attributes[0] ) . '" style="max-height:100px;display:block;" />';
 				$display = 'inline-block';
 			}
 		}
 
-		echo '
-        <div class="options-image-display">
-            <a href="#" class="upload_image_button button">' . $image . '</a>
-            <input type="hidden" name="' . $this->option_name . '[' . esc_attr( $args['label_for'] ) . ']" id="' . esc_attr( $args['label_for'] ) . '" value="' . esc_attr( $value ) . '" />
-            <a href="#" class="remove_image_button" style="display:' . esc_attr( $display ) . '"><i class="dashicons dashicons-remove"></i></a>
-        </div>';
+		echo '</a>'; // Output $image variable here to ensure it is displayed correctly
+
+		echo '<input type="hidden" name="' . esc_attr( $this->option_name ) . '[' . esc_attr( $args['label_for'] ) . ']" id="' . esc_attr( $args['label_for'] ) . '" value="' . esc_attr( $value ) . '" />
+			  <a href="#" class="remove_image_button" style="display:' . esc_attr( $display ) . '"><i class="dashicons dashicons-remove"></i></a>
+			</div>';
 	}
 
 	/**
@@ -674,36 +698,40 @@ class Options_Panel {
 	public function render_repeatable_perperson_field( $args ) {
 		$option_name = $args['label_for'];
 		$array       = $this->get_option_value( $option_name );
-		$description = $this->settings[ $option_name ]['description'] ?? '';
+		$description = '';
+		if ( isset( $this->settings[ $option_name ] ) && isset( $this->settings[ $option_name ]['description'] ) ) {
+			// If the description exists, assign it to $description
+			$description = $this->settings[ $option_name ]['description'];
+		}
 
 		?>
 		<div class="repeatable-perperson-template" style="display: none;">
 			<div class="repeatable">
-				<span class="input-label-outer"><span class="input-label-inner">People</span>
+				<span class="input-label-outer"><span class="input-label-inner"><?php esc_html_e( 'People', 'staylodgic' ); ?></span>
 					<select disabled id="<?php echo esc_attr( $args['label_for'] ); ?>_people" name="people">
-						<option value="1"><?php _e( '1', 'staylodgic' ); ?></option>
-						<option value="3"><?php _e( '3', 'staylodgic' ); ?></option>
-						<option value="4"><?php _e( '4', 'staylodgic' ); ?></option>
-						<option value="5"><?php _e( '5', 'staylodgic' ); ?></option>
-						<option value="6"><?php _e( '6', 'staylodgic' ); ?></option>
-						<option value="7"><?php _e( '7', 'staylodgic' ); ?></option>
-						<option value="8"><?php _e( '8', 'staylodgic' ); ?></option>
-						<option value="9"><?php _e( '9', 'staylodgic' ); ?></option>
+						<option value="1"><?php esc_html_e( '1', 'staylodgic' ); ?></option>
+						<option value="3"><?php esc_html_e( '3', 'staylodgic' ); ?></option>
+						<option value="4"><?php esc_html_e( '4', 'staylodgic' ); ?></option>
+						<option value="5"><?php esc_html_e( '5', 'staylodgic' ); ?></option>
+						<option value="6"><?php esc_html_e( '6', 'staylodgic' ); ?></option>
+						<option value="7"><?php esc_html_e( '7', 'staylodgic' ); ?></option>
+						<option value="8"><?php esc_html_e( '8', 'staylodgic' ); ?></option>
+						<option value="9"><?php esc_html_e( '9', 'staylodgic' ); ?></option>
 					</select>
 				</span>
-				<span class="input-label-outer"><span class="input-label-inner">Value</span>
+				<span class="input-label-outer"><span class="input-label-inner"><?php esc_html_e( 'Value', 'staylodgic' ); ?></span>
 					<input disabled type="number" placeholder="Value" id="<?php echo esc_attr( $args['label_for'] ); ?>_number" name="number" value="">
 				</span>
-				<span class="input-label-outer"><span class="input-label-inner">Type</span>
+				<span class="input-label-outer"><span class="input-label-inner"><?php esc_html_e( 'Type', 'staylodgic' ); ?></span>
 					<select disabled id="<?php echo esc_attr( $args['label_for'] ); ?>_type" name="type">
-						<option value="fixed"><?php _e( 'Fixed', 'staylodgic' ); ?></option>
-						<option value="percentage"><?php _e( 'Percentage', 'staylodgic' ); ?></option>
+						<option value="fixed"><?php esc_html_e( 'Fixed', 'staylodgic' ); ?></option>
+						<option value="percentage"><?php esc_html_e( 'Percentage', 'staylodgic' ); ?></option>
 					</select>
 				</span>
-				<span class="input-label-outer"><span class="input-label-inner">Difference</span>
+				<span class="input-label-outer"><span class="input-label-inner"><?php esc_html_e( 'Difference', 'staylodgic' ); ?></span>
 					<select disabled id="<?php echo esc_attr( $args['label_for'] ); ?>_total" name="total">
-						<option value="increase"><?php _e( 'Increase', 'staylodgic' ); ?></option>
-						<option value="decrease"><?php _e( 'Decrease', 'staylodgic' ); ?></option>
+						<option value="increase"><?php esc_html_e( 'Increase', 'staylodgic' ); ?></option>
+						<option value="decrease"><?php esc_html_e( 'Decrease', 'staylodgic' ); ?></option>
 					</select>
 				</span>
 				<span class="remove-set-button"><i class="dashicons dashicons-remove"></i></span>
@@ -719,31 +747,31 @@ class Options_Panel {
 					if ( isset( $value['people'] ) ) {
 						?>
 						<div class="repeatable">
-							<span class="input-label-outer"><span class="input-label-inner">People</span>
+							<span class="input-label-outer"><span class="input-label-inner"><?php esc_html_e( 'People', 'staylodgic' ); ?></span>
 								<select data-width="80" id="<?php echo esc_attr( $args['label_for'] ); ?>_people_<?php echo esc_attr( $count ); ?>" name="<?php echo esc_attr( $this->option_name ); ?>[<?php echo esc_attr( $args['label_for'] ); ?>][<?php echo esc_attr( $key ); ?>][people]">
-									<option value="1" <?php selected( '1', $value['people'], true ); ?>><?php _e( '1', 'staylodgic' ); ?></option>
-									<option value="3" <?php selected( '3', $value['people'], true ); ?>><?php _e( '3', 'staylodgic' ); ?></option>
-									<option value="4" <?php selected( '4', $value['people'], true ); ?>><?php _e( '4', 'staylodgic' ); ?></option>
-									<option value="5" <?php selected( '5', $value['people'], true ); ?>><?php _e( '5', 'staylodgic' ); ?></option>
-									<option value="6" <?php selected( '6', $value['people'], true ); ?>><?php _e( '6', 'staylodgic' ); ?></option>
-									<option value="7" <?php selected( '7', $value['people'], true ); ?>><?php _e( '7', 'staylodgic' ); ?></option>
-									<option value="8" <?php selected( '8', $value['people'], true ); ?>><?php _e( '8', 'staylodgic' ); ?></option>
-									<option value="9" <?php selected( '9', $value['people'], true ); ?>><?php _e( '9', 'staylodgic' ); ?></option>
+									<option value="1" <?php selected( '1', $value['people'], true ); ?>><?php esc_html_e( '1', 'staylodgic' ); ?></option>
+									<option value="3" <?php selected( '3', $value['people'], true ); ?>><?php esc_html_e( '3', 'staylodgic' ); ?></option>
+									<option value="4" <?php selected( '4', $value['people'], true ); ?>><?php esc_html_e( '4', 'staylodgic' ); ?></option>
+									<option value="5" <?php selected( '5', $value['people'], true ); ?>><?php esc_html_e( '5', 'staylodgic' ); ?></option>
+									<option value="6" <?php selected( '6', $value['people'], true ); ?>><?php esc_html_e( '6', 'staylodgic' ); ?></option>
+									<option value="7" <?php selected( '7', $value['people'], true ); ?>><?php esc_html_e( '7', 'staylodgic' ); ?></option>
+									<option value="8" <?php selected( '8', $value['people'], true ); ?>><?php esc_html_e( '8', 'staylodgic' ); ?></option>
+									<option value="9" <?php selected( '9', $value['people'], true ); ?>><?php esc_html_e( '9', 'staylodgic' ); ?></option>
 								</select>
 							</span>
-							<span class="input-label-outer"><span class="input-label-inner">Value</span>
+							<span class="input-label-outer"><span class="input-label-inner"><?php esc_html_e( 'Value', 'staylodgic' ); ?></span>
 								<input type="number" class="perpersonpricing_number_setter" id="<?php echo esc_attr( $args['label_for'] ); ?>_number_<?php echo esc_attr( $count ); ?>" name="<?php echo esc_attr( $this->option_name ); ?>[<?php echo esc_attr( $args['label_for'] ); ?>][<?php echo esc_attr( $key ); ?>][number]" value="<?php echo esc_attr( $value['number'] ); ?>">
 							</span>
-							<span class="input-label-outer"><span class="input-label-inner">Type</span>
+							<span class="input-label-outer"><span class="input-label-inner"><?php esc_html_e( 'Type', 'staylodgic' ); ?></span>
 								<select data-width="150" id="<?php echo esc_attr( $args['label_for'] ); ?>_type_<?php echo esc_attr( $count ); ?>" name="<?php echo esc_attr( $this->option_name ); ?>[<?php echo esc_attr( $args['label_for'] ); ?>][<?php echo esc_attr( $key ); ?>][type]">
-									<option value="fixed" <?php selected( 'fixed', $value['type'], true ); ?>><?php _e( 'Fixed', 'staylodgic' ); ?></option>
-									<option value="percentage" <?php selected( 'percentage', $value['type'], true ); ?>><?php _e( 'Percentage', 'staylodgic' ); ?></option>
+									<option value="fixed" <?php selected( 'fixed', $value['type'], true ); ?>><?php esc_html_e( 'Fixed', 'staylodgic' ); ?></option>
+									<option value="percentage" <?php selected( 'percentage', $value['type'], true ); ?>><?php esc_html_e( 'Percentage', 'staylodgic' ); ?></option>
 								</select>
 							</span>
-							<span class="input-label-outer"><span class="input-label-inner">Difference</span>
+							<span class="input-label-outer"><span class="input-label-inner"><?php esc_html_e( 'Difference', 'staylodgic' ); ?></span>
 								<select data-width="150" id="<?php echo esc_attr( $args['label_for'] ); ?>_total_<?php echo esc_attr( $count ); ?>" name="<?php echo esc_attr( $this->option_name ); ?>[<?php echo esc_attr( $args['label_for'] ); ?>][<?php echo esc_attr( $key ); ?>][total]">
-									<option value="increase" <?php selected( 'increase', $value['total'], true ); ?>><?php _e( 'Increase', 'staylodgic' ); ?></option>
-									<option value="decrease" <?php selected( 'decrease', $value['total'], true ); ?>><?php _e( 'Decrease', 'staylodgic' ); ?></option>
+									<option value="increase" <?php selected( 'increase', $value['total'], true ); ?>><?php esc_html_e( 'Increase', 'staylodgic' ); ?></option>
+									<option value="decrease" <?php selected( 'decrease', $value['total'], true ); ?>><?php esc_html_e( 'Decrease', 'staylodgic' ); ?></option>
 								</select>
 							</span>
 							<span class="remove-set-button"><i class="dashicons dashicons-remove"></i></span>
@@ -754,7 +782,7 @@ class Options_Panel {
 			}
 			?>
 		</div>
-		<button id="addperperson-repeatable" class="button button-secondary"><?php _e( 'Add new', 'staylodgic' ); ?></button>
+		<button id="addperperson-repeatable" class="button button-secondary"><?php esc_html_e( 'Add new', 'staylodgic' ); ?></button>
 		<?php
 		if ( $description ) {
 			?>
@@ -780,22 +808,22 @@ class Options_Panel {
 		?>
 		<div class="repeatable-mealplan-template" style="display: none;">
 			<div class="repeatable new-container">
-				<span class="input-label-outer"><span class="input-label-inner">Meal</span>
+				<span class="input-label-outer"><span class="input-label-inner"><?php esc_html_e( 'Meal', 'staylodgic' ); ?></span>
 					<select disabled id="<?php echo esc_attr( $args['label_for'] ); ?>_mealtype" name="mealtype">
-						<option value="RO"><?php _e( 'Room Only', 'staylodgic' ); ?></option>
-						<option value="BB"><?php _e( 'Bed and Breakfast', 'staylodgic' ); ?></option>
-						<option value="HB"><?php _e( 'Half Board', 'staylodgic' ); ?></option>
-						<option value="FB"><?php _e( 'Full Board', 'staylodgic' ); ?></option>
-						<option value="AN"><?php _e( 'All-Inclusive', 'staylodgic' ); ?></option>
+						<option value="RO"><?php esc_html_e( 'Room Only', 'staylodgic' ); ?></option>
+						<option value="BB"><?php esc_html_e( 'Bed and Breakfast', 'staylodgic' ); ?></option>
+						<option value="HB"><?php esc_html_e( 'Half Board', 'staylodgic' ); ?></option>
+						<option value="FB"><?php esc_html_e( 'Full Board', 'staylodgic' ); ?></option>
+						<option value="AN"><?php esc_html_e( 'All-Inclusive', 'staylodgic' ); ?></option>
 					</select>
 				</span>
-				<span class="input-label-outer"><span class="input-label-inner">Type</span>
+				<span class="input-label-outer"><span class="input-label-inner"><?php esc_html_e( 'Type', 'staylodgic' ); ?></span>
 					<select disabled id="<?php echo esc_attr( $args['label_for'] ); ?>_choice" name="choice">
-						<option value="included"><?php _e( 'Included in rate', 'staylodgic' ); ?></option>
-						<option value="optional"><?php _e( 'Optional', 'staylodgic' ); ?></option>
+						<option value="included"><?php esc_html_e( 'Included in rate', 'staylodgic' ); ?></option>
+						<option value="optional"><?php esc_html_e( 'Optional', 'staylodgic' ); ?></option>
 					</select>
 				</span>
-				<span class="input-label-outer"><span class="input-label-inner">Price</span>
+				<span class="input-label-outer"><span class="input-label-inner"><?php esc_html_e( 'Price', 'staylodgic' ); ?></span>
 					<input disabled type="number" id="<?php echo esc_attr( $args['label_for'] ); ?>_price" name="price" value="">
 				</span>
 				<span class="remove-set-button"><i class="dashicons dashicons-remove"></i></span>
@@ -810,22 +838,22 @@ class Options_Panel {
 					if ( isset( $value['mealtype'] ) ) {
 						?>
 						<div class="repeatable">
-							<span class="input-label-outer"><span class="input-label-inner">Meal</span>
+							<span class="input-label-outer"><span class="input-label-inner"><?php esc_html_e( 'Meal', 'staylodgic' ); ?></span>
 								<select data-width="170" id="<?php echo esc_attr( $args['label_for'] ); ?>_mealtype_<?php echo esc_attr( $count ); ?>" name="<?php echo esc_attr( $this->option_name ); ?>[<?php echo esc_attr( $args['label_for'] ); ?>][<?php echo esc_attr( $key ); ?>][mealtype]">
-									<option value="RO" <?php selected( 'RO', $value['mealtype'], true ); ?>><?php _e( 'Room Only', 'staylodgic' ); ?></option>
-									<option value="BB" <?php selected( 'BB', $value['mealtype'], true ); ?>><?php _e( 'Bed and Breakfast', 'staylodgic' ); ?></option>
-									<option value="HB" <?php selected( 'HB', $value['mealtype'], true ); ?>><?php _e( 'Half Board', 'staylodgic' ); ?></option>
-									<option value="FB" <?php selected( 'FB', $value['mealtype'], true ); ?>><?php _e( 'Full Board', 'staylodgic' ); ?></option>
-									<option value="AN" <?php selected( 'AN', $value['mealtype'], true ); ?>><?php _e( 'All-Inclusive', 'staylodgic' ); ?></option>
+									<option value="RO" <?php selected( 'RO', $value['mealtype'], true ); ?>><?php esc_html_e( 'Room Only', 'staylodgic' ); ?></option>
+									<option value="BB" <?php selected( 'BB', $value['mealtype'], true ); ?>><?php esc_html_e( 'Bed and Breakfast', 'staylodgic' ); ?></option>
+									<option value="HB" <?php selected( 'HB', $value['mealtype'], true ); ?>><?php esc_html_e( 'Half Board', 'staylodgic' ); ?></option>
+									<option value="FB" <?php selected( 'FB', $value['mealtype'], true ); ?>><?php esc_html_e( 'Full Board', 'staylodgic' ); ?></option>
+									<option value="AN" <?php selected( 'AN', $value['mealtype'], true ); ?>><?php esc_html_e( 'All-Inclusive', 'staylodgic' ); ?></option>
 								</select>
 							</span>
-							<span class="input-label-outer"><span class="input-label-inner">Type</span>
+							<span class="input-label-outer"><span class="input-label-inner"><?php esc_html_e( 'Type', 'staylodgic' ); ?></span>
 								<select data-width="150" id="<?php echo esc_attr( $args['label_for'] ); ?>_choice_<?php echo esc_attr( $count ); ?>" name="<?php echo esc_attr( $this->option_name ); ?>[<?php echo esc_attr( $args['label_for'] ); ?>][<?php echo esc_attr( $key ); ?>][choice]">
-									<option value="included" <?php selected( 'included', $value['choice'], true ); ?>><?php _e( 'Included in rate', 'staylodgic' ); ?></option>
-									<option value="optional" <?php selected( 'optional', $value['choice'], true ); ?>><?php _e( 'Optional', 'staylodgic' ); ?></option>
+									<option value="included" <?php selected( 'included', $value['choice'], true ); ?>><?php esc_html_e( 'Included in rate', 'staylodgic' ); ?></option>
+									<option value="optional" <?php selected( 'optional', $value['choice'], true ); ?>><?php esc_html_e( 'Optional', 'staylodgic' ); ?></option>
 								</select>
 							</span>
-							<span class="input-label-outer"><span class="input-label-inner">Price</span>
+							<span class="input-label-outer"><span class="input-label-inner"><?php esc_html_e( 'Price', 'staylodgic' ); ?></span>
 								<input type="number" class="mealplan-style-setter" id="<?php echo esc_attr( $args['label_for'] ); ?>_price_<?php echo esc_attr( $count ); ?>" name="<?php echo esc_attr( $this->option_name ); ?>[<?php echo esc_attr( $args['label_for'] ); ?>][<?php echo esc_attr( $key ); ?>][price]" value="<?php echo esc_attr( $value['price'] ); ?>">
 							</span>
 							<span class="remove-set-button"><i class="dashicons dashicons-remove"></i></span>
@@ -836,7 +864,7 @@ class Options_Panel {
 			}
 			?>
 		</div>
-		<button id="addmealplan-repeatable" class="button button-secondary"><?php _e( 'Add new', 'staylodgic' ); ?></button>
+		<button id="addmealplan-repeatable" class="button button-secondary"><?php esc_html_e( 'Add new', 'staylodgic' ); ?></button>
 		<?php
 		if ( $description ) {
 			?>
@@ -863,24 +891,24 @@ class Options_Panel {
 		<div class="repeatable-tax-template" style="display: none;">
 			<div class="repeatable">
 				<span class="fa-solid fa-sort"></span>
-				<span class="input-label-outer"><span class="input-label-inner">Name</span>
+				<span class="input-label-outer"><span class="input-label-inner"><?php esc_html_e( 'Name', 'staylodgic' ); ?></span>
 					<input disabled type="text" placeholder="Label" id="<?php echo esc_attr( $args['label_for'] ); ?>_label" name="label" value="">
 				</span>
-				<span class="input-label-outer"><span class="input-label-inner">Value</span>
+				<span class="input-label-outer"><span class="input-label-inner"><?php esc_html_e( 'Value', 'staylodgic' ); ?></span>
 					<input disabled type="number" placeholder="Value" id="<?php echo esc_attr( $args['label_for'] ); ?>_number" name="number" value="">
 				</span>
-				<span class="input-label-outer"><span class="input-label-inner">Type</span>
+				<span class="input-label-outer"><span class="input-label-inner"><?php esc_html_e( 'Type', 'staylodgic' ); ?></span>
 					<select disabled id="<?php echo esc_attr( $args['label_for'] ); ?>_type" name="type">
-						<option value="fixed">Fixed</option>
-						<option value="percentage">Percentage</option>
+						<option value="fixed"><?php esc_html_e( 'Fixed', 'staylodgic' ); ?></option>
+						<option value="percentage"><?php esc_html_e( 'Percentage', 'staylodgic' ); ?></option>
 					</select>
 				</span>
-				<span class="input-label-outer"><span class="input-label-inner">Frequency</span>
+				<span class="input-label-outer"><span class="input-label-inner"><?php esc_html_e( 'Frequency', 'staylodgic' ); ?></span>
 					<select disabled id="<?php echo esc_attr( $args['label_for'] ); ?>_duration" name="duration">
-						<option value="inrate"><?php _e( 'Add to rate', 'staylodgic' ); ?></option>
-						<option value="perperson"><?php _e( 'Per person', 'staylodgic' ); ?></option>
-						<option value="perday"><?php _e( 'Per day', 'staylodgic' ); ?></option>
-						<option value="perpersonperday"><?php _e( 'Per person per day', 'staylodgic' ); ?></option>
+						<option value="inrate"><?php esc_html_e( 'Add to rate', 'staylodgic' ); ?></option>
+						<option value="perperson"><?php esc_html_e( 'Per person', 'staylodgic' ); ?></option>
+						<option value="perday"><?php esc_html_e( 'Per day', 'staylodgic' ); ?></option>
+						<option value="perpersonperday"><?php esc_html_e( 'Per person per day', 'staylodgic' ); ?></option>
 					</select>
 				</span>
 				<span class="remove-set-button"><i class="dashicons dashicons-remove"></i></span>
@@ -898,24 +926,24 @@ class Options_Panel {
 							?>
 							<div class="repeatable">
 								<span class="fa-solid fa-sort"></span>
-								<span class="input-label-outer"><span class="input-label-inner">Name</span>
+								<span class="input-label-outer"><span class="input-label-inner"><?php esc_html_e( 'Name', 'staylodgic' ); ?></span>
 									<input type="text" id="<?php echo esc_attr( $args['label_for'] ); ?>_label_<?php echo esc_attr( $count ); ?>" name="<?php echo esc_attr( $this->option_name ); ?>[<?php echo esc_attr( $args['label_for'] ); ?>][<?php echo esc_attr( $key ); ?>][label]" value="<?php echo esc_attr( $value['label'] ); ?>">
 								</span>
-								<span class="input-label-outer"><span class="input-label-inner">Value</span>
+								<span class="input-label-outer"><span class="input-label-inner"><?php esc_html_e( 'Value', 'staylodgic' ); ?></span>
 									<input type="number" id="<?php echo esc_attr( $args['label_for'] ); ?>_number_<?php echo esc_attr( $count ); ?>" name="<?php echo esc_attr( $this->option_name ); ?>[<?php echo esc_attr( $args['label_for'] ); ?>][<?php echo esc_attr( $key ); ?>][number]" value="<?php echo esc_attr( $value['number'] ); ?>">
 								</span>
-								<span class="input-label-outer"><span class="input-label-inner">Type</span>
+								<span class="input-label-outer"><span class="input-label-inner"><?php esc_html_e( 'Type', 'staylodgic' ); ?></span>
 									<select id="<?php echo esc_attr( $args['label_for'] ); ?>_type_<?php echo esc_attr( $count ); ?>" name="<?php echo esc_attr( $this->option_name ); ?>[<?php echo esc_attr( $args['label_for'] ); ?>][<?php echo esc_attr( $key ); ?>][type]">
-										<option value="fixed" <?php selected( 'fixed', $value['type'], true ); ?>><?php _e( 'Fixed', 'staylodgic' ); ?></option>
-										<option value="percentage" <?php selected( 'percentage', $value['type'], true ); ?>><?php _e( 'Percentage', 'staylodgic' ); ?></option>
+										<option value="fixed" <?php selected( 'fixed', $value['type'], true ); ?>><?php esc_html_e( 'Fixed', 'staylodgic' ); ?></option>
+										<option value="percentage" <?php selected( 'percentage', $value['type'], true ); ?>><?php esc_html_e( 'Percentage', 'staylodgic' ); ?></option>
 									</select>
 								</span>
-								<span class="input-label-outer"><span class="input-label-inner">Frequency</span>
+								<span class="input-label-outer"><span class="input-label-inner"><?php esc_html_e( 'Frequency', 'staylodgic' ); ?></span>
 									<select id="<?php echo esc_attr( $args['label_for'] ); ?>_duration_<?php echo esc_attr( $count ); ?>" name="<?php echo esc_attr( $this->option_name ); ?>[<?php echo esc_attr( $args['label_for'] ); ?>][<?php echo esc_attr( $key ); ?>][duration]">
-										<option value="inrate" <?php selected( 'inrate', $value['duration'], true ); ?>><?php _e( 'Add to rate', 'staylodgic' ); ?></option>
-										<option value="perperson" <?php selected( 'perperson', $value['duration'], true ); ?>><?php _e( 'Per person', 'staylodgic' ); ?></option>
-										<option value="perday" <?php selected( 'perday', $value['duration'], true ); ?>><?php _e( 'Per Day', 'staylodgic' ); ?></option>
-										<option value="perpersonperday" <?php selected( 'perpersonperday', $value['duration'], true ); ?>><?php _e( 'Per person per day', 'staylodgic' ); ?></option>
+										<option value="inrate" <?php selected( 'inrate', $value['duration'], true ); ?>><?php esc_html_e( 'Add to rate', 'staylodgic' ); ?></option>
+										<option value="perperson" <?php selected( 'perperson', $value['duration'], true ); ?>><?php esc_html_e( 'Per person', 'staylodgic' ); ?></option>
+										<option value="perday" <?php selected( 'perday', $value['duration'], true ); ?>><?php esc_html_e( 'Per Day', 'staylodgic' ); ?></option>
+										<option value="perpersonperday" <?php selected( 'perpersonperday', $value['duration'], true ); ?>><?php esc_html_e( 'Per person per day', 'staylodgic' ); ?></option>
 									</select>
 								</span>
 								<span class="remove-set-button"><i class="dashicons dashicons-remove"></i></span>
@@ -926,7 +954,7 @@ class Options_Panel {
 				}
 				?>
 			</div>
-			<button id="addtax-repeatable" class="button button-secondary"><?php _e( 'Add new', 'staylodgic' ); ?></button>
+			<button id="addtax-repeatable" class="button button-secondary"><?php esc_html_e( 'Add new', 'staylodgic' ); ?></button>
 		</div>
 		<?php
 		if ( $description ) {
@@ -954,22 +982,22 @@ class Options_Panel {
 		<div class="repeatable-activitytax-template" style="display: none;">
 			<div class="repeatable">
 				<span class="fa-solid fa-sort"></span>
-				<span class="input-label-outer"><span class="input-label-inner">Name</span>
+				<span class="input-label-outer"><span class="input-label-inner"><?php esc_html_e( 'Name', 'staylodgic' ); ?></span>
 					<input disabled type="text" placeholder="Label" id="<?php echo esc_attr( $args['label_for'] ); ?>_label" name="label" value="">
 				</span>
 				<span class="input-label-outer"><span class="input-label-inner">Value</span>
 					<input disabled type="number" placeholder="Value" id="<?php echo esc_attr( $args['label_for'] ); ?>_number" name="number" value="">
 				</span>
-				<span class="input-label-outer"><span class="input-label-inner">Type</span>
+				<span class="input-label-outer"><span class="input-label-inner"><?php esc_html_e( 'Type', 'staylodgic' ); ?></span>
 					<select disabled id="<?php echo esc_attr( $args['label_for'] ); ?>_type" name="type">
-						<option value="fixed">Fixed</option>
-						<option value="percentage">Percentage</option>
+						<option value="fixed"><?php esc_html_e( 'Fixed', 'staylodgic' ); ?></option>
+						<option value="percentage"><?php esc_html_e( 'Percentage', 'staylodgic' ); ?></option>
 					</select>
 				</span>
-				<span class="input-label-outer"><span class="input-label-inner">Frequency</span>
+				<span class="input-label-outer"><span class="input-label-inner"><?php esc_html_e( 'Frequency', 'staylodgic' ); ?></span>
 					<select disabled id="<?php echo esc_attr( $args['label_for'] ); ?>_duration" name="duration">
-						<option value="inrate"><?php _e( 'Add to rate', 'staylodgic' ); ?></option>
-						<option value="perperson"><?php _e( 'Per person', 'staylodgic' ); ?></option>
+						<option value="inrate"><?php esc_html_e( 'Add to rate', 'staylodgic' ); ?></option>
+						<option value="perperson"><?php esc_html_e( 'Per person', 'staylodgic' ); ?></option>
 					</select>
 				</span>
 				<span class="remove-set-button"><i class="dashicons dashicons-remove"></i></span>
@@ -986,22 +1014,22 @@ class Options_Panel {
 						?>
 						<div class="repeatable">
 							<span class="fa-solid fa-sort"></span>
-							<span class="input-label-outer"><span class="input-label-inner">Name</span>
+							<span class="input-label-outer"><span class="input-label-inner"><?php esc_html_e( 'Name', 'staylodgic' ); ?></span>
 								<input type="text" id="<?php echo esc_attr( $args['label_for'] ); ?>_label_<?php echo esc_attr( $count ); ?>" name="<?php echo esc_attr( $this->option_name ); ?>[<?php echo esc_attr( $args['label_for'] ); ?>][<?php echo esc_attr( $key ); ?>][label]" value="<?php echo esc_attr( $value['label'] ); ?>">
 							</span>
-							<span class="input-label-outer"><span class="input-label-inner">Value</span>
+							<span class="input-label-outer"><span class="input-label-inner"><?php esc_html_e( 'Value', 'staylodgic' ); ?></span>
 								<input type="number" id="<?php echo esc_attr( $args['label_for'] ); ?>_number_<?php echo esc_attr( $count ); ?>" name="<?php echo esc_attr( $this->option_name ); ?>[<?php echo esc_attr( $args['label_for'] ); ?>][<?php echo esc_attr( $key ); ?>][number]" value="<?php echo esc_attr( $value['number'] ); ?>">
 							</span>
-							<span class="input-label-outer"><span class="input-label-inner">Type</span>
+							<span class="input-label-outer"><span class="input-label-inner"><?php esc_html_e( 'Type', 'staylodgic' ); ?></span>
 								<select id="<?php echo esc_attr( $args['label_for'] ); ?>_type_<?php echo esc_attr( $count ); ?>" name="<?php echo esc_attr( $this->option_name ); ?>[<?php echo esc_attr( $args['label_for'] ); ?>][<?php echo esc_attr( $key ); ?>][type]">
-									<option value="fixed" <?php selected( 'fixed', $value['type'], true ); ?>><?php _e( 'Fixed', 'staylodgic' ); ?></option>
-									<option value="percentage" <?php selected( 'percentage', $value['type'], true ); ?>><?php _e( 'Percentage', 'staylodgic' ); ?></option>
+									<option value="fixed" <?php selected( 'fixed', $value['type'], true ); ?>><?php esc_html_e( 'Fixed', 'staylodgic' ); ?></option>
+									<option value="percentage" <?php selected( 'percentage', $value['type'], true ); ?>><?php esc_html_e( 'Percentage', 'staylodgic' ); ?></option>
 								</select>
 							</span>
-							<span class="input-label-outer"><span class="input-label-inner">Frequency</span>
+							<span class="input-label-outer"><span class="input-label-inner"><?php esc_html_e( 'Frequency', 'staylodgic' ); ?></span>
 								<select id="<?php echo esc_attr( $args['label_for'] ); ?>_duration_<?php echo esc_attr( $count ); ?>" name="<?php echo esc_attr( $this->option_name ); ?>[<?php echo esc_attr( $args['label_for'] ); ?>][<?php echo esc_attr( $key ); ?>][duration]">
-									<option value="inrate" <?php selected( 'inrate', $value['duration'], true ); ?>><?php _e( 'Add to rate', 'staylodgic' ); ?></option>
-									<option value="perperson" <?php selected( 'perperson', $value['duration'], true ); ?>><?php _e( 'Per person', 'staylodgic' ); ?></option>
+									<option value="inrate" <?php selected( 'inrate', $value['duration'], true ); ?>><?php esc_html_e( 'Add to rate', 'staylodgic' ); ?></option>
+									<option value="perperson" <?php selected( 'perperson', $value['duration'], true ); ?>><?php esc_html_e( 'Per person', 'staylodgic' ); ?></option>
 								</select>
 							</span>
 							<span class="remove-set-button"><i class="dashicons dashicons-remove"></i></span>
@@ -1012,7 +1040,7 @@ class Options_Panel {
 			}
 			?>
 		</div>
-		<button id="addtax-activity-repeatable" class="button button-secondary"><?php _e( 'Add new', 'staylodgic' ); ?></button>
+		<button id="addtax-activity-repeatable" class="button button-secondary"><?php esc_html_e( 'Add new', 'staylodgic' ); ?></button>
 		<?php
 		if ( $description ) {
 			?>
@@ -1040,7 +1068,7 @@ class Options_Panel {
 			'days'    => '',
 			'percent' => '',
 		);
-		// error_log( print_r( $values,1 ));
+
 		$description = $this->settings[ $option_name ]['description'] ?? '';
 		?>
 		<span class="discount-input-outer">
@@ -1059,7 +1087,7 @@ class Options_Panel {
 		if ( $description ) {
 			?>
 			<p class="description"><?php echo esc_html( $description ); ?></p>
-			<p class="description"><strong>Discounts are not stackable. Only the maximum discount is applied if multiple discounts are eligible.</p>
+			<p class="description"><strong><?php esc_html_e( 'Discounts are not stackable. Only the maximum discount is applied if multiple discounts are eligible.', 'staylodgic' ); ?></p>
 			<?php
 		}
 		?>
@@ -1220,9 +1248,9 @@ $currency_symbols = \Staylodgic\Common::get_staylodgic_currency_symbols();
 $curr_choices     = array();
 
 // Generate the select list
-foreach ( $currencies as $currencyCode => $currencyName ) {
-	$currency_symbol               = $currency_symbols[ $currencyCode ];
-	$curr_choices[ $currencyCode ] = $currencyName . ' ( ' . $currency_symbol . ' )';
+foreach ( $currencies as $currency_code => $currency_name ) {
+	$currency_symbol                = $currency_symbols[ $currency_code ];
+	$curr_choices[ $currency_code ] = $currency_name . ' ( ' . $currency_symbol . ' )';
 }
 
 $country_options = staylodgic_country_list( 'select-array', '' );

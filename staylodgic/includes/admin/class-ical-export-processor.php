@@ -98,29 +98,29 @@ class Ical_Export_Processor {
 		// The HTML content of the 'Staylodgic' page goes here
 		echo '<div class="expor-import-calendar">';
 		echo '<div id="export-import-form">';
-		echo '<h1>' . __( 'Export Guest Registrations', 'staylodgic' ) . '</h1>';
-		echo '<p>' . __( 'Streamline your record management by exporting monthly guest registrations. Simply choose a month and click "Download" to create a CSV file containing detailed registration information.', 'staylodgic' ) . '</p>';
+		echo '<h1>' . esc_html__( 'Export Guest Registrations', 'staylodgic' ) . '</h1>';
+		echo '<p>' . esc_html__( 'Streamline your record management by exporting monthly guest registrations. Simply choose a month and click "Download" to create a CSV file containing detailed registration information.', 'staylodgic' ) . '</p>';
 		echo '<div class="how-to-admin">';
-		echo '<h2>' . __( 'How to Export:', 'staylodgic' ) . '</h2>';
+		echo '<h2>' . esc_html__( 'How to Export:', 'staylodgic' ) . '</h2>';
 		echo '<ol>';
-		echo '<li>' . __( 'Choose the month for which you want to export guest registrations.', 'staylodgic' ) . '</li>';
-		echo '<li>' . __( 'Click the "Donwload" button to download your file.', 'staylodgic' ) . '</li>';
+		echo '<li>' . esc_html__( 'Choose the month for which you want to export guest registrations.', 'staylodgic' ) . '</li>';
+		echo '<li>' . esc_html__( 'Click the "Donwload" button to download your file.', 'staylodgic' ) . '</li>';
 		echo '</ol>';
 		echo '</div>';
 
 		echo "<form id='room_ical_form' method='post'>";
-		echo '<input type="hidden" name="ical_form_nonce" value="' . wp_create_nonce( 'ical_form_nonce' ) . '">';
+		echo '<input type="hidden" name="ical_form_nonce" value="' . esc_attr( wp_create_nonce( 'ical_form_nonce' ) ) . '">';
 
-		echo '<div class="import-export-heading">' . __( 'Choose calendar month for export', 'staylodgic' ) . '</div>';
+		echo '<div class="import-export-heading">' . esc_html__( 'Choose calendar month for export', 'staylodgic' ) . '</div>';
 		echo '<input type="text" class="exporter_calendar" id="exporter_calendar" name="exporter_calendar" value="" />';
 		echo '<div class="exporter_calendar-error-wrap">';
-		echo '<div class="exporter_calendar-no-records">' . __( 'No Records Found', 'staylodgic' ) . '</div>';
+		echo '<div class="exporter_calendar-no-records">' . esc_html__( 'No Records Found', 'staylodgic' ) . '</div>';
 		echo '</div>';
 		echo '<div class="import-export-wrap">';
 
 		echo '<button type="button" class="download_registrations_export_ical btn btn-primary">';
 		echo '<span class="spinner-zone spinner-border-sm" aria-hidden="true"></span>';
-		echo '<span role="status"> ' . __( 'Download', 'staylodgic' ) . '</span>';
+		echo '<span role="status"> ' . esc_html__( 'Download', 'staylodgic' ) . '</span>';
 		echo '</button>';
 
 		echo '</div>';
@@ -138,20 +138,20 @@ class Ical_Export_Processor {
 		// The HTML content of the 'Staylodgic' page goes here
 		echo '<div class="expor-import-calendar">';
 		echo '<div id="export-import-form">';
-		echo '<h1>' . __( 'Export Bookings', 'staylodgic' ) . '</h1>';
-		echo '<p>' . __( 'Efficiently manage your records by exporting your room bookings. Select the room and month to generate a downloadable CSV file of the booking details.', 'staylodgic' ) . '</p>';
+		echo '<h1>' . esc_html__( 'Export Bookings', 'staylodgic' ) . '</h1>';
+		echo '<p>' . esc_html__( 'Efficiently manage your records by exporting your room bookings. Select the room and month to generate a downloadable CSV file of the booking details.', 'staylodgic' ) . '</p>';
 		echo '<div class="how-to-admin">';
-		echo '<h2>' . __( 'How to Export:', 'staylodgic' ) . '</h2>';
+		echo '<h2>' . esc_html__( 'How to Export:', 'staylodgic' ) . '</h2>';
 		echo '<ol>';
-		echo '<li>' . __( 'Choose the month for which you want to export bookings.', 'staylodgic' ) . '</li>';
-		echo '<li>' . __( 'Click the "Donwload" button next to the choice of room to download your file.', 'staylodgic' ) . '</li>';
+		echo '<li>' . esc_html__( 'Choose the month for which you want to export bookings.', 'staylodgic' ) . '</li>';
+		echo '<li>' . esc_html__( 'Click the "Donwload" button next to the choice of room to download your file.', 'staylodgic' ) . '</li>';
 		echo '</ol>';
 		echo '</div>';
 
 		echo "<form id='room_ical_form' method='post'>";
-		echo '<input type="hidden" name="ical_form_nonce" value="' . wp_create_nonce( 'ical_form_nonce' ) . '">';
+		echo '<input type="hidden" name="ical_form_nonce" value="' . esc_attr( wp_create_nonce( 'ical_form_nonce' ) ) . '">';
 
-		echo '<div class="import-export-heading">' . __( 'Choose calendar month for export' ) . '</div>';
+		echo '<div class="import-export-heading">' . esc_html__( 'Choose calendar month for export', 'staylodgic' ) . '</div>';
 		echo '<input type="text" class="exporter_calendar" id="exporter_calendar" name="exporter_calendar" value="" />';
 
 		echo '<div class="import-export-wrap">';
@@ -165,7 +165,7 @@ class Ical_Export_Processor {
 
 			echo '<button data-room-id="' . esc_attr( $room->ID ) . '" type="button" class="download_export_ical btn btn-primary">';
 			echo '<span class="spinner-zone spinner-border-sm" aria-hidden="true"></span>';
-			echo '<span role="status"> ' . __( 'Download', 'staylodgic' ) . '</span>';
+			echo '<span role="status"> ' . esc_html__( 'Download', 'staylodgic' ) . '</span>';
 			echo '</button>';
 
 			echo '</div>';
@@ -240,7 +240,8 @@ class Ical_Export_Processor {
 	 * @return void
 	 */
 	public function download_reservations_ical( $room_id ) {
-		$reservation_instance = new \Staylodgic\Reservations( $stay_date_string = '', $room_id );
+		$stay_date_string     = '';
+		$reservation_instance = new \Staylodgic\Reservations( $stay_date_string, $room_id );
 		$reservations_query   = $reservation_instance->get_reservations_for_room( false, false, false, false, $room_id );
 
 		// Extract post objects from WP_Query
@@ -248,13 +249,13 @@ class Ical_Export_Processor {
 
 		$ical_content = $this->generate_ical_from_reservations( $reservations );
 
-		$current_date_time = date( 'Y-m-d_H-i-s' ); // Formats the date and time as YYYY-MM-DD_HH-MM-SS
-		$filename          = 'reservations-' . esc_attr( $room_id ) . '-' . esc_attr( $current_date_time ) . '.ics';
+		$current_date_time = gmdate( 'Y-m-d_H-i-s' ); // Formats the date and time as YYYY-MM-DD_HH-MM-SS
+		$filename          = 'reservations-' . sanitize_file_name( $room_id ) . '-' . sanitize_file_name( $current_date_time ) . '.ics';
 
 		$filename = htmlspecialchars( $filename, ENT_QUOTES, 'UTF-8' );
 		header( 'Content-Type: text/calendar; charset=utf-8' );
 		header( 'Content-Disposition: attachment; filename="' . $filename . '"' );
-		echo $ical_content;
+		echo wp_kses_post( $ical_content );
 		exit;
 	}
 
@@ -278,16 +279,90 @@ class Ical_Export_Processor {
 		// Extract post objects from WP_Query
 		$reservations = $reservations_query->posts;
 
+		// Loop through each reservation in the list of reservations
 		foreach ( $reservations as $reservation ) {
-			$checkin_date       = get_post_meta( $reservation->ID, 'staylodgic_checkin_date', true ) ?: '-';
-			$checkout_date      = get_post_meta( $reservation->ID, 'staylodgic_checkout_date', true ) ?: '-';
-			$booking_number     = get_post_meta( $reservation->ID, 'staylodgic_booking_number', true ) ?: '-';
-			$reservation_status = get_post_meta( $reservation->ID, 'staylodgic_reservation_status', true ) ?: '-';
-			$room_name          = $reservation_instance->get_room_name_for_reservation( $reservation->ID );
-			$adults_number      = $reservation_instance->get_number_of_adults_for_reservation( $reservation->ID );
-			$children_number    = $reservation_instance->get_number_of_children_for_reservation( $reservation->ID );
 
-			$csv_data .= "$booking_number,$room_name,$adults_number,$children_number,$checkin_date,$checkout_date,$reservation_status\r\n";
+			// Retrieve the check-in date for the reservation
+			$checkin_date = get_post_meta(
+				$reservation->ID,                    // Unique reservation ID
+				'staylodgic_checkin_date',           // Meta key for check-in date
+				true                                 // Retrieve as a single value
+			);
+
+			// Check if the check-in date is empty and assign a default value of '-' if it is
+			if ( empty( $checkin_date ) ) {
+				$checkin_date = '-';
+			}
+
+			// Retrieve the check-out date for the reservation
+			$checkout_date = get_post_meta(
+				$reservation->ID,                    // Unique reservation ID
+				'staylodgic_checkout_date',          // Meta key for check-out date
+				true                                 // Retrieve as a single value
+			);
+
+			// Check if the check-out date is empty and assign a default value of '-' if it is
+			if ( empty( $checkout_date ) ) {
+				$checkout_date = '-';
+			}
+
+			// Retrieve the booking number for the reservation
+			$booking_number = get_post_meta(
+				$reservation->ID,                    // Unique reservation ID
+				'staylodgic_booking_number',         // Meta key for booking number
+				true                                 // Retrieve as a single value
+			);
+
+			// Check if the booking number is empty and assign a default value of '-' if it is
+			if ( empty( $booking_number ) ) {
+				$booking_number = '-';
+			}
+
+			// Retrieve the reservation status
+			$reservation_status = get_post_meta(
+				$reservation->ID,                    // Unique reservation ID
+				'staylodgic_reservation_status',     // Meta key for reservation status
+				true                                 // Retrieve as a single value
+			);
+
+			// Check if the reservation status is empty and assign a default value of '-' if it is
+			if ( empty( $reservation_status ) ) {
+				$reservation_status = '-';
+			}
+
+			// Retrieve the room name using the reservation instance method
+			$room_name = $reservation_instance->get_room_name_for_reservation(
+				$reservation->ID                     // Unique reservation ID
+			);
+
+			// Check if the room name is empty and assign a default value of '-' if it is
+			if ( empty( $room_name ) ) {
+				$room_name = '-';
+			}
+
+			// Retrieve the number of adults using the reservation instance method
+			$adults_number = $reservation_instance->get_number_of_adults_for_reservation(
+				$reservation->ID                     // Unique reservation ID
+			);
+
+			// Check if the number of adults is empty and assign a default value of '0' if it is
+			if ( empty( $adults_number ) ) {
+				$adults_number = '0';
+			}
+
+			// Retrieve the number of children using the reservation instance method
+			$children_number = $reservation_instance->get_number_of_children_for_reservation(
+				$reservation->ID                     // Unique reservation ID
+			);
+
+			// Check if the number of children is empty and assign a default value of '0' if it is
+			if ( empty( $children_number ) ) {
+				$children_number = '0';
+			}
+
+			// Concatenate all retrieved data into a CSV-formatted string and add a newline character at the end
+			$csv_data .= $booking_number . ',' . $room_name . ',' . $adults_number . ',' . $children_number . ',' .
+				$checkin_date . ',' . $checkout_date . ',' . $reservation_status . "\r\n";
 		}
 
 		return $csv_data;
@@ -318,11 +393,54 @@ class Ical_Export_Processor {
 
 			foreach ( $reservations as $reservation ) {
 
-				$checkin_date    = get_post_meta( $reservation->ID, 'staylodgic_checkin_date', true ) ?: '-';
-				$checkout_date   = get_post_meta( $reservation->ID, 'staylodgic_checkout_date', true ) ?: '-';
-				$booking_number  = get_post_meta( $reservation->ID, 'staylodgic_booking_number', true ) ?: '-';
-				$booking_channel = get_post_meta( $reservation->ID, 'staylodgic_booking_channel', true ) ?: '-';
-				$room_name       = $reservation_instance->get_room_name_for_reservation( $reservation->ID );
+				// Retrieve the check-in date for the reservation or assign a default value if not available
+				$checkin_date = get_post_meta(
+					$reservation->ID,                  // The unique ID for the reservation
+					'staylodgic_checkin_date',         // Meta key to retrieve the check-in date
+					true                               // Retrieve as a single value
+				);
+
+				// Check if the check-in date is empty and assign a default value of '-' if it is
+				if ( empty( $checkin_date ) ) {
+					$checkin_date = '-';
+				}
+
+				// Retrieve the check-out date for the reservation or assign a default value if not available
+				$checkout_date = get_post_meta(
+					$reservation->ID,                  // The unique ID for the reservation
+					'staylodgic_checkout_date',        // Meta key to retrieve the check-out date
+					true                               // Retrieve as a single value
+				);
+
+				// Check if the check-out date is empty and assign a default value of '-' if it is
+				if ( empty( $checkout_date ) ) {
+					$checkout_date = '-';
+				}
+
+				// Retrieve the booking number for the reservation or assign a default value if not available
+				$booking_number = get_post_meta(
+					$reservation->ID,                  // The unique ID for the reservation
+					'staylodgic_booking_number',       // Meta key to retrieve the booking number
+					true                               // Retrieve as a single value
+				);
+
+				// Check if the booking number is empty and assign a default value of '-' if it is
+				if ( empty( $booking_number ) ) {
+					$booking_number = '-';
+				}
+
+				// Retrieve the booking channel for the reservation or assign a default value if not available
+				$booking_channel = get_post_meta(
+					$reservation->ID,                  // The unique ID for the reservation
+					'staylodgic_booking_channel',      // Meta key to retrieve the booking channel
+					true                               // Retrieve as a single value
+				);
+
+				// Check if the booking channel is empty and assign a default value of '-' if it is
+				if ( empty( $booking_channel ) ) {
+					$booking_channel = '-';
+				}
+				$room_name = $reservation_instance->get_room_name_for_reservation( $reservation->ID );
 
 				$registry_instance = new \Staylodgic\Guest_Registry();
 				$res_reg_ids       = $registry_instance->fetch_res_reg_ids_by_booking_number( $booking_number );
@@ -388,7 +506,7 @@ class Ical_Export_Processor {
 		header( 'Content-Type: text/csv; charset=utf-8' );
 		header( 'Content-Disposition: attachment; filename="' . $filename . '"' );
 
-		echo $csv_content;
+		echo wp_kses_post( $csv_content );
 		exit;
 	}
 	/**
@@ -411,7 +529,7 @@ class Ical_Export_Processor {
 
 			header( 'Content-Type: text/csv; charset=utf-8' );
 			header( "Content-Disposition: attachment; filename=\"$filename\"" );
-			echo $csv_content;
+			echo wp_kses_post( $csv_content );
 		}
 
 		exit;

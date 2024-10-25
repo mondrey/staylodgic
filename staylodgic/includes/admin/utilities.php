@@ -178,11 +178,11 @@ function staylodgic_get_gmt_timezone_choices() {
 	// Start from GMT-12:00 to GMT+14:00
 	for ( $i = -12; $i <= 14; $i++ ) {
 		$timezone               = $i < 0 ? "GMT$i:00" : ( $i > 0 ? "GMT+$i:00" : 'GMT+00:00' );
-		$timezones[ $timezone ] = esc_html__( $timezone, 'staylodgic' );
+		$timezones[ $timezone ] = esc_html( $timezone );
 	}
 
 	// Add half-hour and 45-minute offsets if needed
-	// Example: $timezones['gmt+5:30'] = esc_html__('GMT+5:30', 'staylodgic');
+	// Example: $timezones['gmt+5:30'] = esc_html('GMT+5:30');
 
 	return $timezones;
 }
