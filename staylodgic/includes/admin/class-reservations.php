@@ -105,7 +105,7 @@ class Reservations {
 		echo '</div>';
 
 		$information_sheet = ob_get_clean(); // Get the buffer content and clean the buffer
-		echo $information_sheet; // Encode the HTML content as JSON
+		echo wp_kses( $information_sheet, staylodgic_get_guest_activities_allowed_tags() );
 		wp_die(); // Terminate and return a proper response
 	}
 

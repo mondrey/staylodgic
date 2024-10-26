@@ -617,7 +617,7 @@ class Activity {
 						if ( '' !== $time ) {
 							$total_rate                                  = intval( $activity_rate * $this->stay_total_guests );
 							$this->activities_array[ $post_id ][ $time ] = $total_rate;
-							echo '<span class="time-slot ' . esc_attr( $active_class ) . '" id="time-slot-' . esc_attr( $time_index ) . '" data-activity="' . esc_attr( $post_id ) . '" data-time="' . esc_attr( $time ) . '"><span class="activity-time-slot"><i class="fa-regular fa-clock"></i> ' . esc_attr( $time ) . '</span><span class="time-slots-remaining">( ' . esc_attr( $remaining_spots ) . ' of ' . esc_attr( $max_guests ) . ' remaining )</span><div class="activity-rate" data-activityprice="' . esc_attr( $total_rate ) . '">' . wp_kses_post( staylodgic_price( $total_rate ) ) . '</div></span> ';
+							echo '<span class="time-slot ' . esc_attr( $active_class ) . '" id="time-slot-' . esc_attr( $time_index ) . '" data-activity="' . esc_attr( $post_id ) . '" data-time="' . esc_attr( $time ) . '"><span class="activity-time-slot"><i class="fa-regular fa-clock"></i> ' . esc_attr( $time ) . '</span><span class="time-slots-remaining">( ' . esc_attr( $remaining_spots ) . ' of ' . esc_attr( $max_guests ) . ' remaining )</span><div class="activity-rate" data-activityprice="' . esc_attr( $total_rate ) . '">' . wp_kses( staylodgic_price( $total_rate ), staylodgic_get_price_tags() ) . '</div></span> ';
 						} else {
 							echo '<span class="time-slot-unavailable time-slot ' . esc_attr( $active_class ) . '" id="time-slot-' . esc_attr( $time_index ) . '" data-activity="' . esc_attr( $post_id ) . '" data-time="' . esc_attr( $time ) . '"><span class="activity-time-slot">Unavailable</span></span> ';
 						}

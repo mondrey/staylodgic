@@ -588,6 +588,141 @@ function staylodgic_set_booking_transient( $data, $stay_booking_number ) {
 function staylodgic_get_booking_transient( $stay_booking_number = null ) {
 	return get_transient( $stay_booking_number );
 }
+function staylodgic_get_invoice_tax_details_tags() {
+
+	$allowed_tags = array(
+		'html' => array(),
+		'body' => array(),
+		'div'  => array(
+			'id'    => array(),
+			'class' => array(),
+		),
+		'span' => array(
+			'class'         => array(),
+			'data-price'    => array(),
+			'data-currency' => array(),
+			'data-number'   => array(),
+			'data-type'     => array(),
+			'data-duration' => array(),
+		),
+	);
+
+	return $allowed_tags;
+}
+function staylodgic_get_price_tags() {
+
+	$allowed_tags = array(
+		'html' => array(),
+		'body' => array(),
+		'span' => array(
+			'class'         => array(),
+			'data-price'    => array(),
+			'data-currency' => array(),
+		),
+	);
+
+	return $allowed_tags;
+}
+function staylodgic_get_invoice_form_tags() {
+
+	$allowed_tags = array(
+		'html'    => array(),
+		'body'    => array(),
+		'div'     => array(
+			'class'              => array(),
+			'data-bookingnumber' => array(),
+			'id'                 => array(),
+		),
+		'button'  => array(
+			'data-title' => array(),
+			'data-id'    => array(),
+			'id'         => array(),
+			'class'      => array(),
+			'data-file'  => array(),
+		),
+		'section' => array(
+			'id' => array(),
+		),
+		'img'     => array(
+			'class'  => array(),
+			'src'    => array(),
+			'width'  => array(),
+			'height' => array(),
+		),
+		'p'       => array(
+			'class' => array(),
+		),
+		'strong'  => array(),
+		'h2'      => array(),
+		'span'    => array(
+			'class'         => array(),
+			'data-price'    => array(),
+			'data-currency' => array(),
+			'data-number'   => array(),
+			'data-type'     => array(),
+			'data-duration' => array(),
+		),
+		'footer'  => array(),
+	);
+
+	return $allowed_tags;
+}
+function staylodgic_get_guest_invoice_tags() {
+
+	$allowed_tags = array(
+		'html'  => array(), // Allow <html> tag without any attributes
+		'body'  => array(), // Allow <body> tag without any attributes
+		'div'   => array(
+			'id'    => array(), // Allow 'id' attribute for <div> tag
+			'class' => array(), // Allow 'class' attribute for <div> tag
+		),
+		'input' => array(
+			'type'        => array(), // Allow 'type' attribute for <input> tag
+			'name'        => array(), // Allow 'name' attribute for <input> tag
+			'value'       => array(), // Allow 'value' attribute for <input> tag
+			'placeholder' => array(), // Allow 'placeholder' attribute for <input> tag
+			'class'       => array(), // Allow 'class' attribute for <input> tag
+			'id'          => array(), // Allow 'id' attribute for <input> tag
+			'required'    => array(), // Allow 'required' attribute for <input> tag
+		),
+		'label' => array(
+			'for'   => array(), // Allow 'for' attribute for <label> tag
+			'class' => array(), // Allow 'class' attribute for <label> tag
+		),
+	);
+
+	return $allowed_tags;
+}
+function staylodgic_get_guest_booking_details_allowed_tags() {
+
+	$allowed_html = array(
+		'html'   => array(),
+		'body'   => array(),
+		'ul'     => array(),
+		'li'     => array(),
+		'p'      => array(
+			'class' => array(),
+		),
+		'a'      => array(
+			'href'  => array(),
+			'title' => array(),
+		),
+		'br'     => array(),
+		'small'  => array(),
+		'strong' => array(),
+		'div'    => array(
+			'class' => array(),
+		),
+		'span'   => array(
+			'class' => array(),
+		),
+		'i'      => array(
+			'class' => array(),
+		),
+	);
+
+	return $allowed_html;
+}
 function staylodgic_get_guest_activities_allowed_tags() {
 
 	$allowed_html = array(
@@ -595,7 +730,9 @@ function staylodgic_get_guest_activities_allowed_tags() {
 		'body'   => array(),
 		'ul'     => array(),
 		'li'     => array(),
-		'p'      => array(),
+		'p'      => array(
+			'class' => array(),
+		),
 		'a'      => array(
 			'href'  => array(),
 			'title' => array(),
