@@ -167,7 +167,6 @@ class Staylodgic_Init {
 		require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-common.php';
 		require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-data.php';
 		require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-modals.php';
-		require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-payments.php';
 		require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-booking.php';
 		require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-email-dispatcher.php';
 		require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-invoicing.php';

@@ -588,6 +588,59 @@ function staylodgic_set_booking_transient( $data, $stay_booking_number ) {
 function staylodgic_get_booking_transient( $stay_booking_number = null ) {
 	return get_transient( $stay_booking_number );
 }
+function staylodgic_get_guest_registration_tags() {
+
+	$allowed_tags = array(
+		'html'    => array(),
+		'body'    => array(),
+		'div'     => array(
+			'class'              => array(),
+			'data-bookingnumber' => array(),
+			'id'                 => array(),
+			'style'              => array(),
+		),
+		'a'       => array(
+			'href'          => array(),
+			'target'        => array(),
+			'class'         => array(),
+			'data-guest-id' => array(),
+		),
+		'button'  => array(
+			'data-title'    => array(),
+			'data-id'       => array(),
+			'id'            => array(),
+			'class'         => array(),
+			'data-file'     => array(),
+			'data-guest-id' => array(),
+		),
+		'section' => array(
+			'id' => array(),
+		),
+		'img'     => array(
+			'class'  => array(),
+			'src'    => array(),
+			'width'  => array(),
+			'height' => array(),
+			'alt'    => array(),
+		),
+		'p'       => array(
+			'class'     => array(),
+			'data-type' => array(),
+			'data-id'   => array(),
+		),
+		'strong'  => array(),
+		'h2'      => array(
+			'id' => array(),
+		),
+		'span'    => array(
+			'class' => array(),
+		),
+		'footer'  => array(),
+		'h4'      => array(),
+	);
+
+	return $allowed_tags;
+}
 function staylodgic_get_invoice_tax_details_tags() {
 
 	$allowed_tags = array(

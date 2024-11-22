@@ -58,14 +58,13 @@ class Guest_Registry {
 		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'staylodgic-nonce-admin' ) ) {
 			wp_die();
 		}
-		// Check user capabilities or nonce here for security, e.g.,
-		// if ( !current_user_can('edit_posts') ) wp_die();
+		// Check user capabilities or nonce here for security
 		$stay_booking_number = isset( $_POST['stay_booking_number'] ) ? sanitize_text_field( $_POST['stay_booking_number'] ) : '';
 
 		// Create a new guest registration post
 		$post_id = wp_insert_post(
 			array(
-				'post_title'   => wp_strip_all_tags( 'Registration for ' . $stay_booking_number ),
+				'post_title'   => esc_html__( 'Registration for', 'staylodgic' ) . ' ' . wp_strip_all_tags( $stay_booking_number ),
 				'post_content' => '',
 				'post_status'  => 'publish',
 				'post_type'    => 'slgc_guestregistry', // Ensure this is the correct post type
@@ -77,7 +76,7 @@ class Guest_Registry {
 
 		if ( $post_id ) {
 			// Successfully created post, return its ID
-			echo $post_id;
+			echo esc_html( $post_id );
 		} else {
 			// There was an error
 			echo 'error';
@@ -336,11 +335,11 @@ class Guest_Registry {
 		);
 
 		if ( isset( $registration_sheet ) ) {
-			echo $registration_sheet;
+			echo wp_kses( $registration_sheet, staylodgic_get_guest_registration_tags() );
 		} else {
 			echo '<div class="registrations-not-found-notice-wrap">';
 			echo '<div class="registrations-not-found-notice">';
-			echo __( 'Registrations not found', 'staylodgic' );
+			echo esc_html__( 'Registrations not found', 'staylodgic' );
 			echo '</div>';
 			echo '</div>';
 		}
@@ -360,36 +359,27 @@ class Guest_Registry {
 		$hotel_footer,
 		$hotel_logo
 	) {
-		$stay_current_date = gmdate( 'F jS, Y' ); // Outputs: January 1st, 2024
+		ob_start(); // Start output buffering
 
-		$registration_data = get_post_meta( get_the_id(), 'staylodgic_registration_data', true );
-
+		$stay_current_date   = gmdate( 'F jS, Y' );
+		$registration_data   = get_post_meta( get_the_id(), 'staylodgic_registration_data', true );
 		$property_logo_width = staylodgic_get_option( 'property_logo_width' );
 
 		if ( is_array( $registration_data ) && ! empty( $registration_data ) ) {
 			foreach ( $registration_data as $guest_id => $guest_data ) {
-
-				// Get the post URL
-				$post_url = get_permalink( get_the_id() );
-
-				// Append guest ID as a query parameter
-				$edit_url = add_query_arg( 'guest', $guest_id, $post_url );
-
-				// Add Edit and Delete buttons
-				echo '<div class="invoice-buttons-container">';
-				echo '<div class="invoice-container-buttons">';
-				// Generate a nonce for the edit action
+				$post_url  = get_permalink( get_the_id() );
+				$edit_url  = add_query_arg( 'guest', $guest_id, $post_url );
 				$nonce_url = wp_nonce_url( $edit_url, 'edit_registration_' . $guest_id );
 
-				// Output the link with the nonce
-				echo '<a href="' . esc_url( $nonce_url ) . '" target="_blank" class="button button-secondary registration-button edit-registration" data-guest-id="' . esc_attr( $guest_id ) . '">' . __( 'Edit', 'staylodgic' ) . '</a>';
-				// Inside your PHP loop where you're echoing out the delete buttons
-				ob_start();
 				?>
-				<button data-title="Guest Registration <?php echo esc_attr( $guest_data['registration_id'] ); ?>" data-id="<?php echo esc_attr( $guest_data['registration_id'] ); ?>" id="print-invoice-button" class="button button-secondary paper-document-button print-invoice-button"><?php _e( 'Print', 'staylodgic' ); ?></button>
-				<button data-file="registration-<?php echo esc_attr( $guest_data['registration_id'] ); ?>" data-id="<?php echo esc_attr( $guest_data['registration_id'] ); ?>" id="save-pdf-invoice-button" class="button button-secondary paper-document-button save-pdf-invoice-button"><?php _e( 'Save PDF', 'staylodgic' ); ?></button>
+				<div class="invoice-buttons-container">
+					<div class="invoice-container-buttons">
+						<a href="<?php echo esc_url( $nonce_url ); ?>" target="_blank" class="button button-secondary registration-button edit-registration" data-guest-id="<?php echo esc_attr( $guest_id ); ?>"><?php esc_html_e( 'Edit', 'staylodgic' ); ?></a>
+						<button data-title="<?php echo esc_attr( 'Guest Registration ' . $guest_data['registration_id'] ); ?>" data-id="<?php echo esc_attr( $guest_data['registration_id'] ); ?>" id="print-invoice-button" class="button button-secondary paper-document-button print-invoice-button"><?php esc_html_e( 'Print', 'staylodgic' ); ?></button>
+						<button data-file="registration-<?php echo esc_attr( $guest_data['registration_id'] ); ?>" data-id="<?php echo esc_attr( $guest_data['registration_id'] ); ?>" id="save-pdf-invoice-button" class="button button-secondary paper-document-button save-pdf-invoice-button"><?php esc_html_e( 'Save PDF', 'staylodgic' ); ?></button>
+					</div>
 				</div>
-				</div>
+	
 				<div class="invoice-container" data-bookingnumber="<?php echo esc_attr( $guest_data['registration_id'] ); ?>">
 					<div class="invoice-container-inner">
 						<div id="invoice-hotel-header">
@@ -398,9 +388,9 @@ class Guest_Registry {
 							</section>
 							<section id="invoice-info">
 								<p><?php echo esc_html( $hotel_header ); ?></p>
-								<p><?php _e( 'Booking Reference:', 'staylodgic' ); ?> <?php echo esc_html( $stay_booking_number ); ?></p>
-								<p><?php _e( 'Date:', 'staylodgic' ); ?> <?php echo esc_html( $stay_current_date ); ?></p>
-								<p class="invoice-booking-status"><?php _e( 'Guest registration', 'staylodgic' ); ?></p>
+								<p><?php esc_html_e( 'Booking Reference:', 'staylodgic' ); ?> <?php echo esc_html( $stay_booking_number ); ?></p>
+								<p><?php esc_html_e( 'Date:', 'staylodgic' ); ?> <?php echo esc_html( $stay_current_date ); ?></p>
+								<p class="invoice-booking-status"><?php esc_html_e( 'Guest registration', 'staylodgic' ); ?></p>
 							</section>
 						</div>
 						<section id="invoice-hotel-info">
@@ -409,14 +399,11 @@ class Guest_Registry {
 							<p><?php echo esc_html( $hotel_phone ); ?></p>
 						</section>
 						<section id="invoice-customer-info">
-							<h2 id="invoice-subheading"><?php _e( 'Registration:', 'staylodgic' ); ?></h2>
+							<h2 id="invoice-subheading"><?php esc_html_e( 'Registration:', 'staylodgic' ); ?></h2>
 							<div class="invoice-customer-registration">
 								<?php
-								// Display guest information
 								foreach ( $guest_data as $info_key => $info_value ) {
-									// Skip the registration_id in the inner loop since it's handled separately
 									if ( 'registration_id' !== $info_key ) {
-
 										if ( 'countries' === $info_key ) {
 											$info_value['value'] = staylodgic_country_list( 'display', $info_value['value'] );
 										}
@@ -433,39 +420,35 @@ class Guest_Registry {
 									}
 								}
 
-								// Handle registration_id and signature image separately
 								if ( isset( $guest_data['registration_id'] ) ) {
 									$registration_id = $guest_data['registration_id'];
 									$upload_dir      = wp_upload_dir();
 									$signature_url   = esc_url( $upload_dir['baseurl'] . '/signatures/' . $registration_id . '.png' );
 
-									echo '<img class="registration-signature" src="' . esc_url( $signature_url ) . '" alt="Signature">';
+									echo '<img class="registration-signature" src="' . esc_url( $signature_url ) . '" alt="' . esc_attr__( 'Signature', 'staylodgic' ) . '">';
 								}
-
 								?>
 							</div>
 						</section>
-
 					</div>
 					<footer>
-						<div class="invoice-footer"><?php echo $hotel_footer; ?></div>
+						<div class="invoice-footer"><?php echo wp_kses_post( $hotel_footer ); ?></div>
 					</footer>
 				</div>
 				<?php
-				echo '<div class="registration-delete-container"><button class="button button-primary paper-document-button registration-button delete-registration" data-guest-id="' . esc_attr( $guest_id ) . '">' . __( 'Delete this registration', 'staylodgic' ) . '</button></div>';
+				echo '<div class="registration-delete-container"><button class="button button-primary paper-document-button registration-button delete-registration" data-guest-id="' . esc_attr( $guest_id ) . '">' . esc_html__( 'Delete this registration', 'staylodgic' ) . '</button></div>';
 			}
 
-			// After the loop, add the modal HTML
 			echo '<div id="deleteConfirmationModal" class="staylodgic-modal" style="display: none;">';
 			echo '<div class="staylodgic-modal-content">';
-			echo '<h4>' . __( 'Confirm Deletion', 'staylodgic' ) . '</h4>';
-			echo '<p>' . __( 'Are you sure you want to delete this registration?', 'staylodgic' ) . '</p>';
-			echo '<button class="button button-primary" id="confirmDelete">' . __( 'Delete', 'staylodgic' ) . '</button>';
-			echo '<button class="button button-secondary" id="cancelDelete">' . __( 'Cancel', 'staylodgic' ) . '</button>';
+			echo '<h4>' . esc_html__( 'Confirm Deletion', 'staylodgic' ) . '</h4>';
+			echo '<p>' . esc_html__( 'Are you sure you want to delete this registration?', 'staylodgic' ) . '</p>';
+			echo '<button class="button button-primary" id="confirmDelete">' . esc_html__( 'Delete', 'staylodgic' ) . '</button>';
+			echo '<button class="button button-secondary" id="cancelDelete">' . esc_html__( 'Cancel', 'staylodgic' ) . '</button>';
 			echo '</div>';
 			echo '</div>';
 
-			return ob_get_clean();
+			return ob_get_clean(); // Return the buffered content
 		} else {
 			return null;
 		}
@@ -510,12 +493,12 @@ class Guest_Registry {
 			if ( false === $signature_data ) {
 				// Decoding base64 signature failed.
 			} else {
-				$registration_id = $post_id . '_' . rand(); // Random number prefixed with post_id
+				$registration_id = $post_id . '_' . wp_rand(); // Random number prefixed with post_id
 				$file            = $signatures_dir . '/' . $registration_id . '.png';
 				if ( file_put_contents( $file, $signature_data ) === false ) {
 					// Failed to save signature file.
 				} else {
-					error_log( 'Signature file saved successfully.' );
+
 					$booking_data['registration_id'] = $registration_id;
 					if ( isset( $booking_data['signature_data'] ) ) {
 						unset( $booking_data['signature_data'] );
@@ -679,24 +662,16 @@ class Guest_Registry {
 	 * @return void
 	 */
 	public function stay_registration_successful( $post_id ) {
-		// Localize and escape the button label
-		$button_label = esc_html__( 'Register another', 'staylodgic' );
 
-		// Construct the button with proper URL escaping
-		$button = '<a href="' . esc_url( get_the_permalink( $post_id ) ) . '" class="book-button button-inline">' . $button_label . '</a>';
-
-		// Localize the message
-		$success_message = esc_html__( 'Your registration was successful.', 'staylodgic' );
-
-		// Build the success HTML with localization for static strings using concatenated strings
+		// Build the success HTML with localization
 		$success_html = '<div class="guest_registration_form_outer">' .
 			'<div class="guest_registration_form_wrap">' .
 			'<div class="guest_registration_form">' .
 			'<div class="registration-successful-inner">' .
 			'<h3>' . esc_html__( 'Registration Successful', 'staylodgic' ) . '</h3>' .
 			'<p>Hi,</p>' .
-			'<p>' . $success_message . '</p>' .
-			'<p>' . $button . '</p>' .
+			'<p>' . esc_html__( 'Your registration was successful.', 'staylodgic' ) . '</p>' .
+			'<p><a href="' . esc_url( get_the_permalink( $post_id ) ) . '" class="book-button button-inline">' . esc_html__( 'Register another', 'staylodgic' ) . '</a></p>' .
 			'</div>' .
 			'</div>' .
 			'</div>' .

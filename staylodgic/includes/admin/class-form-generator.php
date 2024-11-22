@@ -20,9 +20,11 @@ class Form_Generator {
 	 */
 	private function render_input( $input_object ) {
 
-		if ( ! isset( $_GET['_wpnonce'] ) || ! check_admin_referer( 'edit_registration_' . $_GET['guest'] ) ) {
-			wp_die( esc_html__( 'Invalid nonce. Please try again.', 'staylodgic' ) );
-			return; // If used inside a function, this will stop further execution
+		if ( current_user_can( 'edit_posts' ) && ! empty( $_GET ) ) {
+			if ( ! isset( $_GET['_wpnonce'] ) || ! check_admin_referer( 'edit_registration_' . $_GET['guest'] ) ) {
+				wp_die( esc_html__( 'Invalid nonce. Please try again.', 'staylodgic' ) );
+				return; // If used inside a function, this will stop further execution
+			}
 		}
 
 		// Valid nonce; proceed with action

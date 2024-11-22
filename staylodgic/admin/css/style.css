@@ -1070,6 +1070,9 @@
 }
 
 
+#deleteConfirmationModal.staylodgic-modal {
+	display: none;
+}
 .staylodgic-modal {
 	position: fixed;
 	z-index: 999;
