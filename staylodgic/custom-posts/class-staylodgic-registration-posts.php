@@ -130,7 +130,7 @@ class Staylodgic_Registration_Posts {
 
 		// Check if data has been submitted
 		if ( isset( $_POST['staylodgic_guestregistry_shortcode'] ) ) {
-			$shortcode_data = sanitize_textarea_field( $_POST['staylodgic_guestregistry_shortcode'] );
+			$shortcode_data = sanitize_textarea_field( wp_unslash( $_POST['staylodgic_guestregistry_shortcode'] ) );
 			update_option( 'staylodgic_guestregistry_shortcode', $shortcode_data );
 		}
 

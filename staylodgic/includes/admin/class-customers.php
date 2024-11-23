@@ -196,7 +196,7 @@ class Customers {
 			}
 			echo '</ul>';
 		} else {
-			echo __( 'No booking numbers found.', 'staylodgic' );
+			echo esc_html__( 'No booking numbers found.', 'staylodgic' );
 		}
 	}
 }

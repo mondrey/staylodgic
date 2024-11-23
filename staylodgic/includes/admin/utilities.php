@@ -636,6 +636,7 @@ function staylodgic_get_guest_registration_tags() {
 			'class' => array(),
 		),
 		'footer'  => array(),
+		'h3'      => array(),
 		'h4'      => array(),
 	);
 

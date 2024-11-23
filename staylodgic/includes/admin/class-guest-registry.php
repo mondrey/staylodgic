@@ -493,49 +493,62 @@ class Guest_Registry {
 			if ( false === $signature_data ) {
 				// Decoding base64 signature failed.
 			} else {
-				$registration_id = $post_id . '_' . wp_rand(); // Random number prefixed with post_id
-				$file            = $signatures_dir . '/' . $registration_id . '.png';
-				if ( file_put_contents( $file, $signature_data ) === false ) {
-					// Failed to save signature file.
-				} else {
+				global $wp_filesystem;
 
-					$booking_data['registration_id'] = $registration_id;
-					if ( isset( $booking_data['signature_data'] ) ) {
-						unset( $booking_data['signature_data'] );
-					}
-					if ( isset( $booking_data['signature-data'] ) ) {
-						unset( $booking_data['signature-data'] );
-					}
-					if ( isset( $booking_data['Sign'] ) ) {
-						unset( $booking_data['Sign'] );
-					}
-					if ( is_array( get_post_meta( $post_id, 'staylodgic_registration_data', true ) ) ) {
-						$registration_data = get_post_meta( $post_id, 'staylodgic_registration_data', true );
-					}
-					if ( isset( $booking_data['registration_id'] ) && $guest_id ) {
-						$registration_id = $guest_id;
-					}
-					$registration_data[ $registration_id ] = $booking_data;
-					update_post_meta( $post_id, 'staylodgic_registration_data', $registration_data );
+				if ( ! function_exists( 'WP_Filesystem' ) ) {
+					require_once ABSPATH . 'wp-admin/includes/file.php';
+				}
 
-					$email_address = staylodgic_get_loggedin_user_email();
-					$page_title    = get_the_title( $post_id );
+				if ( WP_Filesystem() ) {
+					$registration_id = $post_id . '_' . wp_rand(); // Random number prefixed with post_id
+					$file            = $signatures_dir . '/' . $registration_id . '.png';
 
-					$email = new Email_Dispatcher( $email_address, 'Online Check-in: ' . $page_title );
-					$email->set_html_content()->set_registration_template( $booking_data, $post_id );
+					// Write the file using WP_Filesystem
+					$file_written = $wp_filesystem->put_contents( $file, $signature_data, FS_CHMOD_FILE );
 
-					$cc = false;
-
-					if ( $email->send( $cc ) ) {
-						// Confirmation email sent successfully to the guest
+					if ( false === $file_written ) {
+						// Failed to save signature file.
 					} else {
-						// Failed to send the confirmation email
+
+						$booking_data['registration_id'] = $registration_id;
+						if ( isset( $booking_data['signature_data'] ) ) {
+							unset( $booking_data['signature_data'] );
+						}
+						if ( isset( $booking_data['signature-data'] ) ) {
+							unset( $booking_data['signature-data'] );
+						}
+						if ( isset( $booking_data['Sign'] ) ) {
+							unset( $booking_data['Sign'] );
+						}
+						if ( is_array( get_post_meta( $post_id, 'staylodgic_registration_data', true ) ) ) {
+							$registration_data = get_post_meta( $post_id, 'staylodgic_registration_data', true );
+						}
+						if ( isset( $booking_data['registration_id'] ) && $guest_id ) {
+							$registration_id = $guest_id;
+						}
+						$registration_data[ $registration_id ] = $booking_data;
+						update_post_meta( $post_id, 'staylodgic_registration_data', $registration_data );
+
+						$email_address = staylodgic_get_loggedin_user_email();
+						$page_title    = get_the_title( $post_id );
+
+						$email = new Email_Dispatcher( $email_address, 'Online Check-in: ' . $page_title );
+						$email->set_html_content()->set_registration_template( $booking_data, $post_id );
+
+						$cc = false;
+
+						if ( $email->send( $cc ) ) {
+							// Confirmation email sent successfully to the guest
+						} else {
+							// Failed to send the confirmation email
+						}
 					}
 				}
 			}
 		}
 
-		echo $this->stay_registration_successful( $post_id );
+		$registration_successful = $this->stay_registration_successful( $post_id );
+		echo wp_kses( $registration_successful, staylodgic_get_guest_registration_tags() );
 		wp_die();
 	}
 
@@ -750,7 +763,7 @@ class Guest_Registry {
 			$res_reg_ids       = $registry_instance->fetch_res_reg_ids_by_booking_number( $booking_number );
 			if ( $res_reg_ids ) {
 				$guest_registration_url = get_permalink( $res_reg_ids['guest_register_id'] );
-				echo '<a href="' . esc_url( $guest_registration_url ) . '" class="book-button button-inline">' . __( 'Proceed to register', 'staylodgic' ) . '</a>';
+				echo '<a href="' . esc_url( $guest_registration_url ) . '" class="book-button button-inline">' . esc_html__( 'Proceed to register', 'staylodgic' ) . '</a>';
 			}
 			// Add other guest details as needed
 			echo '</div>';
@@ -760,7 +773,7 @@ class Guest_Registry {
 		echo '</div>';
 
 		$information_sheet = ob_get_clean(); // Get the buffer content and clean the buffer
-		echo $information_sheet; // Directly output the HTML content
+		echo wp_kses( $information_sheet, staylodgic_get_guest_registration_tags() );
 		wp_die(); // Terminate and return a proper response
 	}
 
@@ -781,10 +794,10 @@ class Guest_Registry {
 							<div class="form-group form-floating form-floating-booking-number form-bookingnumber-request">
 								<input type="hidden" name="staylodgic_bookingdetails_nonce" value="<?php echo esc_attr( $staylodgic_bookingdetails_nonce ); ?>" />
 								<input placeholder="Booking No." type="text" class="form-control" id="booking_number" name="booking_number" required>
-								<label for="booking_number" class="control-label"><?php echo __( 'Booking No.', 'staylodgic' ); ?></label>
+								<label for="booking_number" class="control-label"><?php echo esc_html__( 'Booking No.', 'staylodgic' ); ?></label>
 							</div>
 						</div>
-						<div data-request="guestregistration" id="booking_details" class="form-search-button"><?php echo __( 'Search', 'staylodgic' ); ?></div>
+						<div data-request="guestregistration" id="booking_details" class="form-search-button"><?php echo esc_html__( 'Search', 'staylodgic' ); ?></div>
 					</div>
 				</div>
 
