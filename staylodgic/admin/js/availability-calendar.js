@@ -613,6 +613,7 @@
 					$(".notify-number-over-max").hide();
 
 					var selectedValue = $(this).val(); // Get the selected room value
+					console.log( 'Chosen room is ' + selectedValue );
 					var occupantsData =
 						$(".occupants-range").attr("data-occupants"); // Get the data-occupants attribute
 					var occupantsObject = JSON.parse(occupantsData); // Parse the JSON string into an object

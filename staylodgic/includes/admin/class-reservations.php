@@ -384,6 +384,7 @@ class Reservations {
 				$custom         = get_post_custom( $reservation_id );
 
 				if ( isset( $custom['staylodgic_checkin_date'][0] ) && isset( $custom['staylodgic_checkout_date'][0] ) ) {
+
 					$checkin  = $custom['staylodgic_checkin_date'][0];
 					$checkout = $custom['staylodgic_checkout_date'][0];
 

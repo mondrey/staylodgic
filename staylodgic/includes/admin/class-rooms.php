@@ -404,7 +404,8 @@ class Rooms {
 		}
 
 		if ( isset( $_POST['date_range'] ) ) {
-			$date_range = $_POST['date_range'];
+			// Unslash and sanitize the input
+			$date_range = sanitize_text_field( wp_unslash( $_POST['date_range'] ) );
 		} else {
 			// Return an error response if date_range is not set
 			$response = array(

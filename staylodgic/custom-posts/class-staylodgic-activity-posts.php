@@ -93,24 +93,42 @@ class Staylodgic_Activity_Posts {
 	public function staylodgic_save_activity_order() {
 
 		// Check for nonce security
-		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'staylodgic-nonce-admin' ) ) {
-			wp_die();
+		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'staylodgic-nonce-admin' ) ) {
+			wp_die( 'Invalid nonce.', 403 );
 		}
 
-		global $wpdb; // WordPress database class
-
-		$order   = explode( ',', $_POST['order'] );
-		$counter = 0;
-
-		foreach ( $order as $sort_id ) {
-			$wpdb->update(
-				$wpdb->posts,
-				array( 'menu_order' => intval( $counter ) ), // Ensuring integer
-				array( 'ID' => intval( $sort_id ) )          // Ensuring integer
-			);
-			++$counter;
+		// Validate 'order' input
+		if ( ! isset( $_POST['order'] ) || empty( $_POST['order'] ) ) {
+			wp_die( 'Invalid order data.', 400 );
 		}
-		die( 1 );
+
+		// Sanitize and process the 'order' input
+		$order_raw = wp_unslash( $_POST['order'] );
+		$order_ids = explode( ',', $order_raw );
+
+		// Loop through the order and update each post's menu order
+		if ( is_array( $order_ids ) && ! empty( $order_ids ) ) {
+			$counter = 0;
+
+			foreach ( $order_ids as $sort_id ) {
+				// Sanitize each ID
+				$sort_id = intval( sanitize_text_field( $sort_id ) );
+
+				// Update the post using wp_update_post()
+				if ( $sort_id > 0 ) { // Ensure valid IDs
+					wp_update_post(
+						array(
+							'ID'         => $sort_id,
+							'menu_order' => $counter,
+						)
+					);
+					++$counter;
+				}
+			}
+		}
+
+		// Send a success response
+		wp_send_json_success( 'Activity order updated successfully.' );
 	}
 
 	/**
@@ -175,7 +193,7 @@ class Staylodgic_Activity_Posts {
 	public function sort_admin_init() {
 		if ( is_admin() ) {
 			// Load only if in a Post or Page Manager
-			if ( 'edit.php' === basename( $_SERVER['PHP_SELF'] ) ) {
+			if ( isset( $_SERVER['PHP_SELF'] ) && 'edit.php' === basename( sanitize_text_field( wp_unslash( $_SERVER['PHP_SELF'] ) ) ) ) {
 				wp_enqueue_script( 'jquery-ui-sortable' );
 				wp_enqueue_style( 'mtheme-activity-sorter-CSS', plugin_dir_url( __FILE__ ) . 'css/style.css', false, '1.0', 'all' );
 				$screen = get_current_screen();

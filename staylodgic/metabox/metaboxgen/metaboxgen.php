@@ -758,6 +758,7 @@ function staylodgic_generate_metaboxes( $meta_data, $post_id ) {
 					wp_editor( $textarea_value, $editor_id, $settings );
 					break;
 				case 'select':
+
 					$class = '';
 					if ( isset( $field['target'] ) ) {
 						$field['options'] = staylodgic_get_select_target_options( $field['target'] );
@@ -767,7 +768,7 @@ function staylodgic_generate_metaboxes( $meta_data, $post_id ) {
 						if ( '0' === $key ) {
 							$key = __( 'All the items', 'staylodgic' );
 						}
-						echo '<option value="' . esc_attr( $key ) . '"', $meta === $key ? ' selected' : '', '>', esc_attr( $option ), '</option>';
+						echo '<option value="' . esc_attr( $key ) . '"' . ( strval( $meta ) === strval( $key ) ? ' selected' : '' ) . '>' . esc_html( $option ) . '</option>';
 					}
 					echo '</select></div>';
 
@@ -779,10 +780,6 @@ function staylodgic_generate_metaboxes( $meta_data, $post_id ) {
 					// Retrieve the change log for the post
 					$change_log = get_post_meta( $post_id, 'staylodgic_change_log', true );
 
-					// echo '<pre>';
-					// print_r($change_log);
-					// echo '</pre>';
-					// Check if the change log exists and is an array
 					if ( is_array( $change_log ) && ! empty( $change_log ) ) {
 
 						$reversed_change_log = array_reverse( $change_log );
