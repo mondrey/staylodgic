@@ -420,7 +420,8 @@ class Rooms {
 		}
 
 		if ( isset( $_POST['quantity'] ) ) {
-			$quantity = $_POST['quantity'];
+
+			$quantity = sanitize_text_field( wp_unslash( $_POST['quantity'] ) );
 
 			if ( '' === $quantity ) {
 				$quantity = 0;
@@ -462,7 +463,7 @@ class Rooms {
 		}
 
 		if ( isset( $_POST['stay_post_id'] ) ) {
-			$stay_post_id = $_POST['stay_post_id'];
+			$stay_post_id = sanitize_text_field( wp_unslash( $_POST['stay_post_id'] ) );
 		} else {
 			// Return an error response if stay_post_id is not set
 			$response = array(
@@ -607,7 +608,7 @@ class Rooms {
 		}
 
 		if ( isset( $_POST['date_range'] ) ) {
-			$date_range = $_POST['date_range'];
+			$date_range = sanitize_text_field( wp_unslash( $_POST['date_range'] ) );
 		} else {
 			// Return an error response if date_range is not set
 			$response = array(
@@ -621,7 +622,7 @@ class Rooms {
 		}
 
 		if ( isset( $_POST['rate'] ) ) {
-			$rate = $_POST['rate'];
+			$rate = sanitize_text_field( wp_unslash( $_POST['rate'] ) );
 
 			if ( '' === $rate ) {
 				$response = array(
@@ -656,7 +657,7 @@ class Rooms {
 		}
 
 		if ( isset( $_POST['stay_post_id'] ) ) {
-			$stay_post_id = $_POST['stay_post_id'];
+			$stay_post_id = sanitize_text_field( wp_unslash( $_POST['stay_post_id'] ) );
 		} else {
 			// Return an error response if stay_post_id is not set
 			$response = array(

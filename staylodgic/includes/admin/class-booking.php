@@ -125,12 +125,12 @@ class Booking {
 	 */
 	public function process_selected_room() {
 
-		$bookingnumber   = sanitize_text_field( $_POST['bookingnumber'] );
-		$room_id         = sanitize_text_field( $_POST['room_id'] );
-		$room_price      = sanitize_text_field( $_POST['room_price'] );
-		$bed_layout      = sanitize_text_field( $_POST['bed_layout'] );
-		$meal_plan       = sanitize_text_field( $_POST['meal_plan'] );
-		$meal_plan_price = sanitize_text_field( $_POST['meal_plan_price'] );
+		$bookingnumber   = isset( $_POST['bookingnumber'] ) ? sanitize_text_field( wp_unslash( $_POST['bookingnumber'] ) ) : '';
+		$room_id         = isset( $_POST['room_id'] ) ? sanitize_text_field( wp_unslash( $_POST['room_id'] ) ) : '';
+		$room_price      = isset( $_POST['room_price'] ) ? sanitize_text_field( wp_unslash( $_POST['room_price'] ) ) : '';
+		$bed_layout      = isset( $_POST['bed_layout'] ) ? sanitize_text_field( wp_unslash( $_POST['bed_layout'] ) ) : '';
+		$meal_plan       = isset( $_POST['meal_plan'] ) ? sanitize_text_field( wp_unslash( $_POST['meal_plan'] ) ) : '';
+		$meal_plan_price = isset( $_POST['meal_plan_price'] ) ? sanitize_text_field( wp_unslash( $_POST['meal_plan_price'] ) ) : '';
 
 		// Verify the nonce
 		if ( ! isset( $_POST['staylodgic_roomlistingbox_nonce'] ) || ! check_admin_referer( 'staylodgic-roomlistingbox-nonce', 'staylodgic_roomlistingbox_nonce' ) ) {
@@ -187,12 +187,12 @@ class Booking {
 			return;
 		}
 
-		$bookingnumber   = sanitize_text_field( $_POST['booking_number'] );
-		$room_id         = sanitize_text_field( $_POST['room_id'] );
-		$room_price      = sanitize_text_field( $_POST['room_price'] );
-		$bed_layout      = sanitize_text_field( $_POST['bed_layout'] );
-		$meal_plan       = sanitize_text_field( $_POST['meal_plan'] );
-		$meal_plan_price = sanitize_text_field( $_POST['meal_plan_price'] );
+		$bookingnumber   = isset( $_POST['booking_number'] ) ? sanitize_text_field( wp_unslash( $_POST['booking_number'] ) ) : '';
+		$room_id         = isset( $_POST['room_id'] ) ? sanitize_text_field( wp_unslash( $_POST['room_id'] ) ) : '';
+		$room_price      = isset( $_POST['room_price'] ) ? sanitize_text_field( wp_unslash( $_POST['room_price'] ) ) : '';
+		$bed_layout      = isset( $_POST['bed_layout'] ) ? sanitize_text_field( wp_unslash( $_POST['bed_layout'] ) ) : '';
+		$meal_plan       = isset( $_POST['meal_plan'] ) ? sanitize_text_field( wp_unslash( $_POST['meal_plan'] ) ) : '';
+		$meal_plan_price = isset( $_POST['meal_plan_price'] ) ? sanitize_text_field( wp_unslash( $_POST['meal_plan_price'] ) ) : '';
 
 		$booking_results = self::process_room_data(
 			$bookingnumber,
@@ -591,25 +591,18 @@ class Booking {
 			return;
 		}
 
-		if ( isset( $_POST['reservation_date'] ) ) {
-			$reservation_date = $_POST['reservation_date'];
-		}
-
-		if ( isset( $_POST['number_of_adults'] ) ) {
-			$number_of_adults = $_POST['number_of_adults'];
-		}
-
-		if ( isset( $_POST['number_of_children'] ) ) {
-			$number_of_children = $_POST['number_of_children'];
-		}
+		$reservation_date   = isset( $_POST['reservation_date'] ) ? sanitize_text_field( wp_unslash( $_POST['reservation_date'] ) ) : '';
+		$number_of_adults   = isset( $_POST['number_of_adults'] ) ? intval( wp_unslash( $_POST['number_of_adults'] ) ) : 0;
+		$number_of_children = isset( $_POST['number_of_children'] ) ? intval( wp_unslash( $_POST['number_of_children'] ) ) : 0;
 
 		$free_stay_age_under = staylodgic_get_option( 'childfreestay' );
 
 		$free_stay_child_count = 0;
 
-		if ( isset( $_POST['children_age'] ) ) {
+		if ( isset( $_POST['children_age'] ) && is_array( $_POST['children_age'] ) ) {
 			// Loop through all the select elements with the class 'children-age-selector'
-			foreach ( $_POST['children_age'] as $selected_age ) {
+			$children_age_array = array_map( 'intval', wp_unslash( $_POST['children_age'] ) );
+			foreach ( $children_age_array as $selected_age ) {
 				// Sanitize and store the selected values in an array
 				$children_age[] = sanitize_text_field( $selected_age );
 				if ( $selected_age < $free_stay_age_under ) {
@@ -628,7 +621,7 @@ class Booking {
 		$this->total_chargeable_guests = $number_of_guests - $free_stay_child_count;
 
 		if ( isset( $_POST['room_type'] ) ) {
-			$room_type = $_POST['room_type'];
+			$room_type = sanitize_text_field( wp_unslash( $_POST['room_type'] ) );
 		}
 
 		$chosen_date = \Staylodgic\Common::split_date_range( $reservation_date );
@@ -1201,18 +1194,24 @@ class Booking {
 	public function generate_bed_metabox_callback() {
 
 		// Check for nonce security
-		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'staylodgic-nonce-admin' ) ) {
-			wp_die();
+		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'staylodgic-nonce-admin' ) ) {
+			wp_die( esc_html__( 'Unauthorized request.', 'staylodgic' ) );
 		}
 
+		$room_id    = '';
+		$meta_field = '';
+		$meta_value = '';
+
 		if ( isset( $_POST['the_room_id'] ) ) {
-			$room_id = $_POST['the_room_id'];
+			$room_id = sanitize_text_field( wp_unslash( $_POST['the_room_id'] ) );
 		}
+
 		if ( isset( $_POST['fieldID'] ) ) {
-			$meta_field = $_POST['fieldID'];
+			$meta_field = sanitize_text_field( wp_unslash( $_POST['fieldID'] ) );
 		}
+
 		if ( isset( $_POST['metaValue'] ) ) {
-			$meta_value = $_POST['metaValue'];
+			$meta_value = sanitize_text_field( wp_unslash( $_POST['metaValue'] ) );
 		}
 
 		if ( '' !== $room_id ) {
@@ -1936,31 +1935,51 @@ class Booking {
 			return;
 		}
 
-		$serialized_data = $_POST['bookingdata'];
-		// Parse the serialized data into an associative array
-		parse_str( $serialized_data, $form_data );
+		$form_data = array();
+		if ( isset( $_POST['bookingdata'] ) ) {
+			// Unsanitize and sanitize the input
+			$serialized_data = sanitize_text_field( wp_unslash( $_POST['bookingdata'] ) );
+
+			// Parse the sanitized data into an associative array
+			parse_str( $serialized_data, $form_data );
+		}
 
 		// Generate unique booking number
-		$booking_number = sanitize_text_field( $_POST['booking_number'] );
-		$booking_data   = staylodgic_get_booking_transient( $booking_number );
+		$booking_number = '';
 
-		if ( ! isset( $booking_data ) ) {
-			wp_send_json_error( 'Invalid or timeout. Please try again' );
+		if ( isset( $_POST['booking_number'] ) ) {
+			// Unsanitize and sanitize the booking number
+			$booking_number = sanitize_text_field( wp_unslash( $_POST['booking_number'] ) );
+
+			// Retrieve booking data based on the booking number
+			$booking_data = staylodgic_get_booking_transient( $booking_number );
 		}
+
+		if ( empty( $booking_data ) ) {
+			// Send JSON error response if booking data is invalid or missing
+			wp_send_json_error(
+				array(
+					'success' => false,
+					'message' => esc_html__( 'Invalid or timeout. Please try again.', 'staylodgic' ),
+				)
+			);
+			exit;
+		}
+
 		// Obtain customer details from form submission
-		$bookingdata    = sanitize_text_field( $_POST['bookingdata'] );
-		$booking_number = sanitize_text_field( $_POST['booking_number'] );
-		$full_name      = sanitize_text_field( $_POST['full_name'] );
-		$passport       = sanitize_text_field( $_POST['passport'] );
-		$email_address  = sanitize_email( $_POST['email_address'] );
-		$phone_number   = sanitize_text_field( $_POST['phone_number'] );
-		$street_address = sanitize_text_field( $_POST['street_address'] );
-		$city           = sanitize_text_field( $_POST['city'] );
-		$state          = sanitize_text_field( $_POST['state'] );
-		$zip_code       = sanitize_text_field( $_POST['zip_code'] );
-		$country        = sanitize_text_field( $_POST['country'] );
-		$guest_comment  = sanitize_text_field( $_POST['guest_comment'] );
-		$guest_consent  = sanitize_text_field( $_POST['guest_consent'] );
+		$bookingdata    = isset( $_POST['bookingdata'] ) ? sanitize_text_field( wp_unslash( $_POST['bookingdata'] ) ) : '';
+		$booking_number = isset( $_POST['booking_number'] ) ? sanitize_text_field( wp_unslash( $_POST['booking_number'] ) ) : '';
+		$full_name      = isset( $_POST['full_name'] ) ? sanitize_text_field( wp_unslash( $_POST['full_name'] ) ) : '';
+		$passport       = isset( $_POST['passport'] ) ? sanitize_text_field( wp_unslash( $_POST['passport'] ) ) : '';
+		$email_address  = isset( $_POST['email_address'] ) ? sanitize_email( wp_unslash( $_POST['email_address'] ) ) : '';
+		$phone_number   = isset( $_POST['phone_number'] ) ? sanitize_text_field( wp_unslash( $_POST['phone_number'] ) ) : '';
+		$street_address = isset( $_POST['street_address'] ) ? sanitize_text_field( wp_unslash( $_POST['street_address'] ) ) : '';
+		$city           = isset( $_POST['city'] ) ? sanitize_text_field( wp_unslash( $_POST['city'] ) ) : '';
+		$state          = isset( $_POST['state'] ) ? sanitize_text_field( wp_unslash( $_POST['state'] ) ) : '';
+		$zip_code       = isset( $_POST['zip_code'] ) ? sanitize_text_field( wp_unslash( $_POST['zip_code'] ) ) : '';
+		$country        = isset( $_POST['country'] ) ? sanitize_text_field( wp_unslash( $_POST['country'] ) ) : '';
+		$guest_comment  = isset( $_POST['guest_comment'] ) ? sanitize_text_field( wp_unslash( $_POST['guest_comment'] ) ) : '';
+		$guest_consent  = isset( $_POST['guest_consent'] ) ? sanitize_text_field( wp_unslash( $_POST['guest_consent'] ) ) : '';
 
 		$rooms                  = array();
 		$rooms['0']['id']       = $booking_data['choice']['room_id'];

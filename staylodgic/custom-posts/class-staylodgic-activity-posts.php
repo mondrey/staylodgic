@@ -103,7 +103,7 @@ class Staylodgic_Activity_Posts {
 		}
 
 		// Sanitize and process the 'order' input
-		$order_raw = wp_unslash( $_POST['order'] );
+		$order_raw = sanitize_text_field( wp_unslash( $_POST['order'] ) );
 		$order_ids = explode( ',', $order_raw );
 
 		// Loop through the order and update each post's menu order
