@@ -163,7 +163,10 @@ class Invoicing {
 			return;
 		}
 
-		$booking_number = $_POST['booking_number'];
+		$booking_number = '';
+		if ( isset( $_POST['booking_number'] ) ) {
+			$booking_number = sanitize_text_field( wp_unslash( $_POST['booking_number'] ) );
+		}
 		// Fetch reservation details
 		$reservations_instance = new \Staylodgic\Activity();
 		$stay_reservation_id   = $reservations_instance->get_activity_id_for_booking( $booking_number );
@@ -294,7 +297,10 @@ class Invoicing {
 			return;
 		}
 
-		$booking_number = $_POST['booking_number'];
+		$booking_number = '';
+		if ( isset( $_POST['booking_number'] ) ) {
+			$booking_number = sanitize_text_field( wp_unslash( $_POST['booking_number'] ) );
+		}
 
 		// Fetch reservation details
 		$reservations_instance = new \Staylodgic\Reservations();

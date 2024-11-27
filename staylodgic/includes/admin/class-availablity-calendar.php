@@ -137,8 +137,13 @@ class Availablity_Calendar extends Availablity_Calendar_Base {
 
 		// Retrieve start and end dates from the AJAX request if not provided
 		if ( $is_ajax_request ) {
-			$stay_start_date = sanitize_text_field( $_POST['start'] );
-			$stay_end_date   = sanitize_text_field( $_POST['end'] );
+			if ( isset( $_POST['start'] ) ) {
+				$stay_start_date = sanitize_text_field( wp_unslash( $_POST['start'] ) );
+			}
+
+			if ( isset( $_POST['end'] ) ) {
+				$stay_end_date = sanitize_text_field( wp_unslash( $_POST['end'] ) );
+			}
 		}
 
 		if ( isset( $stay_start_date ) && isset( $stay_end_date ) ) {
@@ -332,8 +337,16 @@ class Availablity_Calendar extends Availablity_Calendar_Base {
 		}
 
 		// Sanitize inputs
-		$start_date = sanitize_text_field( $_POST['start_date'] );
-		$end_date   = sanitize_text_field( $_POST['end_date'] );
+		$start_date = '';
+		$end_date   = '';
+
+		if ( isset( $_POST['start_date'] ) ) {
+			$start_date = sanitize_text_field( wp_unslash( $_POST['start_date'] ) );
+		}
+
+		if ( isset( $_POST['end_date'] ) ) {
+			$end_date = sanitize_text_field( wp_unslash( $_POST['end_date'] ) );
+		}
 
 		// Validate inputs
 		if ( ! strtotime( $start_date ) || ! strtotime( $end_date ) ) {

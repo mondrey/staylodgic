@@ -22,16 +22,19 @@ class Ical_Export_Processor {
 	public function ajax_download_guest_registrations_csv() {
 
 		// Check for nonce security
-		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'staylodgic-nonce-admin' ) ) {
-			wp_die();
+		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'staylodgic-nonce-admin' ) ) {
+			wp_die( esc_html__( 'Unauthorized request.', 'staylodgic' ) );
 		}
 
-		$month = isset( $_POST['month'] ) ? $_POST['month'] : false;
+		$month = false;
+		if ( isset( $_POST['month'] ) ) {
+			$month = sanitize_text_field( wp_unslash( $_POST['month'] ) );
+		}
 
 		if ( $month ) {
 			$this->download_guest_registrations_csv( $month );
 		}
-		wp_die(); // this is required to terminate immediately and return a proper response
+		wp_die();
 	}
 
 	/**
@@ -42,17 +45,20 @@ class Ical_Export_Processor {
 	public function ajax_download_reservations_csv() {
 
 		// Check for nonce security
-		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'staylodgic-nonce-admin' ) ) {
-			wp_die();
+		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'staylodgic-nonce-admin' ) ) {
+			wp_die( esc_html__( 'Unauthorized request.', 'staylodgic' ) );
 		}
 
 		$room_id = isset( $_POST['room_id'] ) ? intval( $_POST['room_id'] ) : false;
-		$month   = isset( $_POST['month'] ) ? $_POST['month'] : false;
+		$month   = false;
+		if ( isset( $_POST['month'] ) ) {
+			$month = sanitize_text_field( wp_unslash( $_POST['month'] ) );
+		}
 
 		if ( $room_id ) {
 			$this->download_reservations_csv( $room_id, $month );
 		}
-		wp_die(); // this is required to terminate immediately and return a proper response
+		wp_die();
 	}
 
 	/**

@@ -46,7 +46,10 @@ class Reservations {
 			return;
 		}
 
-		$booking_number = $_POST['booking_number'];
+		$booking_number = '';
+		if ( isset( $_POST['booking_number'] ) ) {
+			$booking_number = sanitize_text_field( wp_unslash( $_POST['booking_number'] ) );
+		}
 
 		$activity_found = false;
 
@@ -1672,15 +1675,29 @@ class Reservations {
 	 */
 	public function get_available_rooms() {
 
-		// Verify the nonce
-		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'staylodgic-nonce-admin' ) ) {
+		// Validate and verify the nonce
+		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'staylodgic-nonce-admin' ) ) {
 			wp_send_json_error( array( 'message' => 'Invalid nonce' ) );
 			wp_die();
 		}
 
-		$checkin_date    = $_POST['checkin'];
-		$checkout_date   = $_POST['checkout'];
-		$reservationid   = $_POST['reservationid'];
+		// Initialize variables with default values
+		$checkin_date  = '';
+		$checkout_date = '';
+		$reservationid = '';
+
+		if ( isset( $_POST['checkin'] ) ) {
+			$checkin_date = sanitize_text_field( wp_unslash( $_POST['checkin'] ) );
+		}
+
+		if ( isset( $_POST['checkout'] ) ) {
+			$checkout_date = sanitize_text_field( wp_unslash( $_POST['checkout'] ) );
+		}
+
+		if ( isset( $_POST['reservationid'] ) ) {
+			$reservationid = sanitize_text_field( wp_unslash( $_POST['reservationid'] ) );
+		}
+
 		$available_rooms = array();
 
 		$room_list = \Staylodgic\Rooms::query_rooms();
