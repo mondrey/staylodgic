@@ -408,13 +408,13 @@ class Activity {
 	public function get_activity_schedules_ajax_handler() {
 
 		// Check for nonce security
-		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'staylodgic-nonce-admin' ) ) {
-			wp_die();
+		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'staylodgic-nonce-admin' ) ) {
+			wp_die( esc_html__( 'Invalid nonce.', 'staylodgic' ) );
 		}
 
-		$selected_date = isset( $_POST['selected_date'] ) ? sanitize_text_field( $_POST['selected_date'] ) : null;
-		$total_people  = isset( $_POST['totalpeople'] ) ? sanitize_text_field( $_POST['totalpeople'] ) : null;
-		$the_post_id   = isset( $_POST['the_post_id'] ) ? sanitize_text_field( $_POST['the_post_id'] ) : null;
+		$selected_date = isset( $_POST['selected_date'] ) ? sanitize_text_field( wp_unslash( $_POST['selected_date'] ) ) : null;
+		$total_people  = isset( $_POST['totalpeople'] ) ? intval( wp_unslash( $_POST['totalpeople'] ) ) : null;
+		$the_post_id   = isset( $_POST['the_post_id'] ) ? intval( wp_unslash( $_POST['the_post_id'] ) ) : null;
 
 		// Call the method and capture the output
 		ob_start();
@@ -439,26 +439,30 @@ class Activity {
 			return;
 		}
 
-		$selected_date = isset( $_POST['selected_date'] ) ? sanitize_text_field( $_POST['selected_date'] ) : null;
-		$total_people  = isset( $_POST['totalpeople'] ) ? sanitize_text_field( $_POST['totalpeople'] ) : null;
-		$the_post_id   = isset( $_POST['the_post_id'] ) ? sanitize_text_field( $_POST['the_post_id'] ) : null;
+		$selected_date = isset( $_POST['selected_date'] ) ? sanitize_text_field( wp_unslash( $_POST['selected_date'] ) ) : null;
+		$total_people  = isset( $_POST['totalpeople'] ) ? intval( wp_unslash( $_POST['totalpeople'] ) ) : null;
+		$the_post_id   = isset( $_POST['the_post_id'] ) ? intval( wp_unslash( $_POST['the_post_id'] ) ) : null;
 
 		$number_of_children = 0;
 		$number_of_adults   = 0;
 		$number_of_guests   = 0;
 		$children_age       = array();
 
+		// Sanitize number_of_adults
 		if ( isset( $_POST['number_of_adults'] ) ) {
-			$number_of_adults = $_POST['number_of_adults'];
+			$number_of_adults = intval( wp_unslash( $_POST['number_of_adults'] ) );
 		}
 
+		// Sanitize number_of_children
 		if ( isset( $_POST['number_of_children'] ) ) {
-			$number_of_children = $_POST['number_of_children'];
+			$number_of_children = intval( wp_unslash( $_POST['number_of_children'] ) );
 		}
 
-		if ( isset( $_POST['children_age'] ) ) {
-			// Loop through all the select elements with the class 'children-age-selector'
-			foreach ( $_POST['children_age'] as $selected_age ) {
+		if ( isset( $_POST['children_age'] ) && is_array( $_POST['children_age'] ) ) {
+			// Unsanitize the array and sanitize each element
+			$childrens_age_array = array_map( 'sanitize_text_field', wp_unslash( $_POST['children_age'] ) );
+
+			foreach ( $childrens_age_array as $selected_age ) {
 				// Sanitize and store the selected values in an array
 				$children_age[] = sanitize_text_field( $selected_age );
 			}
@@ -649,11 +653,31 @@ class Activity {
 	 */
 	public function process_selected_activity() {
 
-		$bookingnumber  = sanitize_text_field( $_POST['bookingnumber'] );
-		$activity_id    = sanitize_text_field( $_POST['activity_id'] );
-		$activity_date  = sanitize_text_field( $_POST['activity_date'] );
-		$activity_time  = sanitize_text_field( $_POST['activity_time'] );
-		$activity_price = sanitize_text_field( $_POST['activity_price'] );
+		$bookingnumber  = '';
+		$activity_id    = '';
+		$activity_date  = '';
+		$activity_time  = '';
+		$activity_price = '';
+
+		if ( isset( $_POST['bookingnumber'] ) ) {
+			$bookingnumber = sanitize_text_field( wp_unslash( $_POST['bookingnumber'] ) );
+		}
+
+		if ( isset( $_POST['activity_id'] ) ) {
+			$activity_id = sanitize_text_field( wp_unslash( $_POST['activity_id'] ) );
+		}
+
+		if ( isset( $_POST['activity_date'] ) ) {
+			$activity_date = sanitize_text_field( wp_unslash( $_POST['activity_date'] ) );
+		}
+
+		if ( isset( $_POST['activity_time'] ) ) {
+			$activity_time = sanitize_text_field( wp_unslash( $_POST['activity_time'] ) );
+		}
+
+		if ( isset( $_POST['activity_price'] ) ) {
+			$activity_price = sanitize_text_field( wp_unslash( $_POST['activity_price'] ) );
+		}
 
 		// Verify the nonce
 		if ( ! isset( $_POST['staylodgic_roomlistingbox_nonce'] ) || ! check_admin_referer( 'staylodgic-roomlistingbox-nonce', 'staylodgic_roomlistingbox_nonce' ) ) {
@@ -1652,32 +1676,38 @@ class Activity {
 			return;
 		}
 
-		$serialized_data = $_POST['bookingdata'];
-		// Parse the serialized data into an associative array
-		parse_str( $serialized_data, $form_data );
+		if ( isset( $_POST['bookingdata'] ) ) {
+			// Unsanitize and sanitize the input
+			$serialized_data = sanitize_text_field( wp_unslash( $_POST['bookingdata'] ) );
+			// Parse the serialized data into an associative array
+			parse_str( $serialized_data, $form_data );
+		}
 
 		// Generate unique booking number
-		$booking_number = sanitize_text_field( $_POST['booking_number'] );
-		$booking_data   = staylodgic_get_booking_transient( $booking_number );
+		$booking_number = '';
+		if ( isset( $_POST['booking_number'] ) ) {
+			$booking_number = sanitize_text_field( wp_unslash( $_POST['booking_number'] ) );
+		}
+
+		$booking_data = staylodgic_get_booking_transient( $booking_number );
 
 		if ( ! isset( $booking_data ) ) {
 			wp_send_json_error( 'Invalid or timeout. Please try again' );
 		}
 		// Obtain customer details from form submission
-		$bookingdata    = sanitize_text_field( $_POST['bookingdata'] );
-		$booking_number = sanitize_text_field( $_POST['booking_number'] );
-		$full_name      = sanitize_text_field( $_POST['full_name'] );
-		$passport       = sanitize_text_field( $_POST['passport'] );
-		$email_address  = sanitize_email( $_POST['email_address'] );
-		$phone_number   = sanitize_text_field( $_POST['phone_number'] );
-		$street_address = sanitize_text_field( $_POST['street_address'] );
-		$city           = sanitize_text_field( $_POST['city'] );
-		$state          = sanitize_text_field( $_POST['state'] );
-		$zip_code       = sanitize_text_field( $_POST['zip_code'] );
-		$country        = sanitize_text_field( $_POST['country'] );
-		$guest_comment  = sanitize_text_field( $_POST['guest_comment'] );
-		$guest_consent  = sanitize_text_field( $_POST['guest_consent'] );
-
+		$bookingdata    = isset( $_POST['bookingdata'] ) ? sanitize_text_field( wp_unslash( $_POST['bookingdata'] ) ) : '';
+		$booking_number = isset( $_POST['booking_number'] ) ? sanitize_text_field( wp_unslash( $_POST['booking_number'] ) ) : '';
+		$full_name      = isset( $_POST['full_name'] ) ? sanitize_text_field( wp_unslash( $_POST['full_name'] ) ) : '';
+		$passport       = isset( $_POST['passport'] ) ? sanitize_text_field( wp_unslash( $_POST['passport'] ) ) : '';
+		$email_address  = isset( $_POST['email_address'] ) ? sanitize_email( wp_unslash( $_POST['email_address'] ) ) : '';
+		$phone_number   = isset( $_POST['phone_number'] ) ? sanitize_text_field( wp_unslash( $_POST['phone_number'] ) ) : '';
+		$street_address = isset( $_POST['street_address'] ) ? sanitize_text_field( wp_unslash( $_POST['street_address'] ) ) : '';
+		$city           = isset( $_POST['city'] ) ? sanitize_text_field( wp_unslash( $_POST['city'] ) ) : '';
+		$state          = isset( $_POST['state'] ) ? sanitize_text_field( wp_unslash( $_POST['state'] ) ) : '';
+		$zip_code       = isset( $_POST['zip_code'] ) ? sanitize_text_field( wp_unslash( $_POST['zip_code'] ) ) : '';
+		$country        = isset( $_POST['country'] ) ? sanitize_text_field( wp_unslash( $_POST['country'] ) ) : '';
+		$guest_comment  = isset( $_POST['guest_comment'] ) ? sanitize_text_field( wp_unslash( $_POST['guest_comment'] ) ) : '';
+		$guest_consent  = isset( $_POST['guest_consent'] ) ? sanitize_text_field( wp_unslash( $_POST['guest_consent'] ) ) : '';
 		// add other fields as necessary
 		$rooms                  = array();
 		$rooms['0']['id']       = $booking_data['choice']['activity_id'];

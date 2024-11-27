@@ -55,12 +55,11 @@ class Guest_Registry {
 	public function create_guest_registration_ajax_handler() {
 
 		// Check for nonce security
-		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'staylodgic-nonce-admin' ) ) {
-			wp_die();
+		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'staylodgic-nonce-admin' ) ) {
+			wp_die( esc_html__( 'Unauthorized request.', 'staylodgic' ) );
 		}
 		// Check user capabilities or nonce here for security
-		$stay_booking_number = isset( $_POST['stay_booking_number'] ) ? sanitize_text_field( $_POST['stay_booking_number'] ) : '';
-
+		$stay_booking_number = isset( $_POST['stay_booking_number'] ) ? sanitize_text_field( wp_unslash( $_POST['stay_booking_number'] ) ) : '';
 		// Create a new guest registration post
 		$post_id = wp_insert_post(
 			array(
@@ -461,17 +460,20 @@ class Guest_Registry {
 	 */
 	public function save_guestregistration_data() {
 		// Verify nonce
-		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'staylodgic-nonce-search' ) ) {
-			wp_die( 'Security check failed' );
+		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'staylodgic-nonce-search' ) ) {
+			wp_die( esc_html__( 'Security check failed', 'staylodgic' ) );
 		}
 
-		$post_id        = intval( $_POST['post_id'] ); // Sanitize post ID
-		$booking_data   = $_POST['booking_data']; // Consider sanitizing this data
-		$signature_data = $_POST['signature_data']; // Base64 data
+		$post_id      = isset( $_POST['post_id'] ) ? intval( wp_unslash( $_POST['post_id'] ) ) : 0;
+		$booking_data = isset( $_POST['booking_data'] ) ? map_deep( wp_unslash( $_POST['booking_data'] ), 'sanitize_text_field' ) : array();
+		if ( isset( $_POST['signature_data'] ) ) {
+			// Apply sanitize_textarea_field directly to $_POST['signature_data']
+			$signature_data = sanitize_textarea_field( wp_unslash( $_POST['signature_data'] ) );
+		}
 
 		$guest_id = false;
 		if ( isset( $_POST['guest_id'] ) ) {
-			$guest_id = $_POST['guest_id']; // data
+			$guest_id = sanitize_textarea_field( wp_unslash( $_POST['guest_id'] ) );
 		}
 
 		$registration_data = array();
@@ -560,12 +562,13 @@ class Guest_Registry {
 	public function delete_registration() {
 
 		// Check for nonce security
-		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'staylodgic-nonce-admin' ) ) {
-			wp_die();
+		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'staylodgic-nonce-admin' ) ) {
+			wp_die( esc_html__( 'Security check failed.', 'staylodgic' ) );
 		}
 
-		$guest_id = isset( $_POST['guest_id'] ) ? $_POST['guest_id'] : 0;
-		$post_id  = isset( $_POST['post_id'] ) ? $_POST['post_id'] : 0;
+		// Sanitize guest_id
+		$guest_id = isset( $_POST['guest_id'] ) ? sanitize_textarea_field( wp_unslash( $_POST['guest_id'] ) ) : 0;
+		$post_id  = isset( $_POST['post_id'] ) ? intval( wp_unslash( $_POST['post_id'] ) ) : 0;
 
 		// Remove registration data and signature
 		$registration_data = get_post_meta( $post_id, 'staylodgic_registration_data', true );
@@ -728,7 +731,7 @@ class Guest_Registry {
 			return;
 		}
 
-		$booking_number = $_POST['booking_number'];
+		$booking_number = isset( $_POST['booking_number'] ) ? sanitize_text_field( wp_unslash( $_POST['booking_number'] ) ) : '';
 
 		// Fetch reservation details
 		$reservation_instance   = new \Staylodgic\Reservations();
@@ -744,14 +747,14 @@ class Guest_Registry {
 				$stay_reservation_id = get_the_ID();
 
 				// Display reservation details
-				echo '<h3>Reservation ID: ' . esc_html( $stay_reservation_id ) . '</h3>';
-				echo '<p>Check-in Date: ' . esc_html( get_post_meta( $stay_reservation_id, 'staylodgic_checkin_date', true ) ) . '</p>';
-				echo '<p>Check-out Date: ' . esc_html( get_post_meta( $stay_reservation_id, 'staylodgic_checkout_date', true ) ) . '</p>';
+				echo '<h3>' . esc_html__( 'Reservation ID:', 'staylodgic' ) . ' ' . esc_html( $stay_reservation_id ) . '</h3>';
+				echo '<p>' . esc_html__( 'Check-in Date:', 'staylodgic' ) . ' ' . esc_html( get_post_meta( $stay_reservation_id, 'staylodgic_checkin_date', true ) ) . '</p>';
+				echo '<p>' . esc_html__( 'Check-out Date:', 'staylodgic' ) . ' ' . esc_html( get_post_meta( $stay_reservation_id, 'staylodgic_checkout_date', true ) ) . '</p>';
 				// Add other reservation details as needed
 			}
 			echo '</div>';
 		} else {
-			echo '<p>No reservation found for Booking Number: ' . esc_html( $booking_number ) . '</p>';
+			echo '<p>' . esc_html__( 'No reservation found for Booking Number:', 'staylodgic' ) . ' ' . esc_html( $booking_number ) . '</p>';
 		}
 
 		// Fetch guest details
@@ -768,7 +771,7 @@ class Guest_Registry {
 			// Add other guest details as needed
 			echo '</div>';
 		} else {
-			echo '<p>No guest details found for Booking Number: ' . esc_html( $booking_number ) . '</p>';
+			echo '<p>' . esc_html__( 'No guest details found for Booking Number:', 'staylodgic' ) . ' ' . esc_html( $booking_number ) . '</p>';
 		}
 		echo '</div>';
 
@@ -793,7 +796,7 @@ class Guest_Registry {
 						<div class="front-booking-number-container">
 							<div class="form-group form-floating form-floating-booking-number form-bookingnumber-request">
 								<input type="hidden" name="staylodgic_bookingdetails_nonce" value="<?php echo esc_attr( $staylodgic_bookingdetails_nonce ); ?>" />
-								<input placeholder="Booking No." type="text" class="form-control" id="booking_number" name="booking_number" required>
+								<input placeholder="<?php echo esc_html__( 'Booking No.', 'staylodgic' ); ?>" type="text" class="form-control" id="booking_number" name="booking_number" required>
 								<label for="booking_number" class="control-label"><?php echo esc_html__( 'Booking No.', 'staylodgic' ); ?></label>
 							</div>
 						</div>
