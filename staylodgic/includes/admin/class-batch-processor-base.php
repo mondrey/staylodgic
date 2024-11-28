@@ -45,7 +45,7 @@ class Batch_Processor_Base {
 	) {
 
 		// Check for nonce security
-		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'staylodgic-nonce-admin' ) ) {
+		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'staylodgic-nonce-admin' ) ) {
 			wp_die();
 		}
 
@@ -54,9 +54,11 @@ class Batch_Processor_Base {
 
 		$json_output = false;
 		if ( ! $room_id ) {
-			$room_id     = $_POST['room_id'];
-			$ics_url     = $_POST['ics_url'];
-			$json_output = true;
+			if ( isset( $_POST['room_id'], $_POST['ics_url'] ) ) {
+				$room_id     = sanitize_text_field( wp_unslash( $_POST['room_id'] ) );
+				$ics_url     = esc_url_raw( wp_unslash( $_POST['ics_url'] ) );
+				$json_output = true;
+			}
 		}
 
 		// Check if the URL is ready for syncing.

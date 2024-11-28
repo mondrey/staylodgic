@@ -189,14 +189,19 @@ class Options_Panel {
 	 */
 	public function staylodgic_import_settings() {
 		// Check if our nonce is set and verify it.
-		if (
-			isset( $_POST['import_settings_nonce_field'] ) &&
-			wp_verify_nonce( $_POST['import_settings_nonce_field'], 'import_settings_nonce' )
-		) {
+		if ( isset( $_POST['import_settings_nonce_field'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['import_settings_nonce_field'] ) ), 'import_settings_nonce' ) ) {
 
 			if ( isset( $_POST['action'] ) && 'import_settings' === $_POST['action'] && isset( $_FILES['import_settings_file'] ) ) {
 
-				$file = $_FILES['import_settings_file'];
+				if ( isset( $_FILES['import_settings_file'] ) ) {
+					$file = array(
+						'name'     => isset( $_FILES['import_settings_file']['name'] ) ? sanitize_file_name( $_FILES['import_settings_file']['name'] ) : '',
+						'type'     => isset( $_FILES['import_settings_file']['type'] ) ? sanitize_mime_type( $_FILES['import_settings_file']['type'] ) : '',
+						'tmp_name' => isset( $_FILES['import_settings_file']['tmp_name'] ) ? esc_url_raw( $_FILES['import_settings_file']['tmp_name'] ) : '',
+						'error'    => isset( $_FILES['import_settings_file']['error'] ) ? intval( $_FILES['import_settings_file']['error'] ) : UPLOAD_ERR_NO_FILE,
+						'size'     => isset( $_FILES['import_settings_file']['size'] ) ? intval( $_FILES['import_settings_file']['size'] ) : 0,
+					);
+				}
 				// Ensure the file was uploaded without errors
 				if ( UPLOAD_ERR_OK === $file['error'] && 'application/json' === $file['type'] ) {
 					// Read the file and decode the JSON data
@@ -245,8 +250,11 @@ class Options_Panel {
 										$sanitized_data[ $key ][ $import_sub_key ] = sanitize_text_field( $import_sub_value );
 									}
 								}
+							} elseif ( isset( $this->settings[ $key ] ) && 'textarea' === $this->settings[ $key ]['type'] ) {
+								// Check if the input type is textarea
+								$sanitized_data[ $key ] = sanitize_textarea_field( $value ); // Preserves new lines
 							} else {
-								// For other non-array settings, apply generic sanitization or specific based on type
+								// For other non-array settings, apply generic sanitization
 								$sanitized_data[ $key ] = sanitize_text_field( $value );
 							}
 						}
