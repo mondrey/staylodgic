@@ -758,7 +758,6 @@ function staylodgic_generate_metaboxes( $meta_data, $post_id ) {
 					wp_editor( $textarea_value, $editor_id, $settings );
 					break;
 				case 'select':
-
 					$class = '';
 					if ( isset( $field['target'] ) ) {
 						$field['options'] = staylodgic_get_select_target_options( $field['target'] );
@@ -1238,7 +1237,7 @@ function staylodgic_save_images() {
 		return;
 	}
 
-	if ( ! isset( $_POST['ids'] ) || ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'staylodgic-nonce-admin' ) ) {
+	if ( ! isset( $_POST['ids'], $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'staylodgic-nonce-admin' ) ) {
 		return;
 	}
 
@@ -1246,8 +1245,12 @@ function staylodgic_save_images() {
 		return;
 	}
 
-	$ids = wp_strip_all_tags( rtrim( $_POST['ids'], ',' ) );
-	update_post_meta( $_POST['post_id'], 'staylodgic_image_ids', $ids );
+	if ( isset( $_POST['ids'], $_POST['post_id'] ) ) {
+		$ids_got = sanitize_text_field( wp_unslash( $_POST['ids'] ) );
+		$ids     = rtrim( $ids_got, ',' );
+		$post_id = sanitize_text_field( wp_unslash( $_POST['post_id'] ) );
+		update_post_meta( $post_id, 'staylodgic_image_ids', $ids );
+	}
 
 	// update thumbs
 	$thumbs        = explode( ',', $ids );
@@ -1268,7 +1271,7 @@ function staylodgic_multo_gallery_save_images() {
 		return;
 	}
 
-	if ( ! isset( $_POST['ids'] ) || ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'staylodgic-nonce-admin' ) ) {
+	if ( ! isset( $_POST['ids'], $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'staylodgic-nonce-admin' ) ) {
 		return;
 	}
 
@@ -1276,11 +1279,16 @@ function staylodgic_multo_gallery_save_images() {
 		return;
 	}
 
-	$ids       = wp_strip_all_tags( rtrim( $_POST['ids'], ',' ) );
-	$galleryid = $_POST['gallerysetid'];
-	update_post_meta( $_POST['post_id'], $galleryid, $ids );
+	if ( isset( $_POST['ids'], $_POST['gallerysetid'], $_POST['post_id'] ) ) {
+		$ids_got   = sanitize_text_field( wp_unslash( $_POST['ids'] ) );
+		$ids       = rtrim( $ids_got, ',' );
+		$galleryid = sanitize_text_field( wp_unslash( $_POST['gallerysetid'] ) );
+		$post_id   = sanitize_text_field( wp_unslash( $_POST['post_id'] ) );
 
-	$getmeta = get_post_meta( $_POST['post_id'], $galleryid, true );
+		update_post_meta( $post_id, $galleryid, $ids );
+
+		$getmeta = get_post_meta( $post_id, $galleryid, true );
+	}
 
 	// update thumbs
 	$thumbs        = explode( ',', $ids );
@@ -1346,7 +1354,9 @@ function staylodgic_checkdata( $post_id ) {
 
 	// verify nonce
 	if ( isset( $_POST['staylodgic_meta_box_nonce'] ) ) {
-		if ( ! wp_verify_nonce( $_POST['staylodgic_meta_box_nonce'], 'metabox-nonce' ) ) {
+		$nonce = sanitize_text_field( wp_unslash( $_POST['staylodgic_meta_box_nonce'] ) );
+
+		if ( ! wp_verify_nonce( $nonce, 'metabox-nonce' ) ) {
 			return $post_id;
 		}
 	}
@@ -1406,7 +1416,9 @@ function staylodgic_savedata( $staylodgic_metaboxdata, $post_id ) {
 
 	// verify nonce
 	if ( isset( $_POST['staylodgic_meta_box_nonce'] ) ) {
-		if ( ! wp_verify_nonce( $_POST['staylodgic_meta_box_nonce'], 'metabox-nonce' ) ) {
+		$nonce = sanitize_text_field( wp_unslash( $_POST['staylodgic_meta_box_nonce'] ) );
+
+		if ( ! wp_verify_nonce( $nonce, 'metabox-nonce' ) ) {
 			return $post_id;
 		}
 	}
@@ -1415,7 +1427,7 @@ function staylodgic_savedata( $staylodgic_metaboxdata, $post_id ) {
 		foreach ( $staylodgic_metaboxdata['fields'] as $field ) {
 			$field_id = $field['id'];
 			$old      = get_post_meta( $post_id, $field_id, true );
-			$new      = isset( $_POST[ $field_id ] ) ? $_POST[ $field_id ] : '';
+			$new      = isset( $_POST[ $field_id ] ) ? map_deep( wp_unslash( $_POST[ $field_id ] ), 'sanitize_text_field' ) : '';
 
 			if ( 'staylodgic_reservation_room_paid' === $field_id ) {
 				// Get the first element of the array

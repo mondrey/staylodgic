@@ -21,7 +21,7 @@ class Form_Generator {
 	private function render_input( $input_object ) {
 
 		if ( current_user_can( 'edit_posts' ) && ! empty( $_GET ) ) {
-			if ( ! isset( $_GET['_wpnonce'] ) || ! check_admin_referer( 'edit_registration_' . $_GET['guest'] ) ) {
+			if ( ! isset( $_GET['_wpnonce'], $_GET['guest'] ) || ! check_admin_referer( 'edit_registration_' . sanitize_text_field( wp_unslash( $_GET['guest'] ) ) ) ) {
 				wp_die( esc_html__( 'Invalid nonce. Please try again.', 'staylodgic' ) );
 				return; // If used inside a function, this will stop further execution
 			}
@@ -55,7 +55,7 @@ class Form_Generator {
 
 		// Check if 'guest' parameter is present in the URL
 		if ( current_user_can( 'edit_posts' ) && isset( $_GET['guest'] ) && ! empty( $_GET['guest'] ) ) {
-			$guest             = sanitize_text_field( $_GET['guest'] ); // Sanitize the input
+			$guest             = isset( $_GET['guest'] ) ? sanitize_text_field( wp_unslash( $_GET['guest'] ) ) : '';
 			$post_id           = get_the_ID(); // Get current post ID
 			$registration_data = get_post_meta( $post_id, 'staylodgic_registration_data', true ); // Retrieve all registration data
 

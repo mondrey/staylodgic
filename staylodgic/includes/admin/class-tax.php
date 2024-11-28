@@ -24,23 +24,24 @@ class Tax {
 	public function exclude_tax() {
 
 		// Verify the nonce
-		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'staylodgic-nonce-admin' ) ) {
-			wp_send_json_error( 'Invalid request.' ); // Provide a useful message
-			return; // Always return after sending a JSON response to stop further processing
+		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'staylodgic-nonce-admin' ) ) {
+			wp_send_json_error( 'Invalid request.' );
+			return;
 		}
 
 		$response = array();
 
-		$the_post_id = sanitize_text_field( $_POST['post_id'] );
-		$subtotal    = sanitize_text_field( $_POST['subtotal'] );
+		if ( isset( $_POST['post_id'] ) && isset( $_POST['subtotal'] ) ) {
+			$the_post_id = sanitize_text_field( wp_unslash( $_POST['post_id'] ) );
+			$subtotal    = sanitize_text_field( wp_unslash( $_POST['subtotal'] ) );
 
-		update_post_meta( $the_post_id, 'staylodgic_tax', 'excluded' );
-		delete_post_meta( $the_post_id, 'staylodgic_tax_html_data' );
-		delete_post_meta( $the_post_id, 'staylodgic_tax_data' );
-		update_post_meta( $the_post_id, 'staylodgic_reservation_total_room_cost', $subtotal );
-
-		// Send the JSON response
-		wp_send_json( 'Tax Exluded' );
+			update_post_meta( $the_post_id, 'staylodgic_tax', 'excluded' );
+			delete_post_meta( $the_post_id, 'staylodgic_tax_html_data' );
+			delete_post_meta( $the_post_id, 'staylodgic_tax_data' );
+			update_post_meta( $the_post_id, 'staylodgic_reservation_total_room_cost', $subtotal );
+			// Send the JSON response
+			wp_send_json( 'Tax Exluded' );
+		}
 	}
 
 	/**
@@ -51,9 +52,9 @@ class Tax {
 	public function generate_tax() {
 
 		// Verify the nonce
-		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'staylodgic-nonce-admin' ) ) {
-			wp_send_json_error( 'Invalid request.' ); // Provide a useful message
-			return; // Always return after sending a JSON response to stop further processing
+		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'staylodgic-nonce-admin' ) ) {
+			wp_send_json_error( 'Invalid request.' );
+			return;
 		}
 
 		// Initialize the response array
@@ -62,15 +63,12 @@ class Tax {
 		// Check if the necessary POST data is set
 		if ( isset( $_POST['subtotal'], $_POST['staynights'], $_POST['total_guests'] ) ) {
 			// Sanitize and retrieve the input data
-			$subtotal          = sanitize_text_field( $_POST['subtotal'] );
-			$staynights        = sanitize_text_field( $_POST['staynights'] );
-			$stay_total_guests = sanitize_text_field( $_POST['total_guests'] );
-			$the_post_id       = sanitize_text_field( $_POST['post_id'] );
-
-			$tax_type = 'room';
-			if ( isset( $_POST['tax_type'] ) ) {
-				$tax_type = sanitize_text_field( $_POST['tax_type'] );
-			}
+			$subtotal          = isset( $_POST['subtotal'] ) ? sanitize_text_field( wp_unslash( $_POST['subtotal'] ) ) : '';
+			$staynights        = isset( $_POST['staynights'] ) ? sanitize_text_field( wp_unslash( $_POST['staynights'] ) ) : '';
+			$stay_total_guests = isset( $_POST['total_guests'] ) ? sanitize_text_field( wp_unslash( $_POST['total_guests'] ) ) : '';
+			$the_post_id       = isset( $_POST['post_id'] ) ? sanitize_text_field( wp_unslash( $_POST['post_id'] ) ) : '';
+			$tax_type          = 'room';
+			$tax_type          = isset( $_POST['tax_type'] ) ? sanitize_text_field( wp_unslash( $_POST['tax_type'] ) ) : 'room';
 
 			// Calculate the total price
 			if ( 'activities' === $tax_type ) {

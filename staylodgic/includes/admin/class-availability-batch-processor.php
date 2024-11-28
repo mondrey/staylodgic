@@ -107,8 +107,7 @@ class Availability_Batch_Processor extends Batch_Processor_Base {
 	 */
 	public function save_ical_availability_meta() {
 		// Perform nonce check and other validations as needed
-		// ...
-		if ( ! isset( $_POST['ical_form_nonce'] ) || ! wp_verify_nonce( $_POST['ical_form_nonce'], 'ical_form_nonce' ) ) {
+		if ( ! isset( $_POST['ical_form_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['ical_form_nonce'] ) ), 'ical_form_nonce' ) ) {
 			wp_send_json_error( 'Invalid nonce' );
 		}
 
@@ -118,17 +117,16 @@ class Availability_Batch_Processor extends Batch_Processor_Base {
 		$room_links_comment = null;
 
 		if ( isset( $_POST['room_ical_links_id'] ) ) {
-			$room_links_id = $_POST['room_ical_links_id'];
+			$room_links_id = sanitize_text_field( wp_unslash( $_POST['room_ical_links_id'] ) );
 		}
 		if ( isset( $_POST['room_ical_links_url'] ) ) {
-			$room_links_url = $_POST['room_ical_links_url'];
+			$room_links_url = esc_url_raw( wp_unslash( $_POST['room_ical_links_url'] ) );
 		}
 		if ( isset( $_POST['room_ical_links_comment'] ) ) {
-			$room_links_comment = $_POST['room_ical_links_comment'];
+			$room_links_comment = sanitize_textarea_field( wp_unslash( $_POST['room_ical_links_comment'] ) );
 		}
-
 		if ( isset( $_POST['room_ids'] ) ) {
-			$room_ids = $_POST['room_ids'];
+			$room_ids = array_map( 'sanitize_text_field', wp_unslash( $_POST['room_ids'] ) );
 
 			$room_ids_count = count( $room_ids ); // Assign the count to a variable
 
