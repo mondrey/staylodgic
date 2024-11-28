@@ -78,14 +78,11 @@ class Data {
 		$full_name = get_post_meta( $post_id, 'staylodgic_full_name', true );
 
 		// Check if customer post exists
-		// error_log("customer_choice: " . $customer_choice . '||' . $booking_number);
 		$customer_id = get_post_meta( $post_id, 'staylodgic_customer_id', true );
-		// error_log("checking customer post: " . $customer_id . '||' . $post_id . '||' . $full_name);
 
 		if ( \Staylodgic\Common::is_customer_valid_post( $existing_customer ) ) {
 			if ( 'existing' == $customer_choice ) {
 
-				// error_log("Updating: " . $existing_customer . '||' . $booking_number);
 				update_post_meta( $post_id, 'staylodgic_customer_id', $existing_customer );
 
 			}
@@ -98,7 +95,6 @@ class Data {
 
 		if ( ! \Staylodgic\Common::is_customer_valid_post( $customer_id ) ) {
 			if ( 'existing' !== $customer_choice ) {
-				// error_log("Customer does not exist: " . $customer_id . '||' . $full_name);
 				// Create new customer from the filled inputs in reservation
 				self::create_customer_from_reservation_post( $post_id );
 			}
@@ -209,7 +205,6 @@ class Data {
 					$reservation_instance->update_remaining_room_count( $room_type );
 				} catch ( \Exception $e ) {
 					// Handle exceptions or log errors
-					error_log( 'Error updating remaining room count: ' . $e->getMessage() );
 				}
 			}
 		}

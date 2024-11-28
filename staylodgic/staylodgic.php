@@ -6,6 +6,8 @@
  * Version:     1.0.0
  * Author:      Staylodgic
  * Author URI:  https://staylodgic.com/
+ * License: GPL2+
+ * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain: staylodgic
  *
  * Staylodgic is free software: you can redistribute it and/or modify
