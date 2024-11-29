@@ -1,3 +1,19 @@
+body {
+	font: 300 14px/1.5, Helvetica, Arial, sans-serif;
+	color: #000;
+	line-height: 1.57143;
+	-webkit-text-size-adjust: none;
+}
+.staylodgic-content,
+.staylodgic-content h1,
+.staylodgic-content h2,
+.staylodgic-content h3,
+.staylodgic-content h4,
+.staylodgic-content h5,
+.staylodgic-content h6 {
+	font-family: Helvetica, Arial, sans-serif;
+}
+
 .flatpickr-calendar .flatpickr-month {
 	height: 32px;
 }
@@ -954,7 +970,7 @@ a.book-button:hover:active,
 	font-weight: 500;
 	background: #0070ff;
 	color: #fff;
-	padding: 0 10px;
+	padding: 5px 10px 3px;
 	border-radius: 6px;
 }
 .calendar-insights-wrap {
