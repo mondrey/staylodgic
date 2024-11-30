@@ -9,37 +9,6 @@ class Staylodgic_Init {
 		$this->staylodgic_load_availablity_calendar();
 
 		add_filter( 'upload_mimes', array( $this, 'allow_ics_upload' ) );
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_google_fonts' ) );
-		add_action( 'wp_head', array( $this, 'preconnect_google_fonts' ) );
-
-		add_action( 'wp_head', array( $this, 'output_dynamic_css' ) );
-	}
-
-	/**
-	 * Dynamic CSS
-	 *
-	 * @return void
-	 */
-	public function output_dynamic_css() {
-		// Get the main_logo_height option value
-		$main_logo_height       = staylodgic_get_option( 'main_logo_height' );
-		$responsive_logo_height = staylodgic_get_option( 'responsive_logo_height' );
-
-		// Check if height value is set and is a valid number
-		if ( $main_logo_height && is_numeric( $main_logo_height ) ) {
-			echo '<style type="text/css">
-                .menu-is-horizontal .logo img {
-                    height: ' . esc_attr( $main_logo_height ) . 'px;
-                }
-                </style>';
-		}
-		if ( $responsive_logo_height && is_numeric( $responsive_logo_height ) ) {
-			echo '<style type="text/css">
-                .logo-mobile .logoimage {
-                    height: ' . esc_attr( $responsive_logo_height ) . 'px;
-                }
-                </style>';
-		}
 	}
 
 	/**
@@ -201,25 +170,6 @@ class Staylodgic_Init {
 		require_once plugin_dir_path( __FILE__ ) . '/metabox/metaboxes/customer-metaboxes.php';
 		require_once plugin_dir_path( __FILE__ ) . '/metabox/metaboxes/room-metaboxes.php';
 		require_once plugin_dir_path( __FILE__ ) . '/metabox/metaboxes/activity-metaboxes.php';
-	}
-
-	/**
-	 * Load Google Fonts
-	 *
-	 * @return void
-	 */
-	function enqueue_google_fonts() {
-		wp_enqueue_style( 'staylodgic-google-fonts', 'https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap', array(), null );
-	}
-
-	/**
-	 * Preconntect Google Fonts
-	 *
-	 * @return void
-	 */
-	function preconnect_google_fonts() {
-		echo '<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>';
-		echo '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>';
 	}
 
 	/**

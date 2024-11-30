@@ -1,3152 +1,4587 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: iMaginem Blocks\n"
+"Project-Id-Version: Staylodgic\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-27 18:26+0530\n"
+"POT-Creation-Date: 2024-11-30 14:08+0500\n"
 "PO-Revision-Date: 2016-04-04 22:30+0530\n"
 "Last-Translator: imaginem <imagine.themes@gmail.com>\n"
-"Language-Team: imaginem\n"
+"Language-Team: staylodgic\n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.12\n"
-"X-Poedit-Basepath: ..\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.5\n"
+"X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: __;_e;esc_html_e;esc_html__;esc_attr_e;esc_attr__\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPath-1: .\n"
 
-#: assets/js/modernizr.custom.47002.js:3
-msgid "hashchange"
+#: custom-posts/class-staylodgic-activity-posts.php:31
+msgid "Sort activities"
 msgstr ""
 
-#: imaginem-blocks.php:55
+#: custom-posts/class-staylodgic-activity-posts.php:32
+msgid "Sort Activities"
+msgstr ""
+
+#: custom-posts/class-staylodgic-activity-posts.php:49
+msgid "Sort activity"
+msgstr ""
+
+#: custom-posts/class-staylodgic-activity-posts.php:51
+#: custom-posts/class-staylodgic-room-posts.php:51
+msgid "Drag and Drop the slides to order them"
+msgstr ""
+
+#: custom-posts/class-staylodgic-activity-posts.php:148
+msgid "Add New Activity"
+msgstr ""
+
+#: custom-posts/class-staylodgic-activity-posts.php:149
+msgid "New Activity"
+msgstr ""
+
+#: custom-posts/class-staylodgic-activity-posts.php:150
+msgid "Edit Activity"
+msgstr ""
+
+#: custom-posts/class-staylodgic-activity-posts.php:151
+msgid "View Activity"
+msgstr ""
+
+#: custom-posts/class-staylodgic-activity-posts.php:152
+msgid "All Activities"
+msgstr ""
+
+#: custom-posts/class-staylodgic-activity-posts.php:153
+msgid "Search Activities"
+msgstr ""
+
+#: custom-posts/class-staylodgic-activity-posts.php:154
+msgid "Parent Activities:"
+msgstr ""
+
+#: custom-posts/class-staylodgic-activity-posts.php:155
+msgid "No activities found."
+msgstr ""
+
+#: custom-posts/class-staylodgic-activity-posts.php:156
+msgid "No activities found in Trash."
+msgstr ""
+
+#: custom-posts/class-staylodgic-activity-reservation-posts.php:20
+#: custom-posts/class-staylodgic-customer-posts.php:92
+#: custom-posts/class-staylodgic-customer-posts.php:95
+#: custom-posts/class-staylodgic-reservation-posts.php:23
+#: metabox/metaboxes/activityres-metaboxes.php:223
+#: metabox/metaboxes/customer-metaboxes.php:33
+#: metabox/metaboxes/reservation-metaboxes.php:235
+msgid "Customer"
+msgstr ""
+
+#: custom-posts/class-staylodgic-activity-reservation-posts.php:21
+#: custom-posts/class-staylodgic-reservation-posts.php:24
+#: metabox/metaboxes/registry-metaboxes.php:12
+#: metabox/metaboxes/registry-metaboxes.php:15
+msgid "Booking Number"
+msgstr ""
+
+#: custom-posts/class-staylodgic-activity-reservation-posts.php:22
+msgid "Activity Day"
+msgstr ""
+
+#: custom-posts/class-staylodgic-activity-reservation-posts.php:23
+#: custom-posts/class-staylodgic-reservation-posts.php:28
+msgid "Status"
+msgstr ""
+
+#: custom-posts/class-staylodgic-activity-reservation-posts.php:24
+#: custom-posts/class-staylodgic-reservation-posts.php:29
+msgid "Sub Status"
+msgstr ""
+
+#: custom-posts/class-staylodgic-activity-reservation-posts.php:25
+#: includes/admin/class-analytics-activity.php:776
+msgid "Activity"
+msgstr ""
+
+#: custom-posts/class-staylodgic-activity-reservation-posts.php:89
+msgid "Add New Activity Reservation"
+msgstr ""
+
+#: custom-posts/class-staylodgic-activity-reservation-posts.php:90
+msgid "New Activity Reservation"
+msgstr ""
+
+#: custom-posts/class-staylodgic-activity-reservation-posts.php:91
+msgid "Edit Activity Reservation"
+msgstr ""
+
+#: custom-posts/class-staylodgic-activity-reservation-posts.php:92
+msgid "View Activity Reservation"
+msgstr ""
+
+#: custom-posts/class-staylodgic-activity-reservation-posts.php:93
+msgid "All Activity Reservations"
+msgstr ""
+
+#: custom-posts/class-staylodgic-activity-reservation-posts.php:94
+msgid "Search Activity Reservations"
+msgstr ""
+
+#: custom-posts/class-staylodgic-activity-reservation-posts.php:95
+msgid "Parent Activity Reservations:"
+msgstr ""
+
+#: custom-posts/class-staylodgic-activity-reservation-posts.php:96
+msgid "No activity reservations found."
+msgstr ""
+
+#: custom-posts/class-staylodgic-activity-reservation-posts.php:97
+msgid "No activity reservations found in Trash."
+msgstr ""
+
+#: custom-posts/class-staylodgic-activity-reservation-posts.php:102
+msgid "Activity Reservation"
+msgstr ""
+
+#: custom-posts/class-staylodgic-customer-posts.php:19
+#: includes/admin/class-analytics-activity.php:774
+#: includes/admin/class-analytics-bookings.php:868
+msgid "Booking"
+msgstr ""
+
+#: custom-posts/class-staylodgic-customer-posts.php:20
+#: custom-posts/class-staylodgic-reservation-posts.php:122
+#: custom-posts/class-staylodgic-reservation-posts.php:125
+#: metabox/metaboxes/customer-metaboxes.php:121
+msgid "Reservations"
+msgstr ""
+
+#: custom-posts/class-staylodgic-customer-posts.php:21
+#: custom-posts/class-staylodgic-room-posts.php:142
+#: custom-posts/class-staylodgic-room-posts.php:145
+msgid "Rooms"
+msgstr ""
+
+#: custom-posts/class-staylodgic-customer-posts.php:22
+#: custom-posts/class-staylodgic-customer-posts.php:121
+#: custom-posts/class-staylodgic-registration-posts.php:51
+#: custom-posts/class-staylodgic-reservation-posts.php:155
+msgid "Section"
+msgstr ""
+
+#: custom-posts/class-staylodgic-customer-posts.php:88
+#: custom-posts/class-staylodgic-customer-posts.php:91
+msgid "Customers"
+msgstr ""
+
+#: custom-posts/class-staylodgic-customer-posts.php:89
+msgid "Create a Customer"
+msgstr ""
+
+#: custom-posts/class-staylodgic-customer-posts.php:90
+msgid "Add New Customer"
+msgstr ""
+
+#: custom-posts/class-staylodgic-customer-posts.php:93
+msgid "All Customers"
+msgstr ""
+
+#: custom-posts/class-staylodgic-customer-posts.php:119
+#: custom-posts/class-staylodgic-customer-posts.php:120
+#: custom-posts/class-staylodgic-registration-posts.php:49
+#: custom-posts/class-staylodgic-registration-posts.php:50
+#: custom-posts/class-staylodgic-reservation-posts.php:153
+#: custom-posts/class-staylodgic-reservation-posts.php:154
+msgid "Sections"
+msgstr ""
+
+#: custom-posts/class-staylodgic-customer-posts.php:122
+#: custom-posts/class-staylodgic-registration-posts.php:52
+#: custom-posts/class-staylodgic-reservation-posts.php:156
+msgid "All Sections"
+msgstr ""
+
+#: custom-posts/class-staylodgic-registration-posts.php:20
+#: custom-posts/class-staylodgic-registration-posts.php:23
+msgid "Guest Registrations"
+msgstr ""
+
+#: custom-posts/class-staylodgic-registration-posts.php:21
+msgid "Create a Registration"
+msgstr ""
+
+#: custom-posts/class-staylodgic-registration-posts.php:22
+msgid "Add New Registration"
+msgstr ""
+
+#: custom-posts/class-staylodgic-registration-posts.php:24
+#: custom-posts/class-staylodgic-registration-posts.php:27
+#: includes/admin/class-welcome-screen.php:132
+#: metabox/metaboxes/reservation-metaboxes.php:267
+msgid "Guest Registration"
+msgstr ""
+
+#: custom-posts/class-staylodgic-registration-posts.php:25
+msgid "All Registrations"
+msgstr ""
+
+#: custom-posts/class-staylodgic-registration-posts.php:74
+msgid "Guest Registration Shortcodes"
+msgstr ""
+
+#: custom-posts/class-staylodgic-registration-posts.php:75
+msgid "Form Fields"
+msgstr ""
+
+#: custom-posts/class-staylodgic-registration-posts.php:104
+msgid "Guest Registration Fields"
+msgstr ""
+
+#: custom-posts/class-staylodgic-registration-posts.php:123
+msgid "Nonce verification failed"
+msgstr ""
+
+#: custom-posts/class-staylodgic-registration-posts.php:128
+msgid "Permission denied"
+msgstr ""
+
+#: custom-posts/class-staylodgic-reservation-posts.php:25
+msgid "Checkin / Checkout"
+msgstr ""
+
+#: custom-posts/class-staylodgic-reservation-posts.php:26
+msgid "Registered"
+msgstr ""
+
+#: custom-posts/class-staylodgic-reservation-posts.php:27
+#: includes/admin/class-analytics-bookings.php:876
+#: includes/admin/class-invoicing.php:685
+msgid "Nights"
+msgstr ""
+
+#: custom-posts/class-staylodgic-reservation-posts.php:30
+#: custom-posts/class-staylodgic-room-posts.php:146
+#: custom-posts/class-staylodgic-room-posts.php:149
+#: includes/admin/class-analytics-bookings.php:870
+#: metabox/metaboxes/reservation-metaboxes.php:77
+msgid "Room"
+msgstr ""
+
+#: custom-posts/class-staylodgic-reservation-posts.php:70
+msgid "Check-in"
+msgstr ""
+
+#: custom-posts/class-staylodgic-reservation-posts.php:72
+msgid "Check-out"
+msgstr ""
+
+#: custom-posts/class-staylodgic-reservation-posts.php:74
+msgid "Staying"
+msgstr ""
+
+#: custom-posts/class-staylodgic-reservation-posts.php:123
+msgid "Create Reservation"
+msgstr ""
+
+#: custom-posts/class-staylodgic-reservation-posts.php:124
+msgid "Add New Reservation"
+msgstr ""
+
+#: custom-posts/class-staylodgic-reservation-posts.php:126
+#: custom-posts/class-staylodgic-reservation-posts.php:129
+#: metabox/metaboxes/activityres-metaboxes.php:36
+#: metabox/metaboxes/activityres-metaboxes.php:50
+#: metabox/metaboxes/reservation-metaboxes.php:36
+#: metabox/metaboxes/reservation-metaboxes.php:50
+msgid "Reservation"
+msgstr ""
+
+#: custom-posts/class-staylodgic-reservation-posts.php:127
+msgid "All Reservations"
+msgstr ""
+
+#: custom-posts/class-staylodgic-room-posts.php:49
+msgid "Sort room"
+msgstr ""
+
+#: custom-posts/class-staylodgic-room-posts.php:143
+msgid "Create a Room"
+msgstr ""
+
+#: custom-posts/class-staylodgic-room-posts.php:144
+msgid "Add New Room"
+msgstr ""
+
+#: custom-posts/class-staylodgic-room-posts.php:147
+msgid "All Rooms"
+msgstr ""
+
+#: includes/admin-property-data.php:9
+msgid "City View"
+msgstr ""
+
+#: includes/admin-property-data.php:10
+msgid "Sea View"
+msgstr ""
+
+#: includes/admin-property-data.php:11
+msgid "Mountain View"
+msgstr ""
+
+#: includes/admin-property-data.php:12
+msgid "Garden View"
+msgstr ""
+
+#: includes/admin-property-data.php:13
+msgid "Pool View"
+msgstr ""
+
+#: includes/admin-property-data.php:14
+msgid "River View"
+msgstr ""
+
+#: includes/admin-property-data.php:15
+msgid "Lake View"
+msgstr ""
+
+#: includes/admin-property-data.php:16
+msgid "Forest View"
+msgstr ""
+
+#: includes/admin-property-data.php:17
+msgid "Courtyard View"
+msgstr ""
+
+#: includes/admin-property-data.php:18 includes/admin-property-data.php:133
+msgid "Beachfront"
+msgstr ""
+
+#: includes/admin-property-data.php:19
+msgid "Park View"
+msgstr ""
+
+#: includes/admin-property-data.php:20
+msgid "Countryside View"
+msgstr ""
+
+#: includes/admin-property-data.php:21
+msgid "Sunset View"
+msgstr ""
+
+#: includes/admin-property-data.php:22
+msgid "Skyline View"
+msgstr ""
+
+#: includes/admin-property-data.php:23
+msgid "Harbor View"
+msgstr ""
+
+#: includes/admin-property-data.php:24
+msgid "Historic View"
+msgstr ""
+
+#: includes/admin-property-data.php:25
+msgid "Panoramic View"
+msgstr ""
+
+#: includes/admin-property-data.php:26
+msgid "Vineyard View"
+msgstr ""
+
+#: includes/admin-property-data.php:27
+msgid "Poolside View"
+msgstr ""
+
+#: includes/admin-property-data.php:28
+msgid "Wildlife View"
+msgstr ""
+
+#: includes/admin-property-data.php:29
+msgid "Ski Slopes View"
+msgstr ""
+
+#: includes/admin-property-data.php:30
+msgid "Theme Park View"
+msgstr ""
+
+#: includes/admin-property-data.php:31
+msgid "Sports Stadium View"
+msgstr ""
+
+#: includes/admin-property-data.php:32
+msgid "Waterfront View"
+msgstr ""
+
+#: includes/admin-property-data.php:33
+msgid "Forest Cabin View"
+msgstr ""
+
+#: includes/admin-property-data.php:34
+msgid "Artistic View"
+msgstr ""
+
+#: includes/admin-property-data.php:35
+msgid "Rooftop View"
+msgstr ""
+
+#: includes/admin-property-data.php:36
+msgid "Balcony View"
+msgstr ""
+
+#: includes/admin-property-data.php:37
+msgid "Desert View"
+msgstr ""
+
+#: includes/admin-property-data.php:38
+msgid "Lagoon View"
+msgstr ""
+
+#: includes/admin-property-data.php:39
+msgid "Side Sea-view"
+msgstr ""
+
+#: includes/admin-property-data.php:51
+msgid "Air Conditioning"
+msgstr ""
+
+#: includes/admin-property-data.php:52
+msgid "Television"
+msgstr ""
+
+#: includes/admin-property-data.php:53
+msgid "Free WiFi"
+msgstr ""
+
+#: includes/admin-property-data.php:54
+msgid "Private Bathroom"
+msgstr ""
+
+#: includes/admin-property-data.php:55
+msgid "Balcony"
+msgstr ""
+
+#: includes/admin-property-data.php:56
+msgid "Minibar"
+msgstr ""
+
+#: includes/admin-property-data.php:57
+msgid "In-room Safe"
+msgstr ""
+
+#: includes/admin-property-data.php:58
+msgid "Room Service"
+msgstr ""
+
+#: includes/admin-property-data.php:59
+msgid "Kitchenette"
+msgstr ""
+
+#: includes/admin-property-data.php:60
+msgid "Bathtub"
+msgstr ""
+
+#: includes/admin-property-data.php:61
+msgid "Jacuzzi"
+msgstr ""
+
+#: includes/admin-property-data.php:62
+msgid "Fitness Gym"
+msgstr ""
+
+#: includes/admin-property-data.php:63 includes/admin-property-data.php:236
+msgid "Spa Facilities"
+msgstr ""
+
+#: includes/admin-property-data.php:64
+msgid "Swimming Pool"
+msgstr ""
+
+#: includes/admin-property-data.php:65
+msgid "Beach Access"
+msgstr ""
+
+#: includes/admin-property-data.php:66
+msgid "Parking Area"
+msgstr ""
+
+#: includes/admin-property-data.php:67
+msgid "Pet Friendly"
+msgstr ""
+
+#: includes/admin-property-data.php:68
+msgid "Conference Room"
+msgstr ""
+
+#: includes/admin-property-data.php:80
+msgid "24-hour front desk"
+msgstr ""
+
+#: includes/admin-property-data.php:81
+msgid "Air conditioning"
+msgstr ""
+
+#: includes/admin-property-data.php:82
+msgid "ATM on site"
+msgstr ""
+
+#: includes/admin-property-data.php:83
+msgid "Babysitting"
+msgstr ""
+
+#: includes/admin-property-data.php:84
+msgid "BBQ/Picnic area"
+msgstr ""
+
+#: includes/admin-property-data.php:85
+msgid "Library"
+msgstr ""
+
+#: includes/admin-property-data.php:86
+msgid "Car rental"
+msgstr ""
+
+#: includes/admin-property-data.php:87
+msgid "Casino"
+msgstr ""
+
+#: includes/admin-property-data.php:88
+msgid "Concierge desk"
+msgstr ""
+
+#: includes/admin-property-data.php:89
+msgid "Currency exchange"
+msgstr ""
+
+#: includes/admin-property-data.php:90
+msgid "Elevators"
+msgstr ""
+
+#: includes/admin-property-data.php:91
+msgid "Fitness Center"
+msgstr ""
+
+#: includes/admin-property-data.php:92
+msgid "Express Check-in/Check-out"
+msgstr ""
+
+#: includes/admin-property-data.php:93
+msgid "Airport shuttle (free)"
+msgstr ""
+
+#: includes/admin-property-data.php:94
+msgid "Game room"
+msgstr ""
+
+#: includes/admin-property-data.php:95
+msgid "Souvenir/Gift Shop"
+msgstr ""
+
+#: includes/admin-property-data.php:96
+msgid "Heated pool"
+msgstr ""
+
+#: includes/admin-property-data.php:97
+msgid "Housekeeping - daily"
+msgstr ""
+
+#: includes/admin-property-data.php:98
+msgid "Indoor parking"
+msgstr ""
+
+#: includes/admin-property-data.php:99
+msgid "Indoor pool"
+msgstr ""
+
+#: includes/admin-property-data.php:100
+msgid "Jacuzzi (Hot Tub)"
+msgstr ""
+
+#: includes/admin-property-data.php:101
+msgid "Evening Entertainment"
+msgstr ""
+
+#: includes/admin-property-data.php:102
+msgid "Massage"
+msgstr ""
+
+#: includes/admin-property-data.php:103
+msgid "Nightclub/DJ"
+msgstr ""
+
+#: includes/admin-property-data.php:104
+msgid "Outdoor pool"
+msgstr ""
+
+#: includes/admin-property-data.php:105
+msgid "Restaurant"
+msgstr ""
+
+#: includes/admin-property-data.php:106
+msgid "Room service"
+msgstr ""
+
+#: includes/admin-property-data.php:107
+msgid "Safe"
+msgstr ""
+
+#: includes/admin-property-data.php:108
+msgid "Sauna"
+msgstr ""
+
+#: includes/admin-property-data.php:109
+msgid "Shoeshine"
+msgstr ""
+
+#: includes/admin-property-data.php:110
+msgid "Solarium"
+msgstr ""
+
+#: includes/admin-property-data.php:111
+msgid "Turkish/Steam Bath"
+msgstr ""
+
+#: includes/admin-property-data.php:112
+msgid "Tour Desk"
+msgstr ""
+
+#: includes/admin-property-data.php:113
+msgid "Dry cleaning"
+msgstr ""
+
+#: includes/admin-property-data.php:114
+msgid "Valet parking"
+msgstr ""
+
+#: includes/admin-property-data.php:115
+msgid "Vending Machine (snacks)"
+msgstr ""
+
+#: includes/admin-property-data.php:116
+msgid "Accessible parking"
+msgstr ""
+
+#: includes/admin-property-data.php:117
+msgid "Shops (on site)"
+msgstr ""
+
+#: includes/admin-property-data.php:118
+msgid "Grocery shopping service available"
+msgstr ""
+
+#: includes/admin-property-data.php:119
+msgid "Bar"
+msgstr ""
+
+#: includes/admin-property-data.php:120
+msgid "Laundry"
+msgstr ""
+
+#: includes/admin-property-data.php:121 includes/admin/utilities.php:547
+msgid "Breakfast"
+msgstr ""
+
+#: includes/admin-property-data.php:122
+msgid "Street parking"
+msgstr ""
+
+#: includes/admin-property-data.php:123
+msgid "Playground"
+msgstr ""
+
+#: includes/admin-property-data.php:124
+msgid "Lockers"
+msgstr ""
+
+#: includes/admin-property-data.php:125
+msgid "Non-smoking rooms"
+msgstr ""
+
+#: includes/admin-property-data.php:126
+msgid "Bicycle rentals"
+msgstr ""
+
+#: includes/admin-property-data.php:127
+msgid "Business center"
+msgstr ""
+
+#: includes/admin-property-data.php:128
+msgid "Secured parking"
+msgstr ""
+
+#: includes/admin-property-data.php:129
+msgid "Tennis court"
+msgstr ""
+
+#: includes/admin-property-data.php:130
+msgid "Water Sport Facilities (on site)"
+msgstr ""
+
+#: includes/admin-property-data.php:131
+msgid "Golf Course (within 2 miles)"
+msgstr ""
+
+#: includes/admin-property-data.php:132
+msgid "Horseback riding"
+msgstr ""
+
+#: includes/admin-property-data.php:134
+msgid "Heating"
+msgstr ""
+
+#: includes/admin-property-data.php:135
+msgid "Shared Kitchen"
+msgstr ""
+
+#: includes/admin-property-data.php:136
+msgid "Meeting/Banquet Facilities"
+msgstr ""
+
+#: includes/admin-property-data.php:137
+msgid "Skiing"
+msgstr ""
+
+#: includes/admin-property-data.php:138
+msgid "Airport shuttle service (surcharge)"
+msgstr ""
+
+#: includes/admin-property-data.php:139
+msgid "Baggage Storage"
+msgstr ""
+
+#: includes/admin-property-data.php:140
+msgid "Newspaper"
+msgstr ""
+
+#: includes/admin-property-data.php:141
+msgid "Hypoallergenic room available"
+msgstr ""
+
+#: includes/admin-property-data.php:142
+msgid "All Spaces Non-Smoking (public and private)"
+msgstr ""
+
+#: includes/admin-property-data.php:143
+msgid "Electric vehicle charging station"
+msgstr ""
+
+#: includes/admin-property-data.php:144
+msgid "Events ticket service"
+msgstr ""
+
+#: includes/admin-property-data.php:145
+msgid "Snack bar"
+msgstr ""
+
+#: includes/admin-property-data.php:158
+msgid "Breakfast in the room"
+msgstr ""
+
+#: includes/admin-property-data.php:159
+msgid "Public transport tickets"
+msgstr ""
+
+#: includes/admin-property-data.php:160
+msgid "Bikes available (free)"
+msgstr ""
+
+#: includes/admin-property-data.php:161
+msgid "Outdoor furniture"
+msgstr ""
+
+#: includes/admin-property-data.php:162
+msgid "Outdoor fireplace"
+msgstr ""
+
+#: includes/admin-property-data.php:163
+msgid "Garden"
+msgstr ""
+
+#: includes/admin-property-data.php:164
+msgid "Terrace"
+msgstr ""
+
+#: includes/admin-property-data.php:165
+msgid "Sun terrace"
+msgstr ""
+
+#: includes/admin-property-data.php:166
+msgid "Chapel/shrine"
+msgstr ""
+
+#: includes/admin-property-data.php:167
+msgid "Shared lounge/TV area"
+msgstr ""
+
+#: includes/admin-property-data.php:168
+msgid "Ironing service"
+msgstr ""
+
+#: includes/admin-property-data.php:169
+msgid "Trouser press"
+msgstr ""
+
+#: includes/admin-property-data.php:170
+msgid "Designated smoking area"
+msgstr ""
+
+#: includes/admin-property-data.php:171
+msgid "Pet basket"
+msgstr ""
+
+#: includes/admin-property-data.php:172
+msgid "Pet bowls"
+msgstr ""
+
+#: includes/admin-property-data.php:173
+msgid "Beach"
+msgstr ""
+
+#: includes/admin-property-data.php:174
+msgid "Bowling"
+msgstr ""
+
+#: includes/admin-property-data.php:175
+msgid "Darts"
+msgstr ""
+
+#: includes/admin-property-data.php:176
+msgid "Fishing"
+msgstr ""
+
+#: includes/admin-property-data.php:177
+msgid "Hiking"
+msgstr ""
+
+#: includes/admin-property-data.php:178
+msgid "Minigolf"
+msgstr ""
+
+#: includes/admin-property-data.php:179
+msgid "Snorkeling"
+msgstr ""
+
+#: includes/admin-property-data.php:180
+msgid "Squash"
+msgstr ""
+
+#: includes/admin-property-data.php:181
+msgid "Windsurfing"
+msgstr ""
+
+#: includes/admin-property-data.php:182
+msgid "Billiard"
+msgstr ""
+
+#: includes/admin-property-data.php:183
+msgid "Table tennis"
+msgstr ""
+
+#: includes/admin-property-data.php:184
+msgid "Canoeing"
+msgstr ""
+
+#: includes/admin-property-data.php:185
+msgid "Ski-to-door access"
+msgstr ""
+
+#: includes/admin-property-data.php:186
+msgid "Diving"
+msgstr ""
+
+#: includes/admin-property-data.php:187
+msgid "Tennis equipment"
+msgstr ""
+
+#: includes/admin-property-data.php:188
+msgid "Badminton equipment"
+msgstr ""
+
+#: includes/admin-property-data.php:189
+msgid "Cycling"
+msgstr ""
+
+#: includes/admin-property-data.php:190
+msgid "Ski storage"
+msgstr ""
+
+#: includes/admin-property-data.php:191
+msgid "Ski school"
+msgstr ""
+
+#: includes/admin-property-data.php:192
+msgid "Ski equipment hire (on site)"
+msgstr ""
+
+#: includes/admin-property-data.php:193
+msgid "Ski pass vendor"
+msgstr ""
+
+#: includes/admin-property-data.php:194
+msgid "Private beach area"
+msgstr ""
+
+#: includes/admin-property-data.php:195
+msgid "Rooms/Facilities for Disabled"
+msgstr ""
+
+#: includes/admin-property-data.php:196
+msgid "Hairdresser/Beautician"
+msgstr ""
+
+#: includes/admin-property-data.php:197
+msgid "Family Rooms"
+msgstr ""
+
+#: includes/admin-property-data.php:198
+msgid "VIP Room Facilities"
+msgstr ""
+
+#: includes/admin-property-data.php:199
+msgid "Bridal Suite"
+msgstr ""
+
+#: includes/admin-property-data.php:200
+msgid "Spa & Wellness Centre"
+msgstr ""
+
+#: includes/admin-property-data.php:201
+msgid "Karaoke"
+msgstr ""
+
+#: includes/admin-property-data.php:202
+msgid "Soundproof rooms"
+msgstr ""
+
+#: includes/admin-property-data.php:203
+msgid "Packed Lunches"
+msgstr ""
+
+#: includes/admin-property-data.php:204
+msgid "Ticket service"
+msgstr ""
+
+#: includes/admin-property-data.php:205
+msgid "Entertainment Staff"
+msgstr ""
+
+#: includes/admin-property-data.php:206
+msgid "Private Check-in/Check-out"
+msgstr ""
+
+#: includes/admin-property-data.php:207
+msgid "Special Diet Menus (on request)"
+msgstr ""
+
+#: includes/admin-property-data.php:208
+msgid "Vending Machine (drinks)"
+msgstr ""
+
+#: includes/admin-property-data.php:209
+msgid "Hot Spring Bath"
+msgstr ""
+
+#: includes/admin-property-data.php:210
+msgid "Kids' club"
+msgstr ""
+
+#: includes/admin-property-data.php:211
+msgid "Minimarket on site"
+msgstr ""
+
+#: includes/admin-property-data.php:212
+msgid "Water park"
+msgstr ""
+
+#: includes/admin-property-data.php:213
+msgid "Adult only"
+msgstr ""
+
+#: includes/admin-property-data.php:214
+msgid "Open-air bath"
+msgstr ""
+
+#: includes/admin-property-data.php:215
+msgid "Public bath"
+msgstr ""
+
+#: includes/admin-property-data.php:216
+msgid "Water slide"
+msgstr ""
+
+#: includes/admin-property-data.php:217
+msgid "Board games/puzzles"
+msgstr ""
+
+#: includes/admin-property-data.php:218
+msgid "Book/DVD/Music library for children"
+msgstr ""
+
+#: includes/admin-property-data.php:219
+msgid "Indoor play area"
+msgstr ""
+
+#: includes/admin-property-data.php:220
+msgid "Kids' outdoor play equipment"
+msgstr ""
+
+#: includes/admin-property-data.php:221
+msgid "Baby safety gates"
+msgstr ""
+
+#: includes/admin-property-data.php:222
+msgid "Children television networks"
+msgstr ""
+
+#: includes/admin-property-data.php:223
+msgid "Kid meals"
+msgstr ""
+
+#: includes/admin-property-data.php:224
+msgid "Kid-friendly buffet"
+msgstr ""
+
+#: includes/admin-property-data.php:225
+msgid "Pool towels"
+msgstr ""
+
+#: includes/admin-property-data.php:226
+msgid "Wine/Champagne"
+msgstr ""
+
+#: includes/admin-property-data.php:227
+msgid "Bottle of water"
+msgstr ""
+
+#: includes/admin-property-data.php:228
+msgid "Fruits"
+msgstr ""
+
+#: includes/admin-property-data.php:229
+msgid "Chocolate/Cookies"
+msgstr ""
+
+#: includes/admin-property-data.php:230
+msgid "Strollers"
+msgstr ""
+
+#: includes/admin-property-data.php:231
+msgid "On-site coffee house"
+msgstr ""
+
+#: includes/admin-property-data.php:232
+msgid "Sun loungers or beach chairs"
+msgstr ""
+
+#: includes/admin-property-data.php:233
+msgid "Sun umbrellas"
+msgstr ""
+
+#: includes/admin-property-data.php:234
+msgid "Picnic area"
+msgstr ""
+
+#: includes/admin-property-data.php:235
+msgid "Beauty Services"
+msgstr ""
+
+#: includes/admin-property-data.php:237
+msgid "Steam room"
+msgstr ""
+
+#: includes/admin-property-data.php:238
+msgid "Spa lounge/relaxation area"
+msgstr ""
+
+#: includes/admin-property-data.php:239
+msgid "Foot bath"
+msgstr ""
+
+#: includes/admin-property-data.php:240
+msgid "Spa/wellness packages"
+msgstr ""
+
+#: includes/admin-property-data.php:241
+msgid "Massage chair"
+msgstr ""
+
+#: includes/admin-property-data.php:242
+msgid "Fitness"
+msgstr ""
+
+#: includes/admin-property-data.php:243
+msgid "Yoga classes"
+msgstr ""
+
+#: includes/admin-property-data.php:244
+msgid "Fitness classes"
+msgstr ""
+
+#: includes/admin-property-data.php:245
+msgid "Personal trainer"
+msgstr ""
+
+#: includes/admin-property-data.php:246
+msgid "Fitness/spa locker rooms"
+msgstr ""
+
+#: includes/admin-property-data.php:247
+msgid "Kids pool"
+msgstr ""
+
+#: includes/admin-property-data.php:248
+msgid "Shuttle Service"
+msgstr ""
+
+#: includes/admin-property-data.php:249
+msgid "Temporary art galleries"
+msgstr ""
+
+#: includes/admin-property-data.php:250
+msgid "Pub crawls"
+msgstr ""
+
+#: includes/admin-property-data.php:251
+msgid "Stand-up comedy"
+msgstr ""
+
+#: includes/admin-property-data.php:252
+msgid "Movie nights"
+msgstr ""
+
+#: includes/admin-property-data.php:253
+msgid "Walking tours"
+msgstr ""
+
+#: includes/admin-property-data.php:254
+msgid "Bike tours"
+msgstr ""
+
+#: includes/admin-property-data.php:255
+msgid "Themed dinner nights"
+msgstr ""
+
+#: includes/admin-property-data.php:256
+msgid "Happy hour"
+msgstr ""
+
+#: includes/admin-property-data.php:257
+msgid "Tour or class about local culture"
+msgstr ""
+
+#: includes/admin-property-data.php:258
+msgid "Cooking class"
+msgstr ""
+
+#: includes/admin-property-data.php:259
+msgid "Live music/performance"
+msgstr ""
+
+#: includes/admin-property-data.php:260
+msgid "Live sports events (broadcast)"
+msgstr ""
+
+#: includes/admin-property-data.php:261
+msgid "Archery"
+msgstr ""
+
+#: includes/admin-property-data.php:262
+msgid "Aerobics"
+msgstr ""
+
+#: includes/admin-property-data.php:263
+msgid "Bingo"
+msgstr ""
+
+#: includes/admin-property-data.php:264
+msgid "Ski Shuttle"
+msgstr ""
+
+#: includes/admin-property-data.php:265
+msgid "Outdoor Swimming Pool (all year)"
+msgstr ""
+
+#: includes/admin-property-data.php:266
+msgid "Outdoor Swimming Pool (seasonal)"
+msgstr ""
+
+#: includes/admin-property-data.php:267
+msgid "Indoor Swimming Pool (all year)"
+msgstr ""
+
+#: includes/admin-property-data.php:268
+msgid "Indoor Swimming Pool (seasonal)"
+msgstr ""
+
+#: includes/admin-property-data.php:269
+msgid "Swimming pool toys"
+msgstr ""
+
+#: includes/admin-property-data.php:270
+msgid "Rooftop pool"
+msgstr ""
+
+#: includes/admin-property-data.php:271
+msgid "Infinity pool"
+msgstr ""
+
+#: includes/admin-property-data.php:272
+msgid "Pool with view"
+msgstr ""
+
+#: includes/admin-property-data.php:273
+msgid "Salt-water pool"
+msgstr ""
+
+#: includes/admin-property-data.php:274
+msgid "Plunge pool"
+msgstr ""
+
+#: includes/admin-property-data.php:275
+msgid "Pool cover"
+msgstr ""
+
+#: includes/admin-property-data.php:276
+msgid "Fence around pool"
+msgstr ""
+
+#: includes/admin-property-data.php:277
+msgid "Airport Shuttle (surcharge)"
+msgstr ""
+
+#: includes/admin-property-data.php:278
+msgid "Property is wheelchair accessible"
+msgstr ""
+
+#: includes/admin-property-data.php:279
+msgid "Toilet with grab rails"
+msgstr ""
+
+#: includes/admin-property-data.php:280
+msgid "Higher-level toilet"
+msgstr ""
+
+#: includes/admin-property-data.php:281
+msgid "Low bathroom sink"
+msgstr ""
+
+#: includes/admin-property-data.php:282
+msgid "Bathroom emergency pull cord"
+msgstr ""
+
+#: includes/admin-property-data.php:283
+msgid "Visual aids: Braille"
+msgstr ""
+
+#: includes/admin-property-data.php:284
+msgid "Visual aids: Tactile Signs"
+msgstr ""
+
+#: includes/admin-property-data.php:285
+msgid "Auditory Guidance"
+msgstr ""
+
+#: includes/admin-property-data.php:286
+msgid "Back massage"
+msgstr ""
+
+#: includes/admin-property-data.php:287
+msgid "Neck massage"
+msgstr ""
+
+#: includes/admin-property-data.php:288
+msgid "Foot massage"
+msgstr ""
+
+#: includes/admin-property-data.php:289
+msgid "Couples massage"
+msgstr ""
+
+#: includes/admin-property-data.php:290
+msgid "Head massage"
+msgstr ""
+
+#: includes/admin-property-data.php:291
+msgid "Hand massage"
+msgstr ""
+
+#: includes/admin-property-data.php:292
+msgid "Full body massage"
+msgstr ""
+
+#: includes/admin-property-data.php:293
+msgid "Facial treatments"
+msgstr ""
+
+#: includes/admin-property-data.php:294
+msgid "Waxing services"
+msgstr ""
+
+#: includes/admin-property-data.php:295
+msgid "Makeup services"
+msgstr ""
+
+#: includes/admin-property-data.php:296
+msgid "Hair treatments"
+msgstr ""
+
+#: includes/admin-property-data.php:297
+msgid "Manicure"
+msgstr ""
+
+#: includes/admin-property-data.php:298
+msgid "Pedicure"
+msgstr ""
+
+#: includes/admin-property-data.php:299
+msgid "Haircut"
+msgstr ""
+
+#: includes/admin-property-data.php:300
+msgid "Hair coloring"
+msgstr ""
+
+#: includes/admin-property-data.php:301
+msgid "Hair styling"
+msgstr ""
+
+#: includes/admin-property-data.php:302
+msgid "Body Treatments"
+msgstr ""
+
+#: includes/admin-property-data.php:303
+msgid "Body scrub"
+msgstr ""
+
+#: includes/admin-property-data.php:304
+msgid "Body wrap"
+msgstr ""
+
+#: includes/admin-property-data.php:305
+msgid "Light therapy"
+msgstr ""
+
+#: includes/admin-property-data.php:306
+msgid "Shuttle Service (free)"
+msgstr ""
+
+#: includes/admin-property-data.php:307
+msgid "Shuttle Service (surcharge)"
+msgstr ""
+
+#: includes/admin-property-data.php:308
+msgid "Swimming pool"
+msgstr ""
+
+#: includes/admin-property-data.php:309
+msgid "Property removed all, or never offered, single-use plastic toiletries"
+msgstr ""
+
+#: includes/admin-property-data.php:310
+msgid "Towels Changed Upon Request"
+msgstr ""
+
+#: includes/admin-property-data.php:311
+msgid "24-hour security"
+msgstr ""
+
+#: includes/admin-property-data.php:312
+msgid "Security alarm"
+msgstr ""
+
+#: includes/admin-property-data.php:313
+msgid "Smoke alarms"
+msgstr ""
+
+#: includes/admin-property-data.php:314
+msgid "CCTV in common areas"
+msgstr ""
+
+#: includes/admin-property-data.php:315
+msgid "CCTV outside property"
+msgstr ""
+
+#: includes/admin-property-data.php:316
+msgid "Fire extinguishers"
+msgstr ""
+
+#: includes/admin-property-data.php:317
+msgid "Key access"
+msgstr ""
+
+#: includes/admin-property-data.php:318
+msgid "Key card access"
+msgstr ""
+
+#: includes/admin-property-data.php:319
+msgid "Carbon monoxide detector"
+msgstr ""
+
+#: includes/admin-property-data.php:320
+msgid "Carbon monoxide source"
+msgstr ""
+
+#: includes/admin-property-data.php:321
+msgid "Property removed all, or never offered, plastic stirrers"
+msgstr ""
+
+#: includes/admin-property-data.php:322
+msgid "Property removed all, or never offered, plastic straws"
+msgstr ""
+
+#: includes/admin-property-data.php:323
+msgid "Property removed all, or never offered, plastic cups"
+msgstr ""
+
+#: includes/admin-property-data.php:324
+msgid "Property removed all, or never offered, plastic water bottles"
+msgstr ""
+
+#: includes/admin-property-data.php:325
 msgid ""
-"Elementor Imaginem Blocks is not working because you are using an old "
-"version of Elementor."
+"Property removed all, or never offered, plastic bottles for non-water drinks"
 msgstr ""
 
-#: imaginem-blocks.php:56
-msgid "Update Elementor Now"
+#: includes/admin-property-data.php:326
+msgid "Property removed all, or never offered, plastic cutlery and tableware"
 msgstr ""
 
-#: imaginem-blocks.php:67
-msgid "Parallax ( Disables Size/Position )"
+#: includes/admin-property-data.php:327
+msgid "Keycard for room electricity"
 msgstr ""
 
-#: imaginem-blocks.php:69
-msgid "Off"
+#: includes/admin-property-data.php:328
+msgid "Opt-out from daily room cleaning"
 msgstr ""
 
-#: imaginem-blocks.php:70
-msgid "On"
+#: includes/admin-property-data.php:329
+msgid "Refillable water stations"
 msgstr ""
 
-#: imaginem-blocks.php:142
-msgid "Sidebar"
+#: includes/admin-property-data.php:330
+msgid "Bike rental"
 msgstr ""
 
-#: imaginem-blocks.php:146 widgets/post-heading.php:118
-#: widgets/section-heading.php:132 widgets/service-box.php:206
-#: widgets/team-member.php:173
-msgid "Left"
+#: includes/admin-property-data.php:331
+msgid "Bike parking"
 msgstr ""
 
-#: imaginem-blocks.php:147
-msgid "No Sidebar"
+#: includes/admin-property-data.php:332
+msgid "Use of cleaning chemicals that are effective against Coronavirus"
 msgstr ""
 
-#: imaginem-blocks.php:148 widgets/post-heading.php:126
-#: widgets/section-heading.php:140 widgets/service-box.php:214
-#: widgets/team-member.php:181
-msgid "Right"
-msgstr ""
-
-#: imaginem-blocks.php:149
-msgid "Edge to Edge"
-msgstr ""
-
-#: includes/theme-gens.php:27
-msgid "Default Menu"
-msgstr ""
-
-#: includes/theme-gens.php:108
-msgid "Customizer Set Slideshow Images"
-msgstr ""
-
-#: includes/theme-gens.php:109
-msgid "Slideshow using Image Attachments"
-msgstr ""
-
-#: includes/theme-gens.php:110
-msgid "none"
-msgstr ""
-
-#: metabox/metaboxes/client-metaboxes.php:30
-msgid "Client Metabox"
-msgstr ""
-
-#: metabox/metaboxes/client-metaboxes.php:36
-msgid "Client Settings"
-msgstr ""
-
-#: metabox/metaboxes/client-metaboxes.php:39
-#: metabox/metaboxes/events-metaboxes.php:172
-#: metabox/metaboxes/events-metaboxes.php:175
-#: metabox/metaboxes/events-metaboxes.php:198
-#: metabox/metaboxes/fullscreen-metaboxes.php:133
-#: metabox/metaboxes/fullscreen-metaboxes.php:455
-#: metabox/metaboxes/fullscreen-metaboxes.php:462
-#: metabox/metaboxes/page-metaboxes.php:68
-#: metabox/metaboxes/page-metaboxes.php:71
-#: metabox/metaboxes/portfolio-metaboxes.php:104
-#: metabox/metaboxes/portfolio-metaboxes.php:107
-#: metabox/metaboxes/portfolio-metaboxes.php:135
-#: metabox/metaboxes/portfolio-metaboxes.php:138
-#: metabox/metaboxes/portfolio-metaboxes.php:142
-#: metabox/metaboxes/post-metaboxes.php:70
-#: metabox/metaboxes/post-metaboxes.php:73
-#: metabox/metaboxes/proofing-metaboxes.php:151
-#: metabox/metaboxes/proofing-metaboxes.php:154
-#: metabox/metaboxes/proofing-metaboxes.php:158
-#: metabox/metaboxes/woocommerce-metaboxes.php:34
-msgid "Page Settings"
-msgstr ""
-
-#: metabox/metaboxes/client-metaboxes.php:43
-#: metabox/metaboxes/events-metaboxes.php:47
-#: metabox/metaboxes/page-metaboxes.php:29
-#: metabox/metaboxes/portfolio-metaboxes.php:46
-#: metabox/metaboxes/post-metaboxes.php:31
-#: metabox/metaboxes/proofing-metaboxes.php:53
-#: metabox/metaboxes/woocommerce-metaboxes.php:27
-msgid "Attach Images"
-msgstr ""
-
-#: metabox/metaboxes/client-metaboxes.php:45
-#: metabox/metaboxes/events-metaboxes.php:49
-#: metabox/metaboxes/fullscreen-metaboxes.php:166
-#: metabox/metaboxes/page-metaboxes.php:32
-#: metabox/metaboxes/portfolio-metaboxes.php:48
-#: metabox/metaboxes/post-metaboxes.php:34
-#: metabox/metaboxes/proofing-metaboxes.php:55
-#: metabox/metaboxes/woocommerce-metaboxes.php:29
-msgid "Upload Images"
-msgstr ""
-
-#: metabox/metaboxes/client-metaboxes.php:47
-#: metabox/metaboxes/post-metaboxes.php:36
-msgid "Attach images. Images can be used to generate when using shortcodes."
-msgstr ""
-
-#: metabox/metaboxes/client-metaboxes.php:50
-msgid "Client Notice"
-msgstr ""
-
-#: metabox/metaboxes/client-metaboxes.php:54
+#: includes/admin-property-data.php:333
 msgid ""
-"Add a Password to this client page to password protect all proofing "
-"galleries associated with the client."
+"Linens, towels, and laundry washed in accordance with local authorities "
+"guidelines"
 msgstr ""
 
-#: metabox/metaboxes/client-metaboxes.php:57
-#: widgets/proofing-client-info.php:142
-msgid "Client Name"
+#: includes/admin-property-data.php:334
+msgid "Guest accommodation is disinfected between stays"
 msgstr ""
 
-#: metabox/metaboxes/client-metaboxes.php:60
-msgid "Client Name."
+#: includes/admin-property-data.php:335
+msgid "Guest accommodation sealed after cleaning"
 msgstr ""
 
-#: metabox/metaboxes/client-metaboxes.php:64
-msgid "Description for client"
+#: includes/admin-property-data.php:336
+msgid "Physical distancing in dining areas"
 msgstr ""
 
-#: metabox/metaboxes/client-metaboxes.php:67
-msgid "This description is displayed for client."
+#: includes/admin-property-data.php:337
+msgid "In-room dining options available"
 msgstr ""
 
-#: metabox/metaboxes/client-metaboxes.php:71
-#: metabox/metaboxes/fullscreen-metaboxes.php:458
-#: metabox/metaboxes/page-metaboxes.php:75
-#: metabox/metaboxes/post-metaboxes.php:77
-msgid "Header Settings"
+#: includes/admin-property-data.php:338
+msgid "Staff follow all safety protocols as directed by local authorities"
 msgstr ""
 
-#: metabox/metaboxes/client-metaboxes.php:76
-msgid "Background Image for Client Password Page"
-msgstr ""
-
-#: metabox/metaboxes/client-metaboxes.php:81
+#: includes/admin-property-data.php:339
 msgid ""
-"Upload or provide full url of background. eg. http://www.domain.com/path/"
-"image.jpg"
+"Shared stationery such as printed menus, magazines, pens, and paper removed"
 msgstr ""
 
-#: metabox/metaboxes/client-metaboxes.php:84
-#: metabox/metaboxes/events-metaboxes.php:215
-#: metabox/metaboxes/fullscreen-metaboxes.php:479
-#: metabox/metaboxes/page-metaboxes.php:61
-#: metabox/metaboxes/portfolio-metaboxes.php:159
-#: metabox/metaboxes/post-metaboxes.php:63
-#: metabox/metaboxes/proofing-metaboxes.php:175
-#: metabox/metaboxes/woocommerce-metaboxes.php:51
-msgid "Switch Menu"
+#: includes/admin-property-data.php:340
+msgid "Hand sanitizer in guest accommodation and key areas"
 msgstr ""
 
-#: metabox/metaboxes/client-metaboxes.php:87
-#: metabox/metaboxes/events-metaboxes.php:218
-#: metabox/metaboxes/fullscreen-metaboxes.php:482
-#: metabox/metaboxes/page-metaboxes.php:64
-#: metabox/metaboxes/portfolio-metaboxes.php:162
-#: metabox/metaboxes/post-metaboxes.php:66
-#: metabox/metaboxes/proofing-metaboxes.php:178
-#: metabox/metaboxes/woocommerce-metaboxes.php:54
-msgid "Select a different menu for this page"
+#: includes/admin-property-data.php:341
+msgid "Process in place to check the health of guests"
 msgstr ""
 
-#: metabox/metaboxes/client-metaboxes.php:91
-#: metabox/metaboxes/client-metaboxes.php:94
-#: metabox/metaboxes/client-metaboxes.php:98
-#: metabox/metaboxes/events-metaboxes.php:234
-#: metabox/metaboxes/events-metaboxes.php:237
-#: metabox/metaboxes/events-metaboxes.php:241
-#: metabox/metaboxes/page-metaboxes.php:112
-#: metabox/metaboxes/portfolio-metaboxes.php:178
-#: metabox/metaboxes/post-metaboxes.php:114
-#: metabox/metaboxes/proofing-metaboxes.php:194
-#: metabox/metaboxes/woocommerce-metaboxes.php:70
-#: metabox/metaboxes/woocommerce-metaboxes.php:73
-#: metabox/metaboxes/woocommerce-metaboxes.php:77
-msgid "Page Background"
+#: includes/admin-property-data.php:342
+msgid "First aid kit available"
 msgstr ""
 
-#: metabox/metaboxes/client-metaboxes.php:103
-#: metabox/metaboxes/events-metaboxes.php:203
-#: metabox/metaboxes/fullscreen-metaboxes.php:467
-#: metabox/metaboxes/page-metaboxes.php:80
-#: metabox/metaboxes/portfolio-metaboxes.php:147
-#: metabox/metaboxes/post-metaboxes.php:82
-#: metabox/metaboxes/proofing-metaboxes.php:163
-#: metabox/metaboxes/woocommerce-metaboxes.php:39
-msgid "Header Type"
+#: includes/admin-property-data.php:343
+msgid "Contactless check-in/out"
 msgstr ""
 
-#: metabox/metaboxes/client-metaboxes.php:107
-#: metabox/metaboxes/events-metaboxes.php:207
-#: metabox/metaboxes/fullscreen-metaboxes.php:471
-#: metabox/metaboxes/page-metaboxes.php:84
-#: metabox/metaboxes/portfolio-metaboxes.php:151
-#: metabox/metaboxes/post-metaboxes.php:86
-#: metabox/metaboxes/proofing-metaboxes.php:167
-#: metabox/metaboxes/woocommerce-metaboxes.php:43
-msgid "Header Type for Horizontal menu"
+#: includes/admin-property-data.php:344
+msgid "Cashless payment available"
 msgstr ""
 
-#: metabox/metaboxes/client-metaboxes.php:109
-#: metabox/metaboxes/client-metaboxes.php:136
-#: metabox/metaboxes/events-metaboxes.php:209
-#: metabox/metaboxes/events-metaboxes.php:228
-#: metabox/metaboxes/events-metaboxes.php:267
-#: metabox/metaboxes/fullscreen-metaboxes.php:473
-#: metabox/metaboxes/page-metaboxes.php:86
-#: metabox/metaboxes/page-metaboxes.php:98
-#: metabox/metaboxes/page-metaboxes.php:130
-#: metabox/metaboxes/portfolio-metaboxes.php:153
-#: metabox/metaboxes/portfolio-metaboxes.php:172
-#: metabox/metaboxes/portfolio-metaboxes.php:204
-#: metabox/metaboxes/post-metaboxes.php:88
-#: metabox/metaboxes/post-metaboxes.php:100
-#: metabox/metaboxes/post-metaboxes.php:132
-#: metabox/metaboxes/proofing-metaboxes.php:169
-#: metabox/metaboxes/proofing-metaboxes.php:188
-#: metabox/metaboxes/proofing-metaboxes.php:220
-#: metabox/metaboxes/woocommerce-metaboxes.php:45
-#: metabox/metaboxes/woocommerce-metaboxes.php:64
-#: metabox/metaboxes/woocommerce-metaboxes.php:103 widgets/blog-grid.php:158
-#: widgets/blog-list.php:115 widgets/contactform.php:191
-#: widgets/events-grid.php:175 widgets/google-map.php:268
-#: widgets/image-carousel.php:315 widgets/portfolio-grid.php:175
-#: widgets/post-heading.php:102 widgets/proofing-grid.php:145
-#: widgets/section-heading.php:102 widgets/section-heading.php:117
-#: widgets/service-box.php:132 widgets/slideshow-carousel.php:316
-#: widgets/swiper-slides.php:263 widgets/thumbnails-grid.php:144
-#: widgets/worktype-albums.php:158
-msgid "Default"
+#: includes/admin-property-data.php:345
+msgid "Physical distancing following guidelines from local authorities"
 msgstr ""
 
-#: metabox/metaboxes/client-metaboxes.php:110
-#: metabox/metaboxes/events-metaboxes.php:210
-#: metabox/metaboxes/fullscreen-metaboxes.php:474
-#: metabox/metaboxes/page-metaboxes.php:87
-#: metabox/metaboxes/portfolio-metaboxes.php:154
-#: metabox/metaboxes/post-metaboxes.php:89
-#: metabox/metaboxes/proofing-metaboxes.php:170
-#: metabox/metaboxes/woocommerce-metaboxes.php:46
-msgid "Bright"
+#: includes/admin-property-data.php:346
+msgid "Mobile app for room service"
 msgstr ""
 
-#: metabox/metaboxes/client-metaboxes.php:111
-#: metabox/metaboxes/events-metaboxes.php:211
-#: metabox/metaboxes/fullscreen-metaboxes.php:475
-#: metabox/metaboxes/page-metaboxes.php:88
-#: metabox/metaboxes/portfolio-metaboxes.php:155
-#: metabox/metaboxes/post-metaboxes.php:90
-#: metabox/metaboxes/proofing-metaboxes.php:171
-#: metabox/metaboxes/woocommerce-metaboxes.php:47
-msgid "Dark"
-msgstr ""
-
-#: metabox/metaboxes/client-metaboxes.php:115
-#: metabox/metaboxes/events-metaboxes.php:246
-#: metabox/metaboxes/page-metaboxes.php:104
-#: metabox/metaboxes/portfolio-metaboxes.php:183
-#: metabox/metaboxes/post-metaboxes.php:106
-#: metabox/metaboxes/proofing-metaboxes.php:199
-#: metabox/metaboxes/woocommerce-metaboxes.php:82
-msgid "Display Page Media"
-msgstr ""
-
-#: metabox/metaboxes/client-metaboxes.php:119
-#: metabox/metaboxes/events-metaboxes.php:250
-#: metabox/metaboxes/page-metaboxes.php:108
-#: metabox/metaboxes/portfolio-metaboxes.php:187
-#: metabox/metaboxes/post-metaboxes.php:110
-#: metabox/metaboxes/proofing-metaboxes.php:203
-#: metabox/metaboxes/woocommerce-metaboxes.php:86
+#: includes/admin-property-data.php:347
 msgid ""
-"Attach 1 image to display one image or Multiples images to display slideshow"
+"Screens or physical barriers placed between staff and guests in appropriate "
+"areas"
 msgstr ""
 
-#: metabox/metaboxes/client-metaboxes.php:123
-#: metabox/metaboxes/events-metaboxes.php:254
-#: metabox/metaboxes/page-metaboxes.php:117
-#: metabox/metaboxes/portfolio-metaboxes.php:191
-#: metabox/metaboxes/post-metaboxes.php:119
-#: metabox/metaboxes/proofing-metaboxes.php:207
-#: metabox/metaboxes/woocommerce-metaboxes.php:90
-msgid "Page Color"
+#: includes/admin-property-data.php:348
+msgid "Property is cleaned by professional cleaning companies"
 msgstr ""
 
-#: metabox/metaboxes/client-metaboxes.php:126
-#: metabox/metaboxes/events-metaboxes.php:257
-#: metabox/metaboxes/page-metaboxes.php:120
-#: metabox/metaboxes/portfolio-metaboxes.php:194
-#: metabox/metaboxes/post-metaboxes.php:122
-#: metabox/metaboxes/proofing-metaboxes.php:210
-#: metabox/metaboxes/woocommerce-metaboxes.php:93
-msgid "Page color"
+#: includes/admin-property-data.php:349
+msgid "All plates, cutlery, glasses, and other tableware have been sanitized"
 msgstr ""
 
-#: metabox/metaboxes/client-metaboxes.php:130
-#: metabox/metaboxes/events-metaboxes.php:261
-#: metabox/metaboxes/page-metaboxes.php:124
-#: metabox/metaboxes/portfolio-metaboxes.php:198
-#: metabox/metaboxes/post-metaboxes.php:126
-#: metabox/metaboxes/proofing-metaboxes.php:214
-#: metabox/metaboxes/woocommerce-metaboxes.php:97
-msgid "Page Opacity"
+#: includes/admin-property-data.php:350
+msgid "Guest accommodation cleaning can be avoided on request"
 msgstr ""
 
-#: metabox/metaboxes/client-metaboxes.php:133
-#: metabox/metaboxes/events-metaboxes.php:264
-#: metabox/metaboxes/page-metaboxes.php:127
-#: metabox/metaboxes/portfolio-metaboxes.php:201
-#: metabox/metaboxes/post-metaboxes.php:129
-msgid "Set Page color and adjust opacity to apply opacity."
+#: includes/admin-property-data.php:351
+msgid "Invoices Provided"
 msgstr ""
 
-#: metabox/metaboxes/client-metaboxes.php:137
-#: metabox/metaboxes/events-metaboxes.php:268
-#: metabox/metaboxes/page-metaboxes.php:131
-#: metabox/metaboxes/portfolio-metaboxes.php:205
-#: metabox/metaboxes/post-metaboxes.php:133
-#: metabox/metaboxes/proofing-metaboxes.php:221
-#: metabox/metaboxes/woocommerce-metaboxes.php:104
-msgid "Transparent"
+#: includes/admin-property-data.php:352
+msgid "Breakfast takeaway containers"
 msgstr ""
 
-#: metabox/metaboxes/client-metaboxes.php:138
-#: metabox/metaboxes/events-metaboxes.php:269
-#: metabox/metaboxes/page-metaboxes.php:132
-#: metabox/metaboxes/portfolio-metaboxes.php:206
-#: metabox/metaboxes/post-metaboxes.php:134
-#: metabox/metaboxes/proofing-metaboxes.php:222
-#: metabox/metaboxes/woocommerce-metaboxes.php:105
-msgid "25%"
+#: includes/admin-property-data.php:353
+msgid "Delivered food is securely covered"
 msgstr ""
 
-#: metabox/metaboxes/client-metaboxes.php:139
-#: metabox/metaboxes/events-metaboxes.php:270
-#: metabox/metaboxes/page-metaboxes.php:133
-#: metabox/metaboxes/portfolio-metaboxes.php:207
-#: metabox/metaboxes/post-metaboxes.php:135
-#: metabox/metaboxes/proofing-metaboxes.php:223
-#: metabox/metaboxes/woocommerce-metaboxes.php:106
-msgid "50%"
+#: includes/admin-property-data.php:354
+msgid "Access to healthcare professionals"
 msgstr ""
 
-#: metabox/metaboxes/client-metaboxes.php:140
-#: metabox/metaboxes/events-metaboxes.php:271
-#: metabox/metaboxes/page-metaboxes.php:134
-#: metabox/metaboxes/portfolio-metaboxes.php:208
-#: metabox/metaboxes/post-metaboxes.php:136
-#: metabox/metaboxes/proofing-metaboxes.php:224
-#: metabox/metaboxes/woocommerce-metaboxes.php:107
-msgid "75%"
+#: includes/admin-property-data.php:355
+msgid "Thermometers for guests provided by the property"
 msgstr ""
 
-#: metabox/metaboxes/client-metaboxes.php:141
-#: metabox/metaboxes/events-metaboxes.php:272
-#: metabox/metaboxes/page-metaboxes.php:135
-#: metabox/metaboxes/portfolio-metaboxes.php:209
-#: metabox/metaboxes/post-metaboxes.php:137
-#: metabox/metaboxes/proofing-metaboxes.php:225
-#: metabox/metaboxes/woocommerce-metaboxes.php:108
-msgid "Opaque"
+#: includes/admin-property-data.php:356
+msgid "Face masks for guests available"
 msgstr ""
 
-#: metabox/metaboxes/events-metaboxes.php:29
-msgid "Events Metabox"
+#: includes/admin-property-data.php:357
+msgid "Wild (non-domesticated) animals are not harmed at the property"
 msgstr ""
 
-#: metabox/metaboxes/events-metaboxes.php:35
-msgid "Event Settings"
+#: includes/admin-property-data.php:358
+msgid "Recycling bins are available to guests, and waste is recycled"
 msgstr ""
 
-#: metabox/metaboxes/events-metaboxes.php:38
-msgid "Events Settings"
+#: includes/admin-property-data.php:359
+#, no-php-format
+msgid "At least 80% of food is sourced from the region"
 msgstr ""
 
-#: metabox/metaboxes/events-metaboxes.php:42
-msgid "Event Options"
+#: includes/admin-property-data.php:360
+#, no-php-format
+msgid "At least 80% of lighting uses energy-efficient LED bulbs"
 msgstr ""
 
-#: metabox/metaboxes/events-metaboxes.php:51
-#: metabox/metaboxes/portfolio-metaboxes.php:50
-msgid "Attach images to this page/post."
+#: includes/admin-property-data.php:361
+msgid "Only using water-efficient toilets"
 msgstr ""
 
-#: metabox/metaboxes/events-metaboxes.php:54
-msgid "Gallery description text"
+#: includes/admin-property-data.php:362
+msgid "Only using water-efficient showers"
 msgstr ""
 
-#: metabox/metaboxes/events-metaboxes.php:58
-msgid "Description text to displayed with evernts gallery thumbnail"
+#: includes/admin-property-data.php:363
+msgid "All windows are double-glazed"
 msgstr ""
 
-#: metabox/metaboxes/events-metaboxes.php:62
-#: metabox/metaboxes/events-metaboxes.php:66
-msgid "Event Status"
+#: includes/admin-property-data.php:364
+msgid ""
+"Food waste policy in place that includes education, food waste prevention, "
+"reduction, recycling, and disposal"
 msgstr ""
 
-#: metabox/metaboxes/events-metaboxes.php:68
-#: metabox/metaboxes/proofing-metaboxes.php:118
-msgid "Active"
+#: includes/admin-property-data.php:365
+msgid ""
+"Investing a percentage of revenue back into community projects or "
+"sustainability projects"
 msgstr ""
 
-#: metabox/metaboxes/events-metaboxes.php:69
-msgid "Hide from Listings"
+#: includes/admin-property-data.php:366
+#, no-php-format
+msgid ""
+"Compensate for at least 10% of total annual carbon emissions by purchasing "
+"certified carbon offsets"
 msgstr ""
 
-#: metabox/metaboxes/events-metaboxes.php:70
-msgid "Display as Postponed"
+#: includes/admin-property-data.php:367
+msgid "Tours and activities organized by local guides and businesses offered"
 msgstr ""
 
-#: metabox/metaboxes/events-metaboxes.php:71
-msgid "Display as Cancelled"
+#: includes/admin-property-data.php:368
+msgid "Vegetarian options available at the property"
 msgstr ""
 
-#: metabox/metaboxes/events-metaboxes.php:72
-msgid "Past Event"
+#: includes/admin-property-data.php:369
+msgid "Vegan options available at the property"
 msgstr ""
 
-#: metabox/metaboxes/events-metaboxes.php:76
-msgid "Event Date"
+#: includes/admin-property-data.php:370
+msgid "Green spaces such as gardens/rooftop gardens on the property"
 msgstr ""
 
-#: metabox/metaboxes/events-metaboxes.php:81
-#: metabox/metaboxes/proofing-metaboxes.php:130
-msgid "Start date"
+#: includes/admin-property-data.php:371
+#, no-php-format
+msgid "At least 80% of the food provided is organic"
 msgstr ""
 
-#: metabox/metaboxes/events-metaboxes.php:90
-msgid "End date"
+#: includes/admin-property-data.php:372
+msgid "100% renewable electricity is used throughout the property"
 msgstr ""
 
-#: metabox/metaboxes/events-metaboxes.php:94
-msgid "Venue"
+#: includes/admin-property-data.php:373
+msgid "Local artists are offered a platform to display their talents"
 msgstr ""
 
-#: metabox/metaboxes/events-metaboxes.php:98
-msgid "Venue Name"
+#: includes/admin-property-data.php:374
+msgid ""
+"Provide guests with information regarding local ecosystems, heritage, and "
+"culture, as well as visitor etiquette"
 msgstr ""
 
-#: metabox/metaboxes/events-metaboxes.php:106
-msgid "Street"
+#: includes/admin-property-data.php:375
+msgid "Lunch"
 msgstr ""
 
-#: metabox/metaboxes/events-metaboxes.php:115
+#: includes/admin-property-data.php:376
+msgid "Dinner"
+msgstr ""
+
+#: includes/admin/class-activity.php:412
+msgid "Invalid nonce."
+msgstr ""
+
+#: includes/admin/class-activity.php:710
+msgid "Session timed out. Please reload the page"
+msgstr ""
+
+#: includes/admin/class-activity.php:782 includes/admin/class-activity.php:834
+#: includes/admin/class-booking.php:1382 includes/admin/class-booking.php:1446
+#: includes/admin/class-guest-registry.php:707 includes/theme-gens.php:691
+#: metabox/metaboxes/customer-metaboxes.php:42
+msgid "Full Name"
+msgstr ""
+
+#: includes/admin/class-activity.php:783 includes/admin/class-booking.php:1383
+#: includes/admin/class-guest-registry.php:708
+msgid "Passport No"
+msgstr ""
+
+#: includes/admin/class-activity.php:784 includes/admin/class-activity.php:842
+#: includes/admin/class-booking.php:1384 includes/admin/class-booking.php:1454
+#: includes/admin/class-guest-registry.php:709 includes/theme-gens.php:700
+#: metabox/metaboxes/customer-metaboxes.php:51
+msgid "Email Address"
+msgstr ""
+
+#: includes/admin/class-activity.php:785 includes/admin/class-activity.php:846
+#: includes/admin/class-booking.php:1385 includes/admin/class-booking.php:1458
+#: includes/admin/class-guest-registry.php:710 includes/theme-gens.php:709
+#: metabox/metaboxes/customer-metaboxes.php:60
+msgid "Phone Number"
+msgstr ""
+
+#: includes/admin/class-activity.php:786 includes/admin/class-activity.php:850
+#: includes/admin/class-booking.php:1386 includes/admin/class-booking.php:1462
+#: includes/theme-gens.php:718 metabox/metaboxes/customer-metaboxes.php:69
+msgid "Street Address"
+msgstr ""
+
+#: includes/admin/class-activity.php:787 includes/admin/class-activity.php:854
+#: includes/admin/class-booking.php:1387 includes/admin/class-booking.php:1466
+#: includes/theme-gens.php:727 metabox/metaboxes/customer-metaboxes.php:78
+msgid "City"
+msgstr ""
+
+#: includes/admin/class-activity.php:788 includes/admin/class-booking.php:1388
+msgid "State/Province"
+msgstr ""
+
+#: includes/admin/class-activity.php:789 includes/admin/class-activity.php:866
+#: includes/admin/class-booking.php:1389 includes/admin/class-booking.php:1478
+#: includes/theme-gens.php:745 metabox/metaboxes/customer-metaboxes.php:96
+msgid "Zip Code"
+msgstr ""
+
+#: includes/admin/class-activity.php:790 includes/admin/class-booking.php:1390
+#: includes/admin/class-guest-registry.php:711
+#: includes/admin/class-options-panel.php:1307
+#: includes/admin/class-options-panel.php:1373 includes/theme-gens.php:754
+#: metabox/metaboxes/customer-metaboxes.php:105
+msgid "Country"
+msgstr ""
+
+#: includes/admin/class-activity.php:791
+#: includes/admin/class-analytics-activity.php:779
+#: includes/admin/class-analytics-bookings.php:873
+#: includes/admin/class-booking.php:1391
+#: metabox/metaboxes/activityres-metaboxes.php:209
+#: metabox/metaboxes/reservation-metaboxes.php:221
+msgid "Notes"
+msgstr ""
+
+#: includes/admin/class-activity.php:792
+msgid ""
+"By clicking \"Book this Activity\" you agree to our terms and conditions and "
+"privacy policy."
+msgstr ""
+
+#: includes/admin/class-activity.php:831 includes/admin/class-booking.php:1443
+msgid "Back"
+msgstr ""
+
+#: includes/admin/class-activity.php:832
+#: includes/admin/class-analytics-bookings.php:872
+#: includes/admin/class-booking.php:1444
+#: metabox/metaboxes/reservation-metaboxes.php:262
+msgid "Registration"
+msgstr ""
+
+#: includes/admin/class-activity.php:838 includes/admin/class-booking.php:1450
+msgid "Passport No."
+msgstr ""
+
+#: includes/admin/class-activity.php:860 includes/admin/class-booking.php:1472
+#: includes/theme-gens.php:736 metabox/metaboxes/customer-metaboxes.php:87
 msgid "State"
 msgstr ""
 
-#: metabox/metaboxes/events-metaboxes.php:124
-msgid "Zip/Postal Code"
+#: includes/admin/class-activity.php:885 includes/admin/class-booking.php:1497
+msgid "Consent is required for booking."
 msgstr ""
 
-#: metabox/metaboxes/events-metaboxes.php:132
-msgid "Event country"
+#: includes/admin/class-activity.php:911 includes/admin/class-booking.php:1524
+msgid "Booking Successful"
 msgstr ""
 
-#: metabox/metaboxes/events-metaboxes.php:141
-msgid "Phone"
+#: includes/admin/class-activity.php:913 includes/admin/class-booking.php:1526
+msgid "Hi,"
 msgstr ""
 
-#: metabox/metaboxes/events-metaboxes.php:150
-msgid "Website"
+#: includes/admin/class-activity.php:916 includes/admin/class-booking.php:1529
+msgid "Your booking number is:"
 msgstr ""
 
-#: metabox/metaboxes/events-metaboxes.php:159
-msgid "Cost Currency Symbol"
-msgstr ""
-
-#: metabox/metaboxes/events-metaboxes.php:168
-msgid "Cost Value"
-msgstr ""
-
-#: metabox/metaboxes/events-metaboxes.php:179
-#: metabox/metaboxes/page-metaboxes.php:42
-#: metabox/metaboxes/portfolio-metaboxes.php:116
-#: metabox/metaboxes/post-metaboxes.php:44
-#: metabox/metaboxes/proofing-metaboxes.php:92
-msgid "Page Style"
-msgstr ""
-
-#: metabox/metaboxes/events-metaboxes.php:183
-#: metabox/metaboxes/page-metaboxes.php:46
-#: metabox/metaboxes/portfolio-metaboxes.php:120
-#: metabox/metaboxes/post-metaboxes.php:48
-#: metabox/metaboxes/proofing-metaboxes.php:96
-msgid "Note: Edge to Edge - same as 100% Width Template"
-msgstr ""
-
-#: metabox/metaboxes/events-metaboxes.php:191
-#: metabox/metaboxes/page-metaboxes.php:54
-#: metabox/metaboxes/portfolio-metaboxes.php:128
-#: metabox/metaboxes/post-metaboxes.php:56
-msgid "Choice of Sidebar"
-msgstr ""
-
-#: metabox/metaboxes/events-metaboxes.php:194
-#: metabox/metaboxes/page-metaboxes.php:57
-#: metabox/metaboxes/portfolio-metaboxes.php:131
-#: metabox/metaboxes/post-metaboxes.php:59
-msgid "For Sidebar Active Pages and Posts"
-msgstr ""
-
-#: metabox/metaboxes/events-metaboxes.php:222
-#: metabox/metaboxes/events-metaboxes.php:225
-#: metabox/metaboxes/page-metaboxes.php:92
-#: metabox/metaboxes/page-metaboxes.php:95
-#: metabox/metaboxes/portfolio-metaboxes.php:166
-#: metabox/metaboxes/portfolio-metaboxes.php:169
-#: metabox/metaboxes/post-metaboxes.php:94
-#: metabox/metaboxes/post-metaboxes.php:97
-#: metabox/metaboxes/proofing-metaboxes.php:182
-#: metabox/metaboxes/proofing-metaboxes.php:185
-#: metabox/metaboxes/woocommerce-metaboxes.php:58
-#: metabox/metaboxes/woocommerce-metaboxes.php:61
-#: widgets/proofing-client-info.php:129
-msgid "Page Title"
-msgstr ""
-
-#: metabox/metaboxes/events-metaboxes.php:229
-#: metabox/metaboxes/page-metaboxes.php:99
-#: metabox/metaboxes/portfolio-metaboxes.php:173
-#: metabox/metaboxes/post-metaboxes.php:101
-#: metabox/metaboxes/proofing-metaboxes.php:189
-#: metabox/metaboxes/woocommerce-metaboxes.php:65 widgets/progress-bar.php:129
-msgid "Show"
-msgstr ""
-
-#: metabox/metaboxes/events-metaboxes.php:230
-#: metabox/metaboxes/page-metaboxes.php:100
-#: metabox/metaboxes/portfolio-metaboxes.php:174
-#: metabox/metaboxes/post-metaboxes.php:102
-#: metabox/metaboxes/proofing-metaboxes.php:190
-#: metabox/metaboxes/woocommerce-metaboxes.php:66 widgets/progress-bar.php:130
-msgid "Hide"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:11
-msgid "Button Link URL"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:14
-msgid "Fullscreen Slideshow, Swiper Slide, Thumbnail Gallery & Photowall links"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:18 widgets/flip-box.php:219
-#: widgets/pricing-services.php:184 widgets/pricing-table.php:184
-#: widgets/section-heading.php:245
-msgid "Button Text"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:21
-msgid "Fullscreen Slideshow, Swiper Slide & Photowall Button text"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:25
-msgid "Purchase URL"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:28
-msgid "Purchase link."
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:31
-msgid "Header UI"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:38
-msgid "Title color "
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:124
-msgid "Fullscreen Metabox"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:130
-msgid "Fullscreen Settings"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:137
-msgid "Fullscreen Options"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:142
-msgid "Fullscreen Type"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:148
-msgid "Fullscreen page type"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:164
-#: widgets/image-carousel.php:136 widgets/slideshow-carousel.php:136
-#: widgets/swiper-slides.php:136 widgets/thumbnails-grid.php:112
-msgid "Add Images"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:168
-msgid "Add images from Media Uploader or by uploading new images."
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:171
-msgid "Display Titles & Description"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:176
-msgid "Display title and description"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:178
-#: metabox/metaboxes/fullscreen-metaboxes.php:278
-msgid "Enable"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:179
-#: metabox/metaboxes/fullscreen-metaboxes.php:279
-#: metabox/metaboxes/proofing-metaboxes.php:121
-msgid "Disable"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:183
-msgid "Slideshow Fill/Fit"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:188
-#: metabox/metaboxes/fullscreen-metaboxes.php:202
-msgid "Transition type for fullscreen slideshow"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:190
-msgid "Cover"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:191
-msgid "Landscape Fit"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:192
-msgid "Portrait Fit"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:193
-msgid "Fit Always"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:197
-msgid "Slideshow Transition"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:204
-msgid "Fade"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:205
-msgid "Wave"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:206 widgets/blog-grid.php:162
-#: widgets/events-grid.php:179 widgets/portfolio-grid.php:179
-#: widgets/proofing-grid.php:149 widgets/thumbnails-grid.php:148
-#: widgets/worktype-albums.php:162
-msgid "Zoom"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:210
-msgid "Portfolio Worktypes ( enter comma seperated slugs )"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:216
-msgid "Enter comma seperated slugs. Leave Blank to list all."
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:219
-msgid "Particle Type"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:224
-msgid "Particle type"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:233
-msgid "Particles / Cover Text Style"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:238
-msgid "Cover Text Style"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:247
-msgid "Coverphoto Text Align"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:252
-msgid "Coverphoto text align"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:254 widgets/post-heading.php:122
-#: widgets/section-heading.php:136 widgets/team-member.php:177
-msgid "Center"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:255
-msgid "Bottom"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:259
-#: metabox/metaboxes/fullscreen-metaboxes.php:264
-msgid "Fotorama Fill mode"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:266
-#: widgets/section-heading.php:278
-msgid "Fill"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:267
-msgid "Fit"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:271
-#: metabox/metaboxes/fullscreen-metaboxes.php:276
-msgid "Fotorama Thumbnails"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:283
-msgid "Revolution Slider"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:287
-msgid "Display Revolution Slider"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:291
-msgid "Fill to activate Static Text"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:297
-msgid "For Kenburns & Static Slideshow Text"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:301
-msgid "Static Title"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:310
-msgid "Static Decription"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:319
-msgid "Static Button Text"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:328
-msgid "Static Button Link"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:333
-msgid "Title Font"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:339
-msgid "Title font"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:343
-#: metabox/metaboxes/fullscreen-metaboxes.php:400
-msgid "Slideshow/Static Title Font"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:348
-#: metabox/metaboxes/fullscreen-metaboxes.php:352
-msgid "Title color"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:357
-#: metabox/metaboxes/fullscreen-metaboxes.php:414
-msgid "Font size"
-msgstr ""
-
-#: metabox/metaboxes/fullscreen-metaboxes.php:361
-#: metabox/metaboxes/fullscreen-metaboxes.php:369
-#: metabox/metaboxes/fullscreen-metaboxes.php:377
-#: metabox/metaboxes/fullscreen-metaboxes.php:418
-#: metabox/metaboxes/fullscreen-metaboxes.php:426
-#: metabox/metaboxes/fullscreen-metaboxes.php:434
+#: includes/admin/class-activity.php:919 includes/admin/class-booking.php:1532
 msgid ""
-"Only Numerical. Enter comma seperated values for responsiveness. Eg. 42,30,16"
+"Please contact us to cancel, modify or if there's any questions regarding "
+"the booking."
 msgstr ""
 
-#: metabox/metaboxes/fullscreen-metaboxes.php:365
-#: metabox/metaboxes/fullscreen-metaboxes.php:422
-msgid "Line-height"
+#: includes/admin/class-activity.php:923 includes/admin/class-booking.php:1535
+#: includes/admin/class-email-dispatcher.php:112
+#: includes/admin/class-email-dispatcher.php:153
+#: includes/admin/class-invoicing.php:668
+msgid "Booking Details"
 msgstr ""
 
-#: metabox/metaboxes/fullscreen-metaboxes.php:373
-#: metabox/metaboxes/fullscreen-metaboxes.php:430
-msgid "Letter-spacing"
+#: includes/admin/class-activity.php:965
+msgid "Activity Time:"
 msgstr ""
 
-#: metabox/metaboxes/fullscreen-metaboxes.php:381
-#: metabox/metaboxes/fullscreen-metaboxes.php:438
-msgid "Font Weight"
+#: includes/admin/class-activity.php:977 includes/admin/class-booking.php:299
+#: includes/admin/class-email-dispatcher.php:122
+#: includes/admin/class-email-dispatcher.php:160
+msgid "Subtotal:"
 msgstr ""
 
-#: metabox/metaboxes/fullscreen-metaboxes.php:385
-#: metabox/metaboxes/fullscreen-metaboxes.php:442
-#: metabox/metaboxes/fullscreen-metaboxes.php:450
-msgid ""
-"Only Numerical. Enter comma seperated values for responsiveness. Eg. "
-"100,30,16"
+#: includes/admin/class-activity.php:981 includes/admin/class-booking.php:303
+msgid "Total:"
 msgstr ""
 
-#: metabox/metaboxes/fullscreen-metaboxes.php:390
-msgid "Description Font"
+#: includes/admin/class-activity.php:997
+msgid "Book this activity"
 msgstr ""
 
-#: metabox/metaboxes/fullscreen-metaboxes.php:396
-msgid "Description font"
+#: includes/admin/class-activity.php:1264
+msgid "Activity date"
 msgstr ""
 
-#: metabox/metaboxes/fullscreen-metaboxes.php:405
-#: metabox/metaboxes/fullscreen-metaboxes.php:409
-msgid "Description color"
+#: includes/admin/class-activity.php:1275 includes/admin/class-booking.php:367
+#: includes/admin/class-booking.php:440
+#: includes/admin/class-guest-registry.php:803
+#: includes/admin/class-invoicing.php:442
+#: includes/admin/class-invoicing.php:475
+msgid "Search"
 msgstr ""
 
-#: metabox/metaboxes/fullscreen-metaboxes.php:446 widgets/post-heading.php:171
-#: widgets/proofing-client-info.php:270 widgets/section-heading.php:215
-msgid "Description Width"
+#: includes/admin/class-activity.php:1290 includes/admin/class-booking.php:386
+msgid "Adults"
 msgstr ""
 
-#: metabox/metaboxes/fullscreen-metaboxes.php:486
-msgid "Page Background color"
+#: includes/admin/class-activity.php:1300 includes/admin/class-booking.php:396
+msgid "Children"
 msgstr ""
 
-#: metabox/metaboxes/fullscreen-metaboxes.php:489
-msgid "Page background color"
+#: includes/admin/class-activity.php:1312 includes/admin/class-booking.php:563
+#: includes/admin/class-booking.php:565
+msgid "Rooms unavailable"
 msgstr ""
 
-#: metabox/metaboxes/fullscreen-metaboxes.php:493
-msgid "Used as Thumbnail gallery description text"
+#: includes/admin/class-activity.php:1313 includes/admin/class-booking.php:563
+msgid "Following range from your selection is avaiable."
 msgstr ""
 
-#: metabox/metaboxes/fullscreen-metaboxes.php:497
-msgid "Description to display in thumbnail gallery."
+#: includes/admin/class-activity.php:1424
+msgid "Ticket price not found"
 msgstr ""
 
-#: metabox/metaboxes/fullscreen-metaboxes.php:505
-msgid "Audio & Video Settings"
+#: includes/admin/class-activity.php:1849
+msgid "Booking Confirmation for: "
 msgstr ""
 
-#: metabox/metaboxes/fullscreen-metaboxes.php:509
-msgid "Media Settings"
+#: includes/admin/class-analytics-activity.php:91
+#: includes/admin/class-analytics-activity.php:92
+#: includes/admin/class-analytics-activity.php:116
+msgid "Activity Overview"
 msgstr ""
 
-#: metabox/metaboxes/fullscreen-metaboxes.php:515
-msgid "Slideshow Audio files (optional)"
+#: includes/admin/class-analytics-activity.php:109
+msgid "No Activities Found"
 msgstr ""
 
-#: metabox/metaboxes/fullscreen-metaboxes.php:519
-msgid "Enter MP3 file path for Slideshow. ( full url )"
+#: includes/admin/class-analytics-activity.php:110
+msgid "Please configure atleast 1 activity from Activities section"
 msgstr ""
 
-#: metabox/metaboxes/fullscreen-metaboxes.php:528
-msgid "Enter OGA file path for Slideshow ( full url )"
+#: includes/admin/class-analytics-activity.php:140
+#: includes/admin/class-analytics-bookings.php:101
+msgid "Bookings for past twelve months"
 msgstr ""
 
-#: metabox/metaboxes/fullscreen-metaboxes.php:538
-msgid "Enter M4A file path for Slideshow ( full url )"
+#: includes/admin/class-analytics-activity.php:153
+#: includes/admin/class-analytics-bookings.php:114
+msgid "Revenue for past twelve months"
 msgstr ""
 
-#: metabox/metaboxes/fullscreen-metaboxes.php:542
-#: metabox/metaboxes/post-metaboxes.php:191
-msgid "Youtube video ID"
+#: includes/admin/class-analytics-activity.php:166
+#: includes/admin/class-analytics-activity.php:735
+#: includes/admin/class-analytics-bookings.php:140
+#: includes/admin/class-analytics-bookings.php:829
+msgid "Today"
 msgstr ""
 
-#: metabox/metaboxes/fullscreen-metaboxes.php:546
-msgid ""
-"Youtube IDs eg: ylLzyHk54Z0. Youtube video IDs can be found at the end of "
-"youtube url - http://www.youtube.com/watch?v=ylLzyHk54Z0"
+#: includes/admin/class-analytics-activity.php:186
+#: includes/admin/class-analytics-activity.php:737
+#: includes/admin/class-analytics-bookings.php:160
+#: includes/admin/class-analytics-bookings.php:831
+msgid "Tomorrow"
 msgstr ""
 
-#: metabox/metaboxes/fullscreen-metaboxes.php:550
-#: metabox/metaboxes/post-metaboxes.php:151
-#: metabox/metaboxes/post-metaboxes.php:154
-msgid "HTML5 Video"
+#: includes/admin/class-analytics-activity.php:206
+#: includes/admin/class-analytics-activity.php:739
+#: includes/admin/class-analytics-bookings.php:180
+#: includes/admin/class-analytics-bookings.php:833
+msgid "Day After"
 msgstr ""
 
-#: metabox/metaboxes/fullscreen-metaboxes.php:554
-msgid "Poster image"
+#: includes/admin/class-analytics-activity.php:567
+#: includes/admin/class-analytics-bookings.php:661
+msgid "Monthly Revenue"
 msgstr ""
 
-#: metabox/metaboxes/fullscreen-metaboxes.php:563
-msgid "MP4 file"
+#: includes/admin/class-analytics-activity.php:678
+#: includes/admin/class-analytics-bookings.php:773
+msgid "Confirmed Bookings"
 msgstr ""
 
-#: metabox/metaboxes/fullscreen-metaboxes.php:572
-msgid "WEBM file"
+#: includes/admin/class-analytics-activity.php:685
+#: includes/admin/class-analytics-bookings.php:780
+msgid "Cancelled Bookings"
 msgstr ""
 
-#: metabox/metaboxes/fullscreen-metaboxes.php:581
-msgid "OGV file"
+#: includes/admin/class-analytics-activity.php:768
+msgid "Activities"
 msgstr ""
 
-#: metabox/metaboxes/page-metaboxes.php:9
-#: metabox/metaboxes/post-metaboxes.php:11 theme-core.php:209
-#: theme-core.php:233
-msgid "General Page Metabox"
+#: includes/admin/class-analytics-activity.php:770
+msgid "Activities for "
 msgstr ""
 
-#: metabox/metaboxes/page-metaboxes.php:15
-#: metabox/metaboxes/page-metaboxes.php:19
-#: metabox/metaboxes/page-metaboxes.php:23
-#: metabox/metaboxes/post-metaboxes.php:17
-#: metabox/metaboxes/post-metaboxes.php:21
-#: metabox/metaboxes/post-metaboxes.php:25
-#: metabox/metaboxes/woocommerce-metaboxes.php:15
-#: metabox/metaboxes/woocommerce-metaboxes.php:18
-#: metabox/metaboxes/woocommerce-metaboxes.php:22
-msgid "Page Options"
+#: includes/admin/class-analytics-activity.php:775
+#: includes/admin/class-analytics-bookings.php:869
+msgid "Guest Name"
 msgstr ""
 
-#: metabox/metaboxes/page-metaboxes.php:34
-#: metabox/metaboxes/woocommerce-metaboxes.php:31
-msgid "Attach images. Can be used to generate background slideshow."
-msgstr ""
-
-#: metabox/metaboxes/page-metaboxes.php:37
-#: metabox/metaboxes/portfolio-metaboxes.php:111
-#: metabox/metaboxes/post-metaboxes.php:39
-msgid "Page Layout"
-msgstr ""
-
-#: metabox/metaboxes/portfolio-metaboxes.php:28
-msgid "Portfolio Metabox"
-msgstr ""
-
-#: metabox/metaboxes/portfolio-metaboxes.php:34
-#: metabox/metaboxes/portfolio-metaboxes.php:37
-msgid "Portfolio Settings"
-msgstr ""
-
-#: metabox/metaboxes/portfolio-metaboxes.php:41 theme-core.php:225
-msgid "Portfolio Options"
-msgstr ""
-
-#: metabox/metaboxes/portfolio-metaboxes.php:53
-msgid "Description for gallery thumbnail ( Portfolio Gallery )"
-msgstr ""
-
-#: metabox/metaboxes/portfolio-metaboxes.php:56
-msgid "This description is displayed below each thumbnail."
-msgstr ""
-
-#: metabox/metaboxes/portfolio-metaboxes.php:60
-msgid "Gallery thumbnail options"
-msgstr ""
-
-#: metabox/metaboxes/portfolio-metaboxes.php:65
-msgid "Gallery thumbnail link type"
-msgstr ""
-
-#: metabox/metaboxes/portfolio-metaboxes.php:69
-msgid "Link type of portfolio image in portfolio galleries."
-msgstr ""
-
-#: metabox/metaboxes/portfolio-metaboxes.php:78
-msgid "Fill for Lightbox Video"
-msgstr ""
-
-#: metabox/metaboxes/portfolio-metaboxes.php:83
-msgid ""
-"To display a Lightbox Video. Eg: http://www.youtube.com/watch?v=D78TYCEG4 , "
-"http://vimeo.com/172881"
-msgstr ""
-
-#: metabox/metaboxes/portfolio-metaboxes.php:87
-msgid "Fill for Custom Link"
-msgstr ""
-
-#: metabox/metaboxes/portfolio-metaboxes.php:92
-msgid "For any link with full url"
-msgstr ""
-
-#: metabox/metaboxes/portfolio-metaboxes.php:96
-msgid "Custom Thumbnail. (optional)"
-msgstr ""
-
-#: metabox/metaboxes/portfolio-metaboxes.php:100
-msgid "Thumbnail URL."
-msgstr ""
-
-#: metabox/metaboxes/post-metaboxes.php:145 theme-core.php:239
-msgid "Video Metabox"
-msgstr ""
-
-#: metabox/metaboxes/post-metaboxes.php:158
-msgid "M4V File URL"
-msgstr ""
-
-#: metabox/metaboxes/post-metaboxes.php:162
-msgid "Enter M4V File URL ( Required )"
-msgstr ""
-
-#: metabox/metaboxes/post-metaboxes.php:165
-msgid "OGV File URL"
-msgstr ""
-
-#: metabox/metaboxes/post-metaboxes.php:169
-msgid "Enter OGV File URL"
-msgstr ""
-
-#: metabox/metaboxes/post-metaboxes.php:172
-#: metabox/metaboxes/post-metaboxes.php:177
-msgid "Poster Image"
-msgstr ""
-
-#: metabox/metaboxes/post-metaboxes.php:180
-#: metabox/metaboxes/post-metaboxes.php:184
-msgid "Video Hosts"
-msgstr ""
-
-#: metabox/metaboxes/post-metaboxes.php:187
-msgid "Youtube Video ID"
-msgstr ""
-
-#: metabox/metaboxes/post-metaboxes.php:194
-msgid "Vimeo Video ID"
-msgstr ""
-
-#: metabox/metaboxes/post-metaboxes.php:198
-msgid "Vimeo video ID"
-msgstr ""
-
-#: metabox/metaboxes/post-metaboxes.php:201
-msgid "Daily Motion Video ID"
-msgstr ""
-
-#: metabox/metaboxes/post-metaboxes.php:205
-msgid "Daily Motion video ID"
-msgstr ""
-
-#: metabox/metaboxes/post-metaboxes.php:208
-msgid "Google Video ID"
-msgstr ""
-
-#: metabox/metaboxes/post-metaboxes.php:212
-msgid "Google video ID"
-msgstr ""
-
-#: metabox/metaboxes/post-metaboxes.php:215
-msgid "Video Embed Code"
-msgstr ""
-
-#: metabox/metaboxes/post-metaboxes.php:219
-msgid "Video Embed code. You can grab embed codes from hosted video sites."
-msgstr ""
-
-#: metabox/metaboxes/post-metaboxes.php:226 theme-core.php:245
-msgid "Audio Metabox"
-msgstr ""
-
-#: metabox/metaboxes/post-metaboxes.php:232
-#: metabox/metaboxes/post-metaboxes.php:235
-#: metabox/metaboxes/post-metaboxes.php:239
-msgid "Audio Embed code"
-msgstr ""
-
-#: metabox/metaboxes/post-metaboxes.php:243
-msgid "eg. Soundcloud embed code"
-msgstr ""
-
-#: metabox/metaboxes/post-metaboxes.php:246
-#: metabox/metaboxes/post-metaboxes.php:249
-msgid "HTML5 Audio"
-msgstr ""
-
-#: metabox/metaboxes/post-metaboxes.php:253
-msgid "MP3 file"
-msgstr ""
-
-#: metabox/metaboxes/post-metaboxes.php:257
-msgid "Please provide full url. eg. http://www.domain.com/path/audiofile.mp3"
-msgstr ""
-
-#: metabox/metaboxes/post-metaboxes.php:260
-msgid "M4A file"
-msgstr ""
-
-#: metabox/metaboxes/post-metaboxes.php:264
-msgid ""
-"Please provide full url. eg. <code>http://www.domain.com/path/audiofile.m4a"
-msgstr ""
-
-#: metabox/metaboxes/post-metaboxes.php:267
-msgid "OGA file"
-msgstr ""
-
-#: metabox/metaboxes/post-metaboxes.php:271
-msgid "Please provide full url. eg. http://www.domain.com/path/audiofile.ogg"
-msgstr ""
-
-#: metabox/metaboxes/post-metaboxes.php:278 theme-core.php:251
-msgid "Link Metabox"
-msgstr ""
-
-#: metabox/metaboxes/post-metaboxes.php:284 widgets/team-member.php:231
-#: widgets/testimonials.php:181
-msgid "Link URL"
-msgstr ""
-
-#: metabox/metaboxes/post-metaboxes.php:288
-msgid "Please provide full url. eg. http://www.domain.com/path/"
-msgstr ""
-
-#: metabox/metaboxes/post-metaboxes.php:295 theme-core.php:257
-msgid "Image Metabox"
-msgstr ""
-
-#: metabox/metaboxes/post-metaboxes.php:301
-#: metabox/metaboxes/post-metaboxes.php:305
-msgid "Enable Lightbox"
-msgstr ""
-
-#: metabox/metaboxes/post-metaboxes.php:306
-msgid "Disable Lighbox"
-msgstr ""
-
-#: metabox/metaboxes/post-metaboxes.php:314 theme-core.php:264
-msgid "Quote Metabox"
-msgstr ""
-
-#: metabox/metaboxes/post-metaboxes.php:320 widgets/testimonials.php:170
-msgid "Quote"
-msgstr ""
-
-#: metabox/metaboxes/post-metaboxes.php:324
-msgid "Enter quote here"
-msgstr ""
-
-#: metabox/metaboxes/post-metaboxes.php:327
-#: metabox/metaboxes/post-metaboxes.php:331
-msgid "Author"
-msgstr ""
-
-#: metabox/metaboxes/proofing-metaboxes.php:40
-msgid "Proofing Metabox"
-msgstr ""
-
-#: metabox/metaboxes/proofing-metaboxes.php:46
-#: metabox/metaboxes/proofing-metaboxes.php:49
-msgid "Proofing Settings"
-msgstr ""
-
-#: metabox/metaboxes/proofing-metaboxes.php:57
-msgid "Attach images for proofing."
-msgstr ""
-
-#: metabox/metaboxes/proofing-metaboxes.php:60
-msgid "Proofing: Selected images and filenames"
-msgstr ""
-
-#: metabox/metaboxes/proofing-metaboxes.php:64
-msgid "Use to locate images from a large collection."
-msgstr ""
-
-#: metabox/metaboxes/proofing-metaboxes.php:67
-msgid "Proofing Grid Columns"
-msgstr ""
-
-#: metabox/metaboxes/proofing-metaboxes.php:70
-#: metabox/metaboxes/proofing-metaboxes.php:83
-msgid "Page opacity"
-msgstr ""
-
-#: metabox/metaboxes/proofing-metaboxes.php:73 widgets/blog-grid.php:115
-#: widgets/events-grid.php:115 widgets/events-swiper.php:138
-#: widgets/image-carousel.php:166 widgets/portfolio-grid.php:115
-#: widgets/proofing-grid.php:115 widgets/swiper-slides.php:151
-#: widgets/worktype-albums.php:115
-msgid "4"
-msgstr ""
-
-#: metabox/metaboxes/proofing-metaboxes.php:74 widgets/blog-grid.php:116
-#: widgets/events-grid.php:116 widgets/events-swiper.php:139
-#: widgets/image-carousel.php:167 widgets/portfolio-grid.php:116
-#: widgets/proofing-grid.php:116 widgets/swiper-slides.php:152
-#: widgets/worktype-albums.php:116
-msgid "3"
-msgstr ""
-
-#: metabox/metaboxes/proofing-metaboxes.php:75 widgets/blog-grid.php:117
-#: widgets/events-grid.php:117 widgets/events-swiper.php:140
-#: widgets/image-carousel.php:168 widgets/portfolio-grid.php:117
-#: widgets/proofing-grid.php:117 widgets/swiper-slides.php:153
-#: widgets/worktype-albums.php:117
-msgid "2"
-msgstr ""
-
-#: metabox/metaboxes/proofing-metaboxes.php:76 widgets/blog-grid.php:118
-#: widgets/events-grid.php:118 widgets/events-swiper.php:141
-#: widgets/image-carousel.php:169 widgets/portfolio-grid.php:118
-#: widgets/proofing-grid.php:118 widgets/swiper-slides.php:154
-#: widgets/worktype-albums.php:118
-msgid "1"
-msgstr ""
-
-#: metabox/metaboxes/proofing-metaboxes.php:80
-msgid "Proofing Grid Format"
-msgstr ""
-
-#: metabox/metaboxes/proofing-metaboxes.php:86 widgets/blog-grid.php:175
-#: widgets/events-grid.php:230 widgets/image-carousel.php:152
-#: widgets/portfolio-grid.php:204 widgets/proofing-grid.php:176
-#: widgets/slideshow-carousel.php:168 widgets/thumbnails-grid.php:176
-#: widgets/worktype-albums.php:175
-msgid "Landscape"
-msgstr ""
-
-#: metabox/metaboxes/proofing-metaboxes.php:87 widgets/blog-grid.php:178
-#: widgets/events-grid.php:233 widgets/portfolio-grid.php:207
-#: widgets/proofing-grid.php:179 widgets/thumbnails-grid.php:179
-#: widgets/worktype-albums.php:178
-msgid "Masonry"
-msgstr ""
-
-#: metabox/metaboxes/proofing-metaboxes.php:88 widgets/blog-grid.php:177
-#: widgets/events-grid.php:232 widgets/image-carousel.php:153
-#: widgets/portfolio-grid.php:206 widgets/proofing-grid.php:178
-#: widgets/slideshow-carousel.php:169 widgets/thumbnails-grid.php:178
-#: widgets/worktype-albums.php:177
-msgid "Portrait"
-msgstr ""
-
-#: metabox/metaboxes/proofing-metaboxes.php:104
-msgid "Assign a Client"
-msgstr ""
-
-#: metabox/metaboxes/proofing-metaboxes.php:108
-msgid "Note :Select client PhotoProofing is for."
-msgstr ""
-
-#: metabox/metaboxes/proofing-metaboxes.php:112
-#: metabox/metaboxes/proofing-metaboxes.php:116
-msgid "Proofing Status"
-msgstr ""
-
-#: metabox/metaboxes/proofing-metaboxes.php:119
-msgid "Lock"
-msgstr ""
-
-#: metabox/metaboxes/proofing-metaboxes.php:120
-msgid "Locked for Download"
-msgstr ""
-
-#: metabox/metaboxes/proofing-metaboxes.php:125
-msgid "Proofing Date"
-msgstr ""
-
-#: metabox/metaboxes/proofing-metaboxes.php:134
-#: metabox/metaboxes/proofing-metaboxes.php:138
-#: widgets/proofing-client-info.php:182
-msgid "Location"
-msgstr ""
-
-#: metabox/metaboxes/proofing-metaboxes.php:142
-msgid "Download Link"
-msgstr ""
-
-#: metabox/metaboxes/proofing-metaboxes.php:147
-msgid "Zipped link for client image download"
-msgstr ""
-
-#: metabox/metaboxes/proofing-metaboxes.php:217
-#: metabox/metaboxes/woocommerce-metaboxes.php:100
-msgid "Set Page background color and adjust opacity to apply opacity."
-msgstr ""
-
-#: metabox/metaboxes/woocommerce-metaboxes.php:9
-msgid "Woocommerce Metabox"
-msgstr ""
-
-#: metabox/metaboxgen/metaboxgen.php:160
-msgid "selected"
-msgstr ""
-
-#: metabox/metaboxgen/metaboxgen.php:178
-msgid "No selection found."
-msgstr ""
-
-#: metabox/metaboxgen/metaboxgen.php:190 metabox/metaboxgen/metaboxgen.php:193
-#: metabox/metaboxgen/metaboxgen.php:231 metabox/metaboxgen/metaboxgen.php:233
-msgid "Edit Gallery"
-msgstr ""
-
-#: metabox/metaboxgen/metaboxgen.php:269
-msgid "image"
-msgstr ""
-
-#: metabox/metaboxgen/metaboxgen.php:272
-msgid "No images found."
-msgstr ""
-
-#: metabox/metaboxgen/metaboxgen.php:367 metabox/metaboxgen/metaboxgen.php:379
-#: widgets/blog-list.php:280 widgets/events-info.php:246
-#: widgets/flip-box.php:178 widgets/proofing-client-info.php:111
-#: widgets/service-box.php:165
-msgid "Size"
-msgstr ""
-
-#: metabox/metaboxgen/metaboxgen.php:368 metabox/metaboxgen/metaboxgen.php:380
-msgid "Price"
-msgstr ""
-
-#: metabox/metaboxgen/metaboxgen.php:370 shortcodes/shortcode-functions.php:328
-msgid "Remove"
-msgstr ""
-
-#: metabox/metaboxgen/metaboxgen.php:384
-msgid "Add more"
-msgstr ""
-
-#: metabox/metaboxgen/metaboxgen.php:385
-msgid "Max Reached!"
-msgstr ""
-
-#: metabox/metaboxgen/metaboxgen.php:444
-msgid "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789"
-msgstr ""
-
-#: metabox/metaboxgen/metaboxgen.php:462
-msgid "All the items"
-msgstr ""
-
-#: metabox/metaboxgen/metaboxgen.php:473
-msgid "Client selected has password protection."
-msgstr ""
-
-#: metabox/metaboxgen/metaboxgen.php:475
-msgid "Gallery password protected."
-msgstr ""
-
-#: metabox/metaboxgen/metaboxgen.php:479
-msgid "Client selected does not have password protection."
-msgstr ""
-
-#: metabox/metaboxgen/metaboxgen.php:481
-msgid "The gallery will be available for everyone."
-msgstr ""
-
-#: metabox/metaboxgen/metaboxgen.php:483
-msgid "Add a password to the Client page to protect the gallery."
-msgstr ""
-
-#: plugin.php:170
-msgid "iMaginem Elements"
-msgstr ""
-
-#: plugin.php:177
-msgid "iMaginem Media"
-msgstr ""
-
-#: plugin.php:184
-msgid "iMaginem Portfolio"
-msgstr ""
-
-#: plugin.php:191
-msgid "iMaginem Proofing"
-msgstr ""
-
-#: shortcodes/blog.php:141 shortcodes/blog.php:852 shortcodes/blog.php:1378
-#: shortcodes/portfolio-blocks.php:2925 shortcodes/slideshow.php:398
-msgid "0 <i class=\"feather-icon-speech-bubble\"></i>"
-msgstr ""
-
-#: shortcodes/blog.php:143 shortcodes/blog.php:854 shortcodes/blog.php:1380
-#: shortcodes/portfolio-blocks.php:2927 shortcodes/slideshow.php:400
-msgid " <i class=\"feather-icon-speech-bubble\"></i>"
-msgstr ""
-
-#: shortcodes/blog.php:145 shortcodes/blog.php:856 shortcodes/blog.php:1382
-#: shortcodes/portfolio-blocks.php:2929 shortcodes/slideshow.php:402
-msgid "1 <i class=\"feather-icon-speech-bubble\"></i>"
-msgstr ""
-
-#: shortcodes/blog.php:1186
-msgid "0 <i class=\"fa fa-comment-alt\"></i>"
-msgstr ""
-
-#: shortcodes/blog.php:1188
-msgid " <i class=\"fa fa-comment-alt\"></i>"
-msgstr ""
-
-#: shortcodes/blog.php:1190
-msgid "1 <i class=\"fa fa-comment-alt\"></i>"
-msgstr ""
-
-#: shortcodes/general.php:357 widgets/service-box.php:210
-msgid "Top"
-msgstr ""
-
-#: shortcodes/shortcode-functions.php:88
-msgid "Proofing gallery selection has been locked."
-msgstr ""
-
-#: shortcodes/shortcode-functions.php:89
-msgid "Proofing gallery is active for selection."
-msgstr ""
-
-#: shortcodes/shortcode-functions.php:91
-msgid "Please contact us to activate this proofing gallery."
-msgstr ""
-
-#: shortcodes/shortcode-functions.php:92
-msgid "Proofing gallery Locked for Download."
-msgstr ""
-
-#: shortcodes/shortcode-functions.php:106
-msgid "Download"
-msgstr ""
-
-#: shortcodes/shortcode-functions.php:211
-#, php-format
-msgid "%s (Pending)"
-msgstr ""
-
-#: shortcodes/shortcode-functions.php:234
-#: shortcodes/shortcode-functions.php:236
-msgid "Edit Menu Item"
-msgstr ""
-
-#: shortcodes/shortcode-functions.php:246
-msgid "URL"
-msgstr ""
-
-#: shortcodes/shortcode-functions.php:253
-msgid "Navigation Label"
-msgstr ""
-
-#: shortcodes/shortcode-functions.php:259
-msgid "Title Attribute"
-msgstr ""
-
-#: shortcodes/shortcode-functions.php:267
-msgid "Open link in a new tab"
-msgstr ""
-
-#: shortcodes/shortcode-functions.php:272
-msgid "CSS Classes (optional)"
-msgstr ""
-
-#: shortcodes/shortcode-functions.php:278
-msgid "Link Relationship (XFN)"
-msgstr ""
-
-#: shortcodes/shortcode-functions.php:284 widgets/blog-grid.php:214
-#: widgets/blog-grid.php:215 widgets/blog-list.php:166
-#: widgets/blog-list.php:167 widgets/blog-parallax.php:138
-#: widgets/blog-parallax.php:139 widgets/events-grid.php:281
-#: widgets/events-grid.php:282 widgets/inline-editing.php:100
-#: widgets/inline-editing.php:102 widgets/portfolio-grid.php:255
-#: widgets/portfolio-grid.php:256 widgets/section-heading.php:188
-#: widgets/split-headlines.php:98 widgets/testimonials.php:195
-#: widgets/worktype-albums.php:245 widgets/worktype-albums.php:246
-msgid "Description"
-msgstr ""
-
-#: shortcodes/shortcode-functions.php:286
-msgid ""
-"The description will be displayed in the menu if the current theme supports "
-"it."
-msgstr ""
-
-#: shortcodes/shortcode-functions.php:296
-msgid "Mega Menu"
-msgstr ""
-
-#: shortcodes/shortcode-functions.php:300
-msgid "2 Columns"
-msgstr ""
-
-#: shortcodes/shortcode-functions.php:301
-msgid "3 Columns"
-msgstr ""
-
-#: shortcodes/shortcode-functions.php:302
-msgid "4 Columns"
-msgstr ""
-
-#: shortcodes/shortcode-functions.php:315
-msgid "Original:"
-msgstr ""
-
-#: shortcodes/shortcode-functions.php:332
-msgid "Cancel"
-msgstr ""
-
-#: shortcodes/shortcode-functions.php:1442
-msgid "Page "
-msgstr ""
-
-#: shortcodes/shortcode-functions.php:1442
-msgid " of "
-msgstr ""
-
-#: templater/remote.php:47
-msgid "iMaginem Templates"
-msgstr ""
-
-#: theme-core.php:51
-msgid "Chose menu image"
-msgstr ""
-
-#: theme-core.php:52
-msgid "Select"
-msgstr ""
-
-#: theme-core.php:205
-msgid "Proofing Options"
-msgstr ""
-
-#: theme-core.php:213
-msgid "Client Options"
-msgstr ""
-
-#: theme-core.php:217
-msgid "Events Options"
-msgstr ""
-
-#: theme-core.php:221
-msgid "Featured Options"
-msgstr ""
-
-#: theme-core.php:279
-msgid "WooCommerce Options"
-msgstr ""
-
-#: widgets/before-after.php:48
-msgid "Before After"
-msgstr ""
-
-#: widgets/before-after.php:112
-msgid "Before After Drops"
-msgstr ""
-
-#: widgets/before-after.php:153 widgets/blog-grid.php:253
-#: widgets/blog-list.php:112 widgets/blog-list.php:205
-#: widgets/blog-parallax.php:188 widgets/contactform.php:136
-#: widgets/events-grid.php:320 widgets/events-swiper.php:179
-#: widgets/flip-box.php:232 widgets/google-map.php:362
-#: widgets/image-carousel.php:258 widgets/image-drops.php:148
-#: widgets/portfolio-grid.php:294 widgets/proofing-client-info.php:196
-#: widgets/proofing-grid.php:204 widgets/sample-imaginem-blocks.php:120
-#: widgets/service-box.php:285 widgets/slideshow-carousel.php:259
-#: widgets/swiper-slides.php:206 widgets/team-member.php:251
-#: widgets/testimonials.php:208 widgets/thumbnails-grid.php:269
-#: widgets/worktype-albums.php:260
-msgid "Style"
-msgstr ""
-
-#: widgets/before-after.php:161
-msgid "Arrow Handle"
-msgstr ""
-
-#: widgets/blog-grid.php:41 widgets/blog-grid.php:104
-msgid "Blog Grid"
-msgstr ""
-
-#: widgets/blog-grid.php:112 widgets/events-grid.php:112
-#: widgets/events-swiper.php:135 widgets/image-carousel.php:163
-#: widgets/portfolio-grid.php:112 widgets/proofing-grid.php:112
-#: widgets/swiper-slides.php:148 widgets/worktype-albums.php:112
-msgid "Columns"
-msgstr ""
-
-#: widgets/blog-grid.php:128 widgets/blog-list.php:127
-#: widgets/blog-parallax.php:113 widgets/events-grid.php:128
-msgid "Choose categories to list"
-msgstr ""
-
-#: widgets/blog-grid.php:140 widgets/blog-grid.php:141
-#: widgets/events-grid.php:140 widgets/events-grid.php:141
-msgid "Style of Grid"
-msgstr ""
-
-#: widgets/blog-grid.php:143 widgets/events-grid.php:143
-#: widgets/portfolio-grid.php:143 widgets/thumbnails-grid.php:129
-#: widgets/worktype-albums.php:143
-msgid "Classic"
-msgstr ""
-
-#: widgets/blog-grid.php:144 widgets/events-grid.php:144
-#: widgets/portfolio-grid.php:144 widgets/proofing-grid.php:131
-#: widgets/thumbnails-grid.php:130 widgets/worktype-albums.php:144
-msgid "Box Spaced"
-msgstr ""
-
-#: widgets/blog-grid.php:145 widgets/events-grid.php:145
-#: widgets/portfolio-grid.php:145 widgets/proofing-grid.php:132
-#: widgets/thumbnails-grid.php:131 widgets/worktype-albums.php:145
-msgid "Box Grid"
-msgstr ""
-
-#: widgets/blog-grid.php:155 widgets/blog-grid.php:156
-#: widgets/events-grid.php:172 widgets/events-grid.php:173
-#: widgets/portfolio-grid.php:172 widgets/portfolio-grid.php:173
-#: widgets/proofing-grid.php:142 widgets/proofing-grid.php:143
-#: widgets/thumbnails-grid.php:141 widgets/thumbnails-grid.php:142
-#: widgets/worktype-albums.php:155 widgets/worktype-albums.php:156
-msgid "Hover Effect"
-msgstr ""
-
-#: widgets/blog-grid.php:159 widgets/events-grid.php:176
-#: widgets/portfolio-grid.php:176 widgets/proofing-grid.php:146
-#: widgets/sample-imaginem-blocks.php:132 widgets/section-heading.php:277
-#: widgets/thumbnails-grid.php:145 widgets/thumbnails-grid.php:205
-#: widgets/worktype-albums.php:159
-msgid "None"
-msgstr ""
-
-#: widgets/blog-grid.php:160 widgets/events-grid.php:177
-#: widgets/portfolio-grid.php:177 widgets/proofing-grid.php:147
-#: widgets/thumbnails-grid.php:146 widgets/worktype-albums.php:160
-msgid "Tilt"
-msgstr ""
-
-#: widgets/blog-grid.php:161 widgets/events-grid.php:178
-#: widgets/portfolio-grid.php:178 widgets/proofing-grid.php:148
-#: widgets/thumbnails-grid.php:147 widgets/worktype-albums.php:161
-msgid "Blur"
-msgstr ""
-
-#: widgets/blog-grid.php:172 widgets/blog-grid.php:173
-#: widgets/events-grid.php:227 widgets/events-grid.php:228
-#: widgets/portfolio-grid.php:201 widgets/portfolio-grid.php:202
-#: widgets/proofing-grid.php:173 widgets/proofing-grid.php:174
-#: widgets/worktype-albums.php:172 widgets/worktype-albums.php:173
-msgid "Image format"
-msgstr ""
-
-#: widgets/blog-grid.php:176 widgets/events-grid.php:231
-#: widgets/image-carousel.php:317 widgets/portfolio-grid.php:205
-#: widgets/proofing-client-info.php:100 widgets/proofing-grid.php:177
-#: widgets/service-box.php:151 widgets/slideshow-carousel.php:318
-#: widgets/swiper-slides.php:265 widgets/team-member.php:129
-#: widgets/testimonials.php:109 widgets/thumbnails-grid.php:177
-#: widgets/worktype-albums.php:176
-msgid "Square"
-msgstr ""
-
-#: widgets/blog-grid.php:187 widgets/blog-grid.php:188
-#: widgets/blog-list.php:139 widgets/blog-list.php:140
-#: widgets/events-grid.php:242 widgets/events-grid.php:243
-msgid "Display categories"
-msgstr ""
-
-#: widgets/blog-grid.php:190 widgets/blog-grid.php:205
-#: widgets/blog-grid.php:218 widgets/blog-grid.php:241
-#: widgets/blog-list.php:142 widgets/blog-list.php:157
-#: widgets/blog-list.php:170 widgets/blog-list.php:193
-#: widgets/blog-parallax.php:129 widgets/blog-parallax.php:142
-#: widgets/blog-parallax.php:155 widgets/events-grid.php:245
-#: widgets/events-grid.php:258 widgets/events-grid.php:272
-#: widgets/events-grid.php:285 widgets/events-grid.php:308
-#: widgets/events-info.php:104 widgets/events-info.php:141
-#: widgets/events-info.php:178 widgets/events-info.php:214
-#: widgets/image-carousel.php:183 widgets/image-carousel.php:198
-#: widgets/image-carousel.php:232 widgets/image-carousel.php:247
-#: widgets/image-carousel.php:270 widgets/portfolio-grid.php:219
-#: widgets/portfolio-grid.php:232 widgets/portfolio-grid.php:246
-#: widgets/portfolio-grid.php:259 widgets/portfolio-grid.php:282
-#: widgets/pricing-services.php:113 widgets/pricing-table.php:113
-#: widgets/pricing-table.php:209 widgets/proofing-client-info.php:132
-#: widgets/proofing-client-info.php:145 widgets/proofing-client-info.php:158
-#: widgets/proofing-client-info.php:171 widgets/proofing-client-info.php:185
-#: widgets/proofing-grid.php:193 widgets/slideshow-carousel.php:184
-#: widgets/slideshow-carousel.php:199 widgets/slideshow-carousel.php:233
-#: widgets/slideshow-carousel.php:248 widgets/slideshow-carousel.php:271
-#: widgets/swiper-slides.php:177 widgets/swiper-slides.php:218
-#: widgets/team-member.php:203 widgets/testimonials.php:124
-#: widgets/thumbnails-grid.php:191 widgets/thumbnails-grid.php:245
-#: widgets/thumbnails-grid.php:258 widgets/worktype-albums.php:222
-#: widgets/worktype-albums.php:236 widgets/worktype-albums.php:249
-msgid "No"
-msgstr ""
-
-#: widgets/blog-grid.php:191 widgets/blog-grid.php:204
-#: widgets/blog-grid.php:217 widgets/blog-grid.php:240
-#: widgets/blog-list.php:143 widgets/blog-list.php:156
-#: widgets/blog-list.php:169 widgets/blog-list.php:192
-#: widgets/blog-parallax.php:128 widgets/blog-parallax.php:141
-#: widgets/blog-parallax.php:154 widgets/events-grid.php:246
-#: widgets/events-grid.php:259 widgets/events-grid.php:271
-#: widgets/events-grid.php:284 widgets/events-grid.php:307
-#: widgets/events-info.php:103 widgets/events-info.php:140
-#: widgets/events-info.php:177 widgets/events-info.php:215
-#: widgets/image-carousel.php:184 widgets/image-carousel.php:199
-#: widgets/image-carousel.php:233 widgets/image-carousel.php:246
-#: widgets/image-carousel.php:269 widgets/portfolio-grid.php:220
-#: widgets/portfolio-grid.php:233 widgets/portfolio-grid.php:245
-#: widgets/portfolio-grid.php:258 widgets/portfolio-grid.php:281
-#: widgets/pricing-services.php:112 widgets/pricing-table.php:112
-#: widgets/pricing-table.php:208 widgets/proofing-client-info.php:131
-#: widgets/proofing-client-info.php:144 widgets/proofing-client-info.php:157
-#: widgets/proofing-client-info.php:170 widgets/proofing-client-info.php:184
-#: widgets/proofing-grid.php:192 widgets/slideshow-carousel.php:185
-#: widgets/slideshow-carousel.php:200 widgets/slideshow-carousel.php:234
-#: widgets/slideshow-carousel.php:247 widgets/slideshow-carousel.php:270
-#: widgets/swiper-slides.php:178 widgets/swiper-slides.php:217
-#: widgets/team-member.php:202 widgets/testimonials.php:125
-#: widgets/thumbnails-grid.php:192 widgets/thumbnails-grid.php:244
-#: widgets/thumbnails-grid.php:257 widgets/worktype-albums.php:221
-#: widgets/worktype-albums.php:235 widgets/worktype-albums.php:248
-msgid "Yes"
-msgstr ""
-
-#: widgets/blog-grid.php:201 widgets/blog-list.php:153
-#: widgets/blog-parallax.php:125 widgets/events-grid.php:268
-#: widgets/events-info.php:226 widgets/inline-editing.php:91
-#: widgets/inline-editing.php:93 widgets/portfolio-grid.php:242
-#: widgets/post-heading.php:105 widgets/post-heading.php:190
-#: widgets/pricing-services.php:99 widgets/pricing-services.php:208
-#: widgets/pricing-table.php:99 widgets/pricing-table.php:233
-#: widgets/progress-bar.php:103 widgets/proofing-grid.php:189
-#: widgets/sample-imaginem-blocks.php:110 widgets/section-heading.php:168
-#: widgets/section-heading.php:293 widgets/split-headlines.php:111
-#: widgets/worktype-albums.php:232
-msgid "Title"
-msgstr ""
-
-#: widgets/blog-grid.php:202 widgets/blog-list.php:154
-#: widgets/blog-parallax.php:126 widgets/events-grid.php:269
-#: widgets/portfolio-grid.php:243 widgets/proofing-grid.php:190
-#: widgets/worktype-albums.php:233
-msgid "title"
-msgstr ""
-
-#: widgets/blog-grid.php:228 widgets/blog-list.php:180
-#: widgets/blog-parallax.php:165 widgets/events-grid.php:295
-#: widgets/portfolio-grid.php:269
-msgid "Limit. -1 for unlimited"
-msgstr ""
-
-#: widgets/blog-grid.php:229 widgets/blog-list.php:181
-#: widgets/blog-parallax.php:166 widgets/events-grid.php:296
-#: widgets/portfolio-grid.php:270
-msgid "Limit items. -1 for unlimited"
-msgstr ""
-
-#: widgets/blog-grid.php:237 widgets/blog-grid.php:238
-#: widgets/blog-list.php:189 widgets/blog-list.php:190
-#: widgets/events-grid.php:304 widgets/events-grid.php:305
-#: widgets/portfolio-grid.php:278 widgets/portfolio-grid.php:279
-msgid "Generate Pagination"
-msgstr ""
-
-#: widgets/blog-grid.php:261 widgets/blog-list.php:213
-#: widgets/blog-parallax.php:222 widgets/events-grid.php:328
-#: widgets/events-info.php:263 widgets/events-swiper.php:203
-#: widgets/flip-box.php:256 widgets/image-carousel.php:359
-#: widgets/portfolio-grid.php:302 widgets/post-heading.php:198
-#: widgets/pricing-services.php:248 widgets/pricing-table.php:273
-#: widgets/proofing-client-info.php:204 widgets/proofing-grid.php:212
-#: widgets/section-heading.php:301 widgets/service-box.php:396
-#: widgets/slideshow-carousel.php:360 widgets/swiper-slides.php:307
-#: widgets/team-member.php:307 widgets/testimonials.php:216
-#: widgets/thumbnails-grid.php:277 widgets/worktype-albums.php:268
-msgid "Title Color"
-msgstr ""
-
-#: widgets/blog-grid.php:274 widgets/blog-list.php:226
-#: widgets/events-grid.php:341 widgets/portfolio-grid.php:315
-#: widgets/worktype-albums.php:281
-msgid "Title Hover Color"
-msgstr ""
-
-#: widgets/blog-grid.php:286 widgets/blog-list.php:238
-#: widgets/blog-parallax.php:235 widgets/events-grid.php:353
-#: widgets/events-swiper.php:220 widgets/flip-box.php:271
-#: widgets/image-carousel.php:375 widgets/portfolio-grid.php:327
-#: widgets/proofing-client-info.php:216 widgets/proofing-grid.php:225
-#: widgets/service-box.php:413 widgets/slideshow-carousel.php:376
-#: widgets/swiper-slides.php:323 widgets/team-member.php:324
-#: widgets/thumbnails-grid.php:290 widgets/worktype-albums.php:293
-msgid "Title Typography"
-msgstr ""
-
-#: widgets/blog-grid.php:295 widgets/events-grid.php:362
-#: widgets/events-swiper.php:257 widgets/flip-box.php:281
-#: widgets/portfolio-grid.php:336 widgets/post-heading.php:230
-#: widgets/proofing-client-info.php:225 widgets/section-heading.php:333
-#: widgets/service-box.php:449 widgets/team-member.php:334
-#: widgets/thumbnails-grid.php:299 widgets/worktype-albums.php:302
-msgid "Description Color"
-msgstr ""
-
-#: widgets/blog-grid.php:307 widgets/blog-list.php:259
-#: widgets/events-grid.php:374 widgets/events-swiper.php:275
-#: widgets/flip-box.php:296 widgets/portfolio-grid.php:348
-#: widgets/service-box.php:468 widgets/team-member.php:350
-#: widgets/thumbnails-grid.php:311 widgets/worktype-albums.php:314
-msgid "Description Typography"
-msgstr ""
-
-#: widgets/blog-grid.php:316 widgets/blog-list.php:297
-#: widgets/blog-parallax.php:265 widgets/events-swiper.php:230
-msgid "Date Color"
-msgstr ""
-
-#: widgets/blog-grid.php:328 widgets/blog-list.php:310
-#: widgets/blog-parallax.php:277 widgets/events-swiper.php:247
-msgid "Date Typography"
-msgstr ""
-
-#: widgets/blog-grid.php:337 widgets/events-grid.php:404
-#: widgets/portfolio-grid.php:378 widgets/proofing-grid.php:234
-#: widgets/thumbnails-grid.php:320 widgets/worktype-albums.php:323
-msgid "Thumbnail Hover Color"
-msgstr ""
-
-#: widgets/blog-grid.php:350 widgets/events-grid.php:417
-#: widgets/events-info.php:234 widgets/portfolio-grid.php:391
-#: widgets/proofing-grid.php:247 widgets/thumbnails-grid.php:333
-#: widgets/worktype-albums.php:336
-msgid "Icon Color"
-msgstr ""
-
-#: widgets/blog-grid.php:363 widgets/events-grid.php:430
-#: widgets/portfolio-grid.php:404 widgets/proofing-grid.php:260
-#: widgets/thumbnails-grid.php:346 widgets/worktype-albums.php:349
-msgid "Icon Hover Color"
-msgstr ""
-
-#: widgets/blog-grid.php:376 widgets/events-grid.php:443
-#: widgets/proofing-grid.php:273
-msgid "Icon Background Color"
-msgstr ""
-
-#: widgets/blog-grid.php:389 widgets/events-grid.php:456
-#: widgets/portfolio-grid.php:430 widgets/proofing-grid.php:286
-#: widgets/thumbnails-grid.php:372
-msgid "Icon Background Hover Color"
-msgstr ""
-
-#: widgets/blog-list.php:41 widgets/blog-list.php:104
-msgid "Blog List"
-msgstr ""
-
-#: widgets/blog-list.php:116
-msgid "Small"
-msgstr ""
-
-#: widgets/blog-list.php:247 widgets/blog-parallax.php:244
-#: widgets/pricing-services.php:361 widgets/pricing-table.php:386
-msgid "Content Color"
-msgstr ""
-
-#: widgets/blog-list.php:268
-msgid "iCon Color"
-msgstr ""
-
-#: widgets/blog-list.php:320 widgets/blog-parallax.php:286
-msgid "Readmore Color"
-msgstr ""
-
-#: widgets/blog-list.php:333 widgets/blog-parallax.php:299
-msgid "Readmore Typography"
-msgstr ""
-
-#: widgets/blog-parallax.php:41 widgets/blog-parallax.php:104
-msgid "Blog Parallax"
-msgstr ""
-
-#: widgets/blog-parallax.php:151 widgets/blog-parallax.php:152
-msgid "Date"
-msgstr ""
-
-#: widgets/blog-parallax.php:174
-msgid "height"
-msgstr ""
-
-#: widgets/blog-parallax.php:196
-msgid "Contents Background Color"
-msgstr ""
-
-#: widgets/blog-parallax.php:209
-msgid "Contents Background Hover"
-msgstr ""
-
-#: widgets/blog-parallax.php:256
-msgid "Contents Typography"
-msgstr ""
-
-#: widgets/contactform.php:50
-msgid "Contact 7 Form"
-msgstr ""
-
-#: widgets/contactform.php:98
-msgid "ContactForm"
-msgstr ""
-
-#: widgets/contactform.php:123
-msgid "Select your contact form 7"
-msgstr ""
-
-#: widgets/contactform.php:144
-msgid "Input Fields"
-msgstr ""
-
-#: widgets/contactform.php:156
-msgid "Input Type"
-msgstr ""
-
-#: widgets/contactform.php:166
-msgid "Label Color"
-msgstr ""
-
-#: widgets/contactform.php:178
-msgid "Label Type"
-msgstr ""
-
-#: widgets/contactform.php:188
-msgid "Input Border Style"
-msgstr ""
-
-#: widgets/contactform.php:192 widgets/image-carousel.php:154
-#: widgets/slideshow-carousel.php:170
-msgid "Full"
-msgstr ""
-
-#: widgets/contactform.php:202
-msgid "Input Border"
-msgstr ""
-
-#: widgets/contactform.php:214 widgets/flip-box.php:306
-#: widgets/pricing-services.php:388 widgets/pricing-table.php:446
-#: widgets/section-heading.php:350
-msgid "Button Color"
-msgstr ""
-
-#: widgets/contactform.php:231
-msgid "Button Text Color"
-msgstr ""
-
-#: widgets/contactform.php:246
-msgid "Button Hover Color"
-msgstr ""
-
-#: widgets/contactform.php:262
-msgid "Button Hover Text"
-msgstr ""
-
-#: widgets/contactform.php:276
-msgid "Button Typography"
-msgstr ""
-
-#: widgets/events-grid.php:41
-msgid "Events Grid"
-msgstr ""
-
-#: widgets/events-grid.php:104
-msgid "Events Gallery"
-msgstr ""
-
-#: widgets/events-grid.php:155 widgets/events-grid.php:156
-#: widgets/portfolio-grid.php:155 widgets/portfolio-grid.php:156
-msgid "Box Thumbnail Link"
-msgstr ""
-
-#: widgets/events-grid.php:158 widgets/portfolio-grid.php:158
-msgid "Direct Link"
-msgstr ""
-
-#: widgets/events-grid.php:159 widgets/portfolio-grid.php:159
-#: widgets/thumbnails-grid.php:228
-msgid "Lightbox"
-msgstr ""
-
-#: widgets/events-grid.php:188 widgets/events-grid.php:189
-#: widgets/events-grid.php:192 widgets/portfolio-grid.php:192
-#: widgets/proofing-grid.php:162
-msgid "Filterable"
-msgstr ""
-
-#: widgets/events-grid.php:191 widgets/portfolio-grid.php:191
-#: widgets/proofing-grid.php:163
-msgid "No Filter"
-msgstr ""
-
-#: widgets/events-grid.php:202
-msgid "All items Text"
-msgstr ""
-
-#: widgets/events-grid.php:203 widgets/events-grid.php:204
-msgid "All items"
-msgstr ""
-
-#: widgets/events-grid.php:216
-msgid "Readmore Text"
-msgstr ""
-
-#: widgets/events-grid.php:217 widgets/events-grid.php:218
-msgid "Event Details"
-msgstr ""
-
-#: widgets/events-grid.php:255 widgets/portfolio-grid.php:229
-#: widgets/thumbnails-grid.php:188
-msgid "Display like/heart"
-msgstr ""
-
-#: widgets/events-grid.php:256 widgets/portfolio-grid.php:230
-#: widgets/thumbnails-grid.php:189
-msgid "Displays like/heart"
-msgstr ""
-
-#: widgets/events-grid.php:383
-msgid "Category/Date Color"
-msgstr ""
-
-#: widgets/events-grid.php:395
-msgid "Category/Date Typography"
-msgstr ""
-
-#: widgets/events-grid.php:469 widgets/portfolio-grid.php:443
-#: widgets/proofing-grid.php:299 widgets/thumbnails-grid.php:385
-msgid "Filter Color"
-msgstr ""
-
-#: widgets/events-grid.php:481 widgets/portfolio-grid.php:455
-#: widgets/proofing-grid.php:312 widgets/thumbnails-grid.php:397
-msgid "Filter Line"
-msgstr ""
-
-#: widgets/events-grid.php:492 widgets/portfolio-grid.php:466
-#: widgets/proofing-grid.php:323 widgets/thumbnails-grid.php:408
-msgid "Filter Hover Color"
-msgstr ""
-
-#: widgets/events-grid.php:503 widgets/portfolio-grid.php:477
-#: widgets/proofing-grid.php:334 widgets/thumbnails-grid.php:419
-msgid "Filter Active Color"
-msgstr ""
-
-#: widgets/events-grid.php:518 widgets/portfolio-grid.php:492
-#: widgets/proofing-grid.php:349 widgets/thumbnails-grid.php:434
-msgid "Filter Typography"
-msgstr ""
-
-#: widgets/events-info.php:44 widgets/events-info.php:91
-msgid "Events Info"
-msgstr ""
-
-#: widgets/events-info.php:100 widgets/events-info.php:101
-msgid "Display When"
-msgstr ""
-
-#: widgets/events-info.php:114
-msgid "When Text"
-msgstr ""
-
-#: widgets/events-info.php:115 widgets/events-info.php:116
-msgid "When"
-msgstr ""
-
-#: widgets/events-info.php:125 widgets/events-info.php:162
-#: widgets/events-info.php:199
-msgid "When Icon"
-msgstr ""
-
-#: widgets/events-info.php:137 widgets/events-info.php:138
-msgid "Display Where"
-msgstr ""
-
-#: widgets/events-info.php:151
-msgid "Where Text"
-msgstr ""
-
-#: widgets/events-info.php:152 widgets/events-info.php:153
-msgid "Where"
-msgstr ""
-
-#: widgets/events-info.php:174 widgets/events-info.php:175
-msgid "Display Cost"
-msgstr ""
-
-#: widgets/events-info.php:188
-msgid "Cost Text"
-msgstr ""
-
-#: widgets/events-info.php:189 widgets/events-info.php:190
-msgid "Cost"
-msgstr ""
-
-#: widgets/events-info.php:211 widgets/events-info.php:212
-msgid "Display Status"
-msgstr ""
-
-#: widgets/events-info.php:284
-msgid "Info Color"
-msgstr ""
-
-#: widgets/events-info.php:306
-msgid "Info Link Color"
-msgstr ""
-
-#: widgets/events-info.php:318
-msgid "Info Link Hover Color"
-msgstr ""
-
-#: widgets/events-info.php:330
-msgid "Event Status Background"
-msgstr ""
-
-#: widgets/events-info.php:342
-msgid "Event Status Text"
-msgstr ""
-
-#: widgets/events-swiper.php:50
-msgid "Events Swiper"
-msgstr ""
-
-#: widgets/events-swiper.php:128 widgets/swiper-slides.php:128
-msgid "Swiper Slideshow"
-msgstr ""
-
-#: widgets/events-swiper.php:152 widgets/image-carousel.php:210
-#: widgets/slideshow-carousel.php:211 widgets/swiper-slides.php:165
-#: widgets/testimonials.php:136
-msgid "Autoplay Interval"
-msgstr ""
-
-#: widgets/events-swiper.php:153 widgets/image-carousel.php:211
-#: widgets/slideshow-carousel.php:212 widgets/swiper-slides.php:166
-#: widgets/testimonials.php:137
-msgid "Autoplay Interval ( 5000 default)"
-msgstr ""
-
-#: widgets/events-swiper.php:160 widgets/google-map.php:182
-#: widgets/swiper-slides.php:187
-msgid "Height"
-msgstr ""
-
-#: widgets/events-swiper.php:187 widgets/image-carousel.php:343
-#: widgets/slideshow-carousel.php:344 widgets/swiper-slides.php:291
-msgid "Arrow Color"
-msgstr ""
-
-#: widgets/events-swiper.php:285
-msgid "Background Color"
-msgstr ""
-
-#: widgets/flip-box.php:50
-msgid "Flip Box"
-msgstr ""
-
-#: widgets/flip-box.php:98 widgets/service-box.php:48
-#: widgets/service-box.php:111
-msgid "Service Box"
-msgstr ""
-
-#: widgets/flip-box.php:136
-msgid "Overlay Opacity"
-msgstr ""
-
-#: widgets/flip-box.php:157
-msgid "Flip Box Title"
-msgstr ""
-
-#: widgets/flip-box.php:158 widgets/service-box.php:229
-msgid "This is the heading"
-msgstr ""
-
-#: widgets/flip-box.php:159 widgets/progress-bar.php:105
-#: widgets/section-heading.php:170 widgets/service-box.php:230
-msgid "Enter your title"
-msgstr ""
-
-#: widgets/flip-box.php:168 widgets/service-box.php:119
-#: widgets/worktype-albums.php:207
-msgid "Choose Icon"
-msgstr ""
-
-#: widgets/flip-box.php:196
-msgid "Flip Box Content"
-msgstr ""
-
-#: widgets/flip-box.php:197 widgets/service-box.php:250
-msgid ""
-"Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Cras "
-"mattis consectetur purus sit amet fermentum."
-msgstr ""
-
-#: widgets/flip-box.php:198 widgets/service-box.php:251
-msgid "Enter your description"
-msgstr ""
-
-#: widgets/flip-box.php:209 widgets/pricing-services.php:174
-#: widgets/pricing-table.php:174 widgets/section-heading.php:232
-msgid "Button Link"
-msgstr ""
-
-#: widgets/flip-box.php:210 widgets/pricing-services.php:175
-#: widgets/pricing-table.php:175 widgets/section-heading.php:234
-#: widgets/service-box.php:263
-msgid "https://your-link.com"
-msgstr ""
-
-#: widgets/flip-box.php:220 widgets/pricing-services.php:185
-#: widgets/pricing-table.php:185 widgets/section-heading.php:248
-msgid "Button"
-msgstr ""
-
-#: widgets/flip-box.php:221 widgets/pricing-services.php:186
-#: widgets/pricing-table.php:186 widgets/service-box.php:274
-msgid "Enter link text"
-msgstr ""
-
-#: widgets/flip-box.php:240 widgets/service-box.php:293
-#: widgets/team-member.php:259
-msgid "Icon color"
-msgstr ""
-
-#: widgets/flip-box.php:323 widgets/pricing-services.php:406
-#: widgets/pricing-table.php:464 widgets/section-heading.php:367
-msgid "Button Hover Text Color"
-msgstr ""
-
-#: widgets/google-map.php:50 widgets/google-map.php:114
-msgid "Google Map"
-msgstr ""
-
-#: widgets/google-map.php:134
-msgid "Find Latitude & Longitude"
-msgstr ""
-
-#: widgets/google-map.php:144
-msgid "Latitude"
-msgstr ""
-
-#: widgets/google-map.php:154
-msgid "Longitude"
-msgstr ""
-
-#: widgets/google-map.php:165
-msgid "Zoom Level"
-msgstr ""
-
-#: widgets/google-map.php:199
-msgid "Map Type"
-msgstr ""
-
-#: widgets/google-map.php:202
-msgid "Road Map"
-msgstr ""
-
-#: widgets/google-map.php:203
-msgid "Satellite"
-msgstr ""
-
-#: widgets/google-map.php:204
-msgid "Hybrid"
-msgstr ""
-
-#: widgets/google-map.php:205
-msgid "Terrain"
-msgstr ""
-
-#: widgets/google-map.php:214
-msgid "Show Zoom Control"
-msgstr ""
-
-#: widgets/google-map.php:223 widgets/google-map.php:283
-msgid "Control Position"
-msgstr ""
-
-#: widgets/google-map.php:226 widgets/google-map.php:318
-msgid "Bottom Right (Default)"
-msgstr ""
-
-#: widgets/google-map.php:227 widgets/google-map.php:319
-msgid "Top Left"
-msgstr ""
-
-#: widgets/google-map.php:228 widgets/google-map.php:287
-#: widgets/google-map.php:320
-msgid "Top Center"
-msgstr ""
-
-#: widgets/google-map.php:229 widgets/google-map.php:288
-#: widgets/google-map.php:321
-msgid "Top Right"
-msgstr ""
-
-#: widgets/google-map.php:230 widgets/google-map.php:289
-#: widgets/google-map.php:322
-msgid "Left Center"
-msgstr ""
-
-#: widgets/google-map.php:231 widgets/google-map.php:290
-#: widgets/google-map.php:323
-msgid "Right Center"
-msgstr ""
-
-#: widgets/google-map.php:232 widgets/google-map.php:291
-#: widgets/google-map.php:324
-msgid "Bottom Left"
-msgstr ""
-
-#: widgets/google-map.php:233 widgets/google-map.php:292
-#: widgets/google-map.php:325
-msgid "Bottom Center"
-msgstr ""
-
-#: widgets/google-map.php:234 widgets/google-map.php:293
-#: widgets/google-map.php:326
-msgid "Bottom Right"
-msgstr ""
-
-#: widgets/google-map.php:247
-msgid "Show Default UI"
-msgstr ""
-
-#: widgets/google-map.php:256
-msgid "Map Type Control"
-msgstr ""
-
-#: widgets/google-map.php:265
-msgid "Control Styles"
-msgstr ""
-
-#: widgets/google-map.php:269
-msgid "Horizontal Bar"
-msgstr ""
-
-#: widgets/google-map.php:270
-msgid "Dropdown Menu"
-msgstr ""
-
-#: widgets/google-map.php:286
-msgid "Top Left (Default)"
-msgstr ""
-
-#: widgets/google-map.php:306
-msgid "Show Streetview Control"
-msgstr ""
-
-#: widgets/google-map.php:315
-msgid "Streetview Position"
-msgstr ""
-
-#: widgets/google-map.php:339
-msgid "Custom Map Style"
-msgstr ""
-
-#: widgets/google-map.php:341
-msgid ""
-"Get new map style codes from: <br/><a href=\"https://mapstyle.withgoogle.com/"
-"\" target=\"_blank\">Google Map Styling Wizard</a> <br/><a href=\"https://"
-"snazzymaps.com/explore\" target=\"_blank\">Snazzy Maps</a><br/>Copy Paste "
-"style code to display."
-msgstr ""
-
-#: widgets/google-map.php:351 widgets/post-heading.php:145
-#: widgets/progress-bar.php:137 widgets/section-heading.php:159
-#: widgets/service-box.php:129
-msgid "View"
-msgstr ""
-
-#: widgets/google-map.php:370
-msgid "Marker Color"
-msgstr ""
-
-#: widgets/image-carousel.php:50 widgets/image-carousel.php:128
-msgid "Image Carousel"
-msgstr ""
-
-#: widgets/image-carousel.php:149 widgets/image-carousel.php:150
-msgid "Carousel image type"
-msgstr ""
-
-#: widgets/image-carousel.php:180 widgets/image-carousel.php:181
-#: widgets/slideshow-carousel.php:181 widgets/slideshow-carousel.php:182
-msgid "Lazy Load"
-msgstr ""
-
-#: widgets/image-carousel.php:195 widgets/image-carousel.php:196
-#: widgets/slideshow-carousel.php:196 widgets/slideshow-carousel.php:197
-#: widgets/testimonials.php:121 widgets/testimonials.php:122
-msgid "Autoplay slideshow"
-msgstr ""
-
-#: widgets/image-carousel.php:220 widgets/slideshow-carousel.php:221
-msgid "Slide Transition"
-msgstr ""
-
-#: widgets/image-carousel.php:221 widgets/slideshow-carousel.php:222
-msgid "Slide Transition ( 1000 default)"
-msgstr ""
-
-#: widgets/image-carousel.php:229 widgets/image-carousel.php:230
-#: widgets/slideshow-carousel.php:230 widgets/slideshow-carousel.php:231
-#: widgets/swiper-slides.php:174 widgets/swiper-slides.php:175
-msgid "Lightbox Activate"
-msgstr ""
-
-#: widgets/image-carousel.php:243 widgets/slideshow-carousel.php:244
-msgid "Dispay title"
-msgstr ""
-
-#: widgets/image-carousel.php:244 widgets/slideshow-carousel.php:245
-msgid "Display thumbnails"
-msgstr ""
-
-#: widgets/image-carousel.php:266 widgets/slideshow-carousel.php:267
-#: widgets/swiper-slides.php:214
-msgid "Pagination Dots"
-msgstr ""
-
-#: widgets/image-carousel.php:280 widgets/slideshow-carousel.php:281
-#: widgets/swiper-slides.php:228
-msgid "Pagination Color"
-msgstr ""
-
-#: widgets/image-carousel.php:296 widgets/slideshow-carousel.php:297
-#: widgets/swiper-slides.php:244
-msgid "Pagination Active Color"
-msgstr ""
-
-#: widgets/image-carousel.php:312 widgets/slideshow-carousel.php:313
-#: widgets/swiper-slides.php:260
-msgid "Arrow"
-msgstr ""
-
-#: widgets/image-carousel.php:316 widgets/proofing-client-info.php:99
-#: widgets/service-box.php:150 widgets/slideshow-carousel.php:317
-#: widgets/swiper-slides.php:264 widgets/team-member.php:130
-#: widgets/testimonials.php:108
-msgid "Circle"
-msgstr ""
-
-#: widgets/image-carousel.php:328 widgets/slideshow-carousel.php:329
-#: widgets/swiper-slides.php:276
-msgid "Arrow Background Color"
-msgstr ""
-
-#: widgets/image-carousel.php:385 widgets/slideshow-carousel.php:386
-#: widgets/swiper-slides.php:333
-msgid "Title Background Color"
-msgstr ""
-
-#: widgets/image-drops.php:48 widgets/image-drops.php:96
-msgid "Image Drops"
-msgstr ""
-
-#: widgets/image-drops.php:157
-msgid "Border"
-msgstr ""
-
-#: widgets/image-drops.php:174
-msgid "Border Color"
-msgstr ""
-
-#: widgets/inline-editing.php:37
-msgid "Inline Editing"
-msgstr ""
-
-#: widgets/inline-editing.php:84 widgets/inline-editing.php:109
-#: widgets/inline-editing.php:111 widgets/sample-imaginem-blocks.php:103
-msgid "Content"
-msgstr ""
-
-#: widgets/portfolio-grid.php:41
-msgid "Portfolio Grid"
-msgstr ""
-
-#: widgets/portfolio-grid.php:104
-msgid "Portfolio Gallery"
-msgstr ""
-
-#: widgets/portfolio-grid.php:128 widgets/worktype-albums.php:128
-msgid "Choose Work types to list"
-msgstr ""
-
-#: widgets/portfolio-grid.php:140 widgets/portfolio-grid.php:141
-#: widgets/worktype-albums.php:140 widgets/worktype-albums.php:141
-msgid "Style of Portfolio"
-msgstr ""
-
-#: widgets/portfolio-grid.php:188 widgets/portfolio-grid.php:189
-msgid "Type of Portfolio list"
-msgstr ""
-
-#: widgets/portfolio-grid.php:216 widgets/portfolio-grid.php:217
-msgid "Display Worktypes"
-msgstr ""
-
-#: widgets/portfolio-grid.php:357
-msgid "Worktype Color"
-msgstr ""
-
-#: widgets/portfolio-grid.php:369
-msgid "Worktype Typography"
-msgstr ""
-
-#: widgets/portfolio-grid.php:417 widgets/thumbnails-grid.php:359
-#: widgets/worktype-albums.php:362
-msgid "Icon Border Color"
-msgstr ""
-
-#: widgets/post-heading.php:44
-msgid "Post Heading"
-msgstr ""
-
-#: widgets/post-heading.php:91 widgets/section-heading.php:44
-#: widgets/section-heading.php:91
-msgid "Section Heading"
-msgstr ""
-
-#: widgets/post-heading.php:98 widgets/section-heading.php:113
-msgid "Section Style"
-msgstr ""
-
-#: widgets/post-heading.php:103
-msgid "Date - Title"
-msgstr ""
-
-#: widgets/post-heading.php:104
-msgid "Title - Date"
-msgstr ""
-
-#: widgets/post-heading.php:114 widgets/section-heading.php:128
-#: widgets/team-member.php:169
-msgid "Alignment"
-msgstr ""
-
-#: widgets/post-heading.php:130 widgets/section-heading.php:144
-#: widgets/team-member.php:185
-msgid "Justified"
-msgstr ""
-
-#: widgets/post-heading.php:154 widgets/section-heading.php:198
-msgid "Title Width"
-msgstr ""
-
-#: widgets/post-heading.php:214 widgets/section-heading.php:317
-msgid "Subtitle Color"
-msgstr ""
-
-#: widgets/pricing-services.php:44 widgets/pricing-services.php:91
-msgid "Pricing Services"
-msgstr ""
-
-#: widgets/pricing-services.php:100 widgets/pricing-services.php:101
-#: widgets/pricing-table.php:100 widgets/pricing-table.php:101
-msgid "Standard"
-msgstr ""
-
-#: widgets/pricing-services.php:110 widgets/pricing-table.php:110
-msgid "Featured"
-msgstr ""
-
-#: widgets/pricing-services.php:125 widgets/pricing-table.php:125
-msgid "Symbol"
-msgstr ""
-
-#: widgets/pricing-services.php:126 widgets/pricing-services.php:127
-#: widgets/pricing-table.php:126 widgets/pricing-table.php:127
-msgid "$"
-msgstr ""
-
-#: widgets/pricing-services.php:136 widgets/pricing-table.php:136
-msgid "Price ( Main Unit )"
-msgstr ""
-
-#: widgets/pricing-services.php:149 widgets/pricing-table.php:149
-msgid "Fraction ( Cents )"
-msgstr ""
-
-#: widgets/pricing-services.php:162 widgets/pricing-table.php:162
-msgid "Duration"
-msgstr ""
-
-#: widgets/pricing-services.php:163 widgets/pricing-services.php:164
-#: widgets/pricing-table.php:163 widgets/pricing-table.php:164
-msgid "Monthly"
-msgstr ""
-
-#: widgets/pricing-services.php:195
-msgid "Services"
-msgstr ""
-
-#: widgets/pricing-services.php:197
-msgid "Enter your services"
-msgstr ""
-
-#: widgets/pricing-services.php:198
-msgid "Add services text"
-msgstr ""
-
-#: widgets/pricing-services.php:216 widgets/pricing-table.php:241
-msgid "Header Background Color"
-msgstr ""
-
-#: widgets/pricing-services.php:232 widgets/pricing-table.php:257
-msgid "Featured Border Color"
-msgstr ""
-
-#: widgets/pricing-services.php:274 widgets/pricing-table.php:299
-msgid "Pricing Color"
-msgstr ""
-
-#: widgets/pricing-services.php:300 widgets/pricing-table.php:325
-msgid "Currency Symbol and Fraction Adjuster"
-msgstr ""
-
-#: widgets/pricing-services.php:318 widgets/pricing-table.php:343
-msgid "Duration Color"
-msgstr ""
-
-#: widgets/pricing-services.php:344 widgets/pricing-table.php:369
-msgid "Content Background Color"
-msgstr ""
-
-#: widgets/pricing-table.php:44 widgets/pricing-table.php:91
-msgid "Pricing Table"
-msgstr ""
-
-#: widgets/pricing-table.php:195
-msgid "Row"
-msgstr ""
-
-#: widgets/pricing-table.php:206
-msgid "Available"
-msgstr ""
-
-#: widgets/pricing-table.php:217 widgets/pricing-table.php:218
-#: widgets/pricing-table.php:219
-msgid "Row Text"
-msgstr ""
-
-#: widgets/pricing-table.php:403
-msgid "Seperator Color"
-msgstr ""
-
-#: widgets/pricing-table.php:420
-msgid "Symbol Color"
-msgstr ""
-
-#: widgets/progress-bar.php:48 widgets/progress-bar.php:96
-#: widgets/progress-bar.php:148
-msgid "Progress Bar"
-msgstr ""
-
-#: widgets/progress-bar.php:106
-msgid "My Skill"
-msgstr ""
-
-#: widgets/progress-bar.php:114
-msgid "Percentage"
-msgstr ""
-
-#: widgets/progress-bar.php:125
-msgid "Display Percentage"
-msgstr ""
-
-#: widgets/progress-bar.php:156
-msgid "Progress Color"
-msgstr ""
-
-#: widgets/progress-bar.php:171
-msgid "Progress Bar Color"
-msgstr ""
-
-#: widgets/progress-bar.php:184
-msgid "Title Style"
-msgstr ""
-
-#: widgets/progress-bar.php:192 widgets/split-headlines.php:119
-msgid "Text Color"
-msgstr ""
-
-#: widgets/proofing-client-info.php:41 widgets/proofing-client-info.php:87
-msgid "Proofing Info"
-msgstr ""
-
-#: widgets/proofing-client-info.php:95 widgets/service-box.php:147
-#: widgets/team-member.php:126 widgets/testimonials.php:105
-msgid "Shape"
-msgstr ""
-
-#: widgets/proofing-client-info.php:98
-msgid "Curved"
-msgstr ""
-
-#: widgets/proofing-client-info.php:155
-msgid "Client Description"
-msgstr ""
-
-#: widgets/proofing-client-info.php:168
+#: includes/admin/class-analytics-activity.php:777
 msgid "Time"
 msgstr ""
 
-#: widgets/proofing-client-info.php:238
-msgid "Client Name Typography"
+#: includes/admin/class-analytics-activity.php:778
+#: includes/admin/class-analytics-bookings.php:871
+msgid "Persons"
 msgstr ""
 
-#: widgets/proofing-client-info.php:247
-msgid "Client Description Color"
+#: includes/admin/class-analytics-activity.php:780
+msgid "Activity Date"
 msgstr ""
 
-#: widgets/proofing-client-info.php:261
-msgid "Client Description Typography"
+#: includes/admin/class-analytics-bookings.php:41
+#: includes/admin/class-analytics-bookings.php:42
+msgid "Overview"
 msgstr ""
 
-#: widgets/proofing-client-info.php:287
-msgid "Client Details Color"
+#: includes/admin/class-analytics-bookings.php:53
+#: includes/admin/class-analytics-bookings.php:54
+#: includes/admin/class-analytics-bookings.php:73
+msgid "Bookings Overview"
 msgstr ""
 
-#: widgets/proofing-client-info.php:299
-msgid "Client Details Typography"
+#: includes/admin/class-analytics-bookings.php:76
+#: includes/admin/class-availablity-calendar-year.php:42
+#: includes/admin/class-availablity-calendar.php:210
+#: includes/admin/class-availablity-calendar.php:253
+msgid "No Rooms Found"
 msgstr ""
 
-#: widgets/proofing-client-info.php:308
-msgid "Client icon Color"
+#: includes/admin/class-analytics-bookings.php:77
+msgid "Please configure atleast 1 Room from Rooms section"
 msgstr ""
 
-#: widgets/proofing-client-info.php:320
-msgid "Client icon Typography"
+#: includes/admin/class-analytics-bookings.php:127
+msgid "ADR for past twelve months"
 msgstr ""
 
-#: widgets/proofing-client-info.php:329
-msgid "Info Border Size"
+#: includes/admin/class-analytics-bookings.php:577
+msgid "Average Daily Rate (ADR)"
 msgstr ""
 
-#: widgets/proofing-client-info.php:346
-msgid "Info Border Color"
+#: includes/admin/class-analytics-bookings.php:874
+msgid "Check-in Date"
 msgstr ""
 
-#: widgets/proofing-grid.php:41
-msgid "Proofing Grid"
+#: includes/admin/class-analytics-bookings.php:875
+msgid "Check-out Date"
 msgstr ""
 
-#: widgets/proofing-grid.php:104
-msgid "Proofing Gallery"
+#: includes/admin/class-availability-batch-processor.php:47
+#: includes/admin/class-availability-batch-processor.php:48
+msgid "Import iCal Availabilitiy"
 msgstr ""
 
-#: widgets/proofing-grid.php:128 widgets/proofing-grid.php:129
-msgid "Style of Proofing"
+#: includes/admin/class-availability-batch-processor.php:328
+msgid "Sync Your Calendar"
 msgstr ""
 
-#: widgets/proofing-grid.php:159 widgets/proofing-grid.php:160
-msgid "Proofing listing"
-msgstr ""
-
-#: widgets/proofing-grid.php:357
-msgid "Selected Count Typography"
-msgstr ""
-
-#: widgets/sample-imaginem-blocks.php:41
-msgid "Imaginem Blocks"
-msgstr ""
-
-#: widgets/sample-imaginem-blocks.php:128
-msgid "Text Transform"
-msgstr ""
-
-#: widgets/sample-imaginem-blocks.php:133
-msgid "UPPERCASE"
-msgstr ""
-
-#: widgets/sample-imaginem-blocks.php:134
-msgid "lowercase"
-msgstr ""
-
-#: widgets/sample-imaginem-blocks.php:135
-msgid "Capitalize"
-msgstr ""
-
-#: widgets/section-heading.php:98
-msgid "Section Size"
-msgstr ""
-
-#: widgets/section-heading.php:103
-msgid "Large"
-msgstr ""
-
-#: widgets/section-heading.php:118
-msgid "Sub Title - Title"
-msgstr ""
-
-#: widgets/section-heading.php:119
-msgid "Title - Sub Title"
-msgstr ""
-
-#: widgets/section-heading.php:171
-msgid "Add Your Heading Text Here"
-msgstr ""
-
-#: widgets/section-heading.php:178
-msgid "Subtitle"
-msgstr ""
-
-#: widgets/section-heading.php:180 widgets/section-heading.php:247
-msgid "Enter your subtitle"
-msgstr ""
-
-#: widgets/section-heading.php:181
-msgid "Add Your Subheading Text Here"
-msgstr ""
-
-#: widgets/section-heading.php:190 widgets/split-headlines.php:100
-msgid "Enter your Description"
-msgstr ""
-
-#: widgets/section-heading.php:191 widgets/split-headlines.php:101
-msgid "Add Your description text"
-msgstr ""
-
-#: widgets/section-heading.php:255
-msgid "Tag"
-msgstr ""
-
-#: widgets/section-heading.php:273
-msgid "Decoration"
-msgstr ""
-
-#: widgets/section-heading.php:279
-msgid "Box Border"
-msgstr ""
-
-#: widgets/section-heading.php:280
-msgid "Border top"
-msgstr ""
-
-#: widgets/section-heading.php:281
-msgid "Border bottom"
-msgstr ""
-
-#: widgets/section-heading.php:282
-msgid "Border top and bottom"
-msgstr ""
-
-#: widgets/service-box.php:133
-msgid "Stacked"
-msgstr ""
-
-#: widgets/service-box.php:134
-msgid "Framed"
-msgstr ""
-
-#: widgets/service-box.php:184
-msgid "Space"
-msgstr ""
-
-#: widgets/service-box.php:201
-msgid "Icon Position"
-msgstr ""
-
-#: widgets/service-box.php:228
-msgid "Service Title"
-msgstr ""
-
-#: widgets/service-box.php:239
-msgid "Count to Number"
-msgstr ""
-
-#: widgets/service-box.php:249
-msgid "Service Content"
-msgstr ""
-
-#: widgets/service-box.php:262
-msgid "Link to"
-msgstr ""
-
-#: widgets/service-box.php:272 widgets/service-box.php:273
-msgid "Link Text"
-msgstr ""
-
-#: widgets/service-box.php:309
-msgid "Icon background color"
-msgstr ""
-
-#: widgets/service-box.php:328
-msgid "Icon border color"
-msgstr ""
-
-#: widgets/service-box.php:347
-msgid "Rotate"
-msgstr ""
-
-#: widgets/service-box.php:362
-msgid "Icon Padding"
-msgstr ""
-
-#: widgets/service-box.php:382
-msgid "Border Width"
-msgstr ""
-
-#: widgets/service-box.php:423
-msgid "Count Color"
-msgstr ""
-
-#: widgets/service-box.php:439
-msgid "Count Typography"
-msgstr ""
-
-#: widgets/slideshow-carousel.php:50 widgets/slideshow-carousel.php:128
-msgid "Slideshow Carousel"
-msgstr ""
-
-#: widgets/slideshow-carousel.php:150 widgets/slideshow-carousel.php:151
-msgid "Slideshow type"
-msgstr ""
-
-#: widgets/slideshow-carousel.php:153
-msgid "Slideshow"
-msgstr ""
-
-#: widgets/slideshow-carousel.php:154
-msgid "2D Center Carousel"
-msgstr ""
-
-#: widgets/slideshow-carousel.php:155
-msgid "3D Center Carousel"
-msgstr ""
-
-#: widgets/slideshow-carousel.php:165 widgets/slideshow-carousel.php:166
-msgid "Slideshow image type"
-msgstr ""
-
-#: widgets/split-headlines.php:44 widgets/split-headlines.php:91
-msgid "Split Headlines"
-msgstr ""
-
-#: widgets/swiper-slides.php:50
-msgid "Swiper Slides"
-msgstr ""
-
-#: widgets/team-member.php:50 widgets/team-member.php:98
-msgid "Team Member"
-msgstr ""
-
-#: widgets/team-member.php:146 widgets/testimonials.php:152
-msgid "Staff title"
-msgstr ""
-
-#: widgets/team-member.php:154 widgets/testimonials.php:158
-msgid "Staff name"
-msgstr ""
-
-#: widgets/team-member.php:162
-msgid "Staff Description"
-msgstr ""
-
-#: widgets/team-member.php:199 widgets/team-member.php:200
-msgid "Display social icons"
-msgstr ""
-
-#: widgets/team-member.php:213
-msgid "Social Icons"
-msgstr ""
-
-#: widgets/team-member.php:223
-msgid "Icon"
-msgstr ""
-
-#: widgets/team-member.php:275
-msgid "Icon hover color"
-msgstr ""
-
-#: widgets/team-member.php:291
-msgid "Icon hover background color"
-msgstr ""
-
-#: widgets/testimonials.php:50 widgets/testimonials.php:98
-msgid "Testimonials"
-msgstr ""
-
-#: widgets/testimonials.php:144
-msgid "Repeater List"
-msgstr ""
-
-#: widgets/testimonials.php:164
-msgid "Company name"
-msgstr ""
-
-#: widgets/testimonials.php:193
-msgid "Title #1"
-msgstr ""
-
-#: widgets/testimonials.php:194
-msgid "Jane Doe"
-msgstr ""
-
-#: widgets/testimonials.php:232
-msgid "Quote Typography"
-msgstr ""
-
-#: widgets/testimonials.php:242
-msgid "Company Info Color"
-msgstr ""
-
-#: widgets/testimonials.php:258
-msgid "Company Info Typography"
-msgstr ""
-
-#: widgets/thumbnails-grid.php:41
-msgid "Thumbnails Grid"
-msgstr ""
-
-#: widgets/thumbnails-grid.php:105
-msgid "Image Gallery"
-msgstr ""
-
-#: widgets/thumbnails-grid.php:126 widgets/thumbnails-grid.php:127
-msgid "Style of Thumbnails"
-msgstr ""
-
-#: widgets/thumbnails-grid.php:158
-msgid "Grid Columns"
-msgstr ""
-
-#: widgets/thumbnails-grid.php:159
-msgid "No. of Grid Columns"
-msgstr ""
-
-#: widgets/thumbnails-grid.php:173 widgets/thumbnails-grid.php:174
-msgid "Image orientation format"
-msgstr ""
-
-#: widgets/thumbnails-grid.php:202
-msgid "Filter"
-msgstr ""
-
-#: widgets/thumbnails-grid.php:203
-msgid "Filter using image tags."
-msgstr ""
-
-#: widgets/thumbnails-grid.php:206
-msgid "Filter with Tags"
-msgstr ""
-
-#: widgets/thumbnails-grid.php:216 widgets/thumbnails-grid.php:217
-msgid "Filter tag for all filters"
-msgstr ""
-
-#: widgets/thumbnails-grid.php:225
-msgid "Link Type"
-msgstr ""
-
-#: widgets/thumbnails-grid.php:226
+#: includes/admin/class-availability-batch-processor.php:329
 msgid ""
-"Link Type. Linked method uses image link field in Media manager image "
-"section."
+"Keep your bookings up-to-date. Connect your iCalendar feeds to synchronize "
+"your booking availability with your StayLodgic calendar. Simply enter the "
+"URLs for the calendars you wish to sync below."
 msgstr ""
 
-#: widgets/thumbnails-grid.php:229
-msgid "Downloadable"
+#: includes/admin/class-availability-batch-processor.php:331
+msgid "How to Sync:"
 msgstr ""
 
-#: widgets/thumbnails-grid.php:230
-msgid "Link using Image link data"
+#: includes/admin/class-availability-batch-processor.php:333
+msgid ""
+"Find your iCalendar URL from the external booking platform or calendar "
+"service."
 msgstr ""
 
-#: widgets/thumbnails-grid.php:231
-msgid "Link using image data purchase link"
+#: includes/admin/class-availability-batch-processor.php:334
+msgid "Enter the iCalendar URL in the input field below."
 msgstr ""
 
-#: widgets/thumbnails-grid.php:241
-msgid "Dispay image title"
+#: includes/admin/class-availability-batch-processor.php:335
+msgid "Set a label for your reference."
 msgstr ""
 
-#: widgets/thumbnails-grid.php:242
-msgid "Display image title"
+#: includes/admin/class-availability-batch-processor.php:359
+#: includes/admin/class-availability-batch-processor.php:391
+msgid "url"
 msgstr ""
 
-#: widgets/thumbnails-grid.php:254 widgets/thumbnails-grid.php:255
-msgid "Display image description"
+#: includes/admin/class-availability-batch-processor.php:361
+#: includes/admin/class-availability-batch-processor.php:393
+msgid "Label"
 msgstr ""
 
-#: widgets/worktype-albums.php:41 widgets/worktype-albums.php:104
-msgid "Worktype Albums"
+#: includes/admin/class-availability-batch-processor.php:377
+msgid "Last sync: "
 msgstr ""
 
-#: widgets/worktype-albums.php:187
-msgid "Item text singular referrer"
+#: includes/admin/class-availability-batch-processor.php:378
+msgid "Time: "
 msgstr ""
 
-#: widgets/worktype-albums.php:189 widgets/worktype-albums.php:190
-msgid "Item"
+#: includes/admin/class-availability-batch-processor.php:379
+msgid "Processed in ( seconds ): "
 msgstr ""
 
-#: widgets/worktype-albums.php:197
-msgid "Item text plural referrer"
+#: includes/admin/class-availability-batch-processor.php:381
+msgid "File error"
 msgstr ""
 
-#: widgets/worktype-albums.php:199 widgets/worktype-albums.php:200
-msgid "Items"
+#: includes/admin/class-availability-batch-processor.php:397
+msgid "Add more"
 msgstr ""
 
-#: widgets/worktype-albums.php:218 widgets/worktype-albums.php:219
-msgid "Item Count"
+#: includes/admin/class-availability-batch-processor.php:402
+msgid "Save All"
 msgstr ""
 
-#: widgets/worktype-albums.php:375
-msgid "Icon Hover background Color"
+#: includes/admin/class-availability-batch-processor.php:418
+#: includes/admin/class-availability-batch-processor.php:419
+msgid "Export iCal Availability"
+msgstr ""
+
+#: includes/admin/class-availability-batch-processor.php:436
+msgid "iCal Feeds"
+msgstr ""
+
+#: includes/admin/class-availability-batch-processor.php:437
+msgid ""
+"Synchronize availability for your rooms with other softwares using iCal "
+"feeds."
+msgstr ""
+
+#: includes/admin/class-availability-batch-processor.php:439
+msgid "How to:"
+msgstr ""
+
+#: includes/admin/class-availability-batch-processor.php:441
+msgid "Copy the url for the room."
+msgstr ""
+
+#: includes/admin/class-availability-batch-processor.php:442
+msgid ""
+"Enter it to the software which is compatible with iCal feeds for "
+"availability."
+msgstr ""
+
+#: includes/admin/class-availability-batch-processor.php:463
+msgid "Copy to clipboard"
+msgstr ""
+
+#: includes/admin/class-availablity-calendar-year.php:23
+#: includes/admin/class-availablity-calendar-year.php:24
+msgid "Annual Availability"
+msgstr ""
+
+#: includes/admin/class-availablity-calendar-year.php:46
+msgid "12 Months Availability Overview"
+msgstr ""
+
+#: includes/admin/class-availablity-calendar.php:38
+msgid "Max room undefined"
+msgstr ""
+
+#: includes/admin/class-availablity-calendar.php:41
+msgid "Max room is zero"
+msgstr ""
+
+#: includes/admin/class-availablity-calendar.php:46
+msgid "Base rate undefined"
+msgstr ""
+
+#: includes/admin/class-availablity-calendar.php:49
+msgid "Base rate is zero"
+msgstr ""
+
+#: includes/admin/class-availablity-calendar.php:54
+msgid "Max guest number undefined"
+msgstr ""
+
+#: includes/admin/class-availablity-calendar.php:57
+msgid "Max guest number is zero"
+msgstr ""
+
+#: includes/admin/class-availablity-calendar.php:62
+msgid "Beds undefined"
+msgstr ""
+
+#: includes/admin/class-availablity-calendar.php:67
+msgid "No featured image"
+msgstr ""
+
+#: includes/admin/class-availablity-calendar.php:190
+#: includes/admin/class-availablity-calendar.php:191
+#: includes/admin/class-availablity-calendar.php:207
+#: includes/admin/class-availablity-calendar.php:257
+msgid "Availability Calendar"
+msgstr ""
+
+#: includes/admin/class-availablity-calendar.php:293
+msgid "Quanity"
+msgstr ""
+
+#: includes/admin/class-availablity-calendar.php:296
+#: includes/admin/class-modals.php:202
+#: metabox/metaboxes/activity-metaboxes.php:44
+msgid "Rate"
+msgstr ""
+
+#: includes/admin/class-availablity-calendar.php:301
+msgid "Display Confirmed"
+msgstr ""
+
+#: includes/admin/class-availablity-calendar.php:633
+msgid "Occupancy"
+msgstr ""
+
+#: includes/admin/class-availablity-calendar.php:701
+msgid "Rooms<br/>Open"
+msgstr ""
+
+#: includes/admin/class-booking.php:169 includes/admin/class-booking.php:210
+msgid "Session timed out. Please reload the page."
+msgstr ""
+
+#: includes/admin/class-booking.php:275
+msgid "Mealplan"
+msgstr ""
+
+#: includes/admin/class-booking.php:284
+msgid "Check-in:"
+msgstr ""
+
+#: includes/admin/class-booking.php:286
+msgid "Check-out:"
+msgstr ""
+
+#: includes/admin/class-booking.php:290
+msgid "Nights:"
+msgstr ""
+
+#: includes/admin/class-booking.php:318
+msgid "Book this room"
+msgstr ""
+
+#: includes/admin/class-booking.php:356
+msgid "Choose stay dates"
+msgstr ""
+
+#: includes/admin/class-booking.php:436 includes/admin/class-booking.php:437
+#: includes/admin/class-guest-registry.php:799
+#: includes/admin/class-guest-registry.php:800
+#: includes/admin/class-invoicing.php:439
+#: includes/admin/class-invoicing.php:472
+msgid "Booking No."
+msgstr ""
+
+#: includes/admin/class-booking.php:565
+msgid "No rooms found within your selection."
+msgstr ""
+
+#: includes/admin/class-booking.php:692
+msgid "Rooms unavailable for choice"
+msgstr ""
+
+#: includes/admin/class-booking.php:693
+msgid "Please choose a different range."
+msgstr ""
+
+#: includes/admin/class-booking.php:863
+msgid "Choose this room"
+msgstr ""
+
+#: includes/admin/class-booking.php:1198
+#: includes/admin/class-guest-registry.php:59
+#: includes/admin/class-ical-export-processor.php:26
+#: includes/admin/class-ical-export-processor.php:49
+msgid "Unauthorized request."
+msgstr ""
+
+#: includes/admin/class-booking.php:1220
+msgid "Room not found!"
+msgstr ""
+
+#: includes/admin/class-booking.php:1371
+msgid "Pay Booking"
+msgstr ""
+
+#: includes/admin/class-booking.php:1392
+#: includes/admin/class-guest-registry.php:712
+msgid ""
+"By clicking \"Book this Room\" you agree to our terms and conditions and "
+"privacy policy."
+msgstr ""
+
+#: includes/admin/class-booking.php:1554
+#: includes/admin/class-options-panel.php:821
+#: includes/admin/class-options-panel.php:851
+msgid "Room Only"
+msgstr ""
+
+#: includes/admin/class-booking.php:1555
+#: includes/admin/class-options-panel.php:822
+#: includes/admin/class-options-panel.php:852
+msgid "Bed and Breakfast"
+msgstr ""
+
+#: includes/admin/class-booking.php:1556
+#: includes/admin/class-options-panel.php:823
+#: includes/admin/class-options-panel.php:853
+msgid "Half Board"
+msgstr ""
+
+#: includes/admin/class-booking.php:1557
+#: includes/admin/class-options-panel.php:824
+#: includes/admin/class-options-panel.php:854
+msgid "Full Board"
+msgstr ""
+
+#: includes/admin/class-booking.php:1558
+#: includes/admin/class-options-panel.php:825
+#: includes/admin/class-options-panel.php:855
+msgid "All-Inclusive"
+msgstr ""
+
+#: includes/admin/class-booking.php:1625
+msgid " included."
+msgstr ""
+
+#: includes/admin/class-booking.php:1664
+msgid "Mealplans"
+msgstr ""
+
+#: includes/admin/class-booking.php:1668
+msgid "Not selected"
+msgstr ""
+
+#: includes/admin/class-booking.php:1963
+msgid "Invalid or timeout. Please try again."
+msgstr ""
+
+#: includes/admin/class-common.php:235
+msgid "United Arab Emirates dirham"
+msgstr ""
+
+#: includes/admin/class-common.php:236
+msgid "Afghan afghani"
+msgstr ""
+
+#: includes/admin/class-common.php:237
+msgid "Albanian lek"
+msgstr ""
+
+#: includes/admin/class-common.php:238
+msgid "Armenian dram"
+msgstr ""
+
+#: includes/admin/class-common.php:239
+msgid "Netherlands Antillean guilder"
+msgstr ""
+
+#: includes/admin/class-common.php:240
+msgid "Angolan kwanza"
+msgstr ""
+
+#: includes/admin/class-common.php:241
+msgid "Argentine peso"
+msgstr ""
+
+#: includes/admin/class-common.php:242
+msgid "Australian dollar"
+msgstr ""
+
+#: includes/admin/class-common.php:243
+msgid "Aruban florin"
+msgstr ""
+
+#: includes/admin/class-common.php:244
+msgid "Azerbaijani manat"
+msgstr ""
+
+#: includes/admin/class-common.php:245
+msgid "Bosnia and Herzegovina convertible mark"
+msgstr ""
+
+#: includes/admin/class-common.php:246
+msgid "Barbadian dollar"
+msgstr ""
+
+#: includes/admin/class-common.php:247
+msgid "Bangladeshi taka"
+msgstr ""
+
+#: includes/admin/class-common.php:248
+msgid "Bulgarian lev"
+msgstr ""
+
+#: includes/admin/class-common.php:249
+msgid "Bahraini dinar"
+msgstr ""
+
+#: includes/admin/class-common.php:250
+msgid "Burundian franc"
+msgstr ""
+
+#: includes/admin/class-common.php:251
+msgid "Bermudian dollar"
+msgstr ""
+
+#: includes/admin/class-common.php:252
+msgid "Brunei dollar"
+msgstr ""
+
+#: includes/admin/class-common.php:253
+msgid "Bolivian boliviano"
+msgstr ""
+
+#: includes/admin/class-common.php:254
+msgid "Brazilian real"
+msgstr ""
+
+#: includes/admin/class-common.php:255
+msgid "Bahamian dollar"
+msgstr ""
+
+#: includes/admin/class-common.php:256
+msgid "Bitcoin"
+msgstr ""
+
+#: includes/admin/class-common.php:257
+msgid "Bhutanese ngultrum"
+msgstr ""
+
+#: includes/admin/class-common.php:258
+msgid "Botswana pula"
+msgstr ""
+
+#: includes/admin/class-common.php:259
+msgid "Belarusian ruble (old)"
+msgstr ""
+
+#: includes/admin/class-common.php:260
+msgid "Belarusian ruble"
+msgstr ""
+
+#: includes/admin/class-common.php:261
+msgid "Belize dollar"
+msgstr ""
+
+#: includes/admin/class-common.php:262
+msgid "Canadian dollar"
+msgstr ""
+
+#: includes/admin/class-common.php:263
+msgid "Congolese franc"
+msgstr ""
+
+#: includes/admin/class-common.php:264
+msgid "Swiss franc"
+msgstr ""
+
+#: includes/admin/class-common.php:265
+msgid "Chilean peso"
+msgstr ""
+
+#: includes/admin/class-common.php:266
+msgid "Chinese yuan"
+msgstr ""
+
+#: includes/admin/class-common.php:267
+msgid "Colombian peso"
+msgstr ""
+
+#: includes/admin/class-common.php:268
+msgid "Costa Rican col&oacute;n"
+msgstr ""
+
+#: includes/admin/class-common.php:269
+msgid "Cuban convertible peso"
+msgstr ""
+
+#: includes/admin/class-common.php:270
+msgid "Cuban peso"
+msgstr ""
+
+#: includes/admin/class-common.php:271
+msgid "Cape Verdean escudo"
+msgstr ""
+
+#: includes/admin/class-common.php:272
+msgid "Czech koruna"
+msgstr ""
+
+#: includes/admin/class-common.php:273
+msgid "Djiboutian franc"
+msgstr ""
+
+#: includes/admin/class-common.php:274
+msgid "Danish krone"
+msgstr ""
+
+#: includes/admin/class-common.php:275
+msgid "Dominican peso"
+msgstr ""
+
+#: includes/admin/class-common.php:276
+msgid "Algerian dinar"
+msgstr ""
+
+#: includes/admin/class-common.php:277
+msgid "Egyptian pound"
+msgstr ""
+
+#: includes/admin/class-common.php:278
+msgid "Eritrean nakfa"
+msgstr ""
+
+#: includes/admin/class-common.php:279
+msgid "Ethiopian birr"
+msgstr ""
+
+#: includes/admin/class-common.php:280
+msgid "Euro"
+msgstr ""
+
+#: includes/admin/class-common.php:281
+msgid "Fijian dollar"
+msgstr ""
+
+#: includes/admin/class-common.php:282
+msgid "Falkland Islands pound"
+msgstr ""
+
+#: includes/admin/class-common.php:283
+msgid "Pound sterling"
+msgstr ""
+
+#: includes/admin/class-common.php:284
+msgid "Georgian lari"
+msgstr ""
+
+#: includes/admin/class-common.php:285
+msgid "Guernsey pound"
+msgstr ""
+
+#: includes/admin/class-common.php:286
+msgid "Ghana cedi"
+msgstr ""
+
+#: includes/admin/class-common.php:287
+msgid "Gibraltar pound"
+msgstr ""
+
+#: includes/admin/class-common.php:288
+msgid "Gambian dalasi"
+msgstr ""
+
+#: includes/admin/class-common.php:289
+msgid "Guinean franc"
+msgstr ""
+
+#: includes/admin/class-common.php:290
+msgid "Guatemalan quetzal"
+msgstr ""
+
+#: includes/admin/class-common.php:291
+msgid "Guyanese dollar"
+msgstr ""
+
+#: includes/admin/class-common.php:292
+msgid "Hong Kong dollar"
+msgstr ""
+
+#: includes/admin/class-common.php:293
+msgid "Honduran lempira"
+msgstr ""
+
+#: includes/admin/class-common.php:294
+msgid "Croatian kuna"
+msgstr ""
+
+#: includes/admin/class-common.php:295
+msgid "Haitian gourde"
+msgstr ""
+
+#: includes/admin/class-common.php:296
+msgid "Hungarian forint"
+msgstr ""
+
+#: includes/admin/class-common.php:297
+msgid "Indonesian rupiah"
+msgstr ""
+
+#: includes/admin/class-common.php:298
+msgid "Israeli new shekel"
+msgstr ""
+
+#: includes/admin/class-common.php:299
+msgid "Manx pound"
+msgstr ""
+
+#: includes/admin/class-common.php:300
+msgid "Indian rupee"
+msgstr ""
+
+#: includes/admin/class-common.php:301
+msgid "Iraqi dinar"
+msgstr ""
+
+#: includes/admin/class-common.php:302
+msgid "Iranian rial"
+msgstr ""
+
+#: includes/admin/class-common.php:303
+msgid "Iranian toman"
+msgstr ""
+
+#: includes/admin/class-common.php:304
+msgid "Icelandic kr&oacute;na"
+msgstr ""
+
+#: includes/admin/class-common.php:305
+msgid "Jersey pound"
+msgstr ""
+
+#: includes/admin/class-common.php:306
+msgid "Jamaican dollar"
+msgstr ""
+
+#: includes/admin/class-common.php:307
+msgid "Jordanian dinar"
+msgstr ""
+
+#: includes/admin/class-common.php:308
+msgid "Japanese yen"
+msgstr ""
+
+#: includes/admin/class-common.php:309
+msgid "Kenyan shilling"
+msgstr ""
+
+#: includes/admin/class-common.php:310
+msgid "Kyrgyzstani som"
+msgstr ""
+
+#: includes/admin/class-common.php:311
+msgid "Cambodian riel"
+msgstr ""
+
+#: includes/admin/class-common.php:312
+msgid "Comorian franc"
+msgstr ""
+
+#: includes/admin/class-common.php:313
+msgid "North Korean won"
+msgstr ""
+
+#: includes/admin/class-common.php:314
+msgid "South Korean won"
+msgstr ""
+
+#: includes/admin/class-common.php:315
+msgid "Kuwaiti dinar"
+msgstr ""
+
+#: includes/admin/class-common.php:316
+msgid "Cayman Islands dollar"
+msgstr ""
+
+#: includes/admin/class-common.php:317
+msgid "Kazakhstani tenge"
+msgstr ""
+
+#: includes/admin/class-common.php:318
+msgid "Lao kip"
+msgstr ""
+
+#: includes/admin/class-common.php:319
+msgid "Lebanese pound"
+msgstr ""
+
+#: includes/admin/class-common.php:320
+msgid "Sri Lankan rupee"
+msgstr ""
+
+#: includes/admin/class-common.php:321
+msgid "Liberian dollar"
+msgstr ""
+
+#: includes/admin/class-common.php:322
+msgid "Lesotho loti"
+msgstr ""
+
+#: includes/admin/class-common.php:323
+msgid "Libyan dinar"
+msgstr ""
+
+#: includes/admin/class-common.php:324
+msgid "Moroccan dirham"
+msgstr ""
+
+#: includes/admin/class-common.php:325
+msgid "Moldovan leu"
+msgstr ""
+
+#: includes/admin/class-common.php:326
+msgid "Malagasy ariary"
+msgstr ""
+
+#: includes/admin/class-common.php:327
+msgid "Macedonian denar"
+msgstr ""
+
+#: includes/admin/class-common.php:328
+msgid "Burmese kyat"
+msgstr ""
+
+#: includes/admin/class-common.php:329
+msgid "Mongolian t&ouml;gr&ouml;g"
+msgstr ""
+
+#: includes/admin/class-common.php:330
+msgid "Macanese pataca"
+msgstr ""
+
+#: includes/admin/class-common.php:331
+msgid "Mauritanian ouguiya"
+msgstr ""
+
+#: includes/admin/class-common.php:332
+msgid "Mauritian rupee"
+msgstr ""
+
+#: includes/admin/class-common.php:333
+msgid "Maldivian rufiyaa"
+msgstr ""
+
+#: includes/admin/class-common.php:334
+msgid "Malawian kwacha"
+msgstr ""
+
+#: includes/admin/class-common.php:335
+msgid "Mexican peso"
+msgstr ""
+
+#: includes/admin/class-common.php:336
+msgid "Malaysian ringgit"
+msgstr ""
+
+#: includes/admin/class-common.php:337
+msgid "Mozambican metical"
+msgstr ""
+
+#: includes/admin/class-common.php:338
+msgid "Namibian dollar"
+msgstr ""
+
+#: includes/admin/class-common.php:339
+msgid "Nigerian naira"
+msgstr ""
+
+#: includes/admin/class-common.php:340
+msgid "Nicaraguan c&oacute;rdoba"
+msgstr ""
+
+#: includes/admin/class-common.php:341
+msgid "Norwegian krone"
+msgstr ""
+
+#: includes/admin/class-common.php:342
+msgid "Nepalese rupee"
+msgstr ""
+
+#: includes/admin/class-common.php:343
+msgid "New Zealand dollar"
+msgstr ""
+
+#: includes/admin/class-common.php:344
+msgid "Omani rial"
+msgstr ""
+
+#: includes/admin/class-common.php:345
+msgid "Panamanian balboa"
+msgstr ""
+
+#: includes/admin/class-common.php:346
+msgid "Sol"
+msgstr ""
+
+#: includes/admin/class-common.php:347
+msgid "Papua New Guinean kina"
+msgstr ""
+
+#: includes/admin/class-common.php:348
+msgid "Philippine peso"
+msgstr ""
+
+#: includes/admin/class-common.php:349
+msgid "Pakistani rupee"
+msgstr ""
+
+#: includes/admin/class-common.php:350
+msgid "Polish z&#x142;oty"
+msgstr ""
+
+#: includes/admin/class-common.php:351
+msgid "Transnistrian ruble"
+msgstr ""
+
+#: includes/admin/class-common.php:352
+msgid "Paraguayan guaran&iacute;"
+msgstr ""
+
+#: includes/admin/class-common.php:353
+msgid "Qatari riyal"
+msgstr ""
+
+#: includes/admin/class-common.php:354
+msgid "Romanian leu"
+msgstr ""
+
+#: includes/admin/class-common.php:355
+msgid "Serbian dinar"
+msgstr ""
+
+#: includes/admin/class-common.php:356
+msgid "Russian ruble"
+msgstr ""
+
+#: includes/admin/class-common.php:357
+msgid "Rwandan franc"
+msgstr ""
+
+#: includes/admin/class-common.php:358
+msgid "Saudi riyal"
+msgstr ""
+
+#: includes/admin/class-common.php:359
+msgid "Solomon Islands dollar"
+msgstr ""
+
+#: includes/admin/class-common.php:360
+msgid "Seychellois rupee"
+msgstr ""
+
+#: includes/admin/class-common.php:361
+msgid "Sudanese pound"
+msgstr ""
+
+#: includes/admin/class-common.php:362
+msgid "Swedish krona"
+msgstr ""
+
+#: includes/admin/class-common.php:363
+msgid "Singapore dollar"
+msgstr ""
+
+#: includes/admin/class-common.php:364
+msgid "Saint Helena pound"
+msgstr ""
+
+#: includes/admin/class-common.php:365
+msgid "Sierra Leonean leone"
+msgstr ""
+
+#: includes/admin/class-common.php:366
+msgid "Somali shilling"
+msgstr ""
+
+#: includes/admin/class-common.php:367
+msgid "Surinamese dollar"
+msgstr ""
+
+#: includes/admin/class-common.php:368
+msgid "South Sudanese pound"
+msgstr ""
+
+#: includes/admin/class-common.php:369
+msgid "S&atilde;o Tom&eacute; and Pr&iacute;ncipe dobra"
+msgstr ""
+
+#: includes/admin/class-common.php:370
+msgid "Syrian pound"
+msgstr ""
+
+#: includes/admin/class-common.php:371
+msgid "Swazi lilangeni"
+msgstr ""
+
+#: includes/admin/class-common.php:372
+msgid "Thai baht"
+msgstr ""
+
+#: includes/admin/class-common.php:373
+msgid "Tajikistani somoni"
+msgstr ""
+
+#: includes/admin/class-common.php:374
+msgid "Turkmenistan manat"
+msgstr ""
+
+#: includes/admin/class-common.php:375
+msgid "Tunisian dinar"
+msgstr ""
+
+#: includes/admin/class-common.php:376
+msgid "Tongan pa&#x2bb;anga"
+msgstr ""
+
+#: includes/admin/class-common.php:377
+msgid "Turkish lira"
+msgstr ""
+
+#: includes/admin/class-common.php:378
+msgid "Trinidad and Tobago dollar"
+msgstr ""
+
+#: includes/admin/class-common.php:379
+msgid "New Taiwan dollar"
+msgstr ""
+
+#: includes/admin/class-common.php:380
+msgid "Tanzanian shilling"
+msgstr ""
+
+#: includes/admin/class-common.php:381
+msgid "Ukrainian hryvnia"
+msgstr ""
+
+#: includes/admin/class-common.php:382
+msgid "Ugandan shilling"
+msgstr ""
+
+#: includes/admin/class-common.php:383
+msgid "United States (US) dollar"
+msgstr ""
+
+#: includes/admin/class-common.php:384
+msgid "Uruguayan peso"
+msgstr ""
+
+#: includes/admin/class-common.php:385
+msgid "Uzbekistani som"
+msgstr ""
+
+#: includes/admin/class-common.php:386
+msgid "Venezuelan bol&iacute;var"
+msgstr ""
+
+#: includes/admin/class-common.php:387
+msgid "Bol&iacute;var soberano"
+msgstr ""
+
+#: includes/admin/class-common.php:388
+msgid "Vietnamese &#x111;&#x1ed3;ng"
+msgstr ""
+
+#: includes/admin/class-common.php:389
+msgid "Vanuatu vatu"
+msgstr ""
+
+#: includes/admin/class-common.php:390
+msgid "Samoan t&#x101;l&#x101;"
+msgstr ""
+
+#: includes/admin/class-common.php:391
+msgid "Central African CFA franc"
+msgstr ""
+
+#: includes/admin/class-common.php:392
+msgid "East Caribbean dollar"
+msgstr ""
+
+#: includes/admin/class-common.php:393
+msgid "West African CFA franc"
+msgstr ""
+
+#: includes/admin/class-common.php:394
+msgid "CFP franc"
+msgstr ""
+
+#: includes/admin/class-common.php:395
+msgid "Yemeni rial"
+msgstr ""
+
+#: includes/admin/class-common.php:396
+msgid "South African rand"
+msgstr ""
+
+#: includes/admin/class-common.php:397
+msgid "Zambian kwacha"
+msgstr ""
+
+#: includes/admin/class-customers.php:174
+msgid "No rooms found."
+msgstr ""
+
+#: includes/admin/class-customers.php:199
+msgid "No booking numbers found."
+msgstr ""
+
+#: includes/admin/class-email-dispatcher.php:88
+msgid "View Guest Registration"
+msgstr ""
+
+#: includes/admin/class-email-dispatcher.php:89
+msgid "View Booking"
+msgstr ""
+
+#: includes/admin/class-email-dispatcher.php:110
+#: includes/admin/class-email-dispatcher.php:151
+msgid "Thank you for your reservation"
+msgstr ""
+
+#: includes/admin/class-email-dispatcher.php:111
+#: includes/admin/class-email-dispatcher.php:152
+msgid "We have recieved your booking."
+msgstr ""
+
+#: includes/admin/class-email-dispatcher.php:113
+#: includes/admin/class-email-dispatcher.php:154
+msgid "Booking Number:"
+msgstr ""
+
+#: includes/admin/class-email-dispatcher.php:114
+#: includes/admin/class-email-dispatcher.php:155
+#: includes/admin/class-invoicing.php:545
+#: includes/admin/class-invoicing.php:661
+msgid "Name:"
+msgstr ""
+
+#: includes/admin/class-email-dispatcher.php:115
+#: includes/admin/class-modals.php:154 includes/admin/class-modals.php:209
+msgid "Room:"
+msgstr ""
+
+#: includes/admin/class-email-dispatcher.php:116
+msgid "Meal Plan:"
+msgstr ""
+
+#: includes/admin/class-email-dispatcher.php:117
+msgid "Included Meal Plans:"
+msgstr ""
+
+#: includes/admin/class-email-dispatcher.php:118
+#: includes/admin/class-guest-registry.php:751
+#: includes/admin/class-invoicing.php:670
+msgid "Check-in Date:"
+msgstr ""
+
+#: includes/admin/class-email-dispatcher.php:119
+#: includes/admin/class-guest-registry.php:752
+#: includes/admin/class-invoicing.php:671
+msgid "Check-out Date:"
+msgstr ""
+
+#: includes/admin/class-email-dispatcher.php:120
+#: includes/admin/class-email-dispatcher.php:158
+#: includes/admin/class-invoicing.php:556
+#: includes/admin/class-invoicing.php:673
+msgid "Adults:"
+msgstr ""
+
+#: includes/admin/class-email-dispatcher.php:121
+#: includes/admin/class-email-dispatcher.php:159
+#: includes/admin/class-invoicing.php:560
+#: includes/admin/class-invoicing.php:677
+msgid "Children:"
+msgstr ""
+
+#: includes/admin/class-email-dispatcher.php:124
+#: includes/admin/class-email-dispatcher.php:162
+msgid "Tax:"
+msgstr ""
+
+#: includes/admin/class-email-dispatcher.php:129
+#: includes/admin/class-email-dispatcher.php:167
+msgid "Total Cost:"
+msgstr ""
+
+#: includes/admin/class-email-dispatcher.php:130
+msgid "We look forward to welcoming you and ensuring a pleasant stay."
+msgstr ""
+
+#: includes/admin/class-email-dispatcher.php:131
+msgid ""
+"Please contact us to cancel, modify or if there are any questions regarding "
+"the booking."
+msgstr ""
+
+#: includes/admin/class-email-dispatcher.php:156
+msgid "Activity Name:"
+msgstr ""
+
+#: includes/admin/class-email-dispatcher.php:157
+#: includes/admin/class-invoicing.php:554
+msgid "Activity Date:"
+msgstr ""
+
+#: includes/admin/class-email-dispatcher.php:168
+msgid "Thank you for choosing our services."
+msgstr ""
+
+#: includes/admin/class-email-dispatcher.php:169
+msgid ""
+"Should you need any further information or wish to make specific "
+"arrangements, please feel free to contact us. We are here to assist you!"
+msgstr ""
+
+#: includes/admin/class-form-generator.php:25
+msgid "Invalid nonce. Please try again."
+msgstr ""
+
+#: includes/admin/class-guest-registry.php:66
+msgid "Registration for"
+msgstr ""
+
+#: includes/admin/class-guest-registry.php:196
+msgid "Check-in date has already passed"
+msgstr ""
+
+#: includes/admin/class-guest-registry.php:204
+msgid "Registration open 7 days before check-in"
+msgstr ""
+
+#: includes/admin/class-guest-registry.php:216
+msgid "Total registrations allowed for this booking exceeded."
+msgstr ""
+
+#: includes/admin/class-guest-registry.php:271
+msgid "View Registrations"
+msgstr ""
+
+#: includes/admin/class-guest-registry.php:278
+msgid "Total guests"
+msgstr ""
+
+#: includes/admin/class-guest-registry.php:279
+msgid "Registered guests"
+msgstr ""
+
+#: includes/admin/class-guest-registry.php:341
+msgid "Registrations not found"
+msgstr ""
+
+#: includes/admin/class-guest-registry.php:376
+msgid "Edit"
+msgstr ""
+
+#: includes/admin/class-guest-registry.php:377
+msgid "Print"
+msgstr ""
+
+#: includes/admin/class-guest-registry.php:378
+#: includes/admin/class-invoicing.php:522
+#: includes/admin/class-invoicing.php:638
+msgid "Save PDF"
+msgstr ""
+
+#: includes/admin/class-guest-registry.php:390
+msgid "Booking Reference:"
+msgstr ""
+
+#: includes/admin/class-guest-registry.php:391
+#: includes/admin/class-modals.php:150 includes/admin/class-modals.php:205
+msgid "Date:"
+msgstr ""
+
+#: includes/admin/class-guest-registry.php:392
+msgid "Guest registration"
+msgstr ""
+
+#: includes/admin/class-guest-registry.php:401
+msgid "Registration:"
+msgstr ""
+
+#: includes/admin/class-guest-registry.php:427
+msgid "Signature"
+msgstr ""
+
+#: includes/admin/class-guest-registry.php:438
+msgid "Delete this registration"
+msgstr ""
+
+#: includes/admin/class-guest-registry.php:443
+msgid "Confirm Deletion"
+msgstr ""
+
+#: includes/admin/class-guest-registry.php:444
+msgid "Are you sure you want to delete this registration?"
+msgstr ""
+
+#: includes/admin/class-guest-registry.php:445
+msgid "Delete"
+msgstr ""
+
+#: includes/admin/class-guest-registry.php:446
+msgid "Cancel"
+msgstr ""
+
+#: includes/admin/class-guest-registry.php:464
+msgid "Security check failed"
+msgstr ""
+
+#: includes/admin/class-guest-registry.php:566
+msgid "Security check failed."
+msgstr ""
+
+#: includes/admin/class-guest-registry.php:651
+msgid "Save Registration"
+msgstr ""
+
+#: includes/admin/class-guest-registry.php:656
+msgid "Online Registration"
+msgstr ""
+
+#: includes/admin/class-guest-registry.php:657
+msgid ""
+"Please fill the form for Online Registration.</p><p>You can fill according "
+"to the number of guests.</p><p>You can submit a registration if you think a "
+"mistake was made in a previous one."
+msgstr ""
+
+#: includes/admin/class-guest-registry.php:687
+msgid "Registration Successful"
+msgstr ""
+
+#: includes/admin/class-guest-registry.php:689
+msgid "Your registration was successful."
+msgstr ""
+
+#: includes/admin/class-guest-registry.php:690
+msgid "Register another"
+msgstr ""
+
+#: includes/admin/class-guest-registry.php:750
+msgid "Reservation ID:"
+msgstr ""
+
+#: includes/admin/class-guest-registry.php:757
+#: includes/admin/class-invoicing.php:253
+#: includes/admin/class-invoicing.php:389
+msgid "No reservation found for Booking Number:"
+msgstr ""
+
+#: includes/admin/class-guest-registry.php:769
+msgid "Proceed to register"
+msgstr ""
+
+#: includes/admin/class-guest-registry.php:774
+msgid "No guest details found for Booking Number:"
+msgstr ""
+
+#: includes/admin/class-ical-export-processor.php:73
+#: includes/admin/class-ical-export-processor.php:74
+#: includes/admin/class-ical-export-processor.php:107
+msgid "Export Guest Registrations"
+msgstr ""
+
+#: includes/admin/class-ical-export-processor.php:90
+#: includes/admin/class-ical-export-processor.php:91
+#: includes/admin/class-ical-export-processor.php:147
+msgid "Export Bookings"
+msgstr ""
+
+#: includes/admin/class-ical-export-processor.php:108
+msgid ""
+"Streamline your record management by exporting monthly guest registrations. "
+"Simply choose a month and click \"Download\" to create a CSV file containing "
+"detailed registration information."
+msgstr ""
+
+#: includes/admin/class-ical-export-processor.php:110
+#: includes/admin/class-ical-export-processor.php:150
+msgid "How to Export:"
+msgstr ""
+
+#: includes/admin/class-ical-export-processor.php:112
+msgid "Choose the month for which you want to export guest registrations."
+msgstr ""
+
+#: includes/admin/class-ical-export-processor.php:113
+msgid "Click the \"Donwload\" button to download your file."
+msgstr ""
+
+#: includes/admin/class-ical-export-processor.php:120
+#: includes/admin/class-ical-export-processor.php:160
+msgid "Choose calendar month for export"
+msgstr ""
+
+#: includes/admin/class-ical-export-processor.php:123
+msgid "No Records Found"
+msgstr ""
+
+#: includes/admin/class-ical-export-processor.php:129
+#: includes/admin/class-ical-export-processor.php:174
+msgid "Download"
+msgstr ""
+
+#: includes/admin/class-ical-export-processor.php:148
+msgid ""
+"Efficiently manage your records by exporting your room bookings. Select the "
+"room and month to generate a downloadable CSV file of the booking details."
+msgstr ""
+
+#: includes/admin/class-ical-export-processor.php:152
+msgid "Choose the month for which you want to export bookings."
+msgstr ""
+
+#: includes/admin/class-ical-export-processor.php:153
+msgid ""
+"Click the \"Donwload\" button next to the choice of room to download your "
+"file."
+msgstr ""
+
+#: includes/admin/class-invoicing.php:96 includes/admin/class-invoicing.php:97
+#: includes/admin/class-invoicing.php:111
+#: includes/admin/class-invoicing.php:112
+#: includes/admin/class-invoicing.php:142
+msgid "Invoices"
+msgstr ""
+
+#: includes/admin/class-invoicing.php:126
+msgid "Activity Invoices"
+msgstr ""
+
+#: includes/admin/class-invoicing.php:214
+#: includes/admin/class-invoicing.php:349
+msgid "Booking Pending"
+msgstr ""
+
+#: includes/admin/class-invoicing.php:216
+#: includes/admin/class-invoicing.php:351
+msgid "Booking Confirmed"
+msgstr ""
+
+#: includes/admin/class-invoicing.php:521
+#: includes/admin/class-invoicing.php:637
+msgid "Print Invoice"
+msgstr ""
+
+#: includes/admin/class-invoicing.php:533
+#: includes/admin/class-invoicing.php:649
+msgid "Invoice No:"
+msgstr ""
+
+#: includes/admin/class-invoicing.php:534
+#: includes/admin/class-invoicing.php:650
+msgid "Invoice Date:"
+msgstr ""
+
+#: includes/admin/class-invoicing.php:544
+#: includes/admin/class-invoicing.php:660
+msgid "Bill to:"
+msgstr ""
+
+#: includes/admin/class-invoicing.php:546
+#: includes/admin/class-invoicing.php:662
+msgid "Email:"
+msgstr ""
+
+#: includes/admin/class-invoicing.php:552
+msgid "Activity Booking Details"
+msgstr ""
+
+#: includes/admin/class-invoicing.php:553
+#: includes/admin/class-invoicing.php:669
+msgid "Booking No:"
+msgstr ""
+
+#: includes/admin/class-invoicing.php:555
+msgid "Activity Type:"
+msgstr ""
+
+#: includes/admin/class-invoicing.php:567
+msgid "Activity Price"
+msgstr ""
+
+#: includes/admin/class-invoicing.php:568
+msgid "Per Person"
+msgstr ""
+
+#: includes/admin/class-invoicing.php:576
+#: includes/admin/class-invoicing.php:693
+msgid "Sub Total:"
+msgstr ""
+
+#: includes/admin/class-invoicing.php:579
+#: includes/admin/class-invoicing.php:696
+msgid "Taxes and Fees:"
+msgstr ""
+
+#: includes/admin/class-invoicing.php:585
+#: includes/admin/class-invoicing.php:702
+msgid "Total Amount:"
+msgstr ""
+
+#: includes/admin/class-invoicing.php:672
+msgid "Room Type:"
+msgstr ""
+
+#: includes/admin/class-invoicing.php:684
+msgid "Room Price"
+msgstr ""
+
+#: includes/admin/class-modals.php:20
+msgid "Rate Updated"
+msgstr ""
+
+#: includes/admin/class-modals.php:21 includes/admin/class-modals.php:33
+#: includes/admin/class-modals.php:45 includes/admin/class-modals.php:57
+#: includes/admin/class-modals.php:69
+msgid "just now"
+msgstr ""
+
+#: includes/admin/class-modals.php:22 includes/admin/class-modals.php:34
+#: includes/admin/class-modals.php:46 includes/admin/class-modals.php:58
+#: includes/admin/class-modals.php:70 includes/admin/class-modals.php:121
+#: includes/admin/class-modals.php:142 includes/admin/class-modals.php:174
+#: includes/admin/class-modals.php:197 includes/admin/class-modals.php:229
+msgid "Close"
+msgstr ""
+
+#: includes/admin/class-modals.php:25
+msgid "Rate updated successfully."
+msgstr ""
+
+#: includes/admin/class-modals.php:32
+msgid "Rate Failed"
+msgstr ""
+
+#: includes/admin/class-modals.php:37
+msgid "Rate update failed."
+msgstr ""
+
+#: includes/admin/class-modals.php:44
+msgid "Quantity Updated"
+msgstr ""
+
+#: includes/admin/class-modals.php:49
+msgid "Quantity updated successfully."
+msgstr ""
+
+#: includes/admin/class-modals.php:56
+msgid "Quantity Failed"
+msgstr ""
+
+#: includes/admin/class-modals.php:61
+msgid "Quantity update failed."
+msgstr ""
+
+#: includes/admin/class-modals.php:68
+msgid "Calendar"
+msgstr ""
+
+#: includes/admin/class-modals.php:73
+msgid "Calendar loaded."
+msgstr ""
+
+#: includes/admin/class-modals.php:95
+msgid "Import iCal Bookings"
+msgstr ""
+
+#: includes/admin/class-modals.php:99
+msgid ""
+"Importing can change status of existing bookings to cancelled if they are "
+"not found or deleted depending on your options settings. Please backup "
+"before proceeding."
+msgstr ""
+
+#: includes/admin/class-modals.php:107
+msgid "Import"
+msgstr ""
+
+#: includes/admin/class-modals.php:141 includes/admin/class-modals.php:146
+#: includes/admin/class-modals.php:147
+msgid "Quantity"
+msgstr ""
+
+#: includes/admin/class-modals.php:151 includes/admin/class-modals.php:206
+msgid "Select date"
+msgstr ""
+
+#: includes/admin/class-modals.php:164 includes/admin/class-modals.php:219
+msgid "Rooms not found."
+msgstr ""
+
+#: includes/admin/class-modals.php:176 includes/admin/class-modals.php:231
+msgid "Save changes"
+msgstr ""
+
+#: includes/admin/class-modals.php:196
+msgid "Set Rate"
+msgstr ""
+
+#: includes/admin/class-modals.php:201
+msgid "Rate:"
+msgstr ""
+
+#: includes/admin/class-modals.php:213
+msgid "Not Selected"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:54
+msgid "staylodgic"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:55
+msgid "Settings"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:269
+msgid "Settings imported successfully."
+msgstr ""
+
+#: includes/admin/class-options-panel.php:277
+msgid "Invalid JSON data provided."
+msgstr ""
+
+#: includes/admin/class-options-panel.php:322
+msgid "You do not have permission to export settings."
+msgstr ""
+
+#: includes/admin/class-options-panel.php:537
+msgid "You do not have sufficient permissions to access this page."
+msgstr ""
+
+#: includes/admin/class-options-panel.php:549
+msgid "Settings Saved"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:562
+#: includes/admin/class-options-panel.php:633
+#: includes/admin/class-welcome-screen.php:96
+msgid "Hotel Settings"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:629
+msgid "General Settings"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:676
+msgid "Upload image"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:718
+#: includes/admin/class-options-panel.php:758
+msgid "People"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:720
+#: includes/admin/class-options-panel.php:760
+#: includes/admin/class-options-panel.php:1489
+#: includes/admin/class-options-panel.php:1512
+msgid "1"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:721
+#: includes/admin/class-options-panel.php:761
+#: includes/admin/class-options-panel.php:1514
+msgid "3"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:722
+#: includes/admin/class-options-panel.php:762
+#: includes/admin/class-options-panel.php:1515
+msgid "4"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:723
+#: includes/admin/class-options-panel.php:763
+#: includes/admin/class-options-panel.php:1488
+#: includes/admin/class-options-panel.php:1516
+msgid "5"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:724
+#: includes/admin/class-options-panel.php:764
+#: includes/admin/class-options-panel.php:1517
+msgid "6"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:725
+#: includes/admin/class-options-panel.php:765
+#: includes/admin/class-options-panel.php:1518
+msgid "7"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:726
+#: includes/admin/class-options-panel.php:766
+#: includes/admin/class-options-panel.php:1519
+msgid "8"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:727
+#: includes/admin/class-options-panel.php:767
+#: includes/admin/class-options-panel.php:1520
+msgid "9"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:730
+#: includes/admin/class-options-panel.php:770
+#: includes/admin/class-options-panel.php:905
+#: includes/admin/class-options-panel.php:940
+#: includes/admin/class-options-panel.php:1028
+msgid "Value"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:733
+#: includes/admin/class-options-panel.php:773
+#: includes/admin/class-options-panel.php:828
+#: includes/admin/class-options-panel.php:858
+#: includes/admin/class-options-panel.php:908
+#: includes/admin/class-options-panel.php:943
+#: includes/admin/class-options-panel.php:999
+#: includes/admin/class-options-panel.php:1031
+msgid "Type"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:735
+#: includes/admin/class-options-panel.php:775
+#: includes/admin/class-options-panel.php:910
+#: includes/admin/class-options-panel.php:945
+#: includes/admin/class-options-panel.php:1001
+#: includes/admin/class-options-panel.php:1033
+msgid "Fixed"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:736
+#: includes/admin/class-options-panel.php:776
+#: includes/admin/class-options-panel.php:911
+#: includes/admin/class-options-panel.php:946
+#: includes/admin/class-options-panel.php:1002
+#: includes/admin/class-options-panel.php:1034
+msgid "Percentage"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:739
+#: includes/admin/class-options-panel.php:779
+msgid "Difference"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:741
+#: includes/admin/class-options-panel.php:781
+msgid "Increase"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:742
+#: includes/admin/class-options-panel.php:782
+msgid "Decrease"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:793
+#: includes/admin/class-options-panel.php:875
+#: includes/admin/class-options-panel.php:965
+#: includes/admin/class-options-panel.php:1051
+msgid "Add new"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:819
+#: includes/admin/class-options-panel.php:849
+msgid "Meal"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:830
+#: includes/admin/class-options-panel.php:860
+msgid "Included in rate"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:831
+#: includes/admin/class-options-panel.php:861
+msgid "Optional"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:834
+#: includes/admin/class-options-panel.php:864
+msgid "Price"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:902
+#: includes/admin/class-options-panel.php:937
+#: includes/admin/class-options-panel.php:993
+#: includes/admin/class-options-panel.php:1025
+#: includes/admin/class-options-panel.php:1280
+#: includes/admin/class-options-panel.php:1346
+msgid "Name"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:914
+#: includes/admin/class-options-panel.php:949
+#: includes/admin/class-options-panel.php:1005
+#: includes/admin/class-options-panel.php:1037
+msgid "Frequency"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:916
+#: includes/admin/class-options-panel.php:951
+#: includes/admin/class-options-panel.php:1007
+#: includes/admin/class-options-panel.php:1039
+msgid "Add to rate"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:917
+#: includes/admin/class-options-panel.php:952
+#: includes/admin/class-options-panel.php:1008
+#: includes/admin/class-options-panel.php:1040
+msgid "Per person"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:918
+msgid "Per day"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:919
+#: includes/admin/class-options-panel.php:954
+msgid "Per person per day"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:953
+msgid "Per Day"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1098
+msgid ""
+"Discounts are not stackable. Only the maximum discount is applied if "
+"multiple discounts are eligible."
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1240
+msgid "Property"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1241
+msgid "Activity Property"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1242
+#: includes/admin/class-options-panel.php:1545
+msgid "Currency"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1243
+msgid "General"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1244
+msgid "Logo"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1245
+#: includes/admin/class-welcome-screen.php:176
+msgid "Discounts"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1246
+#: includes/admin/class-options-panel.php:1539
+#: metabox/metaboxes/reservation-metaboxes.php:163
+msgid "Meal Plan"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1247
+#: includes/admin/class-options-panel.php:1533
+msgid "Per person price"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1248
+msgid "Room Tax"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1249
+msgid "Activity Tax"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1267
+#: includes/admin/class-options-panel.php:1334
+msgid "Upload Logo"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1273
+#: includes/admin/class-options-panel.php:1339
+msgid "On-paper logo width in pixels"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1285
+#: includes/admin/class-options-panel.php:1351
+msgid "Phone"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1290
+#: includes/admin/class-options-panel.php:1356
+msgid "Address"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1295
+#: includes/admin/class-options-panel.php:1361
+msgid "Property Longitude"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1301
+#: includes/admin/class-options-panel.php:1367
+msgid "Property Latitude"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1315
+#: includes/admin/class-options-panel.php:1381
+msgid "Invoice header"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1321
+#: includes/admin/class-options-panel.php:1387
+msgid "Invoice footer"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1327
+#: includes/admin/class-options-panel.php:1393
+msgid "Email footer"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1399
+msgid "Header logo"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1405
+msgid "Header logo height in pixels"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1412
+msgid "Responsive logo"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1418
+msgid "Responsive logo height in pixels"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1425
+#: includes/admin/class-welcome-screen.php:178
+msgid "Last minute discount"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1431
+#: includes/admin/class-welcome-screen.php:179
+msgid "Early booking discount"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1437
+#: includes/admin/class-welcome-screen.php:180
+msgid "Long stay discount"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1443
+msgid "Enable Room Taxes"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1449
+msgid "Enable Activties Taxes"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1455
+msgid "Choose status for new bookings"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1463
+msgid "Choose sub status for new bookings"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1471
+msgid "Select Time Zone"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1479
+msgid "iCal sync interval"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1484
+msgid "60"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1485
+msgid "30"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1486
+#: includes/admin/class-options-panel.php:1526
+msgid "15"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1487
+#: includes/admin/class-options-panel.php:1521
+msgid "10"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1494
+msgid "Room taxes"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1500
+msgid "Activity taxes"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1506
+msgid "Children under the age can stay for free"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1511
+msgid "0"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1513
+msgid "2"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1522
+msgid "11"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1523
+msgid "12"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1524
+msgid "13"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1525
+msgid "14"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1527
+msgid "16"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1528
+msgid "17"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1554
+msgid "Currency position"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1559
+msgid "Left with space"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1560
+msgid "Right with space"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1561
+msgid "Left"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1562
+msgid "Right"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1567
+msgid "Thousand seperator"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1573
+msgid "Decimal seperator"
+msgstr ""
+
+#: includes/admin/class-options-panel.php:1579
+msgid "Number of Decimals"
+msgstr ""
+
+#: includes/admin/class-welcome-screen.php:21
+msgid "Staylodgic Admin"
+msgstr ""
+
+#: includes/admin/class-welcome-screen.php:22
+msgid "Staylodgic"
+msgstr ""
+
+#: includes/admin/class-welcome-screen.php:32
+#: includes/admin/class-welcome-screen.php:33
+msgid "Main"
+msgstr ""
+
+#: includes/admin/class-welcome-screen.php:70
+msgid "New to Staylodgic?"
+msgstr ""
+
+#: includes/admin/class-welcome-screen.php:75
+msgid "How to accept bookings?"
+msgstr ""
+
+#: includes/admin/class-welcome-screen.php:76
+msgid "How to accept activities?"
+msgstr ""
+
+#: includes/admin/class-welcome-screen.php:77
+msgid "How to create guest registration?"
+msgstr ""
+
+#: includes/admin/class-welcome-screen.php:98
+msgid "Setup New Hotel"
+msgstr ""
+
+#: includes/admin/class-welcome-screen.php:101
+msgid "Rooms for Reservation"
+msgstr ""
+
+#: includes/admin/class-welcome-screen.php:103
+msgid "Create Rooms"
+msgstr ""
+
+#: includes/admin/class-welcome-screen.php:104
+msgid "Add Room Rates"
+msgstr ""
+
+#: includes/admin/class-welcome-screen.php:105
+msgid "Add Room Quantity"
+msgstr ""
+
+#: includes/admin/class-welcome-screen.php:106
+msgid "Create Reservations"
+msgstr ""
+
+#: includes/admin/class-welcome-screen.php:109
+msgid "Setup Activities"
+msgstr ""
+
+#: includes/admin/class-welcome-screen.php:111
+msgid "Create Activities"
+msgstr ""
+
+#: includes/admin/class-welcome-screen.php:112
+msgid "Add Scheduled Time to Week"
+msgstr ""
+
+#: includes/admin/class-welcome-screen.php:113
+msgid "Create Activity Reservations"
+msgstr ""
+
+#: includes/admin/class-welcome-screen.php:116
+msgid "Using Dashboard"
+msgstr ""
+
+#: includes/admin/class-welcome-screen.php:118
+msgid "View Bookings Overview"
+msgstr ""
+
+#: includes/admin/class-welcome-screen.php:119
+msgid "View Activities Overview"
+msgstr ""
+
+#: includes/admin/class-welcome-screen.php:120
+msgid "View Availability Calendar"
+msgstr ""
+
+#: includes/admin/class-welcome-screen.php:121
+msgid "View Annual Availability"
+msgstr ""
+
+#: includes/admin/class-welcome-screen.php:127
+msgid "Customer Registry"
+msgstr ""
+
+#: includes/admin/class-welcome-screen.php:129
+msgid "Create customers"
+msgstr ""
+
+#: includes/admin/class-welcome-screen.php:134
+msgid "Customize registration form"
+msgstr ""
+
+#: includes/admin/class-welcome-screen.php:135
+msgid "Create guest registration"
+msgstr ""
+
+#: includes/admin/class-welcome-screen.php:136
+msgid "Online registration"
+msgstr ""
+
+#: includes/admin/class-welcome-screen.php:137
+msgid "Send Links or QR Code"
+msgstr ""
+
+#: includes/admin/class-welcome-screen.php:140
+msgid "Invoicing"
+msgstr ""
+
+#: includes/admin/class-welcome-screen.php:142
+msgid "Bookings Invoice"
+msgstr ""
+
+#: includes/admin/class-welcome-screen.php:143
+msgid "Activity Invoice"
+msgstr ""
+
+#: includes/admin/class-welcome-screen.php:146
+msgid "Import / Export"
+msgstr ""
+
+#: includes/admin/class-welcome-screen.php:148
+msgid "Export CSV Bookings"
+msgstr ""
+
+#: includes/admin/class-welcome-screen.php:149
+msgid "Export Guests Registration for Month"
+msgstr ""
+
+#: includes/admin/class-welcome-screen.php:156
+msgid "Taxes"
+msgstr ""
+
+#: includes/admin/class-welcome-screen.php:158
+msgid "Fixed tax"
+msgstr ""
+
+#: includes/admin/class-welcome-screen.php:159
+msgid "Percentage tax"
+msgstr ""
+
+#: includes/admin/class-welcome-screen.php:160
+msgid "Per day tax"
+msgstr ""
+
+#: includes/admin/class-welcome-screen.php:161
+msgid "Per person tax"
+msgstr ""
+
+#: includes/admin/class-welcome-screen.php:164
+msgid "Meal plans"
+msgstr ""
+
+#: includes/admin/class-welcome-screen.php:166
+msgid "Create free plans"
+msgstr ""
+
+#: includes/admin/class-welcome-screen.php:167
+msgid "Create paid plans"
+msgstr ""
+
+#: includes/admin/class-welcome-screen.php:170
+msgid "Per Person Pricing"
+msgstr ""
+
+#: includes/admin/class-welcome-screen.php:172
+msgid "Set fixed price increments"
+msgstr ""
+
+#: includes/admin/class-welcome-screen.php:173
+msgid "Increment by percentage per occupant"
+msgstr ""
+
+#: includes/admin/utilities.php:269
+msgid "One Minute"
+msgstr ""
+
+#: includes/admin/utilities.php:270
+msgid "Five Minutes"
+msgstr ""
+
+#: includes/admin/utilities.php:271
+msgid "Ten Minutes"
+msgstr ""
+
+#: includes/admin/utilities.php:272
+msgid "Fifteen Minutes"
+msgstr ""
+
+#: includes/admin/utilities.php:273
+msgid "Thirty Minutes"
+msgstr ""
+
+#: includes/admin/utilities.php:274
+msgid "Sixty Minutes"
+msgstr ""
+
+#: includes/admin/utilities.php:322
+msgid "Completed"
+msgstr ""
+
+#: includes/admin/utilities.php:323
+msgid "Checked-In"
+msgstr ""
+
+#: includes/admin/utilities.php:324
+msgid "Checked-Out"
+msgstr ""
+
+#: includes/admin/utilities.php:325
+msgid "No Show"
+msgstr ""
+
+#: includes/admin/utilities.php:326
+msgid "On Hold"
+msgstr ""
+
+#: includes/admin/utilities.php:327
+msgid "Pending Payment"
+msgstr ""
+
+#: includes/admin/utilities.php:328
+msgid "Refunded"
+msgstr ""
+
+#: includes/admin/utilities.php:329
+msgid "In Progress"
+msgstr ""
+
+#: includes/admin/utilities.php:330
+msgid "Expired"
+msgstr ""
+
+#: includes/admin/utilities.php:342 includes/admin/utilities.php:356
+msgid "Confirmed"
+msgstr ""
+
+#: includes/admin/utilities.php:343
+msgid "Cancelled"
+msgstr ""
+
+#: includes/admin/utilities.php:344 includes/admin/utilities.php:357
+msgid "Pending"
+msgstr ""
+
+#: includes/admin/utilities.php:549
+msgid "Halfboard"
+msgstr ""
+
+#: includes/admin/utilities.php:551
+msgid "Fullboard"
+msgstr ""
+
+#: includes/admin/utilities.php:553
+msgid "All inclusive"
+msgstr ""
+
+#: includes/theme-gens.php:69
+msgid "Default Menu"
+msgstr ""
+
+#: includes/theme-gens.php:178
+msgid "Twin bed"
+msgstr ""
+
+#: includes/theme-gens.php:179
+msgid "Full bed"
+msgstr ""
+
+#: includes/theme-gens.php:180
+msgid "Queen bed"
+msgstr ""
+
+#: includes/theme-gens.php:181
+msgid "King bed"
+msgstr ""
+
+#: includes/theme-gens.php:182
+msgid "Bunk bed"
+msgstr ""
+
+#: includes/theme-gens.php:183
+msgid "Sofa bed"
+msgstr ""
+
+#: includes/theme-gens.php:685
+msgid "Create new customer"
+msgstr ""
+
+#: metabox/metaboxes/activity-metaboxes.php:12
+#: metabox/metaboxes/room-metaboxes.php:12
+msgid "Fullscreen Settings"
+msgstr ""
+
+#: metabox/metaboxes/activity-metaboxes.php:15
+#: metabox/metaboxes/activity-metaboxes.php:58
+#: metabox/metaboxes/activity-metaboxes.php:61
+#: metabox/metaboxes/activityres-metaboxes.php:216
+#: metabox/metaboxes/activityres-metaboxes.php:219
+#: metabox/metaboxes/customer-metaboxes.php:114
+#: metabox/metaboxes/customer-metaboxes.php:117
+#: metabox/metaboxes/reservation-metaboxes.php:228
+#: metabox/metaboxes/reservation-metaboxes.php:231
+#: metabox/metaboxes/room-metaboxes.php:15
+#: metabox/metaboxes/room-metaboxes.php:145
+#: metabox/metaboxes/room-metaboxes.php:148
+msgid "Page Settings"
+msgstr ""
+
+#: metabox/metaboxes/activity-metaboxes.php:19
+#: metabox/metaboxes/room-metaboxes.php:19
+msgid "Add Images"
+msgstr ""
+
+#: metabox/metaboxes/activity-metaboxes.php:23
+#: metabox/metaboxes/room-metaboxes.php:23
+msgid "Add images for slideshow."
+msgstr ""
+
+#: metabox/metaboxes/activity-metaboxes.php:26
+#: metabox/metaboxes/activity-metaboxes.php:29
+#: metabox/metaboxes/room-metaboxes.php:138
+#: metabox/metaboxes/room-metaboxes.php:141
+msgid "Description"
+msgstr ""
+
+#: metabox/metaboxes/activity-metaboxes.php:33
+#: metabox/metaboxes/room-metaboxes.php:44
+msgid "Max Guests"
+msgstr ""
+
+#: metabox/metaboxes/activity-metaboxes.php:40
+#: metabox/metaboxes/room-metaboxes.php:51
+msgid "Max guests allowed."
+msgstr ""
+
+#: metabox/metaboxes/activity-metaboxes.php:47
+msgid "Rate for this activity."
+msgstr ""
+
+#: metabox/metaboxes/activity-metaboxes.php:51
+msgid "Graph color"
+msgstr ""
+
+#: metabox/metaboxes/activity-metaboxes.php:55
+msgid "Graph color which is presented in Activity Overview."
+msgstr ""
+
+#: metabox/metaboxes/activity-metaboxes.php:65
+msgid "Activity Schedule"
+msgstr ""
+
+#: metabox/metaboxes/activity-metaboxes.php:68
+msgid "Activity Schedule Setup"
+msgstr ""
+
+#: metabox/metaboxes/activityres-metaboxes.php:23
+msgid "activityres Metabox"
+msgstr ""
+
+#: metabox/metaboxes/activityres-metaboxes.php:29
+#: metabox/metaboxes/reservation-metaboxes.php:29
+msgid "Reservation Settings"
+msgstr ""
+
+#: metabox/metaboxes/activityres-metaboxes.php:32
+msgid "activityres Settings"
+msgstr ""
+
+#: metabox/metaboxes/activityres-metaboxes.php:139
+#: metabox/metaboxes/activityres-metaboxes.php:143
+#: metabox/metaboxes/reservation-metaboxes.php:86
+#: metabox/metaboxes/reservation-metaboxes.php:90
+msgid "Reservation Status"
+msgstr ""
+
+#: metabox/metaboxes/activityres-metaboxes.php:147
+#: metabox/metaboxes/activityres-metaboxes.php:151
+#: metabox/metaboxes/reservation-metaboxes.php:94
+#: metabox/metaboxes/reservation-metaboxes.php:98
+msgid "Reservation Sub Status"
+msgstr ""
+
+#: metabox/metaboxes/activityres-metaboxes.php:161
+#: metabox/metaboxes/reservation-metaboxes.php:173
+msgid "Per night price"
+msgstr ""
+
+#: metabox/metaboxes/activityres-metaboxes.php:172
+#: metabox/metaboxes/reservation-metaboxes.php:184
+msgid "Subtotal"
+msgstr ""
+
+#: metabox/metaboxes/activityres-metaboxes.php:194
+#: metabox/metaboxes/reservation-metaboxes.php:206
+msgid "Total"
+msgstr ""
+
+#: metabox/metaboxes/activityres-metaboxes.php:212
+#: metabox/metaboxes/reservation-metaboxes.php:224
+msgid "Notes."
+msgstr ""
+
+#: metabox/metaboxes/activityres-metaboxes.php:227
+#: metabox/metaboxes/reservation-metaboxes.php:239
+msgid "Customer choice"
+msgstr ""
+
+#: metabox/metaboxes/activityres-metaboxes.php:229
+#: metabox/metaboxes/reservation-metaboxes.php:308
+msgid "Create new from this post"
+msgstr ""
+
+#: metabox/metaboxes/activityres-metaboxes.php:230
+#: metabox/metaboxes/reservation-metaboxes.php:309
+#: metabox/metaboxes/reservation-metaboxes.php:314
+msgid "Choose existing"
+msgstr ""
+
+#: metabox/metaboxes/activityres-metaboxes.php:234
+#: metabox/metaboxes/reservation-metaboxes.php:251
+#: metabox/metaboxes/reservation-metaboxes.php:274
+msgid "Choose an existing customer"
+msgstr ""
+
+#: metabox/metaboxes/activityres-metaboxes.php:239
+#: metabox/metaboxes/reservation-metaboxes.php:256
+#: metabox/metaboxes/reservation-metaboxes.php:279
+msgid "Choose an existing customer."
+msgstr ""
+
+#: metabox/metaboxes/customer-metaboxes.php:20
+msgid "Customers Metabox"
+msgstr ""
+
+#: metabox/metaboxes/customer-metaboxes.php:26
+msgid "Customer Settings"
+msgstr ""
+
+#: metabox/metaboxes/customer-metaboxes.php:29
+msgid "Customers Settings"
+msgstr ""
+
+#: metabox/metaboxes/registry-metaboxes.php:19
+msgid "QR Code for URL"
+msgstr ""
+
+#: metabox/metaboxes/registry-metaboxes.php:22
+msgid "QR Code"
+msgstr ""
+
+#: metabox/metaboxes/registry-metaboxes.php:26
+#: metabox/metaboxes/registry-metaboxes.php:29
+msgid "Registration Data"
+msgstr ""
+
+#: metabox/metaboxes/reservation-metaboxes.php:23
+msgid "Reservations Metabox"
+msgstr ""
+
+#: metabox/metaboxes/reservation-metaboxes.php:32
+msgid "Reservations Settings"
+msgstr ""
+
+#: metabox/metaboxes/reservation-metaboxes.php:82
+msgid "Room."
+msgstr ""
+
+#: metabox/metaboxes/reservation-metaboxes.php:155
+msgid "Included Meals"
+msgstr ""
+
+#: metabox/metaboxes/reservation-metaboxes.php:271
+msgid "Guest registration."
+msgstr ""
+
+#: metabox/metaboxes/reservation-metaboxes.php:313
+msgid "Current selected"
+msgstr ""
+
+#: metabox/metaboxes/room-metaboxes.php:26
+msgid "Rooms of this type"
+msgstr ""
+
+#: metabox/metaboxes/room-metaboxes.php:33
+msgid "Rooms of this type."
+msgstr ""
+
+#: metabox/metaboxes/room-metaboxes.php:37
+msgid "Base Rate"
+msgstr ""
+
+#: metabox/metaboxes/room-metaboxes.php:40
+msgid "Base rate for this room type."
+msgstr ""
+
+#: metabox/metaboxes/room-metaboxes.php:55
+msgid "Set Max Adult Limit on/off"
+msgstr ""
+
+#: metabox/metaboxes/room-metaboxes.php:62
+msgid "Max Adults:"
+msgstr ""
+
+#: metabox/metaboxes/room-metaboxes.php:69
+msgid "Max adults allowed:"
+msgstr ""
+
+#: metabox/metaboxes/room-metaboxes.php:73
+msgid "Set Max Children Limit on/off"
+msgstr ""
+
+#: metabox/metaboxes/room-metaboxes.php:80
+msgid "Max Children:"
+msgstr ""
+
+#: metabox/metaboxes/room-metaboxes.php:87
+msgid "Max children allowed:"
+msgstr ""
+
+#: metabox/metaboxes/room-metaboxes.php:91
+msgid "Beds:"
+msgstr ""
+
+#: metabox/metaboxes/room-metaboxes.php:98
+msgid "Beds"
+msgstr ""
+
+#: metabox/metaboxes/room-metaboxes.php:102
+msgid "Bathrooms:"
+msgstr ""
+
+#: metabox/metaboxes/room-metaboxes.php:109
+msgid "Bathrooms"
+msgstr ""
+
+#: metabox/metaboxes/room-metaboxes.php:113
+msgid "Accomodation Size:"
+msgstr ""
+
+#: metabox/metaboxes/room-metaboxes.php:120
+msgid "Size:"
+msgstr ""
+
+#: metabox/metaboxes/room-metaboxes.php:124
+msgid "Room view"
+msgstr ""
+
+#: metabox/metaboxes/room-metaboxes.php:127
+msgid "Choose room view"
+msgstr ""
+
+#: metabox/metaboxes/room-metaboxes.php:131
+msgid "Room facilities ( comma seperated )"
+msgstr ""
+
+#: metabox/metaboxes/room-metaboxes.php:134
+msgid "Room facilities"
+msgstr ""
+
+#: metabox/metaboxes/room-metaboxes.php:152
+#: metabox/metaboxes/room-metaboxes.php:157
+msgid "Bed Setup"
+msgstr ""
+
+#: metabox/metaboxgen/metaboxgen.php:106 metabox/metaboxgen/metaboxgen.php:110
+#: metabox/metaboxgen/metaboxgen.php:145 metabox/metaboxgen/metaboxgen.php:148
+msgid "Edit Gallery"
+msgstr ""
+
+#: metabox/metaboxgen/metaboxgen.php:186
+msgid "image"
+msgstr ""
+
+#: metabox/metaboxgen/metaboxgen.php:189
+msgid "No images found."
+msgstr ""
+
+#: metabox/metaboxgen/metaboxgen.php:197
+msgid "Or choose an existing customer"
+msgstr ""
+
+#: metabox/metaboxgen/metaboxgen.php:346
+msgid "Booking number not found."
+msgstr ""
+
+#: metabox/metaboxgen/metaboxgen.php:402
+msgid "Balance"
+msgstr ""
+
+#: metabox/metaboxgen/metaboxgen.php:451 metabox/metaboxgen/metaboxgen.php:529
+#: metabox/metaboxgen/metaboxgen.php:551 metabox/metaboxgen/metaboxgen.php:599
+#: metabox/metaboxgen/metaboxgen.php:768 metabox/metaboxgen/metaboxgen.php:888
+msgid "All the items"
+msgstr ""
+
+#: metabox/metaboxgen/metaboxgen.php:560
+msgid "Add bed type"
+msgstr ""
+
+#: metabox/metaboxgen/metaboxgen.php:561 metabox/metaboxgen/metaboxgen.php:632
+#: metabox/metaboxgen/metaboxgen.php:667
+msgid "Max Reached!"
+msgstr ""
+
+#: metabox/metaboxgen/metaboxgen.php:631
+msgid "Add layout"
+msgstr ""
+
+#: metabox/metaboxgen/metaboxgen.php:652
+msgid "Age"
+msgstr ""
+
+#: metabox/metaboxgen/metaboxgen.php:654
+msgid "Remove"
+msgstr ""
+
+#: metabox/metaboxgen/metaboxgen.php:666
+msgid "Add Child"
+msgstr ""
+
+#: metabox/metaboxgen/metaboxgen.php:828
+msgid " included. "
+msgstr ""
+
+#: metabox/metaboxgen/metaboxgen.php:1012
+msgid "Edit Customer"
+msgstr ""
+
+#: metabox/metaboxgen/metaboxgen.php:1012
+msgid "or choose an existing customer"
+msgstr ""
+
+#: metabox/metaboxgen/metaboxgen.php:1213
+#: metabox/metaboxgen/metaboxgen.php:1217
+msgid "Generate Total"
+msgstr ""
+
+#: metabox/metaboxgen/metaboxgen.php:1214
+#: metabox/metaboxgen/metaboxgen.php:1218
+msgid "Exclude Tax"
+msgstr ""
+
+#: staylodgic-loader.php:772
+msgid "Registry Options"
+msgstr ""
+
+#: staylodgic-loader.php:773
+msgid "Registry Changelog"
+msgstr ""
+
+#: staylodgic-loader.php:777
+msgid "Activity Reservations Options"
+msgstr ""
+
+#: staylodgic-loader.php:778
+msgid "Activity Reservations Changelog"
+msgstr ""
+
+#: staylodgic-loader.php:782
+msgid "Reservation Options"
+msgstr ""
+
+#: staylodgic-loader.php:783
+msgid "Reservation Changelog"
+msgstr ""
+
+#: staylodgic-loader.php:787
+msgid "Customer Options"
+msgstr ""
+
+#: staylodgic-loader.php:791
+msgid "Room Options"
+msgstr ""
+
+#: staylodgic-loader.php:792
+msgid "Room Changelog"
+msgstr ""
+
+#: staylodgic-loader.php:796
+msgid "Activity Options"
+msgstr ""
+
+#: staylodgic-loader.php:797
+msgid "Activity Changelog"
 msgstr ""

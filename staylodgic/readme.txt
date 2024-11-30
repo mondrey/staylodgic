@@ -1,59 +1,119 @@
 === Staylodgic ===
-Contributors: mondrey
+Contributors: staylodgic
 Tested up to: 6.7
 Tags: booking system, property management system, hotel booking plugin, staylodgic, hotel management
 Stable tag: 1.0.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
-StayLodgic is an advanced property management system designed specifically for small hotels, guesthouses, and vacation rentals.
+StayLodgic is a user-friendly property management system designed specifically for small to medium hotels, guesthouses, and vacation rentals.
 
 == Description ==
 
-StayLodgic was crafted to address the specific needs of small property managers, offering tools for managing availability, creating invoices, and tracking guest details efficiently. This plugin is perfect for anyone looking to centralize operations while offering a seamless experience for their guests.
+StayLodgic is a powerful, user-friendly hotel management plugin designed to simplify and enhance operations for small to medium-sized hotels, guesthouses, and boutique properties. With a comprehensive suite of features, StayLodgic allows you to manage room bookings, activity reservations, guest registration, invoicing, and more.
 
-<h3>FEATURES OF STAYLODIGIC:</h3>
+== Shortcodes ==
 
-* Easy-to-use booking dashboard for managing reservations.
-* Check availability and block dates directly from the admin panel.
-* Automatically send booking confirmation emails to guests.
-* Customizable booking forms to match your branding.
-* Real-time room availability updates.
-* Multi-language support for international customers.
-* Integration with popular payment gateways.
+* [activity_booking_search]
+* [hotel_booking_search]
+* [hotel_booking_details]
+* [guest_registration]
 
-<h3>BENEFITS OF USING STAYLODIGIC:</h3>
+== Features ==
 
-* Optimized for small properties with up to 10 rooms.
-* Free for small businesses to help you get started.
-* Reduce manual workload with automated workflows.
-* Enhance guest experience with quick and accurate booking processes.
-* Gain actionable insights with detailed reports and analytics.
+* Hotel Management
+  - Setup new hotel settings.
 
-[**📽Learn More**](https://staylodgic.com/) | [**📽Demo**](https://staylodgic.com/demo/) | [**📽Documentation**](https://staylodgic.com/docs/) | [**📽Support**](https://staylodgic.com/support/)
+* Room Management
+  - Create rooms for reservations.
+  - Add room rates.
+  - Set room quantity.
+  - Create and manage reservations.
 
-== CONTRIBUTE AND TRANSLATE ==
+* Activity Management
+  - Create activities for guests.
+  - Add scheduled times to the weekly calendar.
+  - Create and manage activity reservations.
 
-StayLodgic is available in multiple languages to support a global audience. Help localize StayLodgic further by contributing translations for your locale. [Click Here](https://translate.wordpress.org/projects/wp-plugins/staylodgic)
+* Dashboard Tools
+  - View bookings overview.
+  - View activities overview.
+  - Check availability calendar.
+  - Monitor annual availability.
 
-== FAQ ==
+* Customer Management
+  - Create and manage customer profiles.
 
-= How do I install StayLodgic? =
-1. Upload the plugin to your WordPress site and activate it.
-2. Configure your property details and room availability under the StayLodgic settings.
+* Guest Registration
+  - Customize guest registration forms.
+  - Create guest registrations.
+  - Enable online registration.
+  - Share registration links or QR codes.
 
-= Can I use StayLodgic for free? =
-Yes, StayLodgic is free for properties with up to 10 rooms.
+* Invoicing
+  - Generate booking invoices.
+  - Generate activity invoices.
 
-= Which payment gateways are supported? =
-StayLodgic supports integration with popular gateways like PayPal, Stripe, and others.
+* Import/Export Data
+  - Export bookings as CSV files.
+  - Export guest registration data for a specific month.
 
-= Is StayLodgic compatible with other plugins? =
-StayLodgic works seamlessly with most WordPress plugins, but we recommend testing compatibility for custom setups.
+* Tax Management
+  - Apply fixed taxes.
+  - Set percentage-based taxes.
+  - Add per-day taxes.
+  - Configure per-person taxes.
 
-== Screenshots ==
-1. StayLodgic booking dashboard.
-2. Room management settings.
-3. Booking confirmation email template editor.
-4. Guest booking form layout.
-5. Detailed analytics and reporting interface.
+* Meal Plans
+  - Create free meal plans.
+  - Create paid meal plans.
+
+* Per Person Pricing
+  - Add fixed price increments per occupant.
+  - Apply percentage-based increments per occupant.
+
+* Discounts
+  - Offer last-minute booking discounts.
+  - Provide early booking discounts.
+  - Enable long-stay discounts.
+
+== Benefits ==
+
+* Streamlined Hotel Operations
+  - Simplify and centralize hotel and room management.
+  - Manage reservations, activities, and guest registration in one platform.
+
+* Time-Saving Automation
+  - Automate guest registration with customizable forms and online submissions.
+  - Generate invoices for bookings and activities instantly.
+
+* Comprehensive Dashboard
+  - Gain insights with an overview of bookings and activities.
+  - View availability calendars and annual availability at a glance.
+
+* Enhanced Guest Experience
+  - Offer flexible meal plans and activity reservations.
+  - Provide seamless guest registration with links or QR codes.
+
+* Flexible Pricing and Discounts
+  - Configure per-person pricing with fixed or percentage-based increments.
+  - Apply discounts for early bookings, last-minute reservations, or long stays.
+
+* Efficient Tax Management
+  - Set up taxes per booking, per person, per day, or as a percentage.
+
+* Data Management Made Easy
+  - Export bookings and guest registration data for analysis or reporting.
+
+* Customizable for Small to Medium Hotels
+  - Adaptable to guesthouses, boutique hotels, and properties with specific needs.
+
+* Affordable and Scalable
+  - Ideal for small businesses.
+  - Scales easily for larger hotels and businesses.
+
+* User-Friendly Interface
+  - Designed for ease of use with intuitive navigation and clear workflows.
+
+* Improved Decision-Making
+  - Leverage data insights to optimize operations and improve guest satisfaction.
