@@ -15,9 +15,16 @@ StayLodgic is a powerful, user-friendly hotel management plugin designed to simp
 == Shortcodes ==
 
 * [activity_booking_search]
-* [hotel_booking_search]
+  Displays a search form for guests to browse and book available activities.
+
+* [hotel_booking_search]  
+  Provides a search form for guests to find and book available rooms. Helps streamline the booking process by showing room availability based on their preferences.
+
 * [hotel_booking_details]
-* [guest_registration]
+  Displays status about a specific hotel booking.
+
+* [guest_registration]  
+  Adds a customizable guest registration form to your website. Ideal for collecting guest details online or facilitating pre-arrival registration via shared links or QR codes.
 
 == Features ==
 

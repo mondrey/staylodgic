@@ -239,7 +239,7 @@ class Staylodgic_Init {
 		}
 
 		// Custom post type
-		if ( $current_admin_screen->post_type === 'slgc_customers' ) {
+		if ( 'slgc_customers' === $current_admin_screen->post_type ) {
 
 			wp_enqueue_style( 'fontawesome-6' );
 			wp_enqueue_style( 'fontawesome-6-brands' );
@@ -251,7 +251,7 @@ class Staylodgic_Init {
 		if ( isset( $current_admin_screen ) ) {
 
 			// For all posts
-			if ( $current_admin_screen->base == 'post' ) {
+			if ( 'post' === $current_admin_screen->base ) {
 				wp_enqueue_media();
 
 				wp_enqueue_style( 'staylodgic-admin-styles' );
@@ -276,7 +276,7 @@ class Staylodgic_Init {
 			}
 
 			// Invoicing pages
-			if ( $current_admin_screen->base == 'slgc_reservations_page_staylodgic-invoicing' ) {
+			if ( 'slgc_reservations_page_staylodgic-invoicing' === $current_admin_screen->base ) {
 				wp_enqueue_style( 'staylodgic-admin-styles' );
 				wp_enqueue_style( 'staylodgic-indicator-icons' );
 
@@ -296,7 +296,7 @@ class Staylodgic_Init {
 			}
 
 			// Staylodgic Dashboard
-			if ( $current_admin_screen->base == 'toplevel_page_slgc-dashboard' ) {
+			if ( 'toplevel_page_slgc-dashboard' === $current_admin_screen->base ) {
 
 				wp_enqueue_style( 'staylodgic-dashboard' );
 				wp_enqueue_style( 'staylodgic-indicator-icons' );
@@ -704,7 +704,7 @@ class Staylodgic_Init {
 		if ( is_singular() ) {
 			global $post;
 			// Check if the post content contains the Contact Form 7 shortcode
-			if ( has_shortcode( $post->post_content, 'form_input' ) || get_post_type() == 'slgc_guestregistry' ) {
+			if ( has_shortcode( $post->post_content, 'form_input' ) || 'slgc_guestregistry' === get_post_type() ) {
 				// Enqueue the Signature Pad script
 				wp_enqueue_script( 'guest-registration', plugin_dir_url( __FILE__ ) . 'assets/js/guest-registration.js', array(), '1.0.0', true );
 				wp_enqueue_script( 'signature-pad', plugin_dir_url( __FILE__ ) . 'assets/js/signature_pad.umd.min.js', array(), '1.0.0', true );
