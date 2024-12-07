@@ -86,19 +86,26 @@
 
 			updateActivityPrices(totalPeople) {
 				var activityPerPerson = $('[data-priceof="activityperperson"]').val();
-
+			
 				console.log(totalPeople);
 				var totalRate = totalPeople * activityPerPerson;
-
+			
 				if ($('#staylodgic_reservation_checkin').length > 0) {
-
 					var dateStr = $('#staylodgic_reservation_checkin').val();
-					var isValidDate = moment(dateStr, 'YYYY-MM-DD', true).isValid(); // Using moment.js for date validation
-
+			
+					// Validate the date in 'YYYY-MM-DD' format
+					var isValidDate = function (dateString) {
+						var regex = /^\d{4}-\d{2}-\d{2}$/;
+						if (!regex.test(dateString)) return false;
+						var date = new Date(dateString);
+						return date.toISOString().slice(0, 10) === dateString;
+					};
+			
 					$('[data-priceof="activitysubtotal"]').val(totalRate.toFixed(2));
 					$('[data-priceof="activitytotal"]').val('');
 					$('.input-tax-summary-wrap-inner').remove();
-					if (isValidDate) {
+					
+					if (isValidDate(dateStr)) {
 						$.ajax({
 							url: ajaxurl, // 'ajaxurl' is a global variable defined by WordPress
 							type: 'POST',
@@ -126,8 +133,6 @@
 					} else {
 						console.log('Invalid date');
 					}
-
-
 				}
 			}
 

@@ -992,10 +992,8 @@ class Analytics_Bookings {
 		// Initialize the guest list HTML
 		$guest_list_html = '';
 
-		return <<<HTML
-	<canvas id="{$this->booking_id}" class="staylodgic-chart" data-type="{$this->type}" data-data="{$data}" data-options="{$options}"></canvas>
-	$guest_list_html
-	HTML;
+		return '<canvas id="' . esc_attr( $this->booking_id ) . '" class="staylodgic-chart" data-type="' . esc_attr( $this->type ) . '" data-data="' . esc_attr( $data ) . '" data-options="' . esc_attr( $options ) . '"></canvas>' . $guest_list_html;
+
 	}
 }
 

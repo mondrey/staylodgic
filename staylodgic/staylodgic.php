@@ -4,8 +4,7 @@
  * Description: Staylodgic Booking System
  * Plugin URI:  https://staylodgic.com/
  * Version:     1.0.0
- * Author:      Staylodgic
- * Author URI:  https://staylodgic.com/
+ * Author:      Mohamed Musthafa
  * License: GPL2+
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain: staylodgic
