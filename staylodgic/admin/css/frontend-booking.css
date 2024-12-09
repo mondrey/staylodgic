@@ -11,8 +11,201 @@ a {
 	color: #444444;
 }
 
+.portfolio-single-image,
+.entry-content iframe,
+.entry-content object,
+.entry-content embed,
+.entry-content img {
+	max-width: 100%;
+}
+.entry-content iframe,
+.entry-content object,
+.entry-content embed,
+.entry-content img {
+	border: 0;
+}
+
+.entry-content td {
+	vertical-align: middle;
+}
+
+
+.entry-content q {
+	display: inline;
+}
+.entry-content q:before {
+	content: "\f10d";
+	font-family: "fontawesome";
+	margin-right: 10px;
+}
+.entry-content q:after {
+	content: "\f10e";
+	font-family: "fontawesome";
+	margin-left: 10px;
+}
+.entry-content q:before,
+.entry-content q:after {
+	font-size: 12px;
+	color: #000;
+}
+.entry-content address {
+	font-style: italic;
+	margin-bottom: 24px;
+}
+.sidebar-widget cite,
+.sidebar-widget dfn,
+.sidebar-widget em,
+.entry-content cite,
+.entry-content dfn,
+.entry-content em {
+	font-style: italic;
+}
+.entry-content mark,
+.entry-content ins {
+	background: #fff9c0;
+	text-decoration: none;
+}
+
+.entry-content sup,
+.entry-content sub {
+	font-size: 75%;
+	height: 0;
+	line-height: 0;
+	position: relative;
+	vertical-align: baseline;
+}
+.entry-content sup {
+	bottom: 1ex;
+}
+.entry-content sub {
+	top: .5ex;
+}
+.entry-content mark,
+.entry-content ins,
+#commentform code,
+.entry-content code,
+.entry-content kbd,
+.entry-content tt,
+.entry-content var,
+.entry-content samp,
+.entry-content pre {
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+	padding-right: 5px;
+	padding-left: 5px;
+}
+.entry-content abbr[title] {
+	border-bottom: 1px dotted #2b2b2b;
+	cursor: help;
+	text-decoration: none;
+}
+.entry-content pre {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	max-width: 100%;
+	overflow: auto;
+	margin-bottom: 40px;
+	font-size: 14px;
+	line-height: 28px;
+}
+hr,
+.entry-content hr {
+	clear: both;
+	height: 1px;
+	border: none;
+	border-bottom: 1px solid #eee;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+	margin: 40px 0;
+}
+.entry-content p {
+	margin: 0;
+}
+.entry-content strong {
+	font-weight: 600;
+}
+.entry-content small {
+	font-size: 90%;
+}
+.entry-content pre {
+	border-color: #333;
+}
+.entry-content em {
+	font-style: italic;
+	font-weight: 400;
+}
+.entry-content blockquote {
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	padding: 26px 32px 2px;
+	border-left: 5px solid #000;
+}
+.entry-content ol > li > ol,
+.entry-content ul > li > ul {
+	margin-bottom: 0;
+}
+.entry-content .gallery dl {
+	margin-bottom: 0;
+	margin-left: 0;
+}
+.entry-content .gallery dl img {
+	height: auto;
+}
+.entry-content dt {
+	font-weight: bold;
+	color: #000;
+}
+.entry-content dd {
+	margin: 0 20px 10px;
+}
+.entry-content ul {
+	list-style-type: disc;
+	list-style-position: inside;
+}
+.entry-content ul ul {
+	list-style-type: circle;
+	list-style-position: inside;
+}
+.entry-content ol {
+	list-style: decimal;
+}
+.entry-content > ul,
+.entry-content > ol {
+	margin: 20px 0;
+}
+.entry-content ul li,
+.entry-content ol li {
+	margin-bottom: 5px;
+}
+.entry-content ul > li > ul,
+.entry-content ol > li > ol,
+.entry-content ul > li > ol,
+.entry-content ol > li > ul {
+	margin-left: 30px;
+}
+.entry-content ol {
+	list-style-type: decimal;
+	list-style-position: inside;
+}
+.entry-content .linklist ul {
+	list-style: none;
+}
+.entry-content dd a,
+.entry-content table a,
+.entry-content p > a {
+	text-decoration: underline;
+	transition: color 0.2s;
+	-moz-transition: color 0.2s;
+	-webkit-transition: color 0.2s;
+	-o-transition: color 0.2s;
+}
+
+
 .entry-content {
-	font-size: 16px;
+	font-size: 14px;
 	font-weight: 400;
 	line-height: 1.7;
 	letter-spacing: 0;
@@ -20,13 +213,14 @@ a {
 	counter-reset: footnotes;
 	color: rgb(0, 0, 0, 0.6);
 }
+
 .entry-content ul {
 	list-style-type: disc;
 	list-style-position: inside;
 	padding: 0;
 }
 .entry-content strong {
-	font-weight: 600;
+	color: #000;
 }
 .entry-content > ul, .entry-content > ol {
 	margin: 20px 0;
@@ -513,11 +707,12 @@ a.book-button:hover:active,
 	line-height: 1.9;
 }
 .summary-section-description {
-	font-size: 14px;
+	font-size: 12px;
 	margin-top: 30px;
 	padding-top: 12px;
-	letter-spacing: 1px;
-	line-height: 1.4;
+	letter-spacing: 0.2px;
+	line-height: 1.7;
+	font-weight: 300;
 }
 
 .room-included-meals {
