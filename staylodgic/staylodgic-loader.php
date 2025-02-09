@@ -631,8 +631,6 @@ class Staylodgic_Init {
 				wp_enqueue_style( 'staylodgic-admin-styles' );
 				wp_enqueue_style( 'staylodgic-indicator-icons' );
 
-				wp_enqueue_script( 'chosen' );
-				wp_enqueue_style( 'chosen' );
 				wp_enqueue_style( 'flatpickr' );
 				wp_enqueue_script( 'flatpickr' );
 				wp_enqueue_script( 'flatpickr-monthselect' );

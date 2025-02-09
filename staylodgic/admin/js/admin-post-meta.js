@@ -434,13 +434,6 @@ jQuery(document).ready(function ($) {
 	$(document).on("click", ".bedlayout-wrap .add-bedlayout-box", function () {
 		var bedlayoutWrap = $(this).closest(".bedlayout-wrap");
 
-		// // Destroy select2 instances if they exist
-		// bedlayoutWrap.find('.chosen-select-metabox').each(function() {
-		//     if ($(this).data('select2')) {
-		//         $(this).select2('destroy');
-		//     }
-		// });
-
 		// Clone the div section
 		var newSection = bedlayoutWrap
 			.find(".bedlayout-box")
@@ -489,8 +482,6 @@ jQuery(document).ready(function ($) {
 		// Append the new div section below the last one
 		bedlayoutWrap.find(".bedlayout-box").last().after(newSection);
 
-		// Re-initialize select2
-		// bedlayoutWrap.find('.chosen-select-metabox').select2();
 	});
 	// Remove button click event
 	$("body").on("click", ".remove-bedlayout", function () {
