@@ -165,11 +165,11 @@ class Staylodgic_Room_Posts {
 		 */
 		register_taxonomy(
 			'slgc_roomtype',
-			array( 'staylodgic_room' ),
+			array( 'slgc_room' ),
 			array(
 				'hierarchical'   => true,
 				'label'          => 'Room Category',
-				'singular_label' => 'staylodgic_roomtypes',
+				'singular_label' => 'slgc_roomtypes',
 				'rewrite'        => true,
 			)
 		);
