@@ -263,7 +263,7 @@ class Activity {
 	public static function query_activities() {
 		$activities = get_posts(
 			array(
-				'post_type'   => 'slgc_activity',
+				'post_type'   => 'staylodgic_actvties',
 				'orderby'     => 'menu_order',
 				'order'       => 'ASC',
 				'numberposts' => -1,
@@ -283,7 +283,7 @@ class Activity {
 	 */
 	public static function get_reservation_for_activity( $booking_number ) {
 		$args = array(
-			'post_type'      => 'slgc_activityres',
+			'post_type'      => 'staylodgic_actvtres',
 			'posts_per_page' => -1,
 			'post_status'    => 'publish',
 			'meta_query'     => array(
@@ -305,7 +305,7 @@ class Activity {
 	 */
 	public function get_guest_id_for_reservation( $booking_number ) {
 		$args              = array(
-			'post_type'      => 'slgc_activityres',
+			'post_type'      => 'staylodgic_actvtres',
 			'posts_per_page' => -1,
 			'post_status'    => 'publish',
 			'meta_query'     => array(
@@ -380,7 +380,7 @@ class Activity {
 	 */
 	public static function get_activity_id_for_booking( $booking_number ) {
 		$args              = array(
-			'post_type'      => 'slgc_activityres',
+			'post_type'      => 'staylodgic_actvtres',
 			'posts_per_page' => -1,
 			'post_status'    => 'publish',
 			'meta_query'     => array(
@@ -532,7 +532,7 @@ class Activity {
 
 		// Query all activity posts
 		$args       = array(
-			'post_type'      => 'slgc_activity',
+			'post_type'      => 'staylodgic_actvties',
 			'orderby'        => 'menu_order',
 			'order'          => 'ASC',
 			'posts_per_page' => -1,
@@ -1012,7 +1012,7 @@ class Activity {
 	 * @return void
 	 */
 	public function activity_content( $content ) {
-		if ( is_singular( 'slgc_activity' ) ) {
+		if ( is_singular( 'staylodgic_actvties' ) ) {
 			$custom_content = $this->activity_booking_searchform();
 			$content        = $custom_content . $content; // Prepend custom content
 		}
@@ -1083,7 +1083,7 @@ class Activity {
 	 */
 	public static function get_activity_ids_for_customer( $customer_id ) {
 		$args            = array(
-			'post_type'  => 'slgc_activityres',
+			'post_type'  => 'staylodgic_actvtres',
 			'meta_query' => array(
 				array(
 					'key'     => 'staylodgic_customer_id',
@@ -1109,7 +1109,7 @@ class Activity {
 	 */
 	public function get_guest_id_for_activity( $booking_number ) {
 		$args              = array(
-			'post_type'      => 'slgc_activityres',
+			'post_type'      => 'staylodgic_actvtres',
 			'posts_per_page' => -1,
 			'post_status'    => 'publish',
 			'meta_query'     => array(
@@ -1139,7 +1139,7 @@ class Activity {
 	 */
 	public function get_guest_for_activity( $booking_number ) {
 		$args              = array(
-			'post_type'      => 'slgc_activityres',
+			'post_type'      => 'staylodgic_actvtres',
 			'posts_per_page' => -1,
 			'post_status'    => 'publish',
 			'meta_query'     => array(
@@ -1157,7 +1157,7 @@ class Activity {
 
 			if ( ! empty( $customer_id ) ) {
 				$customer_args = array(
-					'post_type'   => 'slgc_customers',
+					'post_type'   => 'staylodgic_customers',
 					'p'           => $customer_id,
 					'post_status' => 'publish',
 				);
@@ -1480,7 +1480,7 @@ class Activity {
 
 		// Query all activity posts
 		$args       = array(
-			'post_type'      => 'slgc_activity',
+			'post_type'      => 'staylodgic_actvties',
 			'orderby'        => 'menu_order',
 			'order'          => 'ASC',
 			'posts_per_page' => -1,
@@ -1565,7 +1565,7 @@ class Activity {
 	public function calculate_remaining_spots( $activity_id, $selected_date, $selected_time, $max_guests ) {
 		// Query all reservation posts for this activity, date, and time
 		$args         = array(
-			'post_type'      => 'slgc_activityres',
+			'post_type'      => 'staylodgic_actvtres',
 			'posts_per_page' => -1,
 			'meta_query'     => array(
 				array(
@@ -1731,7 +1731,7 @@ class Activity {
 
 		// Create customer post
 		$customer_post_data = array(
-			'post_type'   => 'slgc_customers', // Your custom post type for customers
+			'post_type'   => 'staylodgic_customers', // Your custom post type for customers
 			'post_title'  => $full_name, // Set the customer's full name as post title
 			'post_status' => 'publish', // The status you want to give new posts
 			'meta_input'  => array(
@@ -1792,7 +1792,7 @@ class Activity {
 
 		// Here you can also add other post data like post_title, post_content etc.
 		$post_data = array(
-			'post_type'   => 'slgc_activityres', // Your custom post type
+			'post_type'   => 'staylodgic_actvtres', // Your custom post type
 			'post_title'  => $booking_number, // Set the booking number as post title
 			'post_status' => 'publish', // The status you want to give new posts
 			'meta_input'  => array(

@@ -39,11 +39,11 @@ class Staylodgic_Registration_Posts {
 			'supports'           => array( 'title', 'author', 'thumbnail' ),
 		);
 
-		register_post_type( 'slgc_guestregistry', $args );
+		register_post_type( 'staylodgic_guestrgs', $args );
 
 		register_taxonomy(
-			'slgc_guestregistrycat',
-			array( 'slgc_guestregistry' ),
+			'staylodgic_grgscat',
+			array( 'staylodgic_guestrgs' ),
 			array(
 				'labels'       => array(
 					'name'          => __( 'Sections', 'staylodgic' ),
@@ -70,11 +70,11 @@ class Staylodgic_Registration_Posts {
 	 */
 	public function add_guest_registration_submenu_page() {
 		add_submenu_page(
-			'edit.php?post_type=slgc_guestregistry',
+			'edit.php?post_type=staylodgic_guestrgs',
 			__( 'Guest Registration Shortcodes', 'staylodgic' ),
 			__( 'Form Fields', 'staylodgic' ),
 			'edit_posts',
-			'slgc_guestregistry_shortcodes',
+			'staylodgic_guestrgs_shortcodes',
 			array( $this, 'submenu_page_callback' )
 		);
 	}
@@ -138,10 +138,10 @@ class Staylodgic_Registration_Posts {
 		wp_safe_redirect(
 			add_query_arg(
 				array(
-					'page'    => 'slgc_guestregistry_shortcodes',
+					'page'    => 'staylodgic_guestrgs_shortcodes',
 					'updated' => 'true',
 				),
-				admin_url( 'edit.php?post_type=slgc_guestregistry' )
+				admin_url( 'edit.php?post_type=staylodgic_guestrgs' )
 			)
 		);
 		exit;

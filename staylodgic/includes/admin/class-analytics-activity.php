@@ -54,7 +54,7 @@ class Analytics_Activity {
 
 		$activity_query = new \WP_Query(
 			array(
-				'post_type'      => 'slgc_activity',
+				'post_type'      => 'staylodgic_actvties',
 				'orderby'        => 'menu_order',
 				'order'          => 'ASC',
 				'posts_per_page' => -1,
@@ -87,11 +87,11 @@ class Analytics_Activity {
 	public function staylodgic_dashboard() {
 		// Add the Availability submenu item under the parent menu
 		add_submenu_page(
-			'slgc-dashboard',
+			'staylodgic-slg-dashboard',
 			__( 'Activity Overview', 'staylodgic' ),
 			__( 'Activity Overview', 'staylodgic' ),
 			'edit_posts',
-			'slgc-activity-dashboard',
+			'staylodgic-slg-activity-dashboard',
 			array( $this, 'activity_display_dashboard' )
 		);
 	}
@@ -263,7 +263,7 @@ class Analytics_Activity {
 
 		$query = new \WP_Query(
 			array(
-				'post_type'      => 'slgc_activityres',
+				'post_type'      => 'staylodgic_actvtres',
 				'posts_per_page' => -1,
 				'meta_query'     => array(
 					'relation' => 'OR',
@@ -365,7 +365,7 @@ class Analytics_Activity {
 
 		$query = new \WP_Query(
 			array(
-				'post_type'      => 'slgc_activityres',
+				'post_type'      => 'staylodgic_actvtres',
 				'posts_per_page' => -1,
 				'meta_query'     => array(
 					'relation' => 'OR',
@@ -435,7 +435,7 @@ class Analytics_Activity {
 
 		$query = new \WP_Query(
 			array(
-				'post_type'      => 'slgc_activityres',
+				'post_type'      => 'staylodgic_actvtres',
 				'posts_per_page' => -1,
 				'meta_query'     => array(
 					'relation' => 'OR',
@@ -521,7 +521,7 @@ class Analytics_Activity {
 				// Query for revenue
 				$revenue_query = new \WP_Query(
 					array(
-						'post_type'      => 'slgc_activityres',
+						'post_type'      => 'staylodgic_actvtres',
 						'posts_per_page' => -1,
 						'meta_query'     => array(
 							'relation' => 'AND',
@@ -609,7 +609,7 @@ class Analytics_Activity {
 				// Query for confirmed bookings
 				$confirmed_query  = new \WP_Query(
 					array(
-						'post_type'      => 'slgc_activityres',
+						'post_type'      => 'staylodgic_actvtres',
 						'posts_per_page' => -1,
 						'meta_query'     => array(
 							'relation' => 'AND',
@@ -631,7 +631,7 @@ class Analytics_Activity {
 				// Query for cancelled bookings
 				$cancelled_query  = new \WP_Query(
 					array(
-						'post_type'      => 'slgc_activityres',
+						'post_type'      => 'staylodgic_actvtres',
 						'posts_per_page' => -1,
 						'meta_query'     => array(
 							'relation' => 'AND',

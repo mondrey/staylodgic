@@ -1177,7 +1177,7 @@
 			// Check if it's a new post page for a specific post type
 			if (
 				$("body").hasClass("post-new-php") &&
-				$('input[name="post_type"]').val() === "slgc_reservations"
+				$('input[name="post_type"]').val() === "staylodgic_bookings"
 			) {
 				// Listen for the publish button click event
 				$("#publish").click(function () {

@@ -19,11 +19,11 @@ class Availablity_Calendar_Year extends Availablity_Calendar_Base {
 	public function availablity_calendar_year_display() {
 		// Add the Availability submenu item under the parent menu
 		add_submenu_page(
-			'slgc-dashboard',
+			'staylodgic-slg-dashboard',
 			__( 'Annual Availability', 'staylodgic' ),
 			__( 'Annual Availability', 'staylodgic' ),
 			'edit_posts',
-			'slgc-availability-yearly',
+			'staylodgic-slg-availability-yearly',
 			array( $this, 'room_reservation_plugin_display_availability_calendar_yearly' )
 		);
 	}

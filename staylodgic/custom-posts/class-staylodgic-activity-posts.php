@@ -27,7 +27,7 @@ class Staylodgic_Activity_Posts {
 	 */
 	public function staylodgic_enable_activity_sort() {
 		add_submenu_page(
-			'edit.php?post_type=slgc_activity',
+			'edit.php?post_type=staylodgic_actvties',
 			__( 'Sort activities', 'staylodgic' ),
 			__( 'Sort Activities', 'staylodgic' ),
 			'edit_posts',
@@ -43,7 +43,7 @@ class Staylodgic_Activity_Posts {
 	}
 
 	public function staylodgic_sort_activity() {
-		$activity = new WP_Query( 'post_type=slgc_activity&posts_per_page=-1&orderby=menu_order&order=ASC' );
+		$activity = new WP_Query( 'post_type=staylodgic_actvties&posts_per_page=-1&orderby=menu_order&order=ASC' );
 		?>
 		<div class="wrap">
 			<h2><?php esc_html_e( 'Sort activity', 'staylodgic' ); ?> <img src="<?php echo esc_url( home_url() . '/wp-admin/images/loading.gif' ); ?>" id="loading-animation" /></h2>
@@ -60,7 +60,7 @@ class Staylodgic_Activity_Posts {
 							<?php
 							$image_url     = wp_get_attachment_thumb_url( get_post_thumbnail_id() );
 							$custom        = get_post_custom( get_the_ID() );
-							$activity_cats = get_the_terms( get_the_ID(), 'slgc_activitytype' );
+							$activity_cats = get_the_terms( get_the_ID(), 'staylodgic_actvtiestype' );
 
 							?>
 							<?php
@@ -170,13 +170,13 @@ class Staylodgic_Activity_Posts {
 			'supports'           => array( 'title', 'author', 'thumbnail' ),
 		);
 
-		register_post_type( 'slgc_activity', $args );
+		register_post_type( 'staylodgic_actvties', $args );
 		/*
 		 * Add Taxonomy for activity
 		 */
 		register_taxonomy(
-			'slgc_activitytype',
-			array( 'staylodgic_activity' ),
+			'staylodgic_actvtiestype',
+			array( 'staylodgic_actvties' ),
 			array(
 				'hierarchical'   => true,
 				'label'          => 'Activity Category',
@@ -198,7 +198,7 @@ class Staylodgic_Activity_Posts {
 				wp_enqueue_style( 'mtheme-activity-sorter-CSS', plugin_dir_url( __FILE__ ) . 'css/style.css', false, '1.0', 'all' );
 				$screen = get_current_screen();
 
-				if ( 'slgc_activity_page_staylodgic-sort-activities' === $screen->id ) {
+				if ( 'staylodgic_actvties_page_staylodgic-sort-activities' === $screen->id ) {
 					wp_enqueue_script( 'post-sorter-JS', plugin_dir_url( __FILE__ ) . 'js/post-sorter.js', array( 'jquery' ), '1.1', true );
 				}
 			}

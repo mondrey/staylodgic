@@ -102,7 +102,7 @@ class Data {
 	}
 
 	/**
-	 * Method Triggered when a post is saved. If the post type is 'slgc_reservations' and is not autosaved or revision, it updates the reservation details.
+	 * Method Triggered when a post is saved. If the post type is 'staylodgic_bookings' and is not autosaved or revision, it updates the reservation details.
 	 *
 	 * @param $post_id
 	 * @param $post
@@ -152,7 +152,7 @@ class Data {
 			if ( '' !== $full_name ) {
 				// Create customer post
 				$customer_post_data = array(
-					'post_type'   => 'slgc_customers', // Your custom post type for customers
+					'post_type'   => 'staylodgic_customers', // Your custom post type for customers
 					'post_title'  => $full_name, // Set the customer's full name as post title
 					'post_status' => 'publish', // The status you want to give new posts
 					'meta_input'  => array(
@@ -191,7 +191,7 @@ class Data {
 	 */
 	public function remove_reservation_from_array( $post_id ) {
 		// Check if the post is of the "reservations" post type
-		if ( get_post_type( $post_id ) === 'slgc_reservations' ) {
+		if ( get_post_type( $post_id ) === 'staylodgic_bookings' ) {
 			$room_type           = get_post_meta( $post_id, 'staylodgic_room_id', true );
 			$reservation_post_id = $post_id;
 
@@ -271,7 +271,7 @@ class Data {
 	}
 
 	/**
-	 * Method Triggered when a post is saved. If the post type is 'slgc_reservations' and is not autosaved or revision, it updates the reservation details.
+	 * Method Triggered when a post is saved. If the post type is 'staylodgic_bookings' and is not autosaved or revision, it updates the reservation details.
 	 *
 	 * @param $post_id $post_id
 	 * @param $post $post
@@ -429,7 +429,7 @@ class Data {
 	 * @return void
 	 */
 	public static function remove_reservation_id_from_all_rooms( $reservation_post_id ) {
-		$room_types = get_posts( array( 'post_type' => 'slgc_room' ) );
+		$room_types = get_posts( array( 'post_type' => 'staylodgic_rooms' ) );
 		// Remove reservation_from_all_rooms is called with ID
 		foreach ( $room_types as $room ) {
 

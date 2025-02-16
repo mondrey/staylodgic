@@ -33,7 +33,7 @@ class Customers {
 	 */
 	public function get_room_names_by_customer( $customer_id ) {
 		$args = array(
-			'post_type'   => 'slgc_reservations',
+			'post_type'   => 'staylodgic_bookings',
 			'post_status' => 'publish',
 			'meta_query'  => array(
 				array(
@@ -73,7 +73,7 @@ class Customers {
 	 */
 	public function get_rooms_by_customer( $customer_id ) {
 		$args = array(
-			'post_type'   => 'slgc_reservations',
+			'post_type'   => 'staylodgic_bookings',
 			'post_status' => 'publish',
 			'meta_query'  => array(
 				array(
@@ -109,7 +109,7 @@ class Customers {
 		$booking_numbers = array();
 
 		$args = array(
-			'post_type'   => 'slgc_reservations',
+			'post_type'   => 'staylodgic_bookings',
 			'post_status' => 'publish',
 			'meta_query'  => array(
 				array(
@@ -129,7 +129,7 @@ class Customers {
 		}
 
 		$args = array(
-			'post_type'   => 'slgc_activityres',
+			'post_type'   => 'staylodgic_actvtres',
 			'post_status' => 'publish',
 			'meta_query'  => array(
 				array(

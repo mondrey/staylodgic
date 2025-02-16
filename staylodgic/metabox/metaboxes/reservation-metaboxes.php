@@ -1,7 +1,7 @@
 <?php
 function staylodgic_reservations_metadata() {
 
-	$room_names = get_posts( 'post_type=slgc_room&orderby=title&numberposts=-1&order=ASC' );
+	$room_names = get_posts( 'post_type=staylodgic_rooms&orderby=title&numberposts=-1&order=ASC' );
 
 	if ( $room_names ) {
 		$options_room_names['none'] = 'Not Selected';

@@ -5,8 +5,8 @@ class Staylodgic_Activity_Reservation_Posts {
 	public function __construct() {
 		add_action( 'init', array( $this, 'init' ) );
 
-		add_filter( 'manage_edit-slgc_activityres_columns', array( $this, 'slgc_activityres_edit_columns' ) );
-		add_filter( 'manage_slgc_activityres_posts_custom_column', array( $this, 'slgc_activityres_custom_columns' ) );
+		add_filter( 'manage_edit-staylodgic_actvtres_columns', array( $this, 'staylodgic_actvtres_edit_columns' ) );
+		add_filter( 'manage_staylodgic_actvtres_posts_custom_column', array( $this, 'staylodgic_actvtres_custom_columns' ) );
 	}
 
 	/**
@@ -14,7 +14,7 @@ class Staylodgic_Activity_Reservation_Posts {
 	 *
 	 * @return void
 	 */
-	public function slgc_activityres_edit_columns( $columns ) {
+	public function staylodgic_actvtres_edit_columns( $columns ) {
 		unset( $columns['author'] );
 		$new_columns = array(
 			'reservation_customer'  => __( 'Customer', 'staylodgic' ),
@@ -28,7 +28,7 @@ class Staylodgic_Activity_Reservation_Posts {
 		return array_merge( $columns, $new_columns );
 	}
 
-	public function slgc_activityres_custom_columns( $columns ) {
+	public function staylodgic_actvtres_custom_columns( $columns ) {
 		global $post;
 		$custom    = get_post_custom();
 		$image_url = wp_get_attachment_thumb_url( get_post_thumbnail_id( $post->ID ) );
@@ -112,13 +112,13 @@ class Staylodgic_Activity_Reservation_Posts {
 			'supports'           => array( 'title', 'author', 'thumbnail' ),
 		);
 
-		register_post_type( 'slgc_activityres', $args );
+		register_post_type( 'staylodgic_actvtres', $args );
 		/*
 		 * Add Taxonomy for activityreservation
 		 */
 		register_taxonomy(
-			'slgc_slgc_activityrestype',
-			array( 'staylodgic_activityres' ),
+			'staylodgic_acrestype',
+			array( 'staylodgic_actvtres' ),
 			array(
 				'hierarchical'   => true,
 				'label'          => 'Activity Reservation Category',

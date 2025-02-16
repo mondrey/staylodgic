@@ -5,8 +5,8 @@ class Staylodgic_Customer_Posts {
 	public function __construct() {
 		add_action( 'init', array( $this, 'init' ) );
 
-		add_filter( 'manage_edit-slgc_customers_columns', array( $this, 'slgc_customers_edit_columns' ) );
-		add_filter( 'manage_posts_custom_column', array( $this, 'slgc_customers_custom_columns' ) );
+		add_filter( 'manage_edit-staylodgic_customers_columns', array( $this, 'staylodgic_customers_edit_columns' ) );
+		add_filter( 'manage_posts_custom_column', array( $this, 'staylodgic_customers_custom_columns' ) );
 	}
 
 	/**
@@ -14,7 +14,7 @@ class Staylodgic_Customer_Posts {
 	 *
 	 * @return void
 	 */
-	public function slgc_customers_edit_columns( $columns ) {
+	public function staylodgic_customers_edit_columns( $columns ) {
 		$new_columns = array(
 			'customer_booking'      => __( 'Booking', 'staylodgic' ),
 			'customer_reservations' => __( 'Reservations', 'staylodgic' ),
@@ -25,7 +25,7 @@ class Staylodgic_Customer_Posts {
 		return array_merge( $columns, $new_columns );
 	}
 
-	public function slgc_customers_custom_columns( $columns ) {
+	public function staylodgic_customers_custom_columns( $columns ) {
 		global $post;
 
 		$customer_post_id = $post->ID;
@@ -71,7 +71,7 @@ class Staylodgic_Customer_Posts {
 				}
 				break;
 			case 'mcustomer_section':
-				echo get_the_term_list( get_the_id(), 'slgc_customercat', '', ', ', '' );
+				echo get_the_term_list( get_the_id(), 'staylodgic_custcat', '', ', ', '' );
 				break;
 		}
 	}
@@ -107,13 +107,13 @@ class Staylodgic_Customer_Posts {
 			'supports'           => array( 'title', 'author', 'thumbnail' ),
 		);
 
-		register_post_type( 'slgc_customers', $args );
+		register_post_type( 'staylodgic_customers', $args );
 		/*
 		 * Add Taxonomy
 		 */
 		register_taxonomy(
-			'slgc_customercat',
-			array( 'slgc_customers' ),
+			'staylodgic_custcat',
+			array( 'staylodgic_customers' ),
 			array(
 				'labels'       => array(
 					'name'          => __( 'Sections', 'staylodgic' ),

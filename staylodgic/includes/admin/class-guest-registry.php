@@ -32,7 +32,7 @@ class Guest_Registry {
 		add_action( 'wp_ajax_request_registration_details', array( $this, 'request_registration_details' ) );
 		add_action( 'wp_ajax_nopriv_request_registration_details', array( $this, 'request_registration_details' ) );
 
-		// Add a filter to modify the content of slgc_guestregistry posts
+		// Add a filter to modify the content of staylodgic_guestrgs posts
 		add_filter( 'the_content', array( $this, 'append_shortcode_to_content' ) );
 
 		add_action( 'wp_ajax_save_guestregistration_data', array( $this, 'save_guestregistration_data' ) );
@@ -66,7 +66,7 @@ class Guest_Registry {
 				'post_title'   => esc_html__( 'Registration for', 'staylodgic' ) . ' ' . wp_strip_all_tags( $stay_booking_number ),
 				'post_content' => '',
 				'post_status'  => 'publish',
-				'post_type'    => 'slgc_guestregistry', // Ensure this is the correct post type
+				'post_type'    => 'staylodgic_guestrgs', // Ensure this is the correct post type
 				'meta_input'   => array(
 					'staylodgic_registry_bookingnumber' => $stay_booking_number,
 				),
@@ -92,7 +92,7 @@ class Guest_Registry {
 	 */
 	public function check_guest_registration_by_booking_number( $stay_booking_number ) {
 		$guest_register_args = array(
-			'post_type'      => 'slgc_guestregistry', // Adjust to your guest register post type
+			'post_type'      => 'staylodgic_guestrgs', // Adjust to your guest register post type
 			'posts_per_page' => 1,
 			'post_status'    => 'publish',
 			'meta_query'     => array(
@@ -124,7 +124,7 @@ class Guest_Registry {
 	 */
 	public function fetch_res_reg_ids_by_booking_number( $stay_booking_number ) {
 		$stay_reservation_args = array(
-			'post_type'      => 'slgc_reservations', // Adjust to your reservation post type
+			'post_type'      => 'staylodgic_bookings', // Adjust to your reservation post type
 			'posts_per_page' => 1,
 			'post_status'    => 'publish',
 			'meta_query'     => array(
@@ -136,7 +136,7 @@ class Guest_Registry {
 		);
 
 		$guest_register_args = array(
-			'post_type'      => 'slgc_guestregistry', // Adjust to your guest register post type
+			'post_type'      => 'staylodgic_guestrgs', // Adjust to your guest register post type
 			'posts_per_page' => 1,
 			'post_status'    => 'publish',
 			'meta_query'     => array(
@@ -618,15 +618,15 @@ class Guest_Registry {
 	}
 
 	/**
-	 * Method Appends the saved shortcode to the content of slgc_guestregistry posts.
+	 * Method Appends the saved shortcode to the content of staylodgic_guestrgs posts.
 	 *
 	 * @param $content
 	 *
 	 * @return void
 	 */
 	public function append_shortcode_to_content( $content ) {
-		// Check if we are viewing a single post of type 'slgc_guestregistry'
-		if ( is_single() && 'slgc_guestregistry' === get_post_type() ) {
+		// Check if we are viewing a single post of type 'staylodgic_guestrgs'
+		if ( is_single() && 'staylodgic_guestrgs' === get_post_type() ) {
 
 			$registration_allowed_data = $this->allow_guest_registration( get_the_id() );
 

@@ -28,7 +28,7 @@ class Staylodgic_Room_Posts {
 	 */
 	public function staylodgic_enable_room_sort() {
 		add_submenu_page(
-			'edit.php?post_type=slgc_room',
+			'edit.php?post_type=staylodgic_rooms',
 			'Sort rooms',
 			'Sort Rooms',
 			'edit_posts',
@@ -43,7 +43,7 @@ class Staylodgic_Room_Posts {
 		return ( $orderby );
 	}
 	public function staylodgic_sort_room() {
-		$room = new WP_Query( 'post_type=slgc_room&posts_per_page=-1&orderby=menu_order&order=ASC' );
+		$room = new WP_Query( 'post_type=staylodgic_rooms&posts_per_page=-1&orderby=menu_order&order=ASC' );
 		?>
 		<div class="wrap">
 			<h2><?php esc_html_e( 'Sort room', 'staylodgic' ); ?> <img src="<?php echo esc_url( home_url() . '/wp-admin/images/loading.gif' ); ?>" id="loading-animation" /></h2>
@@ -60,7 +60,7 @@ class Staylodgic_Room_Posts {
 							<?php
 							$image_url = wp_get_attachment_thumb_url( get_post_thumbnail_id() );
 							$custom    = get_post_custom( get_the_ID() );
-							$room_cats = get_the_terms( get_the_ID(), 'slgc_roomtype' );
+							$room_cats = get_the_terms( get_the_ID(), 'staylodgic_roomtype' );
 
 							?>
 							<?php
@@ -159,17 +159,17 @@ class Staylodgic_Room_Posts {
 			'supports'           => array( 'title', 'author', 'thumbnail' ),
 		);
 
-		register_post_type( 'slgc_room', $args );
+		register_post_type( 'staylodgic_rooms', $args );
 		/*
 		 * Add Taxonomy
 		 */
 		register_taxonomy(
-			'slgc_roomtype',
-			array( 'slgc_room' ),
+			'staylodgic_roomtype',
+			array( 'staylodgic_rooms' ),
 			array(
 				'hierarchical'   => true,
 				'label'          => 'Room Category',
-				'singular_label' => 'slgc_roomtypes',
+				'singular_label' => 'staylodgic_roomtypes',
 				'rewrite'        => true,
 			)
 		);
@@ -186,7 +186,7 @@ class Staylodgic_Room_Posts {
 				wp_enqueue_script( 'jquery-ui-sortable' );
 				wp_enqueue_style( 'mtheme-activity-sorter-CSS', plugin_dir_url( __FILE__ ) . 'css/style.css', false, '1.0', 'all' );
 				$screen = get_current_screen();
-				if ( 'slgc_room_page_staylodgic-sort-rooms' === $screen->id ) {
+				if ( 'staylodgic_rooms_page_staylodgic-sort-rooms' === $screen->id ) {
 					wp_enqueue_script( 'post-sorter-JS', plugin_dir_url( __FILE__ ) . 'js/post-sorter.js', array( 'jquery' ), '1.1', true );
 				}
 			}

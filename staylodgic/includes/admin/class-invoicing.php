@@ -92,7 +92,7 @@ class Invoicing {
 	 */
 	public function add_invoicing_admin_menu() {
 		add_submenu_page(
-			'edit.php?post_type=slgc_reservations', // Set the parent slug to your custom post type slug
+			'edit.php?post_type=staylodgic_bookings', // Set the parent slug to your custom post type slug
 			esc_html__( 'Invoices', 'staylodgic' ),
 			esc_html__( 'Invoices', 'staylodgic' ),
 			'edit_posts',
@@ -107,7 +107,7 @@ class Invoicing {
 	 */
 	public function add_activity_invoicing_admin_menu() {
 		add_submenu_page(
-			'edit.php?post_type=slgc_activityres', // Set the parent slug to your custom post type slug
+			'edit.php?post_type=staylodgic_actvtres', // Set the parent slug to your custom post type slug
 			esc_html__( 'Invoices', 'staylodgic' ),
 			esc_html__( 'Invoices', 'staylodgic' ),
 			'edit_posts',

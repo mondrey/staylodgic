@@ -60,7 +60,7 @@ class Cron {
 	 */
 	public function cron_initialize() {
 
-		$current_meta_schedule = get_option( 'current_ical_processor_schedule' );
+		$current_meta_schedule = get_option( 'staylodgic_current_ical_processor_schedule' );
 		$new_schedule          = $this->get_scheduled_time();
 
 		if ( $current_meta_schedule !== $new_schedule ) {
@@ -72,7 +72,7 @@ class Cron {
 
 			$reschedule_result = wp_schedule_event( time(), $new_schedule, 'staylodgic_ical_availability_processor_event' );
 
-			update_option( 'current_ical_processor_schedule', $new_schedule );
+			update_option( 'staylodgic_current_ical_processor_schedule', $new_schedule );
 		}
 
 		// Schedule the cron event if it's not already scheduled

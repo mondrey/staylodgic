@@ -17,7 +17,7 @@ class Batch_Processor_Base {
 	 * @return mixed True if the URL can be synced, or the number of minutes left if not ready.
 	 */
 	private function is_url_ready_for_sync( $url ) {
-		$transient_key  = 'sync_last_time_' . md5( $url );
+		$transient_key  = 'staylodgic_sync_last_time_' . md5( $url );
 		$last_sync_time = get_transient( $transient_key );
 
 		if ( false !== $last_sync_time ) {

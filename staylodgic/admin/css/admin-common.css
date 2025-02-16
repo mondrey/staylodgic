@@ -36,14 +36,14 @@
 	background-repeat: no-repeat;
 }
 
-#toplevel_page_slgc-dashboard .wp-menu-image.svg,
+#toplevel_page_staylodgic-slg-dashboard .wp-menu-image.svg,
 #toplevel_page_staylodgic-settings .wp-menu-image.svg,
-#menu-posts-slgc_room .wp-menu-image.svg,
-#menu-posts-slgc_reservations .wp-menu-image.svg,
-#menu-posts-slgc_customers .wp-menu-image.svg,
-#menu-posts-slgc_guestregistry .wp-menu-image.svg,
-#menu-posts-slgc_activity .wp-menu-image.svg,
-#menu-posts-slgc_activityres .wp-menu-image.svg {
+#menu-posts-staylodgic_rooms .wp-menu-image.svg,
+#menu-posts-staylodgic_bookings .wp-menu-image.svg,
+#menu-posts-staylodgic_customers .wp-menu-image.svg,
+#menu-posts-staylodgic_guestrgs .wp-menu-image.svg,
+#menu-posts-staylodgic_actvties .wp-menu-image.svg,
+#menu-posts-staylodgic_actvtres .wp-menu-image.svg {
 	filter: grayscale(100%);
 }
 

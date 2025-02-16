@@ -186,11 +186,11 @@ class Availablity_Calendar extends Availablity_Calendar_Base {
 	public function availablity_calendar_display() {
 		// Add the parent menu item
 		add_submenu_page(
-			'slgc-dashboard',
+			'staylodgic-slg-dashboard',
 			__( 'Availability Calendar', 'staylodgic' ),
 			__( 'Availability Calendar', 'staylodgic' ),
 			'edit_posts',
-			'slgc-availability',
+			'staylodgic-slg-availability',
 			array( $this, 'room_reservation_plugin_display_availability_calendar' ), // Callback for the parent page (can be empty if not needed)
 		);
 	}
@@ -548,7 +548,7 @@ class Availablity_Calendar extends Availablity_Calendar_Base {
 					$create_end_date = new \DateTime( $stay_date_string );
 					$create_end_date->modify( '+1 day' );
 					$create_one_day_ahead = $create_end_date->format( 'Y-m-d' );
-					$new_post_link        = admin_url( 'post-new.php?post_type=slgc_reservations&createfromdate=' . esc_attr( $stay_date_string ) . '&createtodate=' . esc_attr( $create_one_day_ahead ) . '&the_room_id=' . esc_attr( $the_room_id ) );
+					$new_post_link        = admin_url( 'post-new.php?post_type=staylodgic_bookings&createfromdate=' . esc_attr( $stay_date_string ) . '&createtodate=' . esc_attr( $create_one_day_ahead ) . '&the_room_id=' . esc_attr( $the_room_id ) );
 					$room_output         .= '<div class="cal-create-reservation"><a data-bs-delay="0" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="New Booking" href="' . esc_url( $new_post_link ) . '">+</a></div>';
 				}
 

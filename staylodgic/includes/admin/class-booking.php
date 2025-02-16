@@ -2009,7 +2009,7 @@ class Booking {
 		}
 		// Create customer post
 		$customer_post_data = array(
-			'post_type'   => 'slgc_customers',
+			'post_type'   => 'staylodgic_customers',
 			'post_title'  => $full_name,
 			'post_status' => 'publish',
 			'meta_input'  => array(
@@ -2077,7 +2077,7 @@ class Booking {
 
 		// Here you can also add other post data like post_title, post_content etc.
 		$post_data = array(
-			'post_type'   => 'slgc_reservations',
+			'post_type'   => 'staylodgic_bookings',
 			'post_title'  => $booking_number,
 			'post_status' => 'publish',
 			'meta_input'  => array(

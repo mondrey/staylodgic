@@ -1234,7 +1234,7 @@ $panel_args = array(
 	'parent_page'     => 'staylodgic-settings',
 	'title'           => 'Hotel Settings',
 	'option_name'     => 'staylodgic_settings',
-	'slug'            => 'slgc-settings-panel',
+	'slug'            => 'staylodgic-slg-settings-panel',
 	'user_capability' => 'edit_posts',
 	'tabs'            => array(
 		'property'          => '<i class="fa fa-building"></i> <span class="options-menu-link-text">' . esc_html__( 'Property', 'staylodgic' ) . '</span>',

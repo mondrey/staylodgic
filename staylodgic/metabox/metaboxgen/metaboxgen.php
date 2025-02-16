@@ -906,7 +906,7 @@ function staylodgic_generate_metaboxes( $meta_data, $post_id ) {
 
 					if ( isset( $field['datafrom'] ) ) {
 						if ( 'roomtype' === $field['datafrom'] ) {
-							$room = get_posts( 'post_type=slgc_room&numberposts=-1&order=ASC' );
+							$room = get_posts( 'post_type=staylodgic_rooms&numberposts=-1&order=ASC' );
 							if ( $room ) {
 								foreach ( $room as $key => $list ) {
 									$custom = get_post_custom( $list->ID );
@@ -1002,7 +1002,7 @@ function staylodgic_generate_metaboxes( $meta_data, $post_id ) {
 
 					$post_type = get_post_type( $field['id'] );
 
-					if ( 'slgc_activityres' === $post_type ) {
+					if ( 'staylodgic_actvtres' === $post_type ) {
 						$reservation_instance = new \Staylodgic\Activity();
 					} else {
 						$reservation_instance = new \Staylodgic\Reservations();
@@ -1047,7 +1047,7 @@ function staylodgic_generate_metaboxes( $meta_data, $post_id ) {
 					if ( isset( $field['datafrom'] ) ) {
 						if ( 'roomtype' === $field['datafrom'] ) {
 
-							$room = get_posts( 'post_type=slgc_room&numberposts=-1&order=ASC' );
+							$room = get_posts( 'post_type=staylodgic_rooms&numberposts=-1&order=ASC' );
 							if ( $room ) {
 								foreach ( $room as $key => $list ) {
 									$max_adults   = 'disabled';
@@ -1311,8 +1311,8 @@ function staylodgic_pre_process( $post_id, $post, $update ) {
 		return;
 	}
 
-	// Ensure the action is only run for the 'slgc_reservations' custom post type.
-	if ( 'slgc_reservations' !== $post->post_type ) {
+	// Ensure the action is only run for the 'staylodgic_bookings' custom post type.
+	if ( 'staylodgic_bookings' !== $post->post_type ) {
 		return;
 	}
 
@@ -1335,8 +1335,8 @@ function staylodgic_post_process( $post_id, $post, $update ) {
 		return;
 	}
 
-	// Ensure the action is only run for the 'slgc_reservations' custom post type.
-	if ( 'slgc_reservations' !== $post->post_type ) {
+	// Ensure the action is only run for the 'staylodgic_bookings' custom post type.
+	if ( 'staylodgic_bookings' !== $post->post_type ) {
 		return;
 	}
 
@@ -1380,27 +1380,27 @@ function staylodgic_checkdata( $post_id ) {
 		$staylodgic_post_type_got = get_post_type( $post_id );
 
 		switch ( $staylodgic_post_type_got ) {
-			case 'slgc_room':
+			case 'staylodgic_rooms':
 				$staylodgic_room_box = staylodgic_room_metadata();
 				staylodgic_savedata( $staylodgic_room_box, $post_id );
 				break;
-			case 'slgc_activity':
+			case 'staylodgic_actvties':
 				$staylodgic_activity_box = staylodgic_activity_metadata();
 				staylodgic_savedata( $staylodgic_activity_box, $post_id );
 				break;
-			case 'slgc_activityres':
+			case 'staylodgic_actvtres':
 				$staylodgic_activityres_box = staylodgic_activityres_metadata();
 				staylodgic_savedata( $staylodgic_activityres_box, $post_id );
 				break;
-			case 'slgc_guestregistry':
+			case 'staylodgic_guestrgs':
 				$registry_box = staylodgic_registry_metadata();
 				staylodgic_savedata( $registry_box, $post_id );
 				break;
-			case 'slgc_reservations':
+			case 'staylodgic_bookings':
 				$reservations_box = staylodgic_reservations_metadata();
 				staylodgic_savedata( $reservations_box, $post_id );
 				break;
-			case 'slgc_customers':
+			case 'staylodgic_customers':
 				$customers_box = staylodgic_customers_metadata();
 				staylodgic_savedata( $customers_box, $post_id );
 				break;

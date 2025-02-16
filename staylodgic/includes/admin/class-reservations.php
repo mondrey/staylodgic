@@ -119,7 +119,7 @@ class Reservations {
 	 */
 	public static function get_confirmed_reservations() {
 		$args = array(
-			'post_type'      => 'slgc_reservations',
+			'post_type'      => 'staylodgic_bookings',
 			'posts_per_page' => -1,
 			'post_status'    => 'publish',
 			'meta_query'     => array(
@@ -142,7 +142,7 @@ class Reservations {
 	 */
 	public static function get_reservationfor_booking( $booking_number ) {
 		$args = array(
-			'post_type'      => 'slgc_reservations',
+			'post_type'      => 'staylodgic_bookings',
 			'posts_per_page' => -1,
 			'post_status'    => 'publish',
 			'meta_query'     => array(
@@ -164,7 +164,7 @@ class Reservations {
 	 */
 	public static function get_reservation_id_for_booking( $booking_number ) {
 		$args              = array(
-			'post_type'      => 'slgc_reservations',
+			'post_type'      => 'staylodgic_bookings',
 			'posts_per_page' => -1,
 			'post_status'    => 'publish',
 			'meta_query'     => array(
@@ -193,7 +193,7 @@ class Reservations {
 	 */
 	public function get_guest_id_for_activity( $booking_number ) {
 		$args              = array(
-			'post_type'      => 'slgc_activityres',
+			'post_type'      => 'staylodgic_actvtres',
 			'posts_per_page' => -1,
 			'post_status'    => 'publish',
 			'meta_query'     => array(
@@ -223,7 +223,7 @@ class Reservations {
 	 */
 	public function get_guest_id_for_reservation( $booking_number ) {
 		$args              = array(
-			'post_type'      => 'slgc_reservations',
+			'post_type'      => 'staylodgic_bookings',
 			'posts_per_page' => -1,
 			'post_status'    => 'publish',
 			'meta_query'     => array(
@@ -253,7 +253,7 @@ class Reservations {
 	 */
 	public function get_guest_for_reservation( $booking_number ) {
 		$args              = array(
-			'post_type'      => 'slgc_reservations',
+			'post_type'      => 'staylodgic_bookings',
 			'posts_per_page' => -1,
 			'post_status'    => 'publish',
 			'meta_query'     => array(
@@ -271,7 +271,7 @@ class Reservations {
 
 			if ( ! empty( $customer_id ) ) {
 				$customer_args = array(
-					'post_type'   => 'slgc_customers',
+					'post_type'   => 'staylodgic_customers',
 					'p'           => $customer_id,
 					'post_status' => 'publish',
 				);
@@ -347,7 +347,7 @@ class Reservations {
 		}
 
 		$args = array(
-			'post_type'      => 'slgc_reservations',
+			'post_type'      => 'staylodgic_bookings',
 			'posts_per_page' => -1,
 			'post_status'    => 'publish',
 			'meta_query'     => $meta_query,
@@ -1115,7 +1115,7 @@ class Reservations {
 	 */
 	public static function get_reservation_ids_for_customer( $customer_id ) {
 		$args            = array(
-			'post_type'  => 'slgc_reservations',
+			'post_type'  => 'staylodgic_bookings',
 			'meta_query' => array(
 				array(
 					'key'     => 'staylodgic_customer_id',

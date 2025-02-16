@@ -203,7 +203,7 @@ class Common {
 	 * @return void
 	 */
 	public static function is_reservation_valid_post( $post_id, $post ) {
-		return ! wp_is_post_autosave( $post_id ) && ! wp_is_post_revision( $post_id ) && 'slgc_reservations' === $post->post_type && get_post_status( $post_id ) !== 'draft';
+		return ! wp_is_post_autosave( $post_id ) && ! wp_is_post_revision( $post_id ) && 'staylodgic_bookings' === $post->post_type && get_post_status( $post_id ) !== 'draft';
 	}
 
 	/**
@@ -215,7 +215,7 @@ class Common {
 	 * @return void
 	 */
 	public static function is_activities_valid_post( $post_id, $post ) {
-		return ! wp_is_post_autosave( $post_id ) && ! wp_is_post_revision( $post_id ) && 'slgc_activityres' === $post->post_type && get_post_status( $post_id ) !== 'draft';
+		return ! wp_is_post_autosave( $post_id ) && ! wp_is_post_revision( $post_id ) && 'staylodgic_actvtres' === $post->post_type && get_post_status( $post_id ) !== 'draft';
 	}
 
 	/**
@@ -227,7 +227,7 @@ class Common {
 	 */
 	public static function is_customer_valid_post( $post_id ) {
 		$post = get_post( $post_id );
-		return null !== $post && ! wp_is_post_autosave( $post_id ) && ! wp_is_post_revision( $post_id ) && 'slgc_customers' === $post->post_type && get_post_status( $post_id ) !== 'draft';
+		return null !== $post && ! wp_is_post_autosave( $post_id ) && ! wp_is_post_revision( $post_id ) && 'staylodgic_customers' === $post->post_type && get_post_status( $post_id ) !== 'draft';
 	}
 
 	public static function get_staylodgic_currencies() {

@@ -50,19 +50,19 @@ class Staylodgic_Init {
 	 */
 	public function remove_admin_notices_on_specific_page() {
 		$pages_to_remove_notices = array(
-			'slgc-availability',
-			'slgc-availability-yearly',
-			'slgc-dashboard',
+			'staylodgic-slg-availability',
+			'staylodgic-slg-availability-yearly',
+			'staylodgic-slg-dashboard',
 			'staylodgic-invoicing',
 			'staylodgic-activity-invoicing',
-			'slgc-activity-dashboard',
+			'staylodgic-slg-activity-dashboard',
 			'class-staylodgic-room-posts.php',
 			'staylodgic-settings',
-			'slgc-settings-panel',
-			'slgc-export-booking-ical',
-			'slgc-export-registrations-ical',
-			'slgc-import-availability-ical',
-			'slgc-export-availability-ical',
+			'staylodgic-slg-settings-panel',
+			'staylodgic-slg-export-booking-ical',
+			'staylodgic-slg-export-registrations-ical',
+			'staylodgic-slg-import-availability-ical',
+			'staylodgic-slg-export-availability-ical',
 		);
 
 		$screen = get_current_screen(); // Get the current admin screen.
@@ -238,7 +238,7 @@ class Staylodgic_Init {
 		}
 
 		// Custom post type
-		if ( 'slgc_customers' === $current_admin_screen->post_type ) {
+		if ( 'staylodgic_customers' === $current_admin_screen->post_type ) {
 
 			wp_enqueue_style( 'fontawesome-6' );
 			wp_enqueue_style( 'fontawesome-6-brands' );
@@ -275,7 +275,7 @@ class Staylodgic_Init {
 			}
 
 			// Invoicing pages
-			if ( 'slgc_reservations_page_staylodgic-invoicing' === $current_admin_screen->base ) {
+			if ( 'staylodgic_bookings_page_staylodgic-invoicing' === $current_admin_screen->base ) {
 				wp_enqueue_style( 'staylodgic-admin-styles' );
 				wp_enqueue_style( 'staylodgic-indicator-icons' );
 
@@ -295,7 +295,7 @@ class Staylodgic_Init {
 			}
 
 			// Staylodgic Dashboard
-			if ( 'toplevel_page_slgc-dashboard' === $current_admin_screen->base ) {
+			if ( 'toplevel_page_staylodgic-slg-dashboard' === $current_admin_screen->base ) {
 
 				wp_enqueue_style( 'staylodgic-dashboard' );
 				wp_enqueue_style( 'staylodgic-indicator-icons' );
@@ -320,7 +320,7 @@ class Staylodgic_Init {
 			}
 
 			// Activity pages
-			if ( isset( $current_admin_screen->base ) && 'overview_page_slgc-activity-dashboard' === $current_admin_screen->base ) {
+			if ( isset( $current_admin_screen->base ) && 'overview_page_staylodgic-slg-activity-dashboard' === $current_admin_screen->base ) {
 
 				wp_enqueue_style( 'staylodgic-dashboard' );
 				wp_enqueue_style( 'staylodgic-indicator-icons' );
@@ -357,7 +357,7 @@ class Staylodgic_Init {
 			}
 
 			// Export Calendar
-			if ( 'staylodgic_page_slgc-export-booking-ical' === $current_admin_screen->base ) {
+			if ( 'staylodgic_page_staylodgic-slg-export-booking-ical' === $current_admin_screen->base ) {
 
 				wp_enqueue_script( 'staylodgic-parser' );
 				wp_enqueue_style( 'staylodgic-invoice' );
@@ -377,7 +377,7 @@ class Staylodgic_Init {
 			}
 
 			// Registrations
-			if ( 'staylodgic_page_slgc-export-registrations-ical' === $current_admin_screen->base ) {
+			if ( 'staylodgic_page_staylodgic-slg-export-registrations-ical' === $current_admin_screen->base ) {
 
 				wp_enqueue_script( 'staylodgic-parser' );
 				wp_enqueue_style( 'staylodgic-invoice' );
@@ -397,7 +397,7 @@ class Staylodgic_Init {
 			}
 
 			// Import availability ical
-			if ( 'staylodgic_page_slgc-import-availability-ical' === $current_admin_screen->base ) {
+			if ( 'staylodgic_page_staylodgic-slg-import-availability-ical' === $current_admin_screen->base ) {
 
 				wp_enqueue_script( 'staylodgic-parser' );
 				wp_enqueue_style( 'staylodgic-invoice' );
@@ -411,7 +411,7 @@ class Staylodgic_Init {
 			}
 
 			// Export availability
-			if ( 'staylodgic_page_slgc-export-availability-ical' === $current_admin_screen->base ) {
+			if ( 'staylodgic_page_staylodgic-slg-export-availability-ical' === $current_admin_screen->base ) {
 
 				wp_enqueue_script( 'staylodgic-parser' );
 				wp_enqueue_style( 'staylodgic-invoice' );
@@ -439,7 +439,7 @@ class Staylodgic_Init {
 			}
 
 			// Activity invoice
-			if ( 'slgc_activityres_page_staylodgic-activity-invoicing' === $current_admin_screen->base ) {
+			if ( 'staylodgic_actvtres_page_staylodgic-activity-invoicing' === $current_admin_screen->base ) {
 
 				wp_enqueue_script( 'staylodgic-invoice' );
 				wp_localize_script(
@@ -483,7 +483,7 @@ class Staylodgic_Init {
 			}
 
 			// Reservations
-			if ( $current_admin_screen && 'edit' === $current_admin_screen->base && 'slgc_reservations' === $current_admin_screen->post_type ) {
+			if ( $current_admin_screen && 'edit' === $current_admin_screen->base && 'staylodgic_bookings' === $current_admin_screen->post_type ) {
 
 				wp_enqueue_script( 'staylodgic-parser' );
 				wp_enqueue_style( 'fontawesome-6' );
@@ -493,7 +493,7 @@ class Staylodgic_Init {
 			}
 
 			// Activity Reservations
-			if ( $current_admin_screen && 'slgc_activityres' === $current_admin_screen->post_type ) {
+			if ( $current_admin_screen && 'staylodgic_actvtres' === $current_admin_screen->post_type ) {
 
 				wp_enqueue_style( 'staylodgic-admin-styles' );
 				wp_enqueue_style( 'staylodgic-indicator-icons' );
@@ -515,7 +515,7 @@ class Staylodgic_Init {
 			}
 
 			// Guest registry
-			if ( 'slgc_guestregistry' === $current_admin_screen->post_type && ( 'post.php' === $hook || 'post-new.php' === $hook ) ) {
+			if ( 'staylodgic_guestrgs' === $current_admin_screen->post_type && ( 'post.php' === $hook || 'post-new.php' === $hook ) ) {
 
 				wp_enqueue_style( 'staylodgic-admin-styles' );
 				wp_enqueue_style( 'staylodgic-indicator-icons' );
@@ -545,7 +545,7 @@ class Staylodgic_Init {
 			);
 
 			// Page settings
-			if ( 'staylodgic_page_slgc-settings-panel' === $current_admin_screen->base ) {
+			if ( 'staylodgic_page_staylodgic-slg-settings-panel' === $current_admin_screen->base ) {
 
 				wp_enqueue_style( 'fontawesome-6' );
 				wp_enqueue_style( 'fontawesome-6-brands' );
@@ -563,7 +563,7 @@ class Staylodgic_Init {
 			}
 
 			// Yearly Availability
-			if ( isset( $current_admin_screen->base ) && 'overview_page_slgc-availability-yearly' === $current_admin_screen->base ) {
+			if ( isset( $current_admin_screen->base ) && 'overview_page_staylodgic-slg-availability-yearly' === $current_admin_screen->base ) {
 
 				wp_enqueue_style( 'availability-admin-styles' );
 				wp_enqueue_style( 'staylodgic-indicator-icons' );
@@ -605,7 +605,7 @@ class Staylodgic_Init {
 			}
 
 			// Availability
-			if ( isset( $current_admin_screen->base ) && 'overview_page_slgc-availability' === $current_admin_screen->base ) {
+			if ( isset( $current_admin_screen->base ) && 'overview_page_staylodgic-slg-availability' === $current_admin_screen->base ) {
 
 				wp_enqueue_style( 'availability-admin-styles' );
 				wp_enqueue_style( 'staylodgic-indicator-icons' );
@@ -701,7 +701,7 @@ class Staylodgic_Init {
 		if ( is_singular() ) {
 			global $post;
 			// Check if the post content contains the Contact Form 7 shortcode
-			if ( has_shortcode( $post->post_content, 'form_input' ) || 'slgc_guestregistry' === get_post_type() ) {
+			if ( has_shortcode( $post->post_content, 'form_input' ) || 'staylodgic_guestrgs' === get_post_type() ) {
 				// Enqueue the Signature Pad script
 				wp_enqueue_script( 'guest-registration', plugin_dir_url( __FILE__ ) . 'assets/js/guest-registration.js', array(), '1.0.0', true );
 				wp_enqueue_script( 'signature-pad', plugin_dir_url( __FILE__ ) . 'assets/js/signature_pad.umd.min.js', array(), '1.0.0', true );
@@ -716,32 +716,32 @@ class Staylodgic_Init {
 
 	// Registry Metabox
 	public function staylodgic_registryitemmetabox_init() {
-		add_meta_box( 'registryInfo-meta', esc_html__( 'Registry Options', 'staylodgic' ), 'staylodgic_registryitem_metaoptions', 'slgc_guestregistry', 'normal', 'low' );
-		add_meta_box( 'registryInfo-changelog', esc_html__( 'Registry Changelog', 'staylodgic' ), 'staylodgic_registryitem_changelog', 'slgc_guestregistry', 'normal', 'low' );
+		add_meta_box( 'registryInfo-meta', esc_html__( 'Registry Options', 'staylodgic' ), 'staylodgic_registryitem_metaoptions', 'staylodgic_guestrgs', 'normal', 'low' );
+		add_meta_box( 'registryInfo-changelog', esc_html__( 'Registry Changelog', 'staylodgic' ), 'staylodgic_registryitem_changelog', 'staylodgic_guestrgs', 'normal', 'low' );
 	}
 	// Reservations Metabox
 	public function staylodgic_reservationsitemmetabox_init() {
-		add_meta_box( 'activityresInfo-meta', esc_html__( 'Activity Reservations Options', 'staylodgic' ), 'staylodgic_activityresitem_metaoptions', 'slgc_activityres', 'normal', 'low' );
-		add_meta_box( 'activityresInfo-changelog', esc_html__( 'Activity Reservations Changelog', 'staylodgic' ), 'staylodgic_activityresitem_changelog', 'slgc_activityres', 'normal', 'low' );
+		add_meta_box( 'activityresInfo-meta', esc_html__( 'Activity Reservations Options', 'staylodgic' ), 'staylodgic_activityresitem_metaoptions', 'staylodgic_actvtres', 'normal', 'low' );
+		add_meta_box( 'activityresInfo-changelog', esc_html__( 'Activity Reservations Changelog', 'staylodgic' ), 'staylodgic_activityresitem_changelog', 'staylodgic_actvtres', 'normal', 'low' );
 	}
 	// ActivityRes Metabox
 	public function staylodgic_activityresitemmetabox_init() {
-		add_meta_box( 'reservationsInfo-meta', esc_html__( 'Reservation Options', 'staylodgic' ), 'staylodgic_reservationsitem_metaoptions', 'slgc_reservations', 'normal', 'low' );
-		add_meta_box( 'reservationsInfo-changelog', esc_html__( 'Reservation Changelog', 'staylodgic' ), 'staylodgic_reservationsitem_changelog', 'slgc_reservations', 'normal', 'low' );
+		add_meta_box( 'reservationsInfo-meta', esc_html__( 'Reservation Options', 'staylodgic' ), 'staylodgic_reservationsitem_metaoptions', 'staylodgic_bookings', 'normal', 'low' );
+		add_meta_box( 'reservationsInfo-changelog', esc_html__( 'Reservation Changelog', 'staylodgic' ), 'staylodgic_reservationsitem_changelog', 'staylodgic_bookings', 'normal', 'low' );
 	}
 	// Customer Metabox
 	public function staylodgic_customersitemmetabox_init() {
-		add_meta_box( 'customersInfo-meta', esc_html__( 'Customer Options', 'staylodgic' ), 'staylodgic_customersitem_metaoptions', 'slgc_customers', 'normal', 'low' );
+		add_meta_box( 'customersInfo-meta', esc_html__( 'Customer Options', 'staylodgic' ), 'staylodgic_customersitem_metaoptions', 'staylodgic_customers', 'normal', 'low' );
 	}
 	// Room Metabox
 	public function staylodgic_roomitemmetabox_init() {
-		add_meta_box( 'room-meta', esc_html__( 'Room Options', 'staylodgic' ), 'staylodgic_roomitem_metaoptions', 'slgc_room', 'normal', 'low' );
-		add_meta_box( 'room-changelog', esc_html__( 'Room Changelog', 'staylodgic' ), 'staylodgic_roomitem_changelog', 'slgc_room', 'normal', 'low' );
+		add_meta_box( 'room-meta', esc_html__( 'Room Options', 'staylodgic' ), 'staylodgic_roomitem_metaoptions', 'staylodgic_rooms', 'normal', 'low' );
+		add_meta_box( 'room-changelog', esc_html__( 'Room Changelog', 'staylodgic' ), 'staylodgic_roomitem_changelog', 'staylodgic_rooms', 'normal', 'low' );
 	}
 	// Acitivity Metabox
 	public function staylodgic_activityitemmetabox_init() {
-		add_meta_box( 'activity-meta', esc_html__( 'Activity Options', 'staylodgic' ), 'staylodgic_activityitem_metaoptions', 'slgc_activity', 'normal', 'low' );
-		add_meta_box( 'activity-changelog', esc_html__( 'Activity Changelog', 'staylodgic' ), 'staylodgic_activityitem_changelog', 'slgc_activity', 'normal', 'low' );
+		add_meta_box( 'activity-meta', esc_html__( 'Activity Options', 'staylodgic' ), 'staylodgic_activityitem_metaoptions', 'staylodgic_actvties', 'normal', 'low' );
+		add_meta_box( 'activity-changelog', esc_html__( 'Activity Changelog', 'staylodgic' ), 'staylodgic_activityitem_changelog', 'staylodgic_actvties', 'normal', 'low' );
 	}
 }
 

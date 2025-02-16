@@ -5,19 +5,19 @@ class Staylodgic_Reservation_Posts {
 	public function __construct() {
 		add_action( 'init', array( $this, 'init' ) );
 
-		add_filter( 'manage_edit-slgc_reservations_columns', array( $this, 'slgc_reservations_edit_columns' ) );
-		add_filter( 'manage_slgc_reservations_posts_custom_column', array( $this, 'slgc_reservations_custom_columns' ) );
+		add_filter( 'manage_edit-staylodgic_bookings_columns', array( $this, 'staylodgic_bookings_edit_columns' ) );
+		add_filter( 'manage_staylodgic_bookings_posts_custom_column', array( $this, 'staylodgic_bookings_custom_columns' ) );
 
-		add_filter( 'manage_edit-slgc_reservations_sortable_columns', array( $this, 'slgc_reservations_sortable_columns' ) );
+		add_filter( 'manage_edit-staylodgic_bookings_sortable_columns', array( $this, 'staylodgic_bookings_sortable_columns' ) );
 	}
 
 
-	public function slgc_reservations_sortable_columns( $columns ) {
+	public function staylodgic_bookings_sortable_columns( $columns ) {
 		$columns['reservation_checkinout'] = 'reservation_checkinout';
 		return $columns;
 	}
 
-	public function slgc_reservations_edit_columns( $columns ) {
+	public function staylodgic_bookings_edit_columns( $columns ) {
 		unset( $columns['author'] );
 		$new_columns = array(
 			'reservation_customer'   => __( 'Customer', 'staylodgic' ),
@@ -32,7 +32,7 @@ class Staylodgic_Reservation_Posts {
 
 		return array_merge( $columns, $new_columns );
 	}
-	public function slgc_reservations_custom_columns( $columns ) {
+	public function staylodgic_bookings_custom_columns( $columns ) {
 		global $post;
 		$custom    = get_post_custom();
 		$image_url = wp_get_attachment_thumb_url( get_post_thumbnail_id( $post->ID ) );
@@ -103,7 +103,7 @@ class Staylodgic_Reservation_Posts {
 				echo esc_html( $room_title );
 				break;
 			case 'mreservation_section':
-				echo get_the_term_list( get_the_id(), 'slgc_rescat', '', ', ', '' );
+				echo get_the_term_list( get_the_id(), 'staylodgic_rescat', '', ', ', '' );
 				break;
 		}
 	}
@@ -141,13 +141,13 @@ class Staylodgic_Reservation_Posts {
 			'supports'           => array( 'title', 'author', 'thumbnail' ),
 		);
 
-		register_post_type( 'slgc_reservations', $args );
+		register_post_type( 'staylodgic_bookings', $args );
 		/*
 		 * Add Taxonomy
 		 */
 		register_taxonomy(
-			'slgc_rescat',
-			array( 'slgc_reservations' ),
+			'staylodgic_rescat',
+			array( 'staylodgic_bookings' ),
 			array(
 				'labels'       => array(
 					'name'          => __( 'Sections', 'staylodgic' ),

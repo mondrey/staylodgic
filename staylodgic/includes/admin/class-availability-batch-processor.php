@@ -47,7 +47,7 @@ class Availability_Batch_Processor extends Batch_Processor_Base {
 			__( 'Import iCal Availabilitiy', 'staylodgic' ),
 			__( 'Import iCal Availabilitiy', 'staylodgic' ),
 			'edit_posts',
-			'slgc-import-availability-ical',
+			'staylodgic-slg-import-availability-ical',
 			array( $this, 'ical_availability_import' )
 		);
 	}
@@ -374,9 +374,13 @@ class Availability_Batch_Processor extends Batch_Processor_Base {
 								$adjusted_values = staylodgic_apply_timezone_to_date_and_time( $sync_date, $sync_time, $timezone );
 
 								echo '<div class="availability-sync-stats">';
-								echo '<span>' . esc_html__( 'Last sync: ', 'staylodgic' ) . esc_html( $adjusted_values['adjustedDate'] ) . '</span>';
-								echo '<span>' . esc_html__( 'Time: ', 'staylodgic' ) . esc_html( $adjusted_values['adjustedTime'] ) . '</span>';
-								echo '<span>' . esc_html__( 'Processed in ( seconds ): ', 'staylodgic' ) . esc_html( $room_channel_availability['stats'][ $key ]['syncprocessing_time'] ) . '</span>';
+								if ( is_array( $adjusted_values ) && isset( $adjusted_values['adjusted_zone_date'] ) ) {
+									echo '<span>' . esc_html__( 'Last sync: ', 'staylodgic' ) . esc_html( $adjusted_values['adjusted_zone_date'] ) . '</span>';
+									echo '<span>' . esc_html__( 'Time: ', 'staylodgic' ) . esc_html( $adjusted_values['adjusted_zone_time'] ) . '</span>';
+									echo '<span>' . esc_html__( 'Processed in ( seconds ): ', 'staylodgic' ) . esc_html( $room_channel_availability['stats'][ $key ]['syncprocessing_time'] ) . '</span>';
+								} else {
+									echo '<span>' . esc_html__( 'Last sync: Not Available', 'staylodgic' ) . '</span>';
+								}
 								if ( ! $room_channel_availability['stats'][ $key ]['file_ok'] ) {
 									echo '<span class="file-error">' . esc_html__( 'File error', 'staylodgic' ) . '</span>';
 								}
@@ -418,7 +422,7 @@ class Availability_Batch_Processor extends Batch_Processor_Base {
 			__( 'Export iCal Availability', 'staylodgic' ),
 			__( 'Export iCal Availability', 'staylodgic' ),
 			'edit_posts',
-			'slgc-export-availability-ical',
+			'staylodgic-slg-export-availability-ical',
 			array( $this, 'export_availability_ical_page' )
 		);
 	}

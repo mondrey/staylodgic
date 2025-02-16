@@ -158,8 +158,8 @@ function staylodgic_apply_timezone_to_date_and_time( $date, $time, $timezone ) {
 
 		// Return the adjusted date and time
 		return array(
-			'adjustedDate' => $date_time->format( 'Y-m-d' ),
-			'adjustedTime' => $date_time->format( 'H:i:s' ),
+			'adjusted_zone_date' => $date_time->format( 'Y-m-d' ),
+			'adjusted_zone_time' => $date_time->format( 'H:i:s' ),
 		);
 	} catch ( Exception $e ) {
 		// Handle exceptions or invalid input

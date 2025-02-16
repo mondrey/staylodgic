@@ -41,7 +41,7 @@ class Analytics_Bookings {
 			__( 'Overview', 'staylodgic' ),
 			__( 'Overview', 'staylodgic' ),
 			'edit_posts',
-			'slgc-dashboard',
+			'staylodgic-slg-dashboard',
 			array( $this, 'display_dashboard' ),
 			'dashicons-dashboard',
 			32 // Position parameter
@@ -49,11 +49,11 @@ class Analytics_Bookings {
 
 		// Add the first submenu page. Often this duplicates the main menu page.
 		add_submenu_page(
-			'slgc-dashboard',          // Parent slug
+			'staylodgic-slg-dashboard',          // Parent slug
 			__( 'Bookings Overview', 'staylodgic' ),                    // Page title
 			__( 'Bookings Overview', 'staylodgic' ),                    // Menu title
 			'edit_posts',               // Capability
-			'slgc-dashboard',          // Menu slug
+			'staylodgic-slg-dashboard',          // Menu slug
 			array( $this, 'display_dashboard' ) // Callback function
 		);
 	}
@@ -239,7 +239,7 @@ class Analytics_Bookings {
 
 		$query = new \WP_Query(
 			array(
-				'post_type'      => 'slgc_reservations',
+				'post_type'      => 'staylodgic_bookings',
 				'posts_per_page' => -1,
 				'meta_query'     => array(
 					'relation' => 'OR',
@@ -347,7 +347,7 @@ class Analytics_Bookings {
 
 		$query = new \WP_Query(
 			array(
-				'post_type'      => 'slgc_reservations',
+				'post_type'      => 'staylodgic_bookings',
 				'posts_per_page' => -1,
 				'meta_query'     => array(
 					'relation' => 'OR',
@@ -427,7 +427,7 @@ class Analytics_Bookings {
 
 		$query = new \WP_Query(
 			array(
-				'post_type'      => 'slgc_reservations',
+				'post_type'      => 'staylodgic_bookings',
 				'posts_per_page' => -1,
 				'meta_query'     => array(
 					'relation' => 'OR',
@@ -522,7 +522,7 @@ class Analytics_Bookings {
 				// Query for revenue and nights
 				$revenue_query = new \WP_Query(
 					array(
-						'post_type'      => 'slgc_reservations',
+						'post_type'      => 'staylodgic_bookings',
 						'posts_per_page' => -1,
 						'meta_query'     => array(
 							'relation' => 'AND',
@@ -615,7 +615,7 @@ class Analytics_Bookings {
 				// Query for revenue
 				$revenue_query = new \WP_Query(
 					array(
-						'post_type'      => 'slgc_reservations',
+						'post_type'      => 'staylodgic_bookings',
 						'posts_per_page' => -1,
 						'meta_query'     => array(
 							'relation' => 'AND',
@@ -703,7 +703,7 @@ class Analytics_Bookings {
 				// Query for confirmed bookings
 				$confirmed_query  = new \WP_Query(
 					array(
-						'post_type'      => 'slgc_reservations',
+						'post_type'      => 'staylodgic_bookings',
 						'posts_per_page' => -1,
 						'meta_query'     => array(
 							'relation' => 'AND',
@@ -725,7 +725,7 @@ class Analytics_Bookings {
 				// Query for cancelled bookings
 				$cancelled_query  = new \WP_Query(
 					array(
-						'post_type'      => 'slgc_reservations',
+						'post_type'      => 'staylodgic_bookings',
 						'posts_per_page' => -1,
 						'meta_query'     => array(
 							'relation' => 'AND',

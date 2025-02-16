@@ -154,7 +154,7 @@ class Modals {
 							<label for="room"><i class="fa-solid fa-bed"></i> <?php esc_html_e( 'Room:', 'staylodgic' ); ?></label>
 							<select class="form-select" name="room">
 								<?php
-								$rooms                = get_posts( 'post_type=slgc_room&orderby=title&numberposts=-1&order=ASC' );
+								$rooms                = get_posts( 'post_type=staylodgic_rooms&orderby=title&numberposts=-1&order=ASC' );
 								$list_options['none'] = 'Not Selected';
 								if ( $rooms ) {
 									foreach ( $rooms as $key => $list ) {
@@ -209,7 +209,7 @@ class Modals {
 							<label for="room"><i class="fa-solid fa-bed"></i> <?php esc_html_e( 'Room:', 'staylodgic' ); ?></label>
 							<select class="form-select" name="room">
 								<?php
-								$featured_pages       = get_posts( 'post_type=slgc_room&orderby=title&numberposts=-1&order=ASC' );
+								$featured_pages       = get_posts( 'post_type=staylodgic_rooms&orderby=title&numberposts=-1&order=ASC' );
 								$list_options['none'] = esc_html__( 'Not Selected', 'staylodgic' );
 								if ( $featured_pages ) {
 									foreach ( $featured_pages as $key => $list ) {

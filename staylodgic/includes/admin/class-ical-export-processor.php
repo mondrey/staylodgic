@@ -73,7 +73,7 @@ class Ical_Export_Processor {
 			__( 'Export Guest Registrations', 'staylodgic' ),
 			__( 'Export Guest Registrations', 'staylodgic' ),
 			'edit_posts',
-			'slgc-export-registrations-ical',
+			'staylodgic-slg-export-registrations-ical',
 			array( $this, 'csv_registrations_export' )
 		);
 	}
@@ -90,7 +90,7 @@ class Ical_Export_Processor {
 			__( 'Export Bookings', 'staylodgic' ),
 			__( 'Export Bookings', 'staylodgic' ),
 			'edit_posts',
-			'slgc-export-booking-ical',
+			'staylodgic-slg-export-booking-ical',
 			array( $this, 'csv_bookings_export' )
 		);
 	}

@@ -22,7 +22,7 @@ class Rooms {
 	 */
 	public static function has_rooms() {
 		$args = array(
-			'post_type'      => 'slgc_room',
+			'post_type'      => 'staylodgic_rooms',
 			'posts_per_page' => 1, // Only need to check if at least one room exists
 			'fields'         => 'ids', // Only retrieve the post IDs
 			'post_status'    => 'publish',
@@ -41,7 +41,7 @@ class Rooms {
 	public static function query_rooms() {
 		$rooms = get_posts(
 			array(
-				'post_type'   => 'slgc_room',
+				'post_type'   => 'staylodgic_rooms',
 				'numberposts' => -1,
 				'orderby'     => 'menu_order',
 				'order'       => 'ASC',
@@ -565,7 +565,7 @@ class Rooms {
 			$stay_quantity_array[ $date ] = $final_quantity;
 		}
 
-		// Update the metadata for the 'slgc_reservations' post
+		// Update the metadata for the 'staylodgic_bookings' post
 		if ( ! empty( $stay_post_id ) && is_numeric( $stay_post_id ) && is_array( $stay_quantity_array ) ) {
 			// Update the post meta with the modified quantity array
 			update_post_meta( $stay_post_id, 'staylodgic_quantity_array', $stay_quantity_array );
@@ -726,7 +726,7 @@ class Rooms {
 			$got_room_rate_array[ $date ] = $rate;
 		}
 
-		// Update the metadata for the 'slgc_reservations' post
+		// Update the metadata for the 'staylodgic_bookings' post
 		if ( ! empty( $stay_post_id ) && is_numeric( $stay_post_id ) ) {
 			// Update the post meta with the modified quantity array
 			update_post_meta( $stay_post_id, 'staylodgic_roomrate_array', $got_room_rate_array );
