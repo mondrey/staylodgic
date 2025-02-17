@@ -1235,6 +1235,9 @@ a.book-button:hover:active,
 .registration-successful-inner {
 	padding: 30px;
 }
+.registration-successful-inner p {
+	margin-bottom: 10px;
+}
 .registration-successful-inner .booking-number {
 	font-weight: 500;
 	color: #000;

@@ -349,8 +349,9 @@ class Options_Panel {
 	 * @return void
 	 */
 	public function register_settings() {
+
 		register_setting(
-			$this->option_group_name,
+			'staylodgic_settings_group',
 			$this->option_name,
 			array(
 				'sanitize_callback' => array( $this, 'sanitize_fields' ),
