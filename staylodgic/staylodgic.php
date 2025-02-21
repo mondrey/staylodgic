@@ -38,6 +38,7 @@ add_filter( 'show_admin_bar', '__return_false' );
 function staylodgic_load() {
 	// Load localization file
 	load_plugin_textdomain( 'staylodgic' );
-	require __DIR__ . '/staylodgic-loader.php';
+	require __DIR__ . '/class-staylodgic-init.php';
+	new \Staylodgic\Staylodgic_Init();
 }
 add_action( 'plugins_loaded', 'staylodgic_load' );

@@ -1,4 +1,7 @@
 <?php
+
+namespace Staylodgic;
+
 class Staylodgic_Activity_Reservation_Posts {
 
 
@@ -128,4 +131,3 @@ class Staylodgic_Activity_Reservation_Posts {
 		);
 	}
 }
-$staylodgic_activityres_post_type = new Staylodgic_Activity_Reservation_Posts();

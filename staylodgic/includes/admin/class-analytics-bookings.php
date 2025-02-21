@@ -993,9 +993,5 @@ class Analytics_Bookings {
 		$guest_list_html = '';
 
 		return '<canvas id="' . esc_attr( $this->booking_id ) . '" class="staylodgic-chart" data-type="' . esc_attr( $this->type ) . '" data-data="' . esc_attr( $data ) . '" data-options="' . esc_attr( $options ) . '"></canvas>' . $guest_list_html;
-
 	}
 }
-
-$booking_id = false;
-$analytics  = new \Staylodgic\Analytics_Bookings( $booking_id );

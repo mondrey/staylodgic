@@ -1,4 +1,7 @@
 <?php
+
+namespace Staylodgic;
+
 class Staylodgic_Reservation_Posts {
 
 
@@ -167,4 +170,3 @@ class Staylodgic_Reservation_Posts {
 		);
 	}
 }
-$staylodgic_kbase_post_type = new Staylodgic_Reservation_Posts();

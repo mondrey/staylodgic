@@ -444,4 +444,3 @@ class Data {
 		}
 	}
 }
-$instance = new \Staylodgic\Data();

@@ -716,5 +716,3 @@ class Invoicing {
 		return ob_get_clean();
 	}
 }
-
-$instance = new \Staylodgic\Invoicing();

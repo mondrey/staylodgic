@@ -1863,5 +1863,3 @@ class Activity {
 		wp_die();
 	}
 }
-
-$instance = new \Staylodgic\Activity();

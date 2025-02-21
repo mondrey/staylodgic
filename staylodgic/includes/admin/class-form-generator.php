@@ -280,6 +280,3 @@ class Form_Generator {
 		return $shortcodes;
 	}
 }
-
-// Instantiate the class
-new \Staylodgic\Form_Generator();

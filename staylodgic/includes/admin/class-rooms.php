@@ -752,5 +752,3 @@ class Rooms {
 		wp_die(); // Optional: Terminate script execution
 	}
 }
-
-$instance = new \Staylodgic\Rooms();

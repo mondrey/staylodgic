@@ -139,5 +139,3 @@ class Availablity_Calendar_Year extends Availablity_Calendar_Base {
 		echo '</div>'; // Close the calendar-container div
 	}
 }
-
-$instance = new \Staylodgic\Availablity_Calendar_Year();

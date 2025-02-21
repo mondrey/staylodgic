@@ -1,4 +1,7 @@
 <?php
+
+namespace Staylodgic;
+
 class Staylodgic_Registration_Posts {
 
 	public function __construct() {
@@ -147,4 +150,3 @@ class Staylodgic_Registration_Posts {
 		exit;
 	}
 }
-$staylodgic_registration_post_type = new Staylodgic_Registration_Posts();

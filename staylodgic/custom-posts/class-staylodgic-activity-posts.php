@@ -1,6 +1,8 @@
 <?php
-class Staylodgic_Activity_Posts {
 
+namespace Staylodgic;
+
+class Staylodgic_Activity_Posts {
 
 	public function __construct() {
 		add_action( 'init', array( $this, 'init' ) );
@@ -205,5 +207,3 @@ class Staylodgic_Activity_Posts {
 		}
 	}
 }
-$staylodgic_activity_post_type = new Staylodgic_Activity_Posts();
-?>

@@ -211,5 +211,3 @@ class Tax {
 		return $price;
 	}
 }
-
-$instance = new \Staylodgic\Tax();

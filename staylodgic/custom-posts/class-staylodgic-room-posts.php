@@ -1,4 +1,7 @@
 <?php
+
+namespace Staylodgic;
+
 class Staylodgic_Room_Posts {
 
 
@@ -193,5 +196,3 @@ class Staylodgic_Room_Posts {
 		}
 	}
 }
-$staylodgic_room_post_type = new Staylodgic_Room_Posts();
-?>

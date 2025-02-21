@@ -881,6 +881,3 @@ class Analytics_Activity {
 		return '<canvas id="' . esc_attr( $this->activity_id ) . '" class="staylodgic-chart" data-type="' . esc_attr( $this->type ) . '" data-data="' . esc_attr( $data ) . '" data-options="' . esc_attr( $options ) . '"></canvas>' . $guest_list_html;
 	}
 }
-
-$activity_id = false;
-$analytics   = new \Staylodgic\Analytics_Activity( $activity_id );

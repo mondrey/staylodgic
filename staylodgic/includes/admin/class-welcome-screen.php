@@ -195,6 +195,3 @@ class Welcome_Screen {
 		echo '</div>'; // End of page wrapper
 	}
 }
-
-// Instantiate the class
-$welcome_instance = new \Staylodgic\Welcome_Screen();

@@ -126,5 +126,3 @@ class Cron {
 		return $schedules;
 	}
 }
-
-$instance = new \Staylodgic\Cron();

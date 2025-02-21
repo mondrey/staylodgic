@@ -100,11 +100,22 @@ class Staylodgic_Init {
 	 */
 	public function staylodgic_load_custom_posts() {
 		require_once plugin_dir_path( __FILE__ ) . '/custom-posts/class-staylodgic-reservation-posts.php';
+		new \Staylodgic\Staylodgic_Reservation_Posts();
+
 		require_once plugin_dir_path( __FILE__ ) . '/custom-posts/class-staylodgic-customer-posts.php';
+		new \Staylodgic\Staylodgic_Customer_Posts();
+
 		require_once plugin_dir_path( __FILE__ ) . '/custom-posts/class-staylodgic-registration-posts.php';
+		new \Staylodgic\Staylodgic_Registration_Posts();
+
 		require_once plugin_dir_path( __FILE__ ) . '/custom-posts/class-staylodgic-room-posts.php';
+		new \Staylodgic\Staylodgic_Room_Posts();
+
 		require_once plugin_dir_path( __FILE__ ) . '/custom-posts/class-staylodgic-activity-posts.php';
+		new \Staylodgic\Staylodgic_Activity_Posts();
+
 		require_once plugin_dir_path( __FILE__ ) . '/custom-posts/class-staylodgic-activity-reservation-posts.php';
+		new \Staylodgic\Staylodgic_Activity_Reservation_Posts();
 	}
 
 	/**
@@ -115,35 +126,78 @@ class Staylodgic_Init {
 	public function staylodgic_load_availablity_calendar() {
 
 		require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-cron.php';
+		new \Staylodgic\Cron();
 
 		require_once plugin_dir_path( __FILE__ ) . 'includes/admin-property-data.php';
-
 		require_once plugin_dir_path( __FILE__ ) . 'vendors/ics-parser/src/ICal/ICal.php';
 		require_once plugin_dir_path( __FILE__ ) . 'vendors/ics-parser/src/ICal/Event.php';
+
 		require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-analytics-bookings.php';
+		$booking_id = false;
+		new \Staylodgic\Analytics_Bookings( $booking_id );
+
 		require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-activity.php';
+		new \Staylodgic\Activity();
+
 		require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-analytics-activity.php';
+		$activity_id = false;
+		new \Staylodgic\Analytics_Activity( $activity_id );
+
 		require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-welcome-screen.php';
+		new \Staylodgic\Welcome_Screen();
+
 		require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-batch-processor-base.php';
+		new \Staylodgic\Batch_Processor_Base();
+
 		require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-ical-export-processor.php';
+		new \Staylodgic\Ical_Export_Processor();
+
 		require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-availability-batch-processor.php';
+		new \Staylodgic\Availability_Batch_Processor();
+
 		require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-availablity-calendar-base.php';
 		require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-availablity-calendar.php';
+		new \Staylodgic\Availablity_Calendar();
+
 		require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-availablity-calendar-year.php';
+		new \Staylodgic\Availablity_Calendar_Year();
+
 		require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-cache.php';
+		new \Staylodgic\Cache();
+
 		require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-rooms.php';
+		new \Staylodgic\Rooms();
+
 		require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-rates.php';
 		require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-customers.php';
+
 		require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-reservations.php';
+		new \Staylodgic\Reservations();
+
 		require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-common.php';
+
 		require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-data.php';
+		new \Staylodgic\Data();
+
 		require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-modals.php';
+
 		require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-booking.php';
+		new \Staylodgic\Booking();
+
 		require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-email-dispatcher.php';
+
 		require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-invoicing.php';
+		new \Staylodgic\Invoicing();
+
 		require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-guest-registry.php';
+		new \Staylodgic\Guest_Registry();
+
 		require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-form-generator.php';
+		new \Staylodgic\Form_Generator();
+
 		require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-tax.php';
+		new \Staylodgic\Tax();
+
 		require_once plugin_dir_path( __FILE__ ) . 'includes/admin/utilities.php';
 	}
 
@@ -744,5 +798,3 @@ class Staylodgic_Init {
 		add_meta_box( 'activity-changelog', esc_html__( 'Activity Changelog', 'staylodgic' ), 'staylodgic_activityitem_changelog', 'staylodgic_actvties', 'normal', 'low' );
 	}
 }
-
-new \Staylodgic\Staylodgic_Init();

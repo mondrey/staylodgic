@@ -966,5 +966,3 @@ class Availablity_Calendar extends Availablity_Calendar_Base {
 		return $tab_array;
 	}
 }
-
-$instance = new \Staylodgic\Availablity_Calendar();

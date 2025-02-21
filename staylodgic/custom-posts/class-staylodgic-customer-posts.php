@@ -1,4 +1,7 @@
 <?php
+
+namespace Staylodgic;
+
 class Staylodgic_Customer_Posts {
 
 
@@ -133,4 +136,3 @@ class Staylodgic_Customer_Posts {
 		);
 	}
 }
-$staylodgic_kbase_post_type = new Staylodgic_Customer_Posts();

@@ -813,5 +813,3 @@ class Guest_Registry {
 		return ob_get_clean();
 	}
 }
-
-$instance = new \Staylodgic\Guest_Registry();

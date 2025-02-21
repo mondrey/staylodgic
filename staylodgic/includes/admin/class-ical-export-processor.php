@@ -541,6 +541,3 @@ class Ical_Export_Processor {
 		exit;
 	}
 }
-
-// Instantiate the class
-$instance = new \Staylodgic\Ical_Export_Processor();

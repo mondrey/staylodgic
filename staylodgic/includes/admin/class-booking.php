@@ -2155,5 +2155,3 @@ class Booking {
 		wp_die();
 	}
 }
-
-$instance = new \Staylodgic\Booking();

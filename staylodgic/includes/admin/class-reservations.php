@@ -1715,5 +1715,3 @@ class Reservations {
 		wp_die(); // this is required to terminate immediately and return a proper response
 	}
 }
-
-$instance = new \Staylodgic\Reservations();

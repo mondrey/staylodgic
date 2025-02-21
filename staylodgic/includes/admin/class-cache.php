@@ -227,5 +227,3 @@ class Cache {
 		return true;
 	}
 }
-
-$instance = new \Staylodgic\Cache();

@@ -596,6 +596,3 @@ class Availability_Batch_Processor extends Batch_Processor_Base {
 		}
 	}
 }
-
-// Instantiate the class
-$availability_batch_processor = new \Staylodgic\Availability_Batch_Processor();

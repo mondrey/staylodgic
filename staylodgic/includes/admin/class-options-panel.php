@@ -360,7 +360,7 @@ class Options_Panel {
 		);
 
 		add_settings_section(
-			$this->option_name . '_sections',
+			'staylodgic_settings_sections',
 			'', // Set the title to an empty string because we'll add it in the callback
 			array( $this, 'section_heading_callback' ), // Use the custom callback
 			$this->option_name
@@ -374,6 +374,7 @@ class Options_Panel {
 				if ( array_key_exists( 'tab', $args ) ) {
 					$tr_class .= 'staylodgic-tab-item staylodgic-tab-item--' . sanitize_html_class( $args['tab'] );
 				}
+
 				add_settings_field(
 					$key,
 					$args['label'],

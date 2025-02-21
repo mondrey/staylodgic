@@ -209,6 +209,3 @@ class Batch_Processor_Base {
 		}
 	}
 }
-
-// Instantiate the class
-$instance = new \Staylodgic\Batch_Processor_Base();
