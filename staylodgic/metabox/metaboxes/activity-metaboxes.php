@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+// Exit if accessed directly
 function staylodgic_activity_metadata() {
 
 	$staylodgic_activity_box = array(

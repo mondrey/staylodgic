@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+// Exit if accessed directly
 function staylodgic_registry_metadata() {
 
 	$staylodgic_registry_box = array(

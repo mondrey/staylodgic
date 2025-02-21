@@ -1,5 +1,8 @@
 <?php
-
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+// Exit if accessed directly
 /**
  * Method staylodgic_get_loggedin_user_email
  *

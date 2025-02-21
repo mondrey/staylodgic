@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+// Exit if accessed directly
 function staylodgic_generate_metaboxes( $meta_data, $post_id ) {
 	// Use nonce for verification
 

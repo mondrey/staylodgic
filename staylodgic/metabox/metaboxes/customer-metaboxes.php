@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+// Exit if accessed directly
 function staylodgic_customers_metadata() {
 
 	$room_names = get_posts( 'post_type=staylodgic_rooms&orderby=title&numberposts=-1&order=ASC' );

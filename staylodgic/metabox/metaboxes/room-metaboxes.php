@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+// Exit if accessed directly
 function staylodgic_room_metadata() {
 
 	$staylodgic_room_box = array(

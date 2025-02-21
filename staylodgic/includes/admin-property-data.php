@@ -1,11 +1,15 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+// Exit if accessed directly
 /**
  * Room views
  *
- * @return array roomViews
+ * @return array roomviews
  */
 function staylodgic_get_room_views() {
-	$roomViews = array(
+	$roomviews = array(
 		'CityView'          => __( 'City View', 'staylodgic' ),
 		'SeaView'           => __( 'Sea View', 'staylodgic' ),
 		'MountainView'      => __( 'Mountain View', 'staylodgic' ),
@@ -38,16 +42,16 @@ function staylodgic_get_room_views() {
 		'LagoonView'        => __( 'Lagoon View', 'staylodgic' ),
 		'SideSeaView'       => __( 'Side Sea-view', 'staylodgic' ),
 	);
-	return $roomViews;
+	return $roomviews;
 }
 
 /**
  * Room facilities
  *
- * @return array roomFacilities
+ * @return array roomfacilities
  */
-function staylodgic_get_room_Facitilies() {
-	$roomFacilities = array(
+function staylodgic_get_room_facitilies() {
+	$roomfacilities = array(
 		'AC'          => __( 'Air Conditioning', 'staylodgic' ),
 		'TV'          => __( 'Television', 'staylodgic' ),
 		'WiFi'        => __( 'Free WiFi', 'staylodgic' ),
@@ -67,7 +71,7 @@ function staylodgic_get_room_Facitilies() {
 		'PetFriendly' => __( 'Pet Friendly', 'staylodgic' ),
 		'Conference'  => __( 'Conference Room', 'staylodgic' ),
 	);
-	return $roomFacilities;
+	return $roomfacilities;
 }
 
 /**
@@ -75,7 +79,7 @@ function staylodgic_get_room_Facitilies() {
  *
  * @return array amenities
  */
-function staylodgic_get_hotel_Amenities() {
+function staylodgic_get_hotel_amenities() {
 	$amenities = array(
 		'1'   => __( '24-hour front desk', 'staylodgic' ),
 		'5'   => __( 'Air conditioning', 'staylodgic' ),
@@ -153,7 +157,7 @@ function staylodgic_get_hotel_Amenities() {
  *
  * @return array amenities
  */
-function staylodgic_get_hotel_extended_Amenities() {
+function staylodgic_get_hotel_extended_amenities() {
 	$amenities = array(
 		'5000' => __( 'Breakfast in the room', 'staylodgic' ),
 		'5001' => __( 'Public transport tickets', 'staylodgic' ),
