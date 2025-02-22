@@ -38,7 +38,7 @@ class Activity {
 		add_action( 'wp_ajax_book_activity', array( $this, 'book_activity' ) );
 		add_action( 'wp_ajax_nopriv_book_activity', array( $this, 'book_activity' ) );
 
-		add_shortcode( 'activity_booking_search', array( $this, 'activity_search_shortcode' ) );
+		add_shortcode( 'staylodgic_activity_booking_search', array( $this, 'activity_search_shortcode' ) );
 
 		add_filter( 'the_content', array( $this, 'activity_content' ) );
 

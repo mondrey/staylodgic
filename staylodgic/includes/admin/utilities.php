@@ -48,25 +48,25 @@ function staylodgic_get_template_pages() {
 			'title'    => 'Book Room',
 			'slug'     => 'book-room',
 			'template' => 'template-bookroom.php',
-			'content'  => '[hotel_booking_search]',
+			'content'  => '[staylodgic_hotel_booking_search]',
 		),
 		array(
 			'title'    => 'Book Activity',
 			'slug'     => 'book-activity',
 			'template' => 'template-bookactivity.php',
-			'content'  => '[activity_booking_search]',
+			'content'  => '[staylodgic_activity_booking_search]',
 		),
 		array(
 			'title'    => 'Booking Details',
 			'slug'     => 'booking-details',
 			'template' => 'template-bookingdetails.php',
-			'content'  => '[hotel_booking_details]',
+			'content'  => '[staylodgic_hotel_booking_details]',
 		),
 		array(
 			'title'    => 'Guest Registration',
 			'slug'     => 'guest-registration',
 			'template' => 'template-guestregistration.php',
-			'content'  => '[guest_registration]',
+			'content'  => '[staylodgic_guest_registration]',
 		),
 		// Add more pages as needed
 	);

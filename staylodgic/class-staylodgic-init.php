@@ -755,7 +755,7 @@ class Staylodgic_Init {
 		if ( is_singular() ) {
 			global $post;
 			// Check if the post content contains the Contact Form 7 shortcode
-			if ( has_shortcode( $post->post_content, 'form_input' ) || 'staylodgic_guestrgs' === get_post_type() ) {
+			if ( has_shortcode( $post->post_content, 'staylodgic_form_input' ) || 'staylodgic_guestrgs' === get_post_type() ) {
 				// Enqueue the Signature Pad script
 				wp_enqueue_script( 'guest-registration', plugin_dir_url( __FILE__ ) . 'assets/js/guest-registration.js', array(), '1.0.0', true );
 				wp_enqueue_script( 'signature-pad', plugin_dir_url( __FILE__ ) . 'assets/js/signature_pad.umd.min.js', array(), '1.0.0', true );

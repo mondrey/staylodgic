@@ -27,7 +27,7 @@ class Guest_Registry {
 	) {
 		$this->stay_booking_number = get_post_meta( get_the_id(), 'staylodgic_registry_bookingnumber', true );
 
-		add_shortcode( 'guest_registration', array( $this, 'stay_guest_registration' ) );
+		add_shortcode( 'staylodgic_guest_registration', array( $this, 'stay_guest_registration' ) );
 
 		add_action( 'wp_ajax_request_registration_details', array( $this, 'request_registration_details' ) );
 		add_action( 'wp_ajax_nopriv_request_registration_details', array( $this, 'request_registration_details' ) );
@@ -647,9 +647,9 @@ class Guest_Registry {
 				$form_start_tag  = '<div class="registration_form_wrap">';
 				$form_start_tag .= '<div class="registration_form">';
 				$form_start_tag .= '<div class="registration-column registration-column-one registration_form_inputs">';
-				$form_start      = '[form_start id="guestregistration" class="guest-registration" action="submission_url" method="post"]';
-				$form_submit     = '[form_input type="submit" id="submitregistration" class="book-button" value="' . __( 'Save Registration', 'staylodgic' ) . '"]';
-				$form_end        = '[form_end]';
+				$staylodgic_form_start      = '[staylodgic_form_start id="guestregistration" class="guest-registration" action="submission_url" method="post"]';
+				$form_submit     = '[staylodgic_form_input type="submit" id="submitregistration" class="book-button" value="' . __( 'Save Registration', 'staylodgic' ) . '"]';
+				$staylodgic_form_end        = '[staylodgic_form_end]';
 				$form_end_tag    = '</div>';
 				$form_end_tag   .= '<div class="registration-column registration-column-two">';
 				$form_end_tag   .= '<div id="booking-summary-wrap">';
@@ -660,7 +660,7 @@ class Guest_Registry {
 				$form_end_tag   .= '</div>';
 				$form_end_tag   .= '</div>';
 
-				$final_shortcode = $form_start_tag . $form_start . $saved_shortcode . $form_submit . $form_end . $form_end_tag;
+				$final_shortcode = $form_start_tag . $staylodgic_form_start . $saved_shortcode . $form_submit . $staylodgic_form_end . $form_end_tag;
 
 				// Append the shortcode to the original content
 				$content .= '<div class="guestregistry-shortcode-content">' . do_shortcode( $final_shortcode ) . '</div>';

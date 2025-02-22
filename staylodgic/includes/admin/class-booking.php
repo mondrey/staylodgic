@@ -51,8 +51,8 @@ class Booking {
 		$this->discount_label          = $discount_label;
 		$this->stay_booking_number     = uniqid();
 
-		add_shortcode( 'hotel_booking_search', array( $this, 'hotel_booking_search_form' ) );
-		add_shortcode( 'hotel_booking_details', array( $this, 'hotel_booking_specs_details' ) );
+		add_shortcode( 'staylodgic_hotel_booking_search', array( $this, 'hotel_booking_search_form' ) );
+		add_shortcode( 'staylodgic_hotel_booking_details', array( $this, 'hotel_booking_specs_details' ) );
 		// AJAX handler to save room metadata
 
 		add_action( 'wp_ajax_booking_booking_search', array( $this, 'booking_booking_search' ) );
