@@ -124,3 +124,31 @@ StayLodgic is a powerful, user-friendly hotel management plugin designed to simp
 
 * Improved Decision-Making
   - Leverage data insights to optimize operations and improve guest satisfaction.
+
+## Development
+This plugin uses minified JS and CSS files for better performance.
+Source files are available in the following repository:
+
+driver.js
+https://github.com/kamranahmedse/driver.js
+
+DataTables
+https://github.com/DataTables/DataTablesSrc
+
+Lightbox for Bootstrap 5
+https://github.com/trvswgnr/bs5-lightbox
+
+HTML2Canvas
+https://github.com/niklasvh/html2canvas
+
+Signature Pad
+https://github.com/szimek/signature_pad
+
+VelocityJS
+https://github.com/julianshapiro/velocity
+
+Fontawesome
+https://github.com/FortAwesome/Font-Awesome
+
+QRcode JS
+https://github.com/davidshimjs/qrcodejs

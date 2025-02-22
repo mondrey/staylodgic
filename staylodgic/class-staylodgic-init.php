@@ -34,7 +34,6 @@ class Staylodgic_Init {
 		add_action( 'admin_init', array( $this, 'staylodgic_roomitemmetabox_init' ) );
 		add_action( 'admin_init', array( $this, 'staylodgic_activityitemmetabox_init' ) );
 
-		add_action( 'init', array( $this, 'staylodgic_load_textdomain' ) );
 		add_action( 'init', array( $this, 'staylodgic_load_metaboxes' ) );
 		add_action( 'init', array( $this, 'staylodgic_load_themeoptions' ) );
 
@@ -82,15 +81,6 @@ class Staylodgic_Init {
 	 */
 	public function staylodgic_custom_image_size() {
 		add_image_size( 'staylodgic-large-square', 770, 770, true ); // Square.
-	}
-
-	/**
-	 * Set textdomain
-	 *
-	 * @return void
-	 */
-	public function staylodgic_load_textdomain() {
-		load_plugin_textdomain( 'staylodgic', false, basename( __DIR__ ) . '/languages' );
 	}
 
 	/**
@@ -269,9 +259,9 @@ class Staylodgic_Init {
 
 		wp_enqueue_script( 'common-scripts', plugin_dir_url( __FILE__ ) . 'admin/js/common.js', array( 'jquery' ), null, true );
 
-		wp_register_style( 'fontawesome-6', plugin_dir_url( __FILE__ ) . 'assets/fonts/fontawesome-free-6.4.0-web/css/fontawesome.css', false, 'screen' );
-		wp_register_style( 'fontawesome-6-brands', plugin_dir_url( __FILE__ ) . 'assets/fonts/fontawesome-free-6.4.0-web/css/all.css', false, 'screen' );
-		wp_register_style( 'fontawesome-6-solid', plugin_dir_url( __FILE__ ) . 'assets/fonts/fontawesome-free-6.4.0-web/css/solid.css', false, 'screen' );
+		wp_register_style( 'fontawesome-6', plugin_dir_url( __FILE__ ) . 'assets/fonts/fontawesome-free-6.7.2-web/css/fontawesome.css', false, 'screen' );
+		wp_register_style( 'fontawesome-6-brands', plugin_dir_url( __FILE__ ) . 'assets/fonts/fontawesome-free-6.7.2-web/css/all.css', false, 'screen' );
+		wp_register_style( 'fontawesome-6-solid', plugin_dir_url( __FILE__ ) . 'assets/fonts/fontawesome-free-6.7.2-web/css/solid.css', false, 'screen' );
 
 		wp_register_script( 'bootstrap', plugin_dir_url( __FILE__ ) . 'assets/js/bootstrap/js/bootstrap.bundle.min.js', array( 'jquery' ), null, true );
 		wp_register_style( 'bootstrap', plugin_dir_url( __FILE__ ) . 'assets/js/bootstrap/css/bootstrap.min.css', false, 'screen' );
@@ -728,9 +718,9 @@ class Staylodgic_Init {
 		wp_enqueue_script( 'velocity-ui', plugin_dir_url( __FILE__ ) . 'assets/js/velocity.ui.js', array( 'jquery' ), null, true );
 		wp_enqueue_script( 'common-scripts', plugin_dir_url( __FILE__ ) . 'admin/js/common.js', array( 'jquery' ), null, true );
 
-		wp_register_style( 'fontawesome-6', plugin_dir_url( __FILE__ ) . 'assets/fonts/fontawesome-free-6.4.0-web/css/fontawesome.css', false, 'screen' );
-		wp_register_style( 'fontawesome-6-brands', plugin_dir_url( __FILE__ ) . 'assets/fonts/fontawesome-free-6.4.0-web/css/all.css', false, 'screen' );
-		wp_register_style( 'fontawesome-6-solid', plugin_dir_url( __FILE__ ) . 'assets/fonts/fontawesome-free-6.4.0-web/css/solid.css', false, 'screen' );
+		wp_register_style( 'fontawesome-6', plugin_dir_url( __FILE__ ) . 'assets/fonts/fontawesome-free-6.7.2-web/css/fontawesome.css', false, 'screen' );
+		wp_register_style( 'fontawesome-6-brands', plugin_dir_url( __FILE__ ) . 'assets/fonts/fontawesome-free-6.7.2-web/css/all.css', false, 'screen' );
+		wp_register_style( 'fontawesome-6-solid', plugin_dir_url( __FILE__ ) . 'assets/fonts/fontawesome-free-6.7.2-web/css/solid.css', false, 'screen' );
 
 		wp_enqueue_script( 'frontend-calendar', array( 'jquery' ), null, true );
 		wp_enqueue_script( 'payment-helper' );
