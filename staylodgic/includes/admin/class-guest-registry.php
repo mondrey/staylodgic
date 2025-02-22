@@ -643,22 +643,22 @@ class Guest_Registry {
 					$saved_shortcode   = $form_gen_instance->default_shortcodes();
 				}
 
-				$saved_shortcode = stripslashes( $saved_shortcode );
-				$form_start_tag  = '<div class="registration_form_wrap">';
-				$form_start_tag .= '<div class="registration_form">';
-				$form_start_tag .= '<div class="registration-column registration-column-one registration_form_inputs">';
-				$staylodgic_form_start      = '[staylodgic_form_start id="guestregistration" class="guest-registration" action="submission_url" method="post"]';
-				$form_submit     = '[staylodgic_form_input type="submit" id="submitregistration" class="book-button" value="' . __( 'Save Registration', 'staylodgic' ) . '"]';
-				$staylodgic_form_end        = '[staylodgic_form_end]';
-				$form_end_tag    = '</div>';
-				$form_end_tag   .= '<div class="registration-column registration-column-two">';
-				$form_end_tag   .= '<div id="booking-summary-wrap">';
-				$form_end_tag   .= '<div class="summary-section-title">' . __( 'Online Registration', 'staylodgic' ) . '</div>';
-				$form_end_tag   .= '<div class="summary-section-description"><p>' . __( 'Please fill the form for Online Registration.</p><p>You can fill according to the number of guests.</p><p>You can submit a registration if you think a mistake was made in a previous one.', 'staylodgic' ) . '</p></div>';
-				$form_end_tag   .= '</div>';
-				$form_end_tag   .= '</div>';
-				$form_end_tag   .= '</div>';
-				$form_end_tag   .= '</div>';
+				$saved_shortcode       = stripslashes( $saved_shortcode );
+				$form_start_tag        = '<div class="registration_form_wrap">';
+				$form_start_tag       .= '<div class="registration_form">';
+				$form_start_tag       .= '<div class="registration-column registration-column-one registration_form_inputs">';
+				$staylodgic_form_start = '[staylodgic_form_start id="guestregistration" class="guest-registration" action="submission_url" method="post"]';
+				$form_submit           = '[staylodgic_form_input type="submit" id="submitregistration" class="book-button" value="' . __( 'Save Registration', 'staylodgic' ) . '"]';
+				$staylodgic_form_end   = '[staylodgic_form_end]';
+				$form_end_tag          = '</div>';
+				$form_end_tag         .= '<div class="registration-column registration-column-two">';
+				$form_end_tag         .= '<div id="booking-summary-wrap">';
+				$form_end_tag         .= '<div class="summary-section-title">' . __( 'Online Registration', 'staylodgic' ) . '</div>';
+				$form_end_tag         .= '<div class="summary-section-description"><p>' . __( 'Please fill the form for Online Registration.</p><p>You can fill according to the number of guests.</p><p>You can submit a registration if you think a mistake was made in a previous one.', 'staylodgic' ) . '</p></div>';
+				$form_end_tag         .= '</div>';
+				$form_end_tag         .= '</div>';
+				$form_end_tag         .= '</div>';
+				$form_end_tag         .= '</div>';
 
 				$final_shortcode = $form_start_tag . $staylodgic_form_start . $saved_shortcode . $form_submit . $staylodgic_form_end . $form_end_tag;
 
