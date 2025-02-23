@@ -1195,6 +1195,7 @@ function staylodgic_get_allowed_tags() {
 			'dir'                   => true,
 			'lang'                  => true,
 			'xml:lang'              => true,
+			'data-qrcode'           => array(),
 			'data-occupancypercent' => array(),
 			'data-remaining'        => array(),
 			'data-date'             => array(),
