@@ -227,7 +227,7 @@ class Staylodgic_Init {
 
 		wp_register_script( 'staylodgic-parser', plugin_dir_url( __FILE__ ) . 'admin/js/booking-parser.js', array( 'jquery' ), null, true );
 		wp_register_script( 'html2canvas', plugin_dir_url( __FILE__ ) . 'assets/js/html2canvas.min.js', array( 'jquery' ), null, true );
-		wp_register_script( 'jsPDF', plugin_dir_url( __FILE__ ) . 'assets/js/jspdf/jspdf.umd.js', array( 'jquery' ), null, true );
+		wp_register_script( 'jsPDF', plugin_dir_url( __FILE__ ) . 'assets/js/jspdf/jspdf.umd.min.js', array( 'jquery' ), null, true );
 		wp_register_script( 'staylodgic-invoice', plugin_dir_url( __FILE__ ) . 'admin/js/invoice.js', array( 'jquery', 'jsPDF', 'html2canvas' ), null, true );
 		wp_register_style( 'staylodgic-invoice', plugin_dir_url( __FILE__ ) . 'admin/css/invoice.css', false, 'screen' );
 		wp_register_style( 'staylodgic-dashboard', plugin_dir_url( __FILE__ ) . 'admin/css/dashboard.css', false, 'screen' );

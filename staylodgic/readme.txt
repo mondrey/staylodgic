@@ -152,3 +152,18 @@ https://github.com/FortAwesome/Font-Awesome
 
 QRcode JS
 https://github.com/davidshimjs/qrcodejs
+
+PDFMake
+https://github.com/bpampuch/pdfmake
+
+Flatpickr
+https://github.com/flatpickr/flatpickr
+
+jsPDF
+https://github.com/parallax/jsPDF
+
+Chart.js
+https://github.com/chartjs/Chart.js
+
+Select2
+https://github.com/select2/select2
