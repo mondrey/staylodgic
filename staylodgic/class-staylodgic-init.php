@@ -198,6 +198,7 @@ class Staylodgic_Init {
 	 */
 	public function staylodgic_load_themeoptions() {
 		require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-options-panel.php';
+		require_once plugin_dir_path( __FILE__ ) . 'includes/admin/options-init.php';
 	}
 
 	/**
