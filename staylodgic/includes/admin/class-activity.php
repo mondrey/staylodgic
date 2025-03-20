@@ -408,8 +408,8 @@ class Activity {
 	public function get_activity_schedules_ajax_handler() {
 
 		// Check for nonce security
-		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'staylodgic-nonce-admin' ) ) {
-			wp_die( esc_html__( 'Invalid nonce.', 'staylodgic' ) );
+		if ( empty( $_POST['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['nonce'] ), 'staylodgic-nonce-admin' ) ) {
+			wp_die( esc_html__( 'Invalid nonce.', 'staylodgic' ), 403 );
 		}
 
 		$selected_date = isset( $_POST['selected_date'] ) ? sanitize_text_field( wp_unslash( $_POST['selected_date'] ) ) : null;
@@ -432,11 +432,10 @@ class Activity {
 	 */
 	public function get_activity_frontend_schedules_ajax_handler() {
 
-		// Verify the nonce
-		if ( ! isset( $_POST['staylodgic_searchbox_nonce'] ) || ! check_admin_referer( 'staylodgic-searchbox-nonce', 'staylodgic_searchbox_nonce' ) ) {
-			// Nonce verification failed; handle the error or reject the request
-			wp_send_json_error( array( 'message' => 'Failed' ) );
-			return;
+		// Check for nonce security
+		if ( empty( $_POST['staylodgic_searchbox_nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['staylodgic_searchbox_nonce'] ), 'staylodgic-searchbox-nonce' ) ) {
+			wp_send_json_error( array( 'message' => esc_html__( 'Nonce verification failed.', 'staylodgic' ) ), 403 );
+			wp_die();
 		}
 
 		$selected_date = isset( $_POST['selected_date'] ) ? sanitize_text_field( wp_unslash( $_POST['selected_date'] ) ) : null;
