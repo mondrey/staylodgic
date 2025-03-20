@@ -123,12 +123,12 @@ class Staylodgic_Registration_Posts {
 
 		// Check the nonce for security
 		if ( ! isset( $_POST['staylodgic_guestregistry_nonce'] ) || ! check_admin_referer( 'staylodgic_guestregistry_save_shortcode', 'staylodgic_guestregistry_nonce' ) ) {
-			wp_die( esc_html__( 'Nonce verification failed', 'staylodgic' ) );
+			wp_die( esc_html__( 'Nonce verification failed', 'staylodgic' ), 403 );
 		}
 
 		// Check if user has the required capability
 		if ( ! current_user_can( 'edit_posts' ) ) {
-			wp_die( esc_html__( 'Permission denied', 'staylodgic' ) );
+			wp_die( esc_html__( 'Permission denied', 'staylodgic' ), 403 );
 		}
 
 		// Check if data has been submitted

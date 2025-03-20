@@ -659,6 +659,12 @@ class Activity {
 		$activity_time  = '';
 		$activity_price = '';
 
+		// Verify the nonce before accessing $_POST data
+		if ( ! isset( $_POST['staylodgic_roomlistingbox_nonce'] ) || ! wp_verify_nonce( $_POST['staylodgic_roomlistingbox_nonce'], 'staylodgic-roomlistingbox-nonce' ) ) {
+			wp_send_json_error( array( 'message' => 'Failed' ) );
+			return;
+		}
+
 		if ( isset( $_POST['bookingnumber'] ) ) {
 			$bookingnumber = sanitize_text_field( wp_unslash( $_POST['bookingnumber'] ) );
 		}
@@ -677,13 +683,6 @@ class Activity {
 
 		if ( isset( $_POST['activity_price'] ) ) {
 			$activity_price = sanitize_text_field( wp_unslash( $_POST['activity_price'] ) );
-		}
-
-		// Verify the nonce
-		if ( ! isset( $_POST['staylodgic_roomlistingbox_nonce'] ) || ! check_admin_referer( 'staylodgic-roomlistingbox-nonce', 'staylodgic_roomlistingbox_nonce' ) ) {
-			// Nonce verification failed; handle the error or reject the request
-			wp_send_json_error( array( 'message' => 'Failed' ) );
-			return;
 		}
 
 		$booking_results = $this->process_activity_data(

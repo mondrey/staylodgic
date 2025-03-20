@@ -1418,13 +1418,14 @@ function staylodgic_checkdata( $post_id ) {
 
 function staylodgic_savedata( $staylodgic_metaboxdata, $post_id ) {
 
-	// verify nonce
-	if ( isset( $_POST['staylodgic_meta_box_nonce'] ) ) {
-		$nonce = sanitize_text_field( wp_unslash( $_POST['staylodgic_meta_box_nonce'] ) );
+	// Verify the nonce first before accessing $_POST
+	if ( ! isset( $_POST['staylodgic_meta_box_nonce'] ) || ! wp_verify_nonce( $_POST['staylodgic_meta_box_nonce'], 'metabox-nonce' ) ) {
+		return;
+	}
 
-		if ( ! wp_verify_nonce( $nonce, 'metabox-nonce' ) ) {
-			return $post_id;
-		}
+	// Ensure user has permission to edit this post
+	if ( ! current_user_can( 'edit_post', $post_id ) ) {
+		return;
 	}
 
 	if ( is_array( $staylodgic_metaboxdata['fields'] ) ) {

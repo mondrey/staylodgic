@@ -46,7 +46,7 @@ class Staylodgic_Room_Posts {
 		return ( $orderby );
 	}
 	public function staylodgic_sort_room() {
-		$room = new WP_Query( 'post_type=staylodgic_rooms&posts_per_page=-1&orderby=menu_order&order=ASC' );
+		$room = new \WP_Query( 'post_type=staylodgic_rooms&posts_per_page=-1&orderby=menu_order&order=ASC' );
 		?>
 		<div class="wrap">
 			<h2><?php esc_html_e( 'Sort room', 'staylodgic' ); ?> <img src="<?php echo esc_url( home_url() . '/wp-admin/images/loading.gif' ); ?>" id="loading-animation" /></h2>
@@ -102,13 +102,18 @@ class Staylodgic_Room_Posts {
 	public function staylodgic_save_room_order() {
 
 		// Check for nonce security
-		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'staylodgic-nonce-admin' ) ) {
-			wp_die( 'Invalid nonce.', 403 );
+		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['nonce'] ), 'staylodgic-nonce-admin' ) ) {
+			wp_die( esc_html__( 'Invalid nonce.', 'staylodgic' ), 403 );
 		}
 
-		// Ensure 'order' is set and not empty
-		if ( ! isset( $_POST['order'] ) || empty( $_POST['order'] ) ) {
-			wp_die( 'Invalid order data.', 400 );
+		// Ensure user has the correct capability
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'Unauthorized access.', 'staylodgic' ), 403 );
+		}
+
+		// Validate 'order' input
+		if ( ! isset( $_POST['order'] ) || empty( $_POST['order'] ) || ( ! is_string( $_POST['order'] ) && ! is_array( $_POST['order'] ) ) ) {
+			wp_die( esc_html__( 'Invalid order data.', 'staylodgic' ), 400 );
 		}
 
 		// Sanitize and process the 'order' input

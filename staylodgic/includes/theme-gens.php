@@ -632,9 +632,11 @@ function staylodgic_output_custom_image_links( $page_id ) {
 
 	$output .= '<div class="supporting-image-gallery">';
 	foreach ( $images as $image ) {
-		$output .= '<a class="lightbox-image"  data-gallery="lightbox-gallery-' . esc_attr( $page_id ) . '" data-toggle="lightbox" href="' . esc_url( $image['full_image'] ) . '">';
-		$output .= '<img class="main-image" src="' . esc_url( $image['thumbnail'] ) . '" alt="main image">';
-		$output .= '</a>';
+		if ( '' !== esc_url( $image['thumbnail'] ) ) {
+			$output .= '<a class="lightbox-image"  data-gallery="lightbox-gallery-' . esc_attr( $page_id ) . '" data-toggle="lightbox" href="' . esc_url( $image['full_image'] ) . '">';
+			$output .= '<img class="main-image" src="' . esc_url( $image['thumbnail'] ) . '" alt="main image">';
+			$output .= '</a>';
+		}
 	}
 	$output .= '</div>';
 
