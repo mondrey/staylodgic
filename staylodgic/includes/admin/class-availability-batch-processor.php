@@ -106,27 +106,55 @@ class Availability_Batch_Processor extends Batch_Processor_Base {
 	 * @return void
 	 */
 	public function save_ical_availability_meta() {
-		// Perform nonce check and other validations as needed
-		if ( ! isset( $_POST['ical_form_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['ical_form_nonce'] ) ), 'ical_form_nonce' ) ) {
-			wp_send_json_error( 'Invalid nonce' );
+		// Perform nonce check
+		if ( empty( $_POST['ical_form_nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['ical_form_nonce'] ), 'ical_form_nonce' ) ) {
+			wp_send_json_error( array( 'message' => esc_html__( 'Invalid nonce.', 'staylodgic' ) ), 403 );
+			wp_die();
 		}
 
-		$room_ids           = null;
-		$room_links_id      = null;
-		$room_links_url     = null;
-		$room_links_comment = null;
+		// Check user capability
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( array( 'message' => esc_html__( 'Unauthorized access.', 'staylodgic' ) ), 403 );
+			wp_die();
+		}
 
-		if ( isset( $_POST['room_ical_links_id'] ) ) {
-			$room_links_id = sanitize_text_field( wp_unslash( $_POST['room_ical_links_id'] ) );
+		$room_ids           = array();
+		$room_links_id      = array();
+		$room_links_url     = array();
+		$room_links_comment = array();
+
+		if ( isset( $_POST['room_ids'] ) && is_array( $_POST['room_ids'] ) ) {
+			$room_ids = array_map( 'absint', wp_unslash( $_POST['room_ids'] ) );
 		}
-		if ( isset( $_POST['room_ical_links_url'] ) ) {
-			$room_links_url = esc_url_raw( wp_unslash( $_POST['room_ical_links_url'] ) );
+
+		if ( isset( $_POST['room_ical_links_id'] ) && is_array( $_POST['room_ical_links_id'] ) ) {
+			$room_links_id = array();
+			foreach ( wp_unslash( $_POST['room_ical_links_id'] ) as $row ) {
+				if ( is_array( $row ) ) {
+					$room_links_id[] = array_map( 'sanitize_text_field', $row );
+				}
+			}
 		}
-		if ( isset( $_POST['room_ical_links_comment'] ) ) {
-			$room_links_comment = sanitize_textarea_field( wp_unslash( $_POST['room_ical_links_comment'] ) );
+
+		if ( isset( $_POST['room_ical_links_url'] ) && is_array( $_POST['room_ical_links_url'] ) ) {
+			$room_links_url = array();
+			foreach ( wp_unslash( $_POST['room_ical_links_url'] ) as $row ) {
+				if ( is_array( $row ) ) {
+					$room_links_url[] = array_map( 'esc_url_raw', $row );
+				}
+			}
 		}
-		if ( isset( $_POST['room_ids'] ) ) {
-			$room_ids = array_map( 'sanitize_text_field', wp_unslash( $_POST['room_ids'] ) );
+
+		if ( isset( $_POST['room_ical_links_comment'] ) && is_array( $_POST['room_ical_links_comment'] ) ) {
+			$room_links_comment = array();
+			foreach ( wp_unslash( $_POST['room_ical_links_comment'] ) as $row ) {
+				if ( is_array( $row ) ) {
+					$room_links_comment[] = array_map( 'sanitize_text_field', $row );
+				}
+			}
+		}
+
+		if ( isset( $room_ids ) && is_array( $room_ids ) ) {
 
 			$room_ids_count = count( $room_ids ); // Assign the count to a variable
 
@@ -171,6 +199,9 @@ class Availability_Batch_Processor extends Batch_Processor_Base {
 						}
 					}
 				}
+
+				error_log( 'print_r( $room_links,1 )' );
+				error_log( print_r( $room_links,1 ) );
 
 				// Update the meta field in the database.
 				update_post_meta( $room_id, 'staylodgic_availability_ical_data', $room_links );

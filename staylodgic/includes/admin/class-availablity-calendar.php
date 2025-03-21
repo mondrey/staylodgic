@@ -71,18 +71,24 @@ class Availablity_Calendar extends Availablity_Calendar_Base {
 	}
 
 	/**
-	 * Method update_avail_display_confirmed_status
+	 * Method Toggles displaying of confirmed bookings in availablity calendar
 	 *
 	 * @return void
 	 */
 	public function update_avail_display_confirmed_status() {
 
 		// Verify the nonce
-		if ( ! isset( $_POST['staylodgic_availabilitycalendar_nonce'] ) || ! check_admin_referer( 'staylodgic-availabilitycalendar-nonce', 'staylodgic_availabilitycalendar_nonce' ) ) {
-			// Nonce verification failed; handle the error or reject the request
-			wp_send_json_error( array( 'message' => 'Failed' ) );
-			return;
+		if ( empty( $_POST['staylodgic_availabilitycalendar_nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['staylodgic_availabilitycalendar_nonce'] ), 'staylodgic-availabilitycalendar-nonce' ) ) {
+			wp_send_json_error( array( 'message' => esc_html__( 'Nonce verification failed.', 'staylodgic' ) ), 403 );
+			wp_die();
 		}
+
+		// Ensure user has the correct capability
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( array( 'message' => esc_html__( 'Unauthorized access.', 'staylodgic' ) ), 403 );
+			wp_die();
+		}
+
 		// Check if the confirmed_only value is set
 		if ( isset( $_POST['confirmed_only'] ) ) {
 
@@ -115,10 +121,15 @@ class Availablity_Calendar extends Availablity_Calendar_Base {
 		// Perform necessary security checks or validation here
 
 		// Verify the nonce
-		if ( ! isset( $_POST['staylodgic_availabilitycalendar_nonce'] ) || ! check_admin_referer( 'staylodgic-availabilitycalendar-nonce', 'staylodgic_availabilitycalendar_nonce' ) ) {
-			// Nonce verification failed; handle the error or reject the request
-			wp_send_json_error( array( 'message' => 'Failed' ) );
-			return;
+		if ( empty( $_POST['staylodgic_availabilitycalendar_nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['staylodgic_availabilitycalendar_nonce'] ), 'staylodgic-availabilitycalendar-nonce' ) ) {
+			wp_send_json_error( array( 'message' => esc_html__( 'Nonce verification failed.', 'staylodgic' ) ), 403 );
+			wp_die();
+		}
+
+		// Check if user has the required capability
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( array( 'message' => esc_html__( 'Unauthorized access.', 'staylodgic' ) ), 403 );
+			wp_die();
 		}
 
 		// Check if AJAX POST values are set

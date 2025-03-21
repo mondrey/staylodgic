@@ -45,8 +45,13 @@ class Batch_Processor_Base {
 	) {
 
 		// Check for nonce security
-		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'staylodgic-nonce-admin' ) ) {
-			wp_die();
+		if ( empty( $_POST['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['nonce'] ), 'staylodgic-nonce-admin' ) ) {
+			wp_die( esc_html__( 'Invalid nonce.', 'staylodgic' ), 403 );
+		}
+
+		// Ensure user has the correct capability
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'Unauthorized access.', 'staylodgic' ), 403 );
 		}
 
 		// Create a new instance of the parser.

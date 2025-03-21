@@ -1667,11 +1667,10 @@ class Activity {
 	 */
 	public function book_activity() {
 
-		// Verify the nonce
-		if ( ! isset( $_POST['staylodgic_roomlistingbox_nonce'] ) || ! check_admin_referer( 'staylodgic-roomlistingbox-nonce', 'staylodgic_roomlistingbox_nonce' ) ) {
-			// Nonce verification failed; handle the error or reject the request
-			wp_send_json_error( array( 'message' => 'Failed' ) );
-			return;
+		// Verify the nonce (for frontend/AJAX requests)
+		if ( empty( $_POST['staylodgic_roomlistingbox_nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['staylodgic_roomlistingbox_nonce'] ), 'staylodgic-roomlistingbox-nonce' ) ) {
+			wp_send_json_error( array( 'message' => esc_html__( 'Failed.', 'staylodgic' ) ), 403 );
+			wp_die();
 		}
 
 		if ( isset( $_POST['bookingdata'] ) ) {

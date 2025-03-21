@@ -602,17 +602,28 @@ function staylodgic_get_custom_attachments( $page_id ) {
 function staylodgic_get_custom_attachment_images( $page_id ) {
 	$images        = array();
 	$the_image_ids = get_post_meta( $page_id, 'staylodgic_image_ids', true );
+
 	if ( $the_image_ids ) {
 		$filter_image_ids = explode( ',', $the_image_ids );
+
 		foreach ( $filter_image_ids as $image_id ) {
-			$thumbnail_url  = wp_get_attachment_image_src( $image_id, 'thumbnail' )[0];
-			$full_image_url = wp_get_attachment_image_src( $image_id, 'full' )[0];
-			$images[]       = array(
-				'thumbnail'  => $thumbnail_url,
-				'full_image' => $full_image_url,
-			);
+			$image_id = absint( $image_id );
+
+			// Check if it's a valid attachment ID
+			if ( get_post_mime_type( $image_id ) && wp_attachment_is_image( $image_id ) ) {
+				$thumbnail = wp_get_attachment_image_src( $image_id, 'thumbnail' );
+				$full      = wp_get_attachment_image_src( $image_id, 'full' );
+
+				if ( $thumbnail && $full ) {
+					$images[] = array(
+						'thumbnail'  => esc_url( $thumbnail[0] ),
+						'full_image' => esc_url( $full[0] ),
+					);
+				}
+			}
 		}
 	}
+
 	return $images;
 }
 /**

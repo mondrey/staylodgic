@@ -388,6 +388,8 @@ function staylodgic_get_all_bed_layouts( $bed_names ) {
  */
 function staylodgic_get_bed_layout( $bed_name, $bed_field_id = null ) {
 
+	$html = '';
+
 	switch ( $bed_name ) {
 		case 'fullbed':
 			$html = '<div class="guest-bed guest-bed-' . sanitize_title( $bed_name ) . '"></div>';

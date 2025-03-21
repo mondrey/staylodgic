@@ -451,9 +451,6 @@ function staylodgic_generate_metaboxes( $meta_data, $post_id ) {
 										echo '<div class="selectbox-type-selector"><select class="bedtype-select" name="staylodgic_alt_bedsetup[' . esc_attr( $unique_id ) . '][bedtype][]" id="bed_type_' . esc_attr( $field_id ) . '_' . esc_attr( $repeat_count ) . '">';
 
 										foreach ( $field['options'] as $key => $option ) {
-											if ( 0 === (int) $key ) {
-												$key = __( 'All the items', 'staylodgic' );
-											}
 											echo '<option value="' . esc_attr( $key ) . '"', $bedtype === $key ? ' selected' : '', '>', esc_attr( $option ), '</option>';
 										}
 
