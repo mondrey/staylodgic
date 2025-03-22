@@ -808,6 +808,36 @@ function staylodgic_get_guest_activities_allowed_tags() {
 		'i'      => array(
 			'class' => array(),
 		),
+		'h1'     => array(
+			'class' => array(),
+			'id'    => array(),
+			'align' => true,
+		),
+		'h2'     => array(
+			'class' => array(),
+			'id'    => array(),
+			'align' => true,
+		),
+		'h3'     => array(
+			'class' => array(),
+			'id'    => array(),
+			'align' => true,
+		),
+		'h4'     => array(
+			'class' => array(),
+			'id'    => array(),
+			'align' => true,
+		),
+		'h5'     => array(
+			'class' => array(),
+			'id'    => array(),
+			'align' => true,
+		),
+		'h6'     => array(
+			'class' => array(),
+			'id'    => array(),
+			'align' => true,
+		),
 	);
 
 	return $allowed_html;

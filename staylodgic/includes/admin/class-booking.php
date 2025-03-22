@@ -581,12 +581,12 @@ class Booking {
 		$children_age       = array();
 		$reservation_date   = '';
 
-		// Verify the nonce
-		if ( ! isset( $_POST['staylodgic_searchbox_nonce'] ) || ! check_admin_referer( 'staylodgic-searchbox-nonce', 'staylodgic_searchbox_nonce' ) ) {
-			// Nonce verification failed; handle the error or reject the request
-			// For example, you can return an error response
-			wp_send_json_error( array( 'message' => 'Failed' ) );
-			return;
+		// Verify the nonce (frontend-safe)
+		if ( empty( $_POST['staylodgic_searchbox_nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['staylodgic_searchbox_nonce'] ), 'staylodgic-searchbox-nonce' ) ) {
+
+			wp_send_json_error( array( 'message' => esc_html__( 'Nonce verification failed.', 'staylodgic' ) ), 403 );
+			wp_die();
+
 		}
 
 		$reservation_date   = isset( $_POST['reservation_date'] ) ? sanitize_text_field( wp_unslash( $_POST['reservation_date'] ) ) : '';
@@ -1192,8 +1192,9 @@ class Booking {
 	public function generate_bed_metabox_callback() {
 
 		// Check for nonce security
-		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'staylodgic-nonce-admin' ) ) {
-			wp_die( esc_html__( 'Unauthorized request.', 'staylodgic' ) );
+		if ( empty( $_POST['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['nonce'] ), 'staylodgic-nonce-admin' ) ) {
+			wp_send_json_error( array( 'message' => esc_html__( 'Unauthorized request.', 'staylodgic' ) ), 403 );
+			wp_die();
 		}
 
 		$room_id    = '';

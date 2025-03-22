@@ -54,11 +54,16 @@ class Guest_Registry {
 	 */
 	public function create_guest_registration_ajax_handler() {
 
-		// Check for nonce security
-		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'staylodgic-nonce-admin' ) ) {
-			wp_die( esc_html__( 'Unauthorized request.', 'staylodgic' ) );
+		// Check nonce validity (no sanitize_text_field!)
+		if ( empty( $_POST['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['nonce'] ), 'staylodgic-nonce-admin' ) ) {
+			wp_die( esc_html__( 'Invalid or expired nonce.', 'staylodgic' ), esc_html__( 'Unauthorized request', 'staylodgic' ), array( 'response' => 403 ) );
 		}
-		// Check user capabilities or nonce here for security
+
+		// Check user capability
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'You do not have permission to perform this action.', 'staylodgic' ), esc_html__( 'Forbidden', 'staylodgic' ), array( 'response' => 403 ) );
+		}
+
 		$stay_booking_number = isset( $_POST['stay_booking_number'] ) ? sanitize_text_field( wp_unslash( $_POST['stay_booking_number'] ) ) : '';
 		// Create a new guest registration post
 		$post_id = wp_insert_post(
@@ -460,12 +465,14 @@ class Guest_Registry {
 	 */
 	public function save_guestregistration_data() {
 		// Verify nonce
-		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'staylodgic-nonce-search' ) ) {
-			wp_die( esc_html__( 'Security check failed', 'staylodgic' ) );
+		if ( empty( $_POST['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['nonce'] ), 'staylodgic-nonce-search' ) ) {
+			wp_send_json_error( array( 'message' => esc_html__( 'Security check failed.', 'staylodgic' ) ), 403 );
+			wp_die();
 		}
 
 		$post_id      = isset( $_POST['post_id'] ) ? intval( wp_unslash( $_POST['post_id'] ) ) : 0;
 		$booking_data = isset( $_POST['booking_data'] ) ? map_deep( wp_unslash( $_POST['booking_data'] ), 'sanitize_text_field' ) : array();
+
 		if ( isset( $_POST['signature_data'] ) ) {
 			// Apply sanitize_textarea_field directly to $_POST['signature_data']
 			$signature_data = sanitize_textarea_field( wp_unslash( $_POST['signature_data'] ) );
@@ -561,9 +568,18 @@ class Guest_Registry {
 	 */
 	public function delete_registration() {
 
-		// Check for nonce security
-		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'staylodgic-nonce-admin' ) ) {
-			wp_die( esc_html__( 'Security check failed.', 'staylodgic' ) );
+		// Check for nonce validity (do not sanitize a nonce!)
+		if ( empty( $_POST['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['nonce'] ), 'staylodgic-nonce-admin' ) ) {
+			wp_die( esc_html__( 'Security check failed.', 'staylodgic' ), esc_html__( 'Unauthorized Request', 'staylodgic' ), array( 'response' => 403 ) );
+		}
+
+		// Check user capability
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die(
+				esc_html__( 'You do not have permission to perform this action.', 'staylodgic' ),
+				esc_html__( 'Access Denied', 'staylodgic' ),
+				array( 'response' => 403 )
+			);
 		}
 
 		// Sanitize guest_id
@@ -601,10 +617,16 @@ class Guest_Registry {
 	 */
 	public function get_guest_post_permalink() {
 
-		// Verify the nonce
-		if ( ! isset( $_POST['nonce'] ) || ! check_ajax_referer( 'staylodgic-nonce-admin', 'nonce', false ) ) {
-			wp_send_json_error( array( 'message' => 'Invalid nonce.' ) );
-			return;
+		// Verify the nonce using check_ajax_referer (doesn't kill script with `false` as 3rd param)
+		if ( empty( $_POST['nonce'] ) || ! check_ajax_referer( 'staylodgic-nonce-admin', 'nonce', false ) ) {
+			wp_send_json_error( array( 'message' => esc_html__( 'Invalid nonce.', 'staylodgic' ) ), 403 );
+			wp_die();
+		}
+
+		// Check user capability
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( array( 'message' => esc_html__( 'You are not allowed to perform this action.', 'staylodgic' ) ), 403 );
+			wp_die();
 		}
 
 		$post_id = isset( $_POST['post_id'] ) ? intval( $_POST['post_id'] ) : 0;
@@ -724,11 +746,9 @@ class Guest_Registry {
 	 */
 	public function request_registration_details( $booking_number ) {
 		// Verify the nonce
-		if ( ! isset( $_POST['staylodgic_bookingdetails_nonce'] ) || ! check_admin_referer( 'staylodgic-bookingdetails-nonce', 'staylodgic_bookingdetails_nonce' ) ) {
-			// Nonce verification failed; handle the error or reject the request
-			// For example, you can return an error response
-			wp_send_json_error( array( 'message' => 'Failed' ) );
-			return;
+		if ( empty( $_POST['staylodgic_bookingdetails_nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['staylodgic_bookingdetails_nonce'] ), 'staylodgic-bookingdetails-nonce' ) ) {
+			wp_send_json_error( array( 'message' => esc_html__( 'Security check failed.', 'staylodgic' ) ), 403 );
+			wp_die();
 		}
 
 		$booking_number = isset( $_POST['booking_number'] ) ? sanitize_text_field( wp_unslash( $_POST['booking_number'] ) ) : '';
