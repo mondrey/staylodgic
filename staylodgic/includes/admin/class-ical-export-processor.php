@@ -21,9 +21,22 @@ class Ical_Export_Processor {
 	 */
 	public function ajax_download_guest_registrations_csv() {
 
-		// Check for nonce security
-		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'staylodgic-nonce-admin' ) ) {
-			wp_die( esc_html__( 'Unauthorized request.', 'staylodgic' ) );
+		// Check nonce validity
+		if ( empty( $_POST['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['nonce'] ), 'staylodgic-nonce-admin' ) ) {
+			wp_die(
+				esc_html__( 'Security check failed.', 'staylodgic' ),
+				esc_html__( 'Unauthorized Request', 'staylodgic' ),
+				array( 'response' => 403 )
+			);
+		}
+
+		// Check user capability (adjust if needed)
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die(
+				esc_html__( 'You do not have permission to perform this action.', 'staylodgic' ),
+				esc_html__( 'Access Denied', 'staylodgic' ),
+				array( 'response' => 403 )
+			);
 		}
 
 		$month = false;
@@ -45,8 +58,21 @@ class Ical_Export_Processor {
 	public function ajax_download_reservations_csv() {
 
 		// Check for nonce security
-		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'staylodgic-nonce-admin' ) ) {
-			wp_die( esc_html__( 'Unauthorized request.', 'staylodgic' ) );
+		if ( empty( $_POST['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['nonce'] ), 'staylodgic-nonce-admin' ) ) {
+			wp_die(
+				esc_html__( 'Security check failed.', 'staylodgic' ),
+				esc_html__( 'Unauthorized Request', 'staylodgic' ),
+				array( 'response' => 403 )
+			);
+		}
+
+		// Check user capability
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die(
+				esc_html__( 'You do not have permission to perform this action.', 'staylodgic' ),
+				esc_html__( 'Access Denied', 'staylodgic' ),
+				array( 'response' => 403 )
+			);
 		}
 
 		$room_id = isset( $_POST['room_id'] ) ? intval( $_POST['room_id'] ) : false;

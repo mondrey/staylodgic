@@ -188,96 +188,109 @@ class Options_Panel {
 	 * @return void
 	 */
 	public function staylodgic_import_settings() {
-		// Check if our nonce is set and verify it.
-		if ( isset( $_POST['import_settings_nonce_field'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['import_settings_nonce_field'] ) ), 'import_settings_nonce' ) ) {
 
-			if ( isset( $_POST['action'] ) && 'import_settings' === $_POST['action'] && isset( $_FILES['import_settings_file'] ) ) {
+		if ( isset( $_POST['action'] ) && 'import_settings' === $_POST['action'] && isset( $_FILES['import_settings_file'] ) ) {
+			// Prevent unauthorized access
+			if ( empty( $_POST['import_settings_nonce_field'] ) || ! wp_verify_nonce( wp_unslash( $_POST['import_settings_nonce_field'] ), 'import_settings_nonce' ) ) {
+				wp_die(
+					esc_html__( 'Security check failed.', 'staylodgic' ),
+					esc_html__( 'Unauthorized Request', 'staylodgic' ),
+					array( 'response' => 403 )
+				);
+			}
 
-				if ( isset( $_FILES['import_settings_file'] ) ) {
-					$file = array(
-						'name'     => isset( $_FILES['import_settings_file']['name'] ) ? sanitize_file_name( $_FILES['import_settings_file']['name'] ) : '',
-						'type'     => isset( $_FILES['import_settings_file']['type'] ) ? sanitize_mime_type( $_FILES['import_settings_file']['type'] ) : '',
-						'tmp_name' => isset( $_FILES['import_settings_file']['tmp_name'] ) ? esc_url_raw( $_FILES['import_settings_file']['tmp_name'] ) : '',
-						'error'    => isset( $_FILES['import_settings_file']['error'] ) ? intval( $_FILES['import_settings_file']['error'] ) : UPLOAD_ERR_NO_FILE,
-						'size'     => isset( $_FILES['import_settings_file']['size'] ) ? intval( $_FILES['import_settings_file']['size'] ) : 0,
-					);
+			if ( ! current_user_can( 'manage_options' ) ) {
+				wp_die(
+					esc_html__( 'You do not have permission to perform this action.', 'staylodgic' ),
+					esc_html__( 'Access Denied', 'staylodgic' ),
+					array( 'response' => 403 )
+				);
+			}
+
+			if ( isset( $_FILES['import_settings_file'] ) ) {
+				$file = array(
+					'name'     => isset( $_FILES['import_settings_file']['name'] ) ? sanitize_file_name( $_FILES['import_settings_file']['name'] ) : '',
+					'type'     => isset( $_FILES['import_settings_file']['type'] ) ? sanitize_mime_type( $_FILES['import_settings_file']['type'] ) : '',
+					'tmp_name' => isset( $_FILES['import_settings_file']['tmp_name'] ) ? esc_url_raw( $_FILES['import_settings_file']['tmp_name'] ) : '',
+					'error'    => isset( $_FILES['import_settings_file']['error'] ) ? intval( $_FILES['import_settings_file']['error'] ) : UPLOAD_ERR_NO_FILE,
+					'size'     => isset( $_FILES['import_settings_file']['size'] ) ? intval( $_FILES['import_settings_file']['size'] ) : 0,
+				);
+			}
+			// Ensure the file was uploaded without errors
+			if ( UPLOAD_ERR_OK === $file['error'] && 'application/json' === $file['type'] ) {
+				// Read the file and decode the JSON data
+				global $wp_filesystem;
+				if ( ! function_exists( 'WP_Filesystem' ) ) {
+					require_once ABSPATH . 'wp-admin/includes/file.php';
 				}
-				// Ensure the file was uploaded without errors
-				if ( UPLOAD_ERR_OK === $file['error'] && 'application/json' === $file['type'] ) {
-					// Read the file and decode the JSON data
-					global $wp_filesystem;
-					if ( ! function_exists( 'WP_Filesystem' ) ) {
-						require_once ABSPATH . 'wp-admin/includes/file.php';
-					}
 
-					WP_Filesystem();
+				WP_Filesystem();
 
-					$json_data = '';
-					if ( is_readable( $file['tmp_name'] ) ) {
-						$json_data = $wp_filesystem->get_contents( $file['tmp_name'] );
-					}
-					$import_data = json_decode( $json_data, true );
+				$json_data = '';
+				if ( is_readable( $file['tmp_name'] ) ) {
+					$json_data = $wp_filesystem->get_contents( $file['tmp_name'] );
+				}
+				$import_data = json_decode( $json_data, true );
 
-					// Validate the decoded data. This depends on your settings structure.
-					// Here, we assume $import_data is an associative array matching your options structure.
-					if ( is_array( $import_data ) ) {
-						// Iterate through each setting to validate and sanitize it
-						$sanitized_data = array();
-						foreach ( $import_data as $key => $value ) {
-							if ( isset( $this->settings[ $key ] ) && 'checkbox' === $this->settings[ $key ]['type'] ) {
-								// Convert "1" to "on" for checkboxes
-								// Check if the value is equal to '1'
-								if ( '1' === $value ) {
-									// If the value is '1', set the sanitized data key to 'on'
-									$sanitized_data[ $key ] = 'on';
-								} else {
-									// If the value is not '1', set the sanitized data key to an empty string
-									$sanitized_data[ $key ] = '';
-								}
-							} elseif ( is_array( $value ) ) {
-								// The value is an array, handle each element according to its expected type
-								foreach ( $value as $import_sub_key => $import_sub_value ) {
-									if ( is_array( $import_sub_value ) ) {
-										// If the import_sub_value is also an array, apply further sanitization as needed
-										// This example assumes import_sub_value might be a structured array needing detailed sanitization
-										foreach ( $import_sub_value as $field_key => $field_value ) {
-											// Apply sanitization based on field_key or expected data type
-											// This is a placeholder for actual sanitization logic
-											$sanitized_data[ $key ][ $import_sub_key ][ $field_key ] = sanitize_text_field( $field_value );
-										}
-									} else {
-										// For simple nested arrays, directly apply a generic sanitization
-										$sanitized_data[ $key ][ $import_sub_key ] = sanitize_text_field( $import_sub_value );
-									}
-								}
-							} elseif ( isset( $this->settings[ $key ] ) && 'textarea' === $this->settings[ $key ]['type'] ) {
-								// Check if the input type is textarea
-								$sanitized_data[ $key ] = sanitize_textarea_field( $value ); // Preserves new lines
+				// Validate the decoded data. This depends on your settings structure.
+				// Here, we assume $import_data is an associative array matching your options structure.
+				if ( is_array( $import_data ) ) {
+					// Iterate through each setting to validate and sanitize it
+					$sanitized_data = array();
+					foreach ( $import_data as $key => $value ) {
+						if ( isset( $this->settings[ $key ] ) && 'checkbox' === $this->settings[ $key ]['type'] ) {
+							// Convert "1" to "on" for checkboxes
+							// Check if the value is equal to '1'
+							if ( '1' === $value ) {
+								// If the value is '1', set the sanitized data key to 'on'
+								$sanitized_data[ $key ] = 'on';
 							} else {
-								// For other non-array settings, apply generic sanitization
-								$sanitized_data[ $key ] = sanitize_text_field( $value );
+								// If the value is not '1', set the sanitized data key to an empty string
+								$sanitized_data[ $key ] = '';
 							}
+						} elseif ( is_array( $value ) ) {
+							// The value is an array, handle each element according to its expected type
+							foreach ( $value as $import_sub_key => $import_sub_value ) {
+								if ( is_array( $import_sub_value ) ) {
+									// If the import_sub_value is also an array, apply further sanitization as needed
+									// This example assumes import_sub_value might be a structured array needing detailed sanitization
+									foreach ( $import_sub_value as $field_key => $field_value ) {
+										// Apply sanitization based on field_key or expected data type
+										// This is a placeholder for actual sanitization logic
+										$sanitized_data[ $key ][ $import_sub_key ][ $field_key ] = sanitize_text_field( $field_value );
+									}
+								} else {
+									// For simple nested arrays, directly apply a generic sanitization
+									$sanitized_data[ $key ][ $import_sub_key ] = sanitize_text_field( $import_sub_value );
+								}
+							}
+						} elseif ( isset( $this->settings[ $key ] ) && 'textarea' === $this->settings[ $key ]['type'] ) {
+							// Check if the input type is textarea
+							$sanitized_data[ $key ] = sanitize_textarea_field( $value ); // Preserves new lines
+						} else {
+							// For other non-array settings, apply generic sanitization
+							$sanitized_data[ $key ] = sanitize_text_field( $value );
 						}
-
-						// Update the settings in the database
-						update_option( 'staylodgic_settings', $sanitized_data );
-
-						// Optionally, add a message to show success or redirect back to the settings page
-						add_settings_error(
-							$this->option_name . '_mesages',
-							$this->option_name . '_message',
-							esc_html__( 'Settings imported successfully.', 'staylodgic' ),
-							'updated'
-						);
-					} else {
-						// Handle error in case JSON is invalid
-						add_settings_error(
-							$this->option_name . '_mesages',
-							$this->option_name . '_message',
-							esc_html__( 'Invalid JSON data provided.', 'staylodgic' ),
-							'error'
-						);
 					}
+
+					// Update the settings in the database
+					update_option( 'staylodgic_settings', $sanitized_data );
+
+					// Optionally, add a message to show success or redirect back to the settings page
+					add_settings_error(
+						$this->option_name . '_mesages',
+						$this->option_name . '_message',
+						esc_html__( 'Settings imported successfully.', 'staylodgic' ),
+						'updated'
+					);
+				} else {
+					// Handle error in case JSON is invalid
+					add_settings_error(
+						$this->option_name . '_mesages',
+						$this->option_name . '_message',
+						esc_html__( 'Invalid JSON data provided.', 'staylodgic' ),
+						'error'
+					);
 				}
 			}
 		}
@@ -318,8 +331,22 @@ class Options_Panel {
 	public function export_settings() {
 		if ( isset( $_POST['action'] ) && 'export_settings' === $_POST['action'] ) {
 			// Security check, for example, check user permissions and nonces
-			if ( ! current_user_can( 'manage_options' ) || ! check_admin_referer( 'export_settings_nonce', 'export_settings_nonce_field' ) ) {
-				wp_die( esc_html__( 'You do not have permission to export settings.', 'staylodgic' ) );
+			// Verify nonce
+			if ( empty( $_POST['export_settings_nonce_field'] ) || ! wp_verify_nonce( wp_unslash( $_POST['export_settings_nonce_field'] ), 'export_settings_nonce' ) ) {
+				wp_die(
+					esc_html__( 'Security check failed.', 'staylodgic' ),
+					esc_html__( 'Unauthorized Request', 'staylodgic' ),
+					array( 'response' => 403 )
+				);
+			}
+
+			// Verify user capability
+			if ( ! current_user_can( 'manage_options' ) ) {
+				wp_die(
+					esc_html__( 'You do not have permission to export settings.', 'staylodgic' ),
+					esc_html__( 'Access Denied', 'staylodgic' ),
+					array( 'response' => 403 )
+				);
 			}
 			// Fetch all settings
 			$option_name = 'staylodgic_settings'; // Replace with your actual option name
@@ -536,13 +563,18 @@ class Options_Panel {
 	 * @return void
 	 */
 	public function render_options_page() {
-		if ( ! current_user_can( $this->user_capability ) ) {
-			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'staylodgic' ) );
+
+		// Verify the nonce if the form was submitted from this settings group
+		if ( isset( $_POST['option_page'] ) && wp_unslash( $_POST['option_page'] ) === $this->option_group_name ) {
+			check_admin_referer( 'options.php' );
 		}
 
-		// Verify the nonce if the form is submitted
-		if ( isset( $_POST['option_page'] ) && $_POST['option_page'] === $this->option_group_name ) {
-			check_admin_referer( 'options.php' );
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die(
+				esc_html__( 'You do not have permission to update settings.', 'staylodgic' ),
+				esc_html__( 'Access Denied', 'staylodgic' ),
+				array( 'response' => 403 )
+			);
 		}
 
 		if ( isset( $_GET['settings-updated'] ) ) {
