@@ -851,6 +851,10 @@ jQuery(document).ready(function ($) {
 	$("#staylodgic_images_upload").on("click", function (e) {
 		e.preventDefault();
 
+		// Always get the latest image IDs from the hidden field
+		var images = $("#staylodgic_image_ids").val();
+		var selection = loadImages(images);
+
 		// Set options for 1st frame render
 		var options = {
 			title: "Create Featured Gallery",
@@ -931,7 +935,8 @@ jQuery(document).ready(function ($) {
 								nonce: staylodgic_admin_vars.nonce,
 							},
 							success: function () {
-								selection = loadImages(ids);
+								images = ids;
+								selection = loadImages(images);
 								$("#staylodgic_image_ids").val(ids);
 								frame.close();
 							},

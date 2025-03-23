@@ -38,12 +38,10 @@ class Reservations {
 	 */
 	public function get_booking_details( $booking_number ) {
 
-		// Verify the nonce
-		if ( ! isset( $_POST['staylodgic_bookingdetails_nonce'] ) || ! check_admin_referer( 'staylodgic-bookingdetails-nonce', 'staylodgic_bookingdetails_nonce' ) ) {
-			// Nonce verification failed; handle the error or reject the request
-			// For example, you can return an error response
-			wp_send_json_error( array( 'message' => 'Failed' ) );
-			return;
+		// Verify the nonce (frontend-safe)
+		if ( empty( $_POST['staylodgic_bookingdetails_nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['staylodgic_bookingdetails_nonce'] ), 'staylodgic-bookingdetails-nonce' ) ) {
+			wp_send_json_error( array( 'message' => esc_html__( 'Security check failed.', 'staylodgic' ) ), 403 );
+			wp_die();
 		}
 
 		$booking_number = '';
@@ -1676,11 +1674,15 @@ class Reservations {
 	public function get_available_rooms() {
 
 		// Validate and verify the nonce
-		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'staylodgic-nonce-admin' ) ) {
-			wp_send_json_error( array( 'message' => 'Invalid nonce' ) );
+		if ( empty( $_POST['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['nonce'] ), 'staylodgic-nonce-admin' ) ) {
+			wp_send_json_error( array( 'message' => esc_html__( 'Invalid nonce.', 'staylodgic' ) ), 403 );
 			wp_die();
 		}
-
+		// Check user capability
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( array( 'message' => esc_html__( 'You do not have permission to perform this action.', 'staylodgic' ) ), 403 );
+			wp_die();
+		}
 		// Initialize variables with default values
 		$checkin_date  = '';
 		$checkout_date = '';

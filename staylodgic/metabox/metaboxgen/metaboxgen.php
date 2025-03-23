@@ -1238,10 +1238,12 @@ function staylodgic_save_images() {
 		return;
 	}
 
-	if ( ! isset( $_POST['ids'], $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'staylodgic-nonce-admin' ) ) {
+	// Verify nonce
+	if ( empty( $_POST['ids'] ) || empty( $_POST['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['nonce'] ), 'staylodgic-nonce-admin' ) ) {
 		return;
 	}
 
+	// Check user capability
 	if ( ! current_user_can( 'edit_posts' ) ) {
 		return;
 	}
@@ -1272,10 +1274,12 @@ function staylodgic_multo_gallery_save_images() {
 		return;
 	}
 
-	if ( ! isset( $_POST['ids'], $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'staylodgic-nonce-admin' ) ) {
+	// Verify nonce
+	if ( empty( $_POST['ids'] ) || empty( $_POST['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['nonce'] ), 'staylodgic-nonce-admin' ) ) {
 		return;
 	}
 
+	// Check user capability
 	if ( ! current_user_can( 'edit_posts' ) ) {
 		return;
 	}
@@ -1353,28 +1357,19 @@ function staylodgic_post_process( $post_id, $post, $update ) {
 // Hook the function to 'save_post' action.
 function staylodgic_checkdata( $post_id ) {
 
-	// verify nonce
-	if ( isset( $_POST['staylodgic_meta_box_nonce'] ) ) {
-		$nonce = sanitize_text_field( wp_unslash( $_POST['staylodgic_meta_box_nonce'] ) );
+	// Verify nonce
+	if ( empty( $_POST['staylodgic_meta_box_nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['staylodgic_meta_box_nonce'] ), 'metabox-nonce' ) ) {
+		return $post_id;
+	}
 
-		if ( ! wp_verify_nonce( $nonce, 'metabox-nonce' ) ) {
-			return $post_id;
-		}
+	// Check user capability
+	if ( ! current_user_can( 'edit_post', $post_id ) ) {
+		return $post_id;
 	}
 
 	// check autosave
 	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 		return $post_id;
-	}
-	// check permissions
-	if ( isset( $_POST['post_type'] ) ) {
-		if ( 'page' === $_POST['post_type'] ) {
-			if ( ! current_user_can( 'edit_page', $post_id ) ) {
-				return $post_id;
-			}
-		} elseif ( ! current_user_can( 'edit_post', $post_id ) ) {
-			return $post_id;
-		}
 	}
 
 	if ( isset( $_POST['staylodgic_meta_box_nonce'] ) ) {

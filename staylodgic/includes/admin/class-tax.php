@@ -24,9 +24,15 @@ class Tax {
 	public function exclude_tax() {
 
 		// Verify the nonce
-		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'staylodgic-nonce-admin' ) ) {
-			wp_send_json_error( 'Invalid request.' );
-			return;
+		if ( empty( $_POST['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['nonce'] ), 'staylodgic-nonce-admin' ) ) {
+			wp_send_json_error( array( 'message' => esc_html__( 'Invalid request.', 'staylodgic' ) ), 403 );
+			wp_die();
+		}
+
+		// Check user capability
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( array( 'message' => esc_html__( 'You do not have permission to perform this action.', 'staylodgic' ) ), 403 );
+			wp_die();
 		}
 
 		$response = array();
@@ -52,9 +58,15 @@ class Tax {
 	public function generate_tax() {
 
 		// Verify the nonce
-		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'staylodgic-nonce-admin' ) ) {
-			wp_send_json_error( 'Invalid request.' );
-			return;
+		if ( empty( $_POST['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['nonce'] ), 'staylodgic-nonce-admin' ) ) {
+			wp_send_json_error( array( 'message' => esc_html__( 'Invalid request.', 'staylodgic' ) ), 403 );
+			wp_die();
+		}
+
+		// Check user capability
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( array( 'message' => esc_html__( 'You do not have permission to perform this action.', 'staylodgic' ) ), 403 );
+			wp_die();
 		}
 
 		// Initialize the response array

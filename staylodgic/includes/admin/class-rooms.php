@@ -396,11 +396,15 @@ class Rooms {
 	public function update_room_availability() {
 
 		// Verify the nonce
-		if ( ! isset( $_POST['staylodgic_availabilitycalendar_nonce'] ) || ! check_admin_referer( 'staylodgic-availabilitycalendar-nonce', 'staylodgic_availabilitycalendar_nonce' ) ) {
-			// Nonce verification failed; handle the error or reject the request
-			// For example, you can return an error response
-			wp_send_json_error( array( 'message' => 'Failed' ) );
-			return;
+		if ( empty( $_POST['staylodgic_availabilitycalendar_nonce'] ) || ! check_ajax_referer( 'staylodgic-availabilitycalendar-nonce', 'staylodgic_availabilitycalendar_nonce', false ) ) {
+			wp_send_json_error( array( 'message' => esc_html__( 'Security check failed.', 'staylodgic' ) ), 403 );
+			wp_die();
+		}
+
+		// Check user capability
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( array( 'message' => esc_html__( 'You do not have permission to perform this action.', 'staylodgic' ) ), 403 );
+			wp_die();
 		}
 
 		if ( isset( $_POST['date_range'] ) ) {
@@ -599,12 +603,16 @@ class Rooms {
 	 */
 	public function update_room_rate() {
 
-		// Verify the nonce
-		if ( ! isset( $_POST['staylodgic_availabilitycalendar_nonce'] ) || ! check_admin_referer( 'staylodgic-availabilitycalendar-nonce', 'staylodgic_availabilitycalendar_nonce' ) ) {
-			// Nonce verification failed; handle the error or reject the request
-			// For example, you can return an error response
-			wp_send_json_error( array( 'message' => 'Failed' ) );
-			return;
+		// Verify the nonce (admin AJAX-safe)
+		if ( empty( $_POST['staylodgic_availabilitycalendar_nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['staylodgic_availabilitycalendar_nonce'] ), 'staylodgic-availabilitycalendar-nonce' ) ) {
+			wp_send_json_error( array( 'message' => esc_html__( 'Security check failed.', 'staylodgic' ) ), 403 );
+			wp_die();
+		}
+
+		// Check user capability
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( array( 'message' => esc_html__( 'You do not have permission to perform this action.', 'staylodgic' ) ), 403 );
+			wp_die();
 		}
 
 		if ( isset( $_POST['date_range'] ) ) {
