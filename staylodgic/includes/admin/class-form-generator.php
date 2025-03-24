@@ -20,6 +20,7 @@ class Form_Generator {
 	 */
 	private function render_input( $input_object ) {
 
+		// Only for admins
 		if ( current_user_can( 'edit_posts' ) && ! empty( $_GET ) ) {
 			if ( ! isset( $_GET['_wpnonce'], $_GET['guest'] ) || ! check_admin_referer( 'edit_registration_' . sanitize_text_field( wp_unslash( $_GET['guest'] ) ) ) ) {
 				wp_die( esc_html__( 'Invalid nonce. Please try again.', 'staylodgic' ) );
@@ -53,7 +54,7 @@ class Form_Generator {
 			$required = 'required';
 		}
 
-		// Check if 'guest' parameter is present in the URL
+		// Only for admins. Check if 'guest' parameter is present in the URL
 		if ( current_user_can( 'edit_posts' ) && isset( $_GET['guest'] ) && ! empty( $_GET['guest'] ) ) {
 			$guest             = isset( $_GET['guest'] ) ? sanitize_text_field( wp_unslash( $_GET['guest'] ) ) : '';
 			$post_id           = get_the_ID(); // Get current post ID
