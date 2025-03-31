@@ -249,7 +249,7 @@ class Staylodgic_Init {
 
 		wp_register_style( 'driver-js-css', plugin_dir_url( __FILE__ ) . 'admin/js/driverjs/driver.css', false, 'screen' );
 		wp_register_script( 'driver-js-init', plugin_dir_url( __FILE__ ) . 'admin/js/driverjs/driver.js.iife.js', array( 'jquery' ), null, true );
-		wp_register_script( 'driver-js-welcome', plugin_dir_url( __FILE__ ) . 'admin/js/admin-welcome.js', array( 'jquery' ), null, true );
+		wp_register_script( 'staylodgic-welcome', plugin_dir_url( __FILE__ ) . 'admin/js/admin-welcome.js', array( 'jquery' ), null, true );
 
 		wp_register_style( 'staylodgic-availability-yearly-styles', plugin_dir_url( __FILE__ ) . 'admin/css/availability-yearly-calendar.css', false, 'screen' );
 		wp_register_script( 'staylodgic-availability-yearly-scripts', plugin_dir_url( __FILE__ ) . 'admin/js/availability-yearly-calendar.js', array( 'jquery' ), null, true );
@@ -643,7 +643,7 @@ class Staylodgic_Init {
 
 				wp_enqueue_style( 'driver-js-css' );
 				wp_enqueue_script( 'driver-js-init' );
-				wp_enqueue_script( 'driver-js-welcome' );
+				wp_enqueue_script( 'staylodgic-welcome' );
 
 			}
 
