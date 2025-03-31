@@ -191,7 +191,9 @@ class Options_Panel {
 
 		if ( isset( $_POST['action'] ) && 'import_settings' === $_POST['action'] && isset( $_FILES['import_settings_file'] ) ) {
 			// Prevent unauthorized access
-			if ( empty( $_POST['import_settings_nonce_field'] ) || ! wp_verify_nonce( wp_unslash( $_POST['import_settings_nonce_field'] ), 'import_settings_nonce' ) ) {
+			$nonce = isset( $_POST['import_settings_nonce_field'] ) ? sanitize_text_field( wp_unslash( $_POST['import_settings_nonce_field'] ) ) : '';
+
+			if ( ! wp_verify_nonce( $nonce, 'import_settings_nonce' ) ) {
 				wp_die(
 					esc_html__( 'Security check failed.', 'staylodgic' ),
 					esc_html__( 'Unauthorized Request', 'staylodgic' ),
@@ -332,7 +334,9 @@ class Options_Panel {
 		if ( isset( $_POST['action'] ) && 'export_settings' === $_POST['action'] ) {
 			// Security check, for example, check user permissions and nonces
 			// Verify nonce
-			if ( empty( $_POST['export_settings_nonce_field'] ) || ! wp_verify_nonce( wp_unslash( $_POST['export_settings_nonce_field'] ), 'export_settings_nonce' ) ) {
+			$nonce = isset( $_POST['export_settings_nonce_field'] ) ? sanitize_text_field( wp_unslash( $_POST['export_settings_nonce_field'] ) ) : '';
+
+			if ( ! wp_verify_nonce( $nonce, 'export_settings_nonce' ) ) {
 				wp_die(
 					esc_html__( 'Security check failed.', 'staylodgic' ),
 					esc_html__( 'Unauthorized Request', 'staylodgic' ),
@@ -565,7 +569,7 @@ class Options_Panel {
 	public function render_options_page() {
 
 		// Verify the nonce if the form was submitted from this settings group
-		if ( isset( $_POST['option_page'] ) && wp_unslash( $_POST['option_page'] ) === $this->option_group_name ) {
+		if ( isset( $_POST['option_page'] ) && sanitize_text_field( wp_unslash( $_POST['option_page'] ) ) === $this->option_group_name ) {
 			check_admin_referer( 'options.php' );
 		}
 

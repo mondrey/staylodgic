@@ -604,7 +604,9 @@ class Rooms {
 	public function update_room_rate() {
 
 		// Verify the nonce (admin AJAX-safe)
-		if ( empty( $_POST['staylodgic_availabilitycalendar_nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['staylodgic_availabilitycalendar_nonce'] ), 'staylodgic-availabilitycalendar-nonce' ) ) {
+		$nonce = isset( $_POST['staylodgic_availabilitycalendar_nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['staylodgic_availabilitycalendar_nonce'] ) ) : '';
+
+		if ( ! wp_verify_nonce( $nonce, 'staylodgic-availabilitycalendar-nonce' ) ) {
 			wp_send_json_error( array( 'message' => esc_html__( 'Security check failed.', 'staylodgic' ) ), 403 );
 			wp_die();
 		}

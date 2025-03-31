@@ -55,8 +55,14 @@ class Guest_Registry {
 	public function create_guest_registration_ajax_handler() {
 
 		// Check nonce validity (no sanitize_text_field!)
-		if ( empty( $_POST['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['nonce'] ), 'staylodgic-nonce-admin' ) ) {
-			wp_die( esc_html__( 'Invalid or expired nonce.', 'staylodgic' ), esc_html__( 'Unauthorized request', 'staylodgic' ), array( 'response' => 403 ) );
+		$nonce = isset( $_POST['nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : '';
+
+		if ( ! wp_verify_nonce( $nonce, 'staylodgic-nonce-admin' ) ) {
+			wp_die(
+				esc_html__( 'Invalid or expired nonce.', 'staylodgic' ),
+				esc_html__( 'Unauthorized request', 'staylodgic' ),
+				array( 'response' => 403 )
+			);
 		}
 
 		// Check user capability
@@ -465,8 +471,13 @@ class Guest_Registry {
 	 */
 	public function save_guestregistration_data() {
 		// Verify nonce
-		if ( empty( $_POST['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['nonce'] ), 'staylodgic-nonce-search' ) ) {
-			wp_send_json_error( array( 'message' => esc_html__( 'Security check failed.', 'staylodgic' ) ), 403 );
+		$nonce = isset( $_POST['nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : '';
+
+		if ( ! wp_verify_nonce( $nonce, 'staylodgic-nonce-search' ) ) {
+			wp_send_json_error(
+				array( 'message' => esc_html__( 'Security check failed.', 'staylodgic' ) ),
+				403
+			);
 			wp_die();
 		}
 
@@ -569,8 +580,14 @@ class Guest_Registry {
 	public function delete_registration() {
 
 		// Check for nonce validity (do not sanitize a nonce!)
-		if ( empty( $_POST['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['nonce'] ), 'staylodgic-nonce-admin' ) ) {
-			wp_die( esc_html__( 'Security check failed.', 'staylodgic' ), esc_html__( 'Unauthorized Request', 'staylodgic' ), array( 'response' => 403 ) );
+		$nonce = isset( $_POST['nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : '';
+
+		if ( ! wp_verify_nonce( $nonce, 'staylodgic-nonce-admin' ) ) {
+			wp_die(
+				esc_html__( 'Security check failed.', 'staylodgic' ),
+				esc_html__( 'Unauthorized Request', 'staylodgic' ),
+				array( 'response' => 403 )
+			);
 		}
 
 		// Check user capability
@@ -746,8 +763,13 @@ class Guest_Registry {
 	 */
 	public function request_registration_details( $booking_number ) {
 		// Verify the nonce
-		if ( empty( $_POST['staylodgic_bookingdetails_nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['staylodgic_bookingdetails_nonce'] ), 'staylodgic-bookingdetails-nonce' ) ) {
-			wp_send_json_error( array( 'message' => esc_html__( 'Security check failed.', 'staylodgic' ) ), 403 );
+		$nonce = isset( $_POST['staylodgic_bookingdetails_nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['staylodgic_bookingdetails_nonce'] ) ) : '';
+
+		if ( ! wp_verify_nonce( $nonce, 'staylodgic-bookingdetails-nonce' ) ) {
+			wp_send_json_error(
+				array( 'message' => esc_html__( 'Security check failed.', 'staylodgic' ) ),
+				403
+			);
 			wp_die();
 		}
 

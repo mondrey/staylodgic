@@ -126,7 +126,9 @@ class Booking {
 	public function process_selected_room() {
 
 		// Verify the nonce (frontend-safe)
-		if ( empty( $_POST['staylodgic_roomlistingbox_nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['staylodgic_roomlistingbox_nonce'] ), 'staylodgic-roomlistingbox-nonce' ) ) {
+		$nonce = isset( $_POST['staylodgic_roomlistingbox_nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['staylodgic_roomlistingbox_nonce'] ) ) : '';
+
+		if ( ! wp_verify_nonce( $nonce, 'staylodgic-roomlistingbox-nonce' ) ) {
 			wp_send_json_error( array( 'message' => esc_html__( 'Nonce verification failed.', 'staylodgic' ) ), 403 );
 			wp_die();
 		}
@@ -180,7 +182,9 @@ class Booking {
 	public function process_room_price() {
 
 		// Verify the nonce (frontend-safe)
-		if ( empty( $_POST['staylodgic_searchbox_nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['staylodgic_searchbox_nonce'] ), 'staylodgic-searchbox-nonce' ) ) {
+		$nonce = isset( $_POST['staylodgic_searchbox_nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['staylodgic_searchbox_nonce'] ) ) : '';
+
+		if ( ! wp_verify_nonce( $nonce, 'staylodgic-searchbox-nonce' ) ) {
 			wp_send_json_error( array( 'message' => esc_html__( 'Nonce verification failed.', 'staylodgic' ) ), 403 );
 			wp_die();
 		}
@@ -582,11 +586,11 @@ class Booking {
 		$reservation_date   = '';
 
 		// Verify the nonce (frontend-safe)
-		if ( empty( $_POST['staylodgic_searchbox_nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['staylodgic_searchbox_nonce'] ), 'staylodgic-searchbox-nonce' ) ) {
+		$nonce = isset( $_POST['staylodgic_searchbox_nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['staylodgic_searchbox_nonce'] ) ) : '';
 
+		if ( ! wp_verify_nonce( $nonce, 'staylodgic-searchbox-nonce' ) ) {
 			wp_send_json_error( array( 'message' => esc_html__( 'Nonce verification failed.', 'staylodgic' ) ), 403 );
 			wp_die();
-
 		}
 
 		$reservation_date   = isset( $_POST['reservation_date'] ) ? sanitize_text_field( wp_unslash( $_POST['reservation_date'] ) ) : '';
@@ -1192,7 +1196,9 @@ class Booking {
 	public function generate_bed_metabox_callback() {
 
 		// Check for nonce security
-		if ( empty( $_POST['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['nonce'] ), 'staylodgic-nonce-admin' ) ) {
+		$nonce = isset( $_POST['nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : '';
+
+		if ( ! wp_verify_nonce( $nonce, 'staylodgic-nonce-admin' ) ) {
 			wp_send_json_error( array( 'message' => esc_html__( 'Unauthorized request.', 'staylodgic' ) ), 403 );
 			wp_die();
 		}

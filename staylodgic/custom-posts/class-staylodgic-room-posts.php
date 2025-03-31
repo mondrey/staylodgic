@@ -102,7 +102,9 @@ class Staylodgic_Room_Posts {
 	public function staylodgic_save_room_order() {
 
 		// Check for nonce security
-		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['nonce'] ), 'staylodgic-nonce-admin' ) ) {
+		$nonce = isset( $_POST['nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : '';
+
+		if ( ! wp_verify_nonce( $nonce, 'staylodgic-nonce-admin' ) ) {
 			wp_die( esc_html__( 'Invalid nonce.', 'staylodgic' ), 403 );
 		}
 

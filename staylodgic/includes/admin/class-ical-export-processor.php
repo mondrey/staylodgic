@@ -22,7 +22,9 @@ class Ical_Export_Processor {
 	public function ajax_download_guest_registrations_csv() {
 
 		// Check nonce validity
-		if ( empty( $_POST['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['nonce'] ), 'staylodgic-nonce-admin' ) ) {
+		$nonce = isset( $_POST['nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : '';
+
+		if ( ! wp_verify_nonce( $nonce, 'staylodgic-nonce-admin' ) ) {
 			wp_die(
 				esc_html__( 'Security check failed.', 'staylodgic' ),
 				esc_html__( 'Unauthorized Request', 'staylodgic' ),
@@ -58,7 +60,9 @@ class Ical_Export_Processor {
 	public function ajax_download_reservations_csv() {
 
 		// Check for nonce security
-		if ( empty( $_POST['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['nonce'] ), 'staylodgic-nonce-admin' ) ) {
+		$nonce = isset( $_POST['nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : '';
+
+		if ( ! wp_verify_nonce( $nonce, 'staylodgic-nonce-admin' ) ) {
 			wp_die(
 				esc_html__( 'Security check failed.', 'staylodgic' ),
 				esc_html__( 'Unauthorized Request', 'staylodgic' ),

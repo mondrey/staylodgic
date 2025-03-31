@@ -107,8 +107,13 @@ class Availability_Batch_Processor extends Batch_Processor_Base {
 	 */
 	public function save_ical_availability_meta() {
 		// Perform nonce check
-		if ( empty( $_POST['ical_form_nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['ical_form_nonce'] ), 'ical_form_nonce' ) ) {
-			wp_send_json_error( array( 'message' => esc_html__( 'Invalid nonce.', 'staylodgic' ) ), 403 );
+		$nonce = isset( $_POST['ical_form_nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['ical_form_nonce'] ) ) : '';
+
+		if ( ! wp_verify_nonce( $nonce, 'ical_form_nonce' ) ) {
+			wp_send_json_error(
+				array( 'message' => esc_html__( 'Invalid nonce.', 'staylodgic' ) ),
+				403
+			);
 			wp_die();
 		}
 
@@ -129,29 +134,17 @@ class Availability_Batch_Processor extends Batch_Processor_Base {
 
 		if ( isset( $_POST['room_ical_links_id'] ) && is_array( $_POST['room_ical_links_id'] ) ) {
 			$room_links_id = array();
-			foreach ( wp_unslash( $_POST['room_ical_links_id'] ) as $row ) {
-				if ( is_array( $row ) ) {
-					$room_links_id[] = array_map( 'sanitize_text_field', $row );
-				}
-			}
+			$room_links_id = map_deep( wp_unslash( $_POST['room_ical_links_id'] ), 'sanitize_text_field' );
 		}
 
 		if ( isset( $_POST['room_ical_links_url'] ) && is_array( $_POST['room_ical_links_url'] ) ) {
 			$room_links_url = array();
-			foreach ( wp_unslash( $_POST['room_ical_links_url'] ) as $row ) {
-				if ( is_array( $row ) ) {
-					$room_links_url[] = array_map( 'esc_url_raw', $row );
-				}
-			}
+			$room_links_url = map_deep( wp_unslash( $_POST['room_ical_links_url'] ), 'sanitize_text_field' );
 		}
 
 		if ( isset( $_POST['room_ical_links_comment'] ) && is_array( $_POST['room_ical_links_comment'] ) ) {
 			$room_links_comment = array();
-			foreach ( wp_unslash( $_POST['room_ical_links_comment'] ) as $row ) {
-				if ( is_array( $row ) ) {
-					$room_links_comment[] = array_map( 'sanitize_text_field', $row );
-				}
-			}
+			$room_links_comment = map_deep( wp_unslash( $_POST['room_ical_links_comment'] ), 'sanitize_text_field' );
 		}
 
 		if ( isset( $room_ids ) && is_array( $room_ids ) ) {
@@ -199,9 +192,6 @@ class Availability_Batch_Processor extends Batch_Processor_Base {
 						}
 					}
 				}
-
-				error_log( 'print_r( $room_links,1 )' );
-				error_log( print_r( $room_links,1 ) );
 
 				// Update the meta field in the database.
 				update_post_meta( $room_id, 'staylodgic_availability_ical_data', $room_links );

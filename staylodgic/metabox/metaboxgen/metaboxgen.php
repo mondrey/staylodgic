@@ -1239,7 +1239,9 @@ function staylodgic_save_images() {
 	}
 
 	// Verify nonce
-	if ( empty( $_POST['ids'] ) || empty( $_POST['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['nonce'] ), 'staylodgic-nonce-admin' ) ) {
+	$nonce = isset( $_POST['nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : '';
+
+	if ( empty( $_POST['ids'] ) || empty( $nonce ) || ! wp_verify_nonce( $nonce, 'staylodgic-nonce-admin' ) ) {
 		return;
 	}
 
@@ -1275,7 +1277,9 @@ function staylodgic_multo_gallery_save_images() {
 	}
 
 	// Verify nonce
-	if ( empty( $_POST['ids'] ) || empty( $_POST['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['nonce'] ), 'staylodgic-nonce-admin' ) ) {
+	$nonce = isset( $_POST['nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : '';
+
+	if ( empty( $_POST['ids'] ) || empty( $nonce ) || ! wp_verify_nonce( $nonce, 'staylodgic-nonce-admin' ) ) {
 		return;
 	}
 
@@ -1358,7 +1362,9 @@ function staylodgic_post_process( $post_id, $post, $update ) {
 function staylodgic_checkdata( $post_id ) {
 
 	// Verify nonce
-	if ( empty( $_POST['staylodgic_meta_box_nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['staylodgic_meta_box_nonce'] ), 'metabox-nonce' ) ) {
+	$nonce = isset( $_POST['staylodgic_meta_box_nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['staylodgic_meta_box_nonce'] ) ) : '';
+
+	if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, 'metabox-nonce' ) ) {
 		return $post_id;
 	}
 
@@ -1411,7 +1417,9 @@ function staylodgic_checkdata( $post_id ) {
 function staylodgic_savedata( $staylodgic_metaboxdata, $post_id ) {
 
 	// Verify the nonce first before accessing $_POST
-	if ( ! isset( $_POST['staylodgic_meta_box_nonce'] ) || ! wp_verify_nonce( $_POST['staylodgic_meta_box_nonce'], 'metabox-nonce' ) ) {
+	$nonce = isset( $_POST['staylodgic_meta_box_nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['staylodgic_meta_box_nonce'] ) ) : '';
+
+	if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, 'metabox-nonce' ) ) {
 		return;
 	}
 

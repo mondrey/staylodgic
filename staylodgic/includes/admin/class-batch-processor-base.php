@@ -45,7 +45,9 @@ class Batch_Processor_Base {
 	) {
 
 		// Check for nonce security
-		if ( empty( $_POST['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['nonce'] ), 'staylodgic-nonce-admin' ) ) {
+		$nonce = isset( $_POST['nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : '';
+
+		if ( ! wp_verify_nonce( $nonce, 'staylodgic-nonce-admin' ) ) {
 			wp_die( esc_html__( 'Invalid nonce.', 'staylodgic' ), 403 );
 		}
 

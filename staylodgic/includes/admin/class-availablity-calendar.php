@@ -78,8 +78,13 @@ class Availablity_Calendar extends Availablity_Calendar_Base {
 	public function update_avail_display_confirmed_status() {
 
 		// Verify the nonce
-		if ( empty( $_POST['staylodgic_availabilitycalendar_nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['staylodgic_availabilitycalendar_nonce'] ), 'staylodgic-availabilitycalendar-nonce' ) ) {
-			wp_send_json_error( array( 'message' => esc_html__( 'Nonce verification failed.', 'staylodgic' ) ), 403 );
+		$nonce = isset( $_POST['staylodgic_availabilitycalendar_nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['staylodgic_availabilitycalendar_nonce'] ) ) : '';
+
+		if ( ! wp_verify_nonce( $nonce, 'staylodgic-availabilitycalendar-nonce' ) ) {
+			wp_send_json_error(
+				array( 'message' => esc_html__( 'Nonce verification failed.', 'staylodgic' ) ),
+				403
+			);
 			wp_die();
 		}
 
@@ -121,8 +126,13 @@ class Availablity_Calendar extends Availablity_Calendar_Base {
 		// Perform necessary security checks or validation here
 
 		// Verify the nonce
-		if ( empty( $_POST['staylodgic_availabilitycalendar_nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['staylodgic_availabilitycalendar_nonce'] ), 'staylodgic-availabilitycalendar-nonce' ) ) {
-			wp_send_json_error( array( 'message' => esc_html__( 'Nonce verification failed.', 'staylodgic' ) ), 403 );
+		$nonce = isset( $_POST['staylodgic_availabilitycalendar_nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['staylodgic_availabilitycalendar_nonce'] ) ) : '';
+
+		if ( ! wp_verify_nonce( $nonce, 'staylodgic-availabilitycalendar-nonce' ) ) {
+			wp_send_json_error(
+				array( 'message' => esc_html__( 'Nonce verification failed.', 'staylodgic' ) ),
+				403
+			);
 			wp_die();
 		}
 

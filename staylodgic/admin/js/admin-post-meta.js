@@ -848,6 +848,44 @@ jQuery(document).ready(function ($) {
 
 	$("body").addClass("mtheme-admin-core-on");
 
+	// Load images
+	function loadImages(images) {
+		if (images && images !== "false" && images.trim() !== "") {
+			console.log( 'ererere');
+			var shortcode = new wp.shortcode({
+				tag: "gallery",
+				attrs: { ids: images },
+				type: "single",
+			});
+
+			var attachments = wp.media.gallery.attachments(shortcode);
+
+			var selection = new wp.media.model.Selection(attachments.models, {
+				props: attachments.props.toJSON(),
+				multiple: true,
+			});
+
+			selection.gallery = attachments.gallery;
+
+			// Fetch the query's attachments, and then break ties from the
+			// query to allow for sorting.
+			selection.more().done(function () {
+				// Break ties with the query.
+				selection.props.set({ query: false });
+				selection.unmirror();
+				selection.props.unset("orderby");
+			});
+
+			return selection;
+		}
+
+		// Return an empty selection so gallery can still be created
+		return new wp.media.model.Selection([], {
+			props: {},
+			multiple: true,
+		});
+	}
+
 	$("#staylodgic_images_upload").on("click", function (e) {
 		e.preventDefault();
 
@@ -1080,38 +1118,6 @@ jQuery(document).ready(function ($) {
 			});
 
 			return proofingSelection;
-		}
-
-		return false;
-	}
-	// Load images
-	function loadImages(images) {
-		if (images) {
-			var shortcode = new wp.shortcode({
-				tag: "gallery",
-				attrs: { ids: images },
-				type: "single",
-			});
-
-			var attachments = wp.media.gallery.attachments(shortcode);
-
-			var selection = new wp.media.model.Selection(attachments.models, {
-				props: attachments.props.toJSON(),
-				multiple: true,
-			});
-
-			selection.gallery = attachments.gallery;
-
-			// Fetch the query's attachments, and then break ties from the
-			// query to allow for sorting.
-			selection.more().done(function () {
-				// Break ties with the query.
-				selection.props.set({ query: false });
-				selection.unmirror();
-				selection.props.unset("orderby");
-			});
-
-			return selection;
 		}
 
 		return false;

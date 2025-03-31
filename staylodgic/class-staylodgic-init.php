@@ -237,28 +237,26 @@ class Staylodgic_Init {
 		wp_register_script( 'flatpickr', plugin_dir_url( __FILE__ ) . 'assets/js/flatpickr/flatpickr.js', array( 'jquery' ), '1.0', true );
 		wp_register_script( 'flatpickr-monthselect', plugin_dir_url( __FILE__ ) . 'assets/js/flatpickr/monthselect.js', array( 'flatpickr' ), '1.0', true );
 		wp_register_style( 'flatpickr-monthselect', plugin_dir_url( __FILE__ ) . 'assets/js/flatpickr/monthselect.css', false, 'screen' );
-		wp_register_script( 'admin-post-meta', plugin_dir_url( __FILE__ ) . 'admin/js/admin-post-meta.js', array( 'jquery', 'wp-api', 'wp-data' ), null, true );
+		wp_register_script( 'staylodgic-admin-post-meta', plugin_dir_url( __FILE__ ) . 'admin/js/admin-post-meta.js', array( 'jquery', 'wp-api', 'wp-data' ), '1.0', true );
 		wp_register_script( 'qrcodejs', plugin_dir_url( __FILE__ ) . 'assets/js/qrcode.min.js', array( 'jquery' ), null, true );
-		wp_register_script( 'menu-image-admin', plugin_dir_url( __FILE__ ) . 'admin/js/menu-image-admin.js', array( 'jquery' ), null, true );
-		wp_register_style( 'menu-image-css', plugin_dir_url( __FILE__ ) . 'admin/js/menu-image-admin.css', array(), false, 'screen' );
 		wp_register_style( 'staylodgic-admin-styles', plugin_dir_url( __FILE__ ) . 'admin/css/style.css', false, 'screen' );
 		wp_register_style( 'staylodgic-indicator-icons', plugin_dir_url( __FILE__ ) . 'admin/css/indicator-icons.css', false, 'screen' );
 
-		wp_register_style( 'availability-admin-styles', plugin_dir_url( __FILE__ ) . 'admin/css/admin-core-applies.css', false, 'screen' );
-		wp_enqueue_style( 'admin-common', plugin_dir_url( __FILE__ ) . 'admin/css/admin-common.css', false, 'screen' );
-		wp_enqueue_style( 'availability-styles', plugin_dir_url( __FILE__ ) . 'admin/css/availability-calendar.css', false, 'screen' );
-		wp_enqueue_script( 'availability-scripts', plugin_dir_url( __FILE__ ) . 'admin/js/availability-calendar.js', array( 'jquery' ), null, true );
+		wp_register_style( 'staylodgic-availability-admin-styles', plugin_dir_url( __FILE__ ) . 'admin/css/admin-core-applies.css', false, 'screen' );
+		wp_enqueue_style( 'staylodgic-admin-common', plugin_dir_url( __FILE__ ) . 'admin/css/admin-common.css', false, 'screen' );
+		wp_enqueue_style( 'staylodgic-availability-styles', plugin_dir_url( __FILE__ ) . 'admin/css/availability-calendar.css', false, 'screen' );
+		wp_enqueue_script( 'staylodgic-availability-scripts', plugin_dir_url( __FILE__ ) . 'admin/js/availability-calendar.js', array( 'jquery' ), null, true );
 
 		wp_register_style( 'driver-js-css', plugin_dir_url( __FILE__ ) . 'admin/js/driverjs/driver.css', false, 'screen' );
 		wp_register_script( 'driver-js-init', plugin_dir_url( __FILE__ ) . 'admin/js/driverjs/driver.js.iife.js', array( 'jquery' ), null, true );
 		wp_register_script( 'driver-js-welcome', plugin_dir_url( __FILE__ ) . 'admin/js/admin-welcome.js', array( 'jquery' ), null, true );
 
-		wp_register_style( 'availability-yearly-styles', plugin_dir_url( __FILE__ ) . 'admin/css/availability-yearly-calendar.css', false, 'screen' );
-		wp_register_script( 'availability-yearly-scripts', plugin_dir_url( __FILE__ ) . 'admin/js/availability-yearly-calendar.js', array( 'jquery' ), null, true );
+		wp_register_style( 'staylodgic-availability-yearly-styles', plugin_dir_url( __FILE__ ) . 'admin/css/availability-yearly-calendar.css', false, 'screen' );
+		wp_register_script( 'staylodgic-availability-yearly-scripts', plugin_dir_url( __FILE__ ) . 'admin/js/availability-yearly-calendar.js', array( 'jquery' ), null, true );
 
-		wp_enqueue_script( 'activity-scripts', plugin_dir_url( __FILE__ ) . 'admin/js/activity-calendar.js', array( 'jquery' ), null, true );
+		wp_enqueue_script( 'staylodgic-activity-scripts', plugin_dir_url( __FILE__ ) . 'admin/js/activity-calendar.js', array( 'jquery' ), null, true );
 
-		wp_enqueue_script( 'common-scripts', plugin_dir_url( __FILE__ ) . 'admin/js/common.js', array( 'jquery' ), null, true );
+		wp_enqueue_script( 'staylodgic-common-scripts', plugin_dir_url( __FILE__ ) . 'admin/js/common.js', array( 'jquery' ), null, true );
 
 		wp_register_style( 'fontawesome-6', plugin_dir_url( __FILE__ ) . 'assets/fonts/fontawesome-free-6.7.2-web/css/fontawesome.css', false, 'screen' );
 		wp_register_style( 'fontawesome-6-brands', plugin_dir_url( __FILE__ ) . 'assets/fonts/fontawesome-free-6.7.2-web/css/all.css', false, 'screen' );
@@ -306,7 +304,7 @@ class Staylodgic_Init {
 				wp_enqueue_style( 'flatpickr' );
 				wp_enqueue_script( 'flatpickr' );
 				wp_enqueue_style( 'flatpickr-extra' );
-				wp_enqueue_script( 'admin-post-meta' );
+				wp_enqueue_script( 'staylodgic-admin-post-meta' );
 				wp_enqueue_style( 'wp-color-picker' );
 				wp_enqueue_script( 'wp-color-picker' );
 				wp_enqueue_script( 'qrcodejs' );
@@ -596,8 +594,8 @@ class Staylodgic_Init {
 				wp_enqueue_style( 'fontawesome-6-brands' );
 				wp_enqueue_style( 'fontawesome-6-solid' );
 
-				wp_enqueue_script( 'admin_options', plugin_dir_url( __FILE__ ) . 'admin/js/admin-options.js', array( 'jquery' ), null, true );
-				wp_enqueue_style( 'admin_options', plugin_dir_url( __FILE__ ) . 'admin/css/admin-options.css', false, 'screen' );
+				wp_enqueue_script( 'staylodgic-admin-options', plugin_dir_url( __FILE__ ) . 'admin/js/admin-options.js', array( 'jquery' ), null, true );
+				wp_enqueue_style( 'staylodgic-admin-options', plugin_dir_url( __FILE__ ) . 'admin/css/admin-options.css', false, 'screen' );
 
 				wp_enqueue_script( 'jquery-ui-sortable' );
 
@@ -610,10 +608,10 @@ class Staylodgic_Init {
 			// Yearly Availability
 			if ( isset( $current_admin_screen->base ) && 'overview_page_staylodgic-slg-availability-yearly' === $current_admin_screen->base ) {
 
-				wp_enqueue_style( 'availability-admin-styles' );
+				wp_enqueue_style( 'staylodgic-availability-admin-styles' );
 				wp_enqueue_style( 'staylodgic-indicator-icons' );
-				wp_enqueue_style( 'availability-yearly-styles' );
-				wp_enqueue_script( 'availability-yearly-scripts' );
+				wp_enqueue_style( 'staylodgic-availability-yearly-styles' );
+				wp_enqueue_script( 'staylodgic-availability-yearly-scripts' );
 
 				wp_enqueue_script( 'velocity', plugin_dir_url( __FILE__ ) . 'assets/js/velocity.min.js', array( 'jquery' ), null, true );
 				wp_enqueue_script( 'velocity-ui', plugin_dir_url( __FILE__ ) . 'assets/js/velocity.ui.js', array( 'jquery' ), null, true );
@@ -632,7 +630,7 @@ class Staylodgic_Init {
 				wp_enqueue_style( 'staylodgic-admin-styles' );
 				wp_enqueue_style( 'staylodgic-indicator-icons' );
 
-				wp_enqueue_script( 'admin-post-meta' );
+				wp_enqueue_script( 'staylodgic-admin-post-meta' );
 
 			}
 
@@ -652,11 +650,11 @@ class Staylodgic_Init {
 			// Availability
 			if ( isset( $current_admin_screen->base ) && 'overview_page_staylodgic-slg-availability' === $current_admin_screen->base ) {
 
-				wp_enqueue_style( 'availability-admin-styles' );
+				wp_enqueue_style( 'staylodgic-availability-admin-styles' );
 				wp_enqueue_style( 'staylodgic-indicator-icons' );
 
-				wp_enqueue_style( 'availability-styles' );
-				wp_enqueue_script( 'availability-scripts' );
+				wp_enqueue_style( 'staylodgic-availability-styles' );
+				wp_enqueue_script( 'staylodgic-availability-scripts' );
 
 				wp_enqueue_script( 'velocity', plugin_dir_url( __FILE__ ) . 'assets/js/velocity.min.js', array( 'jquery' ), null, true );
 				wp_enqueue_script( 'velocity-ui', plugin_dir_url( __FILE__ ) . 'assets/js/velocity.ui.js', array( 'jquery' ), null, true );
@@ -681,13 +679,13 @@ class Staylodgic_Init {
 				wp_enqueue_script( 'flatpickr-monthselect' );
 				wp_enqueue_style( 'flatpickr-monthselect' );
 				wp_enqueue_style( 'flatpickr-extra' );
-				wp_enqueue_script( 'admin-post-meta' );
+				wp_enqueue_script( 'staylodgic-admin-post-meta' );
 
 			}
 		}
 
 		// General responsive styles
-		wp_enqueue_style( 'admin-responsive', plugin_dir_url( __FILE__ ) . 'admin/css/admin-responsive.css', false, 'screen' );
+		wp_enqueue_style( 'staylodgic-admin-responsive', plugin_dir_url( __FILE__ ) . 'admin/css/admin-responsive.css', false, 'screen' );
 	}
 
 	/**
@@ -697,16 +695,16 @@ class Staylodgic_Init {
 	 */
 	public function staylodgic_load_front_end_scripts_styles() {
 
-		wp_register_style( 'frontendstyle', plugin_dir_url( __FILE__ ) . 'admin/css/frontend-booking.css', array(), '1.0', 'screen' );
+		wp_register_style( 'staylodgic-frontendstyle', plugin_dir_url( __FILE__ ) . 'admin/css/frontend-booking.css', array(), '1.0', 'screen' );
 		wp_register_style( 'flatpickr', plugin_dir_url( __FILE__ ) . 'assets/js/flatpickr/flatpickr.min.css', array(), '1.0', 'screen' );
 		wp_register_style( 'flatpickr-extra', plugin_dir_url( __FILE__ ) . 'assets/js/flatpickr/flatpickr-extra-style.css', array(), '1.0', 'screen' );
 
 		wp_register_script( 'flatpickr', plugin_dir_url( __FILE__ ) . 'assets/js/flatpickr/flatpickr.js', array( 'jquery' ), '1.0', true );
-		wp_register_script( 'frontend-calendar', plugins_url( 'assets/js/frontend-calendar.js', __FILE__ ), array( 'jquery' ), '1.0', true );
-		wp_register_script( 'payment-helper', plugins_url( 'assets/js/payment-helper.js', __FILE__ ), array( 'jquery' ), '1.0', true );
+		wp_register_script( 'staylodgic-frontend-calendar', plugins_url( 'assets/js/frontend-calendar.js', __FILE__ ), array( 'jquery' ), '1.0', true );
+		wp_register_script( 'staylodgic-payment-helper', plugins_url( 'assets/js/payment-helper.js', __FILE__ ), array( 'jquery' ), '1.0', true );
 		wp_register_style( 'staylodgic-indicator-icons', plugin_dir_url( __FILE__ ) . 'admin/css/indicator-icons.css', false, 'screen' );
 		wp_localize_script(
-			'frontend-calendar',
+			'staylodgic-frontend-calendar',
 			'frontendAjax',
 			array(
 				'ajaxurl' => admin_url( 'admin-ajax.php' ),
@@ -717,15 +715,15 @@ class Staylodgic_Init {
 
 		wp_enqueue_script( 'velocity', plugin_dir_url( __FILE__ ) . 'assets/js/velocity.min.js', array( 'jquery' ), null, true );
 		wp_enqueue_script( 'velocity-ui', plugin_dir_url( __FILE__ ) . 'assets/js/velocity.ui.js', array( 'jquery' ), null, true );
-		wp_enqueue_script( 'common-scripts', plugin_dir_url( __FILE__ ) . 'admin/js/common.js', array( 'jquery' ), null, true );
+		wp_enqueue_script( 'staylodgic-common-scripts', plugin_dir_url( __FILE__ ) . 'admin/js/common.js', array( 'jquery' ), null, true );
 
 		wp_register_style( 'fontawesome-6', plugin_dir_url( __FILE__ ) . 'assets/fonts/fontawesome-free-6.7.2-web/css/fontawesome.css', false, 'screen' );
 		wp_register_style( 'fontawesome-6-brands', plugin_dir_url( __FILE__ ) . 'assets/fonts/fontawesome-free-6.7.2-web/css/all.css', false, 'screen' );
 		wp_register_style( 'fontawesome-6-solid', plugin_dir_url( __FILE__ ) . 'assets/fonts/fontawesome-free-6.7.2-web/css/solid.css', false, 'screen' );
 
-		wp_enqueue_script( 'frontend-calendar', array( 'jquery' ), null, true );
-		wp_enqueue_script( 'payment-helper' );
-		wp_enqueue_style( 'frontendstyle' );
+		wp_enqueue_script( 'staylodgic-frontend-calendar', array( 'jquery' ), null, true );
+		wp_enqueue_script( 'staylodgic-payment-helper' );
+		wp_enqueue_style( 'staylodgic-frontendstyle' );
 		wp_enqueue_style( 'staylodgic-indicator-icons' );
 		wp_enqueue_style( 'flatpickr' );
 		wp_enqueue_script( 'flatpickr' );
@@ -748,7 +746,7 @@ class Staylodgic_Init {
 			// Check if the post content contains the Contact Form 7 shortcode
 			if ( has_shortcode( $post->post_content, 'staylodgic_form_input' ) || 'staylodgic_guestrgs' === get_post_type() ) {
 				// Enqueue the Signature Pad script
-				wp_enqueue_script( 'guest-registration', plugin_dir_url( __FILE__ ) . 'assets/js/guest-registration.js', array(), '1.0.0', true );
+				wp_enqueue_script( 'staylodgic-guest-registration', plugin_dir_url( __FILE__ ) . 'assets/js/guest-registration.js', array(), '1.0.0', true );
 				wp_enqueue_script( 'signature-pad', plugin_dir_url( __FILE__ ) . 'assets/js/signature_pad.umd.min.js', array(), '1.0.0', true );
 				// Enqueue any additional scripts required for the digital signature
 				wp_enqueue_script( 'staylodgic-digital-signature', plugin_dir_url( __FILE__ ) . 'assets/js/digital-signature.js', array( 'signature-pad' ), '1.0.0', true );
@@ -756,13 +754,13 @@ class Staylodgic_Init {
 			}
 		}
 
-		wp_enqueue_style( 'admin-responsive', plugin_dir_url( __FILE__ ) . 'admin/css/frontend-responsive.css', false, 'screen' );
+		wp_enqueue_style( 'staylodgic-admin-responsive', plugin_dir_url( __FILE__ ) . 'admin/css/frontend-responsive.css', false, 'screen' );
 	}
 
 	// Registry Metabox
 	public function staylodgic_registryitemmetabox_init() {
-		add_meta_box( 'registryInfo-meta', esc_html__( 'Registry Options', 'staylodgic' ), 'staylodgic_registryitem_metaoptions', 'staylodgic_guestrgs', 'normal', 'low' );
-		add_meta_box( 'registryInfo-changelog', esc_html__( 'Registry Changelog', 'staylodgic' ), 'staylodgic_registryitem_changelog', 'staylodgic_guestrgs', 'normal', 'low' );
+		add_meta_box( 'staylodgic-registry-meta', esc_html__( 'Registry Options', 'staylodgic' ), 'staylodgic_registryitem_metaoptions', 'staylodgic_guestrgs', 'normal', 'low' );
+		add_meta_box( 'staylodgic-registry-changelog', esc_html__( 'Registry Changelog', 'staylodgic' ), 'staylodgic_registryitem_changelog', 'staylodgic_guestrgs', 'normal', 'low' );
 	}
 	// Reservations Metabox
 	public function staylodgic_reservationsitemmetabox_init() {
@@ -776,16 +774,16 @@ class Staylodgic_Init {
 	}
 	// Customer Metabox
 	public function staylodgic_customersitemmetabox_init() {
-		add_meta_box( 'customersInfo-meta', esc_html__( 'Customer Options', 'staylodgic' ), 'staylodgic_customersitem_metaoptions', 'staylodgic_customers', 'normal', 'low' );
+		add_meta_box( 'staylodgic-customers-meta', esc_html__( 'Customer Options', 'staylodgic' ), 'staylodgic_customersitem_metaoptions', 'staylodgic_customers', 'normal', 'low' );
 	}
 	// Room Metabox
 	public function staylodgic_roomitemmetabox_init() {
-		add_meta_box( 'room-meta', esc_html__( 'Room Options', 'staylodgic' ), 'staylodgic_roomitem_metaoptions', 'staylodgic_rooms', 'normal', 'low' );
-		add_meta_box( 'room-changelog', esc_html__( 'Room Changelog', 'staylodgic' ), 'staylodgic_roomitem_changelog', 'staylodgic_rooms', 'normal', 'low' );
+		add_meta_box( 'staylodgic-room-meta', esc_html__( 'Room Options', 'staylodgic' ), 'staylodgic_roomitem_metaoptions', 'staylodgic_rooms', 'normal', 'low' );
+		add_meta_box( 'staylodgic-room-changelog', esc_html__( 'Room Changelog', 'staylodgic' ), 'staylodgic_roomitem_changelog', 'staylodgic_rooms', 'normal', 'low' );
 	}
 	// Acitivity Metabox
 	public function staylodgic_activityitemmetabox_init() {
-		add_meta_box( 'activity-meta', esc_html__( 'Activity Options', 'staylodgic' ), 'staylodgic_activityitem_metaoptions', 'staylodgic_actvties', 'normal', 'low' );
-		add_meta_box( 'activity-changelog', esc_html__( 'Activity Changelog', 'staylodgic' ), 'staylodgic_activityitem_changelog', 'staylodgic_actvties', 'normal', 'low' );
+		add_meta_box( 'staylodgic-activity-meta', esc_html__( 'Activity Options', 'staylodgic' ), 'staylodgic_activityitem_metaoptions', 'staylodgic_actvties', 'normal', 'low' );
+		add_meta_box( 'staylodgic-activity-changelog', esc_html__( 'Activity Changelog', 'staylodgic' ), 'staylodgic_activityitem_changelog', 'staylodgic_actvties', 'normal', 'low' );
 	}
 }
