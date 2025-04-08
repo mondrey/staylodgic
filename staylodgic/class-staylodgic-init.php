@@ -201,6 +201,7 @@ class Staylodgic_Init {
 		require_once plugin_dir_path( __FILE__ ) . 'includes/admin/options-init.php';
 	}
 
+
 	/**
 	 * Load metaboxes
 	 *

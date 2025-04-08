@@ -40,3 +40,12 @@ function staylodgic_load() {
 	new \Staylodgic\Staylodgic_Init();
 }
 add_action( 'plugins_loaded', 'staylodgic_load' );
+
+function staylodgic_activate_plugin() {
+	require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-page-helper.php';
+
+	if ( class_exists( '\Staylodgic\Helpers\Pages_Helper' ) ) {
+		\Staylodgic\Helpers\Pages_Helper::create_initial_pages();
+	}
+}
+register_activation_hook( __FILE__, 'staylodgic_activate_plugin' );

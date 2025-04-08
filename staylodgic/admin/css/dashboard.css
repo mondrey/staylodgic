@@ -122,3 +122,12 @@ div.dataTables_wrapper div.dataTables_filter {
 	padding-bottom: 8px;
 	margin-top: 40px;
 }
+
+.staylodgic_table_outer .dt-search {
+	margin-bottom: 14px;
+}
+
+.table.dataTable .dt-type-numeric,
+.table.dataTable .dt-type-date {
+	text-align: center;
+}
