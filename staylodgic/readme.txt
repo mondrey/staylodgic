@@ -167,3 +167,9 @@ https://github.com/chartjs/Chart.js
 
 Select2
 https://github.com/select2/select2
+
+== Screenshots ==
+
+1. Availability calendar with confirmed, pending and cancelled bookings.
+2. Availability calendar with only confirmed bookings.
+3. 

@@ -74,16 +74,11 @@
                 info: false,
                 dom: 'Bfrtip',
                 buttons: [
-                    {
-                        extend: 'excel',
-                        title: exportTitle
-                    },
-                    {
-                        extend: 'pdf',
-                        title: exportTitle
-                    },
-                    'print'
-                ]
+                    'copy', 'excel', 'pdf','print'
+                ],
+                layout: {
+                    topStart: 'buttons'
+                }
             });
         });
 

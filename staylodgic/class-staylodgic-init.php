@@ -266,16 +266,11 @@ class Staylodgic_Init {
 		wp_register_script( 'bootstrap', plugin_dir_url( __FILE__ ) . 'assets/js/bootstrap/js/bootstrap.bundle.min.js', array( 'jquery' ), null, true );
 		wp_register_style( 'bootstrap', plugin_dir_url( __FILE__ ) . 'assets/js/bootstrap/css/bootstrap.min.css', false, 'screen' );
 
-		wp_register_style( 'dataTables-bootstrap5', plugin_dir_url( __FILE__ ) . 'admin/js/DataTables/datatables.min.css', false, 'screen' );
-		wp_register_style( 'dataTables-bootstrap5-responsive', plugin_dir_url( __FILE__ ) . 'admin/js/DataTables/datatables.responsive.min.css', false, 'screen' );
-		wp_register_script( 'staylodgic-dataTables', plugin_dir_url( __FILE__ ) . 'admin/js/DataTables/datatables.min.js', array( 'jquery' ), null, true );
-		wp_register_script( 'staylodgic-dataTables-vsf-fonts', plugin_dir_url( __FILE__ ) . 'admin/js/DataTables/vfs_fonts.js', array( 'jquery', 'staylodgic-dataTables' ), null, true );
-		wp_register_script( 'staylodgic-dataTables-PDFmake', plugin_dir_url( __FILE__ ) . 'admin/js/DataTables/pdfmake.min.js', array( 'jquery', 'staylodgic-dataTables' ), null, true );
-		wp_register_script( 'staylodgic-dataTables-responsive', plugin_dir_url( __FILE__ ) . 'admin/js/DataTables/dataTables.responsive.js', array( 'jquery', 'staylodgic-dataTables' ), null, true );
-		wp_register_script( 'staylodgic-dataTables-bootstrap-responsive', plugin_dir_url( __FILE__ ) . 'admin/js/DataTables/dataTables.responsive-bootstrap.js', array( 'jquery', 'staylodgic-dataTables' ), null, true );
+		wp_register_style( 'dataTables', plugin_dir_url( __FILE__ ) . 'admin/js/DataTables/datatables.min.css', false, 'screen' );
+		wp_register_script( 'dataTables', plugin_dir_url( __FILE__ ) . 'admin/js/DataTables/datatables.min.js', array( 'jquery' ), null, true );
 
 		wp_register_script( 'staylodgic-chartjs', plugin_dir_url( __FILE__ ) . 'admin/js/chart.js', array( 'jquery' ), null, true );
-		wp_register_script( 'staylodgic-bookingchart', plugin_dir_url( __FILE__ ) . 'admin/js/booking-charts.js', array( 'staylodgic-chartjs', 'staylodgic-dataTables' ), null, true );
+		wp_register_script( 'staylodgic-bookingchart', plugin_dir_url( __FILE__ ) . 'admin/js/booking-charts.js', array( 'staylodgic-chartjs', 'dataTables' ), null, true );
 
 		if ( function_exists( 'get_current_screen' ) ) {
 			$current_admin_screen = get_current_screen();

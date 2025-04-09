@@ -124,6 +124,7 @@ div.dataTables_wrapper div.dataTables_filter {
 }
 
 .staylodgic_table_outer .dt-search {
+	margin-top: 7px;
 	margin-bottom: 14px;
 }
 
