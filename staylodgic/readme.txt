@@ -10,7 +10,9 @@ StayLodgic is a user-friendly property management system designed specifically f
 
 == Description ==
 
-StayLodgic is a powerful, user-friendly hotel management plugin designed to simplify and enhance operations for small to medium-sized hotels, guesthouses, and boutique properties. With a comprehensive suite of features, StayLodgic allows you to manage room bookings, activity reservations, guest registration, invoicing, and more.
+Staylodgic is a user-friendly hotel management plugin designed to simplify and enhance operations for small to medium-sized hotels, guesthouses, and boutique properties. With a comprehensive suite of features, Staylodgic allows you to manage room bookings, activity reservations, guest registration, invoicing, and more.
+
+Developed by a boutique hotel owner, with real-world needs in mind.
 
 == Shortcodes ==
 
@@ -170,6 +172,58 @@ https://github.com/select2/select2
 
 == Screenshots ==
 
-1. Availability calendar with confirmed, pending and cancelled bookings.
-2. Availability calendar with only confirmed bookings.
-3. 
+1. Room Availability Calendar – View confirmed, pending, and cancelled bookings in a visual calendar format.
+2. Date Picker for Booking – A user-friendly calendar interface for selecting check-in and check-out dates.
+3. Room Booking Page – Guests can easily search availability and book rooms directly from your website.
+4. Booking Overview Dashboard – Manage and monitor all hotel bookings in one place.
+5. Annual Availability View – Get a year-round glance at room availability for better planning.
+6. Activity Ticket with QR Code – Printable or scannable tickets for booked activities, complete with QR verification.
+
+== Frequently Asked Questions ==
+
+Q: What is StayLodgic?
+A: StayLodgic is a WordPress plugin designed for small hotels and guesthouses to manage room bookings, guest registrations, and activity reservations effortlessly.
+
+Q: Who is StayLodgic for?
+A: It’s built specifically for small hotels, guesthouses, and boutique properties looking for a lightweight, self-hosted alternative to complex hotel management systems.
+
+Q: Do I need coding skills to use StayLodgic?
+A: Not at all! StayLodgic is designed to work out of the box with shortcodes you can place on pages. No coding required.
+
+Q: Can I customize the booking pages?
+A: Yes. The plugin uses standard WordPress pages and templates, so you can customize them via your theme or child theme.
+
+Q: Does it work with Gutenberg or classic editor?
+A: Yes. You can use the shortcodes in either the Gutenberg block editor or the classic editor.
+
+Q: Is it compatible with multilingual plugins?
+A: StayLodgic uses standard WordPress functions and should work well with multilingual plugins like WPML or Polylang.
+
+Q: Will it slow down my website?
+A: No. StayLodgic is optimized for performance and designed to be lean and efficient, especially for small-scale operations.
+
+Q: Can I use StayLodgic for free?
+A: Yes! StayLodgic is free and open source. You’re welcome to use, modify, and extend it as you like.
+
+Q: Is support available?
+A: Support is available through the WordPress plugin support forum. Active development means bugs and requests are addressed regularly.
+
+== Changelog ==
+
+1.0.0
+
+Initial release.
+•	Simplified room booking system using WordPress pages and shortcodes
+•	Guest registration with digital signature support
+•	Activity booking with QR code tickets
+•	Availability calendar with monthly and yearly views
+•	Booking status tracking: Confirmed, Pending, Cancelled
+•	Clean, mobile-friendly frontend booking UI
+•	Built-in templates for quick setup
+•	Built for small hotels and boutique stays
+
+== Upgrade Notice ==
+
+1.0.0
+
+Initial stable release. Simplifies room bookings, guest registration, and activity reservations for small hotels using WordPress.
