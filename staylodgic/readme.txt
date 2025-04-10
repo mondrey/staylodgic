@@ -1,7 +1,7 @@
-=== Staylodgic ===
+=== Staylodgic – Boutique Hotel & Activity Management and Booking Manager ===
 Contributors: staylodgic
 Tested up to: 6.7
-Tags: booking system, property management system, hotel booking plugin, staylodgic, hotel management
+Tags: booking system, property management, hotel, booking engine, reservation
 Stable tag: 1.0.0
 Requires PHP: 7.4
 License: GPLv2 or later
@@ -126,6 +126,54 @@ Developed by a boutique hotel owner, with real-world needs in mind.
 
 * Improved Decision-Making
   - Leverage data insights to optimize operations and improve guest satisfaction.
+
+== Helpful How-To ==
+
+<strong>Get started quickly with these helpful guides from the Staylodgic Help PDF:</strong>
+
+<p><strong><a href="https://staylodgic.com/wp-content/uploads/2025/04/Staylodgic-Plugin-Help-Guide.pdf#page=6" target="_blank">Configure Hotel Settings</a></strong><br />
+Set up your hotel’s pages, discounts, taxes, meal plans, and general settings.<br />
+<em>(See pages 6–13 of the PDF)</em></p>
+
+<p><strong><a href="https://staylodgic.com/wp-content/uploads/2025/04/Staylodgic-Plugin-Help-Guide.pdf#page=14" target="_blank">Create Rooms and Bed Layouts</a></strong><br />
+Add rooms, set base rates, configure occupants, and define bed types.<br />
+<em>(See pages 14–20)</em></p>
+
+<p><strong><a href="https://staylodgic.com/wp-content/uploads/2025/04/Staylodgic-Plugin-Help-Guide.pdf#page=21" target="_blank">Manage Availability and Rates</a></strong><br />
+Use the Availability Calendar to control room quantity and pricing by date.<br />
+<em>(See pages 21–35)</em></p>
+
+<p><strong><a href="https://staylodgic.com/wp-content/uploads/2025/04/Staylodgic-Plugin-Help-Guide.pdf#page=36" target="_blank">Add a Booking Manually</a></strong><br />
+Step-by-step on how to create a reservation manually.<br />
+<em>(See pages 36–40)</em></p>
+
+<p><strong><a href="https://staylodgic.com/wp-content/uploads/2025/04/Staylodgic-Plugin-Help-Guide.pdf#page=41" target="_blank">Generate Booking Invoices</a></strong><br />
+Quickly print or save invoices for room bookings.<br />
+<em>(See page 41)</em></p>
+
+<p><strong><a href="https://staylodgic.com/wp-content/uploads/2025/04/Staylodgic-Plugin-Help-Guide.pdf#page=42" target="_blank">Set Up Guest Registration</a></strong><br />
+Customize forms, generate QR codes, and track registration status.<br />
+<em>(See pages 42–46)</em></p>
+
+<p><strong><a href="https://staylodgic.com/wp-content/uploads/2025/04/Staylodgic-Plugin-Help-Guide.pdf#page=47" target="_blank">Create Activities & Reservations</a></strong><br />
+Define activities, schedule time slots, and manage guest signups.<br />
+<em>(See pages 47–53)</em></p>
+
+<p><strong><a href="https://staylodgic.com/wp-content/uploads/2025/04/Staylodgic-Plugin-Help-Guide.pdf#page=54" target="_blank">Generate Activity Invoices</a></strong><br />
+Produce printable invoices for activity bookings.<br />
+<em>(See page 54)</em></p>
+
+<p><strong><a href="https://staylodgic.com/wp-content/uploads/2025/04/Staylodgic-Plugin-Help-Guide.pdf#page=55" target="_blank">Use the Booking Dashboard</a></strong><br />
+Track arrivals, departures, and revenue trends using the graphs.<br />
+<em>(See pages 55–58)</em></p>
+
+<p><strong><a href="https://staylodgic.com/wp-content/uploads/2025/04/Staylodgic-Plugin-Help-Guide.pdf#page=59" target="_blank">Annual Availability View</a></strong><br />
+Get a yearly bird’s-eye view of all your bookings.<br />
+<em>(See pages 59–60)</em></p>
+
+<p><strong><a href="https://staylodgic.com/wp-content/uploads/2025/04/Staylodgic-Plugin-Help-Guide.pdf#page=61" target="_blank">Export Bookings and Registrations</a></strong><br />
+Download CSV files of all bookings and guest data.<br />
+<em>(See pages 61–63)</em></p>
 
 ## Development
 This plugin uses minified JS and CSS files for better performance.
