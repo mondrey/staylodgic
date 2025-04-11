@@ -2,7 +2,7 @@
 Contributors: staylodgic
 Tested up to: 6.7
 Tags: booking system, property management, hotel, booking engine, reservation
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
