@@ -276,7 +276,6 @@ class Staylodgic_Init {
 			$current_admin_screen = get_current_screen();
 		}
 
-		// Custom post type
 		if ( 'staylodgic_customers' === $current_admin_screen->post_type ) {
 
 			wp_enqueue_style( 'fontawesome-6' );

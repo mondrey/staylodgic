@@ -1,4 +1,4 @@
-=== Staylodgic – Boutique Hotel & Activity Management and Booking Manager ===
+=== Staylodgic – Booking & Activity Manager for Boutique Hotels ===
 Contributors: staylodgic
 Tested up to: 6.7
 Tags: booking system, property management, hotel, booking engine, reservation
