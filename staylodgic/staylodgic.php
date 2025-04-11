@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 // Exit if accessed directly
 
-define( 'STAYLODGIC_VERSION', '1.0.0' );
+define( 'STAYLODGIC_VERSION', '1.0.1' );
 
 define( 'STAYLODGIC_BLOCKS__FILE__', __FILE__ );
 
