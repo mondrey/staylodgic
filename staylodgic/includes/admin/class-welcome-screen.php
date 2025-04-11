@@ -68,7 +68,8 @@ class Welcome_Screen {
 		echo '<h1>Welcome ' . esc_html( $current_user->user_login ) . '!</h1>';
 		echo '<div class="welcome-text">';
 		echo '<p class="main-greet">' . esc_html__( 'New to Staylodgic?', 'staylodgic' ) . '</p>';
-		echo '<a class="view-help-guide" target="_blank" href="https://staylodgic.com/staylodgic-help-guide-viewer/">View Help Guide</a>';
+		echo '<a class="view-help-guide" target="_blank" href="https://staylodgic.com/staylodgic-help-guide-viewer/">View Help Guide</a> ';
+		echo '<a class="view-help-guide" target="_blank" download href="https://staylodgic.com/wp-content/uploads/2025/04/Staylodgic-Plugin-Help-Guide.pdf">Download Help Guide (PDF)</a>';
 		echo '</div>';
 		echo '<div class="guided-tour-link-wrap">';
 		echo '<div class="guided-tour-heading">Guided tours</div>';

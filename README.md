@@ -79,6 +79,54 @@ Staylodgic is a user-friendly hotel management plugin designed to simplify and e
 - Provide early booking discounts.
 - Enable long-stay discounts.
 
+## Helpful How-To
+
+**Get started quickly with these helpful guides from the Staylodgic Help PDF:**
+
+- **[Configure Hotel Settings](https://staylodgic.com/wp-content/uploads/2025/04/Staylodgic-Plugin-Help-Guide.pdf#page=6)**  
+  Set up your hotel’s pages, discounts, taxes, meal plans, and general settings.  
+  *(See pages 6–13 of the PDF)*
+
+- **[Create Rooms and Bed Layouts](https://staylodgic.com/wp-content/uploads/2025/04/Staylodgic-Plugin-Help-Guide.pdf#page=14)**  
+  Add rooms, set base rates, configure occupants, and define bed types.  
+  *(See pages 14–20)*
+
+- **[Manage Availability and Rates](https://staylodgic.com/wp-content/uploads/2025/04/Staylodgic-Plugin-Help-Guide.pdf#page=21)**  
+  Use the Availability Calendar to control room quantity and pricing by date.  
+  *(See pages 21–35)*
+
+- **[Add a Booking Manually](https://staylodgic.com/wp-content/uploads/2025/04/Staylodgic-Plugin-Help-Guide.pdf#page=36)**  
+  Step-by-step on how to create a reservation manually.  
+  *(See pages 36–40)*
+
+- **[Generate Booking Invoices](https://staylodgic.com/wp-content/uploads/2025/04/Staylodgic-Plugin-Help-Guide.pdf#page=41)**  
+  Quickly print or save invoices for room bookings.  
+  *(See page 41)*
+
+- **[Set Up Guest Registration](https://staylodgic.com/wp-content/uploads/2025/04/Staylodgic-Plugin-Help-Guide.pdf#page=42)**  
+  Customize forms, generate QR codes, and track registration status.  
+  *(See pages 42–46)*
+
+- **[Create Activities & Reservations](https://staylodgic.com/wp-content/uploads/2025/04/Staylodgic-Plugin-Help-Guide.pdf#page=47)**  
+  Define activities, schedule time slots, and manage guest signups.  
+  *(See pages 47–53)*
+
+- **[Generate Activity Invoices](https://staylodgic.com/wp-content/uploads/2025/04/Staylodgic-Plugin-Help-Guide.pdf#page=54)**  
+  Produce printable invoices for activity bookings.  
+  *(See page 54)*
+
+- **[Use the Booking Dashboard](https://staylodgic.com/wp-content/uploads/2025/04/Staylodgic-Plugin-Help-Guide.pdf#page=55)**  
+  Track arrivals, departures, and revenue trends using the graphs.  
+  *(See pages 55–58)*
+
+- **[Annual Availability View](https://staylodgic.com/wp-content/uploads/2025/04/Staylodgic-Plugin-Help-Guide.pdf#page=59)**  
+  Get a yearly bird’s-eye view of all your bookings.  
+  *(See pages 59–60)*
+
+- **[Export Bookings and Registrations](https://staylodgic.com/wp-content/uploads/2025/04/Staylodgic-Plugin-Help-Guide.pdf#page=61)**  
+  Download CSV files of all bookings and guest data.  
+  *(See pages 61–63)*
+
 ## Benefits
 
 - **Streamlined Hotel Operations**  
