@@ -41,7 +41,7 @@ class Batch_Processor_Base {
 	 */
 	public function process_event_batch(
 		$room_id = false,
-		$ics_url = false,
+		$ics_url = false
 	) {
 
 		// Check for nonce security

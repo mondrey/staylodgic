@@ -2,7 +2,7 @@
 Contributors: staylodgic
 Tested up to: 6.7
 Tags: booking system, property management, hotel, booking engine, reservation
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -258,20 +258,24 @@ A: Support is available through the WordPress plugin support forum. Active devel
 
 == Changelog ==
 
-1.0.0
+= 1.0.2 =
+* Added admin notice and auto-deactivation for PHP versions below 7.4
 
-Initial release.
-•	Simplified room booking system using WordPress pages and shortcodes
-•	Guest registration with digital signature support
-•	Activity booking with QR code tickets
-•	Availability calendar with monthly and yearly views
-•	Booking status tracking: Confirmed, Pending, Cancelled
-•	Clean, mobile-friendly frontend booking UI
-•	Built-in templates for quick setup
-•	Built for small hotels and boutique stays
+= 1.0.1 =
+* Minor update and internal improvements
+
+= 1.0.0 =
+Initial release:
+* Simplified room booking system using WordPress pages and shortcodes
+* Guest registration with digital signature support
+* Activity booking with QR code tickets
+* Availability calendar with monthly and yearly views
+* Booking status tracking: Confirmed, Pending, Cancelled
+* Clean, mobile-friendly frontend booking UI
+* Built-in templates for quick setup
+* Designed for small hotels and boutique stays
 
 == Upgrade Notice ==
 
-1.0.0
-
-Initial stable release. Simplifies room bookings, guest registration, and activity reservations for small hotels using WordPress.
+= 1.0.2 =
+Adds admin notice and automatic deactivation for servers running PHP below 7.4. Please ensure your server runs PHP 7.4 or higher to use Staylodgic.

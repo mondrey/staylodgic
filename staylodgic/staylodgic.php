@@ -3,7 +3,7 @@
  * Plugin Name: Staylodgic
  * Description: Staylodgic Booking System
  * Plugin URI:  https://staylodgic.com/
- * Version:     1.0.1
+ * Version:     1.0.2
  * Author:      Mohamed Musthafa
  * License: GPL2+
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
@@ -25,7 +25,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 // Exit if accessed directly
 
-define( 'STAYLODGIC_VERSION', '1.0.1' );
+// PHP version check: Require PHP 7.4 or higher
+if ( version_compare( PHP_VERSION, '7.4', '<' ) ) {
+	add_action( 'admin_notices', function() {
+		echo '<div class="notice notice-error"><p><strong>' . esc_html__( 'Staylodgic', 'staylodgic' ) . '</strong> ' . esc_html__( 'requires PHP 7.4 or higher. Your server is running PHP', 'staylodgic' ) . ' ' . esc_html( PHP_VERSION ) . '. ' . esc_html__( 'Please upgrade PHP to use this plugin.', 'staylodgic' ) . '</p></div>';
+	});
+
+	require_once ABSPATH . 'wp-admin/includes/plugin.php';
+	deactivate_plugins( plugin_basename( __FILE__ ) );
+
+	return;
+}
+
+define( 'STAYLODGIC_VERSION', '1.0.2' );
 
 define( 'STAYLODGIC_BLOCKS__FILE__', __FILE__ );
 
