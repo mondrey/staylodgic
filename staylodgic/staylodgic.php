@@ -59,5 +59,25 @@ function staylodgic_activate_plugin() {
 	if ( class_exists( '\Staylodgic\Helpers\Pages_Helper' ) ) {
 		\Staylodgic\Helpers\Pages_Helper::create_initial_pages();
 	}
+
+	// Set a transient to trigger redirect
+	set_transient( '_staylodgic_activation_redirect', true, 30 );
 }
 register_activation_hook( __FILE__, 'staylodgic_activate_plugin' );
+add_action( 'admin_init', 'staylodgic_redirect_after_activation' );
+function staylodgic_redirect_after_activation() {
+	// Check if redirect transient is set
+	if ( get_transient( '_staylodgic_activation_redirect' ) ) {
+		// Remove the transient
+		delete_transient( '_staylodgic_activation_redirect' );
+
+		// Prevent redirect on multisite bulk activation
+		if ( is_network_admin() ) {
+			return;
+		}
+
+		// Redirect to settings page
+		wp_safe_redirect( admin_url( 'admin.php?page=staylodgic-settings' ) );
+		exit;
+	}
+}

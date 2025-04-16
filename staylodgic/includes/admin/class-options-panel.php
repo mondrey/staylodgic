@@ -100,23 +100,6 @@ class Options_Panel {
 	}
 
 	/**
-	 * Method Function to create initial pages
-	 *
-	 * @return void
-	 */
-	public function create_initial_pages() {
-
-		$pages = staylodgic_get_template_pages();
-
-		foreach ( $pages as $page ) {
-			$this->create_custom_page( $page['title'], $page['template'], $page['content'], $page['slug'] );
-		}
-
-		// After creating pages, create the menu
-		$this->create_booking_menu();
-	}
-
-	/**
 	 * Method Function to create or update the booking menu
 	 *
 	 * @return void
@@ -590,8 +573,6 @@ class Options_Panel {
 			);
 
 			\Staylodgic\Cache::clear_all_cache();
-
-			$this->create_initial_pages();
 		}
 
 		settings_errors( $this->option_name . '_mesages' );
