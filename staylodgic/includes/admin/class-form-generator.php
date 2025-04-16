@@ -267,16 +267,16 @@ class Form_Generator {
 	public function default_shortcodes() {
 		$shortcodes = '';
 
-		$shortcodes .= "[staylodgic_form_input type=\"text\" id=\"bookingnumber\" label=\"Booking number\" required=\"true\"]\n";
-		$shortcodes .= "[staylodgic_form_input type=\"text\" id=\"fullname\" label=\"Fullname\" required=\"true\"]\n";
-		$shortcodes .= "[staylodgic_form_input type=\"text\" id=\"passport\" label=\"Passport number\" required=\"true\"]\n";
-		$shortcodes .= "[staylodgic_form_input type=\"email\" id=\"email\" label=\"e-Mail\"]\n";
-		$shortcodes .= "[staylodgic_form_input type=\"tel\" id=\"phone\" label=\"Phone number\"]\n";
-		$shortcodes .= "[staylodgic_form_input type=\"datetime-local\" id=\"checkin-date\" label=\"Check-In\"]\n";
-		$shortcodes .= "[staylodgic_form_input type=\"datetime-local\" id=\"checkout-date\" label=\"Check-Out\"]\n";
-		$shortcodes .= "[staylodgic_form_input type=\"select\" id=\"countries\" name=\"countries\" class=\"form-control\" value=\"\" target=\"countries\" label=\"Countries\" required=\"true\"]\n";
-		$shortcodes .= "[staylodgic_form_input type=\"checkbox\" id=\"checkbox1\" label=\"Agree to Terms\" name=\"termsCheckbox\" required=\"true\"]\n";
-		$shortcodes .= "[staylodgic_form_input type=\"signature\" id=\"signature\" label=\"Signature\" name=\"signature\"]\n";
+		$shortcodes .= "[staylodgic_form_input name=\"bookingnumber\" type=\"text\" id=\"bookingnumber\" label=\"Booking number\" required=\"true\"]\n";
+		$shortcodes .= "[staylodgic_form_input name=\"fullname\" type=\"text\" id=\"fullname\" label=\"Fullname\" required=\"true\"]\n";
+		$shortcodes .= "[staylodgic_form_input name=\"passport\" type=\"text\" id=\"passport\" label=\"Passport number\" required=\"true\"]\n";
+		$shortcodes .= "[staylodgic_form_input name=\"email\" type=\"email\" id=\"email\" label=\"e-Mail\"]\n";
+		$shortcodes .= "[staylodgic_form_input name=\"phone\" type=\"tel\" id=\"phone\" label=\"Phone number\"]\n";
+		$shortcodes .= "[staylodgic_form_input name=\"checkin-date\" type=\"datetime-local\" id=\"checkin-date\" label=\"Check-In\"]\n";
+		$shortcodes .= "[staylodgic_form_input name=\"checkout-date\" type=\"datetime-local\" id=\"checkout-date\" label=\"Check-Out\"]\n";
+		$shortcodes .= "[staylodgic_form_input name=\"countries\" type=\"select\" id=\"countries\" class=\"form-control\" value=\"\" target=\"countries\" label=\"Countries\" required=\"true\"]\n";
+		$shortcodes .= "[staylodgic_form_input name=\"termsCheckbox\" type=\"checkbox\" id=\"checkbox1\" label=\"Agree to Terms\" required=\"true\"]\n";
+		$shortcodes .= "[staylodgic_form_input name=\"signature\" type=\"signature\" id=\"signature\" label=\"Signature\"]\n";
 
 		return $shortcodes;
 	}

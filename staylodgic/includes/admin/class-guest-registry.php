@@ -421,9 +421,14 @@ class Guest_Registry {
 											$info_value['value'] = 'Yes';
 										}
 										if ( 'datetime-local' === $info_value['type'] ) {
-											$date                = new \DateTime( $info_value['value'] );
-											$formatted_date      = $date->format( 'l, F j, Y g:i A' );
-											$info_value['value'] = $formatted_date;
+											try {
+												$date                = new \DateTime( $info_value['value'] );
+												$formatted_date      = $date->format( 'l, F j, Y g:i A' );
+												$info_value['value'] = $formatted_date;
+											} catch ( \Exception $e ) {
+												// Fallback for invalid date strings
+												$info_value['value'] = '0000-00-00 00:00:00';
+											}
 										}
 
 										echo '<p class="type-container" data-type="' . esc_attr( $info_value['type'] ) . '" data-id="' . esc_attr( $info_key ) . '"><strong><span class="registration-label">' . esc_html( $info_value['label'] ) . ':</span></strong> <span class="registration-data">' . esc_html( $info_value['value'] ) . '</span></p>';
