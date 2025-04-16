@@ -2,7 +2,7 @@
 Contributors: staylodgic
 Tested up to: 6.7
 Tags: booking system, property management, hotel, booking engine, reservation
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -258,6 +258,9 @@ A: Support is available through the WordPress plugin support forum. Active devel
 
 == Changelog ==
 
+= 1.0.3 =
+* Fixed an issue related to velocity UI
+
 = 1.0.2 =
 * Added admin notice and auto-deactivation for PHP versions below 7.4
 
@@ -277,5 +280,5 @@ Initial release:
 
 == Upgrade Notice ==
 
-= 1.0.2 =
-Adds admin notice and automatic deactivation for servers running PHP below 7.4. Please ensure your server runs PHP 7.4 or higher to use Staylodgic.
+= 1.0.3 =
+Fixed an issue related to velocity UI and an issue related to options settings
