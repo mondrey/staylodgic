@@ -349,7 +349,7 @@ jQuery(document).ready(function ($) {
 			$("#staylodgic_customer_choice").val("new").trigger("change");
 		}
 		// Show the existing customers select input
-		$(".metabox_existing_customers").show();
+		$(".metabox_existing_customers").slideToggle(200);
 	});
 
 	// Attach click event listener to each switch-toggle

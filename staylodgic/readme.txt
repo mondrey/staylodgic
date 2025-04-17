@@ -2,7 +2,7 @@
 Contributors: staylodgic
 Tested up to: 6.8
 Tags: booking system, property management, hotel, booking engine, reservation
-Stable tag: 1.0.4
+Stable tag: 1.0.5
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -258,6 +258,9 @@ A: Support is available through the WordPress plugin support forum. Active devel
 
 == Changelog ==
 
+= 1.0.5 =
+* Fixed total calculation when taxes aren't activated for activites.
+
 = 1.0.4 =
 * Improved handling of invalid date inputs to prevent errors during registration display.
 
@@ -283,5 +286,5 @@ Initial release:
 
 == Upgrade Notice ==
 
-= 1.0.4 =
-Improved handling of invalid date inputs to prevent errors during registration display.
+= 1.0.5 =
+Fixed total calculation when taxes aren't activated for activites.

@@ -333,3 +333,8 @@ div .guided-tour-link {
 	margin-right: 6px;
 	font-size: 12px;
 }
+
+.metaboxtype_get_customer_data ul {
+	margin-top: 20px;
+	padding-left: 0;
+}

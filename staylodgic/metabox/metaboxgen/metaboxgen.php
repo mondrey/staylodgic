@@ -1211,12 +1211,20 @@ function staylodgic_generate_metaboxes( $meta_data, $post_id ) {
 		}
 
 		if ( isset( $field['datatype'] ) && 'roomsubtotal' === $field['datatype'] ) {
-			echo '<br/><span id="reservation-tax-generate" class="button button-primary button-small">' . esc_html__( 'Generate Total', 'staylodgic' ) . '</span>&nbsp;';
-			echo '<span id="reservation-tax-exclude" class="button button-secondary button-small">' . esc_html__( 'Exclude Tax', 'staylodgic' ) . '</span><br/><br/>';
+			if ( staylodgic_has_tax() ) {
+				echo '<br/><span id="reservation-tax-generate" class="button button-primary button-small">' . esc_html__( 'Generate Total', 'staylodgic' ) . '</span>&nbsp;';
+				echo '<span id="reservation-tax-exclude" class="button button-secondary button-small">' . esc_html__( 'Exclude Tax', 'staylodgic' ) . '</span><br/><br/>';
+			} else {
+				echo '<span id="reservation-tax-exclude" class="button button-primary button-small">' . esc_html__( 'General Total', 'staylodgic' ) . '</span><br/><br/>';
+			}
 		}
 		if ( isset( $field['datatype'] ) && 'activitysubtotal' === $field['datatype'] ) {
-			echo '<br/><span id="activity-tax-generate" class="button button-primary button-small">' . esc_html__( 'Generate Total', 'staylodgic' ) . '</span>&nbsp;';
-			echo '<span id="activity-tax-exclude" class="button button-secondary button-small">' . esc_html__( 'Exclude Tax', 'staylodgic' ) . '</span><br/><br/>';
+			if ( staylodgic_has_activity_tax() ) {
+				echo '<br/><span id="activity-tax-generate" class="button button-primary button-small">' . esc_html__( 'Generate Total', 'staylodgic' ) . '</span>&nbsp;';
+				echo '<span id="activity-tax-exclude" class="button button-secondary button-small">' . esc_html__( 'Exclude Tax', 'staylodgic' ) . '</span><br/><br/>';
+			} else {
+				echo '<span id="activity-tax-exclude" class="button button-primary button-small">' . esc_html__( 'Generate Total', 'staylodgic' ) . '</span><br/><br/>';
+			}
 		}
 		echo '</div>';
 	}

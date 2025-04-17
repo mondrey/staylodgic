@@ -1534,7 +1534,7 @@ class Activity {
 
 						$active_class = 'time-disabled';
 
-						if ( (int) $total_people <= (int) $remaining_spots_compare && 0 !== (int) $remaining_spots && '' !== (int) $time ) {
+						if ( (int) $total_people <= (int) $remaining_spots_compare && 0 !== (int) $remaining_spots && 0 !== (int) $time ) {
 							$active_class = 'time-active';
 							if ( $existing_found ) {
 								$active_class .= ' time-choice';
