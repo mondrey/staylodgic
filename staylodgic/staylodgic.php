@@ -3,7 +3,7 @@
  * Plugin Name: Staylodgic
  * Description: Staylodgic Booking System
  * Plugin URI:  https://staylodgic.com/
- * Version:     1.0.5
+ * Version:     1.0.6
  * Author:      Mohamed Musthafa
  * License: GPL2+
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
@@ -37,7 +37,7 @@ if ( version_compare( PHP_VERSION, '7.4', '<' ) ) {
 	return;
 }
 
-define( 'STAYLODGIC_VERSION', '1.0.5' );
+define( 'STAYLODGIC_VERSION', '1.0.6' );
 
 define( 'STAYLODGIC_BLOCKS__FILE__', __FILE__ );
 
