@@ -485,6 +485,13 @@ function staylodgic_has_activity_tax() {
 	return $tax_flag;
 }
 
+function staylodgic_get_max_days_to_process() {
+
+	$max_days_to_process = staylodgic_get_option( 'max_days_to_process' );
+	return $max_days_to_process;
+}
+
+
 /**
  * Method staylodgic_get_mealplan_labels
  *

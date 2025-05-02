@@ -265,6 +265,21 @@ $panel_settings = array(
 		),
 		'tab'         => 'general',
 	),
+	'max_days_to_process'           => array(
+		'label'       => esc_html__( 'Availability Calendar Update Range', 'staylodgic' ),
+		'type'        => 'select',
+		'inputwidth'  => '100',
+		'description' => esc_html__( 'Sets the maximum number of future days you can update room rates and availability for in the calendar.', 'staylodgic' ),
+		'choices'     => array(
+			'64'  => esc_html__( '2 Months', 'staylodgic' ),
+			'94'  => esc_html__( '3 Months', 'staylodgic' ),
+			'124' => esc_html__( '4 Months', 'staylodgic' ),
+			'154' => esc_html__( '5 Months', 'staylodgic' ),
+			'184' => esc_html__( '6 Months', 'staylodgic' ),
+			'370' => esc_html__( '1 Year', 'staylodgic' ),
+		),
+		'tab'         => 'general',
+	),
 	'taxes'                         => array(
 		'label'       => esc_html__( 'Room taxes', 'staylodgic' ),
 		'type'        => 'repeatable_tax',

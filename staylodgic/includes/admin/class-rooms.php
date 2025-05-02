@@ -510,7 +510,13 @@ class Rooms {
 
 		$number_of_days_in_selection = \Staylodgic\Common::count_days_between_dates( $stay_start_date, $stay_end_date );
 
-		if ( $number_of_days_in_selection > 64 ) {
+		$max_days_to_process = 64;
+
+		if ( staylodgic_get_max_days_to_process() ) {
+			$max_days_to_process = staylodgic_get_max_days_to_process();
+		}
+
+		if ( $number_of_days_in_selection > $max_days_to_process ) {
 			// Return an error response if date_range is invalid
 			$response = array(
 				'success' => false,
