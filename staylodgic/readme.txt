@@ -258,6 +258,9 @@ A: Support is available through the WordPress plugin support forum. Active devel
 
 == Changelog ==
 
+= 1.0.6 =
+* Added option to set the maximum number of future days for updating rates and availability in the calendar.
+
 = 1.0.5 =
 * Fixed total calculation when taxes aren't activated for activites.
 
@@ -286,5 +289,6 @@ Initial release:
 
 == Upgrade Notice ==
 
-= 1.0.5 =
-Fixed total calculation when taxes aren't activated for activites.
+= 1.0.6 =
+
+Adds a configurable setting to wp-admn > Plugin optons > General, to control how many future days can be updated in the availability calendar. Recommended for sites managing long-term booking data.
