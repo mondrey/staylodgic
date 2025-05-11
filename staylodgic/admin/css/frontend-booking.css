@@ -477,8 +477,8 @@ a.book-button:hover:active,
 	text-decoration: none;
 }
 #woo-bookingpayment {
+	margin-top: 10px;
 	background: #ff0000;
-	display: none;
 }
 
 #submitregistration {

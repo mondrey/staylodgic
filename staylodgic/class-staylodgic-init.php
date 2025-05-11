@@ -171,6 +171,12 @@ class Staylodgic_Init {
 
 		require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-modals.php';
 
+		// Only load if WooCommerce is active
+		if ( class_exists( 'WooCommerce' ) ) {
+			require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-payments.php';
+			new \Staylodgic\Payments();
+		}
+
 		require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-booking.php';
 		new \Staylodgic\Booking();
 
@@ -696,7 +702,10 @@ class Staylodgic_Init {
 
 		wp_register_script( 'flatpickr', plugin_dir_url( __FILE__ ) . 'assets/js/flatpickr/flatpickr.js', array( 'jquery' ), '1.0', true );
 		wp_register_script( 'staylodgic-frontend-calendar', plugins_url( 'assets/js/frontend-calendar.js', __FILE__ ), array( 'jquery' ), '1.0', true );
-		wp_register_script( 'staylodgic-payment-helper', plugins_url( 'assets/js/payment-helper.js', __FILE__ ), array( 'jquery' ), '1.0', true );
+		if ( class_exists( 'WooCommerce' ) && staylodgic_is_payment_active() ) {
+			wp_register_script( 'staylodgic-payment-helper', plugins_url( 'assets/js/payment-helper.js', __FILE__ ), array( 'jquery' ), '1.0', true );
+			wp_enqueue_script( 'staylodgic-payment-helper' );
+		}
 		wp_register_style( 'staylodgic-indicator-icons', plugin_dir_url( __FILE__ ) . 'admin/css/indicator-icons.css', false, 'screen' );
 		wp_localize_script(
 			'staylodgic-frontend-calendar',
@@ -717,7 +726,6 @@ class Staylodgic_Init {
 		wp_register_style( 'fontawesome-6-solid', plugin_dir_url( __FILE__ ) . 'assets/fonts/fontawesome-free-6.7.2-web/css/solid.css', false, 'screen' );
 
 		wp_enqueue_script( 'staylodgic-frontend-calendar', array( 'jquery' ), null, true );
-		wp_enqueue_script( 'staylodgic-payment-helper' );
 		wp_enqueue_style( 'staylodgic-frontendstyle' );
 		wp_enqueue_style( 'staylodgic-indicator-icons' );
 		wp_enqueue_style( 'flatpickr' );

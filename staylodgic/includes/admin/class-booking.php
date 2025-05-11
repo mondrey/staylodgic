@@ -318,6 +318,9 @@ class Booking {
 			$html .= '<div class="form-group">';
 			$html .= '<div id="bookingResponse" class="booking-response"></div>';
 			$html .= '<div id="booking-register" class="book-button">' . __( 'Book this room', 'staylodgic' ) . '</div>';
+			if ( staylodgic_is_payment_active() ) {
+				$html .= self::payment_helper_button( $totalprice['total'], $bookingnumber );
+			}
 			$html .= '</div>';
 		}
 
@@ -1373,7 +1376,7 @@ class Booking {
 	 * @return void
 	 */
 	public function payment_helper_button( $total, $bookingnumber ) {
-		$payment_button = '<div data-paytotal="' . esc_attr( $total ) . '" data-bookingnumber="' . esc_attr( $bookingnumber ) . '" id="woo-bookingpayment" class="book-button">' . __( 'Pay Booking', 'staylodgic' ) . '</div>';
+		$payment_button = '<div data-paytotal="' . esc_attr( $total ) . '" data-bookingnumber="' . esc_attr( $bookingnumber ) . '" id="woo-bookingpayment-copy" class="book-button">' . __( 'Pay Booking', 'staylodgic' ) . '</div>';
 		return $payment_button;
 	}
 
@@ -1440,8 +1443,14 @@ class Booking {
 
 		$form_inputs = self::booking_data_fields();
 
+		$payment_is_active_class = '';
+
+		if ( staylodgic_is_payment_active() ) {
+			$payment_is_active_class = 'payment-is-active';
+		}
+
 		$form_html = '
-		<div class="registration_form_outer registration_request">
+		<div class="registration_form_outer registration_request ' . esc_attr( $payment_is_active_class ) . '">
 			<div class="registration_form_wrap">
 				<div class="registration_form">
 					<div class="registration-column registration-column-one registration_form_inputs">
@@ -1539,6 +1548,7 @@ class Booking {
 						<div id="booking-details" class="book-button not-fullwidth booking-successful-button">
 							<a href="' . esc_url( $booking_page_link ) . '">' . esc_html__( 'Booking Details', 'staylodgic' ) . '</a>
 						</div>
+						<div id="registration-payment-container"></div>
 					</div>
 				</div>
 			</div>

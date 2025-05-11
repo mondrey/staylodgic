@@ -22,6 +22,7 @@ $panel_args = array(
 		'perperson'         => '<i class="fa fa-user"></i> <span class="options-menu-link-text">' . esc_html__( 'Per person price', 'staylodgic' ) . '</span>',
 		'tax'               => '<i class="fa fa-calculator"></i> <span class="options-menu-link-text">' . esc_html__( 'Room Tax', 'staylodgic' ) . '</span>',
 		'activity-tax'      => '<i class="fa fa-calculator"></i> <span class="options-menu-link-text">' . esc_html__( 'Activity Tax', 'staylodgic' ) . '</span>',
+		'payments'          => '<i class="fas fa-credit-card"></i> <span class="options-menu-link-text">' . esc_html__( 'Payments', 'staylodgic' ) . '</span>',
 	),
 );
 
@@ -225,6 +226,12 @@ $panel_settings = array(
 		'type'        => 'checkbox',
 		'description' => '',
 		'tab'         => 'activity-tax',
+	),
+	'enable_payments'               => array(
+		'label'       => esc_html__( 'Enable Payments', 'staylodgic' ),
+		'type'        => 'checkbox',
+		'description' => 'Ensure WooCommerce plugin is active and payments setup.',
+		'tab'         => 'payments',
 	),
 	'new_bookingstatus'             => array(
 		'label'       => esc_html__( 'Choose status for new bookings', 'staylodgic' ),

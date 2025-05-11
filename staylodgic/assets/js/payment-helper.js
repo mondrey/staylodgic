@@ -19,6 +19,10 @@
 			// Get the total value from the form
 			var total = $(this).data("paytotal");
 			var booking_number = $(this).data("bookingnumber");
+
+			var staylodgic_roomlistingbox_nonce = $(
+				'input[name="staylodgic_roomlistingbox_nonce"]'
+			).val();
 			console.log(total);
 			// Send an AJAX request to trigger the server-side function
 			$.ajax({
@@ -28,7 +32,7 @@
 					action: 'process_reservation_payment',
 					total: total,
 					booking_number: booking_number,
-					nonce: staylodgic_admin_vars.nonce
+					staylodgic_roomlistingbox_nonce: staylodgic_roomlistingbox_nonce
 				},
 				success: function(response) {
 					// Handle the success response

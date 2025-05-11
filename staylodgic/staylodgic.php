@@ -81,3 +81,37 @@ function staylodgic_redirect_after_activation() {
 		exit;
 	}
 }
+
+add_filter( 'woocommerce_order_item_name', 'staylodgic_remove_product_link_from_thankyou', 10, 3 );
+function staylodgic_remove_product_link_from_thankyou( $product_name, $item, $is_visible ) {
+	if ( is_order_received_page() ) {
+		$product_name = $item->get_name(); // Just return the name without any link
+	}
+	return $product_name;
+}
+
+/**
+ * Display the booking number under each product name
+ * on the main checkout page (not after payment).
+ */
+add_filter( 'woocommerce_get_item_data', 'staylodgic_show_booking_number_in_checkout_table', 10, 2 );
+
+function staylodgic_show_booking_number_in_checkout_table( $item_data, $cart_item ) {
+
+	// Only on the checkout form, not on the thank‑you / order‑received screen.
+	if ( is_checkout() ) {
+
+		$booking_number = WC()->session->get( 'booking_number' );
+
+		if ( ! empty( $booking_number ) ) {
+			$item_data[] = array(
+				'name'    => __( 'Booking No', 'staylodgic' ),
+				'value'   => esc_html( $booking_number ),
+				/* For WC ≥ 5.3 templates that look for 'display'. */
+				'display' => esc_html( $booking_number ),
+			);
+		}
+	}
+
+	return $item_data;
+}

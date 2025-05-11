@@ -485,6 +485,14 @@ function staylodgic_has_activity_tax() {
 	return $tax_flag;
 }
 
+function staylodgic_is_payment_active() {
+
+	if ( class_exists( 'WooCommerce' ) ) {
+		$enable_payments = staylodgic_get_option( 'enable_payments' );
+	}
+	return $enable_payments;
+}
+
 function staylodgic_get_max_days_to_process() {
 
 	$max_days_to_process = staylodgic_get_option( 'max_days_to_process' );

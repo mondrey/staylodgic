@@ -338,3 +338,28 @@ div .guided-tour-link {
 	margin-top: 20px;
 	padding-left: 0;
 }
+
+#menu-posts-staylodgic_actvtres {
+	background-color: #5a1aff; /* Slightly lighter */
+}
+#menu-posts-staylodgic_bookings {
+	background-color: #661fff; /* More vibrant */
+}
+#menu-posts-staylodgic_actvties {
+	background-color: #4b00e6; /* Slightly darker */
+}
+#menu-posts-staylodgic_guestrgs {
+	background-color: #3d00cc; /* Darker with blue shift */
+}
+#menu-posts-staylodgic_customers {
+	background-color: #4a15ab; /* Lighter and richer */
+}
+#menu-posts-staylodgic_rooms {
+	background-color: #4d11c6; /* Even lighter */
+}
+#toplevel_page_staylodgic-slg-dashboard {
+	background-color: #99004f; /* Deep, dark purple */
+}
+#toplevel_page_staylodgic-settings {
+	background-color: #4201a2; /* Soft lavender tint */
+}

@@ -594,26 +594,6 @@
 		// Initialize flatpickr and get the instance
 		var flatpickrInstance = ReservationDatePicker();
 
-		// $("#number-of-children").change(function () {
-		// 	// Remove old selectors if exists
-		// 	$(".children-selector-wrap").remove();
-
-		// 	var numberOfChildren = $(this).val();
-		// 	var maxAge = $(this).parent().data('agelimitofchild');
-
-		// 	for (var j = 0; j < numberOfChildren; j++) {
-		// 		var select = $('<select id="children_age_' + (j + 1) + '" class="children-age-selector" name="children_age[]"></select>');
-
-		// 		for (var i = 0; i <= maxAge; i++) {
-		// 			select.append('<option value="' + i + '">' + i + '</option>');
-		// 		}
-
-		// 		var wrapper = $('<div class="children-selector-wrap"></div>');
-		// 		wrapper.append(select);
-		// 		$(this).parent().append(wrapper);
-		// 	}
-		// });
-
 		// Frontend codes
 		$("#bookingSearch").on("click", function (e) {
 			// Changed here
@@ -631,21 +611,8 @@
 
 			console.log(inputVal);
 			if (inputVal == "") {
-				console.log("One");
-				// Only one date in input field, get date from #check-in-display
-				// var checkInDateStr = $('#check-in-display span').text();
-				// got_checkin_date = new Date(checkInDateStr);
-				// got_checkout_date = new Date(checkInDateStr); // Use the same date for check-out
-				// updateSelectedDates(got_checkin_date, got_checkout_date);
-				// var formattedCheckIn = formatDateToYYYYMMDD(got_checkin_date);
-				// var formattedCheckOut = formatDateToYYYYMMDD(got_checkout_date);
-				// reservationDate = formattedCheckIn + ' to ' + formattedCheckOut;
-				// console.log( reservationDate );
 				$("#bookingSearch").removeClass("booking-disabled");
 			} else {
-				//reservationDate = $('#reservation-date').val();
-				console.log("Two");
-				//console.log( reservationDate );
 
 				var inputVal = $("#reservation-date").val();
 				var dates = inputVal.split(" to ");
@@ -823,7 +790,14 @@
 							.removeClass("error")
 							.addClass("success")
 							.text("Booking successfully registered.");
-						$(".registration_request").remove();
+
+						if ( $(".registration_request").hasClass("payment-is-active") ) {
+							var $cloned = $('#woo-bookingpayment-copy').clone(true).attr('id', 'woo-bookingpayment');
+							$('#registration-payment-container').append($cloned);
+							$(".registration_request").hide();
+						} else {
+							$(".registration_request").remove();
+						}
 						$(".registration_successful").show();
 					} else {
 						// handle error
