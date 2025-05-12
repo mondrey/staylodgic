@@ -11,10 +11,13 @@ class Payments {
 		add_action( 'wp_ajax_nopriv_process_reservation_payment', array( $this, 'process_reservation_payment' ) );
 
 		// Add the booking number to the checkout page
+		add_action( 'woocommerce_order_details_after_order_table_items', array( $this, 'add_booking_number_to_checkout' ) );
 		add_action( 'woocommerce_checkout_before_customer_details', array( $this, 'add_booking_number_to_checkout' ) );
-		add_action( 'woocommerce_before_thankyou', array( $this, 'add_booking_number_to_checkout' ) );
 
 		add_action( 'woocommerce_checkout_order_processed', array( $this, 'process_booking_after_checkout' ), 10, 3 );
+
+		add_action( 'woocommerce_new_order',  array( $this, 'process_after_order' ) );
+
 
 		add_action( 'woocommerce_payment_failed', array( $this, 'handle_payment_failure' ), 10, 2 );
 
@@ -325,11 +328,29 @@ class Payments {
 	public function process_booking_after_checkout( $order_id, $posted_data, $order ) {
 		// Get the booking number from the session
 		$booking_number = \WC()->session->get( 'booking_number' );
-
+		error_log('here 0');
 		// Perform your custom function based on the booking number
 		if ( ! empty( $booking_number ) ) {
 			// Call your custom function here and pass the booking number
 			$this->set_booking_payment_done( $booking_number, $order );
+		}
+	}
+
+	public function process_after_order() {
+
+		$booking_number = \WC()->session->get( 'booking_number' );
+
+		$reservations_instance = new \Staylodgic\Reservations();
+		$reservation_id        = $reservations_instance->get_reservation_id_for_booking( $booking_number );
+		error_log('here');
+		if ( $reservation_id ) {
+			error_log('here 2');
+			$session = \WC()->session;
+			// Get the total price from the session
+			$total_price           = $session->get( 'total_price' );
+			update_post_meta( $reservation_id, 'staylodgic_reservation_room_paid', $total_price );
+			update_post_meta( $reservation_id, 'staylodgic_reservation_status', 'confirmed' );
+			update_post_meta( $reservation_id, 'staylodgic_reservation_substatus', 'completed' );
 		}
 	}
 
@@ -348,6 +369,7 @@ class Payments {
 		// Save the booking number to the order meta
 		$order->update_meta_data( 'staylodgic_booking_number', $booking_number );
 		$order->save();
+
 	}
 
 	/**
