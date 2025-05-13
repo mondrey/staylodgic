@@ -381,7 +381,6 @@ function staylodgic_generate_metaboxes( $meta_data, $post_id ) {
 						echo ' readonly';
 					}
 					echo ' data-currencyformat="2" class="' . esc_attr( $class ) . ' currency-input" min="0" step="0.01" name="staylodgic_reservation_room_paid[' . esc_attr( $date_time ) . ']" id="', esc_attr( $field['id'] ), '" value="" size="30" />';
-					echo '<ul>';
 
 					$woo_payment_order_id       = get_post_meta( $post_id, 'staylodgic_woo_order_id', true );
 
@@ -389,7 +388,7 @@ function staylodgic_generate_metaboxes( $meta_data, $post_id ) {
 					$total_cost     = get_post_meta( $post_id, 'staylodgic_reservation_total_room_cost', true );
 					$total_payments = 0;
 					if ( is_array( $payments ) && ! empty( $payments ) ) {
-						echo '<ul>';
+						echo '<ul class="metabox-payments">';
 						foreach ( $payments as $timestamp => $value ) {
 							if ( isset( $value ) && '' !== $value ) {
 								$payment_id = 'payment-' . sanitize_title( $timestamp );
@@ -404,25 +403,27 @@ function staylodgic_generate_metaboxes( $meta_data, $post_id ) {
 								$total_payments = $total_payments + $value;
 							}
 						}
-						echo '</ul>';
-						echo '<p class="reservation-payment-balance">' . esc_html__( 'Balance', 'staylodgic' ) . '</p>';
+						echo '<li>';
+						echo '<p class="reservation-payment-balance"><strong>' . esc_html__( 'Balance', 'staylodgic' ) . '</strong></p>';
 						$balance     = intval( $total_cost ) - intval( $total_payments );
 						$payment_set = staylodgic_price( $balance );
 						echo wp_kses( $payment_set, staylodgic_get_price_allowed_tags() );
+						echo '</li>';
+						echo '</ul>';
 					}
 
-					echo '<p>';
 					if ( $order = wc_get_order( $woo_payment_order_id ) ) {
+						echo '<div class="woo-stay-payment">';
 						$order_number = $order->get_order_number();
 						$order_link   = admin_url( 'post.php?post=' . $woo_payment_order_id . '&action=edit' );
-
+						echo esc_html__( 'This reservation was linked to a payment order. You can view the full order details here: ','staylodgic' );
+						echo '<div class="woo-stay-payment-link">';
 						echo '<a href="' . esc_url( $order_link ) . '" target="_blank">';
 						echo 'Order #' . esc_html( $order_number );
 						echo '</a>';
-					} else {
-						echo 'Order not found.';
+						echo '</div>';
+						echo '</div>';
 					}
-					echo '</p>';
 
 					break;
 

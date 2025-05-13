@@ -338,6 +338,24 @@ div .guided-tour-link {
 	margin-top: 20px;
 	padding-left: 0;
 }
+.metabox-fields ul.metabox-payments {
+	background: #f9f4e3;
+	padding: 20px;
+	margin-top: 10px;
+}
+.metabox-fields ul.metabox-payments li {
+	border-bottom: 1px dotted #000;
+}
+.reservation-payment-balance {
+	margin-top: 20px;
+}
+.woo-stay-payment {
+	background: #ffe5e5;
+	padding: 20px;
+}
+.woo-stay-payment-link {
+	margin-top: 7px;
+}
 
 #menu-posts-staylodgic_actvtres {
 	background-color: #5a1aff; /* Slightly lighter */

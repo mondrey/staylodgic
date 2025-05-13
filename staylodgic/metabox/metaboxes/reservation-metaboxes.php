@@ -218,7 +218,7 @@ function staylodgic_reservations_metadata() {
 				'heading'  => 'subhead',
 				'group'    => 'group',
 				'datatype' => 'payment',
-				'desc'     => '',
+				'desc'     => 'Enter payments recieved.',
 				'std'      => '',
 			),
 			array(

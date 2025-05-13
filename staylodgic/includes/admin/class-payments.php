@@ -36,9 +36,10 @@ class Payments {
 
 	public function staylodgic_display_booking_number_in_admin_order( $order ) {
 		$booking_number = $order->get_meta( 'staylodgic_booking_number' );
-		echo '<p><strong>' . __( 'Booking Number:', 'staylodgic' ) . ':</strong></p>';
 		if ( $booking_number ) {
-			echo '<p><strong>' . __( 'Booking Number', 'staylodgic' ) . ':</strong> ' . esc_html( $booking_number ) . '</p>';
+			echo '<div class="order_data_column">';
+			self::display_booking_information( $booking_number );
+			echo '</div>';
 		}
 	}
 
@@ -186,12 +187,30 @@ class Payments {
 			// Get the booking number from the order meta data
 			$booking_number = $order->get_meta( 'staylodgic_booking_number' );
 
-			$found_activity = false;
-			$found_room = false;
+			self::display_booking_information( $booking_number );
 
-			if ( $booking_number ) {
+		}
+	}
+
+	public function display_booking_information( $booking_number ) {
+		$found_activity = false;
+		$found_room = false;
+
+		if ( $booking_number ) {
+			$args = array(
+				'post_type'      => 'staylodgic_bookings',
+				'posts_per_page' => -1,
+				'post_status'    => 'publish',
+				'meta_key'       => 'staylodgic_booking_number',
+				'meta_value'     => $booking_number,
+			);
+
+			$reservations = get_posts( $args );
+
+			if ( empty( $reservations ) ) {
+				// echo $booking_number;
 				$args = array(
-					'post_type'      => 'staylodgic_bookings',
+					'post_type'      => 'staylodgic_actvtres',
 					'posts_per_page' => -1,
 					'post_status'    => 'publish',
 					'meta_key'       => 'staylodgic_booking_number',
@@ -200,69 +219,54 @@ class Payments {
 
 				$reservations = get_posts( $args );
 
-				if ( empty( $reservations ) ) {
-					// echo $booking_number;
-					$args = array(
-						'post_type'      => 'staylodgic_actvtres',
-						'posts_per_page' => -1,
-						'post_status'    => 'publish',
-						'meta_key'       => 'staylodgic_booking_number',
-						'meta_value'     => $booking_number,
-					);
+				$found_activity = true;
+			} else {
+				$found_room = true;
+			}
 
-					$reservations = get_posts( $args );
+			if ( ! empty( $reservations ) ) {
+				$links = array();
+				foreach ( $reservations as $reservation ) {
 
-					$found_activity = true;
-				} else {
-					$found_room = true;
+					if ( $found_room ) {
+						$room_id   = get_post_meta( $reservation->ID, 'staylodgic_room_id', true );
+						$room_name = get_the_title( $room_id );
+
+						$customer_id = get_post_meta( $reservation->ID, 'staylodgic_customer_id', true );
+
+						if ( ! empty( $room_name ) ) {
+							$reservation_link = get_edit_post_link( $reservation->ID );
+							$links[]          = '<p><a href="' . $reservation_link . '"><small>' . $room_name . '</small></a></p>';
+						}
+					}
+
+					if ( $found_activity ) {
+						$activity_id   = get_post_meta( $reservation->ID, 'staylodgic_activity_id', true );
+						$activity_name = get_the_title( $activity_id );
+
+						$customer_id = get_post_meta( $reservation->ID, 'staylodgic_customer_id', true );
+
+						if ( ! empty( $activity_name ) ) {
+							$reservation_link = get_edit_post_link( $reservation->ID );
+							$links[]          = '<p><a href="' . $reservation_link . '"><small>' . $activity_name . '</small></a></p>';
+						}
+					}
+
 				}
-
-				if ( ! empty( $reservations ) ) {
-					$links = array();
-
-					foreach ( $reservations as $reservation ) {
-
-						if ( $found_room ) {
-							$room_id   = get_post_meta( $reservation->ID, 'staylodgic_room_id', true );
-							$room_name = get_the_title( $room_id );
-
-							$customer_id = get_post_meta( $reservation->ID, 'staylodgic_customer_id', true );
-
-							if ( ! empty( $room_name ) ) {
-								$reservation_link = get_edit_post_link( $reservation->ID );
-								$links[]          = '<li><a href="' . $reservation_link . '"><small>' . $room_name . '</small></a></li>';
-							}
-						}
-
-						if ( $found_activity ) {
-							$activity_id   = get_post_meta( $reservation->ID, 'staylodgic_activity_id', true );
-							$activity_name = get_the_title( $activity_id );
-
-							$customer_id = get_post_meta( $reservation->ID, 'staylodgic_customer_id', true );
-
-							if ( ! empty( $activity_name ) ) {
-								$reservation_link = get_edit_post_link( $reservation->ID );
-								$links[]          = '<li><a href="' . $reservation_link . '"><small>' . $activity_name . '</small></a></li>';
-							}
-						}
-
-					}
-
-					if ( ! empty( $links ) ) {
-						$customer_link = get_edit_post_link( $customer_id );
-						$customer_name = get_the_title( $customer_id );
-						echo '<p><small><strong>Booking No: ' . $booking_number . '</strong></small></p>';
-						echo '<p><small><strong><a href="' . $customer_link . '">' . $customer_name . '</a></strong></small></p>';
-						echo implode( '', $links );
-					} else {
-						echo '-';
-					}
+				if ( ! empty( $links ) ) {
+					$customer_link = get_edit_post_link( $customer_id );
+					$customer_name = get_the_title( $customer_id );
+					echo '<p><h4>Booking No: ' . $booking_number . '</h4></p>';
+					echo '<p><a href="' . $customer_link . '">' . $customer_name . '</a></p>';
+					echo implode( '', $links );
 				} else {
 					echo '-';
 				}
 			} else {
 				echo '-';
 			}
+		} else {
+			echo '-';
 		}
 	}
 
@@ -407,8 +411,6 @@ class Payments {
 		error_log( 'here' . $order_id);
 		if ( $reservation_id ) {
 			update_post_meta( $reservation_id, 'staylodgic_woo_order_id', $order_id );
-			update_post_meta( $reservation_id, 'staylodgic_reservation_status', 'confirmed' );
-			update_post_meta( $reservation_id, 'staylodgic_reservation_substatus', 'completed' );
 		}
 	}
 
