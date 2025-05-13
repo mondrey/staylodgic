@@ -383,6 +383,8 @@ function staylodgic_generate_metaboxes( $meta_data, $post_id ) {
 					echo ' data-currencyformat="2" class="' . esc_attr( $class ) . ' currency-input" min="0" step="0.01" name="staylodgic_reservation_room_paid[' . esc_attr( $date_time ) . ']" id="', esc_attr( $field['id'] ), '" value="" size="30" />';
 					echo '<ul>';
 
+					$woo_payment       = get_post_meta( get_the_id(), 'staylodgic_woo_order_id', true );
+
 					$payments       = get_post_meta( get_the_id(), 'staylodgic_reservation_room_paid', true );
 					$total_cost     = get_post_meta( get_the_id(), 'staylodgic_reservation_total_room_cost', true );
 					$total_payments = 0;
