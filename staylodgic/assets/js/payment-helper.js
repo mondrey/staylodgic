@@ -4,7 +4,10 @@
 		$(document).on('click', '#woo-bookingpayment', function(e) {
 			e.preventDefault();
 
-			const $form = $('#hotel-room-listing');
+			let $form = $('#hotel-room-listing');
+			if ($form.length === 0) {
+				$form = $('#hotel-acitivity-listing');
+			}
 
 			// Check if form is valid
 			if ($form[0].checkValidity() === false) {

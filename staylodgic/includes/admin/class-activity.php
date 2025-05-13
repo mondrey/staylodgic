@@ -830,8 +830,13 @@ class Activity {
 
 		$form_inputs = self::booking_data_fields();
 
+		$payment_is_active_class = '';
+		if ( staylodgic_is_payment_active() ) {
+			$payment_is_active_class = 'payment-is-active';
+		}
+
 		echo '
-		<div class="registration_form_outer registration_request">
+		<div class="registration_form_outer registration_request ' . esc_attr( $payment_is_active_class ) . '">
 			<div class="registration_form_wrap">
 				<div class="registration_form">
 					<div class="registration-column registration-column-one registration_form_inputs">
@@ -929,6 +934,7 @@ class Activity {
 							<div id="booking-details" class="book-button not-fullwidth booking-successful-button">
 								<a href="' . esc_url( $booking_page_link ) . '">' . esc_html__( 'Booking Details', 'staylodgic' ) . '</a>
 							</div>
+							<div id="registration-payment-container"></div>
 						</p>
 					</div>
 				</div>
@@ -1002,12 +1008,28 @@ class Activity {
 			$html .= '<div class="form-group">';
 			$html .= '<div id="bookingResponse" class="booking-response"></div>';
 			$html .= '<div id="activity-register" class="book-button">' . esc_html__( 'Book this activity', 'staylodgic' ) . '</div>';
+			if ( staylodgic_is_payment_active() ) {
+				$html .= self::payment_helper_button( $totalprice['total'], $bookingnumber );
+			}
 			$html .= '</div>';
 		}
 
 		$html .= '</div>';
 
 		return $html;
+	}
+
+	/**
+	 * Method payment_helper_button
+	 *
+	 * @param $total $total
+	 * @param $bookingnumber $bookingnumber
+	 *
+	 * @return void
+	 */
+	public function payment_helper_button( $total, $bookingnumber ) {
+		$payment_button = '<div data-paytotal="' . esc_attr( $total ) . '" data-bookingnumber="' . esc_attr( $bookingnumber ) . '" id="woo-bookingpayment-copy" class="book-button">' . __( 'Pay Booking', 'staylodgic' ) . '</div>';
+		return $payment_button;
 	}
 
 

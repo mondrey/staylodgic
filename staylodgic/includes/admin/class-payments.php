@@ -186,6 +186,9 @@ class Payments {
 			// Get the booking number from the order meta data
 			$booking_number = $order->get_meta( 'staylodgic_booking_number' );
 
+			$found_activity = false;
+			$found_room = false;
+
 			if ( $booking_number ) {
 				$args = array(
 					'post_type'      => 'staylodgic_bookings',
@@ -197,26 +200,59 @@ class Payments {
 
 				$reservations = get_posts( $args );
 
+				if ( empty( $reservations ) ) {
+					// echo $booking_number;
+					$args = array(
+						'post_type'      => 'staylodgic_actvtres',
+						'posts_per_page' => -1,
+						'post_status'    => 'publish',
+						'meta_key'       => 'staylodgic_booking_number',
+						'meta_value'     => $booking_number,
+					);
+
+					$reservations = get_posts( $args );
+
+					$found_activity = true;
+				} else {
+					$found_room = true;
+				}
+
 				if ( ! empty( $reservations ) ) {
 					$links = array();
 
 					foreach ( $reservations as $reservation ) {
-						$room_id   = get_post_meta( $reservation->ID, 'staylodgic_room_id', true );
-						$room_name = get_the_title( $room_id );
 
-						$customer_id = get_post_meta( $reservation->ID, 'staylodgic_customer_id', true );
+						if ( $found_room ) {
+							$room_id   = get_post_meta( $reservation->ID, 'staylodgic_room_id', true );
+							$room_name = get_the_title( $room_id );
 
-						if ( ! empty( $room_name ) ) {
-							$reservation_link = get_edit_post_link( $reservation->ID );
-							$links[]          = '<li><a href="' . $reservation_link . '">' . $room_name . '</a></li>';
+							$customer_id = get_post_meta( $reservation->ID, 'staylodgic_customer_id', true );
+
+							if ( ! empty( $room_name ) ) {
+								$reservation_link = get_edit_post_link( $reservation->ID );
+								$links[]          = '<li><a href="' . $reservation_link . '"><small>' . $room_name . '</small></a></li>';
+							}
 						}
+
+						if ( $found_activity ) {
+							$activity_id   = get_post_meta( $reservation->ID, 'staylodgic_activity_id', true );
+							$activity_name = get_the_title( $activity_id );
+
+							$customer_id = get_post_meta( $reservation->ID, 'staylodgic_customer_id', true );
+
+							if ( ! empty( $activity_name ) ) {
+								$reservation_link = get_edit_post_link( $reservation->ID );
+								$links[]          = '<li><a href="' . $reservation_link . '"><small>' . $activity_name . '</small></a></li>';
+							}
+						}
+
 					}
 
 					if ( ! empty( $links ) ) {
 						$customer_link = get_edit_post_link( $customer_id );
 						$customer_name = get_the_title( $customer_id );
-						echo '<p><strong>Booking No: ' . $booking_number . '</strong></p><br/>';
-						echo '<p><strong><a href="' . $customer_link . '">' . $customer_name . '</a></strong></p>';
+						echo '<p><small><strong>Booking No: ' . $booking_number . '</strong></small></p>';
+						echo '<p><small><strong><a href="' . $customer_link . '">' . $customer_name . '</a></strong></small></p>';
 						echo implode( '', $links );
 					} else {
 						echo '-';
@@ -363,13 +399,14 @@ class Payments {
 
 		$reservations_instance = new \Staylodgic\Reservations();
 		$reservation_id        = $reservations_instance->get_reservation_id_for_booking( $booking_number );
+
+		if ( ! $reservation_id ) {
+			$reservations_instance = new \Staylodgic\Activity();
+			$reservation_id        = $reservations_instance->get_activity_id_for_booking( $booking_number );
+		}
 		error_log( 'here' );
 		if ( $reservation_id ) {
-			error_log( 'here 2' );
-			// Get the total price from the session
-			$total_price = \WC()->session->get( 'total_price' );
-			error_log( $total_price );
-			update_post_meta( $reservation_id, 'staylodgic_reservation_room_paid', $total_price );
+			update_post_meta( $reservation_id, 'staylodgic_woo_order_id', $order_id );
 			update_post_meta( $reservation_id, 'staylodgic_reservation_status', 'confirmed' );
 			update_post_meta( $reservation_id, 'staylodgic_reservation_substatus', 'completed' );
 		}

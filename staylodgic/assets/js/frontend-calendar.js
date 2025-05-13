@@ -1034,7 +1034,15 @@
 							.removeClass("error")
 							.addClass("success")
 							.text("Booking successfully registered.");
-						$(".registration_request").remove();
+
+							if ( $(".registration_request").hasClass("payment-is-active") ) {
+								var $cloned = $('#woo-bookingpayment-copy').clone(true).attr('id', 'woo-bookingpayment');
+								$('#registration-payment-container').append($cloned);
+								$(".registration_request").hide();
+							} else {
+								$(".registration_request").remove();
+							}
+							
 						$(".registration_successful").show();
 					} else {
 						// handle error
