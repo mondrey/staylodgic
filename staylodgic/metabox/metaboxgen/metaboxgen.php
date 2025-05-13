@@ -383,10 +383,10 @@ function staylodgic_generate_metaboxes( $meta_data, $post_id ) {
 					echo ' data-currencyformat="2" class="' . esc_attr( $class ) . ' currency-input" min="0" step="0.01" name="staylodgic_reservation_room_paid[' . esc_attr( $date_time ) . ']" id="', esc_attr( $field['id'] ), '" value="" size="30" />';
 					echo '<ul>';
 
-					$woo_payment       = get_post_meta( get_the_id(), 'staylodgic_woo_order_id', true );
+					$woo_payment_order_id       = get_post_meta( $post_id, 'staylodgic_woo_order_id', true );
 
-					$payments       = get_post_meta( get_the_id(), 'staylodgic_reservation_room_paid', true );
-					$total_cost     = get_post_meta( get_the_id(), 'staylodgic_reservation_total_room_cost', true );
+					$payments       = get_post_meta( $post_id, 'staylodgic_reservation_room_paid', true );
+					$total_cost     = get_post_meta( $post_id, 'staylodgic_reservation_total_room_cost', true );
 					$total_payments = 0;
 					if ( is_array( $payments ) && ! empty( $payments ) ) {
 						echo '<ul>';
@@ -410,6 +410,19 @@ function staylodgic_generate_metaboxes( $meta_data, $post_id ) {
 						$payment_set = staylodgic_price( $balance );
 						echo wp_kses( $payment_set, staylodgic_get_price_allowed_tags() );
 					}
+
+					echo '<p>';
+					if ( $order = wc_get_order( $woo_payment_order_id ) ) {
+						$order_number = $order->get_order_number();
+						$order_link   = admin_url( 'post.php?post=' . $woo_payment_order_id . '&action=edit' );
+
+						echo '<a href="' . esc_url( $order_link ) . '" target="_blank">';
+						echo 'Order #' . esc_html( $order_number );
+						echo '</a>';
+					} else {
+						echo 'Order not found.';
+					}
+					echo '</p>';
 
 					break;
 

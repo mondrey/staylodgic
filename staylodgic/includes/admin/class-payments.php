@@ -16,7 +16,7 @@ class Payments {
 
 		add_action( 'woocommerce_new_order', array( $this, 'process_booking_after_checkout' ), 10, 2 );
 
-		add_action( 'woocommerce_new_order', array( $this, 'process_after_order' ) );
+		add_action( 'woocommerce_new_order', array( $this, 'process_after_order' ), 10, 2 );
 
 		add_action( 'woocommerce_admin_order_data_after_order_details', array( $this, 'staylodgic_display_booking_number_in_admin_order' ) );
 
@@ -393,7 +393,7 @@ class Payments {
 		}
 	}
 
-	public function process_after_order() {
+	public function process_after_order( $order_id, $order ){
 
 		$booking_number = \WC()->session->get( 'booking_number' );
 
@@ -404,7 +404,7 @@ class Payments {
 			$reservations_instance = new \Staylodgic\Activity();
 			$reservation_id        = $reservations_instance->get_activity_id_for_booking( $booking_number );
 		}
-		error_log( 'here' );
+		error_log( 'here' . $order_id);
 		if ( $reservation_id ) {
 			update_post_meta( $reservation_id, 'staylodgic_woo_order_id', $order_id );
 			update_post_meta( $reservation_id, 'staylodgic_reservation_status', 'confirmed' );
