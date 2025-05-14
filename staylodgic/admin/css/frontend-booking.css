@@ -468,6 +468,12 @@ a.book-button:hover:active,
 	background: #015884;
 	color: #fff;
 }
+#woo-bookingpayment-copy {
+	display: none;
+}
+#registration-payment-container {
+	display: inline-block;
+}
 .book-button.not-fullwidth {
 	display: inline-block;
 }

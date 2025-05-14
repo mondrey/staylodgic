@@ -60,9 +60,9 @@ jQuery(document).ready(function ($) {
 			showProgress: true,
 			overlayColor: 'blue',
 			steps: [
-				{ element: '#menu-posts-staylodgic_bookings', popover: { title: 'Step: 1: Create Registration', description: 'Edit the booking reservation and create registration under the customer. Next Edit the Registration.', side: "right", align: 'start' } },
-				{ element: '#menu-posts-staylodgic_guestrgs', popover: { title: 'Step 2: Registration Link', description: 'When you edit a registration from the booking, it gives you the option to generate a QR Code. You can send the QR Code to the guest for online registration.', side: "right", align: 'start' } },
-				{ element: '#menu-posts-staylodgic_guestrgs', popover: { title: 'Step 3: View Registration', description: 'Registrations will be display when you edit the registration directly or you can click Registration from the booking as well.', side: "right", align: 'start' } },
+				{ element: '#menu-posts-staylodgic_bookings', popover: { title: 'Step: 1: Create Registration', description: 'Edit the reservation and Create Registration under the customer. Next click Edit Registration button.', side: "right", align: 'start' } },
+				{ element: '#menu-posts-staylodgic_guestrgs', popover: { title: 'Step 2: Registration Link', description: 'When you Edit a Registration, it gives you the option to Generate a QR Code. You can send the QR Code to the guest for online registration.', side: "right", align: 'start' } },
+				{ element: '#menu-posts-staylodgic_guestrgs', popover: { title: 'Step 3: View Registration', description: 'Filled Registrations will be displayed inside the registration post.', side: "right", align: 'start' } },
 				{ element: '#toplevel_page_staylodgic-settings', popover: { title: 'Step 4: Export Registration', description: 'You can export a CSV of all guest registration for a chosen month.', side: "right", align: 'start' } },
 			]
 		});

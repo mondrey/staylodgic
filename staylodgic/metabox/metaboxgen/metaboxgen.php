@@ -416,7 +416,7 @@ function staylodgic_generate_metaboxes( $meta_data, $post_id ) {
 						echo '<div class="woo-stay-payment">';
 						$order_number = $order->get_order_number();
 						$order_link   = admin_url( 'post.php?post=' . $woo_payment_order_id . '&action=edit' );
-						echo esc_html__( 'This reservation was linked to a payment order. You can view the full order details here: ','staylodgic' );
+						echo esc_html__( 'This reservation is linked to a payment order.','staylodgic' );
 						echo '<div class="woo-stay-payment-link">';
 						echo '<a href="' . esc_url( $order_link ) . '" target="_blank">';
 						echo 'Order #' . esc_html( $order_number );
