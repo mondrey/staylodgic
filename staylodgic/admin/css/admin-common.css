@@ -357,6 +357,43 @@ div .guided-tour-link {
 .woo-stay-payment-link {
 	margin-top: 7px;
 }
+.booking-status-confirmed {
+	background: #ffcc00;
+	display: inline-block;
+	padding: 4px 10px;
+	border-radius: 6px;
+}
+.booking-status-pending {
+	background: #00e5ff;
+	display: inline-block;
+	padding: 4px 10px;
+	border-radius: 6px;
+}
+.booking-status-payment {
+	background: #b68cff;
+	display: inline-block;
+	padding: 4px 10px;
+	border-radius: 6px;
+}
+.booking-status-cancelled {
+	background: #ff0000;
+	color: #fff;
+	display: inline-block;
+	padding: 4px 10px;
+	border-radius: 6px;
+}
+.widefat p.booking-status-confirmed {
+	color: #4a4a4a;
+}
+.widefat p.booking-status-pending {
+	color: #4a4a4a;
+}
+.widefat p.booking-status-cancelled {
+	color: #fff;
+}
+.widefat p.booking-status-payment {
+	color:#fff;
+}
 
 #menu-posts-staylodgic_actvtres {
 	background-color: #5a1aff; /* Slightly lighter */

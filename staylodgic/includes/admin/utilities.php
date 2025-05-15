@@ -21,6 +21,29 @@ function staylodgic_get_loggedin_user_email() {
 }
 
 /**
+ * Check whether a StayLodgic reservation (or activity) post
+ * is linked to a valid WooCommerce order.
+ *
+ * @param int $post_id Reservation (or activity) post ID.
+ * @return bool True if the linked order exists, otherwise false.
+ */
+function staylodgic_has_payment_order( $post_id ) {
+
+	// 1. Get the linked order ID stored by StayLodgic.
+	$order_id = (int) get_post_meta( $post_id, 'staylodgic_woo_order_id', true );
+
+	// 2. Bail early if nothing was stored or it isn't numeric.
+	if ( ! $order_id ) {
+		return false;
+	}
+
+	// 3. Try to load the order object (works for HPOS and legacy).
+	$order = wc_get_order( $order_id );
+
+	// 4. Return true only if a valid order object comes back.
+	return ( $order && $order->get_id() );
+}
+/**
  * Method staylodgic_random_color_hex
  *
  * @return void

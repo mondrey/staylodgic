@@ -63,7 +63,13 @@ class Staylodgic_Activity_Reservation_Posts {
 				break;
 			case 'reservation_status':
 				$reservation_status = $reservation_instance->get_reservation_status();
+
+				echo '<p class="booking-status-' . esc_attr( $reservation_status ) . '">';
 				echo esc_attr( ucfirst( $reservation_status ) );
+				echo '</p>';
+				if ( staylodgic_has_payment_order( $reservation_id ) ) {
+					echo '<p class="booking-status-payment">Payment Order</p>';
+				}
 				break;
 			case 'reservation_substatus':
 				$reservation_substatus = $reservation_instance->get_reservation_sub_status();
