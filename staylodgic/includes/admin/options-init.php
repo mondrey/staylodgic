@@ -230,7 +230,8 @@ $panel_settings = array(
 	'enable_payments'               => array(
 		'label'       => esc_html__( 'Enable Payments', 'staylodgic' ),
 		'type'        => 'checkbox',
-		'description' => 'Ensure WooCommerce plugin is active and payments setup.',
+		'choice'      => 'woonotice',
+		'description' => 'Allows guests to choose a payment method during booking. Requires WooCommerce and a valid payment setup.',
 		'tab'         => 'payments',
 	),
 	'new_bookingstatus'             => array(

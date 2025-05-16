@@ -1202,13 +1202,22 @@ class Options_Panel {
 		$option_name = $args['label_for'];
 		$value       = $this->get_option_value( $option_name );
 		$description = $this->settings[ $option_name ]['description'] ?? '';
+		$choice      = $this->settings[ $option_name ]['choice'] ?? '';
+
+		$input_disabled = '';
+		if ( 'woonotice' === $choice ) {
+			if ( ! staylodgic_is_woocommerce_active() ) {
+				$choice_class = 'woonotice-display';
+				$description = 'WooCommerce is not active. To use this feature, WooCommerce must be installed, activated, and have payments set up.';
+			}
+		}
 		?>
 		<label class="staylodgic-checkbox-container">
 			<input type="checkbox" id="<?php echo esc_attr( $args['label_for'] ); ?>" name="<?php echo esc_attr( $this->option_name ); ?>[<?php echo esc_attr( $args['label_for'] ); ?>]" <?php checked( $value, 1, true ); ?>>
 			<span class="checkmark"></span>
 		</label>
 		<?php if ( $description ) { ?>
-			<p class="description"><?php echo esc_html( $description ); ?></p>
+			<p class="description <?php echo esc_attr( $choice_class ); ?>"><?php echo esc_html( $description ); ?></p>
 			<?php
 		}
 		?>

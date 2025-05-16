@@ -394,6 +394,12 @@ div .guided-tour-link {
 .widefat p.booking-status-payment {
 	color:#fff;
 }
+.staylodgic-tab-item .description.woonotice-display {
+	background: #ff0000;
+	color: #fff;
+	padding: 10px 20px;
+	font-size: 14px;
+}
 
 #menu-posts-staylodgic_actvtres {
 	background-color: #5a1aff; /* Slightly lighter */

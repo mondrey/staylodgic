@@ -508,6 +508,15 @@ function staylodgic_has_activity_tax() {
 	return $tax_flag;
 }
 
+function staylodgic_is_woocommerce_active() {
+
+	if ( class_exists( 'WooCommerce' ) ) {
+		return true;
+	}
+	return false;
+}
+
+
 function staylodgic_is_payment_active() {
 
 	if ( class_exists( 'WooCommerce' ) ) {
