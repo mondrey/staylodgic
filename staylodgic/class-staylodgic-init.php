@@ -595,12 +595,10 @@ class Staylodgic_Init {
 				wp_enqueue_style( 'fontawesome-6-brands' );
 				wp_enqueue_style( 'fontawesome-6-solid' );
 
-				wp_enqueue_script( 'staylodgic-admin-options', plugin_dir_url( __FILE__ ) . 'admin/js/admin-options.js', array( 'jquery' ), null, true );
-				wp_enqueue_style( 'staylodgic-admin-options', plugin_dir_url( __FILE__ ) . 'admin/css/admin-options.css', false, 'screen' );
-
 				wp_enqueue_script( 'jquery-ui-sortable' );
 
-				wp_enqueue_style( 'jquery-ui-sortable' );
+				wp_enqueue_script( 'staylodgic-admin-options', plugin_dir_url( __FILE__ ) . 'admin/js/admin-options.js', array( 'jquery' ), null, true );
+				wp_enqueue_style( 'staylodgic-admin-options', plugin_dir_url( __FILE__ ) . 'admin/css/admin-options.css', false, 'screen' );
 
 				wp_enqueue_script( 'select2', plugin_dir_url( __FILE__ ) . 'assets/js/select2/js/select2.full.min.js', array( 'jquery' ), null, true );
 				wp_enqueue_style( 'select2', plugin_dir_url( __FILE__ ) . 'assets/js/select2/css/select2.min.css', array(), false, 'screen' );
