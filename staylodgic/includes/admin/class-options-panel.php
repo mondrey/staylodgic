@@ -707,6 +707,8 @@ class Options_Panel {
 				echo '<img src="' . esc_url( $image_attributes[0] ) . '" style="max-height:100px;display:block;" />';
 				$display = 'inline-block';
 			}
+		} else {
+			echo esc_html_e( 'Upload', 'staylodgic' );
 		}
 
 		echo '</a>'; // Output $image variable here to ensure it is displayed correctly

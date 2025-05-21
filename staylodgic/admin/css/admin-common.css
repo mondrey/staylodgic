@@ -149,7 +149,7 @@
 }
 
 .admin-column1 {
-	background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(147,67,67,1) 0%, rgba(111,27,27,1) 90% );
+	background-image: radial-gradient( circle farthest-corner at -5.6% -6.8%,  rgba(103,49,145,1) 37.3%, rgba(50,0,129,1) 73.5% );
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-end;
@@ -298,7 +298,7 @@ div .guided-tour-link {
 	max-width: 600px;
 	padding: 20px 50px;
 	box-sizing: border-box;
-	color: #000;
+	color: #917300;
 }
 
 .admin-page-two-header {

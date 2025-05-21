@@ -121,7 +121,7 @@
 .staylodgic-tab-item .description {
 	font-size: 12px;
 	margin-top: 3px;
-	color: #b1b1b1;
+	color: #a5b7e4;
 	letter-spacing: -0.5px;
 }
 
@@ -246,11 +246,8 @@
 
 .discount-input-outer {
 	position: relative;
-}
-
-.discount-display-label {
-	position: absolute;
-	top: -10px;
+	display: block;
+  	 margin-top: 23px;
 }
 
 .discount-display-label {
@@ -262,6 +259,14 @@
 	color: #6d6d6d;
 	text-transform: uppercase;
 	letter-spacing: 0.6px;
+	background: #d1f9f3;
+	padding: 2px 5px 0;
+	border-radius: 3px;
+}
+.input-label-inner {
+	background: #d1f9f3;
+	padding: 2px 5px 0;
+	border-radius: 3px;	
 }
 
 .staylodgic-close {
@@ -297,7 +302,7 @@
 }
 
 .staylodgic_page_staylodgic-slg-settings-panel #wpcontent {
-	background: #515151;
+	background-image: linear-gradient( 110.3deg,  rgba(73,93,109,1) 4.3%, rgba(49,55,82,1) 96.7% );
 }
 
 .staylodgic_page_staylodgic-slg-settings-panel .wrap {
@@ -316,7 +321,7 @@ h1.options-heading {
 	display: flex;
 	flex-direction: column;
 	margin-right: 20px;
-	background: #3e3e3e;
+	background-image: radial-gradient( circle farthest-corner at -5.6% -6.8%,  rgba(103,49,145,1) 37.3%, rgba(50,0,129,1) 73.5% );
 }
 
 /* Style for the tab content */
@@ -340,10 +345,16 @@ h1.options-heading {
 	border: 0;
 }
 
+.help-guide-footer {
+	background: #eee;
+	padding: 20px 22px;
+}
+
 .staylodgic-tabs-container {
 	display: flex;
 	flex-direction: column;
 	padding: 10px 30px 80px;
+	width: 170px;
 }
 
 .staylodgic-tab-heading {
@@ -360,12 +371,30 @@ h1.options-heading {
 	/* Add space below the heading */
 }
 
-.repeatable {
+#addmealplan-repeatable,
+#addperperson-repeatable,
+#addtax-repeatable,
+#addtax-activity-repeatable {
+	margin-top: 10px;
+}
+
+.staylodgic-tab-item .repeatable {
 	position: relative;
-	background: #f5f5f5;
+	background: #f6ffff;
 	margin-bottom: 5px;
-	padding: 28px 10px 5px 6px;
-	box-shadow: 0px 11px 25px 2px rgba(0,0,0,0.3);
+	padding: 35px 17px 5px;
+	box-shadow: 0px 0px 17px -1px rgba(0, 0, 0, 0.26);
+	border-radius: 7px;
+}
+
+.staylodgic-tab-item > th {
+	padding-bottom: 0;
+	padding-top: 2px;
+}
+.staylodgic-tab-item > td {
+	padding-left: 0;
+	padding-bottom: 0;
+	padding-top: 7px;
 }
 
 .input-label-outer {
@@ -466,7 +495,9 @@ h1.options-heading {
 .staylodgic-tab-item select {
 	width:100%;
 }
-.form-table td, .form-table th, .label-responsive {
+.form-table .staylodgic-tab-item td,
+.form-table .staylodgic-tab-item th,
+.staylodgic-tab-item .label-responsive {
 	display: block;
 	width: auto;
 }
@@ -492,6 +523,9 @@ h1.options-heading {
 	width: calc(100% - 25px);
 }
 
+.staylodgic-tab-item p.description {
+	margin-top: 10px;
+}
 
 .remove_image_button {
 	text-decoration: none;
@@ -537,13 +571,16 @@ h1.options-heading span {
 
 .toggle-section {
 	position: absolute;
-	top: -31px;
+	top: -52px;
 	left: 10px;
 	font-size: 21px;
 	color: #fff;
 	cursor: pointer;
 	opacity: 0.8;
 	transition: color 0.3s;
+	background: #3163db;
+	padding: 10px;
+	border-radius: 10px;
 }
 
 .toggle-section:hover {
