@@ -230,8 +230,8 @@ class Staylodgic_Init {
 	 * @return void
 	 */
 	public function staylodgic_load_admin_styles( $hook ) {
-		wp_register_script( 'select2', plugin_dir_url( __FILE__ ) . 'assets/js/select2/js/select2.full.min.js', array( 'jquery' ), null, true );
-		wp_register_style( 'select2', plugin_dir_url( __FILE__ ) . 'assets/js/select2/css/select2.min.css', array(), false, 'screen' );
+		wp_register_script( 'wc-select2', plugin_dir_url( __FILE__ ) . 'assets/js/select2/js/select2.full.min.js', array( 'jquery' ), null, true );
+		wp_register_style( 'wc-select2', plugin_dir_url( __FILE__ ) . 'assets/js/select2/css/select2.min.css', array(), false, 'screen' );
 
 		wp_register_script( 'staylodgic-parser', plugin_dir_url( __FILE__ ) . 'admin/js/booking-parser.js', array( 'jquery' ), null, true );
 		wp_register_script( 'html2canvas', plugin_dir_url( __FILE__ ) . 'assets/js/html2canvas.min.js', array( 'jquery' ), null, true );
@@ -300,8 +300,8 @@ class Staylodgic_Init {
 				wp_enqueue_style( 'staylodgic-admin-styles' );
 				wp_enqueue_style( 'staylodgic-indicator-icons' );
 
-				wp_enqueue_script( 'select2' );
-				wp_enqueue_style( 'select2' );
+				wp_enqueue_script( 'wc-select2' );
+				wp_enqueue_style( 'wc-select2' );
 				wp_enqueue_style( 'flatpickr' );
 				wp_enqueue_script( 'flatpickr' );
 				wp_enqueue_style( 'flatpickr-extra' );
@@ -600,8 +600,8 @@ class Staylodgic_Init {
 				wp_enqueue_script( 'staylodgic-admin-options', plugin_dir_url( __FILE__ ) . 'admin/js/admin-options.js', array( 'jquery' ), null, true );
 				wp_enqueue_style( 'staylodgic-admin-options', plugin_dir_url( __FILE__ ) . 'admin/css/admin-options.css', false, 'screen' );
 
-				wp_enqueue_script( 'select2', plugin_dir_url( __FILE__ ) . 'assets/js/select2/js/select2.full.min.js', array( 'jquery' ), null, true );
-				wp_enqueue_style( 'select2', plugin_dir_url( __FILE__ ) . 'assets/js/select2/css/select2.min.css', array(), false, 'screen' );
+				wp_enqueue_script( 'wc-select2', plugin_dir_url( __FILE__ ) . 'assets/js/select2/js/select2.full.min.js', array( 'jquery' ), null, true );
+				wp_enqueue_style( 'wc-select2', plugin_dir_url( __FILE__ ) . 'assets/js/select2/css/select2.min.css', array(), false, 'screen' );
 			}
 
 			// Yearly Availability

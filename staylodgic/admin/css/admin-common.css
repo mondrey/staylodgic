@@ -238,7 +238,7 @@
 	-moz-transition: background-color 0.2s;
 	-webkit-transition: background-color 0.2s;
 	-o-transition: background-color 0.2s;
-
+	margin-top: 4px;
 	background: #0d0dfd;
 	color: #fff;
 	text-decoration: none;
@@ -296,7 +296,7 @@ div .guided-tour-link {
 .section-features {
 	width: 100%;
 	max-width: 600px;
-	padding: 20px 50px;
+	padding: 20px 50px 20px 80px;
 	box-sizing: border-box;
 	color: #917300;
 }
