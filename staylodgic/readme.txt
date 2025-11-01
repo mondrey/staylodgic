@@ -258,6 +258,9 @@ A: Support is available through the WordPress plugin support forum. Active devel
 
 == Changelog ==
 
+= 1.0.7 =
+* Adds online payment integration with WooCommerce
+
 = 1.0.6 =
 * Added option to set the maximum number of future days for updating rates and availability in the calendar.
 
@@ -289,6 +292,9 @@ Initial release:
 
 == Upgrade Notice ==
 
-= 1.0.6 =
+= 1.0.7 =
 
-Adds a configurable setting to wp-admn > Plugin optons > General, to control how many future days can be updated in the availability calendar. Recommended for sites managing long-term booking data.
+Adds online payment integration, which can be enabled from **Plugin Settings**.  
+This feature works with **WooCommerce Payments** and allows guests to complete their booking payments directly after a reservation is made.  
+
+Payments are automatically logged in WooCommerce, and the payment status appears in the **Booking Details** page along with a direct link to the corresponding WooCommerce order (visible in admin mode).
