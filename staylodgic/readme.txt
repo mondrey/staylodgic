@@ -14,6 +14,9 @@ Staylodgic is a user-friendly hotel management plugin designed to simplify and e
 
 Developed by a boutique hotel owner, with real-world needs in mind.
 
+Introduction video:
+https://www.youtube.com/watch?v=AIUeFPAjzP0
+
 == Shortcodes ==
 
 * [staylodgic_activity_booking_search]
@@ -32,6 +35,12 @@ Developed by a boutique hotel owner, with real-world needs in mind.
 
 * Hotel Management
   - Setup new hotel settings.
+
+* Online Payments
+  - Accept online payments via WooCommerce (e.g., WooCommerce Payments and other compatible gateways).
+  - Enable from **StayLodgic → Settings**.
+  - After a booking is made, guests can complete payment online.
+  - Payments are logged as WooCommerce orders; booking details show payment status and link to the order in wp-admin.
 
 * Room Management
   - Create rooms for reservations.
